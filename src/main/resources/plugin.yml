@@ -1,0 +1,11 @@
+name: ${project.artifactId}
+main: work.xeltica.craft.otanoshimiplugin.OtanoshimiPlugin
+version: ${project.version}
+api-version: 1.16
+commands:
+  omikuji:
+    description: おみくじを引きます。マイクラ内で1日に1回まで引けて、100クローバーかかります。
+    usage: /omikuji
+  killunluck:
+    description: kill by my unluck
+    usage: /killunluck
