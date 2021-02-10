@@ -45,22 +45,26 @@ public class NightmareRandomEvent extends BukkitRunnable {
                     }
                 }
             } else if (dice == MODE_PIGLIN) {
-                // 2~5体出す
-                var pivot = l.add(new Vector(random.nextInt(6) + 4, 0, random.nextInt(6) + 4));
-                var amount = random.nextInt(3) + 2;
+                // 1~3体出す
+                var amount = random.nextInt(3) + 1;
+                var pivot = l.add(new Vector(random.nextInt(20) + 10, 0, random.nextInt(20) + 10));
                 for (var i = 0; i < amount; i++) {
                     var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
                     var piglin = (Piglin) nightmare.spawnEntity(loc, EntityType.PIGLIN);
+                    // 50:50で武器が決まる
                     var equip = new ItemStack(
                         random.nextBoolean()
                             ? Material.CROSSBOW
                             : Material.GOLDEN_SWORD
                     );
-                    piglin.setImmuneToZombification(true);
+                    // 90%の確率でゾンビ化を免れる
+                    piglin.setImmuneToZombification(random.nextInt(100) < 90);
                     piglin.getEquipment().setItemInMainHand(equip);
+                    // 5%の確率でスピードバフ
                     if (random.nextInt(100) < 5) {
                         piglin.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 30000, 2));
                     }
+                    // 5%の確率で子供
                     if (random.nextInt(100) < 5) {
                         piglin.setBaby();
                     }
