@@ -1,11 +1,14 @@
 package work.xeltica.craft.otanoshimiplugin.handlers;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -43,5 +46,18 @@ public class PlayerHandler implements Listener {
             }
         }.runTaskLater(this.plugin, 1);
     }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        var name = e.getPlayer().getDisplayName();
+        e.setJoinMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がやってきました");
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        var name = e.getPlayer().getDisplayName();
+        e.setQuitMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がかえりました");
+    }
+
     private Plugin plugin;
 }
