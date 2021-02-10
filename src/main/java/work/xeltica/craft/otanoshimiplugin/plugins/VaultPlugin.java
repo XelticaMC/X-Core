@@ -37,7 +37,7 @@ public class VaultPlugin extends PluginBase {
 
     @Override
     public void onDisable(OtanoshimiPlugin plugin) {
-        super.onEnable(plugin);
+        super.onDisable(plugin);
         setEconomyEnabled(false);
     }
 
