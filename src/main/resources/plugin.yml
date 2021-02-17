@@ -2,7 +2,8 @@ name: ${project.artifactId}
 main: work.xeltica.craft.otanoshimiplugin.OtanoshimiPlugin
 version: ${project.version}
 api-version: 1.16
-softdepend: [Vault]
+softdepend:
+  - Vault
 commands:
   omikuji:
     description: おみくじを引きます。マイクラ内で1日に1回まで引けて、100クローバーかかります。
@@ -10,3 +11,10 @@ commands:
   respawn:
     description: メインワールドの初期スポーンに戻ります。
     usage: /respawn
+  pvp:
+    description: 現在のワールドのPvP設定を変更します。
+    usage: /pvp <on/off>
+    permission: otanoshimi.command.pvp
+permissions:
+  otanoshimi.command.pvp:
+    default: op

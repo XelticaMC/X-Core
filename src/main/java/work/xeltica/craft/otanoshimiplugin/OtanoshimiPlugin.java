@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import work.xeltica.craft.otanoshimiplugin.commands.CommandBase;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandPvp;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandRespawn;
 import work.xeltica.craft.otanoshimiplugin.handlers.EntityHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.NewMorningHandler;
@@ -65,6 +66,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /omikuji command");
         commands.put("respawn", new CommandRespawn());
         logger.info("Loaded /respawn command");
+        commands.put("pvp", new CommandPvp());
+        logger.info("Loaded /pvp command");
     }
 
     private void loadHandlers() {
