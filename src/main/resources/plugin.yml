@@ -15,6 +15,10 @@ commands:
     description: 現在のワールドのPvP設定を変更します。
     usage: /pvp <on/off>
     permission: otanoshimi.command.pvp
+  signedit:
+    description: 看板の指定行を編集します。
+    usage: /signedit <行番号> <テキスト>
+    permission: otanoshimi.command.pvp
 permissions:
   otanoshimi.command.pvp:
     default: op

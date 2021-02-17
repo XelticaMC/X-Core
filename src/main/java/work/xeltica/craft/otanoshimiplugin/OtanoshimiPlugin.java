@@ -11,6 +11,7 @@ import work.xeltica.craft.otanoshimiplugin.commands.CommandBase;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandPvp;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandRespawn;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandSignEdit;
 import work.xeltica.craft.otanoshimiplugin.handlers.EntityHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.NewMorningHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.PlayerHandler;
@@ -68,6 +69,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /respawn command");
         commands.put("pvp", new CommandPvp());
         logger.info("Loaded /pvp command");
+        commands.put("signedit", new CommandSignEdit());
+        logger.info("Loaded /signedit command");
     }
 
     private void loadHandlers() {
