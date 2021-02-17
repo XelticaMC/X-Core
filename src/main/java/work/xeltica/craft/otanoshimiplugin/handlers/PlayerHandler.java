@@ -1,5 +1,6 @@
 package work.xeltica.craft.otanoshimiplugin.handlers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -49,8 +50,12 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        var name = e.getPlayer().getDisplayName();
+        var p = e.getPlayer();
+        var name = p.getDisplayName();
         e.setJoinMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がやってきました");
+        if (!p.hasPlayedBefore()) {
+            e.setJoinMessage(ChatColor.GREEN + name + ChatColor.AQUA + "が" + ChatColor.GOLD + ChatColor.BOLD + "初参加" + ChatColor.RESET + "です");
+        }
     }
 
     @EventHandler

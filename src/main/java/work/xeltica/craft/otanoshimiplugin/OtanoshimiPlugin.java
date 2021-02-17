@@ -9,6 +9,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import work.xeltica.craft.otanoshimiplugin.commands.CommandBase;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandRespawn;
+import work.xeltica.craft.otanoshimiplugin.handlers.EntityHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.NewMorningHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.PlayerHandler;
 import work.xeltica.craft.otanoshimiplugin.plugins.VaultPlugin;
@@ -61,6 +63,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
     private void loadCommands() {
         commands.put("omikuji", new CommandOmikuji());
         logger.info("Loaded /omikuji command");
+        commands.put("respawn", new CommandRespawn());
+        logger.info("Loaded /respawn command");
     }
 
     private void loadHandlers() {
@@ -69,6 +73,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded NewMorningHandler");
         pm.registerEvents(new PlayerHandler(this), this);
         logger.info("Loaded PlayerHandler");
+        pm.registerEvents(new EntityHandler(), this);
+        logger.info("Loaded EntityHandler");
     }
 
     private void loadPlugins() {
