@@ -18,7 +18,9 @@ commands:
   signedit:
     description: 看板の指定行を編集します。
     usage: /signedit <行番号> <テキスト>
-    permission: otanoshimi.command.pvp
+    permission: otanoshimi.command.signedit
 permissions:
   otanoshimi.command.pvp:
     default: op
+  otanoshimi.command.signedit:
+    default: true
