@@ -1,26 +1,45 @@
 package work.xeltica.craft.otanoshimiplugin.handlers;
 
+import java.util.Random;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import work.xeltica.craft.otanoshimiplugin.OmikujiScore;
 import work.xeltica.craft.otanoshimiplugin.OmikujiStore;
+import work.xeltica.craft.otanoshimiplugin.utils.TravelTicketUtil;
 
 public class PlayerHandler implements Listener {
     public PlayerHandler(Plugin p) {
         this.plugin = p;
     }
+
     @EventHandler
     public void onPlayerDeath(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player))
@@ -59,10 +78,95 @@ public class PlayerHandler implements Listener {
     }
 
     @EventHandler
+    public void onPlayer(PlayerPortalEvent e) {
+        // サンドボックスと旅行先からポータルを開けることを禁止
+
+        var name = e.getPlayer().getWorld().getName();
+        if (name.startsWith("travel_") || name.equals("sandbox")) {
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         var name = e.getPlayer().getDisplayName();
         e.setQuitMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がかえりました");
     }
 
+    @EventHandler
+    public void onInventoryOpenEvent(InventoryOpenEvent e) {
+        var isEC = e.getInventory().getType() == InventoryType.ENDER_CHEST;
+        var isSB = e.getPlayer().getWorld().getName().equals("sandbox");
+        if (isEC && isSB) {
+            e.setCancelled(true);
+        }
+    }
+    
+    @EventHandler
+    public void onPlayerDeath(PlayerRespawnEvent e) {
+        var p = e.getPlayer();
+        if (p.getWorld().getName().startsWith("travel_")) {
+            var world = Bukkit.getWorld("world");
+            p.teleportAsync(world.getSpawnLocation());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        var p = e.getPlayer();
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (p.getWorld().getName().startsWith("travel_") && Tag.BEDS.isTagged(e.getClickedBlock().getType())) {
+                e.setCancelled(true);
+            }
+        } else if (e.getAction() == Action.RIGHT_CLICK_AIR) {
+            var item = e.getItem();
+            if (!TravelTicketUtil.isTravelTicket(item)) return;
+            e.setCancelled(true);
+
+
+            if (movingPlayer != null) {
+                p.sendMessage(p.getUniqueId().equals(movingPlayer) ? "移動中です！" : "誰かが移動中です。少し待ってから再試行してください。");
+                return;
+            }
+
+            var type = TravelTicketUtil.getTicketType(item);
+            var worldName = "travel_" + type.toString().toLowerCase();
+            var world = Bukkit.getWorld(worldName);
+            
+            if (world == null) {
+                p.sendMessage("申し訳ありませんが、現在" + type.getDisplayName() + "には行けません。");
+                return;
+            }
+            if (world.getUID().equals(p.getWorld().getUID())) {
+                p.sendMessage("既に来ています！");
+                return;
+            }
+            movingPlayer = p.getUniqueId();
+
+            if (p.getGameMode() != GameMode.CREATIVE) {
+                item.setAmount(item.getAmount() - 1);
+            }
+            var x = rnd.nextInt(20000) - 10000;
+            var z = rnd.nextInt(20000) - 10000;
+            p.sendMessage("旅行券を使用しました。現在手配中です。その場で少しお待ちください！");
+            var res = world.getChunkAtAsync(x, z);
+            res.whenComplete((ret, ex) -> {
+                var y = world.getHighestBlockYAt(x, z);
+                var loc = new Location(world, x, y, z);
+                for (var pl : p.getWorld().getPlayers()) {
+                    pl.sendMessage(String.format("§6%s§rさんが§a%s§rに行きます！§b行ってらっしゃい！", p.getDisplayName(), type.getDisplayName()));
+                }
+                p.teleport(loc);
+                p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS, 1, 0.5f);
+                p.sendTitle(ChatColor.GOLD + type.getDisplayName(), "良い旅を！", 5, 100, 5);
+                p.sendMessage("ようこそ、§6" + type.getDisplayName() + "§rへ！");
+                p.sendMessage("元の世界に帰る場合は、§a/respawn§rコマンドを使用します。");
+                movingPlayer = null;
+            });
+        }
+    }
+
     private Plugin plugin;
+    private final Random rnd = new Random();
+    private UUID movingPlayer = null;
 }

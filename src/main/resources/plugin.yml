@@ -19,8 +19,14 @@ commands:
     description: 看板の指定行を編集します。
     usage: /signedit <行番号> <テキスト>
     permission: otanoshimi.command.signedit
+  givetravelticket:
+    description: トラベルチケットを授与します。
+    usage: /givetravelticket <playerName> [type=NORMAL] [amount=1]
+    permission: otanoshimi.command.givetravelticket
 permissions:
   otanoshimi.command.pvp:
+    default: op
+  otanoshimi.command.givetravelticket:
     default: op
   otanoshimi.command.signedit:
     default: true

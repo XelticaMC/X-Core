@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import work.xeltica.craft.otanoshimiplugin.commands.CommandBase;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandPvp;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandRespawn;
@@ -71,6 +72,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /pvp command");
         commands.put("signedit", new CommandSignEdit());
         logger.info("Loaded /signedit command");
+        commands.put("givetravelticket", new CommandGiveTravelTicket());
+        logger.info("Loaded /givetravelticket command");
     }
 
     private void loadHandlers() {
