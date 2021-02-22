@@ -153,6 +153,12 @@ public class PlayerHandler implements Listener {
             res.whenComplete((ret, ex) -> {
                 var y = world.getHighestBlockYAt(x, z);
                 var loc = new Location(world, x, y, z);
+                var block = world.getBlockAt(loc);
+                // 危険ブロックの場合、安全な石ブロックを敷いておく
+                // TODO: 溶岩だけでは無く他にも対応する
+                if (block.getType() == Material.LAVA) {
+                    block.setType(Material.STONE, false);
+                }
                 for (var pl : p.getWorld().getPlayers()) {
                     pl.sendMessage(String.format("§6%s§rさんが§a%s§rに行きます！§b行ってらっしゃい！", p.getDisplayName(), type.getDisplayName()));
                 }
