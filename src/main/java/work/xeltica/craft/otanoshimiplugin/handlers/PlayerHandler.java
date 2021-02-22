@@ -155,8 +155,8 @@ public class PlayerHandler implements Listener {
                 var loc = new Location(world, x, y, z);
                 var block = world.getBlockAt(loc);
                 // 危険ブロックの場合、安全な石ブロックを敷いておく
-                // TODO: 溶岩だけでは無く他にも対応する
-                if (block.getType() == Material.LAVA) {
+                // TODO: 対象ブロックをHashSetに入れてそれを使うようにする
+                if (block.getType() == Material.LAVA || block.getType() == Material.WATER) {
                     block.setType(Material.STONE, false);
                 }
                 for (var pl : p.getWorld().getPlayers()) {
