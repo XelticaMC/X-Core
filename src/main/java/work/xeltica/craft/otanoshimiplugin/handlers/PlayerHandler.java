@@ -154,7 +154,7 @@ public class PlayerHandler implements Listener {
             } else {
                 var chosen = otherPlayers.get(rnd.nextInt(otherPlayers.size()));
                 var loc = chosen.getLocation();
-                final var range = 20;
+                final var range = 10;
                 x = loc.getBlockX() + rnd.nextInt(range) - range / 2;
                 z = loc.getBlockZ() + rnd.nextInt(range) - range / 2;
             }
