@@ -146,8 +146,18 @@ public class PlayerHandler implements Listener {
             if (p.getGameMode() != GameMode.CREATIVE) {
                 item.setAmount(item.getAmount() - 1);
             }
-            var x = rnd.nextInt(20000) - 10000;
-            var z = rnd.nextInt(20000) - 10000;
+            int x, z;
+            var otherPlayers = world.getPlayers();
+            if (otherPlayers.size() == 0) {
+                x = rnd.nextInt(20000) - 10000;
+                z = rnd.nextInt(20000) - 10000;
+            } else {
+                var chosen = otherPlayers.get(rnd.nextInt(otherPlayers.size()));
+                var loc = chosen.getLocation();
+                final var range = 20;
+                x = loc.getBlockX() + rnd.nextInt(range) - range / 2;
+                z = loc.getBlockZ() + rnd.nextInt(range) - range / 2;
+            }
             p.sendMessage("旅行券を使用しました。現在手配中です。その場で少しお待ちください！");
             var res = world.getChunkAtAsync(x, z);
             res.whenComplete((ret, ex) -> {
@@ -159,7 +169,7 @@ public class PlayerHandler implements Listener {
                 if (block.getType() == Material.LAVA || block.getType() == Material.WATER) {
                     block.setType(Material.STONE, false);
                 }
-                for (var pl : p.getWorld().getPlayers()) {
+                for (var pl : Bukkit.getOnlinePlayers()) {
                     pl.sendMessage(String.format("§6%s§rさんが§a%s§rに行きます！§b行ってらっしゃい！", p.getDisplayName(), type.getDisplayName()));
                 }
                 p.teleport(loc);
