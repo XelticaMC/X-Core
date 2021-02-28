@@ -11,8 +11,10 @@ import work.xeltica.craft.otanoshimiplugin.commands.CommandBase;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandPvp;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandReport;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandRespawn;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandSignEdit;
+import work.xeltica.craft.otanoshimiplugin.gui.Gui;
 import work.xeltica.craft.otanoshimiplugin.handlers.EntityHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.NewMorningHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.PlayerHandler;
@@ -38,6 +40,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         new DaylightObserver(this).runTaskTimer(this, 0, 20);
         // 1分に1回
         new NightmareRandomEvent(this).runTaskTimer(this, 0, 20 * 60);
+
+        
 
         logger.info("Initialized XelticaMC Otanoshimi Plugin! Have fun!");
     }
@@ -74,6 +78,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /signedit command");
         commands.put("givetravelticket", new CommandGiveTravelTicket());
         logger.info("Loaded /givetravelticket command");
+        commands.put("report", new CommandReport());
+        logger.info("Loaded /report command");
     }
 
     private void loadHandlers() {
@@ -84,6 +90,9 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded PlayerHandler");
         pm.registerEvents(new EntityHandler(), this);
         logger.info("Loaded EntityHandler");
+        
+        pm.registerEvents(Gui.getInstance(), this);
+        logger.info("Loaded Gui EventHandler");
     }
 
     private void loadPlugins() {

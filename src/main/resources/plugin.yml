@@ -23,6 +23,10 @@ commands:
     description: トラベルチケットを授与します。
     usage: /givetravelticket <playerName> [type=NORMAL] [amount=1]
     permission: otanoshimi.command.givetravelticket
+  report:
+    description: 処罰GUIを表示します。
+    usage: /report <playerName>
+    permission: otanoshimi.command.report
 permissions:
   otanoshimi.command.pvp:
     default: op
@@ -30,3 +34,5 @@ permissions:
     default: op
   otanoshimi.command.signedit:
     default: true
+  otanoshimi.command.report:
+    default: op
