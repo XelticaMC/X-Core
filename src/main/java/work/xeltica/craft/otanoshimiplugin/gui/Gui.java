@@ -4,11 +4,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,6 +21,10 @@ public class Gui implements Listener {
 
     public void openMenu(Player player, String title, MenuItem... items) {
         // TODO 統合版を相手取る場合Form APIが使えるようになったら良い感じにやる
+        if (player.getName().startsWith("__BE_")) {
+            player.sendMessage("Java 版のみサポートしています。");
+            return;
+        }
         openMenuJavaImpl(player, title, items);
     }
 
@@ -32,7 +38,7 @@ public class Gui implements Listener {
         e.setCancelled(true);
 
         var menuItems = invMap.get(inv);
-        var id = e.getSlot();
+        var id = e.getRawSlot();
     
         if (menuItems.length <= id) return;
         p.closeInventory();
