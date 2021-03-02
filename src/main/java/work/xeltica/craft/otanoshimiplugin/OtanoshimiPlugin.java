@@ -20,6 +20,7 @@ import work.xeltica.craft.otanoshimiplugin.handlers.NewMorningHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.PlayerHandler;
 import work.xeltica.craft.otanoshimiplugin.plugins.VaultPlugin;
 import work.xeltica.craft.otanoshimiplugin.runnables.DaylightObserver;
+import work.xeltica.craft.otanoshimiplugin.runnables.FlyingObserver;
 import work.xeltica.craft.otanoshimiplugin.runnables.NightmareRandomEvent;
 
 public class OtanoshimiPlugin extends JavaPlugin {
@@ -40,8 +41,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         new DaylightObserver(this).runTaskTimer(this, 0, 20);
         // 1分に1回
         new NightmareRandomEvent(this).runTaskTimer(this, 0, 20 * 60);
-
-        
+        // 4tickに1回
+        new FlyingObserver().runTaskTimer(this, 0, 4);
 
         logger.info("Initialized XelticaMC Otanoshimi Plugin! Have fun!");
     }
