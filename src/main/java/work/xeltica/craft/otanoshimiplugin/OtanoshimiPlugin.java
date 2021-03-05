@@ -42,7 +42,7 @@ public class OtanoshimiPlugin extends JavaPlugin {
         // 1分に1回
         new NightmareRandomEvent(this).runTaskTimer(this, 0, 20 * 60);
         // 4tickに1回
-        new FlyingObserver().runTaskTimer(this, 0, 4);
+        // new FlyingObserver().runTaskTimer(this, 0, 4);
 
         logger.info("Initialized XelticaMC Otanoshimi Plugin! Have fun!");
     }
