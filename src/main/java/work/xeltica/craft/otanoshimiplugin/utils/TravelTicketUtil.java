@@ -30,6 +30,7 @@ public class TravelTicketUtil {
     }
 
     public static boolean isTravelTicket(ItemStack i) {
+        if (i == null) return false;
         if (i.getType() != Material.WRITTEN_BOOK) return false;
         var meta = i.getItemMeta();
 

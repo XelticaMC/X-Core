@@ -16,7 +16,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -26,10 +25,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 import work.xeltica.craft.otanoshimiplugin.OmikujiScore;
 import work.xeltica.craft.otanoshimiplugin.OmikujiStore;
@@ -78,7 +74,7 @@ public class PlayerHandler implements Listener {
     }
 
     @EventHandler
-    public void onPlayer(PlayerPortalEvent e) {
+    public void onPlayerPortal(PlayerPortalEvent e) {
         // サンドボックスと旅行先からポータルを開けることを禁止
 
         var name = e.getPlayer().getWorld().getName();
@@ -124,11 +120,11 @@ public class PlayerHandler implements Listener {
             if (isBedDisabledWorld && Tag.BEDS.isTagged(e.getClickedBlock().getType())) {
                 e.setCancelled(true);
             }
-        } else if (e.getAction() == Action.RIGHT_CLICK_AIR) {
-            var item = e.getItem();
-            if (!TravelTicketUtil.isTravelTicket(item)) return;
+            return;
+        }
+        var item = e.getItem();
+        if (TravelTicketUtil.isTravelTicket(item) && e.getAction() != Action.PHYSICAL) {
             e.setCancelled(true);
-
 
             if (movingPlayer != null) {
                 p.sendMessage(p.getUniqueId().equals(movingPlayer) ? "移動中です！" : "誰かが移動中です。少し待ってから再試行してください。");
