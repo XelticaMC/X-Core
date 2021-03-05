@@ -115,7 +115,13 @@ public class PlayerHandler implements Listener {
     public void onPlayerInteract(PlayerInteractEvent e) {
         var p = e.getPlayer();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (p.getWorld().getName().startsWith("travel_") && Tag.BEDS.isTagged(e.getClickedBlock().getType())) {
+            var worldName = p.getWorld().getName();
+            var isBedDisabledWorld = 
+                   worldName.startsWith("travel_")
+                || worldName.equals("hub")
+                || worldName.equals("sandbox")
+                ;
+            if (isBedDisabledWorld && Tag.BEDS.isTagged(e.getClickedBlock().getType())) {
                 e.setCancelled(true);
             }
         } else if (e.getAction() == Action.RIGHT_CLICK_AIR) {
