@@ -2,6 +2,7 @@ package work.xeltica.craft.otanoshimiplugin.travels;
 
 public enum TicketType {
     WILDAREA("ワイルドエリア"),
+    MEGAWILD("メガワイルド"),
     MOON("月"),
     ;
 
