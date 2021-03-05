@@ -28,6 +28,12 @@ public class CommandReport extends CommandPlayerOnlyBase {
             reporter.sendMessage("そのような名前のプレイヤーはこのサーバーにはいないようです。");
             return true;
         }
+        choosePunishmentType(reporter, reportee);
+        return true;
+    }
+
+
+    private void choosePunishmentType(Player reporter, OfflinePlayer reportee) {
         Consumer<MenuItem> cb = (m) -> chooseReason(reporter, reportee, (String)m.getCustomData(), null);
         Gui.getInstance().openMenu(reporter, "処罰の種類"
             , new MenuItem("BAN", cb, Material.BARRIER, "ban")
@@ -35,8 +41,8 @@ public class CommandReport extends CommandPlayerOnlyBase {
             , new MenuItem("キック", cb, Material.RABBIT_FOOT, "kick")
             , new MenuItem("ミュート", cb, Material.MUSIC_DISC_11, "mute")
         );
-        return true;
     }
+    
 
     private void chooseReason(Player reporter, OfflinePlayer reportee, String command, HashSet<AbuseType> state) {
         var types = AbuseType.values();
@@ -49,8 +55,12 @@ public class CommandReport extends CommandPlayerOnlyBase {
                     currentState.add(t);
                 }
                 chooseReason(reporter, reportee, command, currentState);
-            }, currentState.contains(t) ? Material.LIME_WOOL : Material.LIGHT_GRAY_WOOL);
+            }, t.icon, null, currentState.contains(t));
         }).collect(Collectors.toList());
+
+        menuItems.add(new MenuItem("戻る", _null -> {
+            choosePunishmentType(reporter, reportee);
+        }, Material.RED_WOOL));
 
         menuItems.add(
             new MenuItem("決定", _null -> {
@@ -63,7 +73,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
                 } else {
                     takeDown(reporter, reportee, command, currentState, null);
                 }
-            }, Material.WARPED_PLANKS)
+            }, Material.GREEN_WOOL)
         );
 
         Gui.getInstance().openMenu(reporter, command + "すべき理由（複数選択可）", menuItems.toArray(MenuItem[]::new));
@@ -116,22 +126,26 @@ public class CommandReport extends CommandPlayerOnlyBase {
     private final String muteTemplate = "利用規約「%s」に違反しているため、%sミュートします。 異議申し立てはDiscord Xeltica#7081 まで";
 
     enum AbuseType {
-        OBSCENE_BUILDING("わいせつ物建築禁止", Material.RED_MUSHROOM, "撤去してください"),
-        LAW_VIOLATION_BUILDING("国内法違反建築禁止", Material.TNT, "撤去してください"),
-        GLITCH("不具合悪用禁止", Material.COMMAND_BLOCK),
-        STEALING("窃盗禁止", Material.ENDER_CHEST, "盗んだアイテムを直ちに元の場所、持ち主に返却してください"),
-        GRIEFING("破壊禁止", Material.DIAMOND_PICKAXE, "直ちに本来の形に修復するか、意図的でない場合はその旨を返信してください。"),
-        MONOPOLY_SHARED_ITEMS("共有資産独占禁止", Material.OAK_SIGN, "直ちに元の状態に戻すことで独占状態を解いてください。"),
-        FORCED_PVP("取り決め無きPvP禁止", Material.DIAMOND_SWORD),
-        PRIVATE_INVADING("無許可での私有地侵入禁止", Material.OAK_DOOR),
-        AVOID_PANISHMENT("処罰回避禁止", Material.TRIPWIRE_HOOK),
-        REAL_TRADING("資産の現実での取引禁止", Material.GOLD_BLOCK),
-        BLACKMAIL("恐喝禁止", Material.CROSSBOW),
-        COLLUSION("共謀禁止", Material.CAMPFIRE),
-        FAKE_REPORT("虚偽通報禁止", Material.PUFFERFISH),
-        INVALID_CHAT("チャット内容の規制", Material.PLAYER_HEAD),
-        INVALID_MOD("不正MODの使用禁止", Material.COMPARATOR),
-        INVALID_LIVE("許諾無しでの配信・動画公開", Material.MUSIC_DISC_PIGSTEP),
+        GRIEFING("禁止行為: 破壊", Material.DIAMOND_PICKAXE, "直ちに本来の形に修復するか、意図的でない場合はその旨を返信してください。"),
+        STEALING("禁止行為: 窃盗", Material.ENDER_CHEST, "盗んだアイテムを直ちに元の場所、持ち主に返却してください"),
+        MONOPOLY_SHARED_ITEMS("禁止行為: 共有資産独占", Material.OAK_SIGN, "直ちに元の状態に戻すことで独占状態を解いてください。"),
+        FORCED_PVP("禁止行為: 取り決め無きPvP", Material.DIAMOND_SWORD),
+        PRIVATE_INVADING("禁止行為: 無許可での私有地侵入", Material.OAK_DOOR),
+        OBSCENE_BUILDING("禁止行為: わいせつ物建築", Material.RED_MUSHROOM, "撤去してください"),
+        LAW_VIOLATION_BUILDING("禁止行為: 国内法違反建築", Material.TNT, "撤去してください"),
+        INVALID_CHAT("禁止行為: 秩序を乱すチャット", Material.PLAYER_HEAD),
+        REAL_TRADING("禁止行為: 資産の現実での取引", Material.GOLD_BLOCK),
+        BLACKMAIL("禁止行為: 恐喝", Material.CROSSBOW),
+        COLLUSION("禁止行為: 共謀", Material.CAMPFIRE),
+        DOS("禁止行為: 意図的に負荷をかける行為", Material.CAMPFIRE),
+        OTHER("禁止行為: トラブルの原因となる行為", Material.CAMPFIRE, "この後に続く指示に従ってください"),
+        GLITCH("不正行為: 不具合悪用", Material.COMMAND_BLOCK),
+        AVOID_PANISHMENT("不正行為: 処罰回避", Material.TRIPWIRE_HOOK),
+        FAKE_REPORT("不正行為: 虚偽通報", Material.PUFFERFISH),
+        IGNORE_WARN("不正行為: 運営からのPMの無視", Material.PUFFERFISH),
+        EXPOSE_PM("不正行為: PMの晒し上げ行為", Material.PUFFERFISH),
+        INVALID_MOD("不正行為: 不正MODの使用", Material.COMPARATOR),
+        INVALID_LIVE("禁止行為: 許諾無しでの配信・動画公開", Material.MUSIC_DISC_PIGSTEP, "配信した動画を削除してください"),
         ;
 
         AbuseType(String shortName, Material icon) {

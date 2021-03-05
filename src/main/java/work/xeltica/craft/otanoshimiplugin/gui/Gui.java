@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -62,6 +63,9 @@ public class Gui implements Listener {
 
         Arrays.stream(items).map(i -> {
             var item = new ItemStack(i.getIcon(), i.getCount());
+            if (i.isShiny()) {
+                item.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
+            }
             var meta = item.getItemMeta();
             meta.setDisplayName(i.getName());
             item.setItemMeta(meta);
