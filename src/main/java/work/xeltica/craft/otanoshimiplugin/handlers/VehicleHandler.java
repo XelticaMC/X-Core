@@ -2,6 +2,7 @@ package work.xeltica.craft.otanoshimiplugin.handlers;
 
 import java.util.Random;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
@@ -12,6 +13,8 @@ import work.xeltica.craft.otanoshimiplugin.VehicleManager;
 
 public class VehicleHandler implements Listener {
     public void onEnter(VehicleEnterEvent e) {
+        var entity = e.getEntered();
+        if (!(entity instanceof Player)) return;
         VehicleManager.getInstance().unregisterVehicle(e.getVehicle());
     }
 
