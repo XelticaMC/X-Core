@@ -27,6 +27,18 @@ commands:
     description: 処罰GUIを表示します。
     usage: /report <playerName>
     permission: otanoshimi.command.report
+  localtime:
+    description: 現在いるワールドの時間を設定します。
+    usage: /localtime <add|set|query> [day|night|noon|midnight|sunrise|sunset|(数値)]
+    permission: otanoshimi.command.localtime
+  boat:
+    description: ボートを召喚します。
+    usage: /boat
+    permission: otanoshimi.command.boat
+  cart:
+    description: トロッコを召喚します。
+    usage: /cart
+    permission: otanoshimi.command.cart
 permissions:
   otanoshimi.command.pvp:
     default: op
@@ -36,3 +48,9 @@ permissions:
     default: true
   otanoshimi.command.report:
     default: op
+  otanoshimi.command.localtime:
+    default: op
+  otanoshimi.command.boat:
+    default: true
+  otanoshimi.command.cart:
+    default: true

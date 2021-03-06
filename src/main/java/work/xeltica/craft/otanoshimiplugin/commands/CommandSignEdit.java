@@ -3,17 +3,13 @@ package work.xeltica.craft.otanoshimiplugin.commands;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import com.google.common.collect.Lists;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
-
 public class CommandSignEdit extends CommandPlayerOnlyBase {
 
     @Override

@@ -1,6 +1,5 @@
 package work.xeltica.craft.otanoshimiplugin.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -8,10 +7,8 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import work.xeltica.craft.otanoshimiplugin.OmikujiStore;
 import work.xeltica.craft.otanoshimiplugin.OtanoshimiPlugin;
 import work.xeltica.craft.otanoshimiplugin.plugins.VaultPlugin;
