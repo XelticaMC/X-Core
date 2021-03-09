@@ -39,6 +39,9 @@ commands:
     description: トロッコを召喚します。
     usage: /cart
     permission: otanoshimi.command.cart
+  promo:
+    description: 市民への昇格方法を確認します。
+    usage: /promo
 permissions:
   otanoshimi.command.pvp:
     default: op
@@ -54,3 +57,5 @@ permissions:
     default: true
   otanoshimi.command.cart:
     default: true
+  otanoshimi.citizen:
+    default: false

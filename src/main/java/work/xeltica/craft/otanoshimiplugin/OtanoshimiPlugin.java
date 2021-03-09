@@ -3,8 +3,6 @@ package work.xeltica.craft.otanoshimiplugin;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Tag;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +14,7 @@ import work.xeltica.craft.otanoshimiplugin.commands.CommandCart;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandLocalTime;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandPromo;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandPvp;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandReport;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandRespawn;
@@ -103,6 +102,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /boat command");
         commands.put("cart", new CommandCart());
         logger.info("Loaded /cart command");
+        commands.put("promo", new CommandPromo());
+        logger.info("Loaded /promo command");
     }
 
     private void loadHandlers() {
