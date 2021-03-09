@@ -1,5 +1,7 @@
 package work.xeltica.craft.otanoshimiplugin.handlers;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -11,14 +13,16 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
@@ -96,6 +100,31 @@ public class PlayerHandler implements Listener {
         var isSB = e.getPlayer().getWorld().getName().equals("sandbox");
         if (isEC && isSB) {
             e.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayer草ed(AsyncPlayerChatEvent e) {
+        var logger = Bukkit.getLogger();
+        if (e.getMessage().equals("草") || e.getMessage().equalsIgnoreCase("kusa") || e.getMessage().equalsIgnoreCase("w")) {
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    var block = e.getPlayer().getLocation().subtract(0, 1, 0).getBlock();
+                    if (block.getType() != Material.GRASS_BLOCK) {
+                        return;
+                    }
+
+                    var id = e.getPlayer().getUniqueId();
+                    var lastTime = last草edTimeMap.containsKey(id) ? last草edTimeMap.get(id) : Integer.MIN_VALUE;
+                    var nowTime = Bukkit.getCurrentTick();
+                    if (lastTime == Integer.MIN_VALUE || nowTime - lastTime > 20 * 60) {
+                        block.applyBoneMeal(BlockFace.UP);
+                        logger.info("Applied 草");
+                    }
+                    last草edTimeMap.put(id, nowTime);
+                }
+            }.runTask(plugin);
         }
     }
     
@@ -188,4 +217,5 @@ public class PlayerHandler implements Listener {
     private Plugin plugin;
     private final Random rnd = new Random();
     private UUID movingPlayer = null;
+    private Map<UUID, Integer> last草edTimeMap = new HashMap<>();
 }
