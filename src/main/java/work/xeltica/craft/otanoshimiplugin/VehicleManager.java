@@ -17,6 +17,7 @@ public class VehicleManager {
         this.pl = pl;
         VehicleManager.instance = this;
         logger = Bukkit.getLogger();
+        reloadStore();
     }
 
     public static VehicleManager getInstance() {
@@ -56,6 +57,7 @@ public class VehicleManager {
         for (var id : ids) {
             var val = conf.getInt(id);
             val -= tickCount;
+            conf.set(id, val);
             if (val <= 0) {
                 var e = Bukkit.getEntity(UUID.fromString(id));
                 if (e == null) {
@@ -66,6 +68,11 @@ public class VehicleManager {
                 }
                 unregisterVehicle(id);
             }
+        }
+        try {
+            writeStore();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

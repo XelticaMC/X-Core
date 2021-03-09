@@ -11,6 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import work.xeltica.craft.otanoshimiplugin.commands.CommandBase;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandBoat;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandCart;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandLocalTime;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
@@ -77,7 +79,9 @@ public class OtanoshimiPlugin extends JavaPlugin {
 
     private void loadStores() {
         new OmikujiStore(this);
-        logger.info("Loaded Omikuji store");
+        logger.info("Loaded Omikuji Store");
+        new VehicleManager(this);
+        logger.info("Loaded Vehicle Manager");
     }
 
     private void loadCommands() {
@@ -93,8 +97,12 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /givetravelticket command");
         commands.put("report", new CommandReport());
         logger.info("Loaded /report command");
-        commands.put("localtime", new CommandLocalTime();
+        commands.put("localtime", new CommandLocalTime());
         logger.info("Loaded /localtime command");
+        commands.put("boat", new CommandBoat());
+        logger.info("Loaded /boat command");
+        commands.put("cart", new CommandCart());
+        logger.info("Loaded /cart command");
     }
 
     private void loadHandlers() {
