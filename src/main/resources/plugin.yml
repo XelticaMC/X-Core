@@ -42,6 +42,14 @@ commands:
   promo:
     description: 市民への昇格方法を確認します。
     usage: /promo
+  showplayer:
+    description: プレイヤーをすべて表示します。
+    usage: /showplayer
+    permission: otanoshimi.command.showplayer
+  hideplayer:
+    description: プレイヤーをすべて非表示します。
+    usage: /hideplayer
+    permission: otanoshimi.command.hideplayer
 permissions:
   otanoshimi.command.pvp:
     default: op

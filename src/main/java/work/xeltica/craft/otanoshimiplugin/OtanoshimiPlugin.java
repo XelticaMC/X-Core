@@ -12,12 +12,14 @@ import work.xeltica.craft.otanoshimiplugin.commands.CommandBase;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandBoat;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandCart;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandGiveTravelTicket;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandHidePlayer;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandLocalTime;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandPromo;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandPvp;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandReport;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandRespawn;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandShowPlayer;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandSignEdit;
 import work.xeltica.craft.otanoshimiplugin.gui.Gui;
 import work.xeltica.craft.otanoshimiplugin.handlers.EntityHandler;
@@ -81,6 +83,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded Omikuji Store");
         new VehicleManager(this);
         logger.info("Loaded Vehicle Manager");
+        new PlayerHideManager(this);
+        logger.info("Loaded Player Hide Manager");
     }
 
     private void loadCommands() {
@@ -104,6 +108,10 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /cart command");
         commands.put("promo", new CommandPromo());
         logger.info("Loaded /promo command");
+        commands.put("showplayer", new CommandShowPlayer(this));
+        logger.info("Loaded /showplayer command");
+        commands.put("hideplayer", new CommandHidePlayer(this));
+        logger.info("Loaded /hideplayer command");
     }
 
     private void loadHandlers() {

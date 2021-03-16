@@ -103,6 +103,15 @@ public class PlayerHandler implements Listener {
         }
     }
 
+    @EventHandler
+    public void onUpdatePlayerHide(PlayerJoinEvent e) {
+        var newcomer = e.getPlayer();
+        // 来た人のhide情報を更新
+        PlayerHideManager.getInstance().updateAll(newcomer);
+        // オンラインユーザーの来た人に対するhide情報を更新
+        Bukkit.getOnlinePlayers().forEach(p -> PlayerHideManager.getInstance().update(p, newcomer));
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayer草ed(AsyncPlayerChatEvent e) {
         var logger = Bukkit.getLogger();
