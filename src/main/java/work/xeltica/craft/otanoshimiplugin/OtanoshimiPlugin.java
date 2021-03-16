@@ -26,6 +26,7 @@ import work.xeltica.craft.otanoshimiplugin.handlers.EntityHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.NewMorningHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.PlayerHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.VehicleHandler;
+import work.xeltica.craft.otanoshimiplugin.handlers.WakabaHandler;
 import work.xeltica.craft.otanoshimiplugin.plugins.VaultPlugin;
 import work.xeltica.craft.otanoshimiplugin.runnables.DaylightObserver;
 import work.xeltica.craft.otanoshimiplugin.runnables.FlyingObserver;
@@ -124,6 +125,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded EntityHandler");
         pm.registerEvents(new VehicleHandler(), this);
         logger.info("Loaded VehicleHandler");
+        pm.registerEvents(new WakabaHandler(), this);
+        logger.info("Loaded WakabaHandler");
         
         pm.registerEvents(Gui.getInstance(), this);
         logger.info("Loaded Gui EventHandler");
