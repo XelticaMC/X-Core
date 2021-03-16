@@ -3,6 +3,7 @@ package work.xeltica.craft.otanoshimiplugin.travels;
 public enum TicketType {
     WILDAREA("ワイルドエリア"),
     MEGAWILD("メガワイルド"),
+    MAIKURA_CITY("舞倉市"),
     MOON("月"),
     ;
 
