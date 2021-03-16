@@ -56,14 +56,18 @@ permissions:
   otanoshimi.command.givetravelticket:
     default: op
   otanoshimi.command.signedit:
-    default: true
+    default: op
   otanoshimi.command.report:
     default: op
   otanoshimi.command.localtime:
     default: op
   otanoshimi.command.boat:
-    default: true
+    default: op
   otanoshimi.command.cart:
-    default: true
+    default: op
   otanoshimi.citizen:
-    default: false
+    default: op
+  otanoshimi.command.showplayer:
+    default: op
+  otanoshimi.command.hideplayer:
+    default: op
