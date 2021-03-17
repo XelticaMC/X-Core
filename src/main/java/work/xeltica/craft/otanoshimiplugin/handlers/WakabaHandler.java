@@ -3,10 +3,8 @@ package work.xeltica.craft.otanoshimiplugin.handlers;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -16,13 +14,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import work.xeltica.craft.otanoshimiplugin.PlayerFlagsManager;
 
 public class WakabaHandler implements Listener {
     public WakabaHandler() {
@@ -57,7 +52,7 @@ public class WakabaHandler implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-        if (isCitizen(e.getPlayer())) return;
+        if (flags().isCitizen(e.getPlayer())) return;
         var mat = e.getBlock().getType();
         if (isDeniedMaterial(mat)) {
             prevent(e, e.getPlayer(), "ブロック " + mat + " を設置できません。");
@@ -66,7 +61,7 @@ public class WakabaHandler implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        if (isCitizen(e.getPlayer())) return;
+        if (flags().isCitizen(e.getPlayer())) return;
         var mat = e.getBlock().getType();
         if (isDeniedMaterial(mat)) {
             prevent(e, e.getPlayer(), "ブロック " + mat + " を破壊できません。");
@@ -75,7 +70,7 @@ public class WakabaHandler implements Listener {
 
     @EventHandler
     public void onBlockInteract(PlayerInteractEvent e) {
-        if (isCitizen(e.getPlayer())) return;
+        if (flags().isCitizen(e.getPlayer())) return;
         var clickedBlock = e.getClickedBlock();
         if (clickedBlock != null) {
             var mat = e.getClickedBlock().getType();
@@ -96,7 +91,7 @@ public class WakabaHandler implements Listener {
     public void onEntityDamage(EntityDamageByEntityEvent e) {
         if (!(e.getDamager() instanceof Player)) return;
         var p = (Player)e.getDamager();
-        if (isCitizen(p))
+        if (flags().isCitizen(p))
             return;
         if (e.getEntityType() == EntityType.ENDER_CRYSTAL) {
             prevent(e, p, "エンドクリスタルを破壊できません。");
@@ -110,10 +105,6 @@ public class WakabaHandler implements Listener {
         p.sendMessage("§b市民への昇格§rが必要です。詳しくは§b/promo§rコマンドを実行してください！");
     }
 
-    private boolean isCitizen(Player p) {
-        return p.hasPermission("otanoshimi.citizen");
-    }
-
     private boolean isDeniedMaterial(Material mat) {
         if (deniedBlocks.contains(mat)) return true;
         if (deniedTags.stream().anyMatch(t -> t.isTagged(mat))) return true;
@@ -124,6 +115,10 @@ public class WakabaHandler implements Listener {
         if (deniedItems.contains(mat)) return true;
         if (deniedItemTags.stream().anyMatch(t -> t.isTagged(mat))) return true;
         return false;
+    }
+
+    private PlayerFlagsManager flags() {
+        return PlayerFlagsManager.getInstance();
     }
 
     private final Set<Material> deniedBlocks = new HashSet<>();

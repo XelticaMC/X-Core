@@ -16,6 +16,4 @@ public class VehicleModel implements Cloneable, ConfigurationSerializable {
     public static VehicleModel deserialize(Map<String, Object> args) {
         return new VehicleModel();
     }
-
-    private int despawnCount;
 }

@@ -12,24 +12,23 @@ import work.xeltica.craft.otanoshimiplugin.commands.CommandBase;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandBoat;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandCart;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandGiveTravelTicket;
-import work.xeltica.craft.otanoshimiplugin.commands.CommandHidePlayer;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandLocalTime;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandPromo;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandPvp;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandReport;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandRespawn;
-import work.xeltica.craft.otanoshimiplugin.commands.CommandShowPlayer;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandSignEdit;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandVisitor;
 import work.xeltica.craft.otanoshimiplugin.gui.Gui;
 import work.xeltica.craft.otanoshimiplugin.handlers.EntityHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.NewMorningHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.PlayerHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.VehicleHandler;
+import work.xeltica.craft.otanoshimiplugin.handlers.VisitorHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.WakabaHandler;
 import work.xeltica.craft.otanoshimiplugin.plugins.VaultPlugin;
 import work.xeltica.craft.otanoshimiplugin.runnables.DaylightObserver;
-import work.xeltica.craft.otanoshimiplugin.runnables.FlyingObserver;
 import work.xeltica.craft.otanoshimiplugin.runnables.NightmareRandomEvent;
 
 public class OtanoshimiPlugin extends JavaPlugin {
@@ -84,8 +83,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded Omikuji Store");
         new VehicleManager(this);
         logger.info("Loaded Vehicle Manager");
-        new PlayerHideManager(this);
-        logger.info("Loaded Player Hide Manager");
+        new PlayerFlagsManager(this);
+        logger.info("Loaded Player Flags Manager");
     }
 
     private void loadCommands() {
@@ -109,10 +108,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /cart command");
         commands.put("promo", new CommandPromo());
         logger.info("Loaded /promo command");
-        commands.put("showplayer", new CommandShowPlayer(this));
-        logger.info("Loaded /showplayer command");
-        commands.put("hideplayer", new CommandHidePlayer(this));
-        logger.info("Loaded /hideplayer command");
+        commands.put("visitor", new CommandVisitor());
+        logger.info("Loaded /visitor command");
     }
 
     private void loadHandlers() {
@@ -127,6 +124,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded VehicleHandler");
         pm.registerEvents(new WakabaHandler(), this);
         logger.info("Loaded WakabaHandler");
+        pm.registerEvents(new VisitorHandler(), this);
+        logger.info("Loaded VisitorHandler");
         
         pm.registerEvents(Gui.getInstance(), this);
         logger.info("Loaded Gui EventHandler");

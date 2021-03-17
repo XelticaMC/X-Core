@@ -24,6 +24,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -34,6 +35,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import work.xeltica.craft.otanoshimiplugin.OmikujiScore;
 import work.xeltica.craft.otanoshimiplugin.OmikujiStore;
+import work.xeltica.craft.otanoshimiplugin.PlayerFlagsManager;
 import work.xeltica.craft.otanoshimiplugin.utils.TravelTicketUtil;
 
 public class PlayerHandler implements Listener {
@@ -76,6 +78,7 @@ public class PlayerHandler implements Listener {
         if (!p.hasPlayedBefore()) {
             e.setJoinMessage(ChatColor.GREEN + name + ChatColor.AQUA + "が" + ChatColor.GOLD + ChatColor.BOLD + "初参加" + ChatColor.RESET + "です");
         }
+        PlayerFlagsManager.getInstance().updateHasOnlineStaff();
     }
 
     @EventHandler
@@ -92,6 +95,7 @@ public class PlayerHandler implements Listener {
     public void onPlayerQuit(PlayerQuitEvent e) {
         var name = e.getPlayer().getDisplayName();
         e.setQuitMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がかえりました");
+        PlayerFlagsManager.getInstance().updateHasOnlineStaff();
     }
 
     @EventHandler
@@ -101,15 +105,6 @@ public class PlayerHandler implements Listener {
         if (isEC && isSB) {
             e.setCancelled(true);
         }
-    }
-
-    @EventHandler
-    public void onUpdatePlayerHide(PlayerJoinEvent e) {
-        var newcomer = e.getPlayer();
-        // 来た人のhide情報を更新
-        PlayerHideManager.getInstance().updateAll(newcomer);
-        // オンラインユーザーの来た人に対するhide情報を更新
-        Bukkit.getOnlinePlayers().forEach(p -> PlayerHideManager.getInstance().update(p, newcomer));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -147,8 +142,14 @@ public class PlayerHandler implements Listener {
     }
 
     @EventHandler
+    public void onPlayerItemHeld(PlayerItemHeldEvent e) {
+        // TODO 旅行券を持つとタイトル表示が発生するようにする
+    }
+
+    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
         var p = e.getPlayer();
+        var isSneaking = p.isSneaking();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             var worldName = p.getWorld().getName();
             var isBedDisabledWorld = 
@@ -189,7 +190,7 @@ public class PlayerHandler implements Listener {
             }
             int x, z;
             var otherPlayers = world.getPlayers();
-            if (otherPlayers.size() == 0) {
+            if (isSneaking || otherPlayers.size() == 0) {
                 x = rnd.nextInt(20000) - 10000;
                 z = rnd.nextInt(20000) - 10000;
             } else {

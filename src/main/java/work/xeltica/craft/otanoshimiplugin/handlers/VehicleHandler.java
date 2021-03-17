@@ -1,7 +1,5 @@
 package work.xeltica.craft.otanoshimiplugin.handlers;
 
-import java.util.Random;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

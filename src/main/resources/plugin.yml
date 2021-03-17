@@ -42,14 +42,10 @@ commands:
   promo:
     description: 市民への昇格方法を確認します。
     usage: /promo
-  showplayer:
-    description: プレイヤーをすべて表示します。
-    usage: /showplayer
-    permission: otanoshimi.command.showplayer
-  hideplayer:
-    description: プレイヤーをすべて非表示します。
-    usage: /hideplayer
-    permission: otanoshimi.command.hideplayer
+  visitor:
+    description: 観光モードの有効/無効を切り替えるか、現在のモードを取得します。
+    usage: /visitor [on/off]
+    permission: otanoshimi.command.visitor
 permissions:
   otanoshimi.command.pvp:
     default: op
@@ -67,7 +63,9 @@ permissions:
     default: op
   otanoshimi.citizen:
     default: op
-  otanoshimi.command.showplayer:
+  otanoshimi.staff:
     default: op
-  otanoshimi.command.hideplayer:
+  otanoshimi.command.visitor:
+    default: true
+  otanoshimi.command.visitor.set:
     default: op

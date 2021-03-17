@@ -1,9 +1,6 @@
 package work.xeltica.craft.otanoshimiplugin.handlers;
 
-import java.util.Random;
-
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
