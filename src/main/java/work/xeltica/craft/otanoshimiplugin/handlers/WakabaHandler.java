@@ -3,6 +3,7 @@ package work.xeltica.craft.otanoshimiplugin.handlers;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
@@ -16,8 +17,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import work.xeltica.craft.otanoshimiplugin.PlayerFlagsManager;
+import work.xeltica.craft.otanoshimiplugin.events.StaffJoinEvent;
+import work.xeltica.craft.otanoshimiplugin.events.StaffLeaveEvent;
 
 public class WakabaHandler implements Listener {
     public WakabaHandler() {
@@ -96,6 +101,24 @@ public class WakabaHandler implements Listener {
         if (e.getEntityType() == EntityType.ENDER_CRYSTAL) {
             prevent(e, p, "エンドクリスタルを破壊できません。");
         }
+    }
+
+    @EventHandler
+    public void onStaffJoin(StaffJoinEvent e) {
+        var f = flags();
+        Bukkit.getOnlinePlayers().stream().filter(p -> !f.isCitizen(p)).forEach(p -> {
+            p.sendMessage("スタッフが参加したため、「観光モード」が解除されました。");
+        });
+        Bukkit.getLogger().info("Disabled visitor mode!");
+    }
+
+    @EventHandler
+    public void onStaffLeave(StaffLeaveEvent e) {
+        var f = flags();
+        Bukkit.getOnlinePlayers().stream().filter(p -> !f.isCitizen(p)).forEach(p -> {
+            p.sendMessage("スタッフが全員退出したため、「観光モード」が有効化されました。");
+        });
+        Bukkit.getLogger().info("Enabled visitor mode!");
     }
 
     private void prevent(Cancellable e, Player p, String message) {

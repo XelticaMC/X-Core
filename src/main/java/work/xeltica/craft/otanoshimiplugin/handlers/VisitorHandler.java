@@ -17,14 +17,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
@@ -35,6 +36,9 @@ public class VisitorHandler implements Listener {
     public VisitorHandler() {
         // 右クリックできるブロックのホワイトリスト
         rightInteractWhitelist.add(Material.JUKEBOX);
+        rightInteractWhitelist.add(Material.LECTERN);
+        rightInteractWhitelist.addAll(Tag.SIGNS.getValues());
+        rightInteractWhitelist.addAll(Tag.WALL_SIGNS.getValues());
         rightInteractWhitelist.addAll(Tag.DOORS.getValues());
         rightInteractWhitelist.addAll(Tag.BEDS.getValues());
         rightInteractWhitelist.addAll(Tag.TRAPDOORS.getValues());
@@ -93,6 +97,13 @@ public class VisitorHandler implements Listener {
         cancelIfVisitor(e, p, () -> showError(p, "そのブロックを破壊できません"));
     }
 
+    // 観光客がブロックを設置できないようにする
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent e) {
+        var p = e.getPlayer();
+        cancelIfVisitor(e, p, () -> showError(p, "そのブロックを設置できません"));
+    }
+
     // 観光客がブロックに干渉できないようにする
     @EventHandler
     public void onVisitorInteract(PlayerInteractEvent e) {
@@ -110,6 +121,7 @@ public class VisitorHandler implements Listener {
     @EventHandler
     public void onVisitorUseBlacklistedItem(PlayerInteractEvent e) {
         var item = e.getItem();
+        if (item == null) return;
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (rightItemBlacklist.contains(item.getType())) {
                 cancelIfVisitor(e, e.getPlayer(), () -> showError(e.getPlayer(), "そのアイテムは使用できません"));
@@ -147,9 +159,9 @@ public class VisitorHandler implements Listener {
 
     // 観光客がアイテムを捨てられないようにする
     @EventHandler
-    public void onEntityDropItem(EntityDropItemEvent e) {
-        cancelIfVisitor(e, e.getEntity(), () -> {
-            var p = (Player)e.getEntity();
+    public void onEntityDropItem(PlayerDropItemEvent e) {
+        cancelIfVisitor(e, e.getPlayer(), () -> {
+            var p = (Player)e.getPlayer();
             showError(p, "アイテムを捨てることはできません");
         });
     }

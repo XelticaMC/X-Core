@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import com.destroystokyo.paper.Title;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -77,7 +79,34 @@ public class PlayerHandler implements Listener {
         e.setJoinMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がやってきました");
         if (!p.hasPlayedBefore()) {
             e.setJoinMessage(ChatColor.GREEN + name + ChatColor.AQUA + "が" + ChatColor.GOLD + ChatColor.BOLD + "初参加" + ChatColor.RESET + "です");
+            PlayerFlagsManager.getInstance().addNewcomer(p);
         }
+        PlayerFlagsManager.getInstance().updateHasOnlineStaff();
+
+        var f = PlayerFlagsManager.getInstance();
+
+        p.sendTitle(
+            "§aXelticaMCへ§6ようこそ！",
+            "§f詳しくは §b§nhttps://craft.xeltica.work§fを見てね！"
+        );
+        if (f.isCitizen(p))
+            return;
+        if (!f.isNewcomer(p)) {
+            p.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！");
+            p.sendMessage("詳しくは §b/promo§rコマンドを実行してください。");
+        }
+        if (f.hasOnlineStaff()) {
+            p.sendMessage("スタッフが参加しているため、「観光モード」は無効です。");
+        } else {
+            p.sendMessage("スタッフが全員不在のため、「観光モード」は有効です。");
+            p.sendMessage("観光モードがオンの時は、ブロックの設置、破壊、使用やモブへの攻撃などができなくなり、モブから襲われることも、体力や満腹度が減ることもありません。");
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        var name = e.getPlayer().getDisplayName();
+        e.setQuitMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がかえりました");
         PlayerFlagsManager.getInstance().updateHasOnlineStaff();
     }
 
@@ -89,13 +118,6 @@ public class PlayerHandler implements Listener {
         if (name.startsWith("travel_") || name.equals("sandbox")) {
             e.setCancelled(true);
         }
-    }
-
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        var name = e.getPlayer().getDisplayName();
-        e.setQuitMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がかえりました");
-        PlayerFlagsManager.getInstance().updateHasOnlineStaff();
     }
 
     @EventHandler

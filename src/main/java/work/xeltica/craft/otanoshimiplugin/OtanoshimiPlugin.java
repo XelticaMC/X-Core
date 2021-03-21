@@ -3,11 +3,13 @@ package work.xeltica.craft.otanoshimiplugin;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import net.luckperms.api.LuckPerms;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandBase;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandBoat;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandCart;
@@ -27,6 +29,7 @@ import work.xeltica.craft.otanoshimiplugin.handlers.PlayerHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.VehicleHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.VisitorHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.WakabaHandler;
+import work.xeltica.craft.otanoshimiplugin.plugins.CitizenTimerCalculator;
 import work.xeltica.craft.otanoshimiplugin.plugins.VaultPlugin;
 import work.xeltica.craft.otanoshimiplugin.runnables.DaylightObserver;
 import work.xeltica.craft.otanoshimiplugin.runnables.NightmareRandomEvent;
@@ -56,8 +59,15 @@ public class OtanoshimiPlugin extends JavaPlugin {
             @Override
             public void run() {
                 VehicleManager.getInstance().tick(10);
+                PlayerFlagsManager.getInstance().tickNewcomers(10);
             }
         }.runTaskTimer(this, 0, 10);
+
+
+        calculator = new CitizenTimerCalculator();
+        var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        var luckPerms = provider.getProvider();
+        luckPerms.getContextManager().registerCalculator(calculator);
 
         logger.info("Initialized XelticaMC Otanoshimi Plugin! Have fun!");
     }
@@ -66,6 +76,9 @@ public class OtanoshimiPlugin extends JavaPlugin {
     public void onDisable() {
         commands.clear();
         unloadPlugins();
+        var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        var luckPerms = provider.getProvider();
+        luckPerms.getContextManager().unregisterCalculator(calculator);
     }
 
     @Override
@@ -88,6 +101,7 @@ public class OtanoshimiPlugin extends JavaPlugin {
     }
 
     private void loadCommands() {
+        commands.clear();
         commands.put("omikuji", new CommandOmikuji());
         logger.info("Loaded /omikuji command");
         commands.put("respawn", new CommandRespawn());
@@ -141,6 +155,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
 
     private Logger logger;
     private final HashMap<String, CommandBase> commands = new HashMap<>();
+
+    private CitizenTimerCalculator calculator;
 
     private static OtanoshimiPlugin instance;
 }
