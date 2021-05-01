@@ -103,23 +103,23 @@ public class WakabaHandler implements Listener {
         }
     }
 
-    @EventHandler
-    public void onStaffJoin(StaffJoinEvent e) {
-        var f = flags();
-        Bukkit.getOnlinePlayers().stream().filter(p -> !f.isCitizen(p)).forEach(p -> {
-            p.sendMessage("スタッフが参加したため、「観光モード」が解除されました。");
-        });
-        Bukkit.getLogger().info("Disabled visitor mode!");
-    }
+    // @EventHandler
+    // public void onStaffJoin(StaffJoinEvent e) {
+    //     var f = flags();
+    //     Bukkit.getOnlinePlayers().stream().filter(p -> !f.isCitizen(p)).forEach(p -> {
+    //         p.sendMessage("スタッフが参加したため、「観光モード」が解除されました。");
+    //     });
+    //     Bukkit.getLogger().info("Disabled visitor mode!");
+    // }
 
-    @EventHandler
-    public void onStaffLeave(StaffLeaveEvent e) {
-        var f = flags();
-        Bukkit.getOnlinePlayers().stream().filter(p -> !f.isCitizen(p)).forEach(p -> {
-            p.sendMessage("スタッフが全員退出したため、「観光モード」が有効化されました。");
-        });
-        Bukkit.getLogger().info("Enabled visitor mode!");
-    }
+    // @EventHandler
+    // public void onStaffLeave(StaffLeaveEvent e) {
+    //     var f = flags();
+    //     Bukkit.getOnlinePlayers().stream().filter(p -> !f.isCitizen(p)).forEach(p -> {
+    //         p.sendMessage("スタッフが全員退出したため、「観光モード」が有効化されました。");
+    //     });
+    //     Bukkit.getLogger().info("Enabled visitor mode!");
+    // }
 
     private void prevent(Cancellable e, Player p, String message) {
         e.setCancelled(true);

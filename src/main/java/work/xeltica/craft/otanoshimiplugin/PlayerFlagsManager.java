@@ -81,7 +81,7 @@ public class PlayerFlagsManager {
     }
 
     public boolean getVisitorMode(Player p, boolean saved) {
-        if (!saved && !hasOnlineStaff() && !isCitizen(p)) return true;
+        // if (!saved && !hasOnlineStaff() && !isCitizen(p)) return true;
         return visitorUUIDs.contains(p.getUniqueId().toString());
     }
 
