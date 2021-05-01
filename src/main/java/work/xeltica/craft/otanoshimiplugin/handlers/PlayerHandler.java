@@ -81,7 +81,12 @@ public class PlayerHandler implements Listener {
             e.setJoinMessage(ChatColor.GREEN + name + ChatColor.AQUA + "が" + ChatColor.GOLD + ChatColor.BOLD + "初参加" + ChatColor.RESET + "です");
             PlayerFlagsManager.getInstance().addNewcomer(p);
         }
-        PlayerFlagsManager.getInstance().updateHasOnlineStaff();
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                PlayerFlagsManager.getInstance().updateHasOnlineStaff();   
+            }
+        }.runTask(plugin);
 
         var f = PlayerFlagsManager.getInstance();
 
@@ -107,7 +112,12 @@ public class PlayerHandler implements Listener {
     public void onPlayerQuit(PlayerQuitEvent e) {
         var name = e.getPlayer().getDisplayName();
         e.setQuitMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がかえりました");
-        PlayerFlagsManager.getInstance().updateHasOnlineStaff();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                PlayerFlagsManager.getInstance().updateHasOnlineStaff();
+            }
+        }.runTask(plugin);
     }
 
     @EventHandler
@@ -212,6 +222,8 @@ public class PlayerHandler implements Listener {
             }
             int x, z;
             var otherPlayers = world.getPlayers();
+            Bukkit.getLogger().info(String.format("%sに向かうプレイヤー%sはスニークしていま%s。", type.getDisplayName(), p.getName(), isSneaking ? "す" : "せん"));
+
             if (isSneaking || otherPlayers.size() == 0) {
                 x = rnd.nextInt(20000) - 10000;
                 z = rnd.nextInt(20000) - 10000;

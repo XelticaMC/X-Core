@@ -114,12 +114,6 @@ public class PlayerFlagsManager {
     }
 
     public void updateHasOnlineStaff() {
-        updateHasOnlineStaff(null);
-    }
-
-    public void updateHasOnlineStaff(Player pl) {
-        var uuid = pl == null ? null : pl.getUniqueId();
-        var flag = Bukkit.getOnlinePlayers().stream().filter(p -> !p.getUniqueId().equals(uuid)).anyMatch(p -> p.hasPermission("otanoshimi.staff"));
         if (_hasOnlineStaff != flag) {
             Bukkit.getPluginManager().callEvent(flag ? new StaffJoinEvent() : new StaffLeaveEvent());
         }
