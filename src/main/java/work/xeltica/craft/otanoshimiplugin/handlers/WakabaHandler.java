@@ -3,7 +3,6 @@ package work.xeltica.craft.otanoshimiplugin.handlers;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
@@ -17,12 +16,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import work.xeltica.craft.otanoshimiplugin.PlayerFlagsManager;
-import work.xeltica.craft.otanoshimiplugin.events.StaffJoinEvent;
-import work.xeltica.craft.otanoshimiplugin.events.StaffLeaveEvent;
 
 public class WakabaHandler implements Listener {
     public WakabaHandler() {
