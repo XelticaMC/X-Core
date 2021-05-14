@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.query.QueryOptions;
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsManager;
+import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
 
 public class CommandPromo extends CommandPlayerOnlyBase {
     @Override
@@ -14,7 +14,7 @@ public class CommandPromo extends CommandPlayerOnlyBase {
         var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         var luckPerms = provider.getProvider();
         var lpUser = luckPerms.getPlayerAdapter(Player.class).getUser(player);
-        var f = PlayerFlagsManager.getInstance();
+        var f = PlayerFlagsStore.getInstance();
         var isManualCitizen = lpUser.getInheritedGroups(QueryOptions.defaultContextualOptions()).stream().anyMatch(g -> g.getName().equals("citizen"));
         if (!f.isCitizen(player)) {
             player.sendMessage("本サーバーでは、プレイヤーさんを§aわかば§r、§b市民§rという大きく2つのロールに分類しています。");

@@ -60,7 +60,7 @@ public class OtanoshimiPlugin extends JavaPlugin {
             @Override
             public void run() {
                 VehicleManager.getInstance().tick(10);
-                PlayerFlagsManager.getInstance().tickNewcomers(10);
+                PlayerFlagsStore.getInstance().tickNewcomers(10);
             }
         }.runTaskTimer(this, 0, 10);
 
@@ -97,7 +97,7 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded Omikuji Store");
         new VehicleManager(this);
         logger.info("Loaded Vehicle Manager");
-        new PlayerFlagsManager(this);
+        new PlayerFlagsStore(this);
         logger.info("Loaded Player Flags Manager");
     }
 

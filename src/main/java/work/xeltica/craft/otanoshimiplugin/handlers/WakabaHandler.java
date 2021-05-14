@@ -17,7 +17,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsManager;
+import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
 
 public class WakabaHandler implements Listener {
     public WakabaHandler() {
@@ -135,8 +135,8 @@ public class WakabaHandler implements Listener {
         return false;
     }
 
-    private PlayerFlagsManager flags() {
-        return PlayerFlagsManager.getInstance();
+    private PlayerFlagsStore flags() {
+        return PlayerFlagsStore.getInstance();
     }
 
     private final Set<Material> deniedBlocks = new HashSet<>();

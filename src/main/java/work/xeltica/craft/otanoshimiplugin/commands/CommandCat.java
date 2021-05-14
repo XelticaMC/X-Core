@@ -3,13 +3,13 @@ package work.xeltica.craft.otanoshimiplugin.commands;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsManager;
+import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
 
 public class CommandCat extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player sender, Command command, String label, String[] args) {
-        var flag = PlayerFlagsManager.getInstance();
+        var flag = PlayerFlagsStore.getInstance();
         if (args.length > 0) {
             var arg = args[0];
             if ("on".equals(arg)) {

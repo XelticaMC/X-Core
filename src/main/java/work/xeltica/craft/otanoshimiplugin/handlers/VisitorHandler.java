@@ -30,7 +30,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsManager;
+import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
 
 public class VisitorHandler implements Listener {
     public VisitorHandler() {
@@ -204,7 +204,7 @@ public class VisitorHandler implements Listener {
 
     // 観光客かどうかを取得する
     private boolean isVisitor(Player p) {
-        return PlayerFlagsManager.getInstance().getVisitorMode(p);
+        return PlayerFlagsStore.getInstance().getVisitorMode(p);
     }
 
     private Set<Material> leftInteractWhitelist = new HashSet<>();

@@ -3,13 +3,13 @@ package work.xeltica.craft.otanoshimiplugin.commands;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsManager;
+import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
 
 public class CommandVisitor extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        var manager = PlayerFlagsManager.getInstance();
+        var manager = PlayerFlagsStore.getInstance();
         if (args.length == 0) {
             var isVisitor = manager.getVisitorMode(player);
             var isAutoVisitor = isVisitor && !manager.getVisitorMode(player, true);

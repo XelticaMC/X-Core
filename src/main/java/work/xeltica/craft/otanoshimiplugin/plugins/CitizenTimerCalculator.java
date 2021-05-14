@@ -6,13 +6,13 @@ import net.luckperms.api.context.ContextCalculator;
 import net.luckperms.api.context.ContextConsumer;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsManager;
+import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
 
 public class CitizenTimerCalculator implements ContextCalculator<Player> {
 
     @Override
     public void calculate(Player target, ContextConsumer contextConsumer) {
-        contextConsumer.accept(KEY, PlayerFlagsManager.getInstance().isNewcomer(target) ? "false" : "true");
+        contextConsumer.accept(KEY, PlayerFlagsStore.getInstance().isNewcomer(target) ? "false" : "true");
     }
 
     @Override

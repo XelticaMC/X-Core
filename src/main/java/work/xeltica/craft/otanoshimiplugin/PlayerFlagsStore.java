@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,15 +14,15 @@ import org.bukkit.plugin.Plugin;
 import work.xeltica.craft.otanoshimiplugin.events.StaffJoinEvent;
 import work.xeltica.craft.otanoshimiplugin.events.StaffLeaveEvent;
 
-public class PlayerFlagsManager {
-    public PlayerFlagsManager(Plugin pl) {
+public class PlayerFlagsStore {
+    public PlayerFlagsStore(Plugin pl) {
         this.plugin = pl;
-        PlayerFlagsManager.instance = this;
+        PlayerFlagsStore.instance = this;
         reloadStore();
     }
 
-    public static PlayerFlagsManager getInstance() {
-        return PlayerFlagsManager.instance;
+    public static PlayerFlagsStore getInstance() {
+        return PlayerFlagsStore.instance;
     }
 
     public void tickNewcomers(int tick) {
@@ -144,7 +143,7 @@ public class PlayerFlagsManager {
         _hasOnlineStaff = flag;
     }
     
-    private static PlayerFlagsManager instance;
+    private static PlayerFlagsStore instance;
     private Plugin plugin;
     private List<String> visitorUUIDs = new ArrayList<>();
     private List<String> catUUIDs = new ArrayList<>();

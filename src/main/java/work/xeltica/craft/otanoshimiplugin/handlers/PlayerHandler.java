@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import com.destroystokyo.paper.Title;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -37,7 +35,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import work.xeltica.craft.otanoshimiplugin.OmikujiScore;
 import work.xeltica.craft.otanoshimiplugin.OmikujiStore;
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsManager;
+import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
 import work.xeltica.craft.otanoshimiplugin.utils.TravelTicketUtil;
 
 public class PlayerHandler implements Listener {
@@ -79,16 +77,16 @@ public class PlayerHandler implements Listener {
         e.setJoinMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がやってきました");
         if (!p.hasPlayedBefore()) {
             e.setJoinMessage(ChatColor.GREEN + name + ChatColor.AQUA + "が" + ChatColor.GOLD + ChatColor.BOLD + "初参加" + ChatColor.RESET + "です");
-            PlayerFlagsManager.getInstance().addNewcomer(p);
+            PlayerFlagsStore.getInstance().addNewcomer(p);
         }
         new BukkitRunnable(){
             @Override
             public void run() {
-                PlayerFlagsManager.getInstance().updateHasOnlineStaff();   
+                PlayerFlagsStore.getInstance().updateHasOnlineStaff();   
             }
         }.runTask(plugin);
 
-        var f = PlayerFlagsManager.getInstance();
+        var f = PlayerFlagsStore.getInstance();
 
         p.sendTitle(
             "§aXelticaMCへ§6ようこそ！",
@@ -115,7 +113,7 @@ public class PlayerHandler implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                PlayerFlagsManager.getInstance().updateHasOnlineStaff();
+                PlayerFlagsStore.getInstance().updateHasOnlineStaff();
             }
         }.runTask(plugin);
     }
@@ -142,7 +140,7 @@ public class PlayerHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChatForCat(AsyncPlayerChatEvent e) {
         // ネコであれば文章をいじる
-        if (PlayerFlagsManager.getInstance().getCatMode(e.getPlayer())) {
+        if (PlayerFlagsStore.getInstance().getCatMode(e.getPlayer())) {
             var mes = e.getMessage();
             mes = mes.replace("な", "にゃ");
             mes = mes.replace("ナ", "ニャ");
