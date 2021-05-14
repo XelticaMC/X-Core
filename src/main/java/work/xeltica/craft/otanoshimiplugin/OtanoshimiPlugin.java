@@ -13,6 +13,7 @@ import net.luckperms.api.LuckPerms;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandBase;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandBoat;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandCart;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandCat;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandLocalTime;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
@@ -124,6 +125,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /promo command");
         commands.put("visitor", new CommandVisitor());
         logger.info("Loaded /visitor command");
+        commands.put("cat", new CommandCat());
+        logger.info("Loaded /cat command");
     }
 
     private void loadHandlers() {

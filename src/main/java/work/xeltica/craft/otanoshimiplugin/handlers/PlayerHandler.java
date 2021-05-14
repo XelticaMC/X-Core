@@ -140,6 +140,24 @@ public class PlayerHandler implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerChatForCat(AsyncPlayerChatEvent e) {
+        // ネコであれば文章をいじる
+        if (PlayerFlagsManager.getInstance().getCatMode(e.getPlayer())) {
+            var mes = e.getMessage();
+            mes = mes.replace("な", "にゃ");
+            mes = mes.replace("ナ", "ニャ");
+            mes = mes.replace("ﾅ", "ﾆｬ");
+            mes = mes.replace("everyone", "everynyan");
+            mes = mes.replace("morning", "mornyan");
+            mes = mes.replace("na", "nya");
+            mes = mes.replace("EVERYONE", "EVERYNYAN");
+            mes = mes.replace("MORNING", "MORNYAN");
+            mes = mes.replace("NA", "NYA");
+            e.setMessage(mes);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayer草ed(AsyncPlayerChatEvent e) {
         var logger = Bukkit.getLogger();
         if (e.getMessage().equals("草") || e.getMessage().equalsIgnoreCase("kusa") || e.getMessage().equalsIgnoreCase("w")) {

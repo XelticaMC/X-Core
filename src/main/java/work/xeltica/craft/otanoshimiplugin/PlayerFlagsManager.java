@@ -19,7 +19,6 @@ public class PlayerFlagsManager {
     public PlayerFlagsManager(Plugin pl) {
         this.plugin = pl;
         PlayerFlagsManager.instance = this;
-        logger = Bukkit.getLogger();
         reloadStore();
     }
 
@@ -85,11 +84,34 @@ public class PlayerFlagsManager {
         return visitorUUIDs.contains(p.getUniqueId().toString());
     }
 
+    public void setCatMode(Player p, boolean flag) {
+        // 既に同値が設定されている場合はスキップ
+        if (getCatMode(p) == flag) return;
+        var uuid = p.getUniqueId().toString();
+        if (flag) {
+            // 有効化
+            catUUIDs.add(uuid);
+        } else {
+            // 無効化
+            catUUIDs.remove(uuid);
+        }
+        try {
+            writeStore();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean getCatMode(Player p) {
+        return catUUIDs.contains(p.getUniqueId().toString());
+    }
+
     public void reloadStore() {
         var flagsConfFile = new File(plugin.getDataFolder(), "flags.yml");
         flagsConf = YamlConfiguration.loadConfiguration(flagsConfFile);
 
         visitorUUIDs = flagsConf.getStringList("visitors");
+        catUUIDs = flagsConf.getStringList("cats");
 
         var newcomersConfFile = new File(plugin.getDataFolder(), "newcomers.yml");
         newcomersConf = YamlConfiguration.loadConfiguration(newcomersConfFile);
@@ -98,6 +120,7 @@ public class PlayerFlagsManager {
     public void writeStore() throws IOException {
         var flagsConfFile = new File(plugin.getDataFolder(), "flags.yml");
         flagsConf.set("visitors", visitorUUIDs);
+        flagsConf.set("cats", catUUIDs);
         flagsConf.save(flagsConfFile);
         flagsConf = YamlConfiguration.loadConfiguration(flagsConfFile);
         var newcomersConfFile = new File(plugin.getDataFolder(), "newcomers.yml");
@@ -123,8 +146,8 @@ public class PlayerFlagsManager {
     
     private static PlayerFlagsManager instance;
     private Plugin plugin;
-    private Logger logger;
     private List<String> visitorUUIDs = new ArrayList<>();
+    private List<String> catUUIDs = new ArrayList<>();
     private boolean _hasOnlineStaff;
     private YamlConfiguration flagsConf;
     private YamlConfiguration newcomersConf;

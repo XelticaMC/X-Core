@@ -46,6 +46,10 @@ commands:
     description: 観光モードの有効/無効を切り替えるか、現在のモードを取得します。
     usage: /visitor [on/off]
     permission: otanoshimi.command.visitor
+  cat:
+    description: CATモードの有効/無効を切り替えるか、現在のモードを取得します。
+    usage: /cat [on/off]
+    permission: otanoshimi.command.cat
 permissions:
   otanoshimi.command.pvp:
     default: op
@@ -69,3 +73,5 @@ permissions:
     default: true
   otanoshimi.command.visitor.set:
     default: op
+  otanoshimi.command.cat:
+    default: true
