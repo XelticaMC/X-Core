@@ -21,7 +21,7 @@ public class CommandPromo extends CommandPlayerOnlyBase {
             player.sendMessage("§b市民§rにならなくても基本的なプレイはできますが、");
             player.sendMessage("・§c一部ブロックが使えない§r");
             player.sendMessage("・§c一部のオリジナル機能が使えない§r");
-            player.sendMessage("・§cスタッフ不在時に大きく機能が制限される§r");
+            // player.sendMessage("・§cスタッフ不在時に大きく機能が制限される§r");
             player.sendMessage("という欠点があります。§b市民§rに昇格することで全ての機能が開放されます。§b市民§rに昇格する方法の一つに、クイック認証があります。");
         }
         if (isManualCitizen) {
