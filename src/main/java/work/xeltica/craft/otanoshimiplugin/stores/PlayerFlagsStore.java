@@ -1,4 +1,4 @@
-package work.xeltica.craft.otanoshimiplugin;
+package work.xeltica.craft.otanoshimiplugin.stores;
 
 import java.io.File;
 import java.io.IOException;

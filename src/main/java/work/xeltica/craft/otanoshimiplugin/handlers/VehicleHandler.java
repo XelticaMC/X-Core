@@ -8,33 +8,33 @@ import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
-import work.xeltica.craft.otanoshimiplugin.VehicleManager;
+import work.xeltica.craft.otanoshimiplugin.stores.VehicleStore;
 
 public class VehicleHandler implements Listener {
     @EventHandler
     public void onEnter(VehicleEnterEvent e) {
         var entity = e.getEntered();
         if (!(entity instanceof Player)) return;
-        VehicleManager.getInstance().unregisterVehicle(e.getVehicle());
+        VehicleStore.getInstance().unregisterVehicle(e.getVehicle());
     }
 
     @EventHandler
     public void onExit(VehicleExitEvent e) {
-        VehicleManager.getInstance().registerVehicle(e.getVehicle());
+        VehicleStore.getInstance().registerVehicle(e.getVehicle());
     }
 
     @EventHandler
     public void onCreated(VehicleCreateEvent e) {
-        VehicleManager.getInstance().registerVehicle(e.getVehicle());
+        VehicleStore.getInstance().registerVehicle(e.getVehicle());
     }
 
     @EventHandler
     public void onDestroyed(VehicleDestroyEvent e) {
         var v = e.getVehicle();
-        if (VehicleManager.getInstance().isValidVehicle(v)) {
+        if (VehicleStore.getInstance().isValidVehicle(v)) {
             e.setCancelled(true);
             e.getVehicle().remove();
         }
-        VehicleManager.getInstance().unregisterVehicle(v);
+        VehicleStore.getInstance().unregisterVehicle(v);
     }
 }

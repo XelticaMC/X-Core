@@ -1,4 +1,4 @@
-package work.xeltica.craft.otanoshimiplugin;
+package work.xeltica.craft.otanoshimiplugin.stores;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,8 @@ import java.util.Random;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import work.xeltica.craft.otanoshimiplugin.models.OmikujiScore;
 
 public class OmikujiStore {
     public OmikujiStore(Plugin pl) {

@@ -1,4 +1,4 @@
-package work.xeltica.craft.otanoshimiplugin;
+package work.xeltica.craft.otanoshimiplugin.models;
 
 public enum OmikujiScore {
     None,

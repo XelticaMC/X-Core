@@ -50,6 +50,10 @@ commands:
     description: CATモードの有効/無効を切り替えるか、現在のモードを取得します。
     usage: /cat [on/off]
     permission: otanoshimi.command.cat
+  hub:
+    aliases: [ hub ]
+    description: ロビーに移動します。
+    usage: /hub help
 permissions:
   otanoshimi.command.pvp:
     default: op
@@ -75,3 +79,13 @@ permissions:
     default: op
   otanoshimi.command.cat:
     default: true
+  hub.teleport.sandbox:
+    default: op
+  hub.teleport.art:
+    default: op
+  hub.teleport.nightmare:
+    default: op
+  hub.gatekeeper.citizen:
+    default: op
+  hub.gatekeeper.staff:
+    default: op

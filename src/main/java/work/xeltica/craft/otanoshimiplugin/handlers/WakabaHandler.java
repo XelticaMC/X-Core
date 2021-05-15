@@ -17,7 +17,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
+import work.xeltica.craft.otanoshimiplugin.stores.PlayerFlagsStore;
 
 public class WakabaHandler implements Listener {
     public WakabaHandler() {

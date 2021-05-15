@@ -30,7 +30,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
+import work.xeltica.craft.otanoshimiplugin.stores.PlayerFlagsStore;
 
 public class VisitorHandler implements Listener {
     public VisitorHandler() {

@@ -1,4 +1,4 @@
-package work.xeltica.craft.otanoshimiplugin;
+package work.xeltica.craft.otanoshimiplugin.stores;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,16 +12,16 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.RideableMinecart;
 import org.bukkit.plugin.Plugin;
 
-public class VehicleManager {
-    public VehicleManager(Plugin pl) {
+public class VehicleStore {
+    public VehicleStore(Plugin pl) {
         this.pl = pl;
-        VehicleManager.instance = this;
+        VehicleStore.instance = this;
         logger = Bukkit.getLogger();
         reloadStore();
     }
 
-    public static VehicleManager getInstance() {
-        return VehicleManager.instance;
+    public static VehicleStore getInstance() {
+        return VehicleStore.instance;
     }
 
     public void registerVehicle(Vehicle vehicle) {
@@ -101,7 +101,7 @@ public class VehicleManager {
         }
     }
     
-    private static VehicleManager instance;
+    private static VehicleStore instance;
     private Plugin pl;
     private YamlConfiguration conf;
     private Logger logger;

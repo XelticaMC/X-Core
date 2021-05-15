@@ -1,4 +1,4 @@
-package work.xeltica.craft.otanoshimiplugin;
+package work.xeltica.craft.otanoshimiplugin.models;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

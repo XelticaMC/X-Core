@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.query.QueryOptions;
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
+import work.xeltica.craft.otanoshimiplugin.stores.PlayerFlagsStore;
 
 public class CommandPromo extends CommandPlayerOnlyBase {
     @Override

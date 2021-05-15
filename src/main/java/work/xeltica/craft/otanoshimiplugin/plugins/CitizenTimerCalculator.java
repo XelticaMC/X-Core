@@ -6,7 +6,7 @@ import net.luckperms.api.context.ContextCalculator;
 import net.luckperms.api.context.ContextConsumer;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
+import work.xeltica.craft.otanoshimiplugin.stores.PlayerFlagsStore;
 
 public class CitizenTimerCalculator implements ContextCalculator<Player> {
 

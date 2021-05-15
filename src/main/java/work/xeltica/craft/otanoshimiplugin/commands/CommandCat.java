@@ -3,7 +3,7 @@ package work.xeltica.craft.otanoshimiplugin.commands;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
+import work.xeltica.craft.otanoshimiplugin.stores.PlayerFlagsStore;
 
 public class CommandCat extends CommandPlayerOnlyBase {
 

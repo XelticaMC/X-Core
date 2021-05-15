@@ -3,8 +3,8 @@ package work.xeltica.craft.otanoshimiplugin.handlers;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import work.xeltica.craft.otanoshimiplugin.OmikujiStore;
 import work.xeltica.craft.otanoshimiplugin.events.NewMorningEvent;
+import work.xeltica.craft.otanoshimiplugin.stores.OmikujiStore;
 
 public class NewMorningHandler implements Listener {
     @EventHandler

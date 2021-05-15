@@ -33,9 +33,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import work.xeltica.craft.otanoshimiplugin.OmikujiScore;
-import work.xeltica.craft.otanoshimiplugin.OmikujiStore;
-import work.xeltica.craft.otanoshimiplugin.PlayerFlagsStore;
+import work.xeltica.craft.otanoshimiplugin.models.OmikujiScore;
+import work.xeltica.craft.otanoshimiplugin.stores.OmikujiStore;
+import work.xeltica.craft.otanoshimiplugin.stores.PlayerFlagsStore;
 import work.xeltica.craft.otanoshimiplugin.utils.TravelTicketUtil;
 
 public class PlayerHandler implements Listener {

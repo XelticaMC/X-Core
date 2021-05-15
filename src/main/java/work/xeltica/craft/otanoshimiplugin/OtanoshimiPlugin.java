@@ -15,6 +15,7 @@ import work.xeltica.craft.otanoshimiplugin.commands.CommandBoat;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandCart;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandCat;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandGiveTravelTicket;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandHub;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandLocalTime;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandPromo;
@@ -34,6 +35,11 @@ import work.xeltica.craft.otanoshimiplugin.plugins.CitizenTimerCalculator;
 import work.xeltica.craft.otanoshimiplugin.plugins.VaultPlugin;
 import work.xeltica.craft.otanoshimiplugin.runnables.DaylightObserver;
 import work.xeltica.craft.otanoshimiplugin.runnables.NightmareRandomEvent;
+import work.xeltica.craft.otanoshimiplugin.stores.HubStore;
+import work.xeltica.craft.otanoshimiplugin.stores.OmikujiStore;
+import work.xeltica.craft.otanoshimiplugin.stores.PlayerFlagsStore;
+import work.xeltica.craft.otanoshimiplugin.stores.VehicleStore;
+import work.xeltica.craft.otanoshimiplugin.stores.WorldStore;
 
 public class OtanoshimiPlugin extends JavaPlugin {
     public static OtanoshimiPlugin getInstance() {
@@ -59,7 +65,7 @@ public class OtanoshimiPlugin extends JavaPlugin {
         new BukkitRunnable(){
             @Override
             public void run() {
-                VehicleManager.getInstance().tick(10);
+                VehicleStore.getInstance().tick(10);
                 PlayerFlagsStore.getInstance().tickNewcomers(10);
             }
         }.runTaskTimer(this, 0, 10);
@@ -95,10 +101,14 @@ public class OtanoshimiPlugin extends JavaPlugin {
     private void loadStores() {
         new OmikujiStore(this);
         logger.info("Loaded Omikuji Store");
-        new VehicleManager(this);
-        logger.info("Loaded Vehicle Manager");
+        new VehicleStore(this);
+        logger.info("Loaded Vehicle Store");
         new PlayerFlagsStore(this);
-        logger.info("Loaded Player Flags Manager");
+        logger.info("Loaded Player Flags Store");
+        new HubStore(this);
+        logger.info("Loaded Hub Store");
+        new WorldStore(this);
+        logger.info("Loaded World Store");
     }
 
     private void loadCommands() {
@@ -127,6 +137,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /visitor command");
         commands.put("cat", new CommandCat());
         logger.info("Loaded /cat command");
+        commands.put("hub", new CommandHub());
+        logger.info("Loaded /hub command");
     }
 
     private void loadHandlers() {

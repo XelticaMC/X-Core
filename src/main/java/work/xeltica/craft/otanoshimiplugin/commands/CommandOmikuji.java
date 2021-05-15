@@ -9,9 +9,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import work.xeltica.craft.otanoshimiplugin.OmikujiStore;
 import work.xeltica.craft.otanoshimiplugin.OtanoshimiPlugin;
 import work.xeltica.craft.otanoshimiplugin.plugins.VaultPlugin;
+import work.xeltica.craft.otanoshimiplugin.stores.OmikujiStore;
 
 public class CommandOmikuji extends CommandPlayerOnlyBase {
     @Override
