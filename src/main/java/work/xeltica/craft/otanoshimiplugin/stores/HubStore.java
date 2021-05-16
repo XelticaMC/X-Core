@@ -23,6 +23,7 @@ import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
@@ -34,6 +35,7 @@ import work.xeltica.craft.otanoshimiplugin.utils.LocationComparator;
 
 public class HubStore {
     public HubStore(Plugin pl) {
+        ConfigurationSerialization.registerClass(SignData.class, "SignData");
         this.plugin = pl;
         HubStore.instance = this;
         logger = pl.getLogger();
@@ -248,6 +250,7 @@ public class HubStore {
         playersConf = YamlConfiguration.loadConfiguration(playersConfFile);
         signsConf = YamlConfiguration.loadConfiguration(signsConfFile);
         signData = (List<SignData>) signsConf.getList("signs", new ArrayList<SignData>());
+        logger.info(String.format("%dつの看板データを読み込みました。", signData.size()));
     }
 
     public void writePlayerConfig(Player player, boolean savesLocation) {

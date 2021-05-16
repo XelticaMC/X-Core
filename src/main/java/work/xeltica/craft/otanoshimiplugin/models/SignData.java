@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
-@SerializableAs("SignData")
 public class SignData implements Cloneable, ConfigurationSerializable {
     public SignData(Location location, String command) {
         this(location, command, null);

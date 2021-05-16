@@ -26,11 +26,13 @@ import work.xeltica.craft.otanoshimiplugin.commands.CommandSignEdit;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandVisitor;
 import work.xeltica.craft.otanoshimiplugin.gui.Gui;
 import work.xeltica.craft.otanoshimiplugin.handlers.EntityHandler;
+import work.xeltica.craft.otanoshimiplugin.handlers.HubHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.NewMorningHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.PlayerHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.VehicleHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.VisitorHandler;
 import work.xeltica.craft.otanoshimiplugin.handlers.WakabaHandler;
+import work.xeltica.craft.otanoshimiplugin.handlers.WorldHandler;
 import work.xeltica.craft.otanoshimiplugin.plugins.CitizenTimerCalculator;
 import work.xeltica.craft.otanoshimiplugin.plugins.VaultPlugin;
 import work.xeltica.craft.otanoshimiplugin.runnables.DaylightObserver;
@@ -155,6 +157,10 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded WakabaHandler");
         pm.registerEvents(new VisitorHandler(), this);
         logger.info("Loaded VisitorHandler");
+        pm.registerEvents(new HubHandler(), this);
+        logger.info("Loaded HubHandler");
+        pm.registerEvents(new WorldHandler(), this);
+        logger.info("Loaded WorldHandler");
         
         pm.registerEvents(Gui.getInstance(), this);
         logger.info("Loaded Gui EventHandler");
