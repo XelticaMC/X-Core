@@ -144,7 +144,7 @@ public class HubStore {
     public void returnToWorld(Player player) {
         player.setGameMode(GameMode.SURVIVAL);
 
-        var world = getHub();
+        var world = Bukkit.getWorld("world");
         ConfigurationSection section = playersConf.getConfigurationSection(player.getUniqueId().toString());
         if (section == null) {
             // はじめましての場合
