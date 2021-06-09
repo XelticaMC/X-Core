@@ -20,7 +20,7 @@ public class Gui implements Listener {
 
     public void openMenu(Player player, String title, MenuItem... items) {
         // TODO 統合版を相手取る場合Form APIが使えるようになったら良い感じにやる
-        if (player.getName().startsWith("__BE_")) {
+        if (player.getName().startsWith(".")) {
             player.sendMessage("Java 版のみサポートしています。");
             return;
         }
