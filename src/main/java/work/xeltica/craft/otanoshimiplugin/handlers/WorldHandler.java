@@ -1,5 +1,6 @@
 package work.xeltica.craft.otanoshimiplugin.handlers;
 
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -17,11 +18,24 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.world.ChunkPopulateEvent;
 
 import work.xeltica.craft.otanoshimiplugin.stores.HubStore;
 import work.xeltica.craft.otanoshimiplugin.stores.WorldStore;
 
 public class WorldHandler implements Listener {
+    public WorldHandler() {
+        blockToReplaceInWorld2.add(Material.CAVE_AIR);
+        blockToReplaceInWorld2.add(Material.COAL_ORE);
+        blockToReplaceInWorld2.add(Material.IRON_ORE);
+        blockToReplaceInWorld2.add(Material.GOLD_ORE);
+        blockToReplaceInWorld2.add(Material.DIAMOND_ORE);
+        blockToReplaceInWorld2.add(Material.LAPIS_ORE);
+        blockToReplaceInWorld2.add(Material.REDSTONE_ORE);
+        blockToReplaceInWorld2.add(Material.EMERALD_ORE);
+        Bukkit.getLogger().info("Loaded " + blockToReplaceInWorld2.size() + " blocks to replace in world2");
+    }
+
     @EventHandler
     public void onAdvancementDone(PlayerAdvancementDoneEvent e) {
         var p = e.getPlayer();
@@ -139,4 +153,23 @@ public class WorldHandler implements Listener {
             }
         }
     }
+
+    @EventHandler()
+    public void onChunkPopulateEvent(ChunkPopulateEvent e) {
+        // TODO ハードコードをやめる
+        var c = e.getChunk();
+        for (var z = 0; z < 16; z++) {
+            for (var x = 0; x < 16; x++) {
+                var yMax = c.getWorld().getHighestBlockYAt(x, z) - 1;
+                for (int y = 1; y < yMax; y++) {
+                    var block = c.getBlock(x, y, z);
+                    if (blockToReplaceInWorld2.contains(block.getType())) {
+                        block.setType(Material.STONE);
+                    }
+                }
+            }
+        }
+    }
+
+    private HashSet<Material> blockToReplaceInWorld2 = new HashSet<Material>();
 }
