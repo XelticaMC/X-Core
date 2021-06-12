@@ -1,5 +1,5 @@
 name: ${project.artifactId}
-main: work.xeltica.craft.otanoshimiplugin.OtanoshimiPlugin
+main: work.xeltica.craft.core.XCorePlugin
 version: ${project.version}
 api-version: 1.16
 softdepend:
@@ -54,7 +54,7 @@ commands:
     aliases: [ hub ]
     description: ロビーに移動します。
     usage: /hub help
-  __otanoshimi_gui_event__:
+  __core_gui_event__:
     description: "?"
     usage: "?"
   debug:
