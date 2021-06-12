@@ -54,6 +54,13 @@ commands:
     aliases: [ hub ]
     description: ロビーに移動します。
     usage: /hub help
+  __otanoshimi_gui_event__:
+    description: "?"
+    usage: "?"
+  debug:
+    description: デバッグ
+    usage: /debug
+    permission: otanoshimi.command.debug
 permissions:
   otanoshimi.command.pvp:
     default: op
@@ -88,4 +95,6 @@ permissions:
   hub.gatekeeper.citizen:
     default: op
   hub.gatekeeper.staff:
+    default: op
+  otanoshimi.command.debug:
     default: op

@@ -14,10 +14,12 @@ import work.xeltica.craft.otanoshimiplugin.commands.CommandBase;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandBoat;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandCart;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandCat;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandDebug;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandHub;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandLocalTime;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandOmikuji;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandOtanoshimiGuiEvent;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandPromo;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandPvp;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandReport;
@@ -84,6 +86,7 @@ public class OtanoshimiPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         commands.clear();
+        Gui.resetInstance();
         unloadPlugins();
         var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         var luckPerms = provider.getProvider();
@@ -141,6 +144,10 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /cat command");
         commands.put("hub", new CommandHub());
         logger.info("Loaded /hub command");
+        commands.put("debug", new CommandDebug());
+        logger.info("Loaded /debug command");
+        commands.put("__otanoshimi_gui_event__", new CommandOtanoshimiGuiEvent());
+        logger.info("Loaded /__otanoshimi_gui_event__ command");
     }
 
     private void loadHandlers() {
