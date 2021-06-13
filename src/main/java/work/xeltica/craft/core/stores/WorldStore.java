@@ -28,13 +28,7 @@ public class WorldStore {
     }
 
     public String getWorldDisplayName(String n) {
-        var dn = worldNameMap.get(n);
-        if (dn != null)
-            return dn;
-        else if (n.startsWith("travel_"))
-            return null;
-        else
-            return "なぞのばしょ";
+        return n.startsWith("travel_") ? null : worldNameMap.get(n);
     }
 
     public String getWorldDescription(World w) {
