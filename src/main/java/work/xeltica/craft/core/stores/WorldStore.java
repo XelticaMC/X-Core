@@ -8,10 +8,9 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 public class WorldStore {
-    public WorldStore(Plugin pl) {
+    public WorldStore() {
         WorldStore.instance = this;
         loadWorldName();
         loadWorldDescription();
@@ -28,13 +27,7 @@ public class WorldStore {
     }
 
     public String getWorldDisplayName(String n) {
-        var dn = worldNameMap.get(n);
-        if (dn != null)
-            return dn;
-        else if (n.startsWith("travel_"))
-            return null;
-        else
-            return "なぞのばしょ";
+        return n.startsWith("travel_") ? null : worldNameMap.get(n);
     }
 
     public String getWorldDescription(World w) {

@@ -22,25 +22,25 @@ import org.bukkit.WorldCreator;
 import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
+import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.generators.chunks.EmptyChunkGenerator;
 import work.xeltica.craft.core.models.SignData;
+import work.xeltica.craft.core.utils.Config;
 import work.xeltica.craft.core.utils.LocationComparator;
 
 public class HubStore {
-    public HubStore(Plugin pl) {
+    public HubStore() {
         ConfigurationSerialization.registerClass(SignData.class, "SignData");
-        this.plugin = pl;
         HubStore.instance = this;
-        logger = pl.getLogger();
+        logger = Bukkit.getLogger();
         loadWorld();
-        reloadStore();
+        players = new Config("players");
+        signs = new Config("signs");
     }
 
     public static HubStore getInstance() {
@@ -48,7 +48,7 @@ public class HubStore {
     }
 
     public void teleport(Player player) {
-        var server = plugin.getServer();
+        var server = Bukkit.getServer();
         if (worldUuid == null) {
             player.sendMessage("hub が未生成");
             return;
@@ -65,7 +65,7 @@ public class HubStore {
         var worldName = player.getWorld().getName();
         var isSaveIgnoredWorld = Arrays.stream(inventorySaverIgnoredWorldNames)
                 .anyMatch(name -> name.equalsIgnoreCase(worldName));
-        server.getScheduler().runTaskLater(plugin, new Runnable() {
+        server.getScheduler().runTaskLater(XCorePlugin.getInstance(), new Runnable() {
             @Override
             public void run() {
                 var world = server.getWorld(worldUuid);
@@ -74,7 +74,6 @@ public class HubStore {
                 // 砂場から行く場合は記録しない & ポーション効果を潰す
                 if (!isSaveIgnoredWorld) {
                     writePlayerConfig(player, savePosition);
-                    playersConf = YamlConfiguration.loadConfiguration(playersConfFile);
                 } else {
                     // ポーション効果削除
                     player.getActivePotionEffects().stream().forEach(e -> player.removePotionEffect(e.getType()));
@@ -145,7 +144,7 @@ public class HubStore {
         player.setGameMode(GameMode.SURVIVAL);
 
         var world = Bukkit.getWorld("world");
-        ConfigurationSection section = playersConf.getConfigurationSection(player.getUniqueId().toString());
+        ConfigurationSection section = players.getConf().getConfigurationSection(player.getUniqueId().toString());
         if (section == null) {
             // はじめましての場合
             player.teleport(world.getSpawnLocation(), TeleportCause.PLUGIN);
@@ -208,7 +207,7 @@ public class HubStore {
     }
 
     public void restoreInventory(Player player) {
-        ConfigurationSection section = playersConf.getConfigurationSection(player.getUniqueId().toString());
+        ConfigurationSection section = players.getConf().getConfigurationSection(player.getUniqueId().toString());
         if (section == null)
             return;
 
@@ -226,7 +225,7 @@ public class HubStore {
     }
 
     public void restoreParams(Player player) {
-        ConfigurationSection section = playersConf.getConfigurationSection(player.getUniqueId().toString());
+        ConfigurationSection section = players.getConf().getConfigurationSection(player.getUniqueId().toString());
         if (section == null)
             return;
 
@@ -241,15 +240,13 @@ public class HubStore {
     }
 
     public void reloadPlayers() {
-        playersConf = YamlConfiguration.loadConfiguration(playersConfFile);
+        players.reload();
     }
     
     public void reloadStore() {
-        playersConfFile = new File(plugin.getDataFolder(), "players.yml");
-        signsConfFile = new File(plugin.getDataFolder(), "signs.yml");
-        playersConf = YamlConfiguration.loadConfiguration(playersConfFile);
-        signsConf = YamlConfiguration.loadConfiguration(signsConfFile);
-        signData = (List<SignData>) signsConf.getList("signs", new ArrayList<SignData>());
+        players.reload();
+        signs.reload();
+        signData = (List<SignData>) signs.getConf().getList("signs", new ArrayList<SignData>());
     }
 
     public void writePlayerConfig(Player player, boolean savesLocation) {
@@ -258,6 +255,7 @@ public class HubStore {
 
     public void writePlayerConfig(Player player, boolean savesLocation, boolean savesParams) {
         var uid = player.getUniqueId().toString();
+        var playersConf = players.getConf();
         var section = playersConf.getConfigurationSection(uid);
         if (section == null) {
             section = playersConf.createSection(uid);
@@ -286,28 +284,26 @@ public class HubStore {
         section.set("fire", savesParams ? player.getFireTicks() : null);
 
         try {
-            logger.info(playersConf.toString());
-            playersConf.save(playersConfFile);
+            logger.info(players.toString());
+            players.save();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        playersConf = YamlConfiguration.loadConfiguration(playersConfFile);
     }
 
     public void loadSignsFile() {
-        signsConf = YamlConfiguration.loadConfiguration(signsConfFile);
-        signData = (List<SignData>) signsConf.getList("signs", new ArrayList<SignData>());
+        signs.reload();
+        signData = (List<SignData>) signs.getConf().getList("signs", new ArrayList<SignData>());
     }
 
     public void saveSignsFile() throws IOException {
-        signsConf = YamlConfiguration.loadConfiguration(signsConfFile);
-        signsConf.set("signs", signData);
-        signsConf.save(signsConfFile);
-        loadSignsFile();
+        signs.getConf().set("signs", signData);
+        signs.save();
+        signData = (List<SignData>) signs.getConf().getList("signs", new ArrayList<SignData>());
     }
 
     private void loadWorld() {
-        var world = plugin.getServer().getWorld("hub");
+        var world = Bukkit.getServer().getWorld("hub");
         if (world == null) {
             logger.info("Generating Hub...");
             CreateHub();
@@ -345,12 +341,9 @@ public class HubStore {
     };
 
     private static HubStore instance;
-    private Plugin plugin;
 
-    private File playersConfFile;
-    private YamlConfiguration playersConf;
-    private File signsConfFile;
-    private YamlConfiguration signsConf;
+    private Config players;
+    private Config signs;
     private Logger logger;
     private HashMap<UUID, Boolean> isWarpingMap = new HashMap<>();
     private UUID worldUuid;

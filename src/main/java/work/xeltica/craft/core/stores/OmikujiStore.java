@@ -1,19 +1,16 @@
 package work.xeltica.craft.core.stores;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Random;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import work.xeltica.craft.core.models.OmikujiScore;
+import work.xeltica.craft.core.utils.Config;
 
 public class OmikujiStore {
-    public OmikujiStore(Plugin pl) {
-        this.pl = pl;
+    public OmikujiStore() {
         OmikujiStore.instance = this;
         scoreNameMap.put(OmikujiScore.Tokudaikichi, "特大吉");
         scoreNameMap.put(OmikujiScore.Daikichi, "大吉");
@@ -23,7 +20,7 @@ public class OmikujiStore {
         scoreNameMap.put(OmikujiScore.Kyou, "凶");
         scoreNameMap.put(OmikujiScore.Daikyou, "大凶");
         scoreNameMap.put(OmikujiScore.None, "無し");
-        reloadStore();
+        this.cm = new Config("omikujistore");
     }
 
     public static OmikujiStore getInstance () {
@@ -43,12 +40,12 @@ public class OmikujiStore {
     }
 
     public OmikujiScore get(Player player) {
-        var str = conf.getString(player.getUniqueId().toString(), OmikujiScore.None.name());
+        var str = cm.getConf().getString(player.getUniqueId().toString(), OmikujiScore.None.name());
         return OmikujiScore.valueOf(str);
     }
 
     public void set(Player player, OmikujiScore score) {
-        conf.set(player.getUniqueId().toString(), score.name());
+        cm.getConf().set(player.getUniqueId().toString(), score.name());
         try {
             writeStore();
         } catch (IOException e) {
@@ -58,8 +55,8 @@ public class OmikujiStore {
     }
 
     public void reset() {
-        conf.getKeys(false).forEach((key) -> {
-            conf.set(key, null);
+        cm.getConf().getKeys(false).forEach((key) -> {
+            cm.getConf().set(key, null);
         });
         try {
             writeStore();
@@ -70,14 +67,11 @@ public class OmikujiStore {
     }
 
     public void reloadStore() {
-        var confFile = new File(pl.getDataFolder(), "omikujistore.yml");
-        conf = YamlConfiguration.loadConfiguration(confFile);
+        cm.reload();
     }
 
     public void writeStore() throws IOException {
-        var confFile = new File(pl.getDataFolder(), "omikujistore.yml");
-        conf.save(confFile);
-        conf = YamlConfiguration.loadConfiguration(confFile);
+        cm.save();
     }
 
     public OmikujiScore generateScore() {
@@ -94,8 +88,7 @@ public class OmikujiStore {
 
     private final HashMap<OmikujiScore, String> scoreNameMap = new HashMap<>();
 
-    private YamlConfiguration conf;
-    private Plugin pl;
+    private Config cm;
     private static OmikujiStore instance;
     private Random random = new Random();
 }

@@ -104,15 +104,15 @@ public class XCorePlugin extends JavaPlugin {
     }
 
     private void loadStores() {
-        new OmikujiStore(this);
+        new OmikujiStore();
         logger.info("Loaded Omikuji Store");
-        new VehicleStore(this);
+        new VehicleStore();
         logger.info("Loaded Vehicle Store");
-        new PlayerFlagsStore(this);
+        new PlayerFlagsStore();
         logger.info("Loaded Player Flags Store");
-        new HubStore(this);
+        new HubStore();
         logger.info("Loaded Hub Store");
-        new WorldStore(this);
+        new WorldStore();
         logger.info("Loaded World Store");
     }
 

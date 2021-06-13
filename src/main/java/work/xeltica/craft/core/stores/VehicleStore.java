@@ -1,23 +1,21 @@
 package work.xeltica.craft.core.stores;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.RideableMinecart;
-import org.bukkit.plugin.Plugin;
+
+import work.xeltica.craft.core.utils.Config;
 
 public class VehicleStore {
-    public VehicleStore(Plugin pl) {
-        this.pl = pl;
+    public VehicleStore() {
         VehicleStore.instance = this;
         logger = Bukkit.getLogger();
-        reloadStore();
+        this.cm = new Config("vehicles");
     }
 
     public static VehicleStore getInstance() {
@@ -31,7 +29,7 @@ public class VehicleStore {
         var id = vehicle.getUniqueId().toString();
 
         // 初期値を登録
-        conf.set(id, 20 * 60 * 5);
+        cm.getConf().set(id, 20 * 60 * 5);
         try {
             writeStore();
         } catch (IOException e) {
@@ -53,11 +51,12 @@ public class VehicleStore {
     }
 
     public void tick(int tickCount) {
-        var ids = conf.getKeys(false);
+        var c = this.cm.getConf();
+        var ids = c.getKeys(false);
         for (var id : ids) {
-            var val = conf.getInt(id);
+            var val = c.getInt(id);
             val -= tickCount;
-            conf.set(id, val);
+            c.set(id, val);
             if (val <= 0) {
                 var e = Bukkit.getEntity(UUID.fromString(id));
                 if (e == null) {
@@ -81,19 +80,16 @@ public class VehicleStore {
     }
 
     public void reloadStore() {
-        var confFile = new File(pl.getDataFolder(), "vehicles.yml");
-        conf = YamlConfiguration.loadConfiguration(confFile);
+        this.cm.reload();
     }
 
     public void writeStore() throws IOException {
-        var confFile = new File(pl.getDataFolder(), "vehicles.yml");
-        conf.save(confFile);
-        conf = YamlConfiguration.loadConfiguration(confFile);
+        this.cm.save();
     }
 
     private void unregisterVehicle(String id) {
         // 削除
-        conf.set(id, null);
+        cm.getConf().set(id, null);
         try {
             writeStore();
         } catch (IOException e) {
@@ -102,7 +98,6 @@ public class VehicleStore {
     }
     
     private static VehicleStore instance;
-    private Plugin pl;
-    private YamlConfiguration conf;
+    private Config cm;
     private Logger logger;
 }
