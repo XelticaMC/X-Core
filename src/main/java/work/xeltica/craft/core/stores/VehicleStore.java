@@ -1,12 +1,10 @@
 package work.xeltica.craft.core.stores;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.RideableMinecart;
@@ -17,7 +15,7 @@ public class VehicleStore {
     public VehicleStore() {
         VehicleStore.instance = this;
         logger = Bukkit.getLogger();
-        this.conf = new Config("vehicles");
+        this.cm = new Config("vehicles");
     }
 
     public static VehicleStore getInstance() {
@@ -31,7 +29,7 @@ public class VehicleStore {
         var id = vehicle.getUniqueId().toString();
 
         // 初期値を登録
-        conf.getConf().set(id, 20 * 60 * 5);
+        cm.getConf().set(id, 20 * 60 * 5);
         try {
             writeStore();
         } catch (IOException e) {
@@ -53,7 +51,7 @@ public class VehicleStore {
     }
 
     public void tick(int tickCount) {
-        var c = this.conf.getConf();
+        var c = this.cm.getConf();
         var ids = c.getKeys(false);
         for (var id : ids) {
             var val = c.getInt(id);
@@ -82,16 +80,16 @@ public class VehicleStore {
     }
 
     public void reloadStore() {
-        this.conf.reload();
+        this.cm.reload();
     }
 
     public void writeStore() throws IOException {
-        this.conf.save();
+        this.cm.save();
     }
 
     private void unregisterVehicle(String id) {
         // 削除
-        conf.getConf().set(id, null);
+        cm.getConf().set(id, null);
         try {
             writeStore();
         } catch (IOException e) {
@@ -100,6 +98,6 @@ public class VehicleStore {
     }
     
     private static VehicleStore instance;
-    private Config conf;
+    private Config cm;
     private Logger logger;
 }

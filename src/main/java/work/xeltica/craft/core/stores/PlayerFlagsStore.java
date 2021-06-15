@@ -1,24 +1,23 @@
 package work.xeltica.craft.core.stores;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import work.xeltica.craft.core.events.StaffJoinEvent;
 import work.xeltica.craft.core.events.StaffLeaveEvent;
+import work.xeltica.craft.core.utils.Config;
 
 public class PlayerFlagsStore {
-    public PlayerFlagsStore(Plugin pl) {
-        this.plugin = pl;
+    public PlayerFlagsStore() {
         PlayerFlagsStore.instance = this;
         reloadStore();
+        flags = new Config("flags");
+        newcomers = new Config("newcomers");
     }
 
     public static PlayerFlagsStore getInstance() {
@@ -26,11 +25,12 @@ public class PlayerFlagsStore {
     }
 
     public void tickNewcomers(int tick) {
-        newcomersConf.getKeys(false).forEach(key -> {
+        var conf = newcomers.getConf();
+        conf.getKeys(false).forEach(key -> {
             if (Bukkit.getPlayer(UUID.fromString(key)) == null) return;
-            var time = newcomersConf.getInt(key, 0);
+            var time = conf.getInt(key, 0);
             time -= tick;
-            newcomersConf.set(key, time <= 0 ? null : time);
+            conf.set(key, time <= 0 ? null : time);
         });
         try {
             writeStore();
@@ -40,7 +40,7 @@ public class PlayerFlagsStore {
     }
 
     public void addNewcomer(Player p) {
-        newcomersConf.set(p.getUniqueId().toString(), 20 * 60 * 30);
+        newcomers.getConf().set(p.getUniqueId().toString(), 20 * 60 * 30);
         try {
             writeStore();
         } catch (IOException e) {
@@ -49,11 +49,11 @@ public class PlayerFlagsStore {
     }
 
     public boolean isNewcomer(Player p) {
-        return newcomersConf.contains(p.getUniqueId().toString());
+        return newcomers.getConf().contains(p.getUniqueId().toString());
     }
 
     public int getNewcomerTime(Player p) {
-        return newcomersConf.getInt(p.getUniqueId().toString(), 0) / 20;
+        return newcomers.getConf().getInt(p.getUniqueId().toString(), 0) / 20;
     }
 
     public void setVisitorMode(Player p, boolean flag) {
@@ -106,25 +106,21 @@ public class PlayerFlagsStore {
     }
 
     public void reloadStore() {
-        var flagsConfFile = new File(plugin.getDataFolder(), "flags.yml");
-        flagsConf = YamlConfiguration.loadConfiguration(flagsConfFile);
+        flags.reload();
+        newcomers.reload();
+        var fc = flags.getConf();
 
-        visitorUUIDs = flagsConf.getStringList("visitors");
-        catUUIDs = flagsConf.getStringList("cats");
-
-        var newcomersConfFile = new File(plugin.getDataFolder(), "newcomers.yml");
-        newcomersConf = YamlConfiguration.loadConfiguration(newcomersConfFile);
+        visitorUUIDs = fc.getStringList("visitors");
+        catUUIDs = fc.getStringList("cats");
     }
 
     public void writeStore() throws IOException {
-        var flagsConfFile = new File(plugin.getDataFolder(), "flags.yml");
-        flagsConf.set("visitors", visitorUUIDs);
-        flagsConf.set("cats", catUUIDs);
-        flagsConf.save(flagsConfFile);
-        flagsConf = YamlConfiguration.loadConfiguration(flagsConfFile);
-        var newcomersConfFile = new File(plugin.getDataFolder(), "newcomers.yml");
-        newcomersConf.save(newcomersConfFile);
-        newcomersConf = YamlConfiguration.loadConfiguration(newcomersConfFile);
+        var fc = flags.getConf();
+        fc.set("visitors", visitorUUIDs);
+        fc.set("cats", catUUIDs);
+
+        flags.save();
+        newcomers.save();
     }
 
     public boolean hasOnlineStaff() {
@@ -144,10 +140,9 @@ public class PlayerFlagsStore {
     }
     
     private static PlayerFlagsStore instance;
-    private Plugin plugin;
     private List<String> visitorUUIDs = new ArrayList<>();
     private List<String> catUUIDs = new ArrayList<>();
     private boolean _hasOnlineStaff;
-    private YamlConfiguration flagsConf;
-    private YamlConfiguration newcomersConf;
+    private Config flags;
+    private Config newcomers;
 }
