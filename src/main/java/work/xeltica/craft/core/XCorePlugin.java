@@ -52,12 +52,12 @@ public class XCorePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
         logger = getLogger();
         loadStores();
         loadCommands();
         loadHandlers();
         loadPlugins();
-        instance = this;
 
         // 1秒に1回
         new DaylightObserver(this).runTaskTimer(this, 0, 20);
