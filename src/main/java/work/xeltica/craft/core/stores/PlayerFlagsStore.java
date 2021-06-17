@@ -15,7 +15,6 @@ import work.xeltica.craft.core.utils.Config;
 public class PlayerFlagsStore {
     public PlayerFlagsStore() {
         PlayerFlagsStore.instance = this;
-        reloadStore();
         flags = new Config("flags");
         newcomers = new Config("newcomers");
     }

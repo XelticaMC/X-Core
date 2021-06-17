@@ -38,9 +38,9 @@ public class HubStore {
         ConfigurationSerialization.registerClass(SignData.class, "SignData");
         HubStore.instance = this;
         logger = Bukkit.getLogger();
-        loadWorld();
         players = new Config("players");
         signs = new Config("signs");
+        loadWorld();
     }
 
     public static HubStore getInstance() {
