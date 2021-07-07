@@ -250,7 +250,6 @@ public class HubStore {
         playersConf = YamlConfiguration.loadConfiguration(playersConfFile);
         signsConf = YamlConfiguration.loadConfiguration(signsConfFile);
         signData = (List<SignData>) signsConf.getList("signs", new ArrayList<SignData>());
-        logger.info(String.format("%dつの看板データを読み込みました。", signData.size()));
     }
 
     public void writePlayerConfig(Player player, boolean savesLocation) {
