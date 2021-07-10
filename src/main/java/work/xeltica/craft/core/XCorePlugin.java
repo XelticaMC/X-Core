@@ -103,68 +103,42 @@ public class XCorePlugin extends JavaPlugin {
 
     private void loadStores() {
         new OmikujiStore();
-        logger.info("Loaded Omikuji Store");
         new VehicleStore();
-        logger.info("Loaded Vehicle Store");
         new PlayerFlagsStore();
-        logger.info("Loaded Player Flags Store");
         new HubStore();
-        logger.info("Loaded Hub Store");
         new WorldStore();
-        logger.info("Loaded World Store");
     }
 
     private void loadCommands() {
         commands.clear();
+
         commands.put("omikuji", new CommandOmikuji());
-        logger.info("Loaded /omikuji command");
         commands.put("respawn", new CommandRespawn());
-        logger.info("Loaded /respawn command");
         commands.put("pvp", new CommandPvp());
-        logger.info("Loaded /pvp command");
         commands.put("signedit", new CommandSignEdit());
-        logger.info("Loaded /signedit command");
         commands.put("givetravelticket", new CommandGiveTravelTicket());
-        logger.info("Loaded /givetravelticket command");
         commands.put("report", new CommandReport());
-        logger.info("Loaded /report command");
         commands.put("localtime", new CommandLocalTime());
-        logger.info("Loaded /localtime command");
         commands.put("boat", new CommandBoat());
-        logger.info("Loaded /boat command");
         commands.put("cart", new CommandCart());
-        logger.info("Loaded /cart command");
         commands.put("promo", new CommandPromo());
-        logger.info("Loaded /promo command");
         commands.put("cat", new CommandCat());
-        logger.info("Loaded /cat command");
         commands.put("hub", new CommandHub());
-        logger.info("Loaded /hub command");
         commands.put("debug", new CommandDebug());
-        logger.info("Loaded /debug command");
         commands.put("__otanoshimi_gui_event__", new CommandXCoreGuiEvent());
-        logger.info("Loaded /__otanoshimi_gui_event__ command");
     }
 
     private void loadHandlers() {
         var pm = getServer().getPluginManager();
+
         pm.registerEvents(new NewMorningHandler(), this);
-        logger.info("Loaded NewMorningHandler");
         pm.registerEvents(new PlayerHandler(this), this);
-        logger.info("Loaded PlayerHandler");
         pm.registerEvents(new EntityHandler(), this);
-        logger.info("Loaded EntityHandler");
         pm.registerEvents(new VehicleHandler(), this);
-        logger.info("Loaded VehicleHandler");
         pm.registerEvents(new WakabaHandler(), this);
-        logger.info("Loaded WakabaHandler");
         pm.registerEvents(new HubHandler(), this);
-        logger.info("Loaded HubHandler");
         pm.registerEvents(new WorldHandler(), this);
-        logger.info("Loaded WorldHandler");
-        
         pm.registerEvents(Gui.getInstance(), this);
-        logger.info("Loaded Gui EventHandler");
     }
 
     private void loadPlugins() {
