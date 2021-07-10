@@ -111,6 +111,11 @@ public class WorldHandler implements Listener {
             hubStore.restoreParams(p);
             p.playSound(p.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 1, 0.5f);
         }
+        if (name.equals("wildarea")) {
+            var hubStore = HubStore.getInstance();
+            hubStore.restoreInventory(p);
+            hubStore.restoreParams(p);
+        }
         if (desc != null) {
             p.sendMessage(desc);
         }

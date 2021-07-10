@@ -73,6 +73,7 @@ public class WorldStore {
         worldNameMap.put("art", "アートワールド");
         worldNameMap.put("pvp", "PVPワールド");
         worldNameMap.put("test", "テストワールド");
+        worldNameMap.put("wildarea", "ワイルドエリア");
     }
 
     private void loadWorldDescription() {
@@ -97,6 +98,10 @@ public class WorldStore {
             "よくここを見つけたな...。ここはデバッグワールド。\n" +
             "XelticaMC の開発者が機能をテストするために開放している場所。\n" + 
             "自由に立ち入りできますが、何が起こってもサポートは致しかねます。"
+        );
+        worldDescMap.put("wildarea",
+            "ここは、資源が豊富な§cワイルドエリア§r。\n" +
+            "メインワールドで生活するための資源を回収したり、サバイバル生活をしたり、使い方は無限大。"
         );
     }
 
