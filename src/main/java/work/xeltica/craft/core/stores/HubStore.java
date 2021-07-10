@@ -39,8 +39,11 @@ public class HubStore {
         HubStore.instance = this;
         logger = Bukkit.getLogger();
         players = new Config("players");
-        signs = new Config("signs");
-        loadWorld();
+        signs = new Config("signs", (s) -> {
+            signData = (List<SignData>) s.getConf().getList("signs", new ArrayList<SignData>());
+        });
+        loadSignsFile();
+        loadOrInitializeHub();
     }
 
     public static HubStore getInstance() {
@@ -109,7 +112,6 @@ public class HubStore {
 
     public void CreateHub() {
         var world = new WorldCreator("hub").environment(Environment.NORMAL).generator(new EmptyChunkGenerator()).createWorld();
-        configureRule(world);
         world.getBlockAt(0, 60, 0).setType(Material.BIRCH_LOG);
     }
 
@@ -128,8 +130,6 @@ public class HubStore {
 
         var world = Bukkit.getWorld(worldUuid);
         if (world == null) return false;
-
-        configureRule(world);
         return true;
     }
 
@@ -145,7 +145,7 @@ public class HubStore {
         player.setGameMode(GameMode.SURVIVAL);
 
         var world = Bukkit.getWorld("world");
-        ConfigurationSection section = players.getConf().getConfigurationSection(player.getUniqueId().toString());
+        var section = players.getConf().getConfigurationSection(player.getUniqueId().toString());
         if (section == null) {
             // はじめましての場合
             player.teleport(world.getSpawnLocation(), TeleportCause.PLUGIN);
@@ -225,6 +225,10 @@ public class HubStore {
         }
     }
 
+    /**
+     * プレイヤーのパラメーターを保存したものに置き換えます。
+     * @param player 対象のプレイヤー。
+     */
     public void restoreParams(Player player) {
         ConfigurationSection section = players.getConf().getConfigurationSection(player.getUniqueId().toString());
         if (section == null)
@@ -247,7 +251,6 @@ public class HubStore {
     public void reloadStore() {
         players.reload();
         signs.reload();
-        signData = (List<SignData>) signs.getConf().getList("signs", new ArrayList<SignData>());
     }
 
     public void writePlayerConfig(Player player, boolean savesLocation) {
@@ -285,7 +288,6 @@ public class HubStore {
         section.set("fire", savesParams ? player.getFireTicks() : null);
 
         try {
-            logger.info(players.toString());
             players.save();
         } catch (IOException e) {
             e.printStackTrace();
@@ -294,16 +296,14 @@ public class HubStore {
 
     public void loadSignsFile() {
         signs.reload();
-        signData = (List<SignData>) signs.getConf().getList("signs", new ArrayList<SignData>());
     }
 
     public void saveSignsFile() throws IOException {
         signs.getConf().set("signs", signData);
         signs.save();
-        signData = (List<SignData>) signs.getConf().getList("signs", new ArrayList<SignData>());
     }
 
-    private void loadWorld() {
+    private void loadOrInitializeHub() {
         var world = Bukkit.getServer().getWorld("hub");
         if (world == null) {
             logger.info("Generating Hub...");
@@ -319,15 +319,6 @@ public class HubStore {
             player.setExp(0);
             player.setFireTicks(0);
         });
-    }
-
-    private void configureRule(World world) {
-        world.setSpawnLocation(0, 65, 0);
-        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-        world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
-        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-        world.setGameRule(GameRule.MOB_GRIEFING, false);
-        world.setDifficulty(Difficulty.PEACEFUL);
     }
 
     private SignData getSignDataOf(Location loc) {

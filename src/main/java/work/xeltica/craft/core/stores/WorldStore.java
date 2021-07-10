@@ -118,8 +118,8 @@ public class WorldStore {
     }
 
     private static WorldStore instance;
-    private Map<String, String> worldNameMap = new HashMap<>();
-    private Map<String, String> worldDescMap = new HashMap<>();
-    private Set<String> lockedWorldNames = new HashSet<>();
-    private Set<String> creativeWorldNames = new HashSet<>();
+    private final Map<String, String> worldNameMap = new HashMap<>();
+    private final Map<String, String> worldDescMap = new HashMap<>();
+    private final Set<String> lockedWorldNames = new HashSet<>();
+    private final Set<String> creativeWorldNames = new HashSet<>();
 }
