@@ -20,24 +20,8 @@ public class CommandHub extends CommandPlayerOnlyBase {
         if (!isAdmin) {
             player.sendMessage("/hub");
         }
-        if (args[0].equalsIgnoreCase("create")) {
-            store.CreateHub();
-            player.sendMessage("Generated!");
-        } else if (args[0].equalsIgnoreCase("help")) {
-            player.sendMessage("/hub [create/help/main/delete/unload/update/reloadplayers/forceall]");
-        } else if (args[0].equalsIgnoreCase("unload")) {
-            if (!store.tryUnload()) {
-                player.sendMessage("hub が未生成");
-            }
-        } else if (args[0].equalsIgnoreCase("update")) {
-            if (!store.tryUpdate()) {
-                player.sendMessage("hub が未生成");
-            }
-        } else if (args[0].equalsIgnoreCase("reloadplayers")) {
-            store.reloadPlayers();
-        } else if (args[0].equalsIgnoreCase("forceall")) {
-            store.setForceAll(!store.getForceAll());
-            player.sendMessage("forceAll を" + store.getForceAll() + "にしました");
+        if (args[0].equalsIgnoreCase("help")) {
+            player.sendMessage("/hub [help]");
         } else {
             return false;
         }

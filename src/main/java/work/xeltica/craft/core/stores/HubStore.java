@@ -110,29 +110,6 @@ public class HubStore {
         return Bukkit.getWorld(worldUuid);
     }
 
-    public void CreateHub() {
-        var world = new WorldCreator("hub").environment(Environment.NORMAL).generator(new EmptyChunkGenerator()).createWorld();
-        world.getBlockAt(0, 60, 0).setType(Material.BIRCH_LOG);
-    }
-
-    public boolean tryUnload() {
-        if (worldUuid == null) return false;
-
-        var world = Bukkit.getWorld(worldUuid);
-        if (world == null) return false;
-
-        Bukkit.unloadWorld(world, true);
-        return true;
-    }
-
-    public boolean tryUpdate() {
-        if (worldUuid == null) return false;
-
-        var world = Bukkit.getWorld(worldUuid);
-        if (world == null) return false;
-        return true;
-    }
-
     public boolean getForceAll() {
         return forceAll;
     }
@@ -306,8 +283,8 @@ public class HubStore {
     private void loadOrInitializeHub() {
         var world = Bukkit.getServer().getWorld("hub");
         if (world == null) {
-            logger.info("Generating Hub...");
-            CreateHub();
+            logger.severe("No hub found. Create it.");
+            return;
         }
         worldUuid = world.getUID();
         world.getPlayers().stream().forEach(player -> {
