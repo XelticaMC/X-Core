@@ -64,26 +64,34 @@ public class WorldStore {
     }
 
     private void loadWorldName() {
-        worldNameMap.put("world", "メインワールド");
-        worldNameMap.put("world_nether", "ネザー");
-        worldNameMap.put("world_the_end", "ジ・エンド");
-        worldNameMap.put("hub", "ロビー");
-        worldNameMap.put("sandbox", "サンドボックス");
-        worldNameMap.put("nightmare", "ナイトメア");
+        worldNameMap.put("main", "メインワールド");
+        worldNameMap.put("sandbox2", "サンドボックス");
         worldNameMap.put("art", "アートワールド");
-        worldNameMap.put("pvp", "PVPワールド");
-        worldNameMap.put("test", "テストワールド");
-        worldNameMap.put("wildarea", "ワイルドエリア");
+        worldNameMap.put("nightmare2", "ナイトメア");
+        worldNameMap.put("pvp", "PvPアリーナ");
+        worldNameMap.put("test", "実験ワールド");
+        worldNameMap.put("wildarea2", "ワイルドエリア");
+        worldNameMap.put("wildarea2_nether", "ワイルドネザー");
+        worldNameMap.put("wildarea2_the_end", "ワイルドエンド");
+        worldNameMap.put("hub2", "ロビー");
+
+        worldNameMap.put("world", "クラシックワールド");
+        worldNameMap.put("world_nether", "クラシックネザー");
+        worldNameMap.put("world_the_end", "クラシックエンド");
+        worldNameMap.put("hub", "クラシックロビー");
+        worldNameMap.put("sandbox", "サンドボックス(クラシック)");
+        worldNameMap.put("nightmare", "ナイトメア(クラシック)");
+        worldNameMap.put("wildarea", "ワイルドエリア(クラシック)");
     }
 
     private void loadWorldDescription() {
-        worldDescMap.put("sandbox", 
+        worldDescMap.put("sandbox2", 
             "ここは、§bクリエイティブモード§rで好きなだけ遊べる§cサンドボックスワールド§r。\n" +
             "元の世界の道具や経験値はお預かりしているので、好きなだけあそんでね！" +
             "§7(あ、でも他の人の建築物を壊したりしないでね)" +
             "帰るときは、§a/hub §rコマンドを実行してください。"
         );
-        worldDescMap.put("nightmare",
+        worldDescMap.put("nightmare2",
             "ここは怖い敵がうじゃうじゃいる§cナイトメアワールド§r。\n" +
             "手に入れたアイテムは持ち帰れます。\n" +
             "帰るときは、§a/hub §rコマンドを実行してください。"
@@ -99,7 +107,13 @@ public class WorldStore {
             "XelticaMC の開発者が機能をテストするために開放している場所。\n" + 
             "自由に立ち入りできますが、何が起こってもサポートは致しかねます。"
         );
+
         worldDescMap.put("wildarea",
+            "ここは、資源が豊富な§cワイルドエリア§r。\n" +
+            "メインワールドで生活するための資源を回収したり、サバイバル生活をしたり、使い方は無限大。"
+        );
+
+        worldDescMap.put("wildarea2",
             "ここは、資源が豊富な§cワイルドエリア§r。\n" +
             "メインワールドで生活するための資源を回収したり、サバイバル生活をしたり、使い方は無限大。"
         );
