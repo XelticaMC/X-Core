@@ -69,6 +69,12 @@ public class WorldHandler implements Listener {
         var displayName = store.getWorldDisplayName(name);
         var desc = store.getWorldDescription(name);
 
+        var fromId = e.getFrom().getWorld().getUID();
+        var toId = e.getTo().getWorld().getUID();
+
+        if (fromId.equals(toId))
+            return;
+
         if (isLockedWorld && !p.hasPermission("hub.teleport." + name)) {
             p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 0.5f);
             p.sendMessage(
@@ -97,10 +103,17 @@ public class WorldHandler implements Listener {
             hubStore.restoreParams(p);
             p.playSound(p.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 1, 0.5f);
         }
-        if (name.equals("wildarea")) {
+        if (name.equals("wildarea") && e.getFrom().getWorld().getName().equals("hub")) {
             var hubStore = HubStore.getInstance();
             hubStore.restoreInventory(p);
             hubStore.restoreParams(p);
+
+            // 最終ベッドがワイルドエリアにある場合、そこに飛ばす
+            var bed = p.getBedSpawnLocation();
+            if (bed.getWorld().getUID().equals(world.getUID())) {
+                Bukkit.getLogger().info("Set spawn as wildarea bed");
+                e.setTo(bed);
+            }
         }
         if (desc != null) {
             p.sendMessage(desc);
@@ -111,6 +124,7 @@ public class WorldHandler implements Listener {
     public void onPlayerTeleportNotify(PlayerTeleportEvent e) {
         var worldStore = WorldStore.getInstance();
         var player = e.getPlayer();
+        // スペクテイターはステルスっす
         if (player.getGameMode() == GameMode.SPECTATOR)
             return;
         var from = e.getFrom().getWorld();

@@ -70,7 +70,8 @@ public class HubStore {
             public void run() {
                 var world = server.getWorld(worldUuid);
                 var loc = world.getSpawnLocation();
-                var savePosition = !worldName.equalsIgnoreCase("nightmare");
+                // TODO ハードコーディングをやめたい
+                var savePosition = !worldName.equalsIgnoreCase("nightmare") && !worldName.equalsIgnoreCase("wildarea");
                 // 砂場から行く場合は記録しない & ポーション効果を潰す
                 if (!isSaveIgnoredWorld) {
                     writePlayerConfig(player, savePosition);
