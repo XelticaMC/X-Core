@@ -42,10 +42,6 @@ commands:
   promo:
     description: 市民への昇格方法を確認します。
     usage: /promo
-  visitor:
-    description: 観光モードの有効/無効を切り替えるか、現在のモードを取得します。
-    usage: /visitor [on/off]
-    permission: otanoshimi.command.visitor
   cat:
     description: CATモードの有効/無効を切り替えるか、現在のモードを取得します。
     usage: /cat [on/off]
@@ -79,10 +75,6 @@ permissions:
   otanoshimi.citizen:
     default: op
   otanoshimi.staff:
-    default: op
-  otanoshimi.command.visitor:
-    default: true
-  otanoshimi.command.visitor.set:
     default: op
   otanoshimi.command.cat:
     default: true

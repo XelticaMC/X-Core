@@ -55,33 +55,6 @@ public class PlayerFlagsStore {
         return newcomers.getConf().getInt(p.getUniqueId().toString(), 0) / 20;
     }
 
-    public void setVisitorMode(Player p, boolean flag) {
-        // 既に同値が設定されている場合はスキップ
-        if (getVisitorMode(p, true) == flag) return;
-        var uuid = p.getUniqueId().toString();
-        if (flag) {
-            // 有効化
-            visitorUUIDs.add(uuid);
-        } else {
-            // 無効化
-            visitorUUIDs.remove(uuid);
-        }
-        try {
-            writeStore();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public boolean getVisitorMode(Player p) {
-        return getVisitorMode(p, false);
-    }
-
-    public boolean getVisitorMode(Player p, boolean saved) {
-        // if (!saved && !hasOnlineStaff() && !isCitizen(p)) return true;
-        return visitorUUIDs.contains(p.getUniqueId().toString());
-    }
-
     public void setCatMode(Player p, boolean flag) {
         // 既に同値が設定されている場合はスキップ
         if (getCatMode(p) == flag) return;
@@ -109,13 +82,11 @@ public class PlayerFlagsStore {
         newcomers.reload();
         var fc = flags.getConf();
 
-        visitorUUIDs = fc.getStringList("visitors");
         catUUIDs = fc.getStringList("cats");
     }
 
     public void writeStore() throws IOException {
         var fc = flags.getConf();
-        fc.set("visitors", visitorUUIDs);
         fc.set("cats", catUUIDs);
 
         flags.save();
@@ -139,7 +110,6 @@ public class PlayerFlagsStore {
     }
     
     private static PlayerFlagsStore instance;
-    private List<String> visitorUUIDs = new ArrayList<>();
     private List<String> catUUIDs = new ArrayList<>();
     private boolean _hasOnlineStaff;
     private Config flags;
