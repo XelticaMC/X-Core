@@ -68,33 +68,11 @@ public class HubStore {
         var worldName = player.getWorld().getName();
         var isSaveIgnoredWorld = Arrays.stream(inventorySaverIgnoredWorldNames)
                 .anyMatch(name -> name.equalsIgnoreCase(worldName));
-        server.getScheduler().runTaskLater(XCorePlugin.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                var world = server.getWorld(worldUuid);
-                var loc = world.getSpawnLocation();
-                // TODO ハードコーディングをやめたい
-                var savePosition = !worldName.equalsIgnoreCase("nightmare") && !worldName.equalsIgnoreCase("wildarea");
-                // 砂場から行く場合は記録しない & ポーション効果を潰す
-                if (!isSaveIgnoredWorld) {
-                    writePlayerConfig(player, savePosition);
-                } else {
-                    // ポーション効果削除
-                    player.getActivePotionEffects().stream().forEach(e -> player.removePotionEffect(e.getType()));
-                }
-                player.getInventory().clear();
-                player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-                player.setFoodLevel(20);
-                player.setSaturation(0);
-                player.setExhaustion(0);
-                player.setLevel(0);
-                player.setExp(0);
-                player.setFireTicks(0);
-
-                player.setGameMode(GameMode.ADVENTURE);
-                player.teleport(loc, TeleportCause.PLUGIN);
-                isWarpingMap.put(player.getUniqueId(), false);
-            }
+        server.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
+            var world = server.getWorld(worldUuid);
+            var loc = world.getSpawnLocation();
+            player.teleport(loc, TeleportCause.PLUGIN);
+            isWarpingMap.put(player.getUniqueId(), false);
         }, isSaveIgnoredWorld ? 1 : 20 * 5);
         if (!isSaveIgnoredWorld) {
             player.sendMessage("5秒後にロビーに移動します...");
@@ -128,9 +106,6 @@ public class HubStore {
             player.teleport(world.getSpawnLocation(), TeleportCause.PLUGIN);
             return;
         }
-
-        restoreInventory(player);
-        restoreParams(player);
 
         var locationResult = section.get("location");
         if (locationResult == null || !(locationResult instanceof Location)) {
@@ -221,48 +196,16 @@ public class HubStore {
         player.setFireTicks(section.getInt("fire", 0));
     }
 
-    public void reloadPlayers() {
-        players.reload();
-    }
-    
-    public void reloadStore() {
-        players.reload();
-        signs.reload();
-    }
-
-    public void writePlayerConfig(Player player, boolean savesLocation) {
-        writePlayerConfig(player, savesLocation, true);
-    }
-
-    public void writePlayerConfig(Player player, boolean savesLocation, boolean savesParams) {
+    public void writePlayerLocation(Player player) {
         var uid = player.getUniqueId().toString();
         var playersConf = players.getConf();
         var section = playersConf.getConfigurationSection(uid);
         if (section == null) {
             section = playersConf.createSection(uid);
         }
+        
 
-        // 座標を記録
-        if (savesLocation) {
-            section.set("location", player.getLocation());
-        }
-
-        // インベントリを記録
-        var inv = player.getInventory();
-        var items = new ItemStack[inv.getSize()];
-        for (var i = 0; i < items.length; i++) {
-            items[i] = inv.getItem(i);
-        }
-        section.set("items", items);
-
-        // 体力、満腹度、レベル、炎状態を記録
-        section.set("health", savesParams ? player.getHealth() : null);
-        section.set("foodLevel", savesParams ? player.getFoodLevel() : null);
-        section.set("saturaton", savesParams ? player.getSaturation() : null);
-        section.set("exhaustion", savesParams ? player.getExhaustion() : null);
-        section.set("exp", savesParams ? player.getExp() : null);
-        section.set("level", savesParams ? player.getLevel() : null);
-        section.set("fire", savesParams ? player.getFireTicks() : null);
+        section.set("location", player.getLocation());
 
         try {
             players.save();
@@ -287,15 +230,6 @@ public class HubStore {
             return;
         }
         worldUuid = world.getUID();
-        world.getPlayers().stream().forEach(player -> {
-            player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-            player.setFoodLevel(20);
-            player.setSaturation(0);
-            player.setExhaustion(0);
-            player.setLevel(0);
-            player.setExp(0);
-            player.setFireTicks(0);
-        });
     }
 
     private SignData getSignDataOf(Location loc) {

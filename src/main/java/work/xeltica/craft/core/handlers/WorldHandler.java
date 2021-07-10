@@ -65,7 +65,7 @@ public class WorldHandler implements Listener {
         if (e.getPlayer().getWorld().getName().equalsIgnoreCase("nightmare")) {
             // 悪夢から目覚める
             var store = HubStore.getInstance();
-            store.writePlayerConfig(e.getPlayer(), false, false);
+            store.writePlayerLocation(e.getPlayer());
             var lobby = store.getHub().getSpawnLocation();
             e.setRespawnLocation(lobby);
         }
@@ -112,16 +112,9 @@ public class WorldHandler implements Listener {
             world.setWeatherDuration(20000);
             world.setThundering(true);
             world.setThunderDuration(20000);
-            var hubStore = HubStore.getInstance();
-            hubStore.restoreInventory(p);
-            hubStore.restoreParams(p);
             p.playSound(p.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 1, 0.5f);
         }
         if (name.equals("wildarea") && e.getFrom().getWorld().getName().equals("hub")) {
-            var hubStore = HubStore.getInstance();
-            hubStore.restoreInventory(p);
-            hubStore.restoreParams(p);
-
             // 最終ベッドがワイルドエリアにある場合、そこに飛ばす
             var bed = p.getBedSpawnLocation();
             if (bed.getWorld().getUID().equals(world.getUID())) {
