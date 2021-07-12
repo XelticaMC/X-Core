@@ -1,6 +1,6 @@
 package work.xeltica.craft.core.handlers;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -25,14 +25,22 @@ import work.xeltica.craft.core.stores.WorldStore;
 
 public class WorldHandler implements Listener {
     public WorldHandler() {
-        blockToReplaceInWorld2.add(Material.CAVE_AIR);
-        blockToReplaceInWorld2.add(Material.COAL_ORE);
-        blockToReplaceInWorld2.add(Material.IRON_ORE);
-        blockToReplaceInWorld2.add(Material.GOLD_ORE);
-        blockToReplaceInWorld2.add(Material.DIAMOND_ORE);
-        blockToReplaceInWorld2.add(Material.LAPIS_ORE);
-        blockToReplaceInWorld2.add(Material.REDSTONE_ORE);
-        blockToReplaceInWorld2.add(Material.EMERALD_ORE);
+        blockToReplaceInWorld2.put(Material.COAL_ORE, Material.STONE);
+        blockToReplaceInWorld2.put(Material.IRON_ORE, Material.STONE);
+        blockToReplaceInWorld2.put(Material.GOLD_ORE, Material.STONE);
+        blockToReplaceInWorld2.put(Material.DIAMOND_ORE, Material.STONE);
+        blockToReplaceInWorld2.put(Material.LAPIS_ORE, Material.STONE);
+        blockToReplaceInWorld2.put(Material.REDSTONE_ORE, Material.STONE);
+        blockToReplaceInWorld2.put(Material.EMERALD_ORE, Material.STONE);
+
+        blockToReplaceInWorld2.put(Material.DEEPSLATE_COAL_ORE, Material.DEEPSLATE);
+        blockToReplaceInWorld2.put(Material.DEEPSLATE_IRON_ORE, Material.DEEPSLATE);
+        blockToReplaceInWorld2.put(Material.DEEPSLATE_GOLD_ORE, Material.DEEPSLATE);
+        blockToReplaceInWorld2.put(Material.DEEPSLATE_DIAMOND_ORE, Material.DEEPSLATE);
+        blockToReplaceInWorld2.put(Material.DEEPSLATE_LAPIS_ORE, Material.DEEPSLATE);
+        blockToReplaceInWorld2.put(Material.DEEPSLATE_REDSTONE_ORE, Material.DEEPSLATE);
+        blockToReplaceInWorld2.put(Material.DEEPSLATE_EMERALD_ORE, Material.DEEPSLATE);
+
         Bukkit.getLogger().info("Loaded " + blockToReplaceInWorld2.size() + " blocks to replace in world2");
     }
 
@@ -169,19 +177,20 @@ public class WorldHandler implements Listener {
     @EventHandler()
     public void onChunkPopulateEvent(ChunkPopulateEvent e) {
         // TODO ハードコードをやめる
+        if (!e.getWorld().getName().equals("main")) return;
         var c = e.getChunk();
         for (var z = 0; z < 16; z++) {
             for (var x = 0; x < 16; x++) {
-                var yMax = c.getWorld().getHighestBlockYAt(x, z) - 1;
-                for (int y = 1; y < yMax; y++) {
+                var yMax = c.getWorld().getHighestBlockYAt(x, z);
+                for (int y = 1; y <= yMax; y++) {
                     var block = c.getBlock(x, y, z);
-                    if (blockToReplaceInWorld2.contains(block.getType())) {
-                        block.setType(Material.STONE);
+                    if (blockToReplaceInWorld2.containsKey(block.getType())) {
+                        block.setType(blockToReplaceInWorld2.get(block.getType()));
                     }
                 }
             }
         }
     }
 
-    private HashSet<Material> blockToReplaceInWorld2 = new HashSet<Material>();
+    private HashMap<Material, Material> blockToReplaceInWorld2 = new HashMap<>();
 }
