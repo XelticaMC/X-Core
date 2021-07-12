@@ -19,29 +19,13 @@ import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
+import org.checkerframework.checker.units.qual.C;
 
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.WorldStore;
 
 public class WorldHandler implements Listener {
     public WorldHandler() {
-        blockToReplaceInWorld2.put(Material.COAL_ORE, Material.STONE);
-        blockToReplaceInWorld2.put(Material.IRON_ORE, Material.STONE);
-        blockToReplaceInWorld2.put(Material.GOLD_ORE, Material.STONE);
-        blockToReplaceInWorld2.put(Material.DIAMOND_ORE, Material.STONE);
-        blockToReplaceInWorld2.put(Material.LAPIS_ORE, Material.STONE);
-        blockToReplaceInWorld2.put(Material.REDSTONE_ORE, Material.STONE);
-        blockToReplaceInWorld2.put(Material.EMERALD_ORE, Material.STONE);
-
-        blockToReplaceInWorld2.put(Material.DEEPSLATE_COAL_ORE, Material.DEEPSLATE);
-        blockToReplaceInWorld2.put(Material.DEEPSLATE_IRON_ORE, Material.DEEPSLATE);
-        blockToReplaceInWorld2.put(Material.DEEPSLATE_GOLD_ORE, Material.DEEPSLATE);
-        blockToReplaceInWorld2.put(Material.DEEPSLATE_DIAMOND_ORE, Material.DEEPSLATE);
-        blockToReplaceInWorld2.put(Material.DEEPSLATE_LAPIS_ORE, Material.DEEPSLATE);
-        blockToReplaceInWorld2.put(Material.DEEPSLATE_REDSTONE_ORE, Material.DEEPSLATE);
-        blockToReplaceInWorld2.put(Material.DEEPSLATE_EMERALD_ORE, Material.DEEPSLATE);
-
-        Bukkit.getLogger().info("Loaded " + blockToReplaceInWorld2.size() + " blocks to replace in world2");
     }
 
     @EventHandler
@@ -179,18 +163,40 @@ public class WorldHandler implements Listener {
         // TODO ハードコードをやめる
         if (!e.getWorld().getName().equals("main")) return;
         var c = e.getChunk();
+        
         for (var z = 0; z < 16; z++) {
             for (var x = 0; x < 16; x++) {
-                var yMax = c.getWorld().getHighestBlockYAt(x, z);
+                var yMax = c.getWorld().getHighestBlockYAt(c.getX() + x, c.getZ() + z);
                 for (int y = 1; y <= yMax; y++) {
                     var block = c.getBlock(x, y, z);
-                    if (blockToReplaceInWorld2.containsKey(block.getType())) {
-                        block.setType(blockToReplaceInWorld2.get(block.getType()));
+                    var replacer = replace(block.getType());
+                    if (replacer != null) {
+                        block.setType(replacer, false);
                     }
                 }
             }
         }
     }
 
-    private HashMap<Material, Material> blockToReplaceInWorld2 = new HashMap<>();
+    private Material replace(Material mat) {
+        return switch (mat) {
+            case COAL_ORE -> Material.STONE;
+            case IRON_ORE -> Material.STONE;
+            case GOLD_ORE -> Material.STONE;
+            case DIAMOND_ORE -> Material.STONE;
+            case LAPIS_ORE -> Material.STONE;
+            case REDSTONE_ORE -> Material.STONE;
+            case EMERALD_ORE -> Material.STONE;
+            case COPPER_ORE -> Material.STONE;
+            case DEEPSLATE_COAL_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_IRON_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_GOLD_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_DIAMOND_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_LAPIS_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_REDSTONE_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_EMERALD_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_COPPER_ORE -> Material.DEEPSLATE;
+            default -> null;
+        };
+    }
 }
