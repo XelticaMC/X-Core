@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.gui.Gui;
 
 public class CommandDebug extends CommandBase {
@@ -17,7 +18,7 @@ public class CommandDebug extends CommandBase {
         if (subCommand.equalsIgnoreCase("dialog")) {
             if (player == null) return false;
             Gui.getInstance().openDialog(player, "情報", "おめでとう、貴様！貴様は晴れて市民た！制限は緩和されます", (a) -> {
-                player.sendActionBar("ほに");
+                player.sendActionBar(Component.text("ほに"));
                 Bukkit.getLogger().info("ほにににににに");
             });
         } else {

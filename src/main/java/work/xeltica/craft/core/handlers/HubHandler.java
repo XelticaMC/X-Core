@@ -19,6 +19,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.stores.HubStore;
 
 public class HubHandler implements Listener {
@@ -93,23 +95,25 @@ public class HubHandler implements Listener {
         var p = e.getPlayer();
         if (!playerIsInHub(p)) return;
 
-        var lines = e.getLines();
+        var lines = e.lines().stream()
+            .map(c -> PlainTextComponentSerializer.plainText().serialize(c))
+            .toList();
 
-        if (lines[0].equals("[Hub]")) {
-            var command = lines[1];
-            var arg1 = lines[2];
-            var arg2 = lines[3];
+        if (lines.get(0).equals("[Hub]")) {
+            var command = lines.get(1);
+            var arg1 = lines.get(2);
+            var arg2 = lines.get(3);
 
             if (command.equalsIgnoreCase("teleport")) {
-                e.setLine(0, "[§a§lテレポート§r]");
-                e.setLine(1, "");
-                e.setLine(2, "§b" + arg2);
-                e.setLine(3, "§rクリックorタップ");
+                e.line(0, Component.text("[§a§lテレポート§r]"));
+                e.line(1, Component.text(""));
+                e.line(2, Component.text("§b" + arg2));
+                e.line(3, Component.text("§rクリックorタップ"));
             } else if (command.equalsIgnoreCase("return")) {
-                e.setLine(0, "§a元の場所に帰る");
-                e.setLine(1, "");
-                e.setLine(2, "");
-                e.setLine(3, "§rクリックorタップ");
+                e.line(0, Component.text("§a元の場所に帰る"));
+                e.line(1, Component.text(""));
+                e.line(2, Component.text(""));
+                e.line(3, Component.text("§rクリックorタップ"));
             } else {
                 p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1, 0.5f);
                 p.sendMessage("設置に失敗しました。存在しないコマンドです。");

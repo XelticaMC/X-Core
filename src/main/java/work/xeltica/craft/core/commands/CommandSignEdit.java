@@ -10,6 +10,8 @@ import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
+
+import net.kyori.adventure.text.Component;
 public class CommandSignEdit extends CommandPlayerOnlyBase {
 
     @Override
@@ -32,9 +34,9 @@ public class CommandSignEdit extends CommandPlayerOnlyBase {
             var l = new LinkedList<String>(Arrays.asList(args));
             l.remove(0);
             var line = String.join(" ", l);
-            state.setLine(index, line);
+            state.line(index, Component.text(line));
             // イベント
-            var e = new SignChangeEvent(block, player, state.getLines());
+            var e = new SignChangeEvent(block, player, state.lines());
             Bukkit.getPluginManager().callEvent(e);
             if (!e.isCancelled()) {
                 state.update();

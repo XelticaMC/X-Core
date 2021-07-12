@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import work.xeltica.craft.core.XCorePlugin;
 

@@ -1,6 +1,5 @@
 package work.xeltica.craft.core.stores;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,16 +9,11 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
-import org.bukkit.GameRule;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.World.Environment;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -28,7 +22,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.generators.chunks.EmptyChunkGenerator;
 import work.xeltica.craft.core.models.SignData;
 import work.xeltica.craft.core.utils.Config;
 import work.xeltica.craft.core.utils.LocationComparator;

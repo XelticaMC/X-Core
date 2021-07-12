@@ -33,6 +33,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerFlagsStore;
@@ -73,10 +75,10 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         var p = e.getPlayer();
-        var name = p.getDisplayName();
-        e.setJoinMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がやってきました");
+        var name = p.displayName();
+        e.joinMessage(Component.text("§a" + name + "§b" + "さんがやってきました"));
         if (!p.hasPlayedBefore()) {
-            e.setJoinMessage(ChatColor.GREEN + name + ChatColor.AQUA + "が" + ChatColor.GOLD + ChatColor.BOLD + "初参加" + ChatColor.RESET + "です");
+            e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
             PlayerFlagsStore.getInstance().addNewcomer(p);
         }
         new BukkitRunnable(){
@@ -88,10 +90,11 @@ public class PlayerHandler implements Listener {
 
         var f = PlayerFlagsStore.getInstance();
 
-        p.sendTitle(
-            "§aXelticaMCへ§6ようこそ！",
-            "§f詳しくは §b§nhttps://craft.xeltica.work§fを見てね！"
-        );
+        p.showTitle(Title.title(
+            Component.text("§aXelticaMCへ§6ようこそ！"),
+            Component.text("§f詳しくは §b§nhttps://craft.xeltica.work§fを見てね！")
+        ));
+
         if (f.isCitizen(p))
             return;
         if (!f.isNewcomer(p)) {

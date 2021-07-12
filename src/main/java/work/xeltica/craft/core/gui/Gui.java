@@ -1,6 +1,5 @@
 package work.xeltica.craft.core.gui;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,13 +18,15 @@ import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.geysermc.connector.common.ChatColor;
 import org.geysermc.cumulus.SimpleForm;
 import org.geysermc.floodgate.api.FloodgateApi;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.ClickEvent.Action;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
 public class Gui implements Listener {
     public static Gui getInstance() {
@@ -109,7 +110,7 @@ public class Gui implements Listener {
     }
 
     private void openMenuJavaImpl(Player player, String title, MenuItem[] items) {
-        var inv = Bukkit.createInventory(null, (1 + items.length / 9) * 9, title);
+        var inv = Bukkit.createInventory(null, (1 + items.length / 9) * 9, Component.text(title));
 
         Arrays.stream(items).map(i -> {
             var item = new ItemStack(i.getIcon(), i.getCount());
@@ -117,7 +118,7 @@ public class Gui implements Listener {
                 item.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
             }
             var meta = item.getItemMeta();
-            meta.setDisplayName(i.getName());
+            meta.displayName(Component.text(i.getName()));
             item.setItemMeta(meta);
 
             return item;
@@ -134,7 +135,7 @@ public class Gui implements Listener {
         for (var item : items) {
             var text = item.getName();
             if (item.isShiny()) {
-                text = ChatColor.RED + text;
+                text = ChatColor.GOLD + text;
             }
             builder.button(text);
         }
@@ -162,20 +163,17 @@ public class Gui implements Listener {
 
         var handleString = UUID.randomUUID().toString().replace("-", "");
 
-        var okButton = new TextComponent(okButtonText);
-        okButton.setUnderlined(true);
-        okButton.setBold(true);
-        okButton.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/__core_gui_event__ " + handleString));
-      
-        var components = new ComponentBuilder()
-            .append(title + "\n\n")
-            .bold(true)
-            .append(content + "\n\n")
-            .reset()
-            .append(okButton)
-            .create();
+        var comTitle = Component.text(title + "\n\n", Style.style(TextDecoration.BOLD));
+        var comContent = Component.text(content + "\n\n");
+        var comOkButton = Component.text(okButtonText, Style.style(TextColor.color(0, 0, 0), TextDecoration.BOLD, TextDecoration.UNDERLINED))
+            .clickEvent(ClickEvent.runCommand("/__core_gui_event__ " + handleString));
 
-        meta.spigot().addPage(components);
+        var component = comTitle
+            .append(comContent)
+            .append(comOkButton)
+            ;
+
+        meta.addPages(component);
         meta.setAuthor("XelticaMC");
         meta.setTitle(title);
 
