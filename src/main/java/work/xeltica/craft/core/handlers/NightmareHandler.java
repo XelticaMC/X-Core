@@ -6,19 +6,12 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.projectiles.ProjectileSource;
-
-import work.xeltica.craft.core.plugins.VaultPlugin;
 
 public class NightmareHandler implements Listener {
     public NightmareHandler() {
@@ -47,24 +40,8 @@ public class NightmareHandler implements Listener {
     }
 
     @EventHandler
-    public void onPlayerUseBed(PlayerInteractEvent e) {
-        var block = e.getClickedBlock();
-        if (block == null)
-            return;
-        var loc = block.getLocation();
-        if (!isNightmare(loc.getWorld()))
-            return;
-
-        // ベッド爆弾の再現
-        if (Tag.BEDS.isTagged(block.getType())) {
-            block.breakNaturally();
-            e.setCancelled(true);
-            loc.createExplosion(5, true);
-        }
-    }
-
-    @EventHandler
     public void onProjecileLaunch(ProjectileLaunchEvent e) {
+        // TODO wip
         var type = e.getEntityType();
         var p = e.getEntity();
         if (!(p.getShooter() instanceof Player)) return;
