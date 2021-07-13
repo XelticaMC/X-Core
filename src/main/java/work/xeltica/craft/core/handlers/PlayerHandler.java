@@ -124,18 +124,17 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void onPlayerPortal(PlayerPortalEvent e) {
         // サンドボックスと旅行先からポータルを開けることを禁止
-
         var name = e.getPlayer().getWorld().getName();
-        if (name.startsWith("travel_") || name.equals("sandbox")) {
+        if (name.startsWith("travel_") || name.equals("sandbox") || name.equals("wildarea")) {
             e.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onInventoryOpenEvent(InventoryOpenEvent e) {
-        var isEC = e.getInventory().getType() == InventoryType.ENDER_CHEST;
-        var isSB = e.getPlayer().getWorld().getName().equals("sandbox");
-        if (isEC && isSB) {
+        var isEnderChest = e.getInventory().getType() == InventoryType.ENDER_CHEST;
+        var isSandbox = e.getPlayer().getWorld().getName().equals("sandbox");
+        if (isEnderChest && isSandbox) {
             e.setCancelled(true);
         }
     }
