@@ -22,6 +22,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.SignData;
 import work.xeltica.craft.core.utils.Config;
 import work.xeltica.craft.core.utils.LocationComparator;
@@ -43,10 +44,11 @@ public class HubStore {
         return HubStore.instance;
     }
 
-    public void teleport(Player player) {
+    public void teleport(Player player, HubType type) {
         var server = Bukkit.getServer();
-        if (worldUuid == null) {
-            player.sendMessage("hub が未生成");
+        var world = Bukkit.getWorld(type.getWorldName());
+        if (world == null) {
+            player.sendMessage("未生成");
             return;
         }
         var isWarping = isWarpingMap.get(player.getUniqueId());
@@ -54,16 +56,15 @@ public class HubStore {
             player.sendMessage("移動中です！");
             return;
         }
-        if (player.getWorld().getUID().equals(worldUuid)) {
+        if (player.getWorld().getUID().equals(world.getUID())) {
             player.sendMessage("既にロビーです！");
             return;
         }
-        var worldName = player.getWorld().getName();
+        var currentWorldName = player.getWorld().getName();
         var isSaveIgnoredWorld = Arrays.stream(inventorySaverIgnoredWorldNames)
-                .anyMatch(name -> name.equalsIgnoreCase(worldName));
+                .anyMatch(name -> name.equalsIgnoreCase(currentWorldName));
         server.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-            var world = server.getWorld(worldUuid);
-            var loc = world.getSpawnLocation();
+            var loc = type.getLocation() != null ? type.getSpigotLocation() : world.getSpawnLocation();
             player.teleport(loc, TeleportCause.PLUGIN);
             isWarpingMap.put(player.getUniqueId(), false);
         }, isSaveIgnoredWorld ? 1 : 20 * 5);

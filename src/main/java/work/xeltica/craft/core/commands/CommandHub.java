@@ -3,6 +3,7 @@ package work.xeltica.craft.core.commands;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.stores.HubStore;
 
 public class CommandHub extends CommandPlayerOnlyBase {
@@ -13,7 +14,7 @@ public class CommandHub extends CommandPlayerOnlyBase {
         var store = HubStore.getInstance();
 
         if (args.length == 0) {
-            store.teleport(player);
+            store.teleport(player, HubType.Main);
             return true;
         }
 
@@ -21,7 +22,9 @@ public class CommandHub extends CommandPlayerOnlyBase {
             player.sendMessage("/hub");
         }
         if (args[0].equalsIgnoreCase("help")) {
-            player.sendMessage("/hub [help]");
+            player.sendMessage("/hub [help|classic]");
+        } else if (args[0].equalsIgnoreCase("classic")) {
+            store.teleport(player, HubType.Classic);
         } else {
             return false;
         }
