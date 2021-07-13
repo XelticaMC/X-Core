@@ -29,6 +29,7 @@ import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.handlers.EntityHandler;
 import work.xeltica.craft.core.handlers.HubHandler;
 import work.xeltica.craft.core.handlers.NewMorningHandler;
+import work.xeltica.craft.core.handlers.NightmareHandler;
 import work.xeltica.craft.core.handlers.PlayerHandler;
 import work.xeltica.craft.core.handlers.VehicleHandler;
 import work.xeltica.craft.core.handlers.WakabaHandler;
@@ -59,8 +60,8 @@ public class XCorePlugin extends JavaPlugin {
 
         // 1秒に1回
         new DaylightObserver(this).runTaskTimer(this, 0, 20);
-        // 1分に1回
-        new NightmareRandomEvent(this).runTaskTimer(this, 0, 20 * 60);
+        // 30秒に1回
+        new NightmareRandomEvent(this).runTaskTimer(this, 0, 80);
         // 4tickに1回
         // new FlyingObserver().runTaskTimer(this, 0, 4);
         // 10tickに1回
@@ -138,6 +139,7 @@ public class XCorePlugin extends JavaPlugin {
         pm.registerEvents(new WakabaHandler(), this);
         pm.registerEvents(new HubHandler(), this);
         pm.registerEvents(new WorldHandler(), this);
+        pm.registerEvents(new NightmareHandler(), this);
         pm.registerEvents(Gui.getInstance(), this);
     }
 
