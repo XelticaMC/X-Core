@@ -15,11 +15,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 
-import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.WorldStore;
 
 public class WorldHandler implements Listener {
@@ -47,17 +45,6 @@ public class WorldHandler implements Listener {
             if (block == Material.ENDER_CHEST) {
                 e.setCancelled(true);
             }
-        }
-    }
-
-    @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent e) {
-        if (e.getPlayer().getWorld().getName().equalsIgnoreCase("nightmare")) {
-            // 悪夢から目覚める
-            var store = HubStore.getInstance();
-            store.writePlayerLocation(e.getPlayer());
-            var lobby = store.getHub().getSpawnLocation();
-            e.setRespawnLocation(lobby);
         }
     }
 
