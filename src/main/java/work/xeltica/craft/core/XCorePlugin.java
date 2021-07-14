@@ -15,17 +15,20 @@ import work.xeltica.craft.core.commands.CommandBoat;
 import work.xeltica.craft.core.commands.CommandCart;
 import work.xeltica.craft.core.commands.CommandCat;
 import work.xeltica.craft.core.commands.CommandDebug;
+import work.xeltica.craft.core.commands.CommandGiveCustomItem;
 import work.xeltica.craft.core.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.core.commands.CommandHub;
 import work.xeltica.craft.core.commands.CommandLocalTime;
 import work.xeltica.craft.core.commands.CommandOmikuji;
 import work.xeltica.craft.core.commands.CommandXCoreGuiEvent;
+import work.xeltica.craft.core.commands.CommandXtp;
 import work.xeltica.craft.core.commands.CommandPromo;
 import work.xeltica.craft.core.commands.CommandPvp;
 import work.xeltica.craft.core.commands.CommandReport;
 import work.xeltica.craft.core.commands.CommandRespawn;
 import work.xeltica.craft.core.commands.CommandSignEdit;
 import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.handlers.XphoneHandler;
 import work.xeltica.craft.core.handlers.EntityHandler;
 import work.xeltica.craft.core.handlers.HubHandler;
 import work.xeltica.craft.core.handlers.NewMorningHandler;
@@ -39,6 +42,7 @@ import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.runnables.DaylightObserver;
 import work.xeltica.craft.core.runnables.NightmareRandomEvent;
 import work.xeltica.craft.core.stores.HubStore;
+import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerFlagsStore;
 import work.xeltica.craft.core.stores.VehicleStore;
@@ -108,6 +112,7 @@ public class XCorePlugin extends JavaPlugin {
         new PlayerFlagsStore();
         new HubStore();
         new WorldStore();
+        new ItemStore();
     }
 
     private void loadCommands() {
@@ -118,6 +123,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("pvp", new CommandPvp());
         commands.put("signedit", new CommandSignEdit());
         commands.put("givetravelticket", new CommandGiveTravelTicket());
+        commands.put("givecustomitem", new CommandGiveCustomItem());
         commands.put("report", new CommandReport());
         commands.put("localtime", new CommandLocalTime());
         commands.put("boat", new CommandBoat());
@@ -126,6 +132,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("cat", new CommandCat());
         commands.put("hub", new CommandHub());
         commands.put("debug", new CommandDebug());
+        commands.put("xtp", new CommandXtp());
         commands.put("__otanoshimi_gui_event__", new CommandXCoreGuiEvent());
     }
 
@@ -140,6 +147,7 @@ public class XCorePlugin extends JavaPlugin {
         pm.registerEvents(new HubHandler(), this);
         pm.registerEvents(new WorldHandler(), this);
         pm.registerEvents(new NightmareHandler(), this);
+        pm.registerEvents(new XphoneHandler(), this);
         pm.registerEvents(Gui.getInstance(), this);
     }
 

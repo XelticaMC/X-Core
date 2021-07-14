@@ -14,12 +14,9 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.ItemStack;
 
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.HubType;
@@ -32,7 +29,6 @@ public class HubStore {
         ConfigurationSerialization.registerClass(SignData.class, "SignData");
         HubStore.instance = this;
         logger = Bukkit.getLogger();
-        players = new Config("players");
         signs = new Config("signs", (s) -> {
             signData = (List<SignData>) s.getConf().getList("signs", new ArrayList<SignData>());
         });
@@ -45,6 +41,10 @@ public class HubStore {
     }
 
     public void teleport(Player player, HubType type) {
+        teleport(player, type, false);
+    }
+
+    public void teleport(Player player, HubType type, boolean bulk) {
         var server = Bukkit.getServer();
         var world = Bukkit.getWorld(type.getWorldName());
         if (world == null) {
@@ -61,9 +61,10 @@ public class HubStore {
             return;
         }
         var currentWorldName = player.getWorld().getName();
-        var isSaveIgnoredWorld = Arrays.stream(inventorySaverIgnoredWorldNames)
+        var isSaveIgnoredWorld = bulk || Arrays.stream(inventorySaverIgnoredWorldNames)
                 .anyMatch(name -> name.equalsIgnoreCase(currentWorldName));
         server.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
+            WorldStore.getInstance().saveCurrentLocation(player);
             var loc = type.getLocation() != null ? type.getSpigotLocation() : world.getSpawnLocation();
             player.teleport(loc, TeleportCause.PLUGIN);
             isWarpingMap.put(player.getUniqueId(), false);
@@ -93,23 +94,7 @@ public class HubStore {
     public void returnToWorld(Player player) {
         player.setGameMode(GameMode.SURVIVAL);
 
-        var world = Bukkit.getWorld("world");
-        var section = players.getConf().getConfigurationSection(player.getUniqueId().toString());
-        if (section == null) {
-            // はじめましての場合
-            player.teleport(world.getSpawnLocation(), TeleportCause.PLUGIN);
-            return;
-        }
-
-        var locationResult = section.get("location");
-        if (locationResult == null || !(locationResult instanceof Location)) {
-            player.teleport(world.getSpawnLocation(), TeleportCause.PLUGIN);
-            player.sendMessage("§c最後にいた場所が記録されていないため、初期スポーンにワープします。これはおそらくバグなので、管理者に報告してください。 Code: 2");
-            return;
-        }
-
-        var loc = (Location) locationResult;
-        player.teleport(loc, TeleportCause.PLUGIN);
+        WorldStore.getInstance().teleportToSavedLocation(player, "world");
     }
 
     public boolean processSigns(Location loc, Player p) {
@@ -120,6 +105,9 @@ public class HubStore {
         if (cmd.equalsIgnoreCase("teleport")) {
             var worldName = signData.getArg1();
             WorldStore.getInstance().teleport(p, worldName);
+        } else if (cmd.equalsIgnoreCase("xteleport")) {
+            var worldName = signData.getArg1();
+            WorldStore.getInstance().teleportToSavedLocation(p, worldName);
         } else if (cmd.equalsIgnoreCase("return")) {
             returnToWorld(p);
         }
@@ -150,61 +138,6 @@ public class HubStore {
             p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1, 0.5f);
             p.sendMessage("内部エラー発生。");
             e1.printStackTrace();
-        }
-    }
-
-    public void restoreInventory(Player player) {
-        ConfigurationSection section = players.getConf().getConfigurationSection(player.getUniqueId().toString());
-        if (section == null)
-            return;
-
-        var inv = player.getInventory();
-        inv.clear();
-        var itemsResult = section.get("items");
-        if (itemsResult == null) {
-            player.sendMessage("§cインベントリ復元失敗。これはおそらくバグなので、管理者に報告してください。 Code: 1");
-        } else {
-            var items = (ArrayList<ItemStack>) itemsResult;
-            for (var i = 0; i < items.size(); i++) {
-                inv.setItem(i, items.get(i));
-            }
-        }
-    }
-
-    /**
-     * プレイヤーのパラメーターを保存したものに置き換えます。
-     * @param player 対象のプレイヤー。
-     */
-    public void restoreParams(Player player) {
-        ConfigurationSection section = players.getConf().getConfigurationSection(player.getUniqueId().toString());
-        if (section == null)
-            return;
-
-        player.setHealth(section.getDouble("health", player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
-        // TODO: 満腹度上限の決め打ちをしなくて済むならそうしたい
-        player.setFoodLevel(section.getInt("foodLevel", 20));
-        player.setSaturation((float) section.getDouble("saturaton", 0));
-        player.setExhaustion((float) section.getDouble("exhaustion", 0));
-        player.setExp((float) section.getDouble("exp", 0));
-        player.setLevel(section.getInt("level", 0));
-        player.setFireTicks(section.getInt("fire", 0));
-    }
-
-    public void writePlayerLocation(Player player) {
-        var uid = player.getUniqueId().toString();
-        var playersConf = players.getConf();
-        var section = playersConf.getConfigurationSection(uid);
-        if (section == null) {
-            section = playersConf.createSection(uid);
-        }
-        
-
-        section.set("location", player.getLocation());
-
-        try {
-            players.save();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -239,7 +172,6 @@ public class HubStore {
 
     private static HubStore instance;
 
-    private Config players;
     private Config signs;
     private Logger logger;
     private HashMap<UUID, Boolean> isWarpingMap = new HashMap<>();

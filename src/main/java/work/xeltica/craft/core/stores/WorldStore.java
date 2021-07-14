@@ -1,13 +1,17 @@
 package work.xeltica.craft.core.stores;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import work.xeltica.craft.core.utils.Config;
 
 public class WorldStore {
     public WorldStore() {
@@ -16,6 +20,7 @@ public class WorldStore {
         loadWorldDescription();
         loadLockedWorldNames();
         loadCreativeWorldNames();
+        location = new Config("location");
     }
 
     public static WorldStore getInstance() {
@@ -54,6 +59,31 @@ public class WorldStore {
         return lockedWorldNames.contains(n);
     }
 
+    public void saveCurrentLocation(Player p) {
+        var conf = location.getConf();
+        var pid = p.getUniqueId().toString();
+        var playerSection = conf.getConfigurationSection(pid);
+        if (playerSection == null) {
+            playerSection = conf.createSection(pid);
+        }
+        playerSection.set(p.getWorld().getName(), p.getLocation());
+        try {
+            location.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Location getLocation(Player p, String name) {
+        var conf = location.getConf();
+        var pid = p.getUniqueId().toString();
+        var playerSection = conf.getConfigurationSection(pid);
+        if (playerSection == null) {
+            return null;
+        }
+        return playerSection.getLocation(name);
+    }
+
     public void teleport(Player player, String worldName) {
         var world = Bukkit.getWorld(worldName);
         if (world == null) {
@@ -61,6 +91,16 @@ public class WorldStore {
             return;
         }
         player.teleport(world.getSpawnLocation());
+    }
+
+    public void teleportToSavedLocation(Player player, String worldName) {
+        var loc = getLocation(player, worldName);
+        if (loc == null) {
+            // 保存されていなければ普通にTP
+            teleport(player, worldName);
+            return;
+        }
+        player.teleport(loc);
     }
 
     private void loadWorldName() {
@@ -132,6 +172,7 @@ public class WorldStore {
     }
 
     private static WorldStore instance;
+    private Config location;
     private final Map<String, String> worldNameMap = new HashMap<>();
     private final Map<String, String> worldDescMap = new HashMap<>();
     private final Set<String> lockedWorldNames = new HashSet<>();

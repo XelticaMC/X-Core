@@ -14,7 +14,16 @@ public class CommandHub extends CommandPlayerOnlyBase {
         var store = HubStore.getInstance();
 
         if (args.length == 0) {
-            store.teleport(player, HubType.Main);
+            store.teleport(player, switch (player.getWorld().getName()) {
+                default -> HubType.Main;
+                case "hub" -> HubType.Classic;
+                case "world" -> HubType.Classic;
+                case "world_nether" -> HubType.Classic;
+                case "world_the_end" -> HubType.Classic;
+                case "nightmare" -> HubType.Classic;
+                case "sandbox" -> HubType.Classic;
+                case "wildarea" -> HubType.Classic;
+            });
             return true;
         }
 
@@ -22,9 +31,7 @@ public class CommandHub extends CommandPlayerOnlyBase {
             player.sendMessage("/hub");
         }
         if (args[0].equalsIgnoreCase("help")) {
-            player.sendMessage("/hub [help|classic]");
-        } else if (args[0].equalsIgnoreCase("classic")) {
-            store.teleport(player, HubType.Classic);
+            player.sendMessage("/hub [help]");
         } else {
             return false;
         }

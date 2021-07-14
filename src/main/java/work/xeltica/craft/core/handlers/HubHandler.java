@@ -1,6 +1,9 @@
 package work.xeltica.craft.core.handlers;
 
-import org.bukkit.GameMode;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
@@ -22,6 +25,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.stores.HubStore;
+import work.xeltica.craft.core.stores.WorldStore;
 
 public class HubHandler implements Listener {
     @EventHandler
@@ -47,18 +51,12 @@ public class HubHandler implements Listener {
         if (store().getForceAll()) {
             player.teleport(world.getSpawnLocation());
         }
-        if (!player.hasPlayedBefore() && world != null) {
-            var loc = world.getSpawnLocation();
-            player.getInventory().clear();
-            player.setGameMode(GameMode.ADVENTURE);
-            player.teleport(loc, TeleportCause.PLUGIN);
-        }
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         var p = e.getPlayer();
-        if (playerIsInHub(p)) {
+        if (playerIsInClassicHub(p)) {
             store().removeSign(p, e.getBlock().getLocation());
         }
     }
@@ -76,7 +74,7 @@ public class HubHandler implements Listener {
     @EventHandler
     public void onPlayerPortal(PlayerPortalEvent e) {
         var player = e.getPlayer();
-        if (playerIsInHub(player)) {
+        if (playerIsInClassicHub(player)) {
             e.setCancelled(true);
             store().returnToWorld(player);
         }
@@ -93,7 +91,7 @@ public class HubHandler implements Listener {
     @EventHandler
     public void onSignChange(SignChangeEvent e) {
         var p = e.getPlayer();
-        if (!playerIsInHub(p)) return;
+        if (!playerIsInClassicHub(p)) return;
 
         var lines = e.lines().stream()
             .map(c -> PlainTextComponentSerializer.plainText().serialize(c))
@@ -105,9 +103,16 @@ public class HubHandler implements Listener {
             var arg2 = lines.get(3);
 
             if (command.equalsIgnoreCase("teleport")) {
+                // arg1: わーるど名
+                // arg2: 座標(カンマ区切り) 未実装
                 e.line(0, Component.text("[§a§lテレポート§r]"));
                 e.line(1, Component.text(""));
-                e.line(2, Component.text("§b" + arg2));
+                e.line(2, Component.text("§b" + WorldStore.getInstance().getWorldDisplayName(arg1)));
+                e.line(3, Component.text("§rクリックorタップ"));
+            } else if (command.equalsIgnoreCase("xteleport")) {
+                e.line(0, Component.text("[§b§lテレポート§r]"));
+                e.line(1, Component.text(""));
+                e.line(2, Component.text("§b" + WorldStore.getInstance().getWorldDisplayName(arg1)));
                 e.line(3, Component.text("§rクリックorタップ"));
             } else if (command.equalsIgnoreCase("return")) {
                 e.line(0, Component.text("§a元の場所に帰る"));
@@ -124,10 +129,20 @@ public class HubHandler implements Listener {
     }
 
     private boolean playerIsInHub(Entity p) {
-        return p.getWorld().getUID().equals(store().getHubId());
+        return hubs.contains(p.getWorld().getName());
+    }
+
+    private boolean playerIsInClassicHub(Entity p) {
+        return p.getWorld().getName().equals("hub");
     }
 
     private HubStore store() {
         return HubStore.getInstance();
     }
+
+    private List<String> hubs = Lists.newArrayList(
+        "hub",
+        "hub2",
+        "hub_dev"
+    );
 }

@@ -52,6 +52,8 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
     }
 
     private String getRespawnWorld(World w) throws Exception {
+        // TODO 旅行券のときに位置情報保存しておいてーとかそういう処理に対応したい
+        if (w.getName().startsWith("travel_")) return "world";
         return switch (w.getName()) {
             default -> w.getName();
 
