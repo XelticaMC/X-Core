@@ -23,6 +23,10 @@ commands:
     description: トラベルチケットを授与します。
     usage: /givetravelticket <playerName> [type=NORMAL] [amount=1]
     permission: otanoshimi.command.givetravelticket
+  givecustomitem:
+    description: XelticaMCオリジナルアイテムを授与します。
+    usage: /givetravelticket <playerName> <xphone>
+    permission: otanoshimi.command.givecustomitem
   report:
     description: 処罰GUIを表示します。
     usage: /report <playerName>
@@ -66,6 +70,8 @@ permissions:
   otanoshimi.command.pvp:
     default: op
   otanoshimi.command.givetravelticket:
+    default: op
+  otanoshimi.command.givecustomitem:
     default: op
   otanoshimi.command.signedit:
     default: op

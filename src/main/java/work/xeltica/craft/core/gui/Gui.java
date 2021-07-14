@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.gui;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
@@ -38,10 +39,14 @@ public class Gui implements Listener {
     }
 
     public void openMenu(Player player, String title, MenuItem... items) {
+        openMenu(player, title, items);
+    }
+
+    public void openMenu(Player player, String title, Collection<MenuItem> items) {
         if (isBedrock(player)) {
-            openMenuBedrockImpl(player, title, items);
+            openMenuBedrockImpl(player, title, items.toArray(MenuItem[]::new));
         } else {
-            openMenuJavaImpl(player, title, items);
+            openMenuJavaImpl(player, title, items.toArray(MenuItem[]::new));
         }
     }
 
