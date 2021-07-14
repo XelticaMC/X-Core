@@ -34,6 +34,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.stores.OmikujiStore;
@@ -75,7 +76,7 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         var p = e.getPlayer();
-        var name = p.displayName();
+        var name = PlainTextComponentSerializer.plainText().serialize(p.displayName());
         e.joinMessage(Component.text("§a" + name + "§b" + "さんがやってきました"));
         if (!p.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
@@ -111,8 +112,8 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        var name = e.getPlayer().getDisplayName();
-        e.setQuitMessage(ChatColor.GREEN + name + ChatColor.AQUA + "がかえりました");
+        var name = PlainTextComponentSerializer.plainText().serialize(e.getPlayer().displayName());
+        e.quitMessage(Component.text("§a" + name + "§b" + "さんがかえりました"));
         new BukkitRunnable() {
             @Override
             public void run() {
