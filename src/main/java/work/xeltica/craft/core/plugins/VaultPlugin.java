@@ -53,6 +53,10 @@ public class VaultPlugin extends PluginBase {
         return economy.depositPlayer(p, 100).type == ResponseType.SUCCESS;
     }
 
+    public Economy getEconomy() {
+        return economy;
+    }
+
     private boolean isEconomyEnabled;
     private Economy economy;
     private Logger logger;

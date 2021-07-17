@@ -47,6 +47,8 @@ import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerFlagsStore;
 import work.xeltica.craft.core.stores.VehicleStore;
 import work.xeltica.craft.core.stores.WorldStore;
+import work.xeltica.craft.core.commands.CommandDepositClovers;
+import work.xeltica.craft.core.stores.CloverStore;
 
 public class XCorePlugin extends JavaPlugin {
     public static XCorePlugin getInstance() {
@@ -57,10 +59,10 @@ public class XCorePlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
         logger = getLogger();
+        loadPlugins();
         loadStores();
         loadCommands();
         loadHandlers();
-        loadPlugins();
 
         // 1秒に1回
         new DaylightObserver(this).runTaskTimer(this, 0, 20);
@@ -113,6 +115,7 @@ public class XCorePlugin extends JavaPlugin {
         new HubStore();
         new WorldStore();
         new ItemStore();
+        new CloverStore();
     }
 
     private void loadCommands() {
@@ -133,6 +136,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("hub", new CommandHub());
         commands.put("debug", new CommandDebug());
         commands.put("xtp", new CommandXtp());
+        commands.put("depositclovers", new CommandDepositClovers());
         commands.put("__otanoshimi_gui_event__", new CommandXCoreGuiEvent());
     }
 

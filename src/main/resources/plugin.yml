@@ -66,6 +66,10 @@ commands:
     description: デバッグ
     usage: /debug
     permission: otanoshimi.command.debug
+  depositclovers:
+    description:
+    usage: /debug
+    permission: otanoshimi.command.depositclovers
 permissions:
   otanoshimi.command.pvp:
     default: op
@@ -104,4 +108,5 @@ permissions:
   otanoshimi.command.xtp:
     default: op
   otanoshimi.command.xtp.other:
+  otanoshimi.command.depositclovers:
     default: op
