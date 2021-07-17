@@ -77,14 +77,6 @@ public class PlayerFlagsStore {
         return catUUIDs.contains(p.getUniqueId().toString());
     }
 
-    public void reloadStore() {
-        flags.reload();
-        newcomers.reload();
-        var fc = flags.getConf();
-
-        catUUIDs = fc.getStringList("cats");
-    }
-
     public void writeStore() throws IOException {
         var fc = flags.getConf();
         fc.set("cats", catUUIDs);

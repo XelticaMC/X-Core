@@ -1,38 +1,22 @@
 package work.xeltica.craft.core.stores;
 
-import java.io.File;
 import java.io.IOException;
 
 import com.google.common.collect.Lists;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
 import work.xeltica.craft.core.plugins.VaultPlugin;
+import work.xeltica.craft.core.utils.Config;
 
 public class CloverStore {
-    public CloverStore(final Plugin pl) {
+    public CloverStore() {
         CloverStore.instance = this;
-        cloversConfFile = new File(pl.getDataFolder(), "clovers.yml");
-        loadCloversConf();
+        clovers = new Config("clovers");
     }
 
     public static CloverStore getInstance() {
         return instance;
-    }
-
-    public void loadCloversConf() {
-        cloversConf = YamlConfiguration.loadConfiguration(cloversConfFile);
-    }
-
-    public void saveCloversConf() {
-        try {
-            cloversConf.save(cloversConfFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        loadCloversConf();
     }
 
     public void saveAllCloversAccount() {
@@ -43,10 +27,14 @@ public class CloverStore {
         for (var p : players) {
             final var balance = eco.getBalance(p);
             if (balance == 0) continue;
-            cloversConf.set(p.getUniqueId().toString(), balance);
+            clovers.getConf().set(p.getUniqueId().toString(), balance);
             logger.info(String.format("%sさんの残高 %f Clover をデポジット", p.getName(), balance));
         }
-        saveCloversConf();
+        try {
+            clovers.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private VaultPlugin plugin() {
@@ -54,6 +42,5 @@ public class CloverStore {
     }
 
     private static CloverStore instance;
-    private YamlConfiguration cloversConf;
-    private File cloversConfFile;
+    private Config clovers;
 }

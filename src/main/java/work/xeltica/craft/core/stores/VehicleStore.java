@@ -31,7 +31,7 @@ public class VehicleStore {
         // 初期値を登録
         cm.getConf().set(id, 20 * 60 * 5);
         try {
-            writeStore();
+            cm.save();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,7 +69,7 @@ public class VehicleStore {
             }
         }
         try {
-            writeStore();
+            cm.save();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,19 +79,11 @@ public class VehicleStore {
         return v instanceof Boat || v instanceof RideableMinecart;
     }
 
-    public void reloadStore() {
-        this.cm.reload();
-    }
-
-    public void writeStore() throws IOException {
-        this.cm.save();
-    }
-
     private void unregisterVehicle(String id) {
         // 削除
         cm.getConf().set(id, null);
         try {
-            writeStore();
+            cm.save();
         } catch (IOException e) {
             e.printStackTrace();
         }

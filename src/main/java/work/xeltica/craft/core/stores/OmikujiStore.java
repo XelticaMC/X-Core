@@ -47,11 +47,10 @@ public class OmikujiStore {
     public void set(Player player, OmikujiScore score) {
         cm.getConf().set(player.getUniqueId().toString(), score.name());
         try {
-            writeStore();
+            cm.save();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        reloadStore();
     }
 
     public void reset() {
@@ -59,19 +58,10 @@ public class OmikujiStore {
             cm.getConf().set(key, null);
         });
         try {
-            writeStore();
+            cm.save();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        reloadStore();
-    }
-
-    public void reloadStore() {
-        cm.reload();
-    }
-
-    public void writeStore() throws IOException {
-        cm.save();
     }
 
     public OmikujiScore generateScore() {
