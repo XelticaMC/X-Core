@@ -61,6 +61,10 @@ commands:
     description: デバッグ
     usage: /debug
     permission: otanoshimi.command.debug
+  depositclovers:
+    description:
+    usage: /debug
+    permission: otanoshimi.command.depositclovers
 permissions:
   otanoshimi.command.pvp:
     default: op
@@ -97,4 +101,6 @@ permissions:
   hub.gatekeeper.staff:
     default: op
   otanoshimi.command.debug:
+    default: op
+  otanoshimi.command.depositclovers:
     default: op

@@ -15,6 +15,7 @@ import work.xeltica.craft.otanoshimiplugin.commands.CommandBoat;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandCart;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandCat;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandDebug;
+import work.xeltica.craft.otanoshimiplugin.commands.CommandDepositClovers;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandHub;
 import work.xeltica.craft.otanoshimiplugin.commands.CommandLocalTime;
@@ -39,6 +40,7 @@ import work.xeltica.craft.otanoshimiplugin.plugins.CitizenTimerCalculator;
 import work.xeltica.craft.otanoshimiplugin.plugins.VaultPlugin;
 import work.xeltica.craft.otanoshimiplugin.runnables.DaylightObserver;
 import work.xeltica.craft.otanoshimiplugin.runnables.NightmareRandomEvent;
+import work.xeltica.craft.otanoshimiplugin.stores.CloverStore;
 import work.xeltica.craft.otanoshimiplugin.stores.HubStore;
 import work.xeltica.craft.otanoshimiplugin.stores.OmikujiStore;
 import work.xeltica.craft.otanoshimiplugin.stores.PlayerFlagsStore;
@@ -53,10 +55,10 @@ public class OtanoshimiPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         logger = getLogger();
+        loadPlugins();
         loadStores();
         loadCommands();
         loadHandlers();
-        loadPlugins();
         instance = this;
 
         // 1秒に1回
@@ -114,6 +116,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded Hub Store");
         new WorldStore(this);
         logger.info("Loaded World Store");
+        new CloverStore(this);
+        logger.info("Loaded Clover Store");
     }
 
     private void loadCommands() {
@@ -148,6 +152,8 @@ public class OtanoshimiPlugin extends JavaPlugin {
         logger.info("Loaded /debug command");
         commands.put("__otanoshimi_gui_event__", new CommandOtanoshimiGuiEvent());
         logger.info("Loaded /__otanoshimi_gui_event__ command");
+        commands.put("depositclovers", new CommandDepositClovers());
+        logger.info("Loaded /depositclovers command");
     }
 
     private void loadHandlers() {
