@@ -34,7 +34,7 @@ public class WorldStore {
         else if (n.startsWith("travel_"))
             return null;
         else
-            return "なぞのばしょ";
+            return null;
     }
 
     public String getWorldDescription(World w) {

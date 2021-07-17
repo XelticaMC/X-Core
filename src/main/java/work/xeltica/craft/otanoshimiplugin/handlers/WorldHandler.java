@@ -17,6 +17,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.world.ChunkPopulateEvent;
 
 import work.xeltica.craft.otanoshimiplugin.stores.HubStore;
 import work.xeltica.craft.otanoshimiplugin.stores.WorldStore;
@@ -134,6 +135,8 @@ public class WorldHandler implements Listener {
         var fromName = worldStore.getWorldDisplayName(from);
         var toName = worldStore.getWorldDisplayName(to);
 
+        if (fromName == null || toName == null) return;
+
         var toPlayers = to.getPlayers();
         var allPlayersExceptInDestination = Bukkit.getOnlinePlayers().stream()
                 // tpとマッチするUUIDがひとつも無いpのみを抽出
@@ -157,5 +160,48 @@ public class WorldHandler implements Listener {
                 p.sendMessage(String.format("§a%s§bが§e%s§bから来ました", player.getDisplayName(), fromName));
             }
         }
+    }
+
+    @EventHandler()
+    public void onChunkPopulateEvent(ChunkPopulateEvent e) {
+        // TODO ハードコードをやめる
+        if (!e.getWorld().getName().equals("main"))
+            return;
+        var c = e.getChunk();
+
+        for (var z = 0; z < 16; z++) {
+            for (var x = 0; x < 16; x++) {
+                var yMax = c.getWorld().getHighestBlockYAt(c.getX() + x, c.getZ() + z);
+                for (int y = 1; y <= yMax; y++) {
+                    var block = c.getBlock(x, y, z);
+                    var replacer = replace(block.getType());
+                    if (replacer != null) {
+                        block.setType(replacer, false);
+                    }
+                }
+            }
+        }
+    }
+
+    private Material replace(Material mat) {
+        return switch (mat) {
+            case COAL_ORE -> Material.STONE;
+            case IRON_ORE -> Material.STONE;
+            case GOLD_ORE -> Material.STONE;
+            case DIAMOND_ORE -> Material.STONE;
+            case LAPIS_ORE -> Material.STONE;
+            case REDSTONE_ORE -> Material.STONE;
+            case EMERALD_ORE -> Material.STONE;
+            case COPPER_ORE -> Material.STONE;
+            case DEEPSLATE_COAL_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_IRON_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_GOLD_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_DIAMOND_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_LAPIS_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_REDSTONE_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_EMERALD_ORE -> Material.DEEPSLATE;
+            case DEEPSLATE_COPPER_ORE -> Material.DEEPSLATE;
+            default -> null;
+        };
     }
 }

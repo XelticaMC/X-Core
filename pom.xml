@@ -6,7 +6,7 @@
 
   <groupId>work.xeltica.craft.otanoshimiplugin</groupId>
   <artifactId>XelticaMCOtanoshimiPlugin</artifactId>
-  <version>1.7.1</version>
+  <version>1.8.0</version>
 
   <name>XelticaMCOtanoshimiPlugin</name>
 
@@ -40,9 +40,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.destroystokyo.paper</groupId>
+      <groupId>io.papermc.paper</groupId>
       <artifactId>paper-api</artifactId>
-      <version>1.16.5-R0.1-SNAPSHOT</version>
+      <version>1.17.1-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
