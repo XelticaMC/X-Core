@@ -118,6 +118,8 @@ public class WorldHandler implements Listener {
         var fromName = worldStore.getWorldDisplayName(from);
         var toName = worldStore.getWorldDisplayName(to);
 
+        if (fromName == null || toName == null) return;
+
         var toPlayers = to.getPlayers();
         var allPlayersExceptInDestination = Bukkit.getOnlinePlayers().stream()
                 // tpとマッチするUUIDがひとつも無いpのみを抽出
