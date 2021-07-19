@@ -3,26 +3,27 @@ package work.xeltica.craft.core.commands;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import work.xeltica.craft.core.stores.PlayerFlagsStore;
+import work.xeltica.craft.core.stores.PlayerDataKey;
+import work.xeltica.craft.core.stores.PlayerStore;
 
 public class CommandCat extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player sender, Command command, String label, String[] args) {
-        var flag = PlayerFlagsStore.getInstance();
+        var record = PlayerStore.getInstance().open(sender);
         if (args.length > 0) {
             var arg = args[0];
             if ("on".equals(arg)) {
-                flag.setCatMode(sender, true);
+                record.set(PlayerDataKey.CAT_MODE, true);
                 sender.sendMessage("CATモードを§aオン§rにしました。");
             } else if ("off".equals(arg)) {
-                flag.setCatMode(sender, false);
+                record.set(PlayerDataKey.CAT_MODE, false);
                 sender.sendMessage("CATモードを§cオフ§rにしました。");
             } else {
                 return false;
             }
         } else {
-            var mes = flag.getCatMode(sender) ? "§aあなたはCATモードです。§r" : "§aあなたはCATモードではありません。§r";
+            var mes = record.getBoolean(PlayerDataKey.CAT_MODE) ? "§aあなたはCATモードです。§r" : "§aあなたはCATモードではありません。§r";
             sender.sendMessage(mes);
         }
         return true;

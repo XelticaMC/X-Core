@@ -12,7 +12,8 @@ import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
-import work.xeltica.craft.core.stores.PlayerFlagsStore;
+import work.xeltica.craft.core.stores.PlayerDataKey;
+import work.xeltica.craft.core.stores.PlayerStore;
 
 public class XphoneHandler implements Listener {
     @EventHandler
@@ -44,7 +45,7 @@ public class XphoneHandler implements Listener {
         var appOmikuji = new MenuItem("おみくじ", i -> {
             player.performCommand("omikuji");
         }, Material.GOLD_INGOT, null);
-        var catMode = PlayerFlagsStore.getInstance().getCatMode(player);
+        var catMode = PlayerStore.getInstance().open(player).getBoolean(PlayerDataKey.CAT_MODE);
         var appCat = new MenuItem("ネコ語モードを" + (catMode ? "オフ" : "オン") + "にする", i -> {
             player.performCommand("cat " + (catMode ? "off" : "on"));
         }, Material.COD, null, catMode);
