@@ -34,7 +34,7 @@ public class CommandPromo extends CommandPlayerOnlyBase {
             var linked = ctx.contains("discordsrv:linked", "true");
             var crafterRole = ctx.contains("discordsrv:role", "クラフター");
             var citizenRole = ctx.contains("discordsrv:role", "市民");
-            var elapsedTime = record.getInt(PlayerDataKey.NEWCOMER_TIME);
+            var elapsedTime = record.getInt(PlayerDataKey.NEWCOMER_TIME) / 20;
             var elapsedTimeMinutes = elapsedTime / 60;
             var elapsedTimeSeconds = elapsedTime % 60;
             var elapsedTimeString = 
