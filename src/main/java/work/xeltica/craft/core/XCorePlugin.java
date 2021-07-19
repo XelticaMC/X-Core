@@ -1,5 +1,6 @@
 package work.xeltica.craft.core;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -44,7 +45,8 @@ import work.xeltica.craft.core.runnables.NightmareRandomEvent;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
-import work.xeltica.craft.core.stores.PlayerFlagsStore;
+import work.xeltica.craft.core.stores.PlayerDataKey;
+import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.VehicleStore;
 import work.xeltica.craft.core.stores.WorldStore;
 import work.xeltica.craft.core.commands.CommandDepositClovers;
@@ -71,13 +73,32 @@ public class XCorePlugin extends JavaPlugin {
         // 4tickに1回
         // new FlyingObserver().runTaskTimer(this, 0, 4);
         // 10tickに1回
+
+        final var tick = 10;
         new BukkitRunnable(){
             @Override
             public void run() {
-                VehicleStore.getInstance().tick(10);
-                PlayerFlagsStore.getInstance().tickNewcomers(10);
+                VehicleStore.getInstance().tick(tick);
+
+                var store = PlayerStore.getInstance();
+                store.openAll().forEach(record -> {
+                    // オフラインなら処理しない
+                    if (Bukkit.getPlayer(record.getPlayerId()) == null) return;
+                    var time = record.getInt(PlayerDataKey.NEWCOMER_TIME, 0);
+                    time -= tick;
+                    if (time <= 0) {
+                        record.delete(PlayerDataKey.NEWCOMER_TIME, false);
+                    } else {
+                        record.set(PlayerDataKey.NEWCOMER_TIME, time, false);
+                    }
+                });
+                try {
+                    store.save();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }.runTaskTimer(this, 0, 10);
+        }.runTaskTimer(this, 0, tick);
 
 
         calculator = new CitizenTimerCalculator();
@@ -111,7 +132,7 @@ public class XCorePlugin extends JavaPlugin {
     private void loadStores() {
         new OmikujiStore();
         new VehicleStore();
-        new PlayerFlagsStore();
+        new PlayerStore();
         new HubStore();
         new WorldStore();
         new ItemStore();

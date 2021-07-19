@@ -38,7 +38,8 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
 import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.stores.OmikujiStore;
-import work.xeltica.craft.core.stores.PlayerFlagsStore;
+import work.xeltica.craft.core.stores.PlayerDataKey;
+import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.TravelTicketUtil;
 
 public class PlayerHandler implements Listener {
@@ -80,16 +81,17 @@ public class PlayerHandler implements Listener {
         e.joinMessage(Component.text("§a" + name + "§b" + "さんがやってきました"));
         if (!p.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
-            PlayerFlagsStore.getInstance().addNewcomer(p);
+        // newcomers.getConf().set(p.getUniqueId().toString(), 20 * 60 * 30);
+            PlayerStore.getInstance().open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
         }
         new BukkitRunnable(){
             @Override
             public void run() {
-                PlayerFlagsStore.getInstance().updateHasOnlineStaff();   
+                PlayerStore.getInstance().updateHasOnlineStaff();   
             }
         }.runTask(plugin);
 
-        var f = PlayerFlagsStore.getInstance();
+        var f = PlayerStore.getInstance();
 
         p.showTitle(Title.title(
             Component.text("§aXelticaMCへ§6ようこそ！"),
@@ -98,7 +100,7 @@ public class PlayerHandler implements Listener {
 
         if (f.isCitizen(p))
             return;
-        if (!f.isNewcomer(p)) {
+        if (!f.open(p).has(PlayerDataKey.NEWCOMER_TIME)) {
             p.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！");
             p.sendMessage("詳しくは §b/promo§rコマンドを実行してください。");
         }
@@ -117,7 +119,7 @@ public class PlayerHandler implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                PlayerFlagsStore.getInstance().updateHasOnlineStaff();
+                PlayerStore.getInstance().updateHasOnlineStaff();
             }
         }.runTask(plugin);
     }
@@ -143,7 +145,7 @@ public class PlayerHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChatForCat(AsyncPlayerChatEvent e) {
         // ネコであれば文章をいじる
-        if (PlayerFlagsStore.getInstance().getCatMode(e.getPlayer())) {
+        if (PlayerStore.getInstance().open(e.getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
             var mes = e.getMessage();
             mes = mes.replace("な", "にゃ");
             mes = mes.replace("ナ", "ニャ");
@@ -281,4 +283,7 @@ public class PlayerHandler implements Listener {
     private final Random rnd = new Random();
     private UUID movingPlayer = null;
     private Map<UUID, Integer> last草edTimeMap = new HashMap<>();
+
+    // 30分
+    private final int DEFAULT_NEW_COMER_TIME = 20 * 60 * 30;
 }

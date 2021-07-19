@@ -6,7 +6,8 @@ import org.bukkit.entity.Player;
 
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.query.QueryOptions;
-import work.xeltica.craft.core.stores.PlayerFlagsStore;
+import work.xeltica.craft.core.stores.PlayerDataKey;
+import work.xeltica.craft.core.stores.PlayerStore;
 
 public class CommandPromo extends CommandPlayerOnlyBase {
     @Override
@@ -14,9 +15,10 @@ public class CommandPromo extends CommandPlayerOnlyBase {
         var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         var luckPerms = provider.getProvider();
         var lpUser = luckPerms.getPlayerAdapter(Player.class).getUser(player);
-        var f = PlayerFlagsStore.getInstance();
+        var store = PlayerStore.getInstance();
+        var record = store.open(player);
         var isManualCitizen = lpUser.getInheritedGroups(QueryOptions.defaultContextualOptions()).stream().anyMatch(g -> g.getName().equals("citizen"));
-        if (!f.isCitizen(player)) {
+        if (!store.isCitizen(player)) {
             player.sendMessage("本サーバーでは、プレイヤーさんを§aわかば§r、§b市民§rという大きく2つのロールに分類しています。");
             player.sendMessage("§b市民§rにならなくても基本的なプレイはできますが、");
             player.sendMessage("・§c一部ブロックが使えない§r");
@@ -32,7 +34,7 @@ public class CommandPromo extends CommandPlayerOnlyBase {
             var linked = ctx.contains("discordsrv:linked", "true");
             var crafterRole = ctx.contains("discordsrv:role", "クラフター");
             var citizenRole = ctx.contains("discordsrv:role", "市民");
-            var elapsedTime = f.getNewcomerTime(player);
+            var elapsedTime = record.getInt(PlayerDataKey.NEWCOMER_TIME) / 20;
             var elapsedTimeMinutes = elapsedTime / 60;
             var elapsedTimeSeconds = elapsedTime % 60;
             var elapsedTimeString = 

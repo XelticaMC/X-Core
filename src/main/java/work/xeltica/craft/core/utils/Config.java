@@ -42,9 +42,21 @@ public class Config {
         this.reload();
     }
 
+    public static boolean exists(String configName) {
+        return openFile(configName).exists();
+    }
+
+    public static boolean delete(String configName) {
+        return openFile(configName).delete();
+    }
+
     private File openFile() {
+        return openFile(this.configName);
+    }
+
+    private static File openFile(String configName) {
         var folder = XCorePlugin.getInstance().getDataFolder();
-        return new File(folder, this.configName + ".yml");
+        return new File(folder, configName + ".yml");
     }
 
     private final String configName;
