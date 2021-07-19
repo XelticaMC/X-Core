@@ -45,7 +45,6 @@ public class WakabaHandler implements Listener {
 
         deniedTags.add(Tag.BUTTONS);
 
-        // deniedItems.add(Material.BUCKET);
         deniedItems.add(Material.TNT_MINECART);
         deniedItems.add(Material.END_CRYSTAL);
     }
