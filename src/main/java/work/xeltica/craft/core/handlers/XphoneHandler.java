@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.geysermc.floodgate.api.FloodgateApi;
 
@@ -18,11 +20,14 @@ import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 
 public class XphoneHandler implements Listener {
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onUse(PlayerInteractEvent e) {
         var item = e.getItem();
         var player = e.getPlayer();
         if (!store().compareCustomItem(item, store().getXPhone())) return;
+        e.setUseInteractedBlock(Result.DENY);
+        e.setUseItemInHand(Result.DENY);
+
         var items = new ArrayList<MenuItem>();
         var worldName = player.getWorld().getName();
 
@@ -68,14 +73,13 @@ public class XphoneHandler implements Listener {
             player.performCommand("cremove");
         }, Material.TRIPWIRE_HOOK, null);
         var appStore = new MenuItem("エビパワーストア", i -> {
-            player.sendMessage("近日公開予定！");
-            player.sendMessage("貯めたエビパワーでアイテムを買おう！");
+            player.performCommand("epshop");
         }, Material.HEART_OF_THE_SEA, null);
         var appPunishment = new MenuItem("処罰", i -> {
             player.performCommand("report");
         }, Material.BARRIER, null);
         var appHelp = new MenuItem("ヘルプ", i -> {
-            player.sendMessage("近日公開予定！");
+            player.performCommand("guide");
         }, Material.LIGHT, null);
         var bedrockDisclaimer = new MenuItem("統合版プレイヤーのあなたへ", i -> {
             BedrockDisclaimerUtil.showDisclaimer(player);

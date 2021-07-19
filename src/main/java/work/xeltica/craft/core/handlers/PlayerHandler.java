@@ -87,7 +87,7 @@ public class PlayerHandler implements Listener {
 
         var record = PlayerStore.getInstance().open(p);
         if (!record.getBoolean(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER)) {
-            BedrockDisclaimerUtil.showDisclaimer(p);
+            BedrockDisclaimerUtil.showDisclaimerAsync(p);
         }
         
         new BukkitRunnable(){

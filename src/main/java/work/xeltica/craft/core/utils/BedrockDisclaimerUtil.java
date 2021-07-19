@@ -23,17 +23,18 @@ public class BedrockDisclaimerUtil {
         "などです。統合版への対応はまだ不安定でバグも多いこと、突然統合版への対応を打ち切るかもしれないということをご理解ください。\n" + 
         "なお、問題が発生しましたらDiscordにてサポートを受け付けています。詳しくは公式サイトをご確認ください。";
 
-    public static void showDisclaimer(Player p) {
+    public static void showDisclaimerAsync(Player p) {
         var fapi = FloodgateApi.getInstance();
         if (!fapi.isFloodgatePlayer(p.getUniqueId())) return;
 
 
-        Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-            Gui.getInstance().openDialog(p, BEDROCK_DISCLAIMER_TITLE, BEDROCK_DISCLAIMER_MESSAGE, (a) -> {
-                Bukkit.getLogger().info("あ");
-                var record = PlayerStore.getInstance().open(p);
-                record.set(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER, true);
-            }, "わかりました");
-        }, 20);
+        Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> showDisclaimer(p), 20);
+    }
+
+    public static void showDisclaimer(Player p) {
+        Gui.getInstance().openDialog(p, BEDROCK_DISCLAIMER_TITLE, BEDROCK_DISCLAIMER_MESSAGE, (a) -> {
+            var record = PlayerStore.getInstance().open(p);
+            record.set(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER, true);
+        }, "わかりました");
     }
 }
