@@ -40,6 +40,7 @@ import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 import work.xeltica.craft.core.utils.TravelTicketUtil;
 
 public class PlayerHandler implements Listener {
@@ -83,6 +84,12 @@ public class PlayerHandler implements Listener {
             e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
             PlayerStore.getInstance().open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
         }
+
+        var record = PlayerStore.getInstance().open(p);
+        if (!record.getBoolean(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER)) {
+            BedrockDisclaimerUtil.showDisclaimer(p);
+        }
+        
         new BukkitRunnable(){
             @Override
             public void run() {

@@ -17,6 +17,7 @@ public class CommandPromo extends CommandPlayerOnlyBase {
         var lpUser = luckPerms.getPlayerAdapter(Player.class).getUser(player);
         var store = PlayerStore.getInstance();
         var record = store.open(player);
+        
         var isManualCitizen = lpUser.getInheritedGroups(QueryOptions.defaultContextualOptions()).stream().anyMatch(g -> g.getName().equals("citizen"));
         if (!store.isCitizen(player)) {
             player.sendMessage("本サーバーでは、プレイヤーさんを§aわかば§r、§b市民§rという大きく2つのロールに分類しています。");

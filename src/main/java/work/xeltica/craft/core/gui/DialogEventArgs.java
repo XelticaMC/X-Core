@@ -2,8 +2,8 @@ package work.xeltica.craft.core.gui;
 
 import org.bukkit.entity.Player;
 
-public class BookButtonEventArgs {
-    public BookButtonEventArgs(Player p) {
+public class DialogEventArgs {
+    public DialogEventArgs(Player p) {
         player = p;
     }
 

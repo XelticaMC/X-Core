@@ -54,12 +54,12 @@ public class Gui implements Listener {
         openDialog(player, title, content, null);
     }
 
-    public void openDialog(Player player, String title, String content, Consumer<BookButtonEventArgs> callback) {
+    public void openDialog(Player player, String title, String content, Consumer<DialogEventArgs> callback) {
         openDialog(player, title, content, callback, null);
     }
 
-    public void openDialog(Player player, String title, String content, Consumer<BookButtonEventArgs> callback, String okButtonText) {
-        var okText = okButtonText == null ? "かしこま！" : okButtonText;
+    public void openDialog(Player player, String title, String content, Consumer<DialogEventArgs> callback, String okButtonText) {
+        var okText = okButtonText == null ? "OK" : okButtonText;
 
         if (isBedrock(player)) {
             openDialogBedrockImpl(player, title, content, callback, okText);
@@ -162,7 +162,7 @@ public class Gui implements Listener {
         fPlayer.sendForm(builder);
     }
 
-    private void openDialogJavaImpl(Player player, String title, String content, Consumer<BookButtonEventArgs> callback, String okButtonText) {
+    private void openDialogJavaImpl(Player player, String title, String content, Consumer<DialogEventArgs> callback, String okButtonText) {
         var book = new ItemStack(Material.WRITTEN_BOOK);
         var meta = (BookMeta)book.getItemMeta();
 
@@ -189,21 +189,21 @@ public class Gui implements Listener {
         player.openBook(book);
 
         if (callback != null) {
-            bookHandlersMap.put(handleString, new HandlerTuple(callback, new BookButtonEventArgs(player), meta));
+            bookHandlersMap.put(handleString, new HandlerTuple(callback, new DialogEventArgs(player), meta));
         }
     }
 
     private void openDialogBedrockImpl(Player player, String title, String content, 
-            Consumer<BookButtonEventArgs> callback, String okButtonText) {
+            Consumer<DialogEventArgs> callback, String okButtonText) {
         var api = FloodgateApi.getInstance();
         var form = SimpleForm.builder()
             .title(title)
             .content(content)
             .button(okButtonText)
-            .responseHandler((f, r) -> {
-                var res = f.parseResponse(r);
-                if (!res.isCorrect()) return;
-                callback.accept(new BookButtonEventArgs(player));
+            .responseHandler(r -> {
+                if (callback != null) {
+                    callback.accept(new DialogEventArgs(player));
+                }
             });
         api.getPlayer(player.getUniqueId()).sendForm(form);
     }
@@ -218,11 +218,11 @@ public class Gui implements Listener {
     private static Gui instance;
 
     class HandlerTuple {
-        public Consumer<BookButtonEventArgs> handler;
+        public Consumer<DialogEventArgs> handler;
         public BookMeta meta;
-        public BookButtonEventArgs eventArgs;
+        public DialogEventArgs eventArgs;
 
-        public HandlerTuple(Consumer<BookButtonEventArgs> handler, BookButtonEventArgs eventArgs, BookMeta meta) {
+        public HandlerTuple(Consumer<DialogEventArgs> handler, DialogEventArgs eventArgs, BookMeta meta) {
             this.handler = handler;
             this.eventArgs = eventArgs;
             this.meta = meta;

@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.geysermc.floodgate.api.FloodgateApi;
 
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
@@ -14,6 +15,7 @@ import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 
 public class XphoneHandler implements Listener {
     @EventHandler
@@ -24,6 +26,7 @@ public class XphoneHandler implements Listener {
         var items = new ArrayList<MenuItem>();
         var worldName = player.getWorld().getName();
 
+        // #region App初期化
         var appClassicHub = new MenuItem("クラシックロビーへ", i -> {
             HubStore.getInstance().teleport(player, HubType.Classic, true);
         }, Material.GOLD_BLOCK);
@@ -74,6 +77,10 @@ public class XphoneHandler implements Listener {
         var appHelp = new MenuItem("ヘルプ", i -> {
             player.sendMessage("近日公開予定！");
         }, Material.LIGHT, null);
+        var bedrockDisclaimer = new MenuItem("統合版プレイヤーのあなたへ", i -> {
+            BedrockDisclaimerUtil.showDisclaimer(player);
+        }, Material.BEDROCK, null);
+        // #endregion
 
         if (worldName.equals("hub2")) {
             items.add(appClassicHub);
@@ -103,11 +110,16 @@ public class XphoneHandler implements Listener {
         items.add(appCart);
         items.add(appStore);
 
-        if (e.getPlayer().hasPermission("otanoshimi.command.report")) {
-            items.add(appPunishment);
-        }
+        // TODO 通報機能のリニューアルをしたら開放
+        // if (e.getPlayer().hasPermission("otanoshimi.command.report")) {
+        //     items.add(appPunishment);
+        // }
 
         items.add(appHelp);
+
+        if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+            items.add(bedrockDisclaimer);
+        }
 
         ui().openMenu(e.getPlayer(), "X Phone OS", items);
     }
