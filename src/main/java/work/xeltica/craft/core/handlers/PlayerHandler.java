@@ -81,7 +81,6 @@ public class PlayerHandler implements Listener {
         e.joinMessage(Component.text("§a" + name + "§b" + "さんがやってきました"));
         if (!p.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
-        // newcomers.getConf().set(p.getUniqueId().toString(), 20 * 60 * 30);
             PlayerStore.getInstance().open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
         }
         new BukkitRunnable(){
