@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.stores;
+package work.xeltica.craft.core.models;
 
 import java.io.IOException;
 import java.util.UUID;

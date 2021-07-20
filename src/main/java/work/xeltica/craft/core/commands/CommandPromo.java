@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.query.QueryOptions;
-import work.xeltica.craft.core.stores.PlayerDataKey;
+import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
 
 public class CommandPromo extends CommandPlayerOnlyBase {

@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.stores;
+package work.xeltica.craft.core.models;
 
 public enum PlayerDataKey {
     CAT_MODE("cat"),

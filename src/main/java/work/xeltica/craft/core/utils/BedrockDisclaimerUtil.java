@@ -6,7 +6,7 @@ import org.geysermc.floodgate.api.FloodgateApi;
 
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.stores.PlayerDataKey;
+import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
 
 public class BedrockDisclaimerUtil {

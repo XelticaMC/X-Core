@@ -3,7 +3,7 @@ package work.xeltica.craft.core.commands;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import work.xeltica.craft.core.stores.PlayerDataKey;
+import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
 
 public class CommandCat extends CommandPlayerOnlyBase {

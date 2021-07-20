@@ -13,9 +13,9 @@ import org.geysermc.floodgate.api.FloodgateApi;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.models.HubType;
+import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
-import work.xeltica.craft.core.stores.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 
