@@ -1,5 +1,7 @@
 package work.xeltica.craft.core.stores;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.bukkit.Material;
@@ -12,20 +14,27 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class ItemStore {
+    public static final String ITEM_NAME_XPHONE = "xphone";
+
     public ItemStore() {
         ItemStore.instance = this;
-        xPhone = createCustomItem(
-            "X Phone",
-            "XelticaMCの独自機能にアクセスできるスマホ。"
-        );
+        registerItems();
     }
 
     public static ItemStore getInstance() {
         return instance;
     }
 
+    /**
+     * 代わりに getItem(ItemStore.ITEM_NAME_XPHONE) を使ってください
+     */
+    @Deprecated(forRemoval = true)
     public ItemStack getXPhone() {
-        return xPhone;
+        return customItems.get(ITEM_NAME_XPHONE);
+    }
+
+    public ItemStack getItem(String key) {
+        return customItems.get(key).clone();
     }
 
     /**
@@ -72,6 +81,10 @@ public class ItemStore {
         return true;
     }
 
-    private ItemStack xPhone;
+    private void registerItems() {
+        customItems.put(ITEM_NAME_XPHONE, createCustomItem("X Phone", "XelticaMCの独自機能にアクセスできるスマホ。"));
+    }
+    
+    private final Map<String, ItemStack> customItems = new HashMap<>();
     private static ItemStore instance;
 }
