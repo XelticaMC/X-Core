@@ -10,7 +10,7 @@ import org.bukkit.util.Vector;
 import work.xeltica.craft.core.utils.Config;
 
 public class PlayerRecord {
-    PlayerRecord(Config conf, ConfigurationSection section, UUID playerId) {
+    public PlayerRecord(Config conf, ConfigurationSection section, UUID playerId) {
         this.conf = conf;
         this.section = section;
         this.playerId = playerId;
