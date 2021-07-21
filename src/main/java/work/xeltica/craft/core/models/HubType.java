@@ -42,7 +42,7 @@ public enum HubType {
     }
 
     public Location getSpigotLocation() {
-        return new Location(Bukkit.getWorld(getWorldName()), getX(), getY(), getZ());
+        return new Location(Bukkit.getWorld(getWorldName()), getX() + .5, getY() + .5, getZ() + .5);
     }
 
     String worldName;

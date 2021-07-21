@@ -15,9 +15,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.title.Title;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
@@ -181,6 +185,12 @@ public class WorldHandler implements Listener {
                 p.sendMessage(String.format("§a%s§bが§e%s§bから来ました", player.getDisplayName(), fromName));
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerMoveWorld(PlayerChangedWorldEvent e) {
+        var name = WorldStore.getInstance().getWorldDisplayName(e.getPlayer().getWorld());
+        e.getPlayer().showTitle(Title.title(Component.text(name).color(TextColor.color(0xFFB300)), Component.empty()));
     }
 
     @EventHandler()

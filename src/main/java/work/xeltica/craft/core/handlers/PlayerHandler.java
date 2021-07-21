@@ -43,10 +43,12 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.types.InheritanceNode;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.Hint;
+import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
@@ -96,6 +98,7 @@ public class PlayerHandler implements Listener {
         if (!p.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
             PlayerStore.getInstance().open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
+            HubStore.getInstance().teleport(p, HubType.NewComer, true);
         }
 
         HintStore.getInstance().achieve(p, Hint.WELCOME);
@@ -230,6 +233,7 @@ public class PlayerHandler implements Listener {
             var isBedDisabledWorld = 
                    worldName.startsWith("travel_")
                 || worldName.equals("hub")
+                || worldName.equals("hub2")
                 || worldName.equals("sandbox")
                 ;
             if (isBedDisabledWorld && Tag.BEDS.isTagged(e.getClickedBlock().getType())) {

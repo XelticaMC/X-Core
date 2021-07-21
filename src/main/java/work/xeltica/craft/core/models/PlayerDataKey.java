@@ -5,6 +5,7 @@ public enum PlayerDataKey {
     NEWCOMER_TIME("newcomer_time"),
     BEDROCK_ACCEPT_DISCLAIMER("accept_disclaimer"),
     FIRST_SPAWN("first_spawn"),
+    LAST_JOINED("last_joined"),
     ;
 
     PlayerDataKey(String physicalKey) {
