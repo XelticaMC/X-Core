@@ -10,7 +10,6 @@ public class EntityHandler implements Listener {
     @EventHandler
     public void onEntityDeath(EntityDeathEvent e) {
         if (e.getEntityType() == EntityType.MINECART || e.getEntityType() == EntityType.BOAT) {
-            Bukkit.getLogger().info("Remove " + e.getEntityType());
             e.getDrops().clear();
         }
     }

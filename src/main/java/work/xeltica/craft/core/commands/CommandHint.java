@@ -27,9 +27,11 @@ public class CommandHint extends CommandPlayerOnlyBase {
             var hint = optionalHint.get();
             var content = hint.getDescription() + "\n\n" + "§a§l報酬: §r§d" + hint.getPower() + " エビパワー";
             if (store.hasAchieved(player, hint)) {
-                content += "\n" + "§6§m✧達成済み✧";
+                content += "\n" + "§6§o✧達成済み✧";
             }
-            Gui.getInstance().openDialog(player, "§l" + hint.getName(), content);
+            Gui.getInstance().openDialog(player, "§l" + hint.getName() + "§r", content, (d) -> {
+                player.performCommand("hint");
+            });
         } else {
             var items = hints.map(h -> new MenuItem(h.getName() + " (" + h.getPower() + "EP)", (m) -> {
                 player.performCommand("hint " + h.name());

@@ -3,6 +3,7 @@ package work.xeltica.craft.core.handlers;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
+import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import com.google.common.collect.Streams;
 
 import org.bukkit.Material;
@@ -26,6 +27,11 @@ import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 public class XphoneHandler implements Listener {
     @EventHandler
     public void on(PlayerChangedWorldEvent e) {
+        store().givePhoneIfNeeded(e.getPlayer());
+    }
+
+    @EventHandler
+    public void on(PlayerPostRespawnEvent e) {
         store().givePhoneIfNeeded(e.getPlayer());
     }
 
@@ -87,8 +93,8 @@ public class XphoneHandler implements Listener {
         var appPunishment = new MenuItem("処罰", i -> {
             player.performCommand("report");
         }, Material.BARRIER, null);
-        var appHelp = new MenuItem("ヘルプ", i -> {
-            player.performCommand("guide");
+        var appHint = new MenuItem("ヒント", i -> {
+            player.performCommand("hint");
         }, Material.LIGHT, null);
         var bedrockDisclaimer = new MenuItem("統合版プレイヤーのあなたへ", i -> {
             BedrockDisclaimerUtil.showDisclaimer(player);
@@ -128,7 +134,7 @@ public class XphoneHandler implements Listener {
         //     items.add(appPunishment);
         // }
 
-        items.add(appHelp);
+        items.add(appHint);
 
         if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
             items.add(bedrockDisclaimer);

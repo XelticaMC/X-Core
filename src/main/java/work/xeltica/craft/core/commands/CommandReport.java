@@ -113,9 +113,9 @@ public class CommandReport extends CommandPlayerOnlyBase {
                 badPlayer.sendMessage("§c§l警告: §r§c" + message);
             }
             badPlayer.playSound(badPlayer.getLocation(), Sound.BLOCK_ANVIL_PLACE, SoundCategory.PLAYERS, 1, 0.5f);
-            badPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 1));
-            badPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 255));
-            badPlayer.showTitle(Title.title(Component.text("あなたは警告されている"), Component.text("チャット欄を確認する")));
+            badPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 15, 1));
+            badPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 15, 30));
+            badPlayer.showTitle(Title.title(Component.text("§e⚠警告"), Component.text("§cチャット欄を確認してください。")));
             return;
         } else if (command.equals("ban")) {
             message = String.format(banTemplate, abuses, timeString);

@@ -166,7 +166,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("epshop", new CommandEpShop());
         commands.put("depositclovers", new CommandDepositClovers());
         commands.put("hint", new CommandHint());
-        commands.put("__otanoshimi_gui_event__", new CommandXCoreGuiEvent());
+        commands.put("__core_gui_event__", new CommandXCoreGuiEvent());
     }
 
     private void loadHandlers() {

@@ -31,14 +31,12 @@ public class HubHandler implements Listener {
     @EventHandler
     public void onPlayerHurt(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
-        var id = store().getHubId();
-        if (id == null) return;
         var player = (Player)e.getEntity();
-        if (player.getWorld().getUID().equals(id)) {
+        if (playerIsInHub(player)) {
             e.setCancelled(true);
             if (e.getCause() == DamageCause.VOID) {
                 // 落ちた
-                var loc = store().getHub().getSpawnLocation();
+                var loc = player.getWorld().getSpawnLocation();
                 player.teleport(loc, TeleportCause.PLUGIN);
             }
         }
@@ -84,6 +82,7 @@ public class HubHandler implements Listener {
     public void onPlayerHunger(FoodLevelChangeEvent e) {
         var player = e.getEntity();
         if (playerIsInHub(player)) {
+            player.setFoodLevel(20);
             e.setCancelled(true);
         }
     }

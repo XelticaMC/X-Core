@@ -30,7 +30,6 @@ public class PlayerRecord {
         if (get(key) == null && value == null)
             return;
         section.set(key.getPhysicalKey(), value);
-        Bukkit.getLogger().info(String.format("%s = %s", key.getPhysicalKey(), value == null ? null : value.toString()));
         if (save) save();
     }
 
@@ -129,7 +128,6 @@ public class PlayerRecord {
     private void save() {
         try {
             conf.save();
-            Bukkit.getLogger().info("Saved Player Store");
         } catch (IOException e) {
             e.printStackTrace();
         }

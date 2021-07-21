@@ -32,7 +32,7 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
             return true;
         }
         var vault = VaultPlugin.getInstance();
-        if (vault.isEconomyEnabled() && !vault.tryDepositPlayer(player, 100)) {
+        if (vault.isEconomyEnabled() && !vault.tryWithdrawPlayer(player, 100)) {
             player.sendMessage(ChatColor.RED + "パワーが足りません！おみくじは1回100エビパワーが必要です。");
             return true;
         }

@@ -4,6 +4,7 @@ public enum PlayerDataKey {
     CAT_MODE("cat"),
     NEWCOMER_TIME("newcomer_time"),
     BEDROCK_ACCEPT_DISCLAIMER("accept_disclaimer"),
+    FIRST_SPAWN("first_spawn"),
     ;
 
     PlayerDataKey(String physicalKey) {

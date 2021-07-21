@@ -35,7 +35,6 @@ public class VehicleStore {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        logger.info("Registered vehicle ID:" + id);
     }
 
     public void unregisterVehicle(Vehicle vehicle) {
@@ -47,7 +46,6 @@ public class VehicleStore {
 
         // 削除
         unregisterVehicle(id);
-        logger.info("Unregistered vehicle ID:" + id);
     }
 
     public void tick(int tickCount) {
@@ -62,7 +60,6 @@ public class VehicleStore {
                 if (e == null) {
                     logger.warning("A vehicle ID:" + id + " is not found on the server, so skipped to despawn.");
                 } else {
-                    logger.info("A vehicle ID:" + id + "(" + e.getType() + ") has been destroyed");
                     e.remove();
                 }
                 unregisterVehicle(id);

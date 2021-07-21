@@ -77,12 +77,12 @@ public class EbiPowerStore {
 
     public boolean tryGive(Player p, int amount) {
         var vault = VaultPlugin.getInstance();
-        return vault.tryWithdrawPlayer(p, amount);
+        return vault.tryDepositPlayer(p, amount);
     }
 
     public boolean tryTake(Player p, int amount) {
         var vault = VaultPlugin.getInstance();
-        return vault.tryDepositPlayer(p, amount);
+        return vault.tryWithdrawPlayer(p, amount);
     }
     
     private static EbiPowerStore instance;

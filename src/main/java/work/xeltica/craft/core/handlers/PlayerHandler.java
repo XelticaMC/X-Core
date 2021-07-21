@@ -265,7 +265,6 @@ public class PlayerHandler implements Listener {
             }
             int x, z;
             var otherPlayers = world.getPlayers();
-            Bukkit.getLogger().info(String.format("%sに向かうプレイヤー%sはスニークしていま%s。", type.getDisplayName(), p.getName(), isSneaking ? "す" : "せん"));
 
             if (isSneaking || otherPlayers.size() == 0) {
                 x = rnd.nextInt(20000) - 10000;

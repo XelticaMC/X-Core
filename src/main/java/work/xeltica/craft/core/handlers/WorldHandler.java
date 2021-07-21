@@ -18,8 +18,11 @@ import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 
+import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.Hint;
+import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.WorldStore;
 
 public class WorldHandler implements Listener {
@@ -98,7 +101,9 @@ public class WorldHandler implements Listener {
             default -> null;
         };
 
-        if (hint != null) {
+        var isNotFirstTeleport = p.hasPlayedBefore() || PlayerStore.getInstance().open(p).getBoolean(PlayerDataKey.FIRST_SPAWN);
+
+        if (hint != null && isNotFirstTeleport) {
             HintStore.getInstance().achieve(p, hint);
         }
 
@@ -121,13 +126,16 @@ public class WorldHandler implements Listener {
             // 最終ベッドがワイルドエリアにある場合、そこに飛ばす
             var bed = p.getBedSpawnLocation();
             if (bed.getWorld().getUID().equals(world.getUID())) {
-                Bukkit.getLogger().info("Set spawn as wildarea bed");
                 e.setTo(bed);
             }
         }
         if (desc != null) {
             p.sendMessage(desc);
         }
+
+        Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
+            PlayerStore.getInstance().open(p).set(PlayerDataKey.FIRST_SPAWN, true);
+        }, 20 * 5);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -145,6 +153,10 @@ public class WorldHandler implements Listener {
         var toName = worldStore.getWorldDisplayName(to);
 
         if (fromName == null || toName == null) return;
+
+        if (!player.hasPlayedBefore() && !PlayerStore.getInstance().open(player).getBoolean(PlayerDataKey.FIRST_SPAWN)) return;
+
+        if (e.isCancelled()) return;
 
         var toPlayers = to.getPlayers();
         var allPlayersExceptInDestination = Bukkit.getOnlinePlayers().stream()

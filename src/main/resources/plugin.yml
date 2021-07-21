@@ -74,7 +74,7 @@ commands:
     description: エビパワーストアを開きます。
     usage: /epshop
     permission: otanoshimi.command.epshop
-  epshop:
+  hint:
     description: ヒントメニューを開きます。
     usage: /hint [hint-id]
     permission: otanoshimi.command.hint
@@ -119,11 +119,11 @@ permissions:
     default: op
   otanoshimi.command.depositclovers:
     default: op
-  otanoshimi.command.ep:
+  otanoshimi.command.epshop:
     default: true
-  otanoshimi.command.ep.add:
+  otanoshimi.command.epshop.add:
     default: op
-  otanoshimi.command.ep.delete:
+  otanoshimi.command.epshop.delete:
     default: op
-  otanoshimi.command.hint;
+  otanoshimi.command.hint:
     default: true
