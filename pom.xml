@@ -95,7 +95,7 @@
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
           <configuration>
-            <finalName>X-Core</finalName>
+            <finalName>XCore</finalName>
           </configuration>
         </plugin>
         <plugin>

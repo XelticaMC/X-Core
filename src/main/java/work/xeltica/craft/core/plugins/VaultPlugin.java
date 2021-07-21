@@ -50,7 +50,15 @@ public class VaultPlugin extends PluginBase {
     }
 
     public boolean tryDepositPlayer(Player p, double amount) {
-        return economy.depositPlayer(p, 100).type == ResponseType.SUCCESS;
+        return economy.depositPlayer(p, amount).type == ResponseType.SUCCESS;
+    }
+
+    public boolean tryWithdrawPlayer(Player p, double amount) {
+        return economy.withdrawPlayer(p, amount).type == ResponseType.SUCCESS;
+    }
+
+    public double getBalance(Player p) {
+        return economy.getBalance(p);
     }
 
     public Economy getEconomy() {

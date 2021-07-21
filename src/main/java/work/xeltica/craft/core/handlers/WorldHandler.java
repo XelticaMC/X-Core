@@ -18,6 +18,8 @@ import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 
+import work.xeltica.craft.core.models.Hint;
+import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.WorldStore;
 
 public class WorldHandler implements Listener {
@@ -60,12 +62,15 @@ public class WorldHandler implements Listener {
         var displayName = store.getWorldDisplayName(name);
         var desc = store.getWorldDescription(name);
 
-        var fromId = e.getFrom().getWorld().getUID();
-        var toId = e.getTo().getWorld().getUID();
+        var from = e.getFrom().getWorld();
+        var to = e.getTo().getWorld();
+
+        var fromId = from.getUID();
+        var toId = to.getUID();
 
         if (fromId.equals(toId))
             return;
-
+        
         if (isLockedWorld && !p.hasPermission("hub.teleport." + name)) {
             p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 0.5f);
             p.sendMessage(
@@ -74,6 +79,27 @@ public class WorldHandler implements Listener {
             );
             e.setCancelled(true);
             return;
+        }
+
+        WorldStore.getInstance().saveCurrentLocation(p);
+
+        var hint = switch (to.getName()) {
+            case "main" -> Hint.GOTO_MAIN;
+            case "hub2" -> Hint.GOTO_LOBBY;
+            case "wildarea2" -> Hint.GOTO_WILDAREA;
+            case "wildarea2_nether" -> Hint.GOTO_WILDNETHER;
+            case "wildarea2_the_end" -> Hint.GOTO_WILDEND;
+            case "sandbox2" -> Hint.GOTO_SANDBOX;
+            case "art" -> Hint.GOTO_ART;
+            case "nightmare2" -> Hint.GOTO_NIGHTMARE;
+            case "hub" -> Hint.GOTO_CLASSIC_LOBBY;
+            case "world" -> Hint.GOTO_CLASSIC_WORLD;
+            case "wildarea" -> Hint.GOTO_CLASSIC_WILDAREA;
+            default -> null;
+        };
+
+        if (hint != null) {
+            HintStore.getInstance().achieve(p, hint);
         }
 
         if (isCreativeWorld) {

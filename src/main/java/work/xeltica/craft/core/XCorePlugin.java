@@ -18,6 +18,7 @@ import work.xeltica.craft.core.commands.CommandCat;
 import work.xeltica.craft.core.commands.CommandDebug;
 import work.xeltica.craft.core.commands.CommandGiveCustomItem;
 import work.xeltica.craft.core.commands.CommandGiveTravelTicket;
+import work.xeltica.craft.core.commands.CommandHint;
 import work.xeltica.craft.core.commands.CommandHub;
 import work.xeltica.craft.core.commands.CommandLocalTime;
 import work.xeltica.craft.core.commands.CommandOmikuji;
@@ -50,7 +51,10 @@ import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.VehicleStore;
 import work.xeltica.craft.core.stores.WorldStore;
 import work.xeltica.craft.core.commands.CommandDepositClovers;
+import work.xeltica.craft.core.commands.CommandEpShop;
 import work.xeltica.craft.core.stores.CloverStore;
+import work.xeltica.craft.core.stores.EbiPowerStore;
+import work.xeltica.craft.core.stores.HintStore;
 
 public class XCorePlugin extends JavaPlugin {
     public static XCorePlugin getInstance() {
@@ -137,6 +141,8 @@ public class XCorePlugin extends JavaPlugin {
         new WorldStore();
         new ItemStore();
         new CloverStore();
+        new EbiPowerStore();
+        new HintStore();
     }
 
     private void loadCommands() {
@@ -157,7 +163,9 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("hub", new CommandHub());
         commands.put("debug", new CommandDebug());
         commands.put("xtp", new CommandXtp());
+        commands.put("epshop", new CommandEpShop());
         commands.put("depositclovers", new CommandDepositClovers());
+        commands.put("hint", new CommandHint());
         commands.put("__otanoshimi_gui_event__", new CommandXCoreGuiEvent());
     }
 

@@ -1,12 +1,16 @@
 package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
+
+import com.google.common.collect.Streams;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.Event.Result;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.geysermc.floodgate.api.FloodgateApi;
 
@@ -20,11 +24,16 @@ import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 
 public class XphoneHandler implements Listener {
+    @EventHandler
+    public void on(PlayerChangedWorldEvent e) {
+        store().givePhoneIfNeeded(e.getPlayer());
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onUse(PlayerInteractEvent e) {
         var item = e.getItem();
         var player = e.getPlayer();
-        if (!store().compareCustomItem(item, store().getXPhone())) return;
+        if (!store().compareCustomItem(item, store().getItem(ItemStore.ITEM_NAME_XPHONE))) return;
         e.setUseInteractedBlock(Result.DENY);
         e.setUseItemInHand(Result.DENY);
 

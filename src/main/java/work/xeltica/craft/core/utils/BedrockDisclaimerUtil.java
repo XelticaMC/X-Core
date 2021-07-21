@@ -27,7 +27,6 @@ public class BedrockDisclaimerUtil {
         var fapi = FloodgateApi.getInstance();
         if (!fapi.isFloodgatePlayer(p.getUniqueId())) return;
 
-
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> showDisclaimer(p), 20);
     }
 

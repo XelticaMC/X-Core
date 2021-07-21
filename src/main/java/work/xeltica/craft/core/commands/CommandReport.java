@@ -9,9 +9,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 
@@ -82,7 +88,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
         Consumer<MenuItem> cb = (m) -> takeDown(reporter, reportee, command, state, (String)m.getCustomData());
 
         String[] times = {
-            "1d", "3d", "5d", "7d", "14d", "1mo", "3mo", "6mo", "12mo", null
+            "1d", "3d", "5d", "7d", "14d", "1mo", "3mo", "6mo", "12mo", null,
         };
 
         Gui.getInstance().openMenu(reporter, "期間を指定してください", Arrays.stream(times).map(
@@ -90,75 +96,95 @@ public class CommandReport extends CommandPlayerOnlyBase {
         ).toArray(MenuItem[]::new));
     }
 
-    private void takeDown(Player reporter, OfflinePlayer reportee, String command, HashSet<AbuseType> state, String time) {
+    private void takeDown(Player moderator, OfflinePlayer badGuy, String command, HashSet<AbuseType> state, String time) {
         var abuses = String.join(",", state.stream().map(s -> s.shortName).toArray(String[]::new));
         var timeString = convertTimeToLocaleString(time);
-        String reason;
+        var name = badGuy.getName();
+        String message;
         if (command.equals("warn")) {
-            var instructions = String.join(" & ", state.stream().filter(s -> s.instruction != null).map(s -> s.instruction).toArray(String[]::new));
-            reason = instructions.isEmpty() ? String.format(warnTemplateWithoutAfterDoing, abuses) : String.format(warnTemplate, abuses, instructions);
-            command = "tell";
+            if (!(badGuy instanceof Player badPlayer)) {
+                moderator.sendMessage("オフラインのため、警告を送信できません。");
+                return;
+            }
+            for (var s : state) {
+                message = s.instruction == null
+                    ? String.format(warnTemplateWithoutAfterDoing, s.shortName, s.punishment)
+                    : String.format(warnTemplate, s.shortName, s.instruction, s.punishment);
+                badPlayer.sendMessage("§c§l警告: §r§c" + message);
+            }
+            badPlayer.playSound(badPlayer.getLocation(), Sound.BLOCK_ANVIL_PLACE, SoundCategory.PLAYERS, 1, 0.5f);
+            badPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 1));
+            badPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20, 255));
+            badPlayer.showTitle(Title.title(Component.text("あなたは警告されている"), Component.text("チャット欄を確認する")));
+            return;
         } else if (command.equals("ban")) {
-            reason = String.format(banTemplate, abuses, timeString);
+            message = String.format(banTemplate, abuses, timeString);
         } else if (command.equals("kick")) {
-            reason = String.format(kickTemplate, abuses);
+            message = String.format(kickTemplate, abuses);
         } else if (command.equals("mute")) {
-            reason = String.format(muteTemplate, abuses, timeString);
+            message = String.format(muteTemplate, abuses, timeString);
         } else {
-            reporter.sendMessage(ChatColor.RED + "無効なコマンド: " + command);
+            moderator.sendMessage(ChatColor.RED + "無効なコマンド: " + command);
             return;
         }
 
-        var name = reportee.getName();
-        var cmd = time != null ? String.format("temp%s %s %s %s", command, name, time, reason) : String.format("%s %s %s", command, name, reason);
-        reporter.performCommand(cmd);
+        var cmd = time != null ? String.format("temp%s %s %s %s", command, name, time, message) : String.format("%s %s %s", command, name, message);
+        moderator.performCommand(cmd);
     }
 
     private String convertTimeToLocaleString(String time) {
         return time == null ? "無期限" : time.replace("d", "日間").replace("mo", "ヶ月");
     }
 
-    private final String warnTemplateWithoutAfterDoing = "利用規約の「%s」に違反しています。今すぐ停止してください。本警告を無視した場合、アカウントは直ちにBANされます。";
-    private final String warnTemplate = "利用規約の「%s」に違反しています。今すぐ停止し、%s。本警告を無視した場合、アカウントは直ちにBANされます。";
-    private final String banTemplate = "利用規約「%s」に違反しているため、%sBANとします。 異議申し立てはDiscord Xeltica#7081 まで";
-    private final String kickTemplate = "利用規約「%s」に違反しているため、キックします。 異議申し立てはDiscord Xeltica#7081 まで";
-    private final String muteTemplate = "利用規約「%s」に違反しているため、%sミュートします。 異議申し立てはDiscord Xeltica#7081 まで";
+    private final String warnTemplateWithoutAfterDoing = "利用規約の「%s」に違反しています。今すぐ停止してください。本警告を無視した場合、%s。";
+    private final String warnTemplate = "利用規約の「%s」に違反しています。今すぐ停止し、%s。本警告を無視した場合、%s。";
+    private final String banTemplate = "利用規約「%s」に違反";
+    private final String kickTemplate = "利用規約「%s」に違反";
+    private final String muteTemplate = "利用規約「%s」に違反";
+    
+    private static final String WILL_MUTE = "あなたの発言を今後ミュートします";
+    private static final String WILL_BAN = "あなたを本サーバーから追放します";
+    private static final String WILL_KICK = "あなたを本サーバーからキックします";
 
     enum AbuseType {
-        GRIEFING("禁止行為: 破壊", Material.DIAMOND_PICKAXE, "直ちに本来の形に修復するか、意図的でない場合はその旨を返信してください。"),
-        STEALING("禁止行為: 窃盗", Material.ENDER_CHEST, "盗んだアイテムを直ちに元の場所、持ち主に返却してください"),
-        MONOPOLY_SHARED_ITEMS("禁止行為: 共有資産独占", Material.OAK_SIGN, "直ちに元の状態に戻すことで独占状態を解いてください。"),
-        FORCED_PVP("禁止行為: 取り決め無きPvP", Material.DIAMOND_SWORD),
-        PRIVATE_INVADING("禁止行為: 無許可での私有地侵入", Material.OAK_DOOR),
-        OBSCENE_BUILDING("禁止行為: わいせつ物建築", Material.RED_MUSHROOM, "撤去してください"),
-        LAW_VIOLATION_BUILDING("禁止行為: 国内法違反建築", Material.TNT, "撤去してください"),
-        INVALID_CHAT("禁止行為: 秩序を乱すチャット", Material.PLAYER_HEAD),
-        REAL_TRADING("禁止行為: 資産の現実での取引", Material.GOLD_BLOCK),
-        BLACKMAIL("禁止行為: 恐喝", Material.CROSSBOW),
-        COLLUSION("禁止行為: 共謀", Material.CAMPFIRE),
-        DOS("禁止行為: 意図的に負荷をかける行為", Material.CAMPFIRE),
-        OTHER("禁止行為: トラブルの原因となる行為", Material.CAMPFIRE, "この後に続く指示に従ってください"),
-        GLITCH("不正行為: 不具合悪用", Material.COMMAND_BLOCK),
-        AVOID_PANISHMENT("不正行為: 処罰回避", Material.TRIPWIRE_HOOK),
-        FAKE_REPORT("不正行為: 虚偽通報", Material.PUFFERFISH),
-        IGNORE_WARN("不正行為: 運営からのPMの無視", Material.PUFFERFISH),
-        EXPOSE_PM("不正行為: PMの晒し上げ行為", Material.PUFFERFISH),
-        INVALID_MOD("不正行為: 不正MODの使用", Material.COMPARATOR),
-        INVALID_LIVE("禁止行為: 許諾無しでの配信・動画公開", Material.MUSIC_DISC_PIGSTEP, "配信した動画を削除してください"),
+        GRIEFING("禁止行為: 破壊", Material.DIAMOND_PICKAXE, WILL_BAN, "直ちに本来の形に修復するか、意図的でない場合はその旨を返信してください"),
+        STEALING("禁止行為: 窃盗", Material.ENDER_CHEST, WILL_BAN, "盗んだアイテムを直ちに元の場所、持ち主に返却してください"),
+        MONOPOLY_SHARED_ITEMS("禁止行為: 共有資産独占", Material.OAK_SIGN, WILL_BAN, "直ちに元の状態に戻すことで独占状態を解いてください"),
+        FORCED_PVP("禁止行為: 取り決め無きPvP", Material.DIAMOND_SWORD, WILL_BAN),
+        PRIVATE_INVADING("禁止行為: 無許可での私有地侵入", Material.OAK_DOOR, WILL_BAN),
+        OBSCENE_BUILDING("禁止行為: わいせつ物建築", Material.RED_MUSHROOM, "強制撤去かつ悪質であれば" + WILL_BAN, "撤去してください"),
+        LAW_VIOLATION_BUILDING("禁止行為: 国内法違反建築", Material.TNT, "強制撤去かつ悪質であれば" + WILL_BAN, "撤去してください"),
+        INVALID_CHAT("禁止行為: 秩序を乱すチャット", Material.PLAYER_HEAD, WILL_MUTE),
+        REAL_TRADING("禁止行為: 資産の現実での取引", Material.GOLD_BLOCK, WILL_BAN),
+        BLACKMAIL("禁止行為: 恐喝", Material.CROSSBOW, WILL_BAN),
+        COLLUSION("禁止行為: 共謀", Material.CAMPFIRE, WILL_BAN),
+        DOS("禁止行為: 意図的に負荷をかける行為", Material.CAMPFIRE, WILL_BAN),
+        OTHER("禁止行為: トラブルの原因となる行為", Material.CAMPFIRE, WILL_BAN, "この後に続く指示に従ってください"),
+        GLITCH("不正行為: 不具合悪用", Material.COMMAND_BLOCK, WILL_BAN),
+        AVOID_PANISHMENT("不正行為: 処罰回避", Material.TRIPWIRE_HOOK, WILL_BAN),
+        FAKE_REPORT("不正行為: 虚偽通報", Material.PUFFERFISH, WILL_BAN),
+        IGNORE_WARN("不正行為: 運営からのPMの無視", Material.PUFFERFISH, WILL_KICK),
+        EXPOSE_PM("不正行為: PMの晒し上げ行為", Material.PUFFERFISH, WILL_BAN),
+        INVALID_MOD("不正行為: 不正MODの使用", Material.COMPARATOR, WILL_BAN, "該当するMODをアンインストールしてから参加してください（該当するMODについてわからなければ質問してください）"),
+        INVALID_MINING("禁止行為: 禁止場所での資源採掘", Material.NETHERITE_PICKAXE, WILL_BAN, "破壊箇所を可能な限り修復してください"),
+        SPOOF("禁止行為: 運営になりすます行為", Material.BEDROCK, WILL_BAN),
+        FAKE_AGE("禁止行為: 年齢詐称行為", Material.CAKE, WILL_BAN)
         ;
 
-        AbuseType(String shortName, Material icon) {
-            this(shortName, icon, null);
+        AbuseType(String shortName, Material icon, String punishment) {
+            this(shortName, icon, punishment, null);
         }
 
-		AbuseType(String shortName, Material icon, String whatToDoToAvoidPunishment) {
+		AbuseType(String shortName, Material icon, String punishment, String whatToDoToAvoidPunishment) {
             this.shortName = shortName;
             this.icon = icon;
             this.instruction = whatToDoToAvoidPunishment;
+            this.punishment = punishment;
         }
 
         private final String shortName;
         private final Material icon;
         private final String instruction;
+        private final String punishment;
     };
 }

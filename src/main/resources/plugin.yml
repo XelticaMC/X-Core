@@ -6,7 +6,7 @@ softdepend:
   - Vault
 commands:
   omikuji:
-    description: おみくじを引きます。マイクラ内で1日に1回まで引けて、100クローバーかかります。
+    description: おみくじを引きます。マイクラ内で1日に1回まで引けて、100エビパワーを消費します。
     usage: /omikuji
   respawn:
     description: メインワールドの初期スポーンに戻ります。
@@ -70,6 +70,14 @@ commands:
     description:
     usage: /debug
     permission: otanoshimi.command.depositclovers
+  epshop:
+    description: エビパワーストアを開きます。
+    usage: /epshop
+    permission: otanoshimi.command.epshop
+  epshop:
+    description: ヒントメニューを開きます。
+    usage: /hint [hint-id]
+    permission: otanoshimi.command.hint
 permissions:
   otanoshimi.command.pvp:
     default: op
@@ -108,5 +116,14 @@ permissions:
   otanoshimi.command.xtp:
     default: op
   otanoshimi.command.xtp.other:
+    default: op
   otanoshimi.command.depositclovers:
     default: op
+  otanoshimi.command.ep:
+    default: true
+  otanoshimi.command.ep.add:
+    default: op
+  otanoshimi.command.ep.delete:
+    default: op
+  otanoshimi.command.hint;
+    default: true

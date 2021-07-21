@@ -64,7 +64,6 @@ public class HubStore {
         var isSaveIgnoredWorld = bulk || Arrays.stream(inventorySaverIgnoredWorldNames)
                 .anyMatch(name -> name.equalsIgnoreCase(currentWorldName));
         server.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-            WorldStore.getInstance().saveCurrentLocation(player);
             var loc = type.getLocation() != null ? type.getSpigotLocation() : world.getSpawnLocation();
             player.teleport(loc, TeleportCause.PLUGIN);
             isWarpingMap.put(player.getUniqueId(), false);

@@ -36,8 +36,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.title.Title;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.event.node.NodeAddEvent;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.types.InheritanceNode;
+import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.models.PlayerDataKey;
+import work.xeltica.craft.core.plugins.VaultPlugin;
+import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
@@ -46,6 +55,10 @@ import work.xeltica.craft.core.utils.TravelTicketUtil;
 public class PlayerHandler implements Listener {
     public PlayerHandler(Plugin p) {
         this.plugin = p;
+        LuckPermsProvider
+            .get()
+            .getEventBus()
+            .subscribe(XCorePlugin.getInstance(), NodeAddEvent.class, this::onNodeAdd);
     }
 
     @EventHandler
@@ -84,6 +97,8 @@ public class PlayerHandler implements Listener {
             e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
             PlayerStore.getInstance().open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
         }
+
+        HintStore.getInstance().achieve(p, Hint.WELCOME);
 
         var record = PlayerStore.getInstance().open(p);
         if (!record.getBoolean(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER)) {
@@ -186,6 +201,7 @@ public class PlayerHandler implements Listener {
                         logger.info("Applied 草");
                     }
                     last草edTimeMap.put(id, nowTime);
+                    HintStore.getInstance().achieve(e.getPlayer(), Hint.KUSA);
                 }
             }.runTask(plugin);
         }
@@ -283,6 +299,21 @@ public class PlayerHandler implements Listener {
                 movingPlayer = null;
             });
         }
+    }
+
+    private void onNodeAdd(NodeAddEvent e) {
+        if (!e.isUser()) return;
+        var target = (User)e.getTarget();
+        var node = e.getNode();
+
+        Bukkit.getScheduler().runTask(XCorePlugin.getInstance(), () -> {
+            Player player = Bukkit.getPlayer(target.getUniqueId());
+            if (player == null) return;
+
+            if (node instanceof InheritanceNode in && "citizen".equals(in.getGroupName())) {
+                HintStore.getInstance().achieve(player, Hint.BE_CITIZEN);
+            }
+        });
     }
 
     private Plugin plugin;

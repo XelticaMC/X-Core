@@ -33,7 +33,7 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
         }
         var vault = VaultPlugin.getInstance();
         if (vault.isEconomyEnabled() && !vault.tryDepositPlayer(player, 100)) {
-            player.sendMessage(ChatColor.RED + "お金が足りません！おみくじは1回100 Cloverです。");
+            player.sendMessage(ChatColor.RED + "パワーが足りません！おみくじは1回100エビパワーが必要です。");
             return true;
         }
         player.sendMessage("何が出るかな...?");

@@ -4,8 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import com.google.common.collect.Streams;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
@@ -19,6 +24,7 @@ public class ItemStore {
     public ItemStore() {
         ItemStore.instance = this;
         registerItems();
+        Bukkit.getOnlinePlayers().forEach(p -> givePhoneIfNeeded(p));
     }
 
     public static ItemStore getInstance() {
@@ -79,6 +85,14 @@ public class ItemStore {
         if (!lore1.equals(lore2)) return false;
 
         return true;
+    }
+
+    public void givePhoneIfNeeded(@NotNull Player player) {
+        var inv = player.getInventory();
+        var phone = getItem(ItemStore.ITEM_NAME_XPHONE);
+        var hasItem = Streams.stream(inv)
+            .anyMatch(a -> compareCustomItem(a, getItem(ItemStore.ITEM_NAME_XPHONE)));
+        if (!hasItem) inv.addItem(phone);
     }
 
     private void registerItems() {
