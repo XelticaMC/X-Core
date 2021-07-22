@@ -6,6 +6,7 @@ public enum PlayerDataKey {
     BEDROCK_ACCEPT_DISCLAIMER("accept_disclaimer"),
     FIRST_SPAWN("first_spawn"),
     LAST_JOINED("last_joined"),
+    GIVEN_PHONE("given_phone"),
     ;
 
     PlayerDataKey(String physicalKey) {

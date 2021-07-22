@@ -1,4 +1,4 @@
-# X-Core Plugin
+# XelticaMC Core System
 
 XelticaMC の中枢を為すプラグイン。
 

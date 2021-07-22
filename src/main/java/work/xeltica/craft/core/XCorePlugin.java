@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import work.xeltica.craft.core.commands.CommandBase;
 import work.xeltica.craft.core.commands.CommandBoat;
@@ -23,6 +24,7 @@ import work.xeltica.craft.core.commands.CommandHub;
 import work.xeltica.craft.core.commands.CommandLocalTime;
 import work.xeltica.craft.core.commands.CommandOmikuji;
 import work.xeltica.craft.core.commands.CommandXCoreGuiEvent;
+import work.xeltica.craft.core.commands.CommandXPhone;
 import work.xeltica.craft.core.commands.CommandXtp;
 import work.xeltica.craft.core.commands.CommandPromo;
 import work.xeltica.craft.core.commands.CommandPvp;
@@ -74,7 +76,7 @@ public class XCorePlugin extends JavaPlugin {
         // 1秒に1回
         new DaylightObserver(this).runTaskTimer(this, 0, 20);
         // 30秒に1回
-        new NightmareRandomEvent(this).runTaskTimer(this, 0, 80);
+        new NightmareRandomEvent(this).runTaskTimer(this, 0, 20 * 15);
         // 4tickに1回
         // new FlyingObserver().runTaskTimer(this, 0, 4);
         // 10tickに1回
@@ -110,6 +112,8 @@ public class XCorePlugin extends JavaPlugin {
         var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         var luckPerms = provider.getProvider();
         luckPerms.getContextManager().registerCalculator(calculator);
+
+        Bukkit.getServer().audiences().forEach(a -> a.sendMessage(Component.text("§a.....XelticaMC Core System " + getDescription().getVersion() + " initialized. READY")));
 
         logger.info("Booted X-Core Plugin.");
     }
@@ -168,6 +172,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("depositclovers", new CommandDepositClovers());
         commands.put("hint", new CommandHint());
         commands.put("__core_gui_event__", new CommandXCoreGuiEvent());
+        commands.put("xphone", new CommandXPhone());
     }
 
     private void loadHandlers() {

@@ -1,21 +1,19 @@
 package work.xeltica.craft.core.handlers;
 
+import java.lang.System.Logger;
 import java.util.ArrayList;
-
-import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.Event.Result;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.geysermc.floodgate.api.FloodgateApi;
 
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.models.HubType;
@@ -26,26 +24,29 @@ import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 
 public class XphoneHandler implements Listener {
-    @EventHandler
-    public void on(PlayerChangedWorldEvent e) {
-        store().givePhoneIfNeeded(e.getPlayer());
-    }
-
-    @EventHandler
-    public void on(PlayerPostRespawnEvent e) {
-        store().givePhoneIfNeeded(e.getPlayer());
-    }
-
     @EventHandler(priority = EventPriority.HIGH)
     public void onUse(PlayerInteractEvent e) {
-        var item = e.getPlayer().getInventory().getItem(e.getHand());
+        var item = e.getItem();
+        if (item == null) return;
+        var itemMeta = item.getItemMeta();
+        if (itemMeta == null || itemMeta.displayName() == null) return;
         var player = e.getPlayer();
-        if (!store().compareCustomItem(item, store().getItem(ItemStore.ITEM_NAME_XPHONE))) return;
-        if (e.getAction() != Action.LEFT_CLICK_AIR) {
-            e.setCancelled(true);
+        var phone = store().getItem(ItemStore.ITEM_NAME_XPHONE);
+        if (!store().compareCustomItem(item, phone)) {
+            var pt = PlainTextComponentSerializer.plainText();
+            var itemName = pt.serialize(itemMeta.displayName());
+            var phoneName = pt.serialize(phone.getItemMeta().displayName());
+            if (item.getType() == Material.WRITTEN_BOOK && phoneName.equals(itemName)) {
+                player.sendMessage("古いX Phoneは使えなくなりました。捨てた上で /xphone コマンドを実行して入手してください。");
+                e.setUseItemInHand(Result.DENY);
+            }
+            return;
+        }
+        if (e.getAction() == Action.PHYSICAL) {
             return;
         };
-        e.setCancelled(true);
+        
+        e.setUseItemInHand(Result.DENY);
 
         var items = new ArrayList<MenuItem>();
         var worldName = player.getWorld().getName();

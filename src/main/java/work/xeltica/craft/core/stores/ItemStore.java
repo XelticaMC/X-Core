@@ -47,7 +47,7 @@ public class ItemStore {
      * カスタムアイテムを作成
      */
     public ItemStack createCustomItem(String name, String... lore) {
-        var st = new ItemStack(Material.WRITTEN_BOOK);
+        var st = new ItemStack(Material.KNOWLEDGE_BOOK);
 
         st.editMeta(meta -> {
             meta.displayName(
@@ -96,7 +96,7 @@ public class ItemStore {
     }
 
     private void registerItems() {
-        customItems.put(ITEM_NAME_XPHONE, createCustomItem("X Phone", "XelticaMCの独自機能にアクセスできるスマホ。"));
+        customItems.put(ITEM_NAME_XPHONE, createCustomItem("X Phone SE", "XelticaMCの独自機能にアクセスできるスマホ。"));
     }
     
     private final Map<String, ItemStack> customItems = new HashMap<>();

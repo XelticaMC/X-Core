@@ -59,6 +59,12 @@ commands:
     description: 保存された過去位置を用いてテレポートします。
     usage: /xtp <world> [player]
     permission: otanoshimi.command.xtp
+  xphone:
+    aliases: [ phone ]
+    description: X Phone を入手する
+    usage: /xphone
+    permission: otanoshimi.command.xphone
+    
   __core_gui_event__:
     description: "?"
     usage: "?"
@@ -127,3 +133,5 @@ permissions:
     default: op
   otanoshimi.command.hint:
     default: true
+  otanoshimi.command.xphone:
+    defualt: true

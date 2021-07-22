@@ -49,6 +49,7 @@ import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.HubStore;
+import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
@@ -94,16 +95,22 @@ public class PlayerHandler implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         var p = e.getPlayer();
         var name = PlainTextComponentSerializer.plainText().serialize(p.displayName());
+        var pstore = PlayerStore.getInstance();
         e.joinMessage(Component.text("§a" + name + "§b" + "さんがやってきました"));
         if (!p.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
-            PlayerStore.getInstance().open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
+            pstore.open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
             HubStore.getInstance().teleport(p, HubType.NewComer, true);
+        }
+        var record = pstore.open(p);
+
+        if (!record.getBoolean(PlayerDataKey.GIVEN_PHONE)) {
+            p.getInventory().addItem(ItemStore.getInstance().getItem(ItemStore.ITEM_NAME_XPHONE));
+            record.set(PlayerDataKey.GIVEN_PHONE, true);
         }
 
         HintStore.getInstance().achieve(p, Hint.WELCOME);
 
-        var record = PlayerStore.getInstance().open(p);
         if (!record.getBoolean(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER)) {
             BedrockDisclaimerUtil.showDisclaimerAsync(p);
         }
@@ -111,24 +118,22 @@ public class PlayerHandler implements Listener {
         new BukkitRunnable(){
             @Override
             public void run() {
-                PlayerStore.getInstance().updateHasOnlineStaff();   
+                pstore.updateHasOnlineStaff();   
             }
         }.runTask(plugin);
-
-        var f = PlayerStore.getInstance();
 
         p.showTitle(Title.title(
             Component.text("§aXelticaMCへ§6ようこそ！"),
             Component.text("§f詳しくは §b§nhttps://craft.xeltica.work§fを見てね！")
         ));
 
-        if (f.isCitizen(p))
+        if (pstore.isCitizen(p))
             return;
-        if (!f.open(p).has(PlayerDataKey.NEWCOMER_TIME)) {
+        if (!pstore.open(p).has(PlayerDataKey.NEWCOMER_TIME)) {
             p.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！");
             p.sendMessage("詳しくは §b/promo§rコマンドを実行してください。");
         }
-        if (f.hasOnlineStaff()) {
+        if (pstore.hasOnlineStaff()) {
             p.sendMessage("スタッフが参加しているため、「観光モード」は無効です。");
         } else {
             p.sendMessage("スタッフが全員不在のため、「観光モード」は有効です。");

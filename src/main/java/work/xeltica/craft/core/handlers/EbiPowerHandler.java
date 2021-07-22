@@ -3,15 +3,16 @@ package work.xeltica.craft.core.handlers;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 
 import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.models.PlayerDataKey;
@@ -27,6 +28,13 @@ public class EbiPowerHandler implements Listener{
         epBlackList.add("sandbox2");
         epBlackList.add("pvp");
         epBlackList.add("hub_dev");
+        epBlackList.add("world");
+        epBlackList.add("world_nether");
+        epBlackList.add("world_the_end");
+        epBlackList.add("wildarea");
+        epBlackList.add("travel_wildarea");
+        epBlackList.add("travel_megawild");
+        epBlackList.add("travel_maikura_city");
     }
 
     @EventHandler
@@ -38,12 +46,14 @@ public class EbiPowerHandler implements Listener{
             if (victim.fromMobSpawner()) return;
             // TODO: TT登録可能にしてその中のキルは対象外にする
 
-            var power = (int)e.getFinalDamage();
+            var buff = getDropBonus(killer.getInventory().getItemInMainHand()) * 4;
+            
+            var power = 3 + (buff > 0 ? random.nextInt(buff) : 0);
             var mes = "モブにダメージを与えた！" + power + "EPを獲得。";
 
             if ("nightmare2".equals(killer.getWorld().getName())) {
                 power *= 2;
-                mes = "モブにダメージを与えた！" + (power * 2) + "EPを獲得。(ナイトメアボーナス)";
+                mes = "モブにダメージを与えた！" + power + "EPを獲得。(ナイトメアボーナス)";
             }
             if (power > 0) {
                 store().tryGive(killer, power);
@@ -88,8 +98,15 @@ public class EbiPowerHandler implements Listener{
         return EbiPowerStore.getInstance();
     }
 
+    private int getDropBonus(ItemStack stack) {
+        if (stack == null) return 0;
+        return stack.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+    }
+
     private List<String> epBlackList = new ArrayList<>();
 
     private static final int ADVANCEMENT_POWER = 30;
     private static final int LOGIN_BONUS_POWER = 50;
+
+    private static final Random random = new Random();
 }

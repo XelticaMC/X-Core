@@ -89,7 +89,7 @@ public class Gui implements Listener {
         var menuItems = invMap.get(inv);
         var id = e.getRawSlot();
     
-        if (menuItems.length <= id) return;
+        if (menuItems.length <= id && menuItems.length < 0) return;
         p.closeInventory();
         var handler = menuItems[id].getOnClick();
         if (handler != null) handler.accept(menuItems[id]);
