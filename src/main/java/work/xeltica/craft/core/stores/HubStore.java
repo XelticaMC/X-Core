@@ -61,14 +61,14 @@ public class HubStore {
             return;
         }
         var currentWorldName = player.getWorld().getName();
-        var isSaveIgnoredWorld = bulk || Arrays.stream(inventorySaverIgnoredWorldNames)
+        var requireCooldown = bulk || Arrays.stream(noCooldownWorldNames)
                 .anyMatch(name -> name.equalsIgnoreCase(currentWorldName));
         server.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
             var loc = type.getLocation() != null ? type.getSpigotLocation() : world.getSpawnLocation();
             player.teleport(loc, TeleportCause.PLUGIN);
             isWarpingMap.put(player.getUniqueId(), false);
-        }, isSaveIgnoredWorld ? 1 : 20 * 5);
-        if (!isSaveIgnoredWorld) {
+        }, requireCooldown ? 1 : 20 * 5);
+        if (!requireCooldown) {
             player.sendMessage("5秒後にロビーに移動します...");
             isWarpingMap.put(player.getUniqueId(), true);
         }
@@ -162,11 +162,16 @@ public class HubStore {
         return signData.stream().filter(s -> LocationComparator.equals(loc, s.getLocation())).findFirst().orElse(null);
     }
 
-    private final String[] inventorySaverIgnoredWorldNames = {
+    private final String[] noCooldownWorldNames = {
         "sandbox",
         "art", 
         "pvp",
         "test",
+        "hub",
+        "hub2",
+        "hub_dev",
+        "main",
+        "sandbox2",
     };
 
     private static HubStore instance;
