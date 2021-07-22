@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,6 +13,7 @@ import org.bukkit.event.Event.Result;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.geysermc.floodgate.api.FloodgateApi;
 
 import work.xeltica.craft.core.gui.Gui;
@@ -36,13 +38,14 @@ public class XphoneHandler implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onUse(PlayerInteractEvent e) {
-        if (e.useInteractedBlock() == Result.DENY || e.useItemInHand() == Result.DENY) return;
-        if (e.getAction() != Action.LEFT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_AIR) return;
-        var item = e.getItem();
+        var item = e.getPlayer().getInventory().getItem(e.getHand());
         var player = e.getPlayer();
         if (!store().compareCustomItem(item, store().getItem(ItemStore.ITEM_NAME_XPHONE))) return;
-        e.setUseInteractedBlock(Result.DENY);
-        e.setUseItemInHand(Result.DENY);
+        if (e.getAction() != Action.LEFT_CLICK_AIR) {
+            e.setCancelled(true);
+            return;
+        };
+        e.setCancelled(true);
 
         var items = new ArrayList<MenuItem>();
         var worldName = player.getWorld().getName();
