@@ -1,16 +1,15 @@
 package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
-import com.google.common.collect.Streams;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.Event.Result;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.geysermc.floodgate.api.FloodgateApi;
@@ -37,6 +36,8 @@ public class XphoneHandler implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onUse(PlayerInteractEvent e) {
+        if (e.useInteractedBlock() == Result.DENY || e.useItemInHand() == Result.DENY) return;
+        if (e.getAction() != Action.LEFT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_AIR) return;
         var item = e.getItem();
         var player = e.getPlayer();
         if (!store().compareCustomItem(item, store().getItem(ItemStore.ITEM_NAME_XPHONE))) return;

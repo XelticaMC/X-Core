@@ -25,17 +25,20 @@ public class CommandHint extends CommandPlayerOnlyBase {
                 return true;
             }
             var hint = optionalHint.get();
-            var content = hint.getDescription() + "\n\n" + "§a§l報酬: §r§d" + hint.getPower() + " エビパワー";
-            if (store.hasAchieved(player, hint)) {
-                content += "\n" + "§6§o✧達成済み✧";
+            var content = hint.getDescription();
+            if (hint.getPower() > 0) {
+                content += "\n\n" + "§a§l報酬: §r§d" + hint.getPower() + " エビパワー";
+                if (store.hasAchieved(player, hint)) {
+                    content += "\n" + "§6§o✧達成済み✧";
+                }
             }
             Gui.getInstance().openDialog(player, "§l" + hint.getName() + "§r", content, (d) -> {
                 player.performCommand("hint");
             });
         } else {
-            var items = hints.map(h -> new MenuItem(h.getName() + " (" + h.getPower() + "EP)", (m) -> {
+            var items = hints.map(h -> new MenuItem(h.getName() + (h.getPower() > 0 ? (" (" + h.getPower() + "EP)") : ""), (m) -> {
                 player.performCommand("hint " + h.name());
-            }, store.hasAchieved(player, h) ? Material.GOLD_BLOCK : Material.GOLD_NUGGET)).toList();
+            }, h.getPower() == 0 ? Material.NETHER_STAR : store.hasAchieved(player, h) ? Material.GOLD_BLOCK : Material.GOLD_NUGGET)).toList();
             Gui.getInstance().openMenu(player, "ヒント", items);
         }
         return true;
