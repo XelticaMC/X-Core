@@ -13,6 +13,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.geysermc.floodgate.api.FloodgateApi;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
@@ -45,6 +47,7 @@ public class XphoneHandler implements Listener {
         if (e.getAction() == Action.PHYSICAL) {
             return;
         };
+        
         
         e.setUseItemInHand(Result.DENY);
 
@@ -116,6 +119,9 @@ public class XphoneHandler implements Listener {
 
         switch (worldName) {
             case "main":
+            case "wildarea":
+            case "wildarea_nether":
+            case "wildarea_the_end":
             case "world":
             case "world_nether":
             case "world_the_end":
