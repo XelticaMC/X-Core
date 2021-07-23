@@ -49,6 +49,7 @@ import work.xeltica.craft.core.runnables.DaylightObserver;
 import work.xeltica.craft.core.runnables.NightmareRandomEvent;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
+import work.xeltica.craft.core.stores.MetaStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.VehicleStore;
@@ -113,9 +114,21 @@ public class XCorePlugin extends JavaPlugin {
         var luckPerms = provider.getProvider();
         luckPerms.getContextManager().registerCalculator(calculator);
 
-        Bukkit.getServer().audiences().forEach(a -> a.sendMessage(Component.text("§a.....XelticaMC Core System " + getDescription().getVersion() + " initialized. READY")));
+        var meta = MetaStore.getInstance();
 
-        logger.info("Booted X-Core Plugin.");
+        if (MetaStore.getInstance().isUpdated()) {
+            Bukkit.getServer()
+            .audiences()
+            .forEach(a -> {
+                var prev = meta.getPreviousVersion();
+                if (prev == null) prev = "unknown";
+                var current = meta.getCurrentVersion();
+                var text = String.format("§aCore Systemが更新されました。%s -> %s", prev, current);
+                a.sendMessage(Component.text(text));
+            });
+        }
+
+        logger.info("Booted XelticaMC Core System.");
     }
 
     @Override
@@ -148,6 +161,7 @@ public class XCorePlugin extends JavaPlugin {
         new CloverStore();
         new EbiPowerStore();
         new HintStore();
+        new MetaStore();
     }
 
     private void loadCommands() {
