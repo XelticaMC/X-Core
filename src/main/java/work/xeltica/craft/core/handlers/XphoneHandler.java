@@ -3,8 +3,6 @@ package work.xeltica.craft.core.handlers;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
-
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -15,13 +13,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.skinsrestorer.api.SkinsRestorerAPI;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.models.HubType;
