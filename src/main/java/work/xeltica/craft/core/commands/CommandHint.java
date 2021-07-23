@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.commands;
 
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.bukkit.Material;
@@ -36,9 +37,16 @@ public class CommandHint extends CommandPlayerOnlyBase {
                 player.performCommand("hint");
             });
         } else {
-            var items = hints.map(h -> new MenuItem(h.getName() + (h.getPower() > 0 ? (" (" + h.getPower() + "EP)") : ""), (m) -> {
-                player.performCommand("hint " + h.name());
-            }, h.getPower() == 0 ? Material.NETHER_STAR : store.hasAchieved(player, h) ? Material.GOLD_BLOCK : Material.GOLD_NUGGET)).toList();
+            var items = hints.map(h -> {
+                var isAchieved = store.hasAchieved(player, h);
+                var isQuest = h.getPower() > 0;
+                var name = h.getName() + (isQuest ? (" (" + h.getPower() + "EP)") : "");
+                Consumer<MenuItem> onClick = (m) -> {
+                    player.performCommand("hint " + h.name());
+                };
+                var icon = !isQuest ? Material.NETHER_STAR : isAchieved ? Material.GOLD_BLOCK : Material.GOLD_NUGGET;
+                return new MenuItem(name, onClick, icon, null, 1, isAchieved);
+            }).toList();
             Gui.getInstance().openMenu(player, "ヒント", items);
         }
         return true;
