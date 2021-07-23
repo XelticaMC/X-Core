@@ -77,7 +77,7 @@ public class EbiPowerHandler implements Listener{
         var ps = PlayerStore.getInstance();
         var record = ps.open(e.getPlayer());
         var prev = new Date(record.getLong(PlayerDataKey.LAST_JOINED, now.getTime()));
-        if (prev.getYear() != now.getYear() && prev.getMonth() != now.getMonth() && prev.getDay() != now.getDay()) {
+        if (prev.getYear() != now.getYear() && prev.getMonth() != now.getMonth() && prev.getDate() != now.getDate()) {
             store().tryGive(e.getPlayer(), LOGIN_BONUS_POWER);
             notification(e.getPlayer(), "ログボ達成！" + LOGIN_BONUS_POWER + "EPを獲得。");
         }
