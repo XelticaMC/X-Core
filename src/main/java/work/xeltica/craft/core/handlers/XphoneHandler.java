@@ -204,7 +204,8 @@ public class XphoneHandler implements Listener {
             .filter(p -> p.getGameMode() != GameMode.SPECTATOR && !p.getUniqueId().equals(player.getUniqueId()))
             .map(p -> {
                 var head = store().getPlayerHead(p);
-                return new MenuItem(p.getCustomName(), teleport, head, p);
+                var name = p.displayName() != null ? PlainTextComponentSerializer.plainText().serialize(p.displayName()) : p.getName();
+                return new MenuItem(name, teleport, head, p);
             })
             .toList();
 
