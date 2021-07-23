@@ -183,7 +183,6 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("debug", new CommandDebug());
         commands.put("xtp", new CommandXtp());
         commands.put("epshop", new CommandEpShop());
-        commands.put("depositclovers", new CommandDepositClovers());
         commands.put("hint", new CommandHint());
         commands.put("__core_gui_event__", new CommandXCoreGuiEvent());
         commands.put("xphone", new CommandXPhone());

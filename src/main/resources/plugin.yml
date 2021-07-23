@@ -76,10 +76,6 @@ commands:
     description: デバッグ
     usage: /debug
     permission: otanoshimi.command.debug
-  depositclovers:
-    description:
-    usage: /debug
-    permission: otanoshimi.command.depositclovers
   epshop:
     description: エビパワーストアを開きます。
     usage: /epshop
@@ -126,8 +122,6 @@ permissions:
   otanoshimi.command.xtp:
     default: op
   otanoshimi.command.xtp.other:
-    default: op
-  otanoshimi.command.depositclovers:
     default: op
   otanoshimi.command.epshop:
     default: true
