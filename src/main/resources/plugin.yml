@@ -1,9 +1,13 @@
 name: ${project.artifactId}
 main: work.xeltica.craft.core.XCorePlugin
 version: ${project.version}
-api-version: 1.16
+api-version: 1.17
 softdepend:
+  - SkinsRestorer
+depend:
+  - Geyser-Spigot
   - Vault
+  - floodgate
 commands:
   omikuji:
     description: おみくじを引きます。マイクラ内で1日に1回まで引けて、100エビパワーを消費します。

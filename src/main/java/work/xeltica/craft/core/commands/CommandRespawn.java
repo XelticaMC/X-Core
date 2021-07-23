@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
@@ -18,23 +19,61 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        String respawnWorldName;
-        try {
-            respawnWorldName = getRespawnWorld(player.getWorld());
-        } catch (Exception e) {
-            player.sendMessage(ChatColor.RED + "このワールドでは許可されていません");
-            return true;
-        }
-        var respawnWorld = Bukkit.getWorld(respawnWorldName);
-        var respawn = respawnWorld.getSpawnLocation();
-        var isSameWorld = player.getWorld().getUID().equals(respawnWorld.getUID());
-        var respawnWorldDisplayName = WorldStore.getInstance().getWorldDisplayName(respawnWorld);
-
         var isWarping = isWarpingMap.get(player.getUniqueId());
         if (isWarping != null && isWarping) {
             player.sendMessage("移動中です！");
             return true;
         }
+
+        if (args.length > 0 && args[0].equalsIgnoreCase("bed")) {
+            teleportToBedSpawn(player);
+        } else {
+            teleportToInitialSpawn(player);
+        }
+
+        isWarpingMap.put(player.getUniqueId(), true);
+        return true;
+    }
+
+    private void teleportToBedSpawn(Player player) {
+        try {
+            // respawn禁止されているかどうかの検証
+            getRespawnWorld(player.getWorld());
+        } catch (Exception e) {
+            player.sendMessage(ChatColor.RED + "このワールドでは許可されていません");
+            return;
+        }
+
+        var loc = player.getBedSpawnLocation();
+
+        if (loc == null) {
+            player.sendMessage("ベッドが存在しないか、塞がれているためにテレポートできません。");
+            return;
+        }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.teleport(loc, TeleportCause.PLUGIN);
+                isWarpingMap.put(player.getUniqueId(), false);
+            }
+        }.runTaskLater(XCorePlugin.getInstance(), 20 * 5);
+        player.sendMessage("5秒後にベッドの位置にテレポートします...");
+    }
+
+    private void teleportToInitialSpawn(Player player) {
+        String respawnWorldName;
+        try {
+            respawnWorldName = getRespawnWorld(player.getWorld());
+        } catch (Exception e) {
+            player.sendMessage(ChatColor.RED + "このワールドでは許可されていません");
+            return;
+        }
+        var respawnWorld = Bukkit.getWorld(respawnWorldName);
+        var respawn =  respawnWorld.getSpawnLocation();
+
+        var isSameWorld = player.getWorld().getUID().equals(respawnWorld.getUID());
+        var respawnWorldDisplayName = WorldStore.getInstance().getWorldDisplayName(respawnWorld);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -42,13 +81,11 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
                 isWarpingMap.put(player.getUniqueId(), false);
             }
         }.runTaskLater(XCorePlugin.getInstance(), 20 * 5);
-        var mes = isSameWorld
-            ? "5秒後に初期スポーンに移動します..." 
-            : "5秒後に" + respawnWorldDisplayName + "の初期スポーンに移動します...";
-        player.sendMessage(mes);
-        isWarpingMap.put(player.getUniqueId(), true);
 
-        return true;
+        player.sendMessage(isSameWorld
+            ? "5秒後に初期スポーンに移動します..." 
+            : "5秒後に" + respawnWorldDisplayName + "の初期スポーンに移動します..."
+        );
     }
 
     private String getRespawnWorld(World w) throws Exception {
@@ -66,8 +103,6 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             case "nightmare" -> "world";
 
             case "pvp" -> throw new Exception();
-            case "hub" -> throw new Exception();
-            case "hub2" -> throw new Exception();
         };
     }
     

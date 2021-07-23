@@ -119,7 +119,7 @@ public class Gui implements Listener {
         var inv = Bukkit.createInventory(null, (1 + items.length / 9) * 9, Component.text(title));
 
         Arrays.stream(items).map(i -> {
-            var item = new ItemStack(i.getIcon(), i.getCount());
+            var item = i.getIcon();
             if (i.isShiny()) {
                 item.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
             }

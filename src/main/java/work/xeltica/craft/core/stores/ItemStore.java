@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import com.destroystokyo.paper.profile.ProfileProperty;
 import com.google.common.collect.Streams;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import net.kyori.adventure.text.Component;
@@ -17,6 +19,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.skinsrestorer.api.SkinsRestorerAPI;
 
 public class ItemStore {
     public static final String ITEM_NAME_XPHONE = "xphone";
@@ -93,6 +96,49 @@ public class ItemStore {
         var hasItem = Streams.stream(inv)
             .anyMatch(a -> compareCustomItem(a, getItem(ItemStore.ITEM_NAME_XPHONE)));
         if (!hasItem) inv.addItem(phone);
+    }
+
+    public ItemStack getPlayerHead(Player player) {
+        var stack = new ItemStack(Material.PLAYER_HEAD);
+
+        stack.editMeta(m -> {
+            if (m instanceof SkullMeta skullMeta) {
+                if (Bukkit.getPluginManager().isPluginEnabled("SkinsRestorer")) {
+                    try {
+                        resolvePlayerHeadWithSkinsRestorer(player, skullMeta);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        resolvePlayerHeadWithBukkit(player, skullMeta);
+                    }
+                } else {
+                    resolvePlayerHeadWithBukkit(player, skullMeta);
+                }
+            }
+        });
+        return stack;
+    }
+
+    private void resolvePlayerHeadWithSkinsRestorer(Player player, SkullMeta meta) {
+        var sapi = SkinsRestorerAPI.getApi();
+
+        var skinName = sapi.getSkinName(player.getName());
+        if (skinName == null) {
+            resolvePlayerHeadWithBukkit(player, meta);
+            return;
+        }
+        var skin = sapi.getSkinData(skinName);
+        var logger = Bukkit.getLogger();
+        logger.info("Skin Name = " + skin.getName());
+        logger.info("Skin Value = " + skin.getValue());
+        logger.info("Skin Sigunature = " + skin.getSignature());
+
+        var profile = Bukkit.createProfile(skin.getName());
+        profile.setProperty(new ProfileProperty("textures", skin.getValue(), skin.getSignature()));
+        meta.setPlayerProfile(profile);
+    }
+
+    private void resolvePlayerHeadWithBukkit(Player player, SkullMeta meta) {
+        meta.setPlayerProfile(player.getPlayerProfile());
     }
 
     private void registerItems() {

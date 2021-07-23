@@ -1,7 +1,12 @@
 package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
@@ -10,10 +15,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.skinsrestorer.api.SkinsRestorerAPI;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.models.HubType;
@@ -57,23 +65,6 @@ public class XphoneHandler implements Listener {
     private void openSpringBoard(@NotNull Player player) {
         var items = new ArrayList<MenuItem>();
         var worldName = player.getWorld().getName();
-
-        // #region App初期化
-        var appClassicHub = new MenuItem("クラシックロビーへ", i -> {
-            HubStore.getInstance().teleport(player, HubType.Classic, true);
-        }, Material.GOLD_BLOCK);
-
-        var appMainHub = new MenuItem("メインロビーへ", i -> {
-            HubStore.getInstance().teleport(player, HubType.Main, true);
-        }, Material.NETHERITE_BLOCK);
-
-        var appHub = new MenuItem("ロビーへ", i -> {
-            player.performCommand("hub");
-        }, Material.NETHERITE_BLOCK);
-
-        var appRespawn = new MenuItem("初期スポーンへ", i -> {
-            player.performCommand("respawn");
-        }, Material.FIREWORK_ROCKET);
 
         var appPromo = new MenuItem("市民システム", i -> {
             player.performCommand("promo");
@@ -128,15 +119,13 @@ public class XphoneHandler implements Listener {
             BedrockDisclaimerUtil.showDisclaimer(player);
         }, Material.BEDROCK, null);
 
-        // #endregion
+        var appTeleport = new MenuItem("テレポート", i -> {
+            openTeleportApp(player);
+        }, Material.COMPASS, null);
 
-        if (worldName.equals("hub2")) {
-            items.add(appClassicHub);
-        } else if (worldName.equals("hub")) {
-            items.add(appMainHub);
-        } else {
-            items.add(appHub);
-        }
+        // #endregion
+        
+        items.add(appTeleport);
 
         switch (worldName) {
             case "main":
@@ -151,8 +140,7 @@ public class XphoneHandler implements Listener {
                 items.add(appCRemove);
                 break;
         }
-        
-        items.add(appRespawn);
+
         items.add(appPromo);
         items.add(appSidebar);
         items.add(appOmikuji);
@@ -168,6 +156,59 @@ public class XphoneHandler implements Listener {
         }
 
         ui().openMenu(player, "X Phone OS", items);
+    }
+
+    private void openTeleportApp(Player p) {
+        var list = new ArrayList<MenuItem>();
+        var currentWorldName = p.getWorld().getName();
+
+        list.add(
+            switch (currentWorldName) {
+                case "hub" -> new MenuItem("メインロビー", i -> {
+                    HubStore.getInstance().teleport(p, HubType.Main, true);
+                }, Material.NETHERITE_BLOCK);
+
+                case "hub2" -> new MenuItem("クラシックロビー", i -> {
+                    HubStore.getInstance().teleport(p, HubType.Classic, true);
+                }, Material.GOLD_BLOCK);
+
+                default -> new MenuItem("ロビー", i -> {
+                    p.performCommand("hub");
+                }, Material.NETHERITE_BLOCK);
+            }
+        );
+
+        list.add(new MenuItem("初期スポーン", i -> {
+            p.performCommand("respawn");
+        }, Material.FIREWORK_ROCKET));
+
+        list.add(new MenuItem("ベッド", i -> {
+            p.performCommand("respawn bed");
+        }, Material.RED_BED));
+
+        list.add(new MenuItem("他プレイヤー", i -> {
+            openTeleportAppPlayer(p);
+        }, Material.PLAYER_HEAD));
+
+        ui().openMenu(p, "テレポート", list);
+    }
+
+    private void openTeleportAppPlayer(Player player) {
+        Consumer<MenuItem> teleport = (item) -> {
+            var target = (Player)item.getCustomData();
+            player.teleport(target);
+        };
+
+        var list = Bukkit.getOnlinePlayers()
+            .stream()
+            .filter(p -> p.getGameMode() != GameMode.SPECTATOR && !p.getUniqueId().equals(player.getUniqueId()))
+            .map(p -> {
+                var head = store().getPlayerHead(p);
+                return new MenuItem(p.getCustomName(), teleport, head, p);
+            })
+            .toList();
+
+        ui().openMenu(player, "誰のところにテレポートしますか？", list);
     }
 
     private ItemStore store() { return ItemStore.getInstance(); }

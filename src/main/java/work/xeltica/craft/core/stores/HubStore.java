@@ -64,8 +64,11 @@ public class HubStore {
         var requireCooldown = bulk || Arrays.stream(noCooldownWorldNames)
                 .anyMatch(name -> name.equalsIgnoreCase(currentWorldName));
         server.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-            var loc = type.getLocation() != null ? type.getSpigotLocation() : world.getSpawnLocation();
-            player.teleport(loc, TeleportCause.PLUGIN);
+            if (type.getLocation() != null) {
+                player.teleport(type.getSpigotLocation(), TeleportCause.PLUGIN);
+            } else {
+                WorldStore.getInstance().teleport(player, type.getWorldName());
+            }
             isWarpingMap.put(player.getUniqueId(), false);
         }, requireCooldown ? 1 : 20 * 5);
         if (!requireCooldown) {
