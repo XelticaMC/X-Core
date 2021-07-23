@@ -8,7 +8,8 @@ import work.xeltica.craft.core.stores.CloverStore;
 public class CommandDepositClovers extends CommandBase {
     @Override
     public boolean execute(CommandSender sender, Command command, String label, String[] args) {
-        CloverStore.getInstance().saveAllCloversAccount();
+        // CloverStore.getInstance().saveAllCloversAccount();
+        sender.sendMessage("廃止。");
         return true;
     }
 }
