@@ -54,6 +54,9 @@ public class VaultPlugin extends PluginBase {
     }
 
     public boolean tryWithdrawPlayer(Player p, double amount) {
+        if (getBalance(p) - amount < 0) {
+            return false;
+        }
         return economy.withdrawPlayer(p, amount).type == ResponseType.SUCCESS;
     }
 
