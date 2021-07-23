@@ -129,9 +129,10 @@ public class XphoneHandler implements Listener {
 
         switch (worldName) {
             case "main":
+            case "wildarea2":
+            case "wildarea2_nether":
+            case "wildarea2_the_end":
             case "wildarea":
-            case "wildarea_nether":
-            case "wildarea_the_end":
             case "world":
             case "world_nether":
             case "world_the_end":
