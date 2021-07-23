@@ -141,7 +141,7 @@ public class Gui implements Listener {
         for (var item : items) {
             var text = item.getName();
             if (item.isShiny()) {
-                text = ChatColor.GOLD + text;
+                text = ChatColor.GREEN + text;
             }
             builder.button(text);
         }
