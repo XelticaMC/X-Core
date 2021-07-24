@@ -125,7 +125,22 @@ public class XphoneHandler implements Listener {
         var appLive = new MenuItem("配信モードを" + (isLiveMode ? "オフ" : "オン") + "にする", i -> {
             PlayerStore.getInstance().setLiveMode(player, !isLiveMode);
         }, Material.RED_DYE, null);
+
+        var appGeyserAdvancements = new MenuItem("進捗", i -> {
+            player.performCommand("geyser advancements");
+        }, Material.BEDROCK, null);
+
+        var appGeyserStatistics = new MenuItem("統計", i -> {
+            player.performCommand("geyser advancements");
+        }, Material.BEDROCK, null);
+
+        var appGeyserOffhand = new MenuItem("持ち物をオフハンドに移動", i -> {
+            player.performCommand("geyser offhand");
+        }, Material.BEDROCK, null);
+
         // #endregion
+
+        var isBedrock = FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId());
         
         items.add(appTeleport);
 
@@ -144,6 +159,12 @@ public class XphoneHandler implements Listener {
                 break;
         }
 
+        if (isBedrock) {
+            items.add(appGeyserAdvancements);
+            items.add(appGeyserStatistics);
+            items.add(appGeyserOffhand);
+        }
+
         items.add(appPromo);
         items.add(appSidebar);
         items.add(appOmikuji);
@@ -158,6 +179,7 @@ public class XphoneHandler implements Listener {
 
         items.add(appLive);
 
+        if (isBedrock) {
             items.add(bedrockDisclaimer);
         }
 
