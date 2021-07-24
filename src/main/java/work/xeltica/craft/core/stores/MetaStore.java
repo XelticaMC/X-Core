@@ -54,8 +54,8 @@ public class MetaStore {
     private boolean isUpdated;
 
     private String[] changeLog = {
-        "特定のモブを殴るとEPが減るよというヒントを3つ追加",
-        "子供ゾンビなど、敵対モブの子供を殴った場合もEPが減ってしまう不具合を修正"
+        "参加時に、ヒント「晴れて市民になった！」を達成していない市民は達成できるように",
+        "子供、ペット、ネコを殴った場合のヒントが達成できない不具合を修正",
     };
     
     private static MetaStore instance;
