@@ -10,6 +10,8 @@ import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -75,6 +77,16 @@ public class Gui implements Listener {
         t.handler.accept(t.eventArgs);
         bookHandlersMap.remove(id);
         return;
+    }
+
+    /**
+     * エラーをプレイヤーに表示します。
+     * @return 常にtrue。コマンドの返り値に使うことを想定。
+     */
+    public boolean error(Player p, String message) {
+        p.sendMessage(message);
+        p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1, 0.5f);
+        return true;
     }
 
     @EventHandler

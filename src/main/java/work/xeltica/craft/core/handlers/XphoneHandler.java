@@ -17,10 +17,12 @@ import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.PlayerDataKey;
+import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.PlayerStore;
@@ -194,8 +196,17 @@ public class XphoneHandler implements Listener {
 
     private void openTeleportAppPlayer(Player player) {
         Consumer<MenuItem> teleport = (item) -> {
+            if (!EbiPowerStore.getInstance().tryTake(player, 100)) {
+                ui().error(player, "EPが足りないため、テレポートできませんでした。");
+                return;
+            }
+            player.sendMessage("5秒後にテレポートします…。");
             var target = (Player)item.getCustomData();
-            player.teleport(target);
+            var loc = target.getLocation();
+            target.sendMessage(String.format("%sが5秒後にあなたの現在位置にテレポートします。", player.getName()));
+            Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
+                player.teleport(loc);
+            }, 20 * 5);
         };
 
         var list = Bukkit.getOnlinePlayers()
