@@ -121,6 +121,10 @@ public class XphoneHandler implements Listener {
             openTeleportApp(player);
         }, Material.COMPASS, null);
 
+        var isLiveMode = PlayerStore.getInstance().isLiveMode(player);
+        var appLive = new MenuItem("配信モードを" + (isLiveMode ? "オフ" : "オン") + "にする", i -> {
+            PlayerStore.getInstance().setLiveMode(player, !isLiveMode);
+        }, Material.RED_DYE, null);
         // #endregion
         
         items.add(appTeleport);
@@ -152,7 +156,8 @@ public class XphoneHandler implements Listener {
 
         items.add(appHint);
 
-        if (FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId())) {
+        items.add(appLive);
+
             items.add(bedrockDisclaimer);
         }
 

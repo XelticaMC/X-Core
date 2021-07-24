@@ -68,6 +68,11 @@ commands:
     description: X Phone を入手する
     usage: /xphone
     permission: otanoshimi.command.xphone
+  live:
+    aliases: [ live ]
+    description: ライブ配信モードを切り替える
+    usage: /live <on/off>
+    permission: otanoshimi.command.live
     
   __core_gui_event__:
     description: "?"
@@ -132,4 +137,6 @@ permissions:
   otanoshimi.command.hint:
     default: true
   otanoshimi.command.xphone:
+    defualt: true
+  otanoshimi.command.live:
     defualt: true

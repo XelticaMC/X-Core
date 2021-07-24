@@ -21,6 +21,7 @@ import work.xeltica.craft.core.commands.CommandGiveCustomItem;
 import work.xeltica.craft.core.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.core.commands.CommandHint;
 import work.xeltica.craft.core.commands.CommandHub;
+import work.xeltica.craft.core.commands.CommandLive;
 import work.xeltica.craft.core.commands.CommandLocalTime;
 import work.xeltica.craft.core.commands.CommandOmikuji;
 import work.xeltica.craft.core.commands.CommandXCoreGuiEvent;
@@ -54,8 +55,8 @@ import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.VehicleStore;
 import work.xeltica.craft.core.stores.WorldStore;
-import work.xeltica.craft.core.commands.CommandDepositClovers;
 import work.xeltica.craft.core.commands.CommandEpShop;
+import work.xeltica.craft.core.stores.BossBarStore;
 import work.xeltica.craft.core.stores.CloverStore;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
@@ -165,6 +166,7 @@ public class XCorePlugin extends JavaPlugin {
         new EbiPowerStore();
         new HintStore();
         new MetaStore();
+        new BossBarStore();
     }
 
     private void loadCommands() {
@@ -189,6 +191,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("hint", new CommandHint());
         commands.put("__core_gui_event__", new CommandXCoreGuiEvent());
         commands.put("xphone", new CommandXPhone());
+        commands.put("live", new CommandLive());
     }
 
     private void loadHandlers() {

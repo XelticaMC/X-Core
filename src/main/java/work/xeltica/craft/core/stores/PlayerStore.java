@@ -1,13 +1,19 @@
 package work.xeltica.craft.core.stores;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.bossbar.BossBar.Color;
+import net.kyori.adventure.bossbar.BossBar.Overlay;
+import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.events.StaffJoinEvent;
 import work.xeltica.craft.core.events.StaffLeaveEvent;
 import work.xeltica.craft.core.models.PlayerDataKey;
@@ -69,6 +75,26 @@ public class PlayerStore {
         _hasOnlineStaff = flag;
     }
 
+    public void setLiveMode(Player player, boolean isLive) {
+        if (isLive == isLiveMode(player)) return;
+        if (isLive) {
+            var name = String.format("%s が配信中", player.getName());
+            var bar = BossBar.bossBar(Component.text(name), BossBar.MAX_PROGRESS, Color.RED, Overlay.PROGRESS);
+
+            liveBarMap.put(player, bar);
+            BossBarStore.getInstance().add(bar);
+        } else {                
+            var bar = liveBarMap.get(player);
+
+            liveBarMap.remove(player);
+            BossBarStore.getInstance().remove(bar);
+        }
+    }
+
+    public boolean isLiveMode(Player p) {
+        return liveBarMap.containsKey(p);
+    }
+
     private void checkAndMigrate() {
         if (!Config.exists("flags") && !Config.exists("newcomers")) return;
 
@@ -104,4 +130,5 @@ public class PlayerStore {
     private Config flags;
     private Config newcomers;
     private Config playerStores;
+    private Map<Player, BossBar> liveBarMap = new HashMap<>();
 }
