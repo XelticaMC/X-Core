@@ -54,10 +54,7 @@ public class MetaStore {
     private boolean isUpdated;
 
     private String[] changeLog = {
-        "/live コマンドを追加し、配信モードを切り替えられるように",
-        "X Phoneから「配信モード」を切り替えられるように",
-        "統合版でX Phoneから進捗・統計を見たりオフハンドにアイテム移動できるように",
-        "微妙なバグ修正",
+        "リログすると配信モードを二重に有効化できてしまう不具合を修正",
     };
     
     private static MetaStore instance;
