@@ -54,8 +54,8 @@ public class MetaStore {
     private boolean isUpdated;
 
     private String[] changeLog = {
-        "ペット・子供のモブを殴るとEPが減るように",
-        "額縁等の生き物ではないEntityの破壊でもEPが入る不具合を修正",
+        "特定のモブを殴るとEPが減るよというヒントを3つ追加",
+        "子供ゾンビなど、敵対モブの子供を殴った場合もEPが減ってしまう不具合を修正"
     };
     
     private static MetaStore instance;

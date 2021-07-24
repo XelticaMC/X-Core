@@ -11,6 +11,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -60,7 +61,7 @@ public class EbiPowerHandler implements Listener{
                 store().tryTake(killer, 10);
                 notification(killer, "ペットを殴るなんて！10EPを失った。");
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
-            } else if (victim instanceof Ageable man && !man.isAdult()) {
+            } else if (victim instanceof Ageable man && !(victim instanceof Monster) && !man.isAdult()) {
                 store().tryTake(killer, 10);
                 notification(killer, "子供を殴るなんて！10EPを失った。");
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
