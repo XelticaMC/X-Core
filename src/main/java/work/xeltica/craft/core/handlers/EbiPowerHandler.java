@@ -23,8 +23,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.kyori.adventure.text.Component;
+import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.EbiPowerStore;
+import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 
 public class EbiPowerHandler implements Listener{
@@ -57,14 +59,17 @@ public class EbiPowerHandler implements Listener{
                 store().tryTake(killer, 100);
                 notification(killer, "可愛い可愛いネコちゃんを殴るなんて！100EPを失った。");
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
+                HintStore.getInstance().achieve(killer, Hint.VIOLENCE_CAT);
             } else if (victim instanceof Tameable pet && pet.isTamed()) {
                 store().tryTake(killer, 10);
                 notification(killer, "ペットを殴るなんて！10EPを失った。");
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
+                HintStore.getInstance().achieve(killer, Hint.VIOLENCE_PET);
             } else if (victim instanceof Ageable man && !(victim instanceof Monster) && !man.isAdult()) {
                 store().tryTake(killer, 10);
                 notification(killer, "子供を殴るなんて！10EPを失った。");
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
+                HintStore.getInstance().achieve(killer, Hint.VIOLENCE_CHILD);
             } else {
                 var buff = getDropBonus(killer.getInventory().getItemInMainHand()) * 4;
                 var power = 3 + (buff > 0 ? random.nextInt(buff) : 0);
