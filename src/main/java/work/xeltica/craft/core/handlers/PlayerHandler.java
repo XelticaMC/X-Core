@@ -109,6 +109,10 @@ public class PlayerHandler implements Listener {
 
         HintStore.getInstance().achieve(p, Hint.WELCOME);
 
+        if (PlayerStore.getInstance().isCitizen(p)) {
+            HintStore.getInstance().achieve(p, Hint.BE_CITIZEN);
+        }
+
         if (!record.getBoolean(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER)) {
             BedrockDisclaimerUtil.showDisclaimerAsync(p);
         }
