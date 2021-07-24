@@ -103,39 +103,26 @@ public class ItemStore {
 
         stack.editMeta(m -> {
             if (m instanceof SkullMeta skullMeta) {
-                if (Bukkit.getPluginManager().isPluginEnabled("SkinsRestorer")) {
-                    try {
-                        resolvePlayerHeadWithSkinsRestorer(player, skullMeta);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        resolvePlayerHeadWithBukkit(player, skullMeta);
-                    }
-                } else {
-                    resolvePlayerHeadWithBukkit(player, skullMeta);
-                }
+                resolvePlayerHeadWithBukkit(player, skullMeta);
             }
         });
         return stack;
     }
 
-    private void resolvePlayerHeadWithSkinsRestorer(Player player, SkullMeta meta) {
-        var sapi = SkinsRestorerAPI.getApi();
+    // private void resolvePlayerHeadWithSkinsRestorer(Player player, SkullMeta meta) {
+    //     var sapi = SkinsRestorerAPI.getApi();
 
-        var skinName = sapi.getSkinName(player.getName());
-        if (skinName == null) {
-            resolvePlayerHeadWithBukkit(player, meta);
-            return;
-        }
-        var skin = sapi.getSkinData(skinName);
-        var logger = Bukkit.getLogger();
-        logger.info("Skin Name = " + skin.getName());
-        logger.info("Skin Value = " + skin.getValue());
-        logger.info("Skin Sigunature = " + skin.getSignature());
+    //     var skinName = sapi.getSkinName(player.getName());
+    //     if (skinName == null) {
+    //         resolvePlayerHeadWithBukkit(player, meta);
+    //         return;
+    //     }
+    //     var skin = sapi.getSkinData(skinName);
 
-        var profile = Bukkit.createProfile(skin.getName());
-        profile.setProperty(new ProfileProperty("textures", skin.getValue(), skin.getSignature()));
-        meta.setPlayerProfile(profile);
-    }
+    //     var profile = Bukkit.createProfile(skin.getName());
+    //     profile.setProperty(new ProfileProperty("textures", skin.getValue(), skin.getSignature()));
+    //     meta.setPlayerProfile(profile);
+    // }
 
     private void resolvePlayerHeadWithBukkit(Player player, SkullMeta meta) {
         meta.setPlayerProfile(player.getPlayerProfile());

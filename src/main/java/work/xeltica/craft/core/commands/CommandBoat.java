@@ -20,6 +20,7 @@ public class CommandBoat extends CommandPlayerOnlyBase {
             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1, 0.5f);
             return true;
         }
+        
         loc.getWorld().spawnEntity(loc, EntityType.BOAT, SpawnReason.CUSTOM);
         HintStore.getInstance().achieve(player, Hint.BOAT);
         return true;
