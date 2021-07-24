@@ -125,6 +125,9 @@ public class XCorePlugin extends JavaPlugin {
                 var current = meta.getCurrentVersion();
                 var text = String.format("§aCore Systemが更新されました。%s -> %s", prev, current);
                 a.sendMessage(Component.text(text));
+                for (var log : meta.getChangeLog()) {
+                    a.sendMessage(Component.text("・" + log));                    
+                }
             });
         }
 

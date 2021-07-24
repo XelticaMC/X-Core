@@ -5,8 +5,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Cat;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -39,25 +46,37 @@ public class EbiPowerHandler implements Listener{
 
     @EventHandler
     public void onCombat(EntityDamageByEntityEvent e) {
-        var victim = e.getEntity();
-        if (e.getDamager() instanceof Player killer) {
+        if (e.getDamager() instanceof Player killer && e.getEntity() instanceof LivingEntity victim) {
             if (playerIsInBlacklisted(killer)) return;
             // スポナーは対象外
             if (victim.fromMobSpawner()) return;
             // TODO: TT登録可能にしてその中のキルは対象外にする
 
-            var buff = getDropBonus(killer.getInventory().getItemInMainHand()) * 4;
-            
-            var power = 3 + (buff > 0 ? random.nextInt(buff) : 0);
-            var mes = "モブにダメージを与えた！" + power + "EPを獲得。";
+            if (victim instanceof Cat || victim instanceof Ocelot) {
+                store().tryTake(killer, 100);
+                notification(killer, "可愛い可愛いネコちゃんを殴るなんて！100EPを失った。");
+                killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
+            } else if (victim instanceof Tameable pet && pet.isTamed()) {
+                store().tryTake(killer, 10);
+                notification(killer, "ペットを殴るなんて！10EPを失った。");
+                killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
+            } else if (victim instanceof Ageable man && !man.isAdult()) {
+                store().tryTake(killer, 10);
+                notification(killer, "子供を殴るなんて！10EPを失った。");
+                killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
+            } else {
+                var buff = getDropBonus(killer.getInventory().getItemInMainHand()) * 4;
+                var power = 3 + (buff > 0 ? random.nextInt(buff) : 0);
+                var mes = "モブにダメージを与えた！" + power + "EPを獲得。";
 
-            if ("nightmare2".equals(killer.getWorld().getName())) {
-                power *= 2;
-                mes = "モブにダメージを与えた！" + power + "EPを獲得。(ナイトメアボーナス)";
-            }
-            if (power > 0) {
-                store().tryGive(killer, power);
-                notification(killer, mes);
+                if ("nightmare2".equals(killer.getWorld().getName())) {
+                    power *= 2;
+                    mes = "モブにダメージを与えた！" + power + "EPを獲得。(ナイトメアボーナス)";
+                }
+                if (power > 0) {
+                    store().tryGive(killer, power);
+                    notification(killer, mes);
+                }
             }
         }
     }

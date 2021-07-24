@@ -1,5 +1,7 @@
 package work.xeltica.craft.core.stores;
 
+import java.io.IOException;
+
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.utils.Config;
 
@@ -26,6 +28,10 @@ public class MetaStore {
         return isUpdated;
     }
 
+    public String[] getChangeLog() {
+        return changeLog;
+    }
+
     private void checkUpdate() {
         var conf = meta.getConf();
         var currentVersion = conf.getString("version", null);
@@ -35,11 +41,22 @@ public class MetaStore {
             conf.set("previousVersion", currentVersion);
             previousVersion = currentVersion;
             isUpdated = true;
+            try {
+                meta.save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     
     private final Config meta;
     private String previousVersion;
     private boolean isUpdated;
+
+    private String[] changeLog = {
+        "ペット・子供のモブを殴るとEPが減るように",
+        "額縁等の生き物ではないEntityの破壊でもEPが入る不具合を修正",
+    };
+    
     private static MetaStore instance;
 }
