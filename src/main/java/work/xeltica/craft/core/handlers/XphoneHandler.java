@@ -24,6 +24,7 @@ import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.stores.WorldStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 
 public class XphoneHandler implements Listener {
@@ -141,8 +142,10 @@ public class XphoneHandler implements Listener {
         items.add(appSidebar);
         items.add(appOmikuji);
         items.add(appCat);
-        items.add(appBoat);
-        items.add(appCart);
+        if (WorldStore.getInstance().canSummonVehicles(player.getWorld())) {
+            items.add(appBoat);
+            items.add(appCart);
+        }
         items.add(appStore);
 
         items.add(appHint);
