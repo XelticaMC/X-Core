@@ -54,7 +54,10 @@ public class MetaStore {
     private boolean isUpdated;
 
     private String[] changeLog = {
-        "プレイヤーへのテレポートが有償である旨を明示",
+        "/live コマンドを追加し、配信モードを切り替えられるように",
+        "X Phoneから「配信モード」を切り替えられるように",
+        "統合版でX Phoneから進捗・統計を見たりオフハンドにアイテム移動できるように",
+        "微妙なバグ修正",
     };
     
     private static MetaStore instance;
