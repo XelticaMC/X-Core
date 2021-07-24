@@ -81,18 +81,18 @@ public class PlayerStore {
             var name = String.format("%s が配信中", player.getName());
             var bar = BossBar.bossBar(Component.text(name), BossBar.MAX_PROGRESS, Color.RED, Overlay.PROGRESS);
 
-            liveBarMap.put(player, bar);
+            liveBarMap.put(player.getUniqueId(), bar);
             BossBarStore.getInstance().add(bar);
         } else {                
-            var bar = liveBarMap.get(player);
+            var bar = liveBarMap.get(player.getUniqueId());
 
-            liveBarMap.remove(player);
+            liveBarMap.remove(player.getUniqueId());
             BossBarStore.getInstance().remove(bar);
         }
     }
 
     public boolean isLiveMode(Player p) {
-        return liveBarMap.containsKey(p);
+        return liveBarMap.containsKey(p.getUniqueId());
     }
 
     private void checkAndMigrate() {
@@ -130,5 +130,5 @@ public class PlayerStore {
     private Config flags;
     private Config newcomers;
     private Config playerStores;
-    private Map<Player, BossBar> liveBarMap = new HashMap<>();
+    private Map<UUID, BossBar> liveBarMap = new HashMap<>();
 }
