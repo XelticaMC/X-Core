@@ -3,8 +3,10 @@ package work.xeltica.craft.core.stores;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -57,6 +59,14 @@ public class WorldStore {
 
     public boolean isLockedWorld(String n) {
         return lockedWorldNames.contains(n);
+    }
+    
+    public boolean canSummonVehicles(World w) {
+        return canSummonVehicles(w.getName());
+    }
+
+    public boolean canSummonVehicles(String worldName) {
+        return List.of(summonVehicleWhiteList).contains(worldName);
     }
 
     public void saveCurrentLocation(Player p) {
@@ -177,4 +187,16 @@ public class WorldStore {
     private final Map<String, String> worldDescMap = new HashMap<>();
     private final Set<String> lockedWorldNames = new HashSet<>();
     private final Set<String> creativeWorldNames = new HashSet<>();
+
+    private final String[] summonVehicleWhiteList = {
+        "world",
+        "world_nether",
+        "world_the_end",
+        "wildarea",
+        "wildarea2",
+        "wildarea2_nether",
+        "wildarea2_the_end",
+        "main",
+        "nightmare2",
+    };
 }
