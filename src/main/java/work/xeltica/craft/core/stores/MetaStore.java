@@ -54,12 +54,7 @@ public class MetaStore {
     private boolean isUpdated;
 
     private String[] changeLog = {
-        "ボート・トロッコの召喚可能なワールドを制限",
-        "乗り物召喚ができないワールドの場合、スマホからも非表示に",
-        "§mボート・トロッコ召喚を試験的に有償化(1つ5EP)§rやっぱりやめた",
-        "プレイヤーへのテレポートを試験的に有償化(1回100EP)",
-        "プレイヤーへのテレポートを5秒後に行うように",
-        "プレイヤーへのテレポート時に、相手に予告が送られるように",
+        "プレイヤーへのテレポートが有償である旨を明示",
     };
     
     private static MetaStore instance;
