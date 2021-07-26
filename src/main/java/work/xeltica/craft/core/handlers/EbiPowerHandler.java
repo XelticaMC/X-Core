@@ -1,12 +1,13 @@
 package work.xeltica.craft.core.handlers;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.Tag;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Cat;
@@ -18,9 +19,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
-import org.bukkit.event.player.PlayerHarvestBlockEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -47,6 +48,8 @@ public class EbiPowerHandler implements Listener{
         epBlackList.add("travel_wildarea");
         epBlackList.add("travel_megawild");
         epBlackList.add("travel_maikura_city");
+
+        crops.addAll(Tag.CROPS.getValues());
     }
 
     @EventHandler
@@ -73,7 +76,7 @@ public class EbiPowerHandler implements Listener{
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
                 HintStore.getInstance().achieve(killer, Hint.VIOLENCE_CHILD);
             } else {
-                var buff = getDropBonus(killer.getInventory().getItemInMainHand()) * 4;
+                var buff = getMobDropBonus(killer.getInventory().getItemInMainHand()) * 4;
                 var power = 3 + (buff > 0 ? random.nextInt(buff) : 0);
 
                 if ("nightmare2".equals(killer.getWorld().getName())) {
@@ -107,11 +110,12 @@ public class EbiPowerHandler implements Listener{
     }
 
     @EventHandler
-    public void on(PlayerHarvestBlockEvent e) {
+    public void on(BlockBreakEvent e) {
+        var l = Bukkit.getLogger();
         var p = e.getPlayer();
         if (playerIsInBlacklisted(p)) return;
-        if (e.getHarvestedBlock().getBlockData() instanceof org.bukkit.block.data.Ageable a && a.getAge() == a.getMaximumAge()) {
-            var power = e.getItemsHarvested().size() * HARVEST_POWER_MULTIPLIER;
+        if (e.getBlock().getBlockData() instanceof org.bukkit.block.data.Ageable a && a.getAge() == a.getMaximumAge()) {
+            var power = (1 + getBlockDropBonus(e.getPlayer().getInventory().getItemInMainHand())) * HARVEST_POWER_MULTIPLIER;
             store().tryGive(p, power);
         }
     }
@@ -130,12 +134,19 @@ public class EbiPowerHandler implements Listener{
         return EbiPowerStore.getInstance();
     }
 
-    private int getDropBonus(ItemStack stack) {
+    private int getMobDropBonus(ItemStack stack) {
         if (stack == null) return 0;
         return stack.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
     }
 
-    private List<String> epBlackList = new ArrayList<>();
+    private int getBlockDropBonus(ItemStack stack) {
+        if (stack == null) return 0;
+        return stack.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+    }
+
+    private HashSet<String> epBlackList = new HashSet<>();
+
+    private HashSet<Material> crops = new HashSet<>();
 
     private static final int ADVANCEMENT_POWER = 30;
     private static final int HARVEST_POWER_MULTIPLIER = 1;
