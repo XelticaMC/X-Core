@@ -3,7 +3,6 @@ package work.xeltica.craft.core.models;
 import java.io.IOException;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
 

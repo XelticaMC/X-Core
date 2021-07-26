@@ -1,10 +1,8 @@
 package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;

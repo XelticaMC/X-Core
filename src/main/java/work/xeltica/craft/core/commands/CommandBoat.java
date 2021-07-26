@@ -9,7 +9,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.WorldStore;
 

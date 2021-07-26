@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import com.destroystokyo.paper.profile.ProfileProperty;
 import com.google.common.collect.Streams;
 
 import org.bukkit.Bukkit;
@@ -19,7 +18,6 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.skinsrestorer.api.SkinsRestorerAPI;
 
 public class ItemStore {
     public static final String ITEM_NAME_XPHONE = "xphone";
