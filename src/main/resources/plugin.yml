@@ -73,7 +73,6 @@ commands:
     description: ライブ配信モードを切り替える
     usage: /live <on/off>
     permission: otanoshimi.command.live
-    
   __core_gui_event__:
     description: "?"
     usage: "?"
