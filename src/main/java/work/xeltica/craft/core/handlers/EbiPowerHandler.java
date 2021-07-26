@@ -75,15 +75,12 @@ public class EbiPowerHandler implements Listener{
             } else {
                 var buff = getDropBonus(killer.getInventory().getItemInMainHand()) * 4;
                 var power = 3 + (buff > 0 ? random.nextInt(buff) : 0);
-                var mes = "モブにダメージを与えた！" + power + "EPを獲得。";
 
                 if ("nightmare2".equals(killer.getWorld().getName())) {
                     power *= 2;
-                    mes = "モブにダメージを与えた！" + power + "EPを獲得。(ナイトメアボーナス)";
                 }
                 if (power > 0) {
                     store().tryGive(killer, power);
-                    notification(killer, mes);
                 }
             }
         }
@@ -94,8 +91,6 @@ public class EbiPowerHandler implements Listener{
         var p = e.getPlayer();
         if (playerIsInBlacklisted(p)) return;
         store().tryGive(p, ADVANCEMENT_POWER);
-        var mes = "進捗達成！" + ADVANCEMENT_POWER + "EPを獲得。";
-        notification(p, mes);
     }
 
     @EventHandler
@@ -109,6 +104,16 @@ public class EbiPowerHandler implements Listener{
             notification(e.getPlayer(), "ログボ達成！" + LOGIN_BONUS_POWER + "EPを獲得。");
         }
         record.set(PlayerDataKey.LAST_JOINED, now.getTime());
+    }
+
+    @EventHandler
+    public void on(PlayerHarvestBlockEvent e) {
+        var p = e.getPlayer();
+        if (playerIsInBlacklisted(p)) return;
+        if (e.getHarvestedBlock().getBlockData() instanceof org.bukkit.block.data.Ageable a && a.getAge() == a.getMaximumAge()) {
+            var power = e.getItemsHarvested().size() * HARVEST_POWER_MULTIPLIER;
+            store().tryGive(p, power);
+        }
     }
 
     private void notification(Player p, String mes) {
@@ -133,6 +138,7 @@ public class EbiPowerHandler implements Listener{
     private List<String> epBlackList = new ArrayList<>();
 
     private static final int ADVANCEMENT_POWER = 30;
+    private static final int HARVEST_POWER_MULTIPLIER = 1;
     private static final int LOGIN_BONUS_POWER = 50;
 
     private static final Random random = new Random();
