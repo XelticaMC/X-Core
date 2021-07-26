@@ -54,7 +54,9 @@ public class MetaStore {
     private boolean isUpdated;
 
     private String[] changeLog = {
-        "リログすると配信モードを二重に有効化できてしまう不具合を修正",
+        "作物回収でEPを入手できるように",
+        "ホグリンの子供を殴ったときにEPが減る問題を修正",
+        "他プレイヤーへのテレポートを、様々な問題のため§l廃止§r",
     };
     
     private static MetaStore instance;
