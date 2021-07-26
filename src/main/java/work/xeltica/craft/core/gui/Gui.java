@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -31,6 +32,8 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import work.xeltica.craft.core.stores.ItemStore;
 
 public class Gui implements Listener {
     public static Gui getInstance() {
@@ -69,6 +72,31 @@ public class Gui implements Listener {
         } else {
             openDialogJavaImpl(player, title, content, callback, okText);
         }
+    }
+
+    public void openPlayersMenu(Player player, Consumer<Player> onSelect) {
+        openPlayersMenu(player, "プレイヤーを選んでください", onSelect);
+    }
+
+    public void openPlayersMenu(Player player, String title, Consumer<Player> onSelect) {
+        openPlayersMenu(player, title, onSelect, null);
+    }
+
+    public void openPlayersMenu(Player player, String title, Consumer<Player> onSelect, Predicate<Player> filter) {
+        var stream = Bukkit.getOnlinePlayers().stream();
+        if (filter != null) {
+            stream = stream.filter(filter);
+        }
+        var list = stream.map(p -> {
+                var head = ItemStore.getInstance().getPlayerHead(p);
+                var name = p.displayName() != null ? PlainTextComponentSerializer.plainText().serialize(p.displayName()) : p.getName();
+                return new MenuItem(name, (a) -> {
+                    if (onSelect != null) onSelect.accept(p);
+                }, head, p);
+            })
+            .toList();
+
+        openMenu(player, title, list);
     }
 
     public void handleCommand(String id) {

@@ -218,31 +218,18 @@ public class XphoneHandler implements Listener {
     }
 
     private void openTeleportAppPlayer(Player player) {
-        Consumer<MenuItem> teleport = (item) -> {
+        ui().openPlayersMenu(player, "誰のところにテレポートしますか？", (target) -> {
             if (!EbiPowerStore.getInstance().tryTake(player, 100)) {
                 ui().error(player, "EPが足りないため、テレポートできませんでした。");
                 return;
             }
             player.sendMessage("5秒後にテレポートします…。");
-            var target = (Player)item.getCustomData();
             var loc = target.getLocation();
             target.sendMessage(String.format("%sが5秒後にあなたの現在位置にテレポートします。", player.getName()));
             Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
                 player.teleport(loc);
             }, 20 * 5);
-        };
-
-        var list = Bukkit.getOnlinePlayers()
-            .stream()
-            .filter(p -> p.getGameMode() != GameMode.SPECTATOR && !p.getUniqueId().equals(player.getUniqueId()))
-            .map(p -> {
-                var head = store().getPlayerHead(p);
-                var name = p.displayName() != null ? PlainTextComponentSerializer.plainText().serialize(p.displayName()) : p.getName();
-                return new MenuItem(name, teleport, head, p);
-            })
-            .toList();
-
-        ui().openMenu(player, "誰のところにテレポートしますか？", list);
+        });
     }
 
     private ItemStore store() { return ItemStore.getInstance(); }
