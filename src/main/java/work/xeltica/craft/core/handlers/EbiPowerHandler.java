@@ -10,6 +10,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Cat;
+import org.bukkit.entity.Hoglin;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Ocelot;
@@ -19,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
+import org.bukkit.event.player.PlayerHarvestBlockEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -65,7 +67,7 @@ public class EbiPowerHandler implements Listener{
                 notification(killer, "ペットを殴るなんて！10EPを失った。");
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
                 HintStore.getInstance().achieve(killer, Hint.VIOLENCE_PET);
-            } else if (victim instanceof Ageable man && !(victim instanceof Monster) && !man.isAdult()) {
+            } else if (victim instanceof Ageable man && !(victim instanceof Monster) && !(victim instanceof Hoglin) && !man.isAdult()) {
                 store().tryTake(killer, 10);
                 notification(killer, "子供を殴るなんて！10EPを失った。");
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
