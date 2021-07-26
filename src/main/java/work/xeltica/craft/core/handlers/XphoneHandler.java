@@ -214,10 +214,6 @@ public class XphoneHandler implements Listener {
             p.performCommand("respawn bed");
         }, Material.RED_BED));
 
-        list.add(new MenuItem("他プレイヤー(有償 100EP/回)", i -> {
-            openTeleportAppPlayer(p);
-        }, Material.PLAYER_HEAD));
-
         ui().openMenu(p, "テレポート", list);
     }
 
