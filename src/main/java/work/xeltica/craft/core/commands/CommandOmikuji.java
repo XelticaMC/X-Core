@@ -10,7 +10,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.plugins.VaultPlugin;
+import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 
 public class CommandOmikuji extends CommandPlayerOnlyBase {
@@ -62,6 +64,7 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BAD_OMEN, 20 * 60 * 10, 1));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 10, 2));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, 60 * 20 * 20, 1));
+                        HintStore.getInstance().achieve(player, Hint.OMIKUJI_DAIKYOU);
                         break;
                     case Kyou:
                         player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1, 0.5f);
@@ -71,6 +74,7 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
                     case Tokudaikichi:
                         player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1, 1.4f);
                         player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 60 * 20 * 20, 1));
+                        HintStore.getInstance().achieve(player, Hint.OMIKUJI_TOKUDAIKICHI);
                         break;
                     default:
                         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1.6f);
