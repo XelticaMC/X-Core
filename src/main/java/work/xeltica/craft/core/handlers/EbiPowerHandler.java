@@ -111,7 +111,6 @@ public class EbiPowerHandler implements Listener{
 
     @EventHandler
     public void on(BlockBreakEvent e) {
-        var l = Bukkit.getLogger();
         var p = e.getPlayer();
         if (playerIsInBlacklisted(p)) return;
         if (e.getBlock().getBlockData() instanceof org.bukkit.block.data.Ageable a && a.getAge() == a.getMaximumAge()) {

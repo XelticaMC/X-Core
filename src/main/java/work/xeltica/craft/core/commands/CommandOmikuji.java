@@ -47,7 +47,7 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
                 player.sendMessage(
                     ChatColor.GOLD + "あなたの運勢は" +
                     ChatColor.RESET + "「" +
-                    ChatColor.GREEN + s.getScoreName(score) +
+                    ChatColor.GREEN + score.getDisplayName() +
                     ChatColor.RESET + "」" +
                     ChatColor.AQUA + "です！"
                 );

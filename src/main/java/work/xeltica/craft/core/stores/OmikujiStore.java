@@ -12,14 +12,6 @@ import work.xeltica.craft.core.utils.Config;
 public class OmikujiStore {
     public OmikujiStore() {
         OmikujiStore.instance = this;
-        scoreNameMap.put(OmikujiScore.Tokudaikichi, "特大吉");
-        scoreNameMap.put(OmikujiScore.Daikichi, "大吉");
-        scoreNameMap.put(OmikujiScore.Kichi, "吉");
-        scoreNameMap.put(OmikujiScore.Chukichi, "中吉");
-        scoreNameMap.put(OmikujiScore.Shokichi, "小吉");
-        scoreNameMap.put(OmikujiScore.Kyou, "凶");
-        scoreNameMap.put(OmikujiScore.Daikyou, "大凶");
-        scoreNameMap.put(OmikujiScore.None, "無し");
         this.cm = new Config("omikujistore");
     }
 
@@ -27,8 +19,9 @@ public class OmikujiStore {
         return OmikujiStore.instance;
     }
 
+    @Deprecated
     public String getScoreName(OmikujiScore score) {
-        return scoreNameMap.get(score);
+        return score.getDisplayName();
     }
 
     public String getScoreName(Player player) {
@@ -75,8 +68,6 @@ public class OmikujiStore {
         if (dice < 80000) return OmikujiScore.Shokichi;
         return OmikujiScore.Kyou;
     }
-
-    private final HashMap<OmikujiScore, String> scoreNameMap = new HashMap<>();
 
     private Config cm;
     private static OmikujiStore instance;
