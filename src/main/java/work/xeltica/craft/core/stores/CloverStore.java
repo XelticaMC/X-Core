@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 
 import org.bukkit.Bukkit;
 
+import lombok.Getter;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.utils.Config;
 
@@ -13,10 +14,6 @@ public class CloverStore {
     public CloverStore() {
         CloverStore.instance = this;
         clovers = new Config("clovers");
-    }
-
-    public static CloverStore getInstance() {
-        return instance;
     }
 
     public void saveAllCloversAccount() {
@@ -41,6 +38,7 @@ public class CloverStore {
         return VaultPlugin.getInstance();
     }
 
+    @Getter
     private static CloverStore instance;
     private Config clovers;
 }

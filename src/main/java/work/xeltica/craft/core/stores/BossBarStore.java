@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import lombok.Getter;
 import net.kyori.adventure.bossbar.BossBar;
 
 /**
@@ -13,10 +14,6 @@ import net.kyori.adventure.bossbar.BossBar;
 public class BossBarStore {
     public BossBarStore() {
         BossBarStore.instance = this;
-    }
-
-    public static BossBarStore getInstance() {
-        return BossBarStore.instance;
     }
 
     public void add(BossBar bar) {
@@ -41,5 +38,6 @@ public class BossBarStore {
 
     private ArrayList<BossBar> bossBars = new ArrayList<>();
     
+    @Getter
     private static BossBarStore instance;
 }

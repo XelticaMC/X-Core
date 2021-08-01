@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
 
+import lombok.Getter;
 import work.xeltica.craft.core.utils.Config;
 
 public class PlayerRecord {
@@ -13,10 +14,6 @@ public class PlayerRecord {
         this.conf = conf;
         this.section = section;
         this.playerId = playerId;
-    }
-
-    public UUID getPlayerId() {
-        return playerId;
     }
 
     public void set(PlayerDataKey key, Object value) {
@@ -134,5 +131,7 @@ public class PlayerRecord {
 
     private final Config conf;
     private final ConfigurationSection section;
+
+    @Getter
     private final UUID playerId;
 }

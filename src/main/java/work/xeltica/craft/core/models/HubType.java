@@ -3,6 +3,8 @@ package work.xeltica.craft.core.models;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import lombok.Getter;
+
 public enum HubType {
     // メインロビー
     Main("hub2"),
@@ -21,10 +23,6 @@ public enum HubType {
         this.location = vec;
     }
 
-    public String getWorldName() {
-        return worldName;
-    }
-
     public int getX() {
         return location.x();
     }
@@ -37,14 +35,12 @@ public enum HubType {
         return location.z();
     }
 
-    public Vector3 getLocation() {
-        return location;
-    }
-
     public Location getSpigotLocation() {
         return new Location(Bukkit.getWorld(getWorldName()), getX() + .5, getY() + .5, getZ() + .5);
     }
 
+    @Getter
     String worldName;
+    @Getter
     Vector3 location;
 }

@@ -1,5 +1,7 @@
 package work.xeltica.craft.core.models;
 
+import lombok.Getter;
+
 public enum OmikujiScore {
     Tokudaikichi("特大吉"),
     Daikichi("大吉"),
@@ -15,9 +17,6 @@ public enum OmikujiScore {
         this.displayName = displayName;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
+    @Getter
     private String displayName;
 }

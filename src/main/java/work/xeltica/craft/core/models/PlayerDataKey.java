@@ -1,5 +1,7 @@
 package work.xeltica.craft.core.models;
 
+import lombok.Getter;
+
 public enum PlayerDataKey {
     CAT_MODE("cat"),
     NEWCOMER_TIME("newcomer_time"),
@@ -14,9 +16,6 @@ public enum PlayerDataKey {
         this.physicalKey = physicalKey;
     }
 
-    public String getPhysicalKey() {
-        return this.physicalKey;
-    }
-
+    @Getter
     private String physicalKey;
 }

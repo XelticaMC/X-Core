@@ -6,6 +6,8 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
+import lombok.Getter;
+
 public class SignData implements Cloneable, ConfigurationSerializable {
     public SignData(Location location, String command) {
         this(location, command, null);
@@ -21,11 +23,6 @@ public class SignData implements Cloneable, ConfigurationSerializable {
         this.arg1 = arg1;
         this.arg2 = arg2;
     }
-
-    public Location getLocation() { return location; }
-    public String getCommand() { return command; }
-    public String getArg1() { return arg1; }
-    public String getArg2() { return arg2; }
 
     public Map<String, Object> serialize() {
         var result = new LinkedHashMap<String, Object>();
@@ -54,8 +51,12 @@ public class SignData implements Cloneable, ConfigurationSerializable {
         return new SignData(location, command, arg1, arg2);
     }
 
+    @Getter
     private Location location;
+    @Getter
     private String command;
+    @Getter
     private String arg1;
+    @Getter
     private String arg2;
 }

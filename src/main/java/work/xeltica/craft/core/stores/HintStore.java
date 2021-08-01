@@ -9,6 +9,7 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -21,10 +22,6 @@ public class HintStore {
     public HintStore() {
         HintStore.instance = this;
         hints = new Config("hints");
-    }
-
-    public static HintStore getInstance() {
-        return HintStore.instance;
     }
 
     public boolean hasAchieved(Player p, Hint hint) {
@@ -68,6 +65,7 @@ public class HintStore {
         hints.save();
     }
     
+    @Getter
     private static HintStore instance;
     private Config hints;
 }

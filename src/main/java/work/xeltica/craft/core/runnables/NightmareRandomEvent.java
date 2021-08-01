@@ -59,15 +59,14 @@ public class NightmareRandomEvent extends BukkitRunnable {
             final var plugin = XCorePlugin.getInstance();
 
             switch (dice) {
-                case MODE_BLAZE: {
+                case MODE_BLAZE -> {
                     for (var i = 0; i < amount; i++) {
                         var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
                         loc.setY(l.getWorld().getHighestBlockYAt(loc.getBlockX(), loc.getBlockZ()) + 1);
                         nightmare.spawnEntity(loc, EntityType.BLAZE);
                     }
-                    break;
                 }
-                case MODE_PIGLIN: {
+                case MODE_PIGLIN -> {
                     for (var i = 0; i < amount; i++) {
                         final var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
                         loc.setY(l.getWorld().getHighestBlockYAt(loc.getBlockX(), loc.getBlockZ()) + 1);
@@ -91,17 +90,15 @@ public class NightmareRandomEvent extends BukkitRunnable {
                             piglin.setBaby();
                         }
                     }
-                    break;
                 }
-                case MODE_ILLAGER: {
+                case MODE_ILLAGER -> {
                     for (var i = 0; i < amount; i++) {
                         var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
                         loc.setY(l.getWorld().getHighestBlockYAt(loc.getBlockX(), loc.getBlockZ()) + 1);
                         nightmare.spawnEntity(loc, illigers[random.nextInt(illigers.length)]);
                     }
-                    break;
                 }
-                case MODE_BEES: {
+                case MODE_BEES -> {
                     pivot.add(0, 5, 0);
 
                     for (var i = 0; i < amount; i++) {
@@ -112,9 +109,8 @@ public class NightmareRandomEvent extends BukkitRunnable {
                         bee.setAnger(20 * 60 * 30);
                         bee.setTarget(player);
                     }
-                    break;
                 }
-                case MODE_WOLVES: {
+                case MODE_WOLVES -> {
                     for (var i = 0; i < amount; i++) {
                         var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
                         loc.setY(l.getWorld().getHighestBlockYAt(loc.getBlockX(), loc.getBlockZ()) + 1);
@@ -123,9 +119,8 @@ public class NightmareRandomEvent extends BukkitRunnable {
                         wolf.setAngry(true);
                         wolf.setTarget(player);
                     }
-                    break;
                 }
-                case MODE_LIGHTNING: {
+                case MODE_LIGHTNING -> {
                     Runnable strike = () -> {
                         l.getWorld().strikeLightning(l);
                     };
@@ -135,15 +130,13 @@ public class NightmareRandomEvent extends BukkitRunnable {
                         scheduler.runTaskLater(plugin, strike, 10);
                         scheduler.runTaskLater(plugin, strike, 20);
                     }, 20 * 60 * 5);
-                    break;
                 }
-                case MODE_CREEPER: {
+                case MODE_CREEPER -> {
                     var creeper = (Creeper)l.getWorld().spawnEntity(l, EntityType.CREEPER);
                     creeper.setPowered(true);
                     scheduler.runTaskLater(plugin, () -> {
                         creeper.ignite();
                     }, 20 * 60 * 5);
-                    break;
                 }
             }
         }

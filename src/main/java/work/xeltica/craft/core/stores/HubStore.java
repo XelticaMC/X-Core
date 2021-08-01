@@ -6,18 +6,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import lombok.Getter;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.SignData;
@@ -26,48 +25,48 @@ import work.xeltica.craft.core.utils.LocationComparator;
 
 public class HubStore {
     public HubStore() {
-        ConfigurationSerialization.registerClass(SignData.class, "SignData");
         HubStore.instance = this;
-        logger = Bukkit.getLogger();
+
+        ConfigurationSerialization.registerClass(SignData.class, "SignData");
         signs = new Config("signs", (s) -> {
             signData = (List<SignData>) s.getConf().getList("signs", new ArrayList<SignData>());
         });
         loadSignsFile();
-        loadOrInitializeHub();
-    }
-
-    public static HubStore getInstance() {
-        return HubStore.instance;
     }
 
     public void teleport(Player player, HubType type) {
         teleport(player, type, false);
     }
 
-    public void teleport(Player player, HubType type, boolean bulk) {
-        var server = Bukkit.getServer();
-        var world = Bukkit.getWorld(type.getWorldName());
+    public void teleport(Player player, HubType hub, boolean bulk) {
+        var playerWorld = player.getWorld();
+        var world = Bukkit.getWorld(hub.getWorldName());
+
         if (world == null) {
             player.sendMessage("未生成");
             return;
         }
+
         var isWarping = isWarpingMap.get(player.getUniqueId());
         if (isWarping != null && isWarping) {
             player.sendMessage("移動中です！");
             return;
         }
-        if (player.getWorld().getUID().equals(world.getUID())) {
+
+        if (playerWorld.getUID().equals(world.getUID())) {
             player.sendMessage("既にロビーです！");
             return;
         }
-        var currentWorldName = player.getWorld().getName();
+
+        var currentWorldName = playerWorld.getName();
         var requireCooldown = bulk || Arrays.stream(noCooldownWorldNames)
                 .anyMatch(name -> name.equalsIgnoreCase(currentWorldName));
-        server.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-            if (type.getLocation() != null) {
-                player.teleport(type.getSpigotLocation(), TeleportCause.PLUGIN);
+
+        Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
+            if (hub.getLocation() != null) {
+                player.teleport(hub.getSpigotLocation(), TeleportCause.PLUGIN);
             } else {
-                WorldStore.getInstance().teleport(player, type.getWorldName());
+                WorldStore.getInstance().teleport(player, hub.getWorldName());
             }
             isWarpingMap.put(player.getUniqueId(), false);
         }, requireCooldown ? 1 : 20 * 5);
@@ -77,41 +76,30 @@ public class HubStore {
         }
     }
 
-    public UUID getHubId() {
-        return worldUuid;
-    }
-
-    public World getHub() {
-        return Bukkit.getWorld(worldUuid);
-    }
-
-    public boolean getForceAll() {
-        return forceAll;
-    }
-
-    public void setForceAll(boolean value) {
-        forceAll = value;
-    }
-
-    public void returnToWorld(Player player) {
+    public void returnToClassicWorld(Player player) {
         player.setGameMode(GameMode.SURVIVAL);
 
         WorldStore.getInstance().teleportToSavedLocation(player, "world");
     }
 
-    public boolean processSigns(Location loc, Player p) {
+    public boolean processSigns(Location loc, Player player) {
         var signData = getSignDataOf(loc);
         if (signData == null) return false;
+        
+        var wstore = WorldStore.getInstance();
 
-        var cmd = signData.getCommand();
+        var cmd = signData.getCommand().toLowerCase();
+        switch (cmd) {
+            case "teleport" -> wstore.teleport(player, signData.getArg1());
+            case "xteleport" -> wstore.teleportToSavedLocation(player, signData.getArg1());
+            case "return" -> returnToClassicWorld(player);
+        }
         if (cmd.equalsIgnoreCase("teleport")) {
-            var worldName = signData.getArg1();
-            WorldStore.getInstance().teleport(p, worldName);
+            
         } else if (cmd.equalsIgnoreCase("xteleport")) {
-            var worldName = signData.getArg1();
-            WorldStore.getInstance().teleportToSavedLocation(p, worldName);
+            
         } else if (cmd.equalsIgnoreCase("return")) {
-            returnToWorld(p);
+            returnToClassicWorld(player);
         }
         return true;
     }
@@ -152,15 +140,6 @@ public class HubStore {
         signs.save();
     }
 
-    private void loadOrInitializeHub() {
-        var world = Bukkit.getServer().getWorld("hub");
-        if (world == null) {
-            logger.severe("No hub found. Create it.");
-            return;
-        }
-        worldUuid = world.getUID();
-    }
-
     private SignData getSignDataOf(Location loc) {
         return signData.stream().filter(s -> LocationComparator.equals(loc, s.getLocation())).findFirst().orElse(null);
     }
@@ -177,12 +156,10 @@ public class HubStore {
         "sandbox2",
     };
 
+    @Getter
     private static HubStore instance;
 
     private Config signs;
-    private Logger logger;
     private HashMap<UUID, Boolean> isWarpingMap = new HashMap<>();
-    private UUID worldUuid;
-    private boolean forceAll;
     private List<SignData> signData;
 }
