@@ -15,6 +15,10 @@ import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 
+/**
+ * おみくじを引くコマンド
+ * @author Xeltica
+ */
 public class CommandOmikuji extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {

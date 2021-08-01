@@ -14,6 +14,7 @@ import work.xeltica.craft.core.utils.Config;
 
 /**
  * エビパワーショップの販売品管理などを行います。
+ * @author Xeltica
  */
 public class EbiPowerStore {
     public EbiPowerStore() {

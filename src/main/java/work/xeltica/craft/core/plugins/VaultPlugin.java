@@ -9,6 +9,10 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 import work.xeltica.craft.core.XCorePlugin;
 
+/**
+ * Vault プラグインと連携するためのX-Core プラグインです。
+ * @author Xeltica
+ */
 public class VaultPlugin extends PluginBase {
     public static VaultPlugin getInstance() {
         return instance == null ? (instance = new VaultPlugin()) : instance;

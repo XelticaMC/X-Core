@@ -23,6 +23,10 @@ import work.xeltica.craft.core.models.SignData;
 import work.xeltica.craft.core.utils.Config;
 import work.xeltica.craft.core.utils.LocationComparator;
 
+/**
+ * クラシックロビーのコマンド看板の保存・読み出しを行います。
+ * @author Xeltica
+ */
 public class HubStore {
     public HubStore() {
         HubStore.instance = this;

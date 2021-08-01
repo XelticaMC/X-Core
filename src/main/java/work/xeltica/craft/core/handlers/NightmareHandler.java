@@ -13,6 +13,10 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+/**
+ * ナイトメアワールドに関するハンドラーをまとめています。
+ * @author Xeltica
+ */
 public class NightmareHandler implements Listener {
     public NightmareHandler() {
         superRareItems.add(Material.CREEPER_HEAD);

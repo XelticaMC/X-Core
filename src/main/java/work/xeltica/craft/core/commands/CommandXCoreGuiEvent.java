@@ -5,6 +5,12 @@ import org.bukkit.entity.Player;
 
 import work.xeltica.craft.core.gui.Gui;
 
+/**
+ * Java版で看板を使用したダイアログのボタンを
+ * クリックしたときに内部的に送られるコマンド
+ * プレイヤーが使用することは想定していない
+ * @author Xeltica
+ */
 public class CommandXCoreGuiEvent extends CommandPlayerOnlyBase {
 
     @Override

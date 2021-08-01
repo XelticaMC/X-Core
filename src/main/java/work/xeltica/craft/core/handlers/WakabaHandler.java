@@ -19,6 +19,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import work.xeltica.craft.core.stores.PlayerStore;
 
+/**
+ * わかばロール向けの機能制限に関するハンドラーをまとめています。
+ * @author Xeltica
+ */
 public class WakabaHandler implements Listener {
     public WakabaHandler() {
         deniedBlocks.add(Material.DISPENSER);

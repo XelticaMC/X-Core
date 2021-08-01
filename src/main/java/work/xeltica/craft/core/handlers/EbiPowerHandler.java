@@ -3,7 +3,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -32,8 +31,14 @@ import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 
+/**
+ * エビパワー関連のイベントハンドラをまとめています。
+ * @author Xeltica
+ */
 public class EbiPowerHandler implements Listener{
     public EbiPowerHandler() {
+        // エビパワーが貯まらないワールドのリストを構築
+        // TODO: 設定ファイルに移す
         epBlackList.add("hub");
         epBlackList.add("hub2");
         epBlackList.add("sandbox");

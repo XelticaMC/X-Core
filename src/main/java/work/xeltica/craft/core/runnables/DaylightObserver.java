@@ -6,6 +6,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import work.xeltica.craft.core.events.NewMorningEvent;
 
+/**
+ * 朝になったタイミングで NewMorningEvent イベントを発行するための
+ * バックグラウンドタスクです。
+ * @author Xeltica
+ */
 public class DaylightObserver extends BukkitRunnable {
     public DaylightObserver(Plugin plugin) {
         this.plugin = plugin;

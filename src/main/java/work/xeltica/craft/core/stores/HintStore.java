@@ -18,6 +18,10 @@ import net.kyori.adventure.text.format.TextColor;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.utils.Config;
 
+/**
+ * プレイヤーのヒントを達成する処理や、ヒントを達成しているかどうかの取得などを行います。
+ * @author Xeltica
+ */
 public class HintStore {
     public HintStore() {
         HintStore.instance = this;

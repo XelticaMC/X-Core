@@ -8,6 +8,10 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import lombok.Getter;
 
+/**
+ * クラシックロビーのコマンド看板のデータを表すモデルです。
+ * @author Xeltica
+ */
 public class SignData implements Cloneable, ConfigurationSerializable {
     public SignData(Location location, String command) {
         this(location, command, null);

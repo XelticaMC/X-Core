@@ -8,6 +8,10 @@ import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.gui.Gui;
 
+/**
+ * デバッグ用コマンド
+ * @author Xeltica
+ */
 public class CommandDebug extends CommandBase {
 
     @Override

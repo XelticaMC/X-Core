@@ -9,6 +9,10 @@ import org.bukkit.entity.Player;
 import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.utils.Config;
 
+/**
+ * プレイヤーのおみくじ記録を保存・読み出しします。
+ * @author Xeltica
+ */
 public class OmikujiStore {
     public OmikujiStore() {
         OmikujiStore.instance = this;

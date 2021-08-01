@@ -5,6 +5,10 @@ import java.io.IOException;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.utils.Config;
 
+/**
+ * プラグインのメタ情報を管理します。
+ * @author Xeltica
+ */
 public class MetaStore {
     public MetaStore() {
         MetaStore.instance = this;
@@ -53,6 +57,8 @@ public class MetaStore {
     private String previousVersion;
     private boolean isUpdated;
 
+    // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
+    // やり方を調べる必要がある
     private String[] changeLog = {
         "作物回収でEPを入手できない不具合を修正",
     };

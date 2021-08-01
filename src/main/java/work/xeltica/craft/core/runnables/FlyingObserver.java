@@ -8,6 +8,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * 正規の手段で飛行していることを明確にするために、飛行状態のプレイヤーの足に
+ * ジェットのようなパーティクルを出すためのバックグラウンドタスクです。
+ * かなり動作が重たいために現在無効化しています。
+ * TODO: 軽量化して再び有効化する
+ * @author Xeltica
+ */
 public class FlyingObserver extends BukkitRunnable {
     @Override
     public void run() {

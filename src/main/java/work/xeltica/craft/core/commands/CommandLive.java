@@ -6,6 +6,10 @@ import org.bukkit.entity.Player;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.stores.PlayerStore;
 
+/**
+ * 配信モードを切り替えるコマンド
+ * @author Xeltica
+ */
 public class CommandLive extends CommandPlayerOnlyBase {
 
     @Override

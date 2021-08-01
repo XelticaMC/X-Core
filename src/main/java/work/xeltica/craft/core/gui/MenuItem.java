@@ -5,6 +5,10 @@ import java.util.function.Consumer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * メニューのアイテム。
+ * @author Xeltica
+ */
 public class MenuItem {
     public MenuItem(String name) {
         this(name, null);

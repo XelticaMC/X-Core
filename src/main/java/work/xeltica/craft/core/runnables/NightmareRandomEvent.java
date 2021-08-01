@@ -18,6 +18,10 @@ import org.bukkit.util.Vector;
 
 import work.xeltica.craft.core.XCorePlugin;
 
+/**
+ * ナイトメアワールドを制御するバックグラウンドタスクです。
+ * @author Xeltica
+ */
 public class NightmareRandomEvent extends BukkitRunnable {
     public NightmareRandomEvent(Plugin plugin) {
         this.plugin = plugin;

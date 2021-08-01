@@ -27,6 +27,10 @@ import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.WorldStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 
+/**
+ * X Phoneに関する機能をまとめています。
+ * @author Xeltica
+ */
 public class XphoneHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onUse(PlayerInteractEvent e) {

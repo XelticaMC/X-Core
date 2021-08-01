@@ -8,6 +8,10 @@ import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.stores.ItemStore;
 
+/**
+ * X Phoneを受け取るコマンド
+ * @author Xeltica
+ */
 public class CommandXPhone extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {

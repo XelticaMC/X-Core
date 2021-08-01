@@ -2,6 +2,10 @@ package work.xeltica.craft.core.utils;
 
 import org.bukkit.Location;
 
+/**
+ * 2つのLocationが一致しているかどうかを計算します。
+ * @author Xeltica
+ */
 public class LocationComparator {
     public static boolean equals(Location l1, Location l2) {
         if (!l1.getWorld().equals(l2.getWorld())) return false;

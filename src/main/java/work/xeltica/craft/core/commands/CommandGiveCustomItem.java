@@ -10,6 +10,10 @@ import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.stores.ItemStore;
 
+/**
+ * カスタムアイテムをgiveするコマンド
+ * @author Xeltica
+ */
 public class CommandGiveCustomItem extends CommandPlayerOnlyBase {
 
     @Override

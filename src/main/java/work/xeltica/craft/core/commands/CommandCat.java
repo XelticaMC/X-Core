@@ -8,6 +8,10 @@ import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 
+/**
+ * 猫モードを切り替えるコマンド
+ * @author Xeltica
+ */
 public class CommandCat extends CommandPlayerOnlyBase {
 
     @Override

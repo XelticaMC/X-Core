@@ -8,6 +8,10 @@ import org.bukkit.entity.Player;
 import work.xeltica.craft.core.travels.TicketType;
 import work.xeltica.craft.core.utils.TravelTicketUtil;
 
+/**
+ * 旅行券をgiveするコマンド
+ * @author Xeltica
+ */
 public class CommandGiveTravelTicket extends CommandPlayerOnlyBase {
 
     @Override

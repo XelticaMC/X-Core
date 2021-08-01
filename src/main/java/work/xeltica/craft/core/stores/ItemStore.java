@@ -19,6 +19,11 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
+/**
+ * カスタムアイテムを管理します。
+ * TODO: 近いうちにカスタムアイテムの管理方法を大きく変更する予定です…
+ * @author Xeltica
+ */
 public class ItemStore {
     public static final String ITEM_NAME_XPHONE = "xphone";
 

@@ -7,6 +7,10 @@ import org.bukkit.entity.Player;
 
 import work.xeltica.craft.core.stores.WorldStore;
 
+/**
+ * 指定したワールドの最後にいた場所に転送するコマンド
+ * @author Xeltica
+ */
 public class CommandXtp extends CommandBase {
 
     @Override

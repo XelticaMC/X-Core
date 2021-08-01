@@ -14,6 +14,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.stores.WorldStore;
 
+/**
+ * 初期スポーンに転送するコマンド
+ * @author Xeltica
+ */
 public class CommandRespawn extends CommandPlayerOnlyBase {
 
     @Override

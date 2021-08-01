@@ -29,6 +29,11 @@ import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.WorldStore;
 
+/**
+ * ワールド制御に関するハンドラーをまとめています。
+ * TODO: 機能別に再編
+ * @author Xeltica
+ */
 public class WorldHandler implements Listener {
     public WorldHandler() {
     }

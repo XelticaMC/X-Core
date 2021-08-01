@@ -12,6 +12,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 
 import net.kyori.adventure.text.Component;
+
+/**
+ * 看板を編集するコマンド
+ * @author Xeltica
+ */
 public class CommandSignEdit extends CommandPlayerOnlyBase {
 
     @Override

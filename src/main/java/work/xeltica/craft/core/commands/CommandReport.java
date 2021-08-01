@@ -21,6 +21,10 @@ import net.kyori.adventure.title.Title;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 
+/**
+ * 処罰コマンド
+ * @author Xeltica
+ */
 public class CommandReport extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player reporter, Command command, String label, String[] args) {

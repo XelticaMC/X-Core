@@ -1,5 +1,9 @@
 package work.xeltica.craft.core.travels;
 
+/**
+ * 旅行先を定義します。
+ * @author Xeltica
+ */
 public enum TicketType {
     WILDAREA("ワイルドエリア"),
     MEGAWILD("メガワイルド"),

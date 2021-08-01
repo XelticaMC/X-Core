@@ -9,6 +9,10 @@ import net.luckperms.api.query.QueryOptions;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
 
+/**
+ * 市民システムの情報表示コマンド
+ * @author Xeltica
+ */
 public class CommandPromo extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {

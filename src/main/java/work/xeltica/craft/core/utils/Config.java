@@ -9,8 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import work.xeltica.craft.core.XCorePlugin;
 
 /**
- * Spigot のコンフィグ機能のラッパー
- * 
+ * Spigot の設定ファイル機能を扱いやすいように、面倒な部分をラッピングしています。
  * @author Xeltica
  */
 public class Config {

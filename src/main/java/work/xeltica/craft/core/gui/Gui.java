@@ -35,6 +35,11 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import work.xeltica.craft.core.stores.ItemStore;
 
+/**
+ * UI システムのメインクラス。
+ * メニューやダイアログといったプレイヤーにUIを表示し、入力を受け取るAPIを持ちます。
+ * @author Xeltica
+ */
 public class Gui implements Listener {
     public static Gui getInstance() {
         return instance == null ? (instance = new Gui()) : instance;

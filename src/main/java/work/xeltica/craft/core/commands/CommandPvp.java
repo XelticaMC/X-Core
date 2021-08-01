@@ -4,6 +4,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+/**
+ * PvPの有効・無効を切り替えるコマンド
+ * @author Xeltica
+ */
 public class CommandPvp extends CommandPlayerOnlyBase {
 
     @Override

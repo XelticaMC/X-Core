@@ -2,6 +2,11 @@ package work.xeltica.craft.core.models;
 
 import lombok.Getter;
 
+/**
+ * プレイヤーごとに保存するデータのキーを定義しています。
+ * PlayerStore で使用します。
+ * @author Xeltica
+ */
 public enum PlayerDataKey {
     CAT_MODE("cat"),
     NEWCOMER_TIME("newcomer_time"),

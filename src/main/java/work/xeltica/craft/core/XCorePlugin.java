@@ -61,6 +61,10 @@ import work.xeltica.craft.core.stores.CloverStore;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 
+/**
+ * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
+ * @author Xeltica
+ */
 public class XCorePlugin extends JavaPlugin {
     public static XCorePlugin getInstance() {
         return instance;

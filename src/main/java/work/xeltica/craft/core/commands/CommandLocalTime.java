@@ -6,6 +6,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+/**
+ * 現在いるワールドの時間を操作するコマンド
+ * @author Xeltica
+ */
 public class CommandLocalTime extends CommandPlayerOnlyBase {
     public CommandLocalTime() {
         builtinTimeMap.put("day", 1000);

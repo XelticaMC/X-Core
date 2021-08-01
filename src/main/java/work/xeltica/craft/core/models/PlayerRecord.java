@@ -9,6 +9,10 @@ import org.bukkit.util.Vector;
 import lombok.Getter;
 import work.xeltica.craft.core.utils.Config;
 
+/**
+ * プレイヤーごとのデータを読み書きするインターフェイスです。
+ * @author Xeltica
+ */
 public class PlayerRecord {
     public PlayerRecord(Config conf, ConfigurationSection section, UUID playerId) {
         this.conf = conf;

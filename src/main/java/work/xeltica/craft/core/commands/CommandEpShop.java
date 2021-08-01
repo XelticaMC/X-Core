@@ -18,6 +18,10 @@ import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.models.EbiPowerItem;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 
+/**
+ * エビパワーストアを開くコマンド
+ * @author Xeltica
+ */
 public class CommandEpShop extends CommandPlayerOnlyBase {
 
     @Override

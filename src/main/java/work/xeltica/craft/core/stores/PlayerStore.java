@@ -20,6 +20,10 @@ import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.PlayerRecord;
 import work.xeltica.craft.core.utils.Config;
 
+/**
+ * プレイヤー固有データの管理を行い、読み書きを行うPlayer Store APIを提供します。
+ * @author Xeltica
+ */
 public class PlayerStore {
     public PlayerStore() {
         PlayerStore.instance = this;

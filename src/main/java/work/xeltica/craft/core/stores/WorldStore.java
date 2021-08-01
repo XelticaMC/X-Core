@@ -14,6 +14,10 @@ import org.bukkit.entity.Player;
 
 import work.xeltica.craft.core.utils.Config;
 
+/**
+ * ワールドを管理するストアです。
+ * @author Xeltica
+ */
 public class WorldStore {
     public WorldStore() {
         WorldStore.instance = this;

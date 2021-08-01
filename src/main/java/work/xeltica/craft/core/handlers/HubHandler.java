@@ -18,7 +18,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -27,6 +26,10 @@ import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.WorldStore;
 
+/**
+ * ロビーにまつわるイベントハンドラーをまとめています。
+ * @author Xeltica
+ */
 public class HubHandler implements Listener {
     @EventHandler
     public void onPlayerHurt(EntityDamageEvent e) {

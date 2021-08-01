@@ -5,6 +5,10 @@ import org.bukkit.Location;
 
 import lombok.Getter;
 
+/**
+ * ロビーの種類を定義しています。
+ * @author Xeltica
+ */
 public enum HubType {
     // メインロビー
     Main("hub2"),

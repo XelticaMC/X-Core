@@ -54,6 +54,11 @@ import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 import work.xeltica.craft.core.utils.TravelTicketUtil;
 
+/**
+ * プレイヤーに関するハンドラーをまとめています。
+ * TODO: 機能別に再編
+ * @author Xeltica
+ */
 public class PlayerHandler implements Listener {
     public PlayerHandler(Plugin p) {
         this.plugin = p;

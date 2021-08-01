@@ -12,6 +12,10 @@ import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.HintStore;
 
+/**
+ * ヒントアプリを開くコマンド
+ * @author Xeltica
+ */
 public class CommandHint extends CommandPlayerOnlyBase {
 
     @Override

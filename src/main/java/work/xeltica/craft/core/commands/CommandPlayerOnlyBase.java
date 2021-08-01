@@ -5,6 +5,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * プレイヤー限定のコマンドの基底クラス
+ * @author Xeltica
+ */
 public abstract class CommandPlayerOnlyBase extends CommandBase {
     public abstract boolean execute(Player player, Command command, String label, String[] args);
 

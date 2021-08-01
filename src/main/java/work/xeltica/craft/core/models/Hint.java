@@ -1,5 +1,9 @@
 package work.xeltica.craft.core.models;
 
+/**
+ * ヒントを定義しています。
+ * @author Xeltica
+ */
 public enum Hint {
     WELCOME("XelticaMCへようこそ！", "XelticaMCに初めてログインする", 500),
     GOTO_MAIN("いざ居住区へ！", "メインワールドへ行く。メインワールドは建築・生活に適したワールド。採掘目的で地下を掘ってはいけない。", 100),

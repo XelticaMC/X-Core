@@ -6,6 +6,10 @@ import org.bukkit.event.Listener;
 import work.xeltica.craft.core.events.NewMorningEvent;
 import work.xeltica.craft.core.stores.OmikujiStore;
 
+/**
+ * 日付が変わった際のイベントハンドラーをまとめています。
+ * @author Xeltica
+ */
 public class NewMorningHandler implements Listener {
     @EventHandler
     public void onNewMorning(NewMorningEvent e) {

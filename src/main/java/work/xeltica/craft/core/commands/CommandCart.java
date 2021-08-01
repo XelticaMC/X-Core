@@ -12,6 +12,10 @@ import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.WorldStore;
 
+/**
+ * トロッコを出現させるコマンド
+ * @author Xeltica
+ */
 public class CommandCart extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {

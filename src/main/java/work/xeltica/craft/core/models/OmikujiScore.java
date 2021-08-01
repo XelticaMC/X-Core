@@ -2,6 +2,10 @@ package work.xeltica.craft.core.models;
 
 import lombok.Getter;
 
+/**
+ * おみくじの結果を定義しています。
+ * @author Xeltica
+ */
 public enum OmikujiScore {
     Tokudaikichi("特大吉"),
     Daikichi("大吉"),

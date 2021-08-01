@@ -6,6 +6,10 @@ import org.bukkit.entity.Player;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.stores.HubStore;
 
+/**
+ * ロビーへ移動するコマンド
+ * @author Xeltica
+ */
 public class CommandHub extends CommandPlayerOnlyBase {
 
     @Override

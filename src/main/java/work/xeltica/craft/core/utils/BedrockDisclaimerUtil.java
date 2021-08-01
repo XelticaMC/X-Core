@@ -9,6 +9,10 @@ import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
 
+/**
+ * 統合版プレイヤー向けに免責事項を表示するためのメソッドを持ちます。
+ * @author Xeltica
+ */
 public class BedrockDisclaimerUtil {
 
     public static final String BEDROCK_DISCLAIMER_TITLE = "§l統合版プレイヤーのあなたへ";

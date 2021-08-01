@@ -10,6 +10,7 @@ import net.kyori.adventure.bossbar.BossBar;
 
 /**
  * 全体向けに表示するBossBarを管理します。
+ * @author Xeltica
  */
 public class BossBarStore {
     public BossBarStore() {

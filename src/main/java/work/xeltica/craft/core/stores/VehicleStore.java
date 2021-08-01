@@ -11,6 +11,10 @@ import org.bukkit.entity.minecart.RideableMinecart;
 
 import work.xeltica.craft.core.utils.Config;
 
+/**
+ * サーバーに存在する乗り物を管理し、不要なものはデスポーンする処理などを行うストアです。
+ * @author Xeltica
+ */
 public class VehicleStore {
     public VehicleStore() {
         VehicleStore.instance = this;
@@ -48,6 +52,7 @@ public class VehicleStore {
         unregisterVehicle(id);
     }
 
+    // TODO: ワーカーとして書き直す
     public void tick(int tickCount) {
         var c = this.cm.getConf();
         var ids = c.getKeys(false);

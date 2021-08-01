@@ -7,6 +7,10 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * エビパワーストアで取り扱う商品を表すモデルです。
+ * @author Xeltica
+ */
 public record EbiPowerItem(ItemStack item, int cost) implements Cloneable, ConfigurationSerializable {
 
     @Override
