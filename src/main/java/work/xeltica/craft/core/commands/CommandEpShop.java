@@ -28,12 +28,16 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
     public boolean execute(Player player, Command command, String label, String[] args) {
         var subCommand = args.length > 0 ? args[0] : null;
         var store = EbiPowerStore.getInstance();
+
+        // サブコマンドがなければお店UIを開く
         if (subCommand == null || !player.hasPermission("otanoshimi.command.epshop." + subCommand.toLowerCase())) {
             openShop(player);
             return true;
         }
+
         switch (subCommand.toLowerCase()) {
-            case "add":
+            // エビパワーストアに、手に持っている商品を追加
+            case "add" -> {
                 if (args.length != 2) {
                     player.sendMessage("/epshop add <cost>");
                     return true;
@@ -46,21 +50,26 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
                 }
                 store.addItem(new EbiPowerItem(handheld, cost));
                 player.sendMessage("追加しました。");
-                break;
-            
-            case "delete":
+            }
+
+            // エビパワーストアから商品を削除
+            case "delete" -> {
                 openShopMenu(player, "削除するアイテムを選んでください", (item) -> {
                     store.deleteItem(item);
                     player.sendMessage("削除しました。");
                 });
-                break;
+            }
         }
         return true;
     }
 
+    /**
+     * 購入用のUIを開きます。
+     */
     private void openShop(Player player) {
         openShopMenu(player, "購入するアイテムを選んでください", (item) -> {
             var result = EbiPowerStore.getInstance().tryBuyItem(player, item);
+
             switch (result) {
                 case NO_ENOUGH_INVENTORY:
                     player.sendMessage("インベントリがいっぱいなため、購入に失敗しました。");
@@ -83,10 +92,12 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
         });
     }
 
+    /**
+     * お店のメニューを開きます。
+     */
     private void openShopMenu(Player player, String title, Consumer<EbiPowerItem> onChosen) {
         var ui = Gui.getInstance();
         var store = EbiPowerStore.getInstance();
-        // Component.translatable().
         var items = store.getShopItems()
             .stream()
             .map(m -> {
@@ -103,6 +114,9 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
         ui.openMenu(player, title, items);
     }
 
+    /**
+     * 指定したアイテムスタックから名前を取得します。
+     */
     private String getItemName(ItemStack item) {
         var dn = item.getItemMeta().displayName();
         var name = dn != null ? PlainTextComponentSerializer.plainText().serialize(dn) : item.getI18NDisplayName();

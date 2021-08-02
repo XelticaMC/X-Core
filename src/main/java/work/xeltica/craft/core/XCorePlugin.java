@@ -16,7 +16,6 @@ import work.xeltica.craft.core.commands.CommandBase;
 import work.xeltica.craft.core.commands.CommandBoat;
 import work.xeltica.craft.core.commands.CommandCart;
 import work.xeltica.craft.core.commands.CommandCat;
-import work.xeltica.craft.core.commands.CommandDebug;
 import work.xeltica.craft.core.commands.CommandGiveCustomItem;
 import work.xeltica.craft.core.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.core.commands.CommandHint;
@@ -36,7 +35,6 @@ import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.handlers.XphoneHandler;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.handlers.EbiPowerHandler;
-import work.xeltica.craft.core.handlers.EntityHandler;
 import work.xeltica.craft.core.handlers.HubHandler;
 import work.xeltica.craft.core.handlers.NewMorningHandler;
 import work.xeltica.craft.core.handlers.NightmareHandler;
@@ -55,6 +53,7 @@ import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.VehicleStore;
 import work.xeltica.craft.core.stores.WorldStore;
+import work.xeltica.craft.core.utils.Ticks;
 import work.xeltica.craft.core.commands.CommandEpShop;
 import work.xeltica.craft.core.stores.BossBarStore;
 import work.xeltica.craft.core.stores.CloverStore;
@@ -79,13 +78,11 @@ public class XCorePlugin extends JavaPlugin {
         loadCommands();
         loadHandlers();
 
-        // 1秒に1回
-        new DaylightObserver(this).runTaskTimer(this, 0, 20);
-        // 30秒に1回
-        new NightmareRandomEvent(this).runTaskTimer(this, 0, 20 * 15);
+        new DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1));
+
+        new NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15));
         // 4tickに1回
         // new FlyingObserver().runTaskTimer(this, 0, 4);
-        // 10tickに1回
 
         final var tick = 10;
         new BukkitRunnable(){
@@ -115,6 +112,7 @@ public class XCorePlugin extends JavaPlugin {
 
 
         calculator = new CitizenTimerCalculator();
+
         var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         var luckPerms = provider.getProvider();
         luckPerms.getContextManager().registerCalculator(calculator);
@@ -189,7 +187,6 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("promo", new CommandPromo());
         commands.put("cat", new CommandCat());
         commands.put("hub", new CommandHub());
-        commands.put("debug", new CommandDebug());
         commands.put("xtp", new CommandXtp());
         commands.put("epshop", new CommandEpShop());
         commands.put("hint", new CommandHint());
@@ -203,7 +200,6 @@ public class XCorePlugin extends JavaPlugin {
 
         pm.registerEvents(new NewMorningHandler(), this);
         pm.registerEvents(new PlayerHandler(this), this);
-        pm.registerEvents(new EntityHandler(), this);
         pm.registerEvents(new VehicleHandler(), this);
         pm.registerEvents(new WakabaHandler(), this);
         pm.registerEvents(new HubHandler(), this);

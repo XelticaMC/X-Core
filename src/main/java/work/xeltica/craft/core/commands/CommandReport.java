@@ -23,6 +23,7 @@ import work.xeltica.craft.core.gui.MenuItem;
 
 /**
  * 処罰コマンド
+ * TODO: punish コマンドに名称変更
  * @author Xeltica
  */
 public class CommandReport extends CommandPlayerOnlyBase {
@@ -41,7 +42,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
         return true;
     }
 
-
+    /** 処罰の種類を選ぶUIを表示します */
     private void choosePunishmentType(Player reporter, OfflinePlayer reportee) {
         Consumer<MenuItem> cb = (m) -> chooseReason(reporter, reportee, (String)m.getCustomData(), null);
         Gui.getInstance().openMenu(reporter, "処罰の種類"
@@ -53,6 +54,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
     }
     
 
+    /** 処罰の理由を選ぶUIを表示します */
     private void chooseReason(Player reporter, OfflinePlayer reportee, String command, HashSet<AbuseType> state) {
         var types = AbuseType.values();
         final HashSet<AbuseType> currentState = state == null ? new HashSet<>() : state;
@@ -88,6 +90,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
         Gui.getInstance().openMenu(reporter, command + "すべき理由（複数選択可）", menuItems.toArray(MenuItem[]::new));
     }
 
+    /** 処罰期間を選ぶUIを表示します */
     private void chooseTime(Player reporter, OfflinePlayer reportee, String command, HashSet<AbuseType> state) {
         Consumer<MenuItem> cb = (m) -> takeDown(reporter, reportee, command, state, (String)m.getCustomData());
 
@@ -100,6 +103,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
         ).toArray(MenuItem[]::new));
     }
 
+    /** 処罰を下します */
     private void takeDown(Player moderator, OfflinePlayer badGuy, String command, HashSet<AbuseType> state, String time) {
         var abuses = String.join(",", state.stream().map(s -> s.shortName).toArray(String[]::new));
         var timeString = convertTimeToLocaleString(time);
@@ -116,10 +120,11 @@ public class CommandReport extends CommandPlayerOnlyBase {
                     : String.format(warnTemplate, s.shortName, s.instruction, s.punishment);
                 badPlayer.sendMessage("§c§l警告: §r§c" + message);
             }
+            // 警告時は画面を暗くしたりして目立たせる
+            badPlayer.showTitle(Title.title(Component.text("§e⚠警告"), Component.text("§cチャット欄を確認してください。")));
             badPlayer.playSound(badPlayer.getLocation(), Sound.BLOCK_ANVIL_PLACE, SoundCategory.PLAYERS, 1, 0.5f);
             badPlayer.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 15, 1));
             badPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 15, 30));
-            badPlayer.showTitle(Title.title(Component.text("§e⚠警告"), Component.text("§cチャット欄を確認してください。")));
             return;
         } else if (command.equals("ban")) {
             message = String.format(banTemplate, abuses, timeString);
@@ -136,6 +141,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
         moderator.performCommand(cmd);
     }
 
+    /** 時間文字列を日本語表記に変換します */
     private String convertTimeToLocaleString(String time) {
         return time == null ? "無期限" : time.replace("d", "日間").replace("mo", "ヶ月");
     }
@@ -150,6 +156,10 @@ public class CommandReport extends CommandPlayerOnlyBase {
     private static final String WILL_BAN = "あなたを本サーバーから追放します";
     private static final String WILL_KICK = "あなたを本サーバーからキックします";
 
+    /**
+     * 現時点で存在する処罰一覧です。
+     * TODO: enumではなくデータクラスにした上で、設定ファイルに移す
+     */
     enum AbuseType {
         GRIEFING("禁止行為: 破壊", Material.DIAMOND_PICKAXE, WILL_BAN, "直ちに本来の形に修復するか、意図的でない場合はその旨を返信してください"),
         STEALING("禁止行為: 窃盗", Material.ENDER_CHEST, WILL_BAN, "盗んだアイテムを直ちに元の場所、持ち主に返却してください"),

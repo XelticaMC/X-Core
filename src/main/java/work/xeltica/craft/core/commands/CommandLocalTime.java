@@ -12,6 +12,8 @@ import org.bukkit.entity.Player;
  */
 public class CommandLocalTime extends CommandPlayerOnlyBase {
     public CommandLocalTime() {
+        // 組込み名前付き時間を追加
+        // 統合版のほうが充実しているので統合版から拝借してます
         builtinTimeMap.put("day", 1000);
         builtinTimeMap.put("night", 13000);
         builtinTimeMap.put("noon", 6000);
@@ -22,41 +24,44 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        if (args.length < 1) {
-            return false;
-        }
-        var w = player.getWorld();
-        var c = args[0];
-        if (c.equals("set")) {
-            if (args.length != 2) return false;
-            var timeString = args[1];
-            try {
-                var time = toTime(timeString);
-                w.setTime(time);
-                player.sendMessage(ChatColor.RED + "時刻を " + time + "に設定しました");
-            } catch (NumberFormatException e) {
-                player.sendMessage(ChatColor.RED + "時間指定が異常です");
+        if (args.length < 1) return false;
+
+        var world = player.getWorld();
+        var subCommand = args[0].toLowerCase();
+        
+        switch (subCommand) {
+            case "set" -> {
+                if (args.length != 2) return false;
+                var timeString = args[1];
+                try {
+                    var time = toTime(timeString);
+                    world.setTime(time);
+                    player.sendMessage(ChatColor.RED + "時刻を " + time + "に設定しました");
+                } catch (NumberFormatException e) {
+                    player.sendMessage(ChatColor.RED + "時間指定が異常です");
+                }
             }
-            return true;
-        }
-        if (c.equals("add")) {
-            if (args.length != 2) return false;
-            var timeString = args[1];
-            try {
-                var time = toTime(timeString);
-                w.setTime(w.getTime() + time);
-                player.sendMessage(ChatColor.RED + "時刻を " + w.getTime() + "に設定しました");
-            } catch (NumberFormatException e) {
-                player.sendMessage(ChatColor.RED + "時間指定が異常です");
+            case "add" -> {
+                if (args.length != 2) return false;
+                var timeString = args[1];
+                try {
+                    var time = toTime(timeString);
+                    world.setTime(world.getTime() + time);
+                    player.sendMessage(ChatColor.RED + "時刻を " + world.getTime() + "に設定しました");
+                } catch (NumberFormatException e) {
+                    player.sendMessage(ChatColor.RED + "時間指定が異常です");
+                }
             }
-            return true;
-        }
-        if (c.equals("query")) {
-            if (args.length != 1) return false;
-            player.sendMessage(Long.toString(w.getTime()));
-            return true;
-        }
-        return false;
+            case "query" -> {
+                if (args.length != 1) return false;
+                player.sendMessage(Long.toString(world.getTime()));
+            }
+            default -> {
+                return false;
+            }
+        };
+        
+        return true;
     }
 
     private int toTime(String timeString) {

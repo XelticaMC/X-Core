@@ -22,12 +22,14 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
+        // テレポート中であれば弾く
         var isWarping = isWarpingMap.get(player.getUniqueId());
         if (isWarping != null && isWarping) {
             player.sendMessage("移動中です！");
             return true;
         }
 
+        // 第一引数の内容によってテレポート先を分岐
         if (args.length > 0 && args[0].equalsIgnoreCase("bed")) {
             teleportToBedSpawn(player);
         } else {
@@ -38,6 +40,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         return true;
     }
 
+    /** ベッド位置にリスポーンします */
     private void teleportToBedSpawn(Player player) {
         try {
             // respawn禁止されているかどうかの検証
@@ -64,6 +67,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         player.sendMessage("5秒後にベッドの位置にテレポートします...");
     }
 
+    /** ワールドの初期スポーンにテレポートします */
     private void teleportToInitialSpawn(Player player) {
         String respawnWorldName;
         try {

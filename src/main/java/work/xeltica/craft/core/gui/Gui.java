@@ -41,18 +41,30 @@ import work.xeltica.craft.core.stores.ItemStore;
  * @author Xeltica
  */
 public class Gui implements Listener {
+    /**
+     * インスタンスを取得します。
+     */
     public static Gui getInstance() {
         return instance == null ? (instance = new Gui()) : instance;
     }
 
+    /**
+     * 内部的に使用するものです。
+     */
     public static void resetInstance() {
         instance = null;
     }
 
+    /**
+     * メニューを開きます。
+     */
     public void openMenu(Player player, String title, MenuItem... items) {
         openMenu(player, title, List.of(items));
     }
 
+    /**
+     * メニューを開きます。
+     */
     public void openMenu(Player player, String title, Collection<MenuItem> items) {
         if (isBedrock(player)) {
             openMenuBedrockImpl(player, title, items.toArray(MenuItem[]::new));
@@ -61,14 +73,23 @@ public class Gui implements Listener {
         }
     }
 
+    /**
+     * ダイアログを開きます。
+     */
     public void openDialog(Player player, String title, String content) {
         openDialog(player, title, content, null);
     }
 
+    /**
+     * ダイアログを開きます。
+     */
     public void openDialog(Player player, String title, String content, Consumer<DialogEventArgs> callback) {
         openDialog(player, title, content, callback, null);
     }
 
+    /**
+     * ダイアログを開きます。
+     */
     public void openDialog(Player player, String title, String content, Consumer<DialogEventArgs> callback, String okButtonText) {
         var okText = okButtonText == null ? "OK" : okButtonText;
 
@@ -79,14 +100,23 @@ public class Gui implements Listener {
         }
     }
 
+    /**
+     * 現在参加中のプレイヤーを選択するメニューを開きます。
+     */
     public void openPlayersMenu(Player player, Consumer<Player> onSelect) {
         openPlayersMenu(player, "プレイヤーを選んでください", onSelect);
     }
 
+    /**
+     * 現在参加中のプレイヤーを選択するメニューを開きます。
+     */
     public void openPlayersMenu(Player player, String title, Consumer<Player> onSelect) {
         openPlayersMenu(player, title, onSelect, null);
     }
 
+    /**
+     * 現在参加中のプレイヤーを選択するメニューを開きます。
+     */
     public void openPlayersMenu(Player player, String title, Consumer<Player> onSelect, Predicate<Player> filter) {
         var stream = Bukkit.getOnlinePlayers().stream();
         if (filter != null) {
@@ -104,6 +134,10 @@ public class Gui implements Listener {
         openMenu(player, title, list);
     }
 
+    /**
+     * Java Editionにてボタンを押下したときに実行される内部コマンドの処理を行います。
+     * 直接呼び出さないこと。
+     */
     public void handleCommand(String id) {
         if (!bookHandlersMap.containsKey(id)) return;
         var t = bookHandlersMap.get(id);
@@ -122,6 +156,9 @@ public class Gui implements Listener {
         return true;
     }
 
+    /**
+     * JavaでインベントリをメニューUIとして使うため、そのハンドリングを行います。
+    */
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         var inv = e.getInventory();
@@ -140,6 +177,10 @@ public class Gui implements Listener {
         if (handler != null) handler.accept(menuItems[id]);
     }
 
+
+    /**
+     * JavaでインベントリをメニューUIとして使うため、そのハンドリングを行います。
+    */
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         var inv = e.getInventory();
@@ -151,6 +192,10 @@ public class Gui implements Listener {
         invMap.remove(inv);
     }
 
+
+    /**
+     * Javaで本をダイアログUIとして使うため、そのハンドリングを行います。
+    */
     @EventHandler
     public void onPlayerEditBook(PlayerEditBookEvent e) {
         if (bookSet.contains(e.getPreviousBookMeta())) {

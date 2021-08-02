@@ -40,12 +40,14 @@ public class CommandSignEdit extends CommandPlayerOnlyBase {
             l.remove(0);
             var line = String.join(" ", l);
             state.line(index, Component.text(line));
-            // イベント
+            // Spigot イベントを発行し、他のプラグインにキャンセルされたらやめる
             var e = new SignChangeEvent(block, player, state.lines());
             Bukkit.getPluginManager().callEvent(e);
             if (!e.isCancelled()) {
                 state.update();
                 player.sendMessage("看板の" + index + "行目を「" + line + "」と書き換えました");
+            } else {
+                player.sendMessage("何らかの理由でこの看板は編集できません");
             }
         } catch (NumberFormatException e) {
             return false;

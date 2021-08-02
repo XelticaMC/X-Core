@@ -8,6 +8,7 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.query.QueryOptions;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.utils.Ticks;
 
 /**
  * 市民システムの情報表示コマンド
@@ -21,8 +22,8 @@ public class CommandPromo extends CommandPlayerOnlyBase {
         var lpUser = luckPerms.getPlayerAdapter(Player.class).getUser(player);
         var store = PlayerStore.getInstance();
         var record = store.open(player);
-        
         var isManualCitizen = lpUser.getInheritedGroups(QueryOptions.defaultContextualOptions()).stream().anyMatch(g -> g.getName().equals("citizen"));
+
         if (!store.isCitizen(player)) {
             player.sendMessage("本サーバーでは、プレイヤーさんを§aわかば§r、§b市民§rという大きく2つのロールに分類しています。");
             player.sendMessage("§b市民§rにならなくても基本的なプレイはできますが、");
@@ -30,25 +31,21 @@ public class CommandPromo extends CommandPlayerOnlyBase {
             player.sendMessage("・§c一部のオリジナル機能が使えない§r");
             player.sendMessage("という欠点があります。§b市民§rに昇格することで全ての機能が開放されます。§b市民§rに昇格する方法の一つに、クイック認証があります。");
         }
+
         if (isManualCitizen) {
             player.sendMessage("既に手動認証されているため、あなたは市民です！");
         } else {
-            player.sendMessage("§b§lクイック認証に必要な条件: ");
             var ctx = luckPerms.getContextManager().getContext(player);
             var linked = ctx.contains("discordsrv:linked", "true");
             var crafterRole = ctx.contains("discordsrv:role", "クラフター");
-            var citizenRole = ctx.contains("discordsrv:role", "市民");
-            var elapsedTime = record.getInt(PlayerDataKey.NEWCOMER_TIME) / 20;
-            var elapsedTimeMinutes = elapsedTime / 60;
-            var elapsedTimeSeconds = elapsedTime % 60;
-            var elapsedTimeString = 
-                elapsedTimeMinutes > 0 
-                    ? elapsedTimeMinutes + "分" + elapsedTimeSeconds + "秒"
-                    : elapsedTimeSeconds + "秒";
+            var citizenRole = ctx.contains("discordsrv:role", "市民");    
+            var tick = record.getInt(PlayerDataKey.NEWCOMER_TIME); 
+
+            player.sendMessage("§b§lクイック認証に必要な条件: ");
             sendMessage(player, "Discord 連携済み", linked);
             sendMessage(player, "クラフターロール付与済み", crafterRole);
             sendMessage(player, "市民ロール付与済み", citizenRole);
-            sendMessage(player, "初参加から30分経過(残り" + elapsedTimeString + ")", elapsedTime == 0);
+            sendMessage(player, "初参加から30分経過(残り" + tickToString(tick) + ")", tick == 0);
             player.sendMessage(
                 linked && crafterRole && citizenRole
                     ? "§b全ての条件を満たしているため、あなたは市民です！"
@@ -58,11 +55,20 @@ public class CommandPromo extends CommandPlayerOnlyBase {
                 player.sendMessage("クイック認証が面倒であれば§6§l手動認証§rもできます。");
             }
         }
-        player.sendMessage("詳しくは https://craft.xeltica.work/docs/citizen を確認してください！");
+        player.sendMessage("詳しくは https://wiki.craft.xeltica.work/citizen を確認してください！");
         return true;
     }
 
     private void sendMessage(Player player, String str, boolean isSuccess) {
         player.sendMessage((isSuccess ? "§a✔ " : "§c✘ ") + str + "§r");
+    }
+
+    private String tickToString(int tick) {
+        var elapsedTime = Ticks.toTime(tick);
+        var elapsedTimeMinutes = elapsedTime / 60;
+        var elapsedTimeSeconds = elapsedTime % 60;
+        return elapsedTimeMinutes > 0 
+            ? elapsedTimeMinutes + "分" + elapsedTimeSeconds + "秒"
+            : elapsedTimeSeconds + "秒";
     }
 }

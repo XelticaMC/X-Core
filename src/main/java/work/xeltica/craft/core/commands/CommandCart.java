@@ -22,14 +22,13 @@ public class CommandCart extends CommandPlayerOnlyBase {
         if (!WorldStore.getInstance().canSummonVehicles(player.getWorld())) {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。");
         }
-        // if (!EbiPowerStore.getInstance().tryTake(player, 5)) {
-        //     return Gui.getInstance().error(player, "§cEPが足りない…");
-        // }
 
         var loc = player.getLocation();
         loc.getWorld().spawnEntity(loc, EntityType.MINECART, SpawnReason.CUSTOM);
+
         player.sendMessage("トロッコを足元に召喚した。");
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 2);
+
         HintStore.getInstance().achieve(player, Hint.MINECART);
         return true;
     }
