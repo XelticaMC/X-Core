@@ -2,6 +2,7 @@ package work.xeltica.craft.core.handlers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -230,7 +231,7 @@ public class PlayerHandler implements Listener {
         final var p = e.getPlayer();
         if (p.getWorld().getName().startsWith("travel_")) {
             final var world = Bukkit.getWorld("world");
-            p.teleportAsync(world.getSpawnLocation());
+            p.teleportAsync(Objects.requireNonNull(world).getSpawnLocation());
         }
     }
 
@@ -251,7 +252,7 @@ public class PlayerHandler implements Listener {
                 || worldName.equals("hub2")
                 || worldName.equals("sandbox")
                 ;
-            if (isBedDisabledWorld && Tag.BEDS.isTagged(e.getClickedBlock().getType())) {
+            if (isBedDisabledWorld && Tag.BEDS.isTagged(Objects.requireNonNull(e.getClickedBlock()).getType())) {
                 e.setCancelled(true);
             }
             return;

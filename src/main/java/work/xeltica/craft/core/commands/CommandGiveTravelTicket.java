@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import work.xeltica.craft.core.travels.TicketType;
 import work.xeltica.craft.core.utils.TravelTicketUtil;
 
+import java.util.Objects;
+
 /**
  * 旅行券をgiveするコマンド
  * @author Xeltica
@@ -19,7 +21,7 @@ public class CommandGiveTravelTicket extends CommandPlayerOnlyBase {
         final var name = args.length >= 1 ? args[0] : null;
         final var p = name == null ? player : Bukkit.getPlayer(name);
         if (p == null) {
-            player.sendMessage(ChatColor.RED + "そのようなプレイヤーはいません");
+            Objects.requireNonNull(player).sendMessage(ChatColor.RED + "そのようなプレイヤーはいません");
             return true;
         }
         try {

@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.plugins;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -13,6 +14,7 @@ import work.xeltica.craft.core.XCorePlugin;
  * Vault プラグインと連携するためのX-Core プラグインです。
  * @author Xeltica
  */
+@SuppressWarnings("ALL")
 public class VaultPlugin extends PluginBase {
     public static VaultPlugin getInstance() {
         return instance == null ? (instance = new VaultPlugin()) : instance;
@@ -27,7 +29,7 @@ public class VaultPlugin extends PluginBase {
             this.logger.warning("Vault is not found, so economy feature has been disabled.");
         } else {
             final var provider = Bukkit.getServicesManager().getRegistration(Economy.class);
-            final var econ = provider.getProvider();
+            final var econ = Objects.requireNonNull(provider).getProvider();
             if (econ == null) {
                 this.logger.warning("Economy plugin is not found, so economy feature has been disabled.");
             } else {

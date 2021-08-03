@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.handlers;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -134,7 +135,7 @@ public class WorldHandler implements Listener {
         if (name.equals("wildarea") && e.getFrom().getWorld().getName().equals("hub")) {
             // 最終ベッドがワイルドエリアにある場合、そこに飛ばす
             final var bed = p.getBedSpawnLocation();
-            if (bed.getWorld().getUID().equals(world.getUID())) {
+            if (Objects.requireNonNull(bed).getWorld().getUID().equals(world.getUID())) {
                 e.setTo(bed);
             }
         }

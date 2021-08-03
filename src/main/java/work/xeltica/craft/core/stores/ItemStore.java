@@ -2,6 +2,7 @@ package work.xeltica.craft.core.stores;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Streams;
@@ -81,13 +82,13 @@ public class ItemStore {
         final var meta2 = stack2.getItemMeta();
 
         // -- 名前の比較
-        final var name1 = PlainTextComponentSerializer.plainText().serialize(meta1.displayName());
-        final var name2 = PlainTextComponentSerializer.plainText().serialize(meta2.displayName());
+        final var name1 = PlainTextComponentSerializer.plainText().serialize(Objects.requireNonNull(meta1.displayName()));
+        final var name2 = PlainTextComponentSerializer.plainText().serialize(Objects.requireNonNull(meta2.displayName()));
         if (!name1.equals(name2)) return false;
 
         // -- lore の比較
-        final var lore1 = meta1.lore().stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
-        final var lore2 = meta2.lore().stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
+        final var lore1 = Objects.requireNonNull(meta1.lore()).stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
+        final var lore2 = Objects.requireNonNull(meta2.lore()).stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
         return lore1.equals(lore2);
     }
 

@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.stores.ItemStore;
 
+import java.util.Objects;
+
 /**
  * カスタムアイテムをgiveするコマンド
  * @author Xeltica
@@ -22,7 +24,7 @@ public class CommandGiveCustomItem extends CommandPlayerOnlyBase {
         final var p = name == null ? player : Bukkit.getPlayer(name);
         final var store = ItemStore.getInstance();
         if (p == null) {
-            player.sendMessage(ChatColor.RED + "そのようなプレイヤーはいません");
+            Objects.requireNonNull(player).sendMessage(ChatColor.RED + "そのようなプレイヤーはいません");
             return true;
         }
         try {
@@ -31,7 +33,7 @@ public class CommandGiveCustomItem extends CommandPlayerOnlyBase {
             if (item != null) {
                 p.getInventory().addItem(item);
                 p.playSound(p.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);
-                p.sendMessage(item.getItemMeta().displayName().append(Component.text("を付与しました")));
+                p.sendMessage(Objects.requireNonNull(item.getItemMeta().displayName()).append(Component.text("を付与しました")));
             }
         } catch (IllegalArgumentException e) {
             player.sendMessage("引数がおかしい");

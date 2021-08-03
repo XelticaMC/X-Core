@@ -9,6 +9,8 @@ import net.luckperms.api.query.QueryOptions;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
 
+import java.util.Objects;
+
 /**
  * 市民システムの情報表示コマンド
  * @author Xeltica
@@ -17,7 +19,7 @@ public class CommandPromo extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        final var luckPerms = provider.getProvider();
+        final var luckPerms = Objects.requireNonNull(provider).getProvider();
         final var lpUser = luckPerms.getPlayerAdapter(Player.class).getUser(player);
         final var store = PlayerStore.getInstance();
         final var record = store.open(player);

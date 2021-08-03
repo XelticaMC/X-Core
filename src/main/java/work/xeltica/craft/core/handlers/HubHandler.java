@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.handlers;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.google.common.collect.Lists;
 
@@ -58,7 +59,7 @@ public class HubHandler implements Listener {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK)
             return;
         if (playerIsInClassicHub(p)) {
-            e.setCancelled(store().processSigns(e.getClickedBlock().getLocation(), p));
+            e.setCancelled(store().processSigns(Objects.requireNonNull(e.getClickedBlock()).getLocation(), p));
         }
     }
 

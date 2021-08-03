@@ -12,6 +12,7 @@ import work.xeltica.craft.core.XCorePlugin;
  * Spigot の設定ファイル機能を扱いやすいように、面倒な部分をラッピングしています。
  * @author Xeltica
  */
+@SuppressWarnings("ALL")
 public class Config {
     public Config(String configName) {
         this(configName, null);

@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.commands;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -73,7 +74,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             return;
         }
         final var respawnWorld = Bukkit.getWorld(respawnWorldName);
-        final var respawn =  respawnWorld.getSpawnLocation();
+        final var respawn =  Objects.requireNonNull(respawnWorld).getSpawnLocation();
 
         final var isSameWorld = player.getWorld().getUID().equals(respawnWorld.getUID());
         final var respawnWorldDisplayName = WorldStore.getInstance().getWorldDisplayName(respawnWorld);

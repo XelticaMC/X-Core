@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * クラシックロビーのコマンド看板のデータを表すモデルです。
@@ -28,7 +29,7 @@ public class SignData implements Cloneable, ConfigurationSerializable {
         this.arg2 = arg2;
     }
 
-    public Map<String, Object> serialize() {
+    public @NotNull Map<String, Object> serialize() {
         final var result = new LinkedHashMap<String, Object>();
         result.put("location", location.serialize());
         result.put("command", command);

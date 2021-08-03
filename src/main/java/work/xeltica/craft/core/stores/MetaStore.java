@@ -9,6 +9,7 @@ import work.xeltica.craft.core.utils.Config;
  * プラグインのメタ情報を管理します。
  * @author Xeltica
  */
+@SuppressWarnings("ALL")
 public class MetaStore {
     public MetaStore() {
         MetaStore.instance = this;

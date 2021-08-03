@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.utils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -40,7 +41,7 @@ public class TravelTicketUtil {
         if (i.getType() != Material.WRITTEN_BOOK) return false;
         final var meta = i.getItemMeta();
 
-        final var lores = meta.lore().stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
+        final var lores = Objects.requireNonNull(meta.lore()).stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
         if (lores == null || lores.size() != 5) return false;
         if (!lores.get(0).equals(TRAVEL_TICKET_LORE1)) return false;
         if (!lores.get(1).equals(TRAVEL_TICKET_LORE2)) return false;
@@ -51,7 +52,7 @@ public class TravelTicketUtil {
         final var meta = i.getItemMeta();
         final var lores = meta.lore();
 
-        return TicketType.valueOf(PlainTextComponentSerializer.plainText().serialize(lores.get(4)));
+        return TicketType.valueOf(PlainTextComponentSerializer.plainText().serialize(Objects.requireNonNull(lores).get(4)));
     }
 
     private static final String TRAVEL_TICKET_NAME = ChatColor.AQUA + "%s行き旅行券";

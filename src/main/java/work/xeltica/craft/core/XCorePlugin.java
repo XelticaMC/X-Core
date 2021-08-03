@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import work.xeltica.craft.core.commands.CommandBase;
 import work.xeltica.craft.core.commands.CommandBoat;
 import work.xeltica.craft.core.commands.CommandCart;
@@ -30,7 +31,6 @@ import work.xeltica.craft.core.commands.CommandXPhone;
 import work.xeltica.craft.core.commands.CommandXtp;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.handlers.EbiPowerHandler;
-import work.xeltica.craft.core.handlers.EntityHandler;
 import work.xeltica.craft.core.handlers.HubHandler;
 import work.xeltica.craft.core.handlers.NewMorningHandler;
 import work.xeltica.craft.core.handlers.NightmareHandler;
@@ -58,6 +58,7 @@ import work.xeltica.craft.core.stores.WorldStore;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -115,7 +116,7 @@ public class XCorePlugin extends JavaPlugin {
 
         calculator = new CitizenTimerCalculator();
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        final var luckPerms = provider.getProvider();
+        final var luckPerms = Objects.requireNonNull(provider).getProvider();
         luckPerms.getContextManager().registerCalculator(calculator);
 
         final var meta = MetaStore.getInstance();
@@ -144,12 +145,12 @@ public class XCorePlugin extends JavaPlugin {
         Gui.resetInstance();
         unloadPlugins();
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        final var luckPerms = provider.getProvider();
+        final var luckPerms = Objects.requireNonNull(provider).getProvider();
         luckPerms.getContextManager().unregisterCalculator(calculator);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
         final var name = command.getName().toLowerCase();
 
         final var com = commands.get(name);
@@ -202,7 +203,6 @@ public class XCorePlugin extends JavaPlugin {
 
         pm.registerEvents(new NewMorningHandler(), this);
         pm.registerEvents(new PlayerHandler(this), this);
-        pm.registerEvents(new EntityHandler(), this);
         pm.registerEvents(new VehicleHandler(), this);
         pm.registerEvents(new WakabaHandler(), this);
         pm.registerEvents(new HubHandler(), this);

@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -46,8 +47,8 @@ public class XphoneHandler implements Listener {
 
         if (!store().compareCustomItem(item, phone)) {
             final var pt = PlainTextComponentSerializer.plainText();
-            final var itemName = pt.serialize(itemMeta.displayName());
-            final var phoneName = pt.serialize(phone.getItemMeta().displayName());
+            final var itemName = pt.serialize(Objects.requireNonNull(itemMeta.displayName()));
+            final var phoneName = pt.serialize(Objects.requireNonNull(phone.getItemMeta().displayName()));
             if (item.getType() == Material.WRITTEN_BOOK && phoneName.equals(itemName)) {
                 player.sendMessage("古いX Phoneは使えなくなりました。捨てた上で /xphone コマンドを実行して入手してください。");
                 e.setUseItemInHand(Result.DENY);

@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.stores.ItemStore;
 
+import java.util.Objects;
+
 /**
  * X Phoneを受け取るコマンド
  * @author Xeltica
@@ -19,7 +21,7 @@ public class CommandXPhone extends CommandPlayerOnlyBase {
         if (item != null) {
             player.getInventory().addItem(item);
             player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);
-            player.sendMessage(item.getItemMeta().displayName().append(Component.text("を付与しました")));
+            player.sendMessage(Objects.requireNonNull(item.getItemMeta().displayName()).append(Component.text("を付与しました")));
         }
         return true;
     }

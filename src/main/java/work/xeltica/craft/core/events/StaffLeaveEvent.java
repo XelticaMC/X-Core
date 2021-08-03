@@ -2,14 +2,16 @@ package work.xeltica.craft.core.events;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * スタッフがサーバーから退出したときに発生するイベント
  * @author Xeltica
  */
+@SuppressWarnings("ALL")
 public class StaffLeaveEvent extends Event {
 	@Override
-	public HandlerList getHandlers() {
+	public @NotNull HandlerList getHandlers() {
         return HANDLERS_LIST;
 	}
 

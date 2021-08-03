@@ -2,6 +2,7 @@ package work.xeltica.craft.core.commands;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
             return false;
         }
         final var playerName = args[0];
-        final var reportee = Bukkit.getOfflinePlayer(Bukkit.getPlayerUniqueId(playerName));
+        final var reportee = Bukkit.getOfflinePlayer(Objects.requireNonNull(Bukkit.getPlayerUniqueId(playerName)));
         if (reportee == null) {
             reporter.sendMessage("そのような名前のプレイヤーはこのサーバーにはいないようです。");
             return true;

@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.runnables;
 
+import java.util.Objects;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -30,7 +31,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
     @Override
     public void run() {
         final var nightmare = plugin.getServer().getWorld("nightmare2");
-        final var players = nightmare.getPlayers();
+        final var players = Objects.requireNonNull(nightmare).getPlayers();
         nightmare.setStorm(true);
         nightmare.setThundering(true);
 
@@ -82,7 +83,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
 
                         // 50:50で武器が決まる
                         final var equip = new ItemStack(random.nextBoolean() ? Material.CROSSBOW : Material.GOLDEN_SWORD);
-                        piglin.getEquipment().setItemInMainHand(equip);
+                        Objects.requireNonNull(piglin.getEquipment()).setItemInMainHand(equip);
 
                         // 5%の確率でスピードバフ
                         if (random.nextInt(100) < 5) {
