@@ -18,6 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
+import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 
@@ -136,6 +137,8 @@ public class CommandReport extends CommandPlayerOnlyBase {
             moderator.sendMessage(ChatColor.RED + "無効なコマンド: " + command);
             return;
         }
+
+        XCorePlugin.getInstance().getServer().sendMessage(Component.text(message + "したため" + command + "されました"));
 
         var cmd = time != null ? String.format("temp%s %s %s %s", command, name, time, message) : String.format("%s %s %s", command, name, message);
         moderator.performCommand(cmd);
