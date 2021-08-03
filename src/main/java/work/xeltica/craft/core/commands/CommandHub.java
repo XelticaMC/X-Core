@@ -14,8 +14,8 @@ public class CommandHub extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        var isAdmin = player.hasPermission("hub.admin") || player.isOp();
-        var store = HubStore.getInstance();
+        final var isAdmin = player.hasPermission("hub.admin") || player.isOp();
+        final var store = HubStore.getInstance();
 
         if (args.length == 0) {
             store.teleport(player, switch (player.getWorld().getName()) {

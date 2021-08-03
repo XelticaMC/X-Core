@@ -34,11 +34,11 @@ public class HubHandler implements Listener {
     @EventHandler
     public void onPlayerHurt(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
-        var player = (Player)e.getEntity();
+        final var player = (Player)e.getEntity();
         if (playerIsInHub(player)) {
             e.setCancelled(true);
             if (e.getCause() == DamageCause.VOID) {
-                var loc = player.getWorld().getSpawnLocation();
+                final var loc = player.getWorld().getSpawnLocation();
                 player.teleport(loc, TeleportCause.PLUGIN);
             }
         }
@@ -46,7 +46,7 @@ public class HubHandler implements Listener {
 
     @EventHandler
     public void onPlayerBreakSign(BlockBreakEvent e) {
-        var p = e.getPlayer();
+        final var p = e.getPlayer();
         if (playerIsInClassicHub(p)) {
             store().removeSign(p, e.getBlock().getLocation());
         }
@@ -54,7 +54,7 @@ public class HubHandler implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerClickSign(PlayerInteractEvent e) {
-        var p = e.getPlayer();
+        final var p = e.getPlayer();
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK)
             return;
         if (playerIsInClassicHub(p)) {
@@ -64,7 +64,7 @@ public class HubHandler implements Listener {
 
     @EventHandler
     public void onPlayerClassicHubPortal(PlayerPortalEvent e) {
-        var player = e.getPlayer();
+        final var player = e.getPlayer();
         if (playerIsInClassicHub(player)) {
             e.setCancelled(true);
             store().returnToClassicWorld(player);
@@ -73,7 +73,7 @@ public class HubHandler implements Listener {
 
     @EventHandler
     public void onPlayerHunger(FoodLevelChangeEvent e) {
-        var player = e.getEntity();
+        final var player = e.getEntity();
         if (playerIsInHub(player)) {
             player.setFoodLevel(20);
             e.setCancelled(true);
@@ -82,17 +82,17 @@ public class HubHandler implements Listener {
 
     @EventHandler
     public void onSignChange(SignChangeEvent e) {
-        var p = e.getPlayer();
+        final var p = e.getPlayer();
         if (!playerIsInClassicHub(p)) return;
 
-        var lines = e.lines().stream()
+        final var lines = e.lines().stream()
             .map(c -> PlainTextComponentSerializer.plainText().serialize(c))
             .toList();
 
         if (lines.get(0).equals("[Hub]")) {
-            var command = lines.get(1).toLowerCase();
-            var arg1 = lines.get(2);
-            var arg2 = lines.get(3);
+            final var command = lines.get(1).toLowerCase();
+            final var arg1 = lines.get(2);
+            final var arg2 = lines.get(3);
 
             switch (command) {
                 case "teleport" -> {
@@ -136,7 +136,7 @@ public class HubHandler implements Listener {
         return HubStore.getInstance();
     }
 
-    private List<String> hubs = Lists.newArrayList(
+    private final List<String> hubs = Lists.newArrayList(
         "hub",
         "hub2",
         "hub_dev"

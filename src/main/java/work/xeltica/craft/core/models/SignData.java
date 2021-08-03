@@ -29,7 +29,7 @@ public class SignData implements Cloneable, ConfigurationSerializable {
     }
 
     public Map<String, Object> serialize() {
-        var result = new LinkedHashMap<String, Object>();
+        final var result = new LinkedHashMap<String, Object>();
         result.put("location", location.serialize());
         result.put("command", command);
         result.put("arg1", arg1);
@@ -38,10 +38,10 @@ public class SignData implements Cloneable, ConfigurationSerializable {
     }
 
     public static SignData deserialize(Map<String, Object> args) {
-        Location location;
-        String command;
-        String arg1;
-        String arg2;
+        final Location location;
+        final String command;
+        final String arg1;
+        final String arg2;
         if (!args.containsKey("location"))  throw new IllegalArgumentException("location is null");
         if(!args.containsKey("command")) throw new IllegalArgumentException("command is null");
         if (!args.containsKey("arg1")) throw new IllegalArgumentException("arg1 is null");
@@ -56,11 +56,11 @@ public class SignData implements Cloneable, ConfigurationSerializable {
     }
 
     @Getter
-    private Location location;
+    private final Location location;
     @Getter
-    private String command;
+    private final String command;
     @Getter
-    private String arg1;
+    private final String arg1;
     @Getter
-    private String arg2;
+    private final String arg2;
 }

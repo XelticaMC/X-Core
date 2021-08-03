@@ -22,10 +22,10 @@ import work.xeltica.craft.core.stores.OmikujiStore;
 public class CommandOmikuji extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        var s = OmikujiStore.getInstance();
+        final var s = OmikujiStore.getInstance();
 
         if (s.isDrawnBy(player)) {
-            var score = s.getScoreName(player);
+            final var score = s.getScoreName(player);
             player.sendMessage(
                 ChatColor.RED + "既に引いています！" +
                 ChatColor.GOLD + "あなたの運勢は" +
@@ -37,17 +37,17 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
             player.sendMessage(ChatColor.GOLD + "また次の朝、引いてください！");
             return true;
         }
-        var vault = VaultPlugin.getInstance();
+        final var vault = VaultPlugin.getInstance();
         if (vault.isEconomyEnabled() && !vault.tryWithdrawPlayer(player, 100)) {
             player.sendMessage(ChatColor.RED + "パワーが足りません！おみくじは1回100エビパワーが必要です。");
             return true;
         }
         player.sendMessage("何が出るかな...?");
-        
+
         new BukkitRunnable(){
             @Override
             public void run() {
-                var score = s.generateScore();
+                final var score = s.generateScore();
                 s.set(player, score);
 
                 player.sendMessage(
@@ -86,7 +86,7 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
                 }
             }
         }.runTaskLater(XCorePlugin.getInstance(), 20 * 3);
-        
+
         return true;
     }
 }

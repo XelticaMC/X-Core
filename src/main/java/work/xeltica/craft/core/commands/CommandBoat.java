@@ -25,8 +25,8 @@ public class CommandBoat extends CommandPlayerOnlyBase {
         // if (!EbiPowerStore.getInstance().tryTake(player, 5)) {
         //     return Gui.getInstance().error(player, "§cEPが足りない…");
         // }
-        
-        var loc = player.getLocation();
+
+        final var loc = player.getLocation();
         loc.getWorld().spawnEntity(loc, EntityType.BOAT, SpawnReason.CUSTOM);
         player.sendMessage("ボートを足元に召喚した。");
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 2);

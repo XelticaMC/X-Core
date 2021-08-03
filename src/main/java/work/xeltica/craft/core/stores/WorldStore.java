@@ -63,7 +63,7 @@ public class WorldStore {
     public boolean isLockedWorld(String n) {
         return lockedWorldNames.contains(n);
     }
-    
+
     public boolean canSummonVehicles(World w) {
         return canSummonVehicles(w.getName());
     }
@@ -73,8 +73,8 @@ public class WorldStore {
     }
 
     public void saveCurrentLocation(Player p) {
-        var conf = location.getConf();
-        var pid = p.getUniqueId().toString();
+        final var conf = location.getConf();
+        final var pid = p.getUniqueId().toString();
         var playerSection = conf.getConfigurationSection(pid);
         if (playerSection == null) {
             playerSection = conf.createSection(pid);
@@ -88,9 +88,9 @@ public class WorldStore {
     }
 
     public Location getLocation(Player p, String name) {
-        var conf = location.getConf();
-        var pid = p.getUniqueId().toString();
-        var playerSection = conf.getConfigurationSection(pid);
+        final var conf = location.getConf();
+        final var pid = p.getUniqueId().toString();
+        final var playerSection = conf.getConfigurationSection(pid);
         if (playerSection == null) {
             return null;
         }
@@ -98,7 +98,7 @@ public class WorldStore {
     }
 
     public void teleport(Player player, String worldName) {
-        var world = Bukkit.getWorld(worldName);
+        final var world = Bukkit.getWorld(worldName);
         if (world == null) {
             player.sendMessage("§bテレポートに失敗しました。ワールドが存在しないようです。");
             return;
@@ -107,7 +107,7 @@ public class WorldStore {
     }
 
     public void teleportToSavedLocation(Player player, String worldName) {
-        var loc = getLocation(player, worldName);
+        final var loc = getLocation(player, worldName);
         if (loc == null) {
             // 保存されていなければ普通にTP
             teleport(player, worldName);
@@ -138,7 +138,7 @@ public class WorldStore {
     }
 
     private void loadWorldDescription() {
-        worldDescMap.put("sandbox2", 
+        worldDescMap.put("sandbox2",
             "ここは、§bクリエイティブモード§rで好きなだけ遊べる§cサンドボックスワールド§r。\n" +
             "元の世界の道具や経験値はお預かりしているので、好きなだけあそんでね！" +
             "§7(あ、でも他の人の建築物を壊したりしないでね)" +
@@ -157,7 +157,7 @@ public class WorldStore {
         );
         worldDescMap.put("test",
             "よくここを見つけたな...。ここはデバッグワールド。\n" +
-            "XelticaMC の開発者が機能をテストするために開放している場所。\n" + 
+            "XelticaMC の開発者が機能をテストするために開放している場所。\n" +
             "自由に立ち入りできますが、何が起こってもサポートは致しかねます。"
         );
 
@@ -185,7 +185,7 @@ public class WorldStore {
     }
 
     private static WorldStore instance;
-    private Config location;
+    private final Config location;
     private final Map<String, String> worldNameMap = new HashMap<>();
     private final Map<String, String> worldDescMap = new HashMap<>();
     private final Set<String> lockedWorldNames = new HashSet<>();

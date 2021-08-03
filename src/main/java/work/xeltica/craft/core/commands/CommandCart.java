@@ -26,7 +26,7 @@ public class CommandCart extends CommandPlayerOnlyBase {
         //     return Gui.getInstance().error(player, "§cEPが足りない…");
         // }
 
-        var loc = player.getLocation();
+        final var loc = player.getLocation();
         loc.getWorld().spawnEntity(loc, EntityType.MINECART, SpawnReason.CUSTOM);
         player.sendMessage("トロッコを足元に召喚した。");
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 2);

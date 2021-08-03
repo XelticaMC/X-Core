@@ -72,19 +72,19 @@ public class PlayerHandler implements Listener {
     public void onPlayerDeath(EntityDamageEvent e) {
         if (!(e.getEntity() instanceof Player))
             return;
-        var p = (Player)e.getEntity();
+        final var p = (Player)e.getEntity();
         if (p.getHealth() - e.getFinalDamage() > 0)
             return;
 
-        var score = OmikujiStore.getInstance().get(p);
-        var th = 
-            score == OmikujiScore.Tokudaikichi ? 5 : 
+        final var score = OmikujiStore.getInstance().get(p);
+        final var th =
+            score == OmikujiScore.Tokudaikichi ? 5 :
             score == OmikujiScore.Daikichi ? 1 : 0;
-        
+
         if ((int)(Math.random() * 100) >= th) return;
 
-        var i = p.getInventory();
-        var heldItem = i.getItemInMainHand();
+        final var i = p.getInventory();
+        final var heldItem = i.getItemInMainHand();
         i.remove(heldItem);
         i.setItemInMainHand(new ItemStack(Material.TOTEM_OF_UNDYING));
         new BukkitRunnable(){
@@ -97,16 +97,16 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        var p = e.getPlayer();
-        var name = PlainTextComponentSerializer.plainText().serialize(p.displayName());
-        var pstore = PlayerStore.getInstance();
+        final var p = e.getPlayer();
+        final var name = PlainTextComponentSerializer.plainText().serialize(p.displayName());
+        final var pstore = PlayerStore.getInstance();
         e.joinMessage(Component.text("§a" + name + "§b" + "さんがやってきました"));
         if (!p.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
             pstore.open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
             HubStore.getInstance().teleport(p, HubType.NewComer, true);
         }
-        var record = pstore.open(p);
+        final var record = pstore.open(p);
 
         if (!record.getBoolean(PlayerDataKey.GIVEN_PHONE)) {
             p.getInventory().addItem(ItemStore.getInstance().getItem(ItemStore.ITEM_NAME_XPHONE));
@@ -114,7 +114,7 @@ public class PlayerHandler implements Listener {
         }
 
         HintStore.getInstance().achieve(p, Hint.WELCOME);
-        
+
         BossBarStore.getInstance().applyAll(p);
 
         if (PlayerStore.getInstance().isCitizen(p)) {
@@ -124,11 +124,11 @@ public class PlayerHandler implements Listener {
         if (!record.getBoolean(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER)) {
             BedrockDisclaimerUtil.showDisclaimerAsync(p);
         }
-        
+
         new BukkitRunnable(){
             @Override
             public void run() {
-                pstore.updateHasOnlineStaff();   
+                pstore.updateHasOnlineStaff();
             }
         }.runTask(plugin);
 
@@ -153,7 +153,7 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        var name = PlainTextComponentSerializer.plainText().serialize(e.getPlayer().displayName());
+        final var name = PlainTextComponentSerializer.plainText().serialize(e.getPlayer().displayName());
         e.quitMessage(Component.text("§a" + name + "§b" + "さんがかえりました"));
         new BukkitRunnable() {
             @Override
@@ -166,7 +166,7 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void onPlayerPortal(PlayerPortalEvent e) {
         // サンドボックスと旅行先からポータルを開けることを禁止
-        var name = e.getPlayer().getWorld().getName();
+        final var name = e.getPlayer().getWorld().getName();
         if (name.startsWith("travel_") || name.equals("sandbox") || name.equals("wildarea")) {
             e.setCancelled(true);
         }
@@ -174,8 +174,8 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onInventoryOpenEvent(InventoryOpenEvent e) {
-        var isEnderChest = e.getInventory().getType() == InventoryType.ENDER_CHEST;
-        var isSandbox = e.getPlayer().getWorld().getName().equals("sandbox");
+        final var isEnderChest = e.getInventory().getType() == InventoryType.ENDER_CHEST;
+        final var isSandbox = e.getPlayer().getWorld().getName().equals("sandbox");
         if (isEnderChest && isSandbox) {
             e.setCancelled(true);
         }
@@ -201,19 +201,19 @@ public class PlayerHandler implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayer草ed(AsyncPlayerChatEvent e) {
-        var logger = Bukkit.getLogger();
+        final var logger = Bukkit.getLogger();
         if (e.getMessage().equals("草") || e.getMessage().equalsIgnoreCase("kusa") || e.getMessage().equalsIgnoreCase("w")) {
             new BukkitRunnable(){
                 @Override
                 public void run() {
-                    var block = e.getPlayer().getLocation().subtract(0, 1, 0).getBlock();
+                    final var block = e.getPlayer().getLocation().subtract(0, 1, 0).getBlock();
                     if (block.getType() != Material.GRASS_BLOCK) {
                         return;
                     }
 
-                    var id = e.getPlayer().getUniqueId();
-                    var lastTime = last草edTimeMap.containsKey(id) ? last草edTimeMap.get(id) : Integer.MIN_VALUE;
-                    var nowTime = Bukkit.getCurrentTick();
+                    final var id = e.getPlayer().getUniqueId();
+                    final var lastTime = last草edTimeMap.containsKey(id) ? last草edTimeMap.get(id) : Integer.MIN_VALUE;
+                    final var nowTime = Bukkit.getCurrentTick();
                     if (lastTime == Integer.MIN_VALUE || nowTime - lastTime > 20 * 60) {
                         block.applyBoneMeal(BlockFace.UP);
                         logger.info("Applied 草");
@@ -224,12 +224,12 @@ public class PlayerHandler implements Listener {
             }.runTask(plugin);
         }
     }
-    
+
     @EventHandler
     public void onPlayerDeath(PlayerRespawnEvent e) {
-        var p = e.getPlayer();
+        final var p = e.getPlayer();
         if (p.getWorld().getName().startsWith("travel_")) {
-            var world = Bukkit.getWorld("world");
+            final var world = Bukkit.getWorld("world");
             p.teleportAsync(world.getSpawnLocation());
         }
     }
@@ -241,11 +241,11 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
-        var p = e.getPlayer();
-        var isSneaking = p.isSneaking();
+        final var p = e.getPlayer();
+        final var isSneaking = p.isSneaking();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            var worldName = p.getWorld().getName();
-            var isBedDisabledWorld = 
+            final var worldName = p.getWorld().getName();
+            final var isBedDisabledWorld =
                    worldName.startsWith("travel_")
                 || worldName.equals("hub")
                 || worldName.equals("hub2")
@@ -256,7 +256,7 @@ public class PlayerHandler implements Listener {
             }
             return;
         }
-        var item = e.getItem();
+        final var item = e.getItem();
         if (TravelTicketUtil.isTravelTicket(item) && e.getAction() != Action.PHYSICAL) {
             e.setCancelled(true);
 
@@ -265,10 +265,10 @@ public class PlayerHandler implements Listener {
                 return;
             }
 
-            var type = TravelTicketUtil.getTicketType(item);
-            var worldName = "travel_" + type.toString().toLowerCase();
-            var world = Bukkit.getWorld(worldName);
-            
+            final var type = TravelTicketUtil.getTicketType(item);
+            final var worldName = "travel_" + type.toString().toLowerCase();
+            final var world = Bukkit.getWorld(worldName);
+
             if (world == null) {
                 p.sendMessage("申し訳ありませんが、現在" + type.getDisplayName() + "には行けません。");
                 return;
@@ -282,25 +282,26 @@ public class PlayerHandler implements Listener {
             if (p.getGameMode() != GameMode.CREATIVE) {
                 item.setAmount(item.getAmount() - 1);
             }
-            int x, z;
-            var otherPlayers = world.getPlayers();
+            final int x;
+            final int z;
+            final var otherPlayers = world.getPlayers();
 
             if (isSneaking || otherPlayers.size() == 0) {
                 x = rnd.nextInt(20000) - 10000;
                 z = rnd.nextInt(20000) - 10000;
             } else {
-                var chosen = otherPlayers.get(rnd.nextInt(otherPlayers.size()));
-                var loc = chosen.getLocation();
+                final var chosen = otherPlayers.get(rnd.nextInt(otherPlayers.size()));
+                final var loc = chosen.getLocation();
                 final var range = 10;
                 x = loc.getBlockX() + rnd.nextInt(range) - range / 2;
                 z = loc.getBlockZ() + rnd.nextInt(range) - range / 2;
             }
             p.sendMessage("旅行券を使用しました。現在手配中です。その場で少しお待ちください！");
-            var res = world.getChunkAtAsync(x, z);
+            final var res = world.getChunkAtAsync(x, z);
             res.whenComplete((ret, ex) -> {
-                var y = world.getHighestBlockYAt(x, z);
-                var loc = new Location(world, x, y, z);
-                var block = world.getBlockAt(loc);
+                final var y = world.getHighestBlockYAt(x, z);
+                final var loc = new Location(world, x, y, z);
+                final var block = world.getBlockAt(loc);
                 // 危険ブロックの場合、安全な石ブロックを敷いておく
                 // TODO: 対象ブロックをHashSetに入れてそれを使うようにする
                 if (block.getType() == Material.LAVA || block.getType() == Material.WATER) {
@@ -321,11 +322,11 @@ public class PlayerHandler implements Listener {
 
     private void onNodeAdd(NodeAddEvent e) {
         if (!e.isUser()) return;
-        var target = (User)e.getTarget();
-        var node = e.getNode();
+        final var target = (User)e.getTarget();
+        final var node = e.getNode();
 
         Bukkit.getScheduler().runTask(XCorePlugin.getInstance(), () -> {
-            Player player = Bukkit.getPlayer(target.getUniqueId());
+            final Player player = Bukkit.getPlayer(target.getUniqueId());
             if (player == null) return;
 
             if (node instanceof InheritanceNode in && "citizen".equals(in.getGroupName())) {
@@ -334,10 +335,10 @@ public class PlayerHandler implements Listener {
         });
     }
 
-    private Plugin plugin;
+    private final Plugin plugin;
     private final Random rnd = new Random();
     private UUID movingPlayer = null;
-    private Map<UUID, Integer> last草edTimeMap = new HashMap<>();
+    private final Map<UUID, Integer> last草edTimeMap = new HashMap<>();
 
     // 30分
     private final int DEFAULT_NEW_COMER_TIME = 20 * 60 * 30;

@@ -30,9 +30,9 @@ public class NightmareHandler implements Listener {
 
     @EventHandler
     public void onPlayerUseBed(PlayerInteractEvent e) {
-        var block = e.getClickedBlock();
+        final var block = e.getClickedBlock();
         if (block == null) return;
-        var loc = block.getLocation();
+        final var loc = block.getLocation();
         if (!isNightmare(loc.getWorld())) return;
 
         // ベッド爆弾の再現
@@ -46,11 +46,11 @@ public class NightmareHandler implements Listener {
     @EventHandler
     public void onProjecileLaunch(ProjectileLaunchEvent e) {
         // TODO wip
-        var type = e.getEntityType();
-        var p = e.getEntity();
+        final var type = e.getEntityType();
+        final var p = e.getEntity();
         if (!(p.getShooter() instanceof Player)) return;
-        var shooter = (Player)p.getShooter();
-        var handheld = shooter.getInventory().getItemInMainHand();
+        final var shooter = (Player)p.getShooter();
+        final var handheld = shooter.getInventory().getItemInMainHand();
 
         // egg
     }
@@ -59,7 +59,7 @@ public class NightmareHandler implements Listener {
     public void onDropRareItems(EntityDeathEvent e) {
         if (!isNightmare(e.getEntity().getWorld())) return;
         if (random.nextDouble() > superRareItemsDropRatio) {
-            var drops = e.getDrops();
+            final var drops = e.getDrops();
             drops.removeIf(st -> superRareItems.contains(st.getType()));
         }
     }
@@ -72,5 +72,5 @@ public class NightmareHandler implements Listener {
     private final Random random = new Random();
     private final HashSet<Material> superRareItems = new HashSet<>();
 
-    private float superRareItemsDropRatio = 0.1f;
+    private final float superRareItemsDropRatio = 0.1f;
 }

@@ -37,7 +37,7 @@ public class OmikujiStore {
     }
 
     public OmikujiScore get(Player player) {
-        var str = cm.getConf().getString(player.getUniqueId().toString(), OmikujiScore.None.name());
+        final var str = cm.getConf().getString(player.getUniqueId().toString(), OmikujiScore.None.name());
         return OmikujiScore.valueOf(str);
     }
 
@@ -62,7 +62,7 @@ public class OmikujiStore {
     }
 
     public OmikujiScore generateScore() {
-        var dice = random.nextInt(100000);
+        final var dice = random.nextInt(100000);
 
         if (dice == 777) return OmikujiScore.Tokudaikichi;
         if (dice == 666) return OmikujiScore.Daikyou;
@@ -73,7 +73,7 @@ public class OmikujiStore {
         return OmikujiScore.Kyou;
     }
 
-    private Config cm;
+    private final Config cm;
     private static OmikujiStore instance;
-    private Random random = new Random();
+    private final Random random = new Random();
 }

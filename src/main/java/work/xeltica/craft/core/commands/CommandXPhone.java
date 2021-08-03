@@ -15,7 +15,7 @@ import work.xeltica.craft.core.stores.ItemStore;
 public class CommandXPhone extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        var item = ItemStore.getInstance().getItem("xphone");
+        final var item = ItemStore.getInstance().getItem("xphone");
         if (item != null) {
             player.getInventory().addItem(item);
             player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);

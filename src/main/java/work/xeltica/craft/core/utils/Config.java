@@ -54,7 +54,7 @@ public class Config {
     }
 
     private static File openFile(String configName) {
-        var folder = XCorePlugin.getInstance().getDataFolder();
+        final var folder = XCorePlugin.getInstance().getDataFolder();
         return new File(folder, configName + ".yml");
     }
 

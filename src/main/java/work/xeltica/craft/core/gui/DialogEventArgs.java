@@ -15,5 +15,5 @@ public class DialogEventArgs {
         return player;
     }
 
-    private Player player;
+    private final Player player;
 }

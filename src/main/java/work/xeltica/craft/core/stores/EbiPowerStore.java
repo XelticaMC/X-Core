@@ -23,7 +23,7 @@ public class EbiPowerStore {
 
         // エビパワー保存データを読み込む
         ep = new Config("ep", (conf) -> {
-            var c = conf.getConf();
+            final var c = conf.getConf();
             this.shopItems = (List<EbiPowerItem>)c.getList(CONFIG_KEY_SHOP_ITEMS, new ArrayList<EbiPowerItem>());
         });
     }
@@ -53,7 +53,7 @@ public class EbiPowerStore {
             return Result.NO_ENOUGH_POWER;
         }
 
-        var res = p.getInventory().addItem(item.item().clone());
+        final var res = p.getInventory().addItem(item.item().clone());
         if (res.size() != 0) {
             // 購入失敗なので返金
             tryGive(p, item.cost());
@@ -65,26 +65,26 @@ public class EbiPowerStore {
     }
 
     public int get(Player p) {
-        var vault = VaultPlugin.getInstance();
+        final var vault = VaultPlugin.getInstance();
         return (int)vault.getBalance(p);
     }
 
     public boolean tryGive(Player p, int amount) {
-        var vault = VaultPlugin.getInstance();
+        final var vault = VaultPlugin.getInstance();
         return vault.tryDepositPlayer(p, amount);
     }
 
     public boolean tryTake(Player p, int amount) {
-        var vault = VaultPlugin.getInstance();
+        final var vault = VaultPlugin.getInstance();
         return vault.tryWithdrawPlayer(p, amount);
     }
-    
+
     @Getter
     private static EbiPowerStore instance;
     @Getter
     private List<EbiPowerItem> shopItems = new ArrayList<>();
 
-    private Config ep;
+    private final Config ep;
 
     private static final String CONFIG_KEY_SHOP_ITEMS = "shopItems";
 

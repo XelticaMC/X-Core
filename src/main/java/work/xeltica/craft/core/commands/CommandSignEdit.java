@@ -24,24 +24,24 @@ public class CommandSignEdit extends CommandPlayerOnlyBase {
         if (args.length < 1) {
             return false;
         }
-        var block = player.getTargetBlock(null, 5);
+        final var block = player.getTargetBlock(null, 5);
         if (!Tag.SIGNS.isTagged(block.getType())) {
             player.sendMessage(ChatColor.RED + "変更する対象の看板を見てください");
             return true;
         }
-        var state = (Sign)block.getState();
+        final var state = (Sign)block.getState();
         try {
-            var index = Integer.parseInt(args[0]);
+            final var index = Integer.parseInt(args[0]);
             if (index < 0 || index > 3) {
                 player.sendMessage(ChatColor.RED + "行番号には0,1,2,3を指定してください");
                 return true;
-            };
-            var l = new LinkedList<String>(Arrays.asList(args));
+            }
+            final var l = new LinkedList<String>(Arrays.asList(args));
             l.remove(0);
-            var line = String.join(" ", l);
+            final var line = String.join(" ", l);
             state.line(index, Component.text(line));
             // イベント
-            var e = new SignChangeEvent(block, player, state.lines());
+            final var e = new SignChangeEvent(block, player, state.lines());
             Bukkit.getPluginManager().callEvent(e);
             if (!e.isCancelled()) {
                 state.update();
@@ -52,5 +52,5 @@ public class CommandSignEdit extends CommandPlayerOnlyBase {
         }
         return true;
     }
-    
+
 }

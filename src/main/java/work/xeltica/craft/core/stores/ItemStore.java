@@ -53,7 +53,7 @@ public class ItemStore {
      * カスタムアイテムを作成
      */
     public ItemStack createCustomItem(String name, String... lore) {
-        var st = new ItemStack(Material.KNOWLEDGE_BOOK);
+        final var st = new ItemStack(Material.KNOWLEDGE_BOOK);
 
         st.editMeta(meta -> {
             meta.displayName(
@@ -77,32 +77,30 @@ public class ItemStore {
         // -- 種類が違う
         if (stack1.getType() != stack2.getType()) return false;
 
-        var meta1 = stack1.getItemMeta();
-        var meta2 = stack2.getItemMeta();
+        final var meta1 = stack1.getItemMeta();
+        final var meta2 = stack2.getItemMeta();
 
         // -- 名前の比較
-        var name1 = PlainTextComponentSerializer.plainText().serialize(meta1.displayName());
-        var name2 = PlainTextComponentSerializer.plainText().serialize(meta2.displayName());
+        final var name1 = PlainTextComponentSerializer.plainText().serialize(meta1.displayName());
+        final var name2 = PlainTextComponentSerializer.plainText().serialize(meta2.displayName());
         if (!name1.equals(name2)) return false;
-        
-        // -- lore の比較
-        var lore1 = meta1.lore().stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
-        var lore2 = meta2.lore().stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
-        if (!lore1.equals(lore2)) return false;
 
-        return true;
+        // -- lore の比較
+        final var lore1 = meta1.lore().stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
+        final var lore2 = meta2.lore().stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
+        return lore1.equals(lore2);
     }
 
     public void givePhoneIfNeeded(@NotNull Player player) {
-        var inv = player.getInventory();
-        var phone = getItem(ItemStore.ITEM_NAME_XPHONE);
-        var hasItem = Streams.stream(inv)
+        final var inv = player.getInventory();
+        final var phone = getItem(ItemStore.ITEM_NAME_XPHONE);
+        final var hasItem = Streams.stream(inv)
             .anyMatch(a -> compareCustomItem(a, getItem(ItemStore.ITEM_NAME_XPHONE)));
         if (!hasItem) inv.addItem(phone);
     }
 
     public ItemStack getPlayerHead(Player player) {
-        var stack = new ItemStack(Material.PLAYER_HEAD);
+        final var stack = new ItemStack(Material.PLAYER_HEAD);
 
         stack.editMeta(m -> {
             if (m instanceof SkullMeta skullMeta) {
@@ -134,7 +132,7 @@ public class ItemStore {
     private void registerItems() {
         customItems.put(ITEM_NAME_XPHONE, createCustomItem("X Phone SE", "XelticaMCの独自機能にアクセスできるスマホ。"));
     }
-    
+
     private final Map<String, ItemStack> customItems = new HashMap<>();
     private static ItemStore instance;
 }

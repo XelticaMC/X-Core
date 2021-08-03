@@ -31,8 +31,8 @@ public class CommandReport extends CommandPlayerOnlyBase {
         if (args.length != 1) {
             return false;
         }
-        var playerName = args[0];
-        var reportee = Bukkit.getOfflinePlayer(Bukkit.getPlayerUniqueId(playerName));
+        final var playerName = args[0];
+        final var reportee = Bukkit.getOfflinePlayer(Bukkit.getPlayerUniqueId(playerName));
         if (reportee == null) {
             reporter.sendMessage("そのような名前のプレイヤーはこのサーバーにはいないようです。");
             return true;
@@ -43,7 +43,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
 
 
     private void choosePunishmentType(Player reporter, OfflinePlayer reportee) {
-        Consumer<MenuItem> cb = (m) -> chooseReason(reporter, reportee, (String)m.getCustomData(), null);
+        final Consumer<MenuItem> cb = (m) -> chooseReason(reporter, reportee, (String)m.getCustomData(), null);
         Gui.getInstance().openMenu(reporter, "処罰の種類"
             , new MenuItem("BAN", cb, Material.BARRIER, "ban")
             , new MenuItem("警告", cb, Material.BELL, "warn")
@@ -51,12 +51,12 @@ public class CommandReport extends CommandPlayerOnlyBase {
             , new MenuItem("ミュート", cb, Material.MUSIC_DISC_11, "mute")
         );
     }
-    
+
 
     private void chooseReason(Player reporter, OfflinePlayer reportee, String command, HashSet<AbuseType> state) {
-        var types = AbuseType.values();
+        final var types = AbuseType.values();
         final HashSet<AbuseType> currentState = state == null ? new HashSet<>() : state;
-        var menuItems = Arrays.stream(types).map(t -> {
+        final var menuItems = Arrays.stream(types).map(t -> {
             return new MenuItem(t.shortName, _null -> {
                 if (currentState.contains(t)) {
                     currentState.remove(t);
@@ -89,9 +89,9 @@ public class CommandReport extends CommandPlayerOnlyBase {
     }
 
     private void chooseTime(Player reporter, OfflinePlayer reportee, String command, HashSet<AbuseType> state) {
-        Consumer<MenuItem> cb = (m) -> takeDown(reporter, reportee, command, state, (String)m.getCustomData());
+        final Consumer<MenuItem> cb = (m) -> takeDown(reporter, reportee, command, state, (String)m.getCustomData());
 
-        String[] times = {
+        final String[] times = {
             "1d", "3d", "5d", "7d", "14d", "1mo", "3mo", "6mo", "12mo", null,
         };
 
@@ -101,9 +101,9 @@ public class CommandReport extends CommandPlayerOnlyBase {
     }
 
     private void takeDown(Player moderator, OfflinePlayer badGuy, String command, HashSet<AbuseType> state, String time) {
-        var abuses = String.join(",", state.stream().map(s -> s.shortName).toArray(String[]::new));
-        var timeString = convertTimeToLocaleString(time);
-        var name = badGuy.getName();
+        final var abuses = String.join(",", state.stream().map(s -> s.shortName).toArray(String[]::new));
+        final var timeString = convertTimeToLocaleString(time);
+        final var name = badGuy.getName();
         String message;
         if (command.equals("warn")) {
             if (!(badGuy instanceof Player badPlayer)) {
@@ -132,7 +132,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
             return;
         }
 
-        var cmd = time != null ? String.format("temp%s %s %s %s", command, name, time, message) : String.format("%s %s %s", command, name, message);
+        final var cmd = time != null ? String.format("temp%s %s %s %s", command, name, time, message) : String.format("%s %s %s", command, name, message);
         moderator.performCommand(cmd);
     }
 
@@ -145,7 +145,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
     private final String banTemplate = "利用規約「%s」に違反";
     private final String kickTemplate = "利用規約「%s」に違反";
     private final String muteTemplate = "利用規約「%s」に違反";
-    
+
     private static final String WILL_MUTE = "あなたの発言を今後ミュートします";
     private static final String WILL_BAN = "あなたを本サーバーから追放します";
     private static final String WILL_KICK = "あなたを本サーバーからキックします";
@@ -190,5 +190,5 @@ public class CommandReport extends CommandPlayerOnlyBase {
         private final Material icon;
         private final String instruction;
         private final String punishment;
-    };
+    }
 }

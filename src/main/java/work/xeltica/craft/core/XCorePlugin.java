@@ -1,22 +1,18 @@
 package work.xeltica.craft.core;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.logging.Logger;
-
+import net.kyori.adventure.text.Component;
+import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import net.kyori.adventure.text.Component;
-import net.luckperms.api.LuckPerms;
 import work.xeltica.craft.core.commands.CommandBase;
 import work.xeltica.craft.core.commands.CommandBoat;
 import work.xeltica.craft.core.commands.CommandCart;
 import work.xeltica.craft.core.commands.CommandCat;
 import work.xeltica.craft.core.commands.CommandDebug;
+import work.xeltica.craft.core.commands.CommandEpShop;
 import work.xeltica.craft.core.commands.CommandGiveCustomItem;
 import work.xeltica.craft.core.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.core.commands.CommandHint;
@@ -24,17 +20,15 @@ import work.xeltica.craft.core.commands.CommandHub;
 import work.xeltica.craft.core.commands.CommandLive;
 import work.xeltica.craft.core.commands.CommandLocalTime;
 import work.xeltica.craft.core.commands.CommandOmikuji;
-import work.xeltica.craft.core.commands.CommandXCoreGuiEvent;
-import work.xeltica.craft.core.commands.CommandXPhone;
-import work.xeltica.craft.core.commands.CommandXtp;
 import work.xeltica.craft.core.commands.CommandPromo;
 import work.xeltica.craft.core.commands.CommandPvp;
 import work.xeltica.craft.core.commands.CommandReport;
 import work.xeltica.craft.core.commands.CommandRespawn;
 import work.xeltica.craft.core.commands.CommandSignEdit;
+import work.xeltica.craft.core.commands.CommandXCoreGuiEvent;
+import work.xeltica.craft.core.commands.CommandXPhone;
+import work.xeltica.craft.core.commands.CommandXtp;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.handlers.XphoneHandler;
-import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.handlers.EbiPowerHandler;
 import work.xeltica.craft.core.handlers.EntityHandler;
 import work.xeltica.craft.core.handlers.HubHandler;
@@ -44,10 +38,16 @@ import work.xeltica.craft.core.handlers.PlayerHandler;
 import work.xeltica.craft.core.handlers.VehicleHandler;
 import work.xeltica.craft.core.handlers.WakabaHandler;
 import work.xeltica.craft.core.handlers.WorldHandler;
+import work.xeltica.craft.core.handlers.XphoneHandler;
+import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.plugins.CitizenTimerCalculator;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.runnables.DaylightObserver;
 import work.xeltica.craft.core.runnables.NightmareRandomEvent;
+import work.xeltica.craft.core.stores.BossBarStore;
+import work.xeltica.craft.core.stores.CloverStore;
+import work.xeltica.craft.core.stores.EbiPowerStore;
+import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.MetaStore;
@@ -55,11 +55,10 @@ import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.VehicleStore;
 import work.xeltica.craft.core.stores.WorldStore;
-import work.xeltica.craft.core.commands.CommandEpShop;
-import work.xeltica.craft.core.stores.BossBarStore;
-import work.xeltica.craft.core.stores.CloverStore;
-import work.xeltica.craft.core.stores.EbiPowerStore;
-import work.xeltica.craft.core.stores.HintStore;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
@@ -93,7 +92,7 @@ public class XCorePlugin extends JavaPlugin {
             public void run() {
                 VehicleStore.getInstance().tick(tick);
 
-                var store = PlayerStore.getInstance();
+                final var store = PlayerStore.getInstance();
                 store.openAll().forEach(record -> {
                     // オフラインなら処理しない
                     if (Bukkit.getPlayer(record.getPlayerId()) == null) return;
@@ -115,11 +114,11 @@ public class XCorePlugin extends JavaPlugin {
 
 
         calculator = new CitizenTimerCalculator();
-        var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        var luckPerms = provider.getProvider();
+        final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        final var luckPerms = provider.getProvider();
         luckPerms.getContextManager().registerCalculator(calculator);
 
-        var meta = MetaStore.getInstance();
+        final var meta = MetaStore.getInstance();
 
         if (MetaStore.getInstance().isUpdated()) {
             Bukkit.getServer()
@@ -127,11 +126,11 @@ public class XCorePlugin extends JavaPlugin {
             .forEach(a -> {
                 var prev = meta.getPreviousVersion();
                 if (prev == null) prev = "unknown";
-                var current = meta.getCurrentVersion();
-                var text = String.format("§aCore Systemが更新されました。%s -> %s", prev, current);
+                final var current = meta.getCurrentVersion();
+                final var text = String.format("§aCore Systemが更新されました。%s -> %s", prev, current);
                 a.sendMessage(Component.text(text));
                 for (var log : meta.getChangeLog()) {
-                    a.sendMessage(Component.text("・" + log));                    
+                    a.sendMessage(Component.text("・" + log));
                 }
             });
         }
@@ -144,16 +143,16 @@ public class XCorePlugin extends JavaPlugin {
         commands.clear();
         Gui.resetInstance();
         unloadPlugins();
-        var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        var luckPerms = provider.getProvider();
+        final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        final var luckPerms = provider.getProvider();
         luckPerms.getContextManager().unregisterCalculator(calculator);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        var name = command.getName().toLowerCase();
+        final var name = command.getName().toLowerCase();
 
-        var com = commands.get(name);
+        final var com = commands.get(name);
         if (com == null) return false;
 
         return com.execute(sender, command, label, args);
@@ -199,7 +198,7 @@ public class XCorePlugin extends JavaPlugin {
     }
 
     private void loadHandlers() {
-        var pm = getServer().getPluginManager();
+        final var pm = getServer().getPluginManager();
 
         pm.registerEvents(new NewMorningHandler(), this);
         pm.registerEvents(new PlayerHandler(this), this);

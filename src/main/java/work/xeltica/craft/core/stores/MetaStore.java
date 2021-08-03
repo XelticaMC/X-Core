@@ -37,8 +37,8 @@ public class MetaStore {
     }
 
     private void checkUpdate() {
-        var conf = meta.getConf();
-        var currentVersion = conf.getString("version", null);
+        final var conf = meta.getConf();
+        final var currentVersion = conf.getString("version", null);
         previousVersion = conf.getString("previousVersion", null);
         if (currentVersion == null || !currentVersion.equals(getCurrentVersion())) {
             conf.set("version", getCurrentVersion());
@@ -52,16 +52,16 @@ public class MetaStore {
             }
         }
     }
-    
+
     private final Config meta;
     private String previousVersion;
     private boolean isUpdated;
 
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
-    private String[] changeLog = {
+    private final String[] changeLog = {
         "作物回収でEPを入手できない不具合を修正",
     };
-    
+
     private static MetaStore instance;
 }

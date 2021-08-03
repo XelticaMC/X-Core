@@ -27,5 +27,5 @@ public class NewMorningEvent extends Event {
         return HANDLERS_LIST;
     }
 
-    private long time;
+    private final long time;
 }

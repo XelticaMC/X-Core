@@ -37,8 +37,8 @@ public class BossBarStore {
         });
     }
 
-    private ArrayList<BossBar> bossBars = new ArrayList<>();
-    
+    private final ArrayList<BossBar> bossBars = new ArrayList<>();
+
     @Getter
     private static BossBarStore instance;
 }

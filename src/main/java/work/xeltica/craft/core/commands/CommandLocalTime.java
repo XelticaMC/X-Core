@@ -25,13 +25,13 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
         if (args.length < 1) {
             return false;
         }
-        var w = player.getWorld();
-        var c = args[0];
+        final var w = player.getWorld();
+        final var c = args[0];
         if (c.equals("set")) {
             if (args.length != 2) return false;
-            var timeString = args[1];
+            final var timeString = args[1];
             try {
-                var time = toTime(timeString);
+                final var time = toTime(timeString);
                 w.setTime(time);
                 player.sendMessage(ChatColor.RED + "時刻を " + time + "に設定しました");
             } catch (NumberFormatException e) {
@@ -41,9 +41,9 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
         }
         if (c.equals("add")) {
             if (args.length != 2) return false;
-            var timeString = args[1];
+            final var timeString = args[1];
             try {
-                var time = toTime(timeString);
+                final var time = toTime(timeString);
                 w.setTime(w.getTime() + time);
                 player.sendMessage(ChatColor.RED + "時刻を " + w.getTime() + "に設定しました");
             } catch (NumberFormatException e) {
@@ -67,6 +67,6 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
     }
 
     private final HashMap<String, Integer> builtinTimeMap = new HashMap<>();
-    
+
 }
 

@@ -18,16 +18,16 @@ public class CommandGiveCustomItem extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        var name = args.length >= 1 ? args[0] : null;
-        var p = name == null ? player : Bukkit.getPlayer(name);
-        var store = ItemStore.getInstance();
+        final var name = args.length >= 1 ? args[0] : null;
+        final var p = name == null ? player : Bukkit.getPlayer(name);
+        final var store = ItemStore.getInstance();
         if (p == null) {
             player.sendMessage(ChatColor.RED + "そのようなプレイヤーはいません");
             return true;
         }
         try {
-            var typeString = args.length >= 2 ? args[1] : "";
-            var item = store.getItem(typeString.toLowerCase());
+            final var typeString = args.length >= 2 ? args[1] : "";
+            final var item = store.getItem(typeString.toLowerCase());
             if (item != null) {
                 p.getInventory().addItem(item);
                 p.playSound(p.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);
@@ -39,5 +39,5 @@ public class CommandGiveCustomItem extends CommandPlayerOnlyBase {
         }
         return true;
     }
-    
+
 }

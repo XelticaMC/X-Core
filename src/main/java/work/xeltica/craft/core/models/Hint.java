@@ -14,13 +14,13 @@ public enum Hint {
     GOTO_SANDBOX("好きなだけ実験しよう", "サンドボックスへ行く。クリエイティブモードで好きなだけ実験できる。爆発物も思いのママ。あ、鯖は落とすなよ？", 100),
     GOTO_ART("アーティストへの第一歩", "アートワールドへ行く。サンドボックスに近いが、こちらはクリエイティブ建築用ワールド。", 100),
     GOTO_NIGHTMARE("悪い夢", "ナイトメアワールドへ行く。怖い敵がうじゃうじゃ、天候は最悪。だけど貰えるエビパワーは2倍！", 100),
-    
+
     GOTO_CLASSIC_LOBBY("先代の歩んだ歴史を探して Part.1", "クラシックロビーへ行く。かつてのXelticaMCのロビー。", 100),
     GOTO_CLASSIC_WORLD("先代の歩んだ歴史を探して Part.2", "クラシックワールドへ行く。発展しきった過去のメインワールドを刮目せよ。", 100),
     GOTO_CLASSIC_WILDAREA("そう、クラシックで、ワイルドです", "クラシックワイルドエリアへ行く。クラシックワールドで建築したければここで資材を集めるが良い。", 100),
-    
+
     // USE_POINT("力こそパワー", "エビパワーを使用する", 100),
-    
+
     CAT_MODE("にゃんか猫ににゃった", "ネコ語モードをオンにする。チャットの「な」が「にゃ」になる。", 50),
     BOAT("ボートを出す", "/boat コマンドを使うか、X Phoneを用いてボートを出現させる", 50),
     MINECART("トロッコを出す", "/cart コマンドを使うか、X Phoneを用いてトロッコを出現させる", 50),
@@ -53,7 +53,7 @@ public enum Hint {
     public String getDescription() { return description; }
     public int getPower() { return power; }
 
-    private String name;
-    private String description;
-    private int power;
+    private final String name;
+    private final String description;
+    private final int power;
 }

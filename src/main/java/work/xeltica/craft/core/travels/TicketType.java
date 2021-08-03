@@ -15,9 +15,9 @@ public enum TicketType {
         return this.displayName;
     }
 
-    private TicketType(String displayName) {
+    TicketType(String displayName) {
         this.displayName = displayName;
     }
 
-    private String displayName;
+    private final String displayName;
 }

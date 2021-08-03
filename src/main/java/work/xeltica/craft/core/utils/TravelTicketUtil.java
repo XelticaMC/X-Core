@@ -21,10 +21,10 @@ public class TravelTicketUtil {
     }
 
     public static ItemStack GenerateTravelTicket(int amount, TicketType ticketType) {
-        var ticket = new ItemStack(Material.WRITTEN_BOOK, amount);
-        var meta = ticket.getItemMeta();
+        final var ticket = new ItemStack(Material.WRITTEN_BOOK, amount);
+        final var meta = ticket.getItemMeta();
         meta.displayName(Component.text(String.format(TRAVEL_TICKET_NAME, ticketType.getDisplayName())));
-        var list = new ArrayList<String>();
+        final var list = new ArrayList<String>();
         list.add(TRAVEL_TICKET_LORE1);
         list.add(TRAVEL_TICKET_LORE2);
         list.add(TRAVEL_TICKET_LORE3);
@@ -38,20 +38,18 @@ public class TravelTicketUtil {
     public static boolean isTravelTicket(ItemStack i) {
         if (i == null) return false;
         if (i.getType() != Material.WRITTEN_BOOK) return false;
-        var meta = i.getItemMeta();
+        final var meta = i.getItemMeta();
 
-        var lores = meta.lore().stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
+        final var lores = meta.lore().stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
         if (lores == null || lores.size() != 5) return false;
         if (!lores.get(0).equals(TRAVEL_TICKET_LORE1)) return false;
         if (!lores.get(1).equals(TRAVEL_TICKET_LORE2)) return false;
-        if (!lores.get(2).equals(TRAVEL_TICKET_LORE3)) return false;
-
-        return true;
+        return lores.get(2).equals(TRAVEL_TICKET_LORE3);
     }
 
     public static TicketType getTicketType(ItemStack i) {
-        var meta = i.getItemMeta();
-        var lores = meta.lore();
+        final var meta = i.getItemMeta();
+        final var lores = meta.lore();
 
         return TicketType.valueOf(PlainTextComponentSerializer.plainText().serialize(lores.get(4)));
     }

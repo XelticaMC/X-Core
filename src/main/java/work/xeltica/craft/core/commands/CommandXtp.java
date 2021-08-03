@@ -26,8 +26,8 @@ public class CommandXtp extends CommandBase {
             sender.sendMessage("プレイヤーが実行してください。");
             return true;
         }
-        var worldName = args[0];
-        var p = args.length == 2 ? Bukkit.getPlayer(args[1]) : (Player)sender;
+        final var worldName = args[0];
+        final var p = args.length == 2 ? Bukkit.getPlayer(args[1]) : (Player)sender;
         if (p == null) {
             sender.sendMessage("§cプレイヤーが存在しません");
             return true;
@@ -35,5 +35,5 @@ public class CommandXtp extends CommandBase {
         WorldStore.getInstance().teleportToSavedLocation(p, worldName);
         return true;
     }
-    
+
 }

@@ -30,7 +30,7 @@ public class VehicleStore {
         if (!isValidVehicle(vehicle)) {
             return;
         }
-        var id = vehicle.getUniqueId().toString();
+        final var id = vehicle.getUniqueId().toString();
 
         // 初期値を登録
         cm.getConf().set(id, 20 * 60 * 5);
@@ -46,7 +46,7 @@ public class VehicleStore {
             return;
         }
 
-        var id = vehicle.getUniqueId().toString();
+        final var id = vehicle.getUniqueId().toString();
 
         // 削除
         unregisterVehicle(id);
@@ -54,14 +54,14 @@ public class VehicleStore {
 
     // TODO: ワーカーとして書き直す
     public void tick(int tickCount) {
-        var c = this.cm.getConf();
-        var ids = c.getKeys(false);
+        final var c = this.cm.getConf();
+        final var ids = c.getKeys(false);
         for (var id : ids) {
             var val = c.getInt(id);
             val -= tickCount;
             c.set(id, val);
             if (val <= 0) {
-                var e = Bukkit.getEntity(UUID.fromString(id));
+                final var e = Bukkit.getEntity(UUID.fromString(id));
                 if (e == null) {
                     logger.warning("A vehicle ID:" + id + " is not found on the server, so skipped to despawn.");
                 } else {
@@ -90,8 +90,8 @@ public class VehicleStore {
             e.printStackTrace();
         }
     }
-    
+
     private static VehicleStore instance;
-    private Config cm;
-    private Logger logger;
+    private final Config cm;
+    private final Logger logger;
 }

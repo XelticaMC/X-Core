@@ -26,8 +26,8 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        var subCommand = args.length > 0 ? args[0] : null;
-        var store = EbiPowerStore.getInstance();
+        final var subCommand = args.length > 0 ? args[0] : null;
+        final var store = EbiPowerStore.getInstance();
         if (subCommand == null || !player.hasPermission("otanoshimi.command.epshop." + subCommand.toLowerCase())) {
             openShop(player);
             return true;
@@ -38,8 +38,8 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
                     player.sendMessage("/epshop add <cost>");
                     return true;
                 }
-                var cost = Integer.parseInt(args[1]);
-                var handheld = player.getInventory().getItemInMainHand();
+                final var cost = Integer.parseInt(args[1]);
+                final var handheld = player.getInventory().getItemInMainHand();
                 if (handheld == null || handheld.getType() == Material.AIR) {
                     player.sendMessage("アイテムを手に持っていないため追加できません。");
                     return true;
@@ -47,7 +47,7 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
                 store.addItem(new EbiPowerItem(handheld, cost));
                 player.sendMessage("追加しました。");
                 break;
-            
+
             case "delete":
                 openShopMenu(player, "削除するアイテムを選んでください", (item) -> {
                     store.deleteItem(item);
@@ -60,7 +60,7 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
 
     private void openShop(Player player) {
         openShopMenu(player, "購入するアイテムを選んでください", (item) -> {
-            var result = EbiPowerStore.getInstance().tryBuyItem(player, item);
+            final var result = EbiPowerStore.getInstance().tryBuyItem(player, item);
             switch (result) {
                 case NO_ENOUGH_INVENTORY:
                     player.sendMessage("インベントリがいっぱいなため、購入に失敗しました。");
@@ -84,15 +84,15 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
     }
 
     private void openShopMenu(Player player, String title, Consumer<EbiPowerItem> onChosen) {
-        var ui = Gui.getInstance();
-        var store = EbiPowerStore.getInstance();
+        final var ui = Gui.getInstance();
+        final var store = EbiPowerStore.getInstance();
         // Component.translatable().
-        var items = store.getShopItems()
+        final var items = store.getShopItems()
             .stream()
             .map(m -> {
-                var item = m.item();
-                var name = getItemName(item);
-                var displayName = name + "×" + item.getAmount() +  " (" + m.cost() + "EP)";
+                final var item = m.item();
+                final var name = getItemName(item);
+                final var displayName = name + "×" + item.getAmount() +  " (" + m.cost() + "EP)";
                 return new MenuItem(displayName, (a) -> {
                     if (onChosen != null) {
                         onChosen.accept(m);
@@ -104,8 +104,8 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
     }
 
     private String getItemName(ItemStack item) {
-        var dn = item.getItemMeta().displayName();
-        var name = dn != null ? PlainTextComponentSerializer.plainText().serialize(dn) : item.getI18NDisplayName();
+        final var dn = item.getItemMeta().displayName();
+        final var name = dn != null ? PlainTextComponentSerializer.plainText().serialize(dn) : item.getI18NDisplayName();
         return name;
     }
 }

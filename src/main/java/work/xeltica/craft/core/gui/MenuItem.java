@@ -18,12 +18,12 @@ public class MenuItem {
         this(name, onClick, Material.STONE_BUTTON);
     }
 
-    public MenuItem(String name, Consumer<MenuItem> onClick, Material icon) { 
+    public MenuItem(String name, Consumer<MenuItem> onClick, Material icon) {
        this(name, onClick, icon, null);
     }
 
     public MenuItem(String name, Consumer<MenuItem> onClick, Material icon, Object customData) {
-        this(name, onClick, icon, customData, 1); 
+        this(name, onClick, icon, customData, 1);
     }
 
     public MenuItem(String name, Consumer<MenuItem> onClick, Material icon, Object customData, boolean shiny) {
@@ -38,7 +38,7 @@ public class MenuItem {
         this(name, onClick, new ItemStack(icon, count), customData, shiny);
     }
 
-    public MenuItem(String name, Consumer<MenuItem> onClick, ItemStack icon) { 
+    public MenuItem(String name, Consumer<MenuItem> onClick, ItemStack icon) {
         this(name, onClick, icon, null);
     }
 
@@ -60,9 +60,9 @@ public class MenuItem {
     public Object getCustomData() { return customData; }
     public boolean isShiny() { return shiny; }
 
-    private String name;
-    private ItemStack icon;
-    private Consumer<MenuItem> onClick;
-    private Object customData;
-    private boolean shiny;
+    private final String name;
+    private final ItemStack icon;
+    private final Consumer<MenuItem> onClick;
+    private final Object customData;
+    private final boolean shiny;
 }

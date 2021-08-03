@@ -24,7 +24,7 @@ public class CitizenTimerCalculator implements ContextCalculator<Player> {
 
     @Override
     public ContextSet estimatePotentialContexts() {
-        ImmutableContextSet.Builder builder = ImmutableContextSet.builder();
+        final ImmutableContextSet.Builder builder = ImmutableContextSet.builder();
         builder.add(KEY, "false");
         builder.add(KEY, "true");
         return builder.build();
