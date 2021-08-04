@@ -14,7 +14,7 @@ public class CommandHub extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        var store = HubStore.getInstance();
+        final var store = HubStore.getInstance();
 
         // 現在いるワールドを踏まえてどのワールドに移動するかどうかを分岐する
         store.teleport(player, switch (player.getWorld().getName()) {

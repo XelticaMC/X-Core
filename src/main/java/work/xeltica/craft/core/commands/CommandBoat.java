@@ -23,7 +23,7 @@ public class CommandBoat extends CommandPlayerOnlyBase {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。");
         }
 
-        var loc = player.getLocation();
+        final var loc = player.getLocation();
         loc.getWorld().spawnEntity(loc, EntityType.BOAT, SpawnReason.CUSTOM);
 
         player.sendMessage("ボートを足元に召喚した。");
