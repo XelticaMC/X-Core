@@ -1,7 +1,6 @@
 package work.xeltica.craft.core.commands;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -23,12 +22,14 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        final var isWarping = isWarpingMap.get(player.getUniqueId());
+        // テレポート中であれば弾く
+        var isWarping = isWarpingMap.get(player.getUniqueId());
         if (isWarping != null && isWarping) {
             player.sendMessage("移動中です！");
             return true;
         }
 
+        // 第一引数の内容によってテレポート先を分岐
         if (args.length > 0 && args[0].equalsIgnoreCase("bed")) {
             teleportToBedSpawn(player);
         } else {
@@ -39,6 +40,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         return true;
     }
 
+    /** ベッド位置にリスポーンします */
     private void teleportToBedSpawn(Player player) {
         try {
             // respawn禁止されているかどうかの検証
@@ -48,7 +50,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             return;
         }
 
-        final var loc = player.getBedSpawnLocation();
+        var loc = player.getBedSpawnLocation();
 
         if (loc == null) {
             player.sendMessage("ベッドが存在しないか、塞がれているためにテレポートできません。");
@@ -65,19 +67,20 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         player.sendMessage("5秒後にベッドの位置にテレポートします...");
     }
 
+    /** ワールドの初期スポーンにテレポートします */
     private void teleportToInitialSpawn(Player player) {
-        final String respawnWorldName;
+        String respawnWorldName;
         try {
             respawnWorldName = getRespawnWorld(player.getWorld());
         } catch (Exception e) {
             player.sendMessage(ChatColor.RED + "このワールドでは許可されていません");
             return;
         }
-        final var respawnWorld = Bukkit.getWorld(respawnWorldName);
-        final var respawn =  Objects.requireNonNull(respawnWorld).getSpawnLocation();
+        var respawnWorld = Bukkit.getWorld(respawnWorldName);
+        var respawn =  respawnWorld.getSpawnLocation();
 
-        final var isSameWorld = player.getWorld().getUID().equals(respawnWorld.getUID());
-        final var respawnWorldDisplayName = WorldStore.getInstance().getWorldDisplayName(respawnWorld);
+        var isSameWorld = player.getWorld().getUID().equals(respawnWorld.getUID());
+        var respawnWorldDisplayName = WorldStore.getInstance().getWorldDisplayName(respawnWorld);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -87,7 +90,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         }.runTaskLater(XCorePlugin.getInstance(), 20 * 5);
 
         player.sendMessage(isSameWorld
-            ? "5秒後に初期スポーンに移動します..."
+            ? "5秒後に初期スポーンに移動します..." 
             : "5秒後に" + respawnWorldDisplayName + "の初期スポーンに移動します..."
         );
     }
@@ -109,7 +112,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             case "pvp" -> throw new Exception();
         };
     }
-
-    private final HashMap<UUID, Boolean> isWarpingMap = new HashMap<>();
+    
+    private HashMap<UUID, Boolean> isWarpingMap = new HashMap<>();
 
 }

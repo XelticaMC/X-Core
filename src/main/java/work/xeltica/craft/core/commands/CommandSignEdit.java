@@ -24,33 +24,35 @@ public class CommandSignEdit extends CommandPlayerOnlyBase {
         if (args.length < 1) {
             return false;
         }
-        final var block = player.getTargetBlock(null, 5);
+        var block = player.getTargetBlock(null, 5);
         if (!Tag.SIGNS.isTagged(block.getType())) {
             player.sendMessage(ChatColor.RED + "変更する対象の看板を見てください");
             return true;
         }
-        final var state = (Sign)block.getState();
+        var state = (Sign)block.getState();
         try {
-            final var index = Integer.parseInt(args[0]);
+            var index = Integer.parseInt(args[0]);
             if (index < 0 || index > 3) {
                 player.sendMessage(ChatColor.RED + "行番号には0,1,2,3を指定してください");
                 return true;
-            }
-            final var l = new LinkedList<String>(Arrays.asList(args));
+            };
+            var l = new LinkedList<String>(Arrays.asList(args));
             l.remove(0);
-            final var line = String.join(" ", l);
+            var line = String.join(" ", l);
             state.line(index, Component.text(line));
-            // イベント
-            final var e = new SignChangeEvent(block, player, state.lines());
+            // Spigot イベントを発行し、他のプラグインにキャンセルされたらやめる
+            var e = new SignChangeEvent(block, player, state.lines());
             Bukkit.getPluginManager().callEvent(e);
             if (!e.isCancelled()) {
                 state.update();
                 player.sendMessage("看板の" + index + "行目を「" + line + "」と書き換えました");
+            } else {
+                player.sendMessage("何らかの理由でこの看板は編集できません");
             }
         } catch (NumberFormatException e) {
             return false;
         }
         return true;
     }
-
+    
 }

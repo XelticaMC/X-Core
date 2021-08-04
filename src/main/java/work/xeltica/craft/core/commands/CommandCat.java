@@ -16,24 +16,34 @@ public class CommandCat extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player sender, Command command, String label, String[] args) {
-        final var record = PlayerStore.getInstance().open(sender);
-        if (args.length > 0) {
-            final var arg = args[0];
-            if ("on".equals(arg)) {
+        var record = PlayerStore.getInstance().open(sender);
+        // 引数がない場合は現在のモードを表示
+        if (args.length == 0) {
+            var mes = record.getBoolean(PlayerDataKey.CAT_MODE)
+                ? "§aあなたはCATモードです。§r"
+                : "§aあなたはCATモードではありません。§r";
+            sender.sendMessage(mes);
+            return true;
+        }
+
+        // 引数がある場合はモードを設定
+        var arg = args[0].toLowerCase();
+        switch (arg) {
+            case "on" -> {
                 record.set(PlayerDataKey.CAT_MODE, true);
-                HintStore.getInstance().achieve(sender, Hint.CAT_MODE);
                 sender.sendMessage("CATモードを§aオン§rにしました。");
-            } else if ("off".equals(arg)) {
+
+                HintStore.getInstance().achieve(sender, Hint.CAT_MODE);
+            }
+            case "off" -> {
                 record.set(PlayerDataKey.CAT_MODE, false);
                 sender.sendMessage("CATモードを§cオフ§rにしました。");
-            } else {
+            }
+            default -> {
                 return false;
             }
-        } else {
-            final var mes = record.getBoolean(PlayerDataKey.CAT_MODE) ? "§aあなたはCATモードです。§r" : "§aあなたはCATモードではありません。§r";
-            sender.sendMessage(mes);
         }
         return true;
     }
-
+    
 }

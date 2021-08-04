@@ -15,9 +15,7 @@ public class CommandXtp extends CommandBase {
 
     @Override
     public boolean execute(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length != 1 && args.length != 2) {
-            return false;
-        }
+        if (args.length != 1 && args.length != 2) return false;
         if (args.length == 2 && !sender.hasPermission("otanoshimi.command.xtp.other")) {
             sender.sendMessage("§c権限がありません。");
             return true;

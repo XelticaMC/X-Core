@@ -22,14 +22,13 @@ public class CommandBoat extends CommandPlayerOnlyBase {
         if (!WorldStore.getInstance().canSummonVehicles(player.getWorld())) {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。");
         }
-        // if (!EbiPowerStore.getInstance().tryTake(player, 5)) {
-        //     return Gui.getInstance().error(player, "§cEPが足りない…");
-        // }
 
-        final var loc = player.getLocation();
+        var loc = player.getLocation();
         loc.getWorld().spawnEntity(loc, EntityType.BOAT, SpawnReason.CUSTOM);
+
         player.sendMessage("ボートを足元に召喚した。");
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 2);
+
         HintStore.getInstance().achieve(player, Hint.BOAT);
         return true;
     }
