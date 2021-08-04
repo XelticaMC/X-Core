@@ -148,18 +148,11 @@ public class XphoneHandler implements Listener {
         items.add(appTeleport);
 
         switch (worldName) {
-            case "main":
-            case "wildarea2":
-            case "wildarea2_nether":
-            case "wildarea2_the_end":
-            case "wildarea":
-            case "world":
-            case "world_nether":
-            case "world_the_end":
+            case "main", "wildarea2", "wildarea2_nether", "wildarea2_the_end", "wildarea", "world", "world_nether", "world_the_end" -> {
                 items.add(appCPrivate);
                 items.add(appCPublic);
                 items.add(appCRemove);
-                break;
+            }
         }
 
         if (isBedrock) {

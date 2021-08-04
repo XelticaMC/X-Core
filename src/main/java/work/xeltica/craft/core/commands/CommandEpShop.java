@@ -63,28 +63,29 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
 
     /**
      * 購入用のUIを開きます。
+     * @param player UIを開くプレイヤー
      */
     private void openShop(Player player) {
         openShopMenu(player, "購入するアイテムを選んでください", (item) -> {
             final var result = EbiPowerStore.getInstance().tryBuyItem(player, item);
 
             switch (result) {
-                case NO_ENOUGH_INVENTORY:
+                case NO_ENOUGH_INVENTORY -> {
                     player.sendMessage("インベントリがいっぱいなため、購入に失敗しました。");
                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1, 0.5f);
-                    break;
-                case NO_ENOUGH_POWER:
+                }
+                case NO_ENOUGH_POWER -> {
                     player.sendMessage("エビパワー不足のため、購入に失敗しました。");
                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1, 0.5f);
-                    break;
-                case SUCCESS:
+                }
+                case SUCCESS -> {
                     player.sendMessage(Component.text("§a" + getItemName(item.item()) + "§rを購入しました！"));
                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 1);
-                    break;
-                default:
+                }
+                default -> {
                     player.sendMessage("謎のエラーだゾ");
                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1, 0.5f);
-                    break;
+                }
             }
             Bukkit.getScheduler().runTask(XCorePlugin.getInstance(), () -> openShop(player));
         });
@@ -92,6 +93,9 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
 
     /**
      * お店のメニューを開きます。
+     * @param player メニューを開くプレイヤー
+     * @param title メニューのタイトル
+     * @param onChosen お店のメニューの一覧
      */
     private void openShopMenu(Player player, String title, Consumer<EbiPowerItem> onChosen) {
         final var ui = Gui.getInstance();
@@ -114,6 +118,8 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
 
     /**
      * 指定したアイテムスタックから名前を取得します。
+     * @param item 取得するアイテム
+     * @return アイテムのdisplayName
      */
     private String getItemName(ItemStack item) {
         final var dn = item.getItemMeta().displayName();

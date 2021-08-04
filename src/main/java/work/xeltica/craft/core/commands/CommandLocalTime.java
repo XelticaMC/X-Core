@@ -7,13 +7,15 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 /**
- * 現在いるワールドの時間を操作するコマンド
+ * 現在いるワールドのみの時間を操作するコマンド
  * @author Xeltica
  */
 public class CommandLocalTime extends CommandPlayerOnlyBase {
+    /**
+     * 組込み名前付き時間を追加
+     * 統合版のほうが充実しているので統合版から拝借してます
+     */
     public CommandLocalTime() {
-        // 組込み名前付き時間を追加
-        // 統合版のほうが充実しているので統合版から拝借してます
         builtinTimeMap.put("day", 1000);
         builtinTimeMap.put("night", 13000);
         builtinTimeMap.put("noon", 6000);
@@ -64,6 +66,11 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
         return true;
     }
 
+    /**
+     * 対応する文字列から時間の数値に変換する関数
+     * @param timeString builtinTimeMapにある対応する文字列
+     * @return 時間の数値
+     */
     private int toTime(String timeString) {
         if (builtinTimeMap.containsKey(timeString)) {
             return builtinTimeMap.get(timeString);
@@ -71,7 +78,10 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
         return Integer.parseInt(timeString);
     }
 
-    private final HashMap<String, Integer> builtinTimeMap = new HashMap<>();
+    /**
+     * 時間の数値とそれに対応するmidnightなどの文字列が格納されている
+     */
+    private static final HashMap<String, Integer> builtinTimeMap = new HashMap<>();
 
 }
 

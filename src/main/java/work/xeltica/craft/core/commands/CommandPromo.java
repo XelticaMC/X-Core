@@ -59,10 +59,21 @@ public class CommandPromo extends CommandPlayerOnlyBase {
         return true;
     }
 
+    /**
+     * 市民になるためのクリアしているかのリストを表示する関数
+     * @param player 表示するプレイヤー
+     * @param str 条件
+     * @param isSuccess クリアしているか
+     */
     private void sendMessage(Player player, String str, boolean isSuccess) {
         player.sendMessage((isSuccess ? "§a✔ " : "§c✘ ") + str + "§r");
     }
 
+    /**
+     * minecraft tickからリアル時間に変換する関数
+     * @param tick minecraft tick
+     * @return 何分何秒or何秒で表されているリアル時間
+     */
     private String tickToString(int tick) {
         final var elapsedTime = Ticks.toTime(tick);
         final var elapsedTimeMinutes = elapsedTime / 60;

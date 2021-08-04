@@ -43,7 +43,11 @@ public class CommandReport extends CommandPlayerOnlyBase {
         return true;
     }
 
-    /** 処罰の種類を選ぶUIを表示します */
+    /**
+     * 処罰の種類を選ぶUIを表示します
+     * @param reporter 報告者
+     * @param reportee 報告される人
+     */
     private void choosePunishmentType(Player reporter, OfflinePlayer reportee) {
         final Consumer<MenuItem> cb = (m) -> chooseReason(reporter, reportee, (String)m.getCustomData(), null);
         Gui.getInstance().openMenu(reporter, "処罰の種類"
