@@ -59,7 +59,13 @@ public class CommandReport extends CommandPlayerOnlyBase {
     }
 
 
-    /** 処罰の理由を選ぶUIを表示します */
+    /**
+     * 処罰の理由を選ぶUIを表示します
+     * @param reporter 報告者
+     * @param reportee 報告される人
+     * @param command 対応している処罰方法の文字列
+     * @param state 処罰理由
+     */
     private void chooseReason(Player reporter, OfflinePlayer reportee, String command, HashSet<AbuseType> state) {
         final var types = AbuseType.values();
         final HashSet<AbuseType> currentState = state == null ? new HashSet<>() : state;
@@ -95,7 +101,13 @@ public class CommandReport extends CommandPlayerOnlyBase {
         Gui.getInstance().openMenu(reporter, command + "すべき理由（複数選択可）", menuItems.toArray(MenuItem[]::new));
     }
 
-    /** 処罰期間を選ぶUIを表示します */
+    /**
+     * 処罰期間を選ぶUIを表示します
+     * @param reporter 報告者
+     * @param reportee 報告される人
+     * @param command 対応している処罰方法の文字列
+     * @param state 処罰理由
+     */
     private void chooseTime(Player reporter, OfflinePlayer reportee, String command, HashSet<AbuseType> state) {
         final Consumer<MenuItem> cb = (m) -> takeDown(reporter, reportee, command, state, (String)m.getCustomData());
 
@@ -108,7 +120,14 @@ public class CommandReport extends CommandPlayerOnlyBase {
         ).toArray(MenuItem[]::new));
     }
 
-    /** 処罰を下します */
+    /**
+     * 処罰を下します
+     * @param moderator 実際に処罰を下すモデレーター
+     * @param badGuy 処罰が下されるプレイヤー
+     * @param command 対応している処罰方法の文字列
+     * @param state 処罰理由
+     * @param time 処罰される時間
+     */
     private void takeDown(Player moderator, OfflinePlayer badGuy, String command, HashSet<AbuseType> state, String time) {
         final var abuses = String.join(",", state.stream().map(s -> s.shortName).toArray(String[]::new));
         final var timeString = convertTimeToLocaleString(time);
@@ -148,19 +167,47 @@ public class CommandReport extends CommandPlayerOnlyBase {
         moderator.performCommand(cmd);
     }
 
-    /** 時間文字列を日本語表記に変換します */
+    /**
+     * 時間文字列を日本語表記に変換します
+     * @param time 変換する時間文字列
+     * @return 日本語表記の時間表現
+     */
     private String convertTimeToLocaleString(String time) {
         return time == null ? "無期限" : time.replace("d", "日間").replace("mo", "ヶ月");
     }
 
-    private final String warnTemplateWithoutAfterDoing = "利用規約の「%s」に違反しています。今すぐ停止してください。本警告を無視した場合、%s。";
-    private final String warnTemplate = "利用規約の「%s」に違反しています。今すぐ停止し、%s。本警告を無視した場合、%s。";
-    private final String banTemplate = "利用規約「%s」に違反";
-    private final String kickTemplate = "利用規約「%s」に違反";
-    private final String muteTemplate = "利用規約「%s」に違反";
+    /**
+     * 内容：利用規約の「%s」に違反しています。今すぐ停止してください。本警告を無視した場合、%s。
+     */
+    private static final String warnTemplateWithoutAfterDoing = "利用規約の「%s」に違反しています。今すぐ停止してください。本警告を無視した場合、%s。";
+    /**
+     * 内容：利用規約の「%s」に違反しています。今すぐ停止し、%s。本警告を無視した場合、%s。
+     */
+    private static final String warnTemplate = "利用規約の「%s」に違反しています。今すぐ停止し、%s。本警告を無視した場合、%s。";
+    /**
+     * 内容：利用規約「%s」に違反
+     */
+    private static final String banTemplate = "利用規約「%s」に違反";
+    /**
+     * 内容：利用規約「%s」に違反
+     */
+    private static final String kickTemplate = "利用規約「%s」に違反";
+    /**
+     * 内容：利用規約「%s」に違反
+     */
+    private static final String muteTemplate = "利用規約「%s」に違反";
 
+    /**
+     * 内容：あなたの発言を今後ミュートします
+     */
     private static final String WILL_MUTE = "あなたの発言を今後ミュートします";
+    /**
+     * 内容：あなたを本サーバーから追放します
+     */
     private static final String WILL_BAN = "あなたを本サーバーから追放します";
+    /**
+     * 内容：あなたを本サーバーからキックします
+     */
     private static final String WILL_KICK = "あなたを本サーバーからキックします";
 
     /**
@@ -168,29 +215,94 @@ public class CommandReport extends CommandPlayerOnlyBase {
      * TODO: enumではなくデータクラスにした上で、設定ファイルに移す
      */
     enum AbuseType {
+        /**
+         * 禁止行為: 破壊
+         */
         GRIEFING("禁止行為: 破壊", Material.DIAMOND_PICKAXE, WILL_BAN, "直ちに本来の形に修復するか、意図的でない場合はその旨を返信してください"),
+        /**
+         * 禁止行為: 窃盗
+         */
         STEALING("禁止行為: 窃盗", Material.ENDER_CHEST, WILL_BAN, "盗んだアイテムを直ちに元の場所、持ち主に返却してください"),
+        /**
+         * 禁止行為: 共有資産独占
+         */
         MONOPOLY_SHARED_ITEMS("禁止行為: 共有資産独占", Material.OAK_SIGN, WILL_BAN, "直ちに元の状態に戻すことで独占状態を解いてください"),
+        /**
+         * 禁止行為: 取り決め無きPvP
+         */
         FORCED_PVP("禁止行為: 取り決め無きPvP", Material.DIAMOND_SWORD, WILL_BAN),
+        /**
+         * 禁止行為: 無許可での私有地侵入
+         */
         PRIVATE_INVADING("禁止行為: 無許可での私有地侵入", Material.OAK_DOOR, WILL_BAN),
+        /**
+         * 禁止行為: わいせつ物建築
+         */
         OBSCENE_BUILDING("禁止行為: わいせつ物建築", Material.RED_MUSHROOM, "強制撤去かつ悪質であれば" + WILL_BAN, "撤去してください"),
+        /**
+         * 禁止行為: 国内法違反建築
+         */
         LAW_VIOLATION_BUILDING("禁止行為: 国内法違反建築", Material.TNT, "強制撤去かつ悪質であれば" + WILL_BAN, "撤去してください"),
+        /**
+         * 禁止行為: 秩序を乱すチャット
+         */
         INVALID_CHAT("禁止行為: 秩序を乱すチャット", Material.PLAYER_HEAD, WILL_MUTE),
+        /**
+         * 禁止行為: 資産の現実での取引
+         */
         REAL_TRADING("禁止行為: 資産の現実での取引", Material.GOLD_BLOCK, WILL_BAN),
+        /**
+         * 禁止行為: 恐喝
+         */
         BLACKMAIL("禁止行為: 恐喝", Material.CROSSBOW, WILL_BAN),
+        /**
+         * 禁止行為: 共謀
+         */
         COLLUSION("禁止行為: 共謀", Material.CAMPFIRE, WILL_BAN),
+        /**
+         * 禁止行為: 意図的に負荷をかける行為
+         */
         DOS("禁止行為: 意図的に負荷をかける行為", Material.CAMPFIRE, WILL_BAN),
+        /**
+         * 禁止行為: トラブルの原因となる行為
+         */
         OTHER("禁止行為: トラブルの原因となる行為", Material.CAMPFIRE, WILL_BAN, "この後に続く指示に従ってください"),
+        /**
+         * 不正行為: 不具合悪用
+         */
         GLITCH("不正行為: 不具合悪用", Material.COMMAND_BLOCK, WILL_BAN),
+        /**
+         * 不正行為: 処罰回避
+         */
         AVOID_PANISHMENT("不正行為: 処罰回避", Material.TRIPWIRE_HOOK, WILL_BAN),
+        /**
+         * 不正行為: 虚偽通報
+         */
         FAKE_REPORT("不正行為: 虚偽通報", Material.PUFFERFISH, WILL_BAN),
+        /**
+         * 不正行為: 運営からのPMの無視
+         */
         IGNORE_WARN("不正行為: 運営からのPMの無視", Material.PUFFERFISH, WILL_KICK),
+        /**
+         * 不正行為: PMの晒し上げ行為
+         */
         EXPOSE_PM("不正行為: PMの晒し上げ行為", Material.PUFFERFISH, WILL_BAN),
+        /**
+         * 不正行為: 不正MODの使用
+         */
         INVALID_MOD("不正行為: 不正MODの使用", Material.COMPARATOR, WILL_BAN, "該当するMODをアンインストールしてから参加してください（該当するMODについてわからなければ質問してください）"),
+        /**
+         * 禁止行為: 禁止場所での資源採掘
+         */
         INVALID_MINING("禁止行為: 禁止場所での資源採掘", Material.NETHERITE_PICKAXE, WILL_BAN, "破壊箇所を可能な限り修復してください"),
+        /**
+         * 禁止行為: 運営になりすます行為
+         */
         SPOOF("禁止行為: 運営になりすます行為", Material.BEDROCK, WILL_BAN),
-        FAKE_AGE("禁止行為: 年齢詐称行為", Material.CAKE, WILL_BAN)
-        ;
+        /**
+         * 禁止行為: 年齢詐称行為
+         */
+        FAKE_AGE("禁止行為: 年齢詐称行為", Material.CAKE, WILL_BAN);
 
         AbuseType(String shortName, Material icon, String punishment) {
             this(shortName, icon, punishment, null);

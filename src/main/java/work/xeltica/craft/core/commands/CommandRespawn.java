@@ -40,7 +40,10 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         return true;
     }
 
-    /** ベッド位置にリスポーンします */
+    /**
+     * ベッド位置にリスポーンします
+     * @param player リスポーンさせるプレイヤー
+     */
     private void teleportToBedSpawn(Player player) {
         try {
             // respawn禁止されているかどうかの検証
@@ -67,7 +70,10 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         player.sendMessage("5秒後にベッドの位置にテレポートします...");
     }
 
-    /** ワールドの初期スポーンにテレポートします */
+    /**
+     * ワールドの初期スポーンにテレポートします
+     * @param player テレポートさせるプレイヤー
+     */
     private void teleportToInitialSpawn(Player player) {
         final String respawnWorldName;
         try {

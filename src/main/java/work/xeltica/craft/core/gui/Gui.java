@@ -43,6 +43,7 @@ import work.xeltica.craft.core.stores.ItemStore;
 public class Gui implements Listener {
     /**
      * インスタンスを取得します。
+     * @return インスタンス
      */
     public static Gui getInstance() {
         return instance == null ? (instance = new Gui()) : instance;
@@ -57,6 +58,9 @@ public class Gui implements Listener {
 
     /**
      * メニューを開きます。
+     * @param player メニューを開くプレイヤー
+     * @param title メニューのタイトル
+     * @param items メニューのアイテム
      */
     public void openMenu(Player player, String title, MenuItem... items) {
         openMenu(player, title, List.of(items));
@@ -64,6 +68,9 @@ public class Gui implements Listener {
 
     /**
      * メニューを開きます。
+     * @param player メニューを開くプレイヤー
+     * @param title メニューのタイトル
+     * @param items メニューのアイテム
      */
     public void openMenu(Player player, String title, Collection<MenuItem> items) {
         if (isBedrock(player)) {
@@ -75,6 +82,9 @@ public class Gui implements Listener {
 
     /**
      * ダイアログを開きます。
+     * @param player ダイアログを開くプレイヤー
+     * @param title ダイアログのタイトル
+     * @param content ダイアログに記載する文字列
      */
     public void openDialog(Player player, String title, String content) {
         openDialog(player, title, content, null);
@@ -82,6 +92,10 @@ public class Gui implements Listener {
 
     /**
      * ダイアログを開きます。
+     * @param player ダイアログを開くプレイヤー
+     * @param title ダイアログのタイトル
+     * @param content ダイアログに記載する文字列
+     * @param callback UIダイアログのボタンを押したときに発火するイベント
      */
     public void openDialog(Player player, String title, String content, Consumer<DialogEventArgs> callback) {
         openDialog(player, title, content, callback, null);
@@ -89,6 +103,11 @@ public class Gui implements Listener {
 
     /**
      * ダイアログを開きます。
+     * @param player ダイアログを開くプレイヤー
+     * @param title ダイアログのタイトル
+     * @param content ダイアログに記載する文字列
+     * @param callback UIダイアログのボタンを押したときに発火するイベント
+     * @param okButtonText OKボタンのテキスト
      */
     public void openDialog(Player player, String title, String content, Consumer<DialogEventArgs> callback, String okButtonText) {
         final var okText = okButtonText == null ? "OK" : okButtonText;
@@ -102,6 +121,8 @@ public class Gui implements Listener {
 
     /**
      * 現在参加中のプレイヤーを選択するメニューを開きます。
+     * @param player メニューを開くプレイヤー
+     * @param onSelect 選択肢に入るプレイヤーを指定
      */
     public void openPlayersMenu(Player player, Consumer<Player> onSelect) {
         openPlayersMenu(player, "プレイヤーを選んでください", onSelect);
@@ -109,6 +130,9 @@ public class Gui implements Listener {
 
     /**
      * 現在参加中のプレイヤーを選択するメニューを開きます。
+     * @param player メニューを開くプレイヤー
+     * @param onSelect 選択肢に入るプレイヤーを指定
+     * @param title メニューのタイトルを指定
      */
     public void openPlayersMenu(Player player, String title, Consumer<Player> onSelect) {
         openPlayersMenu(player, title, onSelect, null);
@@ -116,6 +140,10 @@ public class Gui implements Listener {
 
     /**
      * 現在参加中のプレイヤーを選択するメニューを開きます。
+     * @param player メニューを開くプレイヤー
+     * @param onSelect 選択肢に入るプレイヤーを指定
+     * @param title メニューのタイトルを指定
+     * @param filter プレイヤーのフィルターを指定
      */
     public void openPlayersMenu(Player player, String title, Consumer<Player> onSelect, Predicate<Player> filter) {
         var stream = Bukkit.getOnlinePlayers().stream();
@@ -137,6 +165,7 @@ public class Gui implements Listener {
     /**
      * Java Editionにてボタンを押下したときに実行される内部コマンドの処理を行います。
      * 直接呼び出さないこと。
+     * @param id ID
      */
     public void handleCommand(String id) {
         if (!bookHandlersMap.containsKey(id)) return;
@@ -148,6 +177,8 @@ public class Gui implements Listener {
 
     /**
      * エラーをプレイヤーに表示します。
+     * @param p エラーを表示させるプレイヤー
+     * @param message エラー内容
      * @return 常にtrue。コマンドの返り値に使うことを想定。
      */
     public boolean error(Player p, String message) {
@@ -158,6 +189,7 @@ public class Gui implements Listener {
 
     /**
      * JavaでインベントリをメニューUIとして使うため、そのハンドリングを行います。
+     * @param e ハンドリングに使用するイベント
     */
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
@@ -180,6 +212,7 @@ public class Gui implements Listener {
 
     /**
      * JavaでインベントリをメニューUIとして使うため、そのハンドリングを行います。
+     * @param e ハンドリングに使用するイベント
     */
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
@@ -195,6 +228,7 @@ public class Gui implements Listener {
 
     /**
      * Javaで本をダイアログUIとして使うため、そのハンドリングを行います。
+     * @param e ハンドリングするイベントを指定
     */
     @EventHandler
     public void onPlayerEditBook(PlayerEditBookEvent e) {
