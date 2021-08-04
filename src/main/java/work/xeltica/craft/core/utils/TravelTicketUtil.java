@@ -14,6 +14,7 @@ import work.xeltica.craft.core.travels.TicketType;
 /**
  * 旅行券に関する便利機能を用意します。
  * @author Xeltica
+ * @deprecated
  */
 public class TravelTicketUtil {
 
