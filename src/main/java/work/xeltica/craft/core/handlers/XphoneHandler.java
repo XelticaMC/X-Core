@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,22 +46,46 @@ public class XphoneHandler implements Listener {
 
         var phone = store().getItem(ItemStore.ITEM_NAME_XPHONE);
 
+        // 右クリック以外はガード
+        if (!List.of(
+            Action.RIGHT_CLICK_AIR, 
+            Action.RIGHT_CLICK_BLOCK
+        ).contains(e.getAction())) return;
+
+        // 古いX Phone
         if (!store().compareCustomItem(item, phone)) {
             var pt = PlainTextComponentSerializer.plainText();
             var itemName = pt.serialize(itemMeta.displayName());
-            var phoneName = pt.serialize(phone.getItemMeta().displayName());
-            if (item.getType() == Material.WRITTEN_BOOK && phoneName.equals(itemName)) {
-                player.sendMessage("古いX Phoneは使えなくなりました。捨てた上で /xphone コマンドを実行して入手してください。");
+            if (item.getType() == Material.WRITTEN_BOOK && itemName.equals("X Phone")) {
                 e.setUseItemInHand(Result.DENY);
+                player.getInventory().remove(item);
+                player.getInventory().addItem(phone);
             }
             return;
         }
 
-        if (e.getAction() == Action.PHYSICAL) return;
-
         e.setUseItemInHand(Result.DENY);
 
         openSpringBoard(player);
+    }
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onOffhandUse(PlayerInteractEvent e) {
+        if (e.getHand() != EquipmentSlot.OFF_HAND) return;
+
+        var phone = store().getItem(ItemStore.ITEM_NAME_XPHONE);
+        var item = e.getPlayer().getInventory().getItemInMainHand();
+        if (item == null) return;
+
+        // 右クリック以外はガード
+        if (!List.of(
+            Action.RIGHT_CLICK_AIR, 
+            Action.RIGHT_CLICK_BLOCK
+        ).contains(e.getAction())) return;
+
+        // メインハンドがX Phoneであればオフハンドも使用停止
+        if (store().compareCustomItem(item, phone)) {
+            e.setUseItemInHand(Result.DENY);
+        }
     }
 
     private void openSpringBoard(@NotNull Player player) {
