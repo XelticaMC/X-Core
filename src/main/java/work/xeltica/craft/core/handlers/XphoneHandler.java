@@ -1,7 +1,6 @@
 package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -13,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,6 +67,25 @@ public class XphoneHandler implements Listener {
         e.setUseItemInHand(Result.DENY);
 
         openSpringBoard(player);
+    }
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onOffhandUse(PlayerInteractEvent e) {
+        if (e.getHand() != EquipmentSlot.OFF_HAND) return;
+
+        var phone = store().getItem(ItemStore.ITEM_NAME_XPHONE);
+        var item = e.getPlayer().getInventory().getItemInMainHand();
+        if (item == null) return;
+
+        // 右クリック以外はガード
+        if (!List.of(
+            Action.RIGHT_CLICK_AIR, 
+            Action.RIGHT_CLICK_BLOCK
+        ).contains(e.getAction())) return;
+
+        // メインハンドがX Phoneであればオフハンドも使用停止
+        if (store().compareCustomItem(item, phone)) {
+            e.setUseItemInHand(Result.DENY);
+        }
     }
 
     private void openSpringBoard(@NotNull Player player) {
