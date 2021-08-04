@@ -65,8 +65,8 @@ public class CommandPromo extends CommandPlayerOnlyBase {
 
     private String tickToString(int tick) {
         var elapsedTime = Ticks.toTime(tick);
-        var elapsedTimeMinutes = Math.floor(elapsedTime / 60);
-        var elapsedTimeSeconds = Math.floor(elapsedTime % 60);
+        var elapsedTimeMinutes = (int) elapsedTime / 60;
+        var elapsedTimeSeconds = (int) elapsedTime % 60;
         return elapsedTimeMinutes > 0
             ? elapsedTimeMinutes + "分" + elapsedTimeSeconds + "秒"
             : elapsedTimeSeconds + "秒";
