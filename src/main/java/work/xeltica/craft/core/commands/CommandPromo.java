@@ -17,12 +17,12 @@ import work.xeltica.craft.core.utils.Ticks;
 public class CommandPromo extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        final var luckPerms = provider.getProvider();
-        final var lpUser = luckPerms.getPlayerAdapter(Player.class).getUser(player);
-        final var store = PlayerStore.getInstance();
-        final var record = store.open(player);
-        final var isManualCitizen = lpUser.getInheritedGroups(QueryOptions.defaultContextualOptions()).stream().anyMatch(g -> g.getName().equals("citizen"));
+        var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        var luckPerms = provider.getProvider();
+        var lpUser = luckPerms.getPlayerAdapter(Player.class).getUser(player);
+        var store = PlayerStore.getInstance();
+        var record = store.open(player);
+        var isManualCitizen = lpUser.getInheritedGroups(QueryOptions.defaultContextualOptions()).stream().anyMatch(g -> g.getName().equals("citizen"));
 
         if (!store.isCitizen(player)) {
             player.sendMessage("本サーバーでは、プレイヤーさんを§aわかば§r、§b市民§rという大きく2つのロールに分類しています。");
@@ -35,11 +35,11 @@ public class CommandPromo extends CommandPlayerOnlyBase {
         if (isManualCitizen) {
             player.sendMessage("既に手動認証されているため、あなたは市民です！");
         } else {
-            final var ctx = luckPerms.getContextManager().getContext(player);
-            final var linked = ctx.contains("discordsrv:linked", "true");
-            final var crafterRole = ctx.contains("discordsrv:role", "クラフター");
-            final var citizenRole = ctx.contains("discordsrv:role", "市民");
-            final var tick = record.getInt(PlayerDataKey.NEWCOMER_TIME);
+            var ctx = luckPerms.getContextManager().getContext(player);
+            var linked = ctx.contains("discordsrv:linked", "true");
+            var crafterRole = ctx.contains("discordsrv:role", "クラフター");
+            var citizenRole = ctx.contains("discordsrv:role", "市民");
+            var tick = record.getInt(PlayerDataKey.NEWCOMER_TIME);
 
             player.sendMessage("§b§lクイック認証に必要な条件: ");
             sendMessage(player, "Discord 連携済み", linked);
@@ -59,25 +59,14 @@ public class CommandPromo extends CommandPlayerOnlyBase {
         return true;
     }
 
-    /**
-     * 市民になるためのクリアしているかのリストを表示する関数
-     * @param player 表示するプレイヤー
-     * @param str 条件
-     * @param isSuccess クリアしているか
-     */
     private void sendMessage(Player player, String str, boolean isSuccess) {
         player.sendMessage((isSuccess ? "§a✔ " : "§c✘ ") + str + "§r");
     }
 
-    /**
-     * minecraft tickからリアル時間に変換する関数
-     * @param tick minecraft tick
-     * @return 何分何秒or何秒で表されているリアル時間
-     */
     private String tickToString(int tick) {
-        final var elapsedTime = Ticks.toTime(tick);
-        final var elapsedTimeMinutes = elapsedTime / 60;
-        final var elapsedTimeSeconds = elapsedTime % 60;
+        var elapsedTime = (int) Ticks.toTime(tick);
+        var elapsedTimeMinutes = elapsedTime / 60;
+        var elapsedTimeSeconds = elapsedTime % 60;
         return elapsedTimeMinutes > 0
             ? elapsedTimeMinutes + "分" + elapsedTimeSeconds + "秒"
             : elapsedTimeSeconds + "秒";
