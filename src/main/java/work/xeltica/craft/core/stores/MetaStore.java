@@ -37,8 +37,8 @@ public class MetaStore {
     }
 
     private void checkUpdate() {
-        var conf = meta.getConf();
-        var currentVersion = conf.getString("version", null);
+        final var conf = meta.getConf();
+        final var currentVersion = conf.getString("version", null);
         previousVersion = conf.getString("previousVersion", null);
         if (currentVersion == null || !currentVersion.equals(getCurrentVersion())) {
             conf.set("version", getCurrentVersion());
@@ -52,14 +52,14 @@ public class MetaStore {
             }
         }
     }
-    
+
     private final Config meta;
     private String previousVersion;
     private boolean isUpdated;
 
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
-    private String[] changeLog = {
+    private final String[] changeLog = {
         "処罰報告がチャットに流れるように",
         "古いX Phoneを使用したときの挙動を改善",
         "X Phoneを右クリック, ブロックタップ, 空中ロングタップでのみ使用できるように",
@@ -67,6 +67,6 @@ public class MetaStore {
         "promoコマンドで提示される残り時間の表記がおかしい問題を修正",
         "内部プログラムの最適化",
     };
-    
+
     private static MetaStore instance;
 }
