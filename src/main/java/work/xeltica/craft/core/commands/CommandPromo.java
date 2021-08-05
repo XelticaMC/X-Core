@@ -38,8 +38,8 @@ public class CommandPromo extends CommandPlayerOnlyBase {
             var ctx = luckPerms.getContextManager().getContext(player);
             var linked = ctx.contains("discordsrv:linked", "true");
             var crafterRole = ctx.contains("discordsrv:role", "クラフター");
-            var citizenRole = ctx.contains("discordsrv:role", "市民");    
-            var tick = record.getInt(PlayerDataKey.NEWCOMER_TIME); 
+            var citizenRole = ctx.contains("discordsrv:role", "市民");
+            var tick = record.getInt(PlayerDataKey.NEWCOMER_TIME);
 
             player.sendMessage("§b§lクイック認証に必要な条件: ");
             sendMessage(player, "Discord 連携済み", linked);
@@ -64,10 +64,10 @@ public class CommandPromo extends CommandPlayerOnlyBase {
     }
 
     private String tickToString(int tick) {
-        var elapsedTime = Ticks.toTime(tick);
+        var elapsedTime = (int) Ticks.toTime(tick);
         var elapsedTimeMinutes = elapsedTime / 60;
         var elapsedTimeSeconds = elapsedTime % 60;
-        return elapsedTimeMinutes > 0 
+        return elapsedTimeMinutes > 0
             ? elapsedTimeMinutes + "分" + elapsedTimeSeconds + "秒"
             : elapsedTimeSeconds + "秒";
     }
