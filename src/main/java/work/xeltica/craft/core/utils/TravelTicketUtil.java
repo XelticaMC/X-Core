@@ -16,7 +16,7 @@ import work.xeltica.craft.core.travels.TicketType;
  */
 public class TravelTicketUtil {
 
-    public static ItemStack GenerateTravelTicket(String ticketType) {
+    public static ItemStack GenerateTravelTicket(TicketType ticketType) {
         return GenerateTravelTicket(1, ticketType);
     }
 
