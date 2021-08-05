@@ -128,17 +128,19 @@ public class CommandReport extends CommandPlayerOnlyBase {
             badPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 15, 30));
             return;
         } else if (command.equals("ban")) {
-            message = String.format(banTemplate, abuses, timeString);
+            message = String.format(punishLogTemplate, abuses);
         } else if (command.equals("kick")) {
-            message = String.format(kickTemplate, abuses);
+            message = String.format(punishLogTemplate, abuses);
         } else if (command.equals("mute")) {
-            message = String.format(muteTemplate, abuses, timeString);
+            message = String.format(punishLogTemplate, abuses);
         } else {
             moderator.sendMessage(ChatColor.RED + "無効なコマンド: " + command);
             return;
         }
 
-        XCorePlugin.getInstance().getServer().sendMessage(Component.text(message + "したため" + command + "されました"));
+        Bukkit.getServer().sendMessage(
+            Component.text(String.format(broadcastTemplate, name, abuses, timeString + command))
+        );
 
         var cmd = time != null ? String.format("temp%s %s %s %s", command, name, time, message) : String.format("%s %s %s", command, name, message);
         moderator.performCommand(cmd);
@@ -150,10 +152,9 @@ public class CommandReport extends CommandPlayerOnlyBase {
     }
 
     private final String warnTemplateWithoutAfterDoing = "利用規約の「%s」に違反しています。今すぐ停止してください。本警告を無視した場合、%s。";
-    private final String warnTemplate = "利用規約の「%s」に違反しています。今すぐ停止し、%s。本警告を無視した場合、%s。";
-    private final String banTemplate = "利用規約「%s」に違反";
-    private final String kickTemplate = "利用規約「%s」に違反";
-    private final String muteTemplate = "利用規約「%s」に違反";
+    private final String warnTemplate = "%sは規約違反です。今すぐ停止し、%s。本警告を無視した場合、%s。";
+    private final String punishLogTemplate = "利用規約で禁止されている「%s」を行った";
+    private final String broadcastTemplate = "§c§l[報告] §r§b%s§c: 「§a%s§c」により、%s";
     
     private static final String WILL_MUTE = "あなたの発言を今後ミュートします";
     private static final String WILL_BAN = "あなたを本サーバーから追放します";
@@ -164,28 +165,29 @@ public class CommandReport extends CommandPlayerOnlyBase {
      * TODO: enumではなくデータクラスにした上で、設定ファイルに移す
      */
     enum AbuseType {
-        GRIEFING("禁止行為: 破壊", Material.DIAMOND_PICKAXE, WILL_BAN, "直ちに本来の形に修復するか、意図的でない場合はその旨を返信してください"),
-        STEALING("禁止行為: 窃盗", Material.ENDER_CHEST, WILL_BAN, "盗んだアイテムを直ちに元の場所、持ち主に返却してください"),
-        MONOPOLY_SHARED_ITEMS("禁止行為: 共有資産独占", Material.OAK_SIGN, WILL_BAN, "直ちに元の状態に戻すことで独占状態を解いてください"),
-        FORCED_PVP("禁止行為: 取り決め無きPvP", Material.DIAMOND_SWORD, WILL_BAN),
-        PRIVATE_INVADING("禁止行為: 無許可での私有地侵入", Material.OAK_DOOR, WILL_BAN),
-        OBSCENE_BUILDING("禁止行為: わいせつ物建築", Material.RED_MUSHROOM, "強制撤去かつ悪質であれば" + WILL_BAN, "撤去してください"),
-        LAW_VIOLATION_BUILDING("禁止行為: 国内法違反建築", Material.TNT, "強制撤去かつ悪質であれば" + WILL_BAN, "撤去してください"),
-        INVALID_CHAT("禁止行為: 秩序を乱すチャット", Material.PLAYER_HEAD, WILL_MUTE),
-        REAL_TRADING("禁止行為: 資産の現実での取引", Material.GOLD_BLOCK, WILL_BAN),
-        BLACKMAIL("禁止行為: 恐喝", Material.CROSSBOW, WILL_BAN),
-        COLLUSION("禁止行為: 共謀", Material.CAMPFIRE, WILL_BAN),
-        DOS("禁止行為: 意図的に負荷をかける行為", Material.CAMPFIRE, WILL_BAN),
-        OTHER("禁止行為: トラブルの原因となる行為", Material.CAMPFIRE, WILL_BAN, "この後に続く指示に従ってください"),
-        GLITCH("不正行為: 不具合悪用", Material.COMMAND_BLOCK, WILL_BAN),
-        AVOID_PANISHMENT("不正行為: 処罰回避", Material.TRIPWIRE_HOOK, WILL_BAN),
-        FAKE_REPORT("不正行為: 虚偽通報", Material.PUFFERFISH, WILL_BAN),
-        IGNORE_WARN("不正行為: 運営からのPMの無視", Material.PUFFERFISH, WILL_KICK),
-        EXPOSE_PM("不正行為: PMの晒し上げ行為", Material.PUFFERFISH, WILL_BAN),
-        INVALID_MOD("不正行為: 不正MODの使用", Material.COMPARATOR, WILL_BAN, "該当するMODをアンインストールしてから参加してください（該当するMODについてわからなければ質問してください）"),
-        INVALID_MINING("禁止行為: 禁止場所での資源採掘", Material.NETHERITE_PICKAXE, WILL_BAN, "破壊箇所を可能な限り修復してください"),
-        SPOOF("禁止行為: 運営になりすます行為", Material.BEDROCK, WILL_BAN),
-        FAKE_AGE("禁止行為: 年齢詐称行為", Material.CAKE, WILL_BAN)
+        GRIEFING("グリーフィング（建築物の毀損）", Material.DIAMOND_PICKAXE, WILL_BAN, "直ちに本来の形に修復するか、意図的でない場合はその旨を返信してください"),
+        STEALING("窃盗", Material.ENDER_CHEST, WILL_BAN, "盗んだアイテムを直ちに元の場所、持ち主に返却してください"),
+        MONOPOLY_SHARED_ITEMS("共有資産独占", Material.OAK_SIGN, WILL_BAN, "直ちに元の状態に戻すことで独占状態を解いてください"),
+        FORCED_PVP("取り決め無きPvP", Material.DIAMOND_SWORD, WILL_BAN),
+        PRIVATE_INVADING("無許可での私有地侵入", Material.OAK_DOOR, WILL_BAN),
+        OBSCENE_BUILDING("わいせつ物建築", Material.RED_MUSHROOM, "強制撤去かつ悪質であれば" + WILL_BAN, "撤去してください"),
+        LAW_VIOLATION_BUILDING("国内法違反建築", Material.TNT, "強制撤去かつ悪質であれば" + WILL_BAN, "撤去してください"),
+        INVALID_CHAT("秩序を乱すチャット", Material.PLAYER_HEAD, WILL_MUTE),
+        REAL_TRADING("資産の現実での取引", Material.GOLD_BLOCK, WILL_BAN),
+        BLACKMAIL("恐喝", Material.CROSSBOW, WILL_BAN),
+        COLLUSION("共謀", Material.CAMPFIRE, WILL_BAN),
+        DOS("意図的に負荷をかける行為", Material.CAMPFIRE, WILL_BAN),
+        GLITCH("不具合悪用", Material.COMMAND_BLOCK, WILL_BAN),
+        AVOID_PANISHMENT("処罰回避", Material.TRIPWIRE_HOOK, WILL_BAN),
+        FAKE_REPORT("虚偽通報", Material.PUFFERFISH, WILL_BAN),
+        IGNORE_WARN("運営からのPMの無視", Material.PUFFERFISH, WILL_KICK),
+        EXPOSE_PM("PMの晒し上げ行為", Material.PUFFERFISH, WILL_BAN),
+        INVALID_MOD("不正MODの使用", Material.COMPARATOR, WILL_BAN, "該当するMODをアンインストールしてから参加してください（該当するMODについてわからなければ質問してください）"),
+        INVALID_MINING("禁止場所での資源採掘", Material.NETHERITE_PICKAXE, WILL_BAN, "破壊箇所を可能な限り修復してください"),
+        SPOOF("運営になりすます行為", Material.BEDROCK, WILL_BAN),
+        FAKE_AGE("年齢詐称行為", Material.CAKE, WILL_BAN),
+        ACCOUNT_SHARING("アカウント共有", Material.LEAD, WILL_BAN),
+        OTHER("トラブルの原因となる行為", Material.CAMPFIRE, WILL_BAN, "この後に続く指示に従ってください"),
         ;
 
         AbuseType(String shortName, Material icon, String punishment) {
