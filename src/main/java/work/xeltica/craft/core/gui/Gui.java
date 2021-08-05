@@ -43,6 +43,7 @@ import work.xeltica.craft.core.stores.ItemStore;
 public class Gui implements Listener {
     /**
      * インスタンスを取得します。
+     * @return インスタンス
      */
     public static Gui getInstance() {
         return instance == null ? (instance = new Gui()) : instance;
@@ -57,6 +58,9 @@ public class Gui implements Listener {
 
     /**
      * メニューを開きます。
+     * @param player メニューを開くプレイヤー
+     * @param title メニューのタイトル
+     * @param items メニューのアイテム
      */
     public void openMenu(Player player, String title, MenuItem... items) {
         openMenu(player, title, List.of(items));
@@ -64,6 +68,9 @@ public class Gui implements Listener {
 
     /**
      * メニューを開きます。
+     * @param player メニューを開くプレイヤー
+     * @param title メニューのタイトル
+     * @param items メニューのアイテム
      */
     public void openMenu(Player player, String title, Collection<MenuItem> items) {
         if (isBedrock(player)) {
@@ -75,6 +82,9 @@ public class Gui implements Listener {
 
     /**
      * ダイアログを開きます。
+     * @param player ダイアログを開くプレイヤー
+     * @param title ダイアログのタイトル
+     * @param content ダイアログに記載する文字列
      */
     public void openDialog(Player player, String title, String content) {
         openDialog(player, title, content, null);
@@ -82,6 +92,10 @@ public class Gui implements Listener {
 
     /**
      * ダイアログを開きます。
+     * @param player ダイアログを開くプレイヤー
+     * @param title ダイアログのタイトル
+     * @param content ダイアログに記載する文字列
+     * @param callback UIダイアログのボタンを押したときに発火するイベント
      */
     public void openDialog(Player player, String title, String content, Consumer<DialogEventArgs> callback) {
         openDialog(player, title, content, callback, null);
@@ -89,9 +103,14 @@ public class Gui implements Listener {
 
     /**
      * ダイアログを開きます。
+     * @param player ダイアログを開くプレイヤー
+     * @param title ダイアログのタイトル
+     * @param content ダイアログに記載する文字列
+     * @param callback UIダイアログのボタンを押したときに発火するイベント
+     * @param okButtonText OKボタンのテキスト
      */
     public void openDialog(Player player, String title, String content, Consumer<DialogEventArgs> callback, String okButtonText) {
-        var okText = okButtonText == null ? "OK" : okButtonText;
+        final var okText = okButtonText == null ? "OK" : okButtonText;
 
         if (isBedrock(player)) {
             openDialogBedrockImpl(player, title, content, callback, okText);
@@ -102,6 +121,8 @@ public class Gui implements Listener {
 
     /**
      * 現在参加中のプレイヤーを選択するメニューを開きます。
+     * @param player メニューを開くプレイヤー
+     * @param onSelect 選択肢に入るプレイヤーを指定
      */
     public void openPlayersMenu(Player player, Consumer<Player> onSelect) {
         openPlayersMenu(player, "プレイヤーを選んでください", onSelect);
@@ -109,6 +130,9 @@ public class Gui implements Listener {
 
     /**
      * 現在参加中のプレイヤーを選択するメニューを開きます。
+     * @param player メニューを開くプレイヤー
+     * @param onSelect 選択肢に入るプレイヤーを指定
+     * @param title メニューのタイトルを指定
      */
     public void openPlayersMenu(Player player, String title, Consumer<Player> onSelect) {
         openPlayersMenu(player, title, onSelect, null);
@@ -116,15 +140,19 @@ public class Gui implements Listener {
 
     /**
      * 現在参加中のプレイヤーを選択するメニューを開きます。
+     * @param player メニューを開くプレイヤー
+     * @param onSelect 選択肢に入るプレイヤーを指定
+     * @param title メニューのタイトルを指定
+     * @param filter プレイヤーのフィルターを指定
      */
     public void openPlayersMenu(Player player, String title, Consumer<Player> onSelect, Predicate<Player> filter) {
         var stream = Bukkit.getOnlinePlayers().stream();
         if (filter != null) {
             stream = stream.filter(filter);
         }
-        var list = stream.map(p -> {
-                var head = ItemStore.getInstance().getPlayerHead(p);
-                var name = p.displayName() != null ? PlainTextComponentSerializer.plainText().serialize(p.displayName()) : p.getName();
+        final var list = stream.map(p -> {
+                final var head = ItemStore.getInstance().getPlayerHead(p);
+                final var name = p.displayName() != null ? PlainTextComponentSerializer.plainText().serialize(p.displayName()) : p.getName();
                 return new MenuItem(name, (a) -> {
                     if (onSelect != null) onSelect.accept(p);
                 }, head, p);
@@ -137,10 +165,11 @@ public class Gui implements Listener {
     /**
      * Java Editionにてボタンを押下したときに実行される内部コマンドの処理を行います。
      * 直接呼び出さないこと。
+     * @param id ID
      */
     public void handleCommand(String id) {
         if (!bookHandlersMap.containsKey(id)) return;
-        var t = bookHandlersMap.get(id);
+        final var t = bookHandlersMap.get(id);
         t.handler.accept(t.eventArgs);
         bookHandlersMap.remove(id);
         return;
@@ -148,6 +177,8 @@ public class Gui implements Listener {
 
     /**
      * エラーをプレイヤーに表示します。
+     * @param p エラーを表示させるプレイヤー
+     * @param message エラー内容
      * @return 常にtrue。コマンドの返り値に使うことを想定。
      */
     public boolean error(Player p, String message) {
@@ -158,36 +189,38 @@ public class Gui implements Listener {
 
     /**
      * JavaでインベントリをメニューUIとして使うため、そのハンドリングを行います。
+     * @param e ハンドリングに使用するイベント
     */
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        var inv = e.getInventory();
-        var p = e.getWhoClicked();
+        final var inv = e.getInventory();
+        final var p = e.getWhoClicked();
 
         // 管理インベントリでなければ無視
         if (!invMap.containsKey(inv)) return;
         e.setCancelled(true);
 
-        var menuItems = invMap.get(inv);
-        var id = e.getRawSlot();
-    
+        final var menuItems = invMap.get(inv);
+        final var id = e.getRawSlot();
+
         if (menuItems.length <= id || menuItems.length < 0) return;
         p.closeInventory();
-        var handler = menuItems[id].getOnClick();
+        final var handler = menuItems[id].getOnClick();
         if (handler != null) handler.accept(menuItems[id]);
     }
 
 
     /**
      * JavaでインベントリをメニューUIとして使うため、そのハンドリングを行います。
+     * @param e ハンドリングに使用するイベント
     */
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        var inv = e.getInventory();
+        final var inv = e.getInventory();
 
         // 管理インベントリでなければ無視
         if (!invMap.containsKey(inv)) return;
-        
+
         // GC
         invMap.remove(inv);
     }
@@ -195,6 +228,7 @@ public class Gui implements Listener {
 
     /**
      * Javaで本をダイアログUIとして使うため、そのハンドリングを行います。
+     * @param e ハンドリングするイベントを指定
     */
     @EventHandler
     public void onPlayerEditBook(PlayerEditBookEvent e) {
@@ -206,14 +240,14 @@ public class Gui implements Listener {
     }
 
     private void openMenuJavaImpl(Player player, String title, MenuItem[] items) {
-        var inv = Bukkit.createInventory(null, (1 + items.length / 9) * 9, Component.text(title));
+        final var inv = Bukkit.createInventory(null, (1 + items.length / 9) * 9, Component.text(title));
 
         Arrays.stream(items).map(i -> {
-            var item = i.getIcon();
+            final var item = i.getIcon();
             if (i.isShiny()) {
                 item.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
             }
-            var meta = item.getItemMeta();
+            final var meta = item.getItemMeta();
             meta.displayName(Component.text(i.getName()));
             item.setItemMeta(meta);
 
@@ -221,13 +255,13 @@ public class Gui implements Listener {
         }).forEach(i -> inv.addItem(i));
 
         invMap.put(inv, items);
-        player.openInventory(inv);        
+        player.openInventory(inv);
     }
 
     private void openMenuBedrockImpl(Player player, String title, MenuItem[] items) {
-        var builder = SimpleForm.builder()
+        final var builder = SimpleForm.builder()
             .title(title);
-        
+
         for (var item : items) {
             var text = item.getName();
             if (item.isShiny()) {
@@ -237,34 +271,34 @@ public class Gui implements Listener {
         }
 
         builder.responseHandler((form, data) -> {
-            var res = form.parseResponse(data);
+            final var res = form.parseResponse(data);
             if (!res.isCorrect()) {
                 return;
             }
 
-            var id = res.getClickedButtonId();
-            var callback = items[id].getOnClick();
+            final var id = res.getClickedButtonId();
+            final var callback = items[id].getOnClick();
             if (callback != null) {
                 callback.accept(items[id]);
             }
         });
-        
-        var fPlayer = FloodgateApi.getInstance().getPlayer(player.getUniqueId());
+
+        final var fPlayer = FloodgateApi.getInstance().getPlayer(player.getUniqueId());
         fPlayer.sendForm(builder);
     }
 
     private void openDialogJavaImpl(Player player, String title, String content, Consumer<DialogEventArgs> callback, String okButtonText) {
-        var book = new ItemStack(Material.WRITTEN_BOOK);
-        var meta = (BookMeta)book.getItemMeta();
+        final var book = new ItemStack(Material.WRITTEN_BOOK);
+        final var meta = (BookMeta)book.getItemMeta();
 
-        var handleString = UUID.randomUUID().toString().replace("-", "");
+        final var handleString = UUID.randomUUID().toString().replace("-", "");
 
-        var comTitle = Component.text(title + "\n\n", Style.style(TextDecoration.BOLD));
-        var comContent = Component.text(content + "\n\n");
-        var comOkButton = Component.text(okButtonText, Style.style(TextColor.color(0, 0, 0), TextDecoration.BOLD, TextDecoration.UNDERLINED))
+        final var comTitle = Component.text(title + "\n\n", Style.style(TextDecoration.BOLD));
+        final var comContent = Component.text(content + "\n\n");
+        final var comOkButton = Component.text(okButtonText, Style.style(TextColor.color(0, 0, 0), TextDecoration.BOLD, TextDecoration.UNDERLINED))
             .clickEvent(ClickEvent.runCommand("/__core_gui_event__ " + handleString));
 
-        var component = comTitle
+        final var component = comTitle
             .append(comContent)
             .append(comOkButton)
             ;
@@ -284,10 +318,10 @@ public class Gui implements Listener {
         }
     }
 
-    private void openDialogBedrockImpl(Player player, String title, String content, 
+    private void openDialogBedrockImpl(Player player, String title, String content,
             Consumer<DialogEventArgs> callback, String okButtonText) {
-        var api = FloodgateApi.getInstance();
-        var form = SimpleForm.builder()
+        final var api = FloodgateApi.getInstance();
+        final var form = SimpleForm.builder()
             .title(title)
             .content(content)
             .button(okButtonText)

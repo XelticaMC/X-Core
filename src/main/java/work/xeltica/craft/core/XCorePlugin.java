@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
+import org.jetbrains.annotations.NotNull;
 import work.xeltica.craft.core.commands.CommandBase;
 import work.xeltica.craft.core.commands.CommandBoat;
 import work.xeltica.craft.core.commands.CommandCart;
@@ -90,7 +91,7 @@ public class XCorePlugin extends JavaPlugin {
             public void run() {
                 VehicleStore.getInstance().tick(tick);
 
-                var store = PlayerStore.getInstance();
+                final var store = PlayerStore.getInstance();
                 store.openAll().forEach(record -> {
                     // オフラインなら処理しない
                     if (Bukkit.getPlayer(record.getPlayerId()) == null) return;
@@ -113,11 +114,11 @@ public class XCorePlugin extends JavaPlugin {
 
         calculator = new CitizenTimerCalculator();
 
-        var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        var luckPerms = provider.getProvider();
+        final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        final var luckPerms = provider.getProvider();
         luckPerms.getContextManager().registerCalculator(calculator);
 
-        var meta = MetaStore.getInstance();
+        final var meta = MetaStore.getInstance();
 
         if (MetaStore.getInstance().isUpdated()) {
             Bukkit.getServer()
@@ -125,11 +126,11 @@ public class XCorePlugin extends JavaPlugin {
             .forEach(a -> {
                 var prev = meta.getPreviousVersion();
                 if (prev == null) prev = "unknown";
-                var current = meta.getCurrentVersion();
-                var text = String.format("§aCore Systemが更新されました。%s -> %s", prev, current);
+                final var current = meta.getCurrentVersion();
+                final var text = String.format("§aCore Systemが更新されました。%s -> %s", prev, current);
                 a.sendMessage(Component.text(text));
                 for (var log : meta.getChangeLog()) {
-                    a.sendMessage(Component.text("・" + log));                    
+                    a.sendMessage(Component.text("・" + log));
                 }
             });
         }
@@ -142,16 +143,16 @@ public class XCorePlugin extends JavaPlugin {
         commands.clear();
         Gui.resetInstance();
         unloadPlugins();
-        var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        var luckPerms = provider.getProvider();
+        final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        final var luckPerms = provider.getProvider();
         luckPerms.getContextManager().unregisterCalculator(calculator);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        var name = command.getName().toLowerCase();
+    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
+        final var name = command.getName().toLowerCase();
 
-        var com = commands.get(name);
+        final var com = commands.get(name);
         if (com == null) return false;
 
         return com.execute(sender, command, label, args);
@@ -196,7 +197,7 @@ public class XCorePlugin extends JavaPlugin {
     }
 
     private void loadHandlers() {
-        var pm = getServer().getPluginManager();
+        final var pm = getServer().getPluginManager();
 
         pm.registerEvents(new NewMorningHandler(), this);
         pm.registerEvents(new PlayerHandler(this), this);

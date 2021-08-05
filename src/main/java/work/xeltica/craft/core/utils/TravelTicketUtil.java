@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.utils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,6 +14,7 @@ import work.xeltica.craft.core.travels.TicketType;
 /**
  * 旅行券に関する便利機能を用意します。
  * @author Xeltica
+ * @deprecated
  */
 public class TravelTicketUtil {
 
@@ -21,10 +23,10 @@ public class TravelTicketUtil {
     }
 
     public static ItemStack GenerateTravelTicket(int amount, TicketType ticketType) {
-        var ticket = new ItemStack(Material.WRITTEN_BOOK, amount);
-        var meta = ticket.getItemMeta();
+        final var ticket = new ItemStack(Material.WRITTEN_BOOK, amount);
+        final var meta = ticket.getItemMeta();
         meta.displayName(Component.text(String.format(TRAVEL_TICKET_NAME, ticketType.getDisplayName())));
-        var list = new ArrayList<String>();
+        final var list = new ArrayList<String>();
         list.add(TRAVEL_TICKET_LORE1);
         list.add(TRAVEL_TICKET_LORE2);
         list.add(TRAVEL_TICKET_LORE3);
@@ -38,22 +40,20 @@ public class TravelTicketUtil {
     public static boolean isTravelTicket(ItemStack i) {
         if (i == null) return false;
         if (i.getType() != Material.WRITTEN_BOOK) return false;
-        var meta = i.getItemMeta();
+        final var meta = i.getItemMeta();
 
-        var lores = meta.lore().stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
+        final var lores = Objects.requireNonNull(meta.lore()).stream().map(c -> PlainTextComponentSerializer.plainText().serialize(c)).toList();
         if (lores == null || lores.size() != 5) return false;
         if (!lores.get(0).equals(TRAVEL_TICKET_LORE1)) return false;
         if (!lores.get(1).equals(TRAVEL_TICKET_LORE2)) return false;
-        if (!lores.get(2).equals(TRAVEL_TICKET_LORE3)) return false;
-
-        return true;
+        return lores.get(2).equals(TRAVEL_TICKET_LORE3);
     }
 
     public static TicketType getTicketType(ItemStack i) {
-        var meta = i.getItemMeta();
-        var lores = meta.lore();
+        final var meta = i.getItemMeta();
+        final var lores = meta.lore();
 
-        return TicketType.valueOf(PlainTextComponentSerializer.plainText().serialize(lores.get(4)));
+        return TicketType.valueOf(PlainTextComponentSerializer.plainText().serialize(Objects.requireNonNull(lores).get(4)));
     }
 
     private static final String TRAVEL_TICKET_NAME = ChatColor.AQUA + "%s行き旅行券";

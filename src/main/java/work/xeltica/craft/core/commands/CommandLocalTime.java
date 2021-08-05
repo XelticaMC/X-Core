@@ -7,13 +7,15 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 /**
- * 現在いるワールドの時間を操作するコマンド
+ * 現在いるワールドのみの時間を操作するコマンド
  * @author Xeltica
  */
 public class CommandLocalTime extends CommandPlayerOnlyBase {
+    /**
+     * 組込み名前付き時間を追加
+     * 統合版のほうが充実しているので統合版から拝借してます
+     */
     public CommandLocalTime() {
-        // 組込み名前付き時間を追加
-        // 統合版のほうが充実しているので統合版から拝借してます
         builtinTimeMap.put("day", 1000);
         builtinTimeMap.put("night", 13000);
         builtinTimeMap.put("noon", 6000);
@@ -26,15 +28,15 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
     public boolean execute(Player player, Command command, String label, String[] args) {
         if (args.length < 1) return false;
 
-        var world = player.getWorld();
-        var subCommand = args[0].toLowerCase();
-        
+        final var world = player.getWorld();
+        final var subCommand = args[0].toLowerCase();
+
         switch (subCommand) {
             case "set" -> {
                 if (args.length != 2) return false;
-                var timeString = args[1];
+                final var timeString = args[1];
                 try {
-                    var time = toTime(timeString);
+                    final var time = toTime(timeString);
                     world.setTime(time);
                     player.sendMessage(ChatColor.RED + "時刻を " + time + "に設定しました");
                 } catch (NumberFormatException e) {
@@ -43,9 +45,9 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
             }
             case "add" -> {
                 if (args.length != 2) return false;
-                var timeString = args[1];
+                final var timeString = args[1];
                 try {
-                    var time = toTime(timeString);
+                    final var time = toTime(timeString);
                     world.setTime(world.getTime() + time);
                     player.sendMessage(ChatColor.RED + "時刻を " + world.getTime() + "に設定しました");
                 } catch (NumberFormatException e) {
@@ -59,11 +61,16 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
             default -> {
                 return false;
             }
-        };
-        
+        }
+
         return true;
     }
 
+    /**
+     * 対応する文字列から時間の数値に変換する関数
+     * @param timeString builtinTimeMapにある対応する文字列
+     * @return 時間の数値
+     */
     private int toTime(String timeString) {
         if (builtinTimeMap.containsKey(timeString)) {
             return builtinTimeMap.get(timeString);
@@ -71,7 +78,10 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
         return Integer.parseInt(timeString);
     }
 
-    private final HashMap<String, Integer> builtinTimeMap = new HashMap<>();
-    
+    /**
+     * 時間の数値とそれに対応するmidnightなどの文字列が格納されている
+     */
+    private static final HashMap<String, Integer> builtinTimeMap = new HashMap<>();
+
 }
 

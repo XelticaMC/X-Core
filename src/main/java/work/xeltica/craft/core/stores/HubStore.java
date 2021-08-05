@@ -43,15 +43,15 @@ public class HubStore {
     }
 
     public void teleport(Player player, HubType hub, boolean bulk) {
-        var playerWorld = player.getWorld();
-        var world = Bukkit.getWorld(hub.getWorldName());
+        final var playerWorld = player.getWorld();
+        final var world = Bukkit.getWorld(hub.getWorldName());
 
         if (world == null) {
             player.sendMessage("未生成");
             return;
         }
 
-        var isWarping = isWarpingMap.get(player.getUniqueId());
+        final var isWarping = isWarpingMap.get(player.getUniqueId());
         if (isWarping != null && isWarping) {
             player.sendMessage("移動中です！");
             return;
@@ -62,8 +62,8 @@ public class HubStore {
             return;
         }
 
-        var currentWorldName = playerWorld.getName();
-        var requireCooldown = bulk || Arrays.stream(noCooldownWorldNames)
+        final var currentWorldName = playerWorld.getName();
+        final var requireCooldown = bulk || Arrays.stream(noCooldownWorldNames)
                 .anyMatch(name -> name.equalsIgnoreCase(currentWorldName));
 
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
@@ -87,21 +87,21 @@ public class HubStore {
     }
 
     public boolean processSigns(Location loc, Player player) {
-        var signData = getSignDataOf(loc);
+        final var signData = getSignDataOf(loc);
         if (signData == null) return false;
-        
-        var wstore = WorldStore.getInstance();
 
-        var cmd = signData.getCommand().toLowerCase();
+        final var wstore = WorldStore.getInstance();
+
+        final var cmd = signData.getCommand().toLowerCase();
         switch (cmd) {
             case "teleport" -> wstore.teleport(player, signData.getArg1());
             case "xteleport" -> wstore.teleportToSavedLocation(player, signData.getArg1());
             case "return" -> returnToClassicWorld(player);
         }
         if (cmd.equalsIgnoreCase("teleport")) {
-            
+
         } else if (cmd.equalsIgnoreCase("xteleport")) {
-            
+
         } else if (cmd.equalsIgnoreCase("return")) {
             returnToClassicWorld(player);
         }
@@ -109,7 +109,7 @@ public class HubStore {
     }
 
     public void removeSign(Player p, Location loc) {
-        var sign = getSignDataOf(loc);
+        final var sign = getSignDataOf(loc);
         if (sign != null) {
             signData.remove(sign);
             try {
@@ -150,7 +150,7 @@ public class HubStore {
 
     private final String[] noCooldownWorldNames = {
         "sandbox",
-        "art", 
+        "art",
         "pvp",
         "test",
         "hub",
@@ -163,7 +163,7 @@ public class HubStore {
     @Getter
     private static HubStore instance;
 
-    private Config signs;
-    private HashMap<UUID, Boolean> isWarpingMap = new HashMap<>();
+    private final Config signs;
+    private final HashMap<UUID, Boolean> isWarpingMap = new HashMap<>();
     private List<SignData> signData;
 }

@@ -16,8 +16,8 @@ public class CommandLive extends CommandPlayerOnlyBase {
     public boolean execute(Player player, Command command, String label, String[] args) {
         if (args.length == 0 || (!args[0].equals("on") && !args[0].equals("off"))) return false;
 
-        var isLiveMode = args[0].equals("on");
-        var store = PlayerStore.getInstance();
+        final var isLiveMode = args[0].equals("on");
+        final var store = PlayerStore.getInstance();
 
         if (store.isLiveMode(player) == isLiveMode) {
             return Gui.getInstance().error(player, "既に" + (isLiveMode ? "オン" : "オフ") + "です");
@@ -27,5 +27,5 @@ public class CommandLive extends CommandPlayerOnlyBase {
         return true;
     }
 
-    
+
 }

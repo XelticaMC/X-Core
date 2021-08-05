@@ -19,10 +19,10 @@ public class FlyingObserver extends BukkitRunnable {
     @Override
     public void run() {
         Bukkit.getOnlinePlayers().stream().filter(p -> p.getAllowFlight() && p.getGameMode() != GameMode.SPECTATOR).forEach(p -> {
-            var loc = p.getLocation();
-            var world = p.getWorld();
+            final var loc = p.getLocation();
+            final var world = p.getWorld();
             world.spawnEntity(loc, EntityType.AREA_EFFECT_CLOUD, SpawnReason.CUSTOM, (e) -> {
-                var aec = (AreaEffectCloud)e;
+                final var aec = (AreaEffectCloud)e;
                 aec.setParticle(Particle.FLAME);
                 aec.setRadius(0.5f);
                 aec.setDuration(10);

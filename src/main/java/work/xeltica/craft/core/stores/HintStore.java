@@ -34,13 +34,13 @@ public class HintStore {
 
     public void achieve(Player p, Hint hint) {
         if (hasAchieved(p, hint)) return;
-        var list = open(p);
+        final var list = open(p);
         list.add(hint.name());
         hints.getConf().set(p.getUniqueId().toString(), list);
 
         EbiPowerStore.getInstance().tryGive(p, hint.getPower());
         p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1.4f);
-        var component = p.displayName().color(TextColor.color(0x4CAF50))
+        final var component = p.displayName().color(TextColor.color(0x4CAF50))
             .append(Component.text("さんがヒント "))
             .append(Component
                 .text(hint.getName())
@@ -68,8 +68,8 @@ public class HintStore {
     public void save() throws IOException {
         hints.save();
     }
-    
+
     @Getter
     private static HintStore instance;
-    private Config hints;
+    private final Config hints;
 }

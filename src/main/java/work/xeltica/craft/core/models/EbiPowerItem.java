@@ -15,7 +15,7 @@ public record EbiPowerItem(ItemStack item, int cost) implements Cloneable, Confi
 
     @Override
     public @NotNull Map<String, Object> serialize() {
-        var result = new LinkedHashMap<String, Object>();
+        final var result = new LinkedHashMap<String, Object>();
         result.put("item", item.serialize());
         result.put("cost", cost);
 
@@ -23,8 +23,8 @@ public record EbiPowerItem(ItemStack item, int cost) implements Cloneable, Confi
     }
 
     public static EbiPowerItem deserialize(Map<String, Object> args) {
-        var item = ItemStack.deserialize((Map<String, Object>) args.get("item"));
-        var cost = (int) args.get("cost");
+        final var item = ItemStack.deserialize((Map<String, Object>) args.get("item"));
+        final var cost = (int) args.get("cost");
 
         return new EbiPowerItem(item, cost);
     }

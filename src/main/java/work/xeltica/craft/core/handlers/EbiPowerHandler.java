@@ -81,7 +81,7 @@ public class EbiPowerHandler implements Listener{
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
                 HintStore.getInstance().achieve(killer, Hint.VIOLENCE_CHILD);
             } else {
-                var buff = getMobDropBonus(killer.getInventory().getItemInMainHand()) * 4;
+                final var buff = getMobDropBonus(killer.getInventory().getItemInMainHand()) * 4;
                 var power = 3 + (buff > 0 ? random.nextInt(buff) : 0);
 
                 if ("nightmare2".equals(killer.getWorld().getName())) {
@@ -96,17 +96,17 @@ public class EbiPowerHandler implements Listener{
 
     @EventHandler
     public void on(PlayerAdvancementDoneEvent e) {
-        var p = e.getPlayer();
+        final var p = e.getPlayer();
         if (playerIsInBlacklisted(p)) return;
         store().tryGive(p, ADVANCEMENT_POWER);
     }
 
     @EventHandler
     public void on(PlayerJoinEvent e) {
-        var now = new Date();
-        var ps = PlayerStore.getInstance();
-        var record = ps.open(e.getPlayer());
-        var prev = new Date(record.getLong(PlayerDataKey.LAST_JOINED, now.getTime()));
+        final var now = new Date();
+        final var ps = PlayerStore.getInstance();
+        final var record = ps.open(e.getPlayer());
+        final var prev = new Date(record.getLong(PlayerDataKey.LAST_JOINED, now.getTime()));
         if (prev.getYear() != now.getYear() && prev.getMonth() != now.getMonth() && prev.getDate() != now.getDate()) {
             store().tryGive(e.getPlayer(), LOGIN_BONUS_POWER);
             notification(e.getPlayer(), "ログボ達成！" + LOGIN_BONUS_POWER + "EPを獲得。");
@@ -116,10 +116,10 @@ public class EbiPowerHandler implements Listener{
 
     @EventHandler
     public void on(BlockBreakEvent e) {
-        var p = e.getPlayer();
+        final var p = e.getPlayer();
         if (playerIsInBlacklisted(p)) return;
         if (e.getBlock().getBlockData() instanceof org.bukkit.block.data.Ageable a && a.getAge() == a.getMaximumAge()) {
-            var power = (1 + getBlockDropBonus(e.getPlayer().getInventory().getItemInMainHand())) * HARVEST_POWER_MULTIPLIER;
+            final var power = (1 + getBlockDropBonus(e.getPlayer().getInventory().getItemInMainHand())) * HARVEST_POWER_MULTIPLIER;
             store().tryGive(p, power);
         }
     }
@@ -130,7 +130,7 @@ public class EbiPowerHandler implements Listener{
     }
 
     private boolean playerIsInBlacklisted(Player p) {
-        var wName = p.getWorld().getName();
+        final var wName = p.getWorld().getName();
         return epBlackList.contains(wName);
     }
 
@@ -148,9 +148,9 @@ public class EbiPowerHandler implements Listener{
         return stack.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
     }
 
-    private HashSet<String> epBlackList = new HashSet<>();
+    private final HashSet<String> epBlackList = new HashSet<>();
 
-    private HashSet<Material> crops = new HashSet<>();
+    private final HashSet<Material> crops = new HashSet<>();
 
     private static final int ADVANCEMENT_POWER = 30;
     private static final int HARVEST_POWER_MULTIPLIER = 1;

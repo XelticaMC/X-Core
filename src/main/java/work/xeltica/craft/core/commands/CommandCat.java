@@ -16,10 +16,10 @@ public class CommandCat extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player sender, Command command, String label, String[] args) {
-        var record = PlayerStore.getInstance().open(sender);
+        final var record = PlayerStore.getInstance().open(sender);
         // 引数がない場合は現在のモードを表示
         if (args.length == 0) {
-            var mes = record.getBoolean(PlayerDataKey.CAT_MODE)
+            final var mes = record.getBoolean(PlayerDataKey.CAT_MODE)
                 ? "§aあなたはCATモードです。§r"
                 : "§aあなたはCATモードではありません。§r";
             sender.sendMessage(mes);
@@ -27,7 +27,7 @@ public class CommandCat extends CommandPlayerOnlyBase {
         }
 
         // 引数がある場合はモードを設定
-        var arg = args[0].toLowerCase();
+        final var arg = args[0].toLowerCase();
         switch (arg) {
             case "on" -> {
                 record.set(PlayerDataKey.CAT_MODE, true);
@@ -45,5 +45,5 @@ public class CommandCat extends CommandPlayerOnlyBase {
         }
         return true;
     }
-    
+
 }

@@ -23,7 +23,7 @@ public class CommandCart extends CommandPlayerOnlyBase {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。");
         }
 
-        var loc = player.getLocation();
+        final var loc = player.getLocation();
         loc.getWorld().spawnEntity(loc, EntityType.MINECART, SpawnReason.CUSTOM);
 
         player.sendMessage("トロッコを足元に召喚した。");

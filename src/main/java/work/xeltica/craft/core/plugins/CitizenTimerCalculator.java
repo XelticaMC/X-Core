@@ -6,6 +6,7 @@ import net.luckperms.api.context.ContextCalculator;
 import net.luckperms.api.context.ContextConsumer;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
+import org.jetbrains.annotations.NotNull;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
 
@@ -18,13 +19,13 @@ import work.xeltica.craft.core.stores.PlayerStore;
 public class CitizenTimerCalculator implements ContextCalculator<Player> {
 
     @Override
-    public void calculate(Player target, ContextConsumer contextConsumer) {
+    public void calculate(@NotNull Player target, ContextConsumer contextConsumer) {
         contextConsumer.accept(KEY, PlayerStore.getInstance().open(target).has(PlayerDataKey.NEWCOMER_TIME) ? "false" : "true");
     }
 
     @Override
     public ContextSet estimatePotentialContexts() {
-        ImmutableContextSet.Builder builder = ImmutableContextSet.builder();
+        final ImmutableContextSet.Builder builder = ImmutableContextSet.builder();
         builder.add(KEY, "false");
         builder.add(KEY, "true");
         return builder.build();

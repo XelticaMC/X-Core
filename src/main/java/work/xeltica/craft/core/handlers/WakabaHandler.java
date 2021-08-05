@@ -56,7 +56,7 @@ public class WakabaHandler implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
         if (flags().isCitizen(e.getPlayer())) return;
-        var mat = e.getBlock().getType();
+        final var mat = e.getBlock().getType();
         if (isDeniedMaterial(mat)) {
             prevent(e, e.getPlayer(), "ブロック " + mat + " を設置できません。");
         }
@@ -65,7 +65,7 @@ public class WakabaHandler implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         if (flags().isCitizen(e.getPlayer())) return;
-        var mat = e.getBlock().getType();
+        final var mat = e.getBlock().getType();
         if (isDeniedMaterial(mat)) {
             prevent(e, e.getPlayer(), "ブロック " + mat + " を破壊できません。");
         }
@@ -74,14 +74,14 @@ public class WakabaHandler implements Listener {
     @EventHandler
     public void onBlockInteract(PlayerInteractEvent e) {
         if (flags().isCitizen(e.getPlayer())) return;
-        var clickedBlock = e.getClickedBlock();
+        final var clickedBlock = e.getClickedBlock();
         if (clickedBlock != null) {
-            var mat = e.getClickedBlock().getType();
+            final var mat = e.getClickedBlock().getType();
             if (isDeniedMaterial(mat)) {
                 prevent(e, e.getPlayer(), "ブロック " + mat + " を使用できません。");
             }
         }
-        var isUsingItem = e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getItem() != null;
+        final var isUsingItem = e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getItem() != null;
         if (isUsingItem && isDeniedItemMaterial(e.getItem().getType())) {
             prevent(e, e.getPlayer(), "アイテム " + e.getItem().getType() + " を使用できません。");
         }
@@ -93,7 +93,7 @@ public class WakabaHandler implements Listener {
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent e) {
         if (!(e.getDamager() instanceof Player)) return;
-        var p = (Player)e.getDamager();
+        final var p = (Player)e.getDamager();
         if (flags().isCitizen(p))
             return;
         if (e.getEntityType() == EntityType.ENDER_CRYSTAL) {
@@ -110,14 +110,12 @@ public class WakabaHandler implements Listener {
 
     private boolean isDeniedMaterial(Material mat) {
         if (deniedBlocks.contains(mat)) return true;
-        if (deniedTags.stream().anyMatch(t -> t.isTagged(mat))) return true;
-        return false;
+        return deniedTags.stream().anyMatch(t -> t.isTagged(mat));
     }
 
     private boolean isDeniedItemMaterial(Material mat) {
         if (deniedItems.contains(mat)) return true;
-        if (deniedItemTags.stream().anyMatch(t -> t.isTagged(mat))) return true;
-        return false;
+        return deniedItemTags.stream().anyMatch(t -> t.isTagged(mat));
     }
 
     private PlayerStore flags() {

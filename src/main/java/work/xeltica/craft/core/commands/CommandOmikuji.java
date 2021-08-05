@@ -23,10 +23,10 @@ import work.xeltica.craft.core.utils.Ticks;
 public class CommandOmikuji extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        var s = OmikujiStore.getInstance();
+        final var s = OmikujiStore.getInstance();
 
         if (s.isDrawnBy(player)) {
-            var score = s.getScoreName(player);
+            final var score = s.getScoreName(player);
             player.sendMessage(
                 ChatColor.RED + "既に引いています！" +
                 ChatColor.GOLD + "あなたの運勢は" +
@@ -38,17 +38,17 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
             player.sendMessage(ChatColor.GOLD + "また次の朝、引いてください！");
             return true;
         }
-        var vault = VaultPlugin.getInstance();
+        final var vault = VaultPlugin.getInstance();
         if (vault.isEconomyEnabled() && !vault.tryWithdrawPlayer(player, 100)) {
             player.sendMessage(ChatColor.RED + "パワーが足りません！おみくじは1回100エビパワーが必要です。");
             return true;
         }
         player.sendMessage("何が出るかな...?");
-        
+
         new BukkitRunnable(){
             @Override
             public void run() {
-                var score = s.generateScore();
+                final var score = s.generateScore();
                 s.set(player, score);
 
                 player.sendMessage(
@@ -60,39 +60,38 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
                 );
 
                 switch (score) {
-                    case Daikichi:
+                    case Daikichi -> {
                         // 大吉。幸運が20分つく
                         player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, Ticks.from(20, 0), 1));
                         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 0.7f);
-                        break;
-                    case Daikyou:
+                    }
+                    case Daikyou -> {
                         // 大凶。不吉な予感10分、毒10秒、不運が20分つく
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BAD_OMEN, Ticks.from(10, 0), 1));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, Ticks.from(10), 2));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, Ticks.from(20, 0), 1));
                         player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 1, 0.5f);
                         HintStore.getInstance().achieve(player, Hint.OMIKUJI_DAIKYOU);
-                        break;
-                    case Kyou:
+                    }
+                    case Kyou -> {
                         // 凶。不運が20分、吐き気が5秒つく
                         player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, Ticks.from(20, 0), 1));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, Ticks.from(5), 1));
                         player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1, 0.5f);
-                        break;
-                    case Tokudaikichi:
+                    }
+                    case Tokudaikichi -> {
                         // 特大吉。幸運が20分つく
                         player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 60 * 20 * 20, 1));
                         player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1, 1.4f);
                         HintStore.getInstance().achieve(player, Hint.OMIKUJI_TOKUDAIKICHI);
-                        break;
-                    default:
-                        // その他。特に何もなし
-                        player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1.6f);
-                        break;
+                    }
+                    default ->
+                            // その他。特に何もなし
+                            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1.6f);
                 }
             }
         }.runTaskLater(XCorePlugin.getInstance(), 20 * 3);
-        
+
         return true;
     }
 }

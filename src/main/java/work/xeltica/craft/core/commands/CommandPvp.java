@@ -15,12 +15,12 @@ public class CommandPvp extends CommandPlayerOnlyBase {
         if (args.length != 1) return false;
         if (!args[0].equalsIgnoreCase("on") && !args[0].equalsIgnoreCase("off")) return false;
 
-        var world = player.getWorld();
-        var flag = args[0].equalsIgnoreCase("on");
+        final var world = player.getWorld();
+        final var flag = args[0].equalsIgnoreCase("on");
         world.setPVP(flag);
         player.sendMessage(ChatColor.GOLD + String.format("ワールド %s のPvPを%sしました", world.getName(), flag ? "許可" : "禁止"));
 
         return true;
     }
-    
+
 }

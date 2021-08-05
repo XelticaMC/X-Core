@@ -12,6 +12,7 @@ import work.xeltica.craft.core.XCorePlugin;
  * Spigot の設定ファイル機能を扱いやすいように、面倒な部分をラッピングしています。
  * @author Xeltica
  */
+@SuppressWarnings("ALL")
 public class Config {
     public Config(String configName) {
         this(configName, null);
@@ -54,7 +55,7 @@ public class Config {
     }
 
     private static File openFile(String configName) {
-        var folder = XCorePlugin.getInstance().getDataFolder();
+        final var folder = XCorePlugin.getInstance().getDataFolder();
         return new File(folder, configName + ".yml");
     }
 

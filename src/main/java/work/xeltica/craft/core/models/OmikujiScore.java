@@ -22,5 +22,5 @@ public enum OmikujiScore {
     }
 
     @Getter
-    private String displayName;
+    private final String displayName;
 }

@@ -19,7 +19,7 @@ import work.xeltica.craft.core.stores.VehicleStore;
 public class VehicleHandler implements Listener {
     @EventHandler
     public void onEnter(VehicleEnterEvent e) {
-        var entity = e.getEntered();
+        final var entity = e.getEntered();
         if (!(entity instanceof Player)) return;
         VehicleStore.getInstance().unregisterVehicle(e.getVehicle());
     }
@@ -36,7 +36,7 @@ public class VehicleHandler implements Listener {
 
     @EventHandler
     public void onDestroyed(VehicleDestroyEvent e) {
-        var v = e.getVehicle();
+        final var v = e.getVehicle();
         if (VehicleStore.getInstance().isValidVehicle(v)) {
             e.setCancelled(true);
             e.getVehicle().remove();

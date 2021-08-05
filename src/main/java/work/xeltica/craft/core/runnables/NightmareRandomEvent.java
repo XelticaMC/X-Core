@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.runnables;
 
+import java.util.Objects;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -30,7 +31,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
     @Override
     public void run() {
         final var nightmare = plugin.getServer().getWorld("nightmare2");
-        final var players = nightmare.getPlayers();
+        final var players = Objects.requireNonNull(nightmare).getPlayers();
         nightmare.setStorm(true);
         nightmare.setThundering(true);
 
@@ -65,7 +66,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
             switch (dice) {
                 case MODE_BLAZE -> {
                     for (var i = 0; i < amount; i++) {
-                        var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
+                        final var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
                         loc.setY(l.getWorld().getHighestBlockYAt(loc.getBlockX(), loc.getBlockZ()) + 1);
                         nightmare.spawnEntity(loc, EntityType.BLAZE);
                     }
@@ -82,7 +83,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
 
                         // 50:50で武器が決まる
                         final var equip = new ItemStack(random.nextBoolean() ? Material.CROSSBOW : Material.GOLDEN_SWORD);
-                        piglin.getEquipment().setItemInMainHand(equip);
+                        Objects.requireNonNull(piglin.getEquipment()).setItemInMainHand(equip);
 
                         // 5%の確率でスピードバフ
                         if (random.nextInt(100) < 5) {
@@ -97,7 +98,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
                 }
                 case MODE_ILLAGER -> {
                     for (var i = 0; i < amount; i++) {
-                        var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
+                        final var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
                         loc.setY(l.getWorld().getHighestBlockYAt(loc.getBlockX(), loc.getBlockZ()) + 1);
                         nightmare.spawnEntity(loc, illigers[random.nextInt(illigers.length)]);
                     }
@@ -106,9 +107,9 @@ public class NightmareRandomEvent extends BukkitRunnable {
                     pivot.add(0, 5, 0);
 
                     for (var i = 0; i < amount; i++) {
-                        var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
+                        final var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
                         loc.setY(l.getWorld().getHighestBlockYAt(loc.getBlockX(), loc.getBlockZ() + 5));
-                        var bee = (Bee)nightmare.spawnEntity(loc, EntityType.BEE);
+                        final var bee = (Bee)nightmare.spawnEntity(loc, EntityType.BEE);
                         // 30分おいかり
                         bee.setAnger(20 * 60 * 30);
                         bee.setTarget(player);
@@ -116,16 +117,16 @@ public class NightmareRandomEvent extends BukkitRunnable {
                 }
                 case MODE_WOLVES -> {
                     for (var i = 0; i < amount; i++) {
-                        var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
+                        final var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
                         loc.setY(l.getWorld().getHighestBlockYAt(loc.getBlockX(), loc.getBlockZ()) + 1);
-                        var wolf = (Wolf)nightmare.spawnEntity(loc, EntityType.WOLF);
+                        final var wolf = (Wolf)nightmare.spawnEntity(loc, EntityType.WOLF);
                         // 30分おいかり
                         wolf.setAngry(true);
                         wolf.setTarget(player);
                     }
                 }
                 case MODE_LIGHTNING -> {
-                    Runnable strike = () -> {
+                    final Runnable strike = () -> {
                         l.getWorld().strikeLightning(l);
                     };
                     // 今いる場所に、5分後に雷を3つ落とす
@@ -136,7 +137,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
                     }, 20 * 60 * 5);
                 }
                 case MODE_CREEPER -> {
-                    var creeper = (Creeper)l.getWorld().spawnEntity(l, EntityType.CREEPER);
+                    final var creeper = (Creeper)l.getWorld().spawnEntity(l, EntityType.CREEPER);
                     creeper.setPowered(true);
                     scheduler.runTaskLater(plugin, () -> {
                         creeper.ignite();
@@ -146,7 +147,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
         }
     }
 
-    private Plugin plugin;
+    private final Plugin plugin;
     private final Random random = new Random();
     private final EntityType[] illigers = {
         EntityType.PILLAGER,

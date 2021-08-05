@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.handlers;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -40,9 +41,9 @@ public class WorldHandler implements Listener {
 
     @EventHandler
     public void onAdvancementDone(PlayerAdvancementDoneEvent e) {
-        var p = e.getPlayer();
+        final var p = e.getPlayer();
         if (p.getWorld().getName().equals("sandbox")) {
-            var advancement = e.getAdvancement();
+            final var advancement = e.getAdvancement();
 
             for (var criteria : advancement.getCriteria()) {
                 p.getAdvancementProgress(advancement).revokeCriteria(criteria);
@@ -52,9 +53,9 @@ public class WorldHandler implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-        var p = e.getPlayer();
+        final var p = e.getPlayer();
         if (p.getWorld().getName().equals("sandbox")) {
-            var block = e.getBlock().getType();
+            final var block = e.getBlock().getType();
             // エンダーチェストはダメ
             if (block == Material.ENDER_CHEST) {
                 e.setCancelled(true);
@@ -64,25 +65,25 @@ public class WorldHandler implements Listener {
 
     @EventHandler
     public void onPlayerTeleportGuard(PlayerTeleportEvent e) {
-        var p = e.getPlayer();
-        var world = e.getTo().getWorld();
-        var name = world.getName();
-        var store = WorldStore.getInstance();
+        final var p = e.getPlayer();
+        final var world = e.getTo().getWorld();
+        final var name = world.getName();
+        final var store = WorldStore.getInstance();
 
-        var isLockedWorld = store.isLockedWorld(name);
-        var isCreativeWorld = store.isCreativeWorld(name);
-        var displayName = store.getWorldDisplayName(name);
-        var desc = store.getWorldDescription(name);
+        final var isLockedWorld = store.isLockedWorld(name);
+        final var isCreativeWorld = store.isCreativeWorld(name);
+        final var displayName = store.getWorldDisplayName(name);
+        final var desc = store.getWorldDescription(name);
 
-        var from = e.getFrom().getWorld();
-        var to = e.getTo().getWorld();
+        final var from = e.getFrom().getWorld();
+        final var to = e.getTo().getWorld();
 
-        var fromId = from.getUID();
-        var toId = to.getUID();
+        final var fromId = from.getUID();
+        final var toId = to.getUID();
 
         if (fromId.equals(toId))
             return;
-        
+
         if (isLockedWorld && !p.hasPermission("hub.teleport." + name)) {
             p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 0.5f);
             p.sendMessage(
@@ -95,7 +96,7 @@ public class WorldHandler implements Listener {
 
         WorldStore.getInstance().saveCurrentLocation(p);
 
-        var hint = switch (to.getName()) {
+        final var hint = switch (to.getName()) {
             case "main" -> Hint.GOTO_MAIN;
             case "hub2" -> Hint.GOTO_LOBBY;
             case "wildarea2" -> Hint.GOTO_WILDAREA;
@@ -110,7 +111,7 @@ public class WorldHandler implements Listener {
             default -> null;
         };
 
-        var isNotFirstTeleport = p.hasPlayedBefore() || PlayerStore.getInstance().open(p).getBoolean(PlayerDataKey.FIRST_SPAWN);
+        final var isNotFirstTeleport = p.hasPlayedBefore() || PlayerStore.getInstance().open(p).getBoolean(PlayerDataKey.FIRST_SPAWN);
 
         if (hint != null && isNotFirstTeleport) {
             HintStore.getInstance().achieve(p, hint);
@@ -133,8 +134,8 @@ public class WorldHandler implements Listener {
         }
         if (name.equals("wildarea") && e.getFrom().getWorld().getName().equals("hub")) {
             // 最終ベッドがワイルドエリアにある場合、そこに飛ばす
-            var bed = p.getBedSpawnLocation();
-            if (bed.getWorld().getUID().equals(world.getUID())) {
+            final var bed = p.getBedSpawnLocation();
+            if (Objects.requireNonNull(bed).getWorld().getUID().equals(world.getUID())) {
                 e.setTo(bed);
             }
         }
@@ -149,17 +150,17 @@ public class WorldHandler implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerTeleportNotify(PlayerTeleportEvent e) {
-        var worldStore = WorldStore.getInstance();
-        var player = e.getPlayer();
+        final var worldStore = WorldStore.getInstance();
+        final var player = e.getPlayer();
         // スペクテイターはステルスっす
         if (player.getGameMode() == GameMode.SPECTATOR)
             return;
-        var from = e.getFrom().getWorld();
-        var to = e.getTo().getWorld();
+        final var from = e.getFrom().getWorld();
+        final var to = e.getTo().getWorld();
         if (from.getName().equals(to.getName()))
             return;
-        var fromName = worldStore.getWorldDisplayName(from);
-        var toName = worldStore.getWorldDisplayName(to);
+        final var fromName = worldStore.getWorldDisplayName(from);
+        final var toName = worldStore.getWorldDisplayName(to);
 
         if (fromName == null || toName == null) return;
 
@@ -167,8 +168,8 @@ public class WorldHandler implements Listener {
 
         if (e.isCancelled()) return;
 
-        var toPlayers = to.getPlayers();
-        var allPlayersExceptInDestination = Bukkit.getOnlinePlayers().stream()
+        final var toPlayers = to.getPlayers();
+        final var allPlayersExceptInDestination = Bukkit.getOnlinePlayers().stream()
                 // tpとマッチするUUIDがひとつも無いpのみを抽出
                 .filter(p -> toPlayers.stream().allMatch(tp -> !tp.getUniqueId().equals(p.getUniqueId())))
                 .collect(Collectors.toList());
@@ -194,7 +195,7 @@ public class WorldHandler implements Listener {
 
     @EventHandler
     public void onPlayerMoveWorld(PlayerChangedWorldEvent e) {
-        var name = WorldStore.getInstance().getWorldDisplayName(e.getPlayer().getWorld());
+        final var name = WorldStore.getInstance().getWorldDisplayName(e.getPlayer().getWorld());
         e.getPlayer().showTitle(Title.title(Component.text(name).color(TextColor.color(0xFFB300)), Component.empty()));
     }
 
@@ -202,14 +203,14 @@ public class WorldHandler implements Listener {
     public void onChunkPopulateEvent(ChunkPopulateEvent e) {
         // TODO ハードコードをやめる
         if (!e.getWorld().getName().equals("main")) return;
-        var c = e.getChunk();
-        
+        final var c = e.getChunk();
+
         for (var z = 0; z < 16; z++) {
             for (var x = 0; x < 16; x++) {
-                var yMax = c.getWorld().getHighestBlockYAt(c.getX() + x, c.getZ() + z);
+                final var yMax = c.getWorld().getHighestBlockYAt(c.getX() + x, c.getZ() + z);
                 for (int y = 1; y <= yMax; y++) {
-                    var block = c.getBlock(x, y, z);
-                    var replacer = replace(block.getType());
+                    final var block = c.getBlock(x, y, z);
+                    final var replacer = replace(block.getType());
                     if (replacer != null) {
                         block.setType(replacer, false);
                     }

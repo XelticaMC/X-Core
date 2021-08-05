@@ -52,5 +52,5 @@ public class CloverStore {
 
     @Getter
     private static CloverStore instance;
-    private Config clovers;
+    private final Config clovers;
 }

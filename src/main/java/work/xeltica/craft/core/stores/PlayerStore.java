@@ -72,7 +72,7 @@ public class PlayerStore {
     }
 
     public void updateHasOnlineStaff() {
-        var flag = Bukkit.getOnlinePlayers().stream().anyMatch(p -> p.hasPermission("otanoshimi.staff"));
+        final var flag = Bukkit.getOnlinePlayers().stream().anyMatch(p -> p.hasPermission("otanoshimi.staff"));
         if (_hasOnlineStaff != flag) {
             Bukkit.getPluginManager().callEvent(flag ? new StaffJoinEvent() : new StaffLeaveEvent());
         }
@@ -82,13 +82,13 @@ public class PlayerStore {
     public void setLiveMode(Player player, boolean isLive) {
         if (isLive == isLiveMode(player)) return;
         if (isLive) {
-            var name = String.format("%s が配信中", player.getName());
-            var bar = BossBar.bossBar(Component.text(name), BossBar.MAX_PROGRESS, Color.RED, Overlay.PROGRESS);
+            final var name = String.format("%s が配信中", player.getName());
+            final var bar = BossBar.bossBar(Component.text(name), BossBar.MAX_PROGRESS, Color.RED, Overlay.PROGRESS);
 
             liveBarMap.put(player.getUniqueId(), bar);
             BossBarStore.getInstance().add(bar);
-        } else {                
-            var bar = liveBarMap.get(player.getUniqueId());
+        } else {
+            final var bar = liveBarMap.get(player.getUniqueId());
 
             liveBarMap.remove(player.getUniqueId());
             BossBarStore.getInstance().remove(bar);
@@ -115,24 +115,24 @@ public class PlayerStore {
 
     private void migrate() throws IOException {
         // cat
-        var catUUIDs = flags.getConf().getStringList("cats").stream().map(id -> UUID.fromString(id)).toList();
+        final var catUUIDs = flags.getConf().getStringList("cats").stream().map(id -> UUID.fromString(id)).toList();
         for (var id : catUUIDs) {
             open(id).set(PlayerDataKey.CAT_MODE, true, false);
         }
 
         // new comers
-        var newComerIds = newcomers.getConf().getKeys(false);
+        final var newComerIds = newcomers.getConf().getKeys(false);
         for (var id : newComerIds) {
             open(UUID.fromString(id)).set(PlayerDataKey.NEWCOMER_TIME, newcomers.getConf().getInt(id), false);
         }
 
         playerStores.save();
     }
-    
+
     private static PlayerStore instance;
     private boolean _hasOnlineStaff;
-    private Config flags;
-    private Config newcomers;
-    private Config playerStores;
-    private Map<UUID, BossBar> liveBarMap = new HashMap<>();
+    private final Config flags;
+    private final Config newcomers;
+    private final Config playerStores;
+    private final Map<UUID, BossBar> liveBarMap = new HashMap<>();
 }
