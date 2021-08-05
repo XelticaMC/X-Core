@@ -19,19 +19,28 @@ public class LiveModeHandler implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        final UUID playerUUID = (e.getPlayer()).getUniqueId();
+        final UUID playerUUID = e.getPlayer().getUniqueId();
         final PlayerStore instance = PlayerStore.getInstance();
+
         if (instance.liveBarMap.containsKey(playerUUID)) {
             PlanToDeleteMap.put(playerUUID, Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-                final BossBar bar = instance.liveBarMap.get(playerUUID);
+                BossBarStore.getInstance().remove(instance.liveBarMap.get(playerUUID));
                 instance.liveBarMap.remove(playerUUID);
-                BossBarStore.getInstance().remove(bar);
                 PlanToDeleteMap.remove(playerUUID);
                 Bukkit.getLogger().info("removed");
             }, 200L)); //TODO: Debug用時間を1200に修正する
-            Bukkit.getLogger().info("remove livemode after 20tick");
+            Bukkit.getLogger().info("disable livemode after 20tick");
         } else {
             Bukkit.getLogger().info("already disabled livemode");
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e){
+        final UUID playerUUID = e.getPlayer().getUniqueId();
+        if (PlanToDeleteMap.containsKey(playerUUID)) {
+            Bukkit.getLogger().info("player rejoined. abort disable livemode");
+            PlanToDeleteMap.get(playerUUID).cancel();
         }
     }
 }
