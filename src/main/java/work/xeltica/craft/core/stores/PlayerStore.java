@@ -134,5 +134,5 @@ public class PlayerStore {
     private final Config flags;
     private final Config newcomers;
     private final Config playerStores;
-    private final Map<UUID, BossBar> liveBarMap = new HashMap<>();
+    public final Map<UUID, BossBar> liveBarMap = new HashMap<>();
 }
