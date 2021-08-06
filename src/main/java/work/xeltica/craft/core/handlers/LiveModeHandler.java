@@ -1,16 +1,17 @@
 package work.xeltica.craft.core.handlers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.stores.BossBarStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -24,14 +25,14 @@ public class LiveModeHandler implements Listener {
      */
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        final UUID playerUUID = e.getPlayer().getUniqueId();
+        final Player p = e.getPlayer();
+        final UUID uuid = p.getUniqueId();
         final PlayerStore instance = PlayerStore.getInstance();
 
-        if (instance.liveBarMap.containsKey(playerUUID)) {
-            PlanToDeleteMap.put(playerUUID, Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-                BossBarStore.getInstance().remove(instance.liveBarMap.get(playerUUID));
-                instance.liveBarMap.remove(playerUUID);
-                PlanToDeleteMap.remove(playerUUID);
+        if (PlayerStore.getliveBarMap().containsKey(uuid)) {
+            PlanToDeleteMap.put(uuid, Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
+                instance.setLiveMode(p,false);
+                PlanToDeleteMap.remove(uuid);
             }, GRACE_TIME_TICK));
         }
     }
@@ -48,6 +49,6 @@ public class LiveModeHandler implements Listener {
         }
     }
 
-    private final HashMap<UUID,BukkitTask> PlanToDeleteMap = new HashMap<>();
+    private final Map<UUID,BukkitTask> PlanToDeleteMap = new HashMap<>();
     private static final long GRACE_TIME_TICK = 1200L;
 }

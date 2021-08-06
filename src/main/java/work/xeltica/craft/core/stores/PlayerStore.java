@@ -27,6 +27,7 @@ import work.xeltica.craft.core.utils.Config;
 public class PlayerStore {
     public PlayerStore() {
         PlayerStore.instance = this;
+        PlayerStore.liveBarMap = new HashMap<>();
         flags = new Config("flags");
         newcomers = new Config("newcomers");
         playerStores = new Config("playerStores");
@@ -36,6 +37,10 @@ public class PlayerStore {
 
     public static PlayerStore getInstance() {
         return PlayerStore.instance;
+    }
+
+    public static Map<UUID, BossBar> getliveBarMap() {
+        return PlayerStore.liveBarMap;
     }
 
     public PlayerRecord open(OfflinePlayer p) {
@@ -134,5 +139,5 @@ public class PlayerStore {
     private final Config flags;
     private final Config newcomers;
     private final Config playerStores;
-    public final Map<UUID, BossBar> liveBarMap = new HashMap<>();
+    private static Map<UUID, BossBar> liveBarMap;
 }
