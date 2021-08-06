@@ -86,6 +86,10 @@ commands:
     description: ニックネームを変更
     usage: /nick [minecraft|discord|discord-nick]
     permission: otanosimi.command.nickname
+  counter:
+    description: カウンター管理
+    usage: /counter <register/unregister/cancel/bind/info/list/setisdaily>
+    permission: otanoshimi.command.counter
   __core_gui_event__:
     description: "?"
     usage: "?"
@@ -139,6 +143,8 @@ permissions:
   otanoshimi.command.xphone:
     defualt: true
   otanoshimi.command.live:
-    defualt: true
-  otanosimmi.command.nickname:
     default: true
+  otanoshimi.command.nickname:
+    default: true
+  otanoshimi.command.counter:
+    default: op

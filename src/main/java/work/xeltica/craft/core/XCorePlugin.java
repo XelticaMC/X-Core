@@ -17,6 +17,7 @@ import work.xeltica.craft.core.commands.CommandBase;
 import work.xeltica.craft.core.commands.CommandBoat;
 import work.xeltica.craft.core.commands.CommandCart;
 import work.xeltica.craft.core.commands.CommandCat;
+import work.xeltica.craft.core.commands.CommandCounter;
 import work.xeltica.craft.core.commands.CommandGiveCustomItem;
 import work.xeltica.craft.core.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.core.commands.CommandHint;
@@ -61,6 +62,7 @@ import work.xeltica.craft.core.utils.Ticks;
 import work.xeltica.craft.core.commands.CommandEpShop;
 import work.xeltica.craft.core.stores.BossBarStore;
 import work.xeltica.craft.core.stores.CloverStore;
+import work.xeltica.craft.core.stores.CounterStore;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 
@@ -174,6 +176,7 @@ public class XCorePlugin extends JavaPlugin {
         new MetaStore();
         new BossBarStore();
         new NickNameStore();
+        new CounterStore();
     }
 
     private void loadCommands() {
@@ -199,6 +202,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("xphone", new CommandXPhone());
         commands.put("live", new CommandLive());
         commands.put("nick", new CommandNickName());
+        commands.put("counter", new CommandCounter());
     }
 
     private void loadHandlers() {
