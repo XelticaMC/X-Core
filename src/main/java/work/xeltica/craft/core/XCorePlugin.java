@@ -33,6 +33,7 @@ import work.xeltica.craft.core.commands.CommandReport;
 import work.xeltica.craft.core.commands.CommandRespawn;
 import work.xeltica.craft.core.commands.CommandSignEdit;
 import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.handlers.LiveModeHandler;
 import work.xeltica.craft.core.handlers.XphoneHandler;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.handlers.EbiPowerHandler;
@@ -208,6 +209,7 @@ public class XCorePlugin extends JavaPlugin {
         pm.registerEvents(new NightmareHandler(), this);
         pm.registerEvents(new XphoneHandler(), this);
         pm.registerEvents(new EbiPowerHandler(), this);
+        pm.registerEvents(new LiveModeHandler(), this);
         pm.registerEvents(Gui.getInstance(), this);
     }
 
