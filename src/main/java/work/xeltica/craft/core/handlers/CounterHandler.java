@@ -17,6 +17,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import work.xeltica.craft.core.events.PlayerCounterFinish;
 import work.xeltica.craft.core.events.PlayerCounterStart;
+import work.xeltica.craft.core.events.RealTimeNewDayEvent;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.CounterData;
 import work.xeltica.craft.core.models.PlayerDataKey;
@@ -180,6 +181,15 @@ public class CounterHandler implements Listener {
         } catch (IOException e1) {
             e1.printStackTrace();
             ui.error(player, "§cIO エラーが発生したために処理を続行できませんでした。");
+        }
+    }
+
+    @EventHandler
+    public void onDailyReset(RealTimeNewDayEvent e) {
+        try {
+            CounterStore.getInstance().resetAllPlayersPlayedLog();
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
     }
 }

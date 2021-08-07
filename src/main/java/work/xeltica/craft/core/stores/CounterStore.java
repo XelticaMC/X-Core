@@ -13,6 +13,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 import lombok.Getter;
 import work.xeltica.craft.core.models.CounterData;
+import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.utils.Config;
 
 /**
@@ -111,6 +112,17 @@ public class CounterStore {
         counters.remove(id);
         config.getConf().set(id, null);
         config.save();
+    }
+
+    /**
+     * 全プレイヤーのデイリーイベントプレイ履歴を削除します。
+     * @throws IOException 保存に失敗した
+     */
+    public void resetAllPlayersPlayedLog() throws IOException {
+        final var pstore = PlayerStore.getInstance();
+        pstore.openAll()
+            .forEach(record -> record.delete(PlayerDataKey.PLAYED_COUNTER));
+        pstore.save();
     }
     
     /**

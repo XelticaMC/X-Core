@@ -90,14 +90,8 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                 // カウンターのプレイ済み履歴を全プレイヤー分削除します。
                 // counter resetdaily
                 case "resetdaily" -> {
-                    final var name = args[1];
-                    final var data = store.getByName(name);
-                    player.sendMessage("名前: " + name);
-                    player.sendMessage("ID: " + store.getIdOf(data));
-                    player.sendMessage("始点: " + data.getLocation1().toString());
-                    player.sendMessage("終点: " + data.getLocation2().toString());
-                    player.sendMessage("1日1回かどうか: " + data.isDaily());
-                    player.sendMessage("紐付いたランキングID: " + data.getRankingId());
+                    store.resetAllPlayersPlayedLog();
+                    player.sendMessage("全プレイヤーのプレイ済み履歴を削除しました。");
                 }
 
                 // カウンターを一覧表示します。
