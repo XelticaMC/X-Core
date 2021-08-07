@@ -50,6 +50,7 @@ import work.xeltica.craft.core.stores.BossBarStore;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
+import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
@@ -99,6 +100,9 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         final var p = e.getPlayer();
+
+        NickNameStore.getInstance().setNickName(p);
+
         final var name = PlainTextComponentSerializer.plainText().serialize(p.displayName());
         final var pstore = PlayerStore.getInstance();
         e.joinMessage(Component.text("§a" + name + "§b" + "さんがやってきました"));

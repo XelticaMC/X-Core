@@ -23,6 +23,7 @@ import work.xeltica.craft.core.commands.CommandHint;
 import work.xeltica.craft.core.commands.CommandHub;
 import work.xeltica.craft.core.commands.CommandLive;
 import work.xeltica.craft.core.commands.CommandLocalTime;
+import work.xeltica.craft.core.commands.CommandNickName;
 import work.xeltica.craft.core.commands.CommandOmikuji;
 import work.xeltica.craft.core.commands.CommandXCoreGuiEvent;
 import work.xeltica.craft.core.commands.CommandXPhone;
@@ -51,6 +52,7 @@ import work.xeltica.craft.core.runnables.NightmareRandomEvent;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.MetaStore;
+import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.VehicleStore;
@@ -171,6 +173,7 @@ public class XCorePlugin extends JavaPlugin {
         new HintStore();
         new MetaStore();
         new BossBarStore();
+        new NickNameStore();
     }
 
     private void loadCommands() {
@@ -195,6 +198,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("__core_gui_event__", new CommandXCoreGuiEvent());
         commands.put("xphone", new CommandXPhone());
         commands.put("live", new CommandLive());
+        commands.put("nick", new CommandNickName());
     }
 
     private void loadHandlers() {
