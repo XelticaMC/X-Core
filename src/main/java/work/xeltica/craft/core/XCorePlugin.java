@@ -51,6 +51,7 @@ import work.xeltica.craft.core.plugins.CitizenTimerCalculator;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.runnables.DaylightObserver;
 import work.xeltica.craft.core.runnables.NightmareRandomEvent;
+import work.xeltica.craft.core.runnables.RealTimeObserver;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.MetaStore;
@@ -88,8 +89,10 @@ public class XCorePlugin extends JavaPlugin {
         new DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1));
 
         new NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15));
-        // 4tickに1回
+
         // new FlyingObserver().runTaskTimer(this, 0, 4);
+
+        new RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1));
 
         final var tick = 10;
         new BukkitRunnable(){

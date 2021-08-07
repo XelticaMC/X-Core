@@ -124,56 +124,62 @@ public class CounterHandler implements Listener {
 
         final var isUsingCounter = counter != null;
 
-        // カウンター開始する
-        if (first != null) {
-            if (isUsingCounter) {
-                ui.error(player, "既にカウントが始まっています！");
-                return;
-            }
+        try {
+            // カウンター開始する
+            if (first != null) {
+                if (isUsingCounter) {
+                    ui.error(player, "既にカウントが始まっています！");
+                    return;
+                }
 
-            final var ts = Long.toString(System.currentTimeMillis());
-            record.set(PlayerDataKey.PLAYING_COUNTER_ID, store.getIdOf(first), false);
-            record.set(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, ts, false);
-            try {
+                if (record.getBoolean(PlayerDataKey.PLAYED_COUNTER)) {
+                    ui.error(player, "本日は既に挑戦済みです！また明日遊んでね。");
+                    return;
+                }
+
+                final var ts = Long.toString(System.currentTimeMillis());
+                record.set(PlayerDataKey.PLAYING_COUNTER_ID, store.getIdOf(first), false);
+                record.set(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, ts, false);
                 pstore.save();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+                
+                player.showTitle(Title.title(Component.text("§6スタート！"), Component.empty()));
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
+
+                Bukkit.getPluginManager().callEvent(new PlayerCounterStart(player, counter));
             }
             
-            player.showTitle(Title.title(Component.text("§6スタート！"), Component.empty()));
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
+            // カウンター終了する
+            if (last != null) {
+                if (!isUsingCounter) {
+                    ui.error(player, "こちらはゴールです。スタートから開始してください。");
+                    return;
+                }
+                if (!store.getIdOf(last).equals(counterId)) {
+                    ui.error(player, "ゴールが異なります。");
+                    return;
+                }
+                record.delete(PlayerDataKey.PLAYING_COUNTER_ID, false);
+                record.delete(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, false);
+                record.set(PlayerDataKey.PLAYED_COUNTER, true, false);
+                pstore.save();
 
-            Bukkit.getPluginManager().callEvent(new PlayerCounterStart(player, counter));
-        }
-        
-        // カウンター終了する
-        if (last != null) {
-            if (!isUsingCounter) {
-                ui.error(player, "まだカウントが開始していません。");
-                return;
+                final var endAt = System.currentTimeMillis();
+                final var diff = endAt - startedAt;
+                final var timeString = Time.msToString(diff);
+
+                player.sendMessage("ゴール！タイムは" + timeString + "でした。");
+
+                player.showTitle(Title.title(
+                    Component.text("§6ゴール！"),
+                    Component.text("タイム " + timeString)
+                ));
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
+
+                Bukkit.getPluginManager().callEvent(new PlayerCounterFinish(player, counter, diff));
             }
-            if (!store.getIdOf(last).equals(counterId)) {
-                ui.error(player, "ゴールが異なります。");
-                return;
-            }
-            record.delete(PlayerDataKey.PLAYING_COUNTER_ID);
-            record.delete(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP);
-            var endAt = System.currentTimeMillis();
-            player.sendMessage("start: " + startedAt);
-            player.sendMessage("end: " + endAt);
-
-            final var diff = System.currentTimeMillis() - startedAt;
-            final var timeString = Time.msToString(diff);
-
-            player.sendMessage("ゴール！タイムは" + timeString + "でした。");
-
-            player.showTitle(Title.title(
-                Component.text("§6ゴール！"),
-                Component.text("タイム " + timeString)
-            ));
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
-
-            Bukkit.getPluginManager().callEvent(new PlayerCounterFinish(player, counter, diff));
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            ui.error(player, "§cIO エラーが発生したために処理を続行できませんでした。");
         }
     }
 }
