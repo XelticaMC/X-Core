@@ -29,9 +29,8 @@ public class CommandNickName extends CommandPlayerOnlyBase implements TabComplet
         if (args.length == 0) return false;
 
         NickNameStore.getInstance().setNickNameType(player.getUniqueId(), args[0]);
-        NickNameStore.getInstance().setNickName(player);
-
         player.sendMessage("NickNameTypeを" + args[0] + "に変更しました");
+        NickNameStore.getInstance().setNickName(player);
         return true;
     }
 
