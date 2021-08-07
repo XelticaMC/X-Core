@@ -44,6 +44,11 @@
       <id>opencollab-snapshot-repo</id>
       <url>https://repo.opencollab.dev/maven-snapshots/</url>
     </repository>
+
+    <repository>
+      <id>Scarsz-Nexus</id>
+      <url>https://nexus.scarsz.me/content/groups/public/</url>
+    </repository>
   </repositories>
 
   <dependencies>
@@ -92,6 +97,13 @@
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.20</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.discordsrv</groupId>
+      <artifactId>discordsrv</artifactId>
+      <version>1.21.1</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

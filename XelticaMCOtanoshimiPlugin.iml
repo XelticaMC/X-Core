@@ -123,7 +123,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.steveice10:opennbt:1.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.GeyserMC:PacketLib:0b75570" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.spotbugs:spotbugs-annotations:4.2.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-resolver-dns:4.1.59.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-common:4.1.59.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: io.netty:netty-buffer:4.1.59.Final" level="project" />
@@ -167,5 +166,38 @@
     <orderEntry type="library" name="Maven: com.gilecode.yagson:j9-reflection-utils:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: de.tr7zw:item-nbt-api-plugin:2.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.20" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.discordsrv:discordsrv:1.21.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.dv8tion:JDA:4.2.0_222" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.squareup.okhttp3:okhttp:3.13.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.squareup.okio:okio:1.17.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-collections4:4.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.neovisionaries:nv-websocket-client:2.10" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.sf.trove4j:trove4j:3.0.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: github.scarsz:configuralize:1.3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-jdk14:1.7.25" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-io:commons-io:2.6" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-lang3:3.5" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-codec:commons-codec:1.11" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.vdurmont:emoji-java:3.1.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.json:json:20140107" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.zafarkhaja:java-semver:0.9.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.kevinsawicki:http-request:6.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.minidns:minidns-hla:0.3.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.minidns:minidns-dnssec:0.3.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.minidns:minidns-client:0.3.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.minidns:minidns-core:0.3.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.minidns:minidns-iterative-resolver:0.3.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-expression:5.2.7.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-core:5.2.7.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-jcl:5.2.7.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.vankka:MCDiscordReserializer:3.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: dev.vankka:SimpleAST:2.2.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:text-api:3.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:text-serializer-legacy:3.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:text-adapter-bukkit:3.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:text-serializer-gson:3.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.14-R0.1-SNAPSHOT" level="project" />
   </component>
 </module>
