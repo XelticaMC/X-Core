@@ -42,6 +42,11 @@ public class NickNameStore {
 
         final String nickname = getNickName(player.getUniqueId(), type);
 
+        if (nicknameLength(nickname) > nicknameLimit) {
+            player.sendMessage("nicknameの長さが " + nicknameLimit + "文字 より長いので変更できませんでした");
+            return;
+        }
+
         player.setCustomName(nickname);
         player.setPlayerListName(nickname);
         player.setDisplayName(nickname);
@@ -69,6 +74,20 @@ public class NickNameStore {
         return DiscordSRV.getPlugin().getMainGuild().getMemberById(discordId);
     }
 
+    private Integer nicknameLength(String nickname) {
+        double length = 0.0;
+        for (Character c: nickname.toCharArray()) {
+            if (String.valueOf(c).getBytes().length < 2) {
+                length += 0.5;
+            } else {
+                length += 1;
+            }
+        }
+        return (int) Math.ceil(length);
+    }
+
     private static NickNameStore instance;
     private final Config config;
+
+    private final Integer nicknameLimit = 8;
 }
