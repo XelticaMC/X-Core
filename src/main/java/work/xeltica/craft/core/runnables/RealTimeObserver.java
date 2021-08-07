@@ -16,7 +16,12 @@ public class RealTimeObserver extends BukkitRunnable {
     @Override
     public void run() {
         var now = LocalDateTime.now();
+        if (previousDateTime == null) {
+            previousDateTime = now;
+        }
+
         observeNewDay(now);
+
         previousDateTime = now;
     }
 
