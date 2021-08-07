@@ -23,6 +23,7 @@ import work.xeltica.craft.core.commands.CommandHint;
 import work.xeltica.craft.core.commands.CommandHub;
 import work.xeltica.craft.core.commands.CommandLive;
 import work.xeltica.craft.core.commands.CommandLocalTime;
+import work.xeltica.craft.core.commands.CommandNickName;
 import work.xeltica.craft.core.commands.CommandOmikuji;
 import work.xeltica.craft.core.commands.CommandXCoreGuiEvent;
 import work.xeltica.craft.core.commands.CommandXPhone;
@@ -197,6 +198,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("__core_gui_event__", new CommandXCoreGuiEvent());
         commands.put("xphone", new CommandXPhone());
         commands.put("live", new CommandLive());
+        commands.put("nick", new CommandNickName());
     }
 
     private void loadHandlers() {

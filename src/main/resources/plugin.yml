@@ -82,6 +82,10 @@ commands:
     description: ヒントメニューを開きます。
     usage: /hint [hint-id]
     permission: otanoshimi.command.hint
+  nick:
+    description: ニックネームを変更
+    usage: /nick [minecraft|discord|discord-nick]
+    permission: otanosimi.command.nickname
   __core_gui_event__:
     description: "?"
     usage: "?"
@@ -136,3 +140,5 @@ permissions:
     defualt: true
   otanoshimi.command.live:
     defualt: true
+  otanosimmi.command.nickname:
+    default: true
