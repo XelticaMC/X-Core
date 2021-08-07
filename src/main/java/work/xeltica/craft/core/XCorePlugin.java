@@ -51,6 +51,7 @@ import work.xeltica.craft.core.runnables.NightmareRandomEvent;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.MetaStore;
+import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.VehicleStore;
@@ -171,6 +172,7 @@ public class XCorePlugin extends JavaPlugin {
         new HintStore();
         new MetaStore();
         new BossBarStore();
+        new NickNameStore();
     }
 
     private void loadCommands() {
