@@ -18,6 +18,8 @@ public enum PlayerDataKey {
     COUNTER_REGISTER_NAME("counter_register_name"),
     COUNTER_REGISTER_IS_DAILY("counter_register_is_daily"),
     COUNTER_REGISTER_LOCATION("counter_register_location"),
+    PLAYING_COUNTER_ID("counter_id"),
+    PLAYING_COUNTER_TIMESTAMP("counter_time"),
 
     ;
 

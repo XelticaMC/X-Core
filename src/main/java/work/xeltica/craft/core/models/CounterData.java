@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +15,7 @@ import lombok.Getter;
 /**
  * カウンターの位置情報を登録するシステムです。
  */
-public class CounterData {
+public class CounterData implements Cloneable, ConfigurationSerializable {
 
     public CounterData(String name, Location location1, Location location2, boolean isDaily, @Nullable UUID rankingId) {
         this.name = name;
@@ -27,8 +28,8 @@ public class CounterData {
     public @NotNull Map<String, Object> serialize() {
         final var serialized = new HashMap<String, Object>();
         serialized.put("name", name);
-        serialized.put("location1", location1);
-        serialized.put("location2", location2);
+        serialized.put("location1", location1.serialize());
+        serialized.put("location2", location2.serialize());
         serialized.put("isDaily", isDaily);
         if (rankingId != null) {
             serialized.put("rankingId", rankingId.toString());

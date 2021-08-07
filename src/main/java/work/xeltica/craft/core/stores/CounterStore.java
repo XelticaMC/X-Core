@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 import lombok.Getter;
 import work.xeltica.craft.core.models.CounterData;
@@ -19,6 +20,7 @@ import work.xeltica.craft.core.utils.Config;
  */
 public class CounterStore {
     public CounterStore() {
+        ConfigurationSerialization.registerClass(CounterData.class, "CounterData");
         instance = this;
         config = new Config("counters");
         loadAll();
@@ -105,8 +107,8 @@ public class CounterStore {
      * @throws IOException 保存に失敗した
      */
     public void remove(String id) throws IOException {
-        counters.remove(id);
         removeFromIndex(get(id));
+        counters.remove(id);
         config.getConf().set(id, null);
         config.save();
     }

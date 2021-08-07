@@ -1,7 +1,9 @@
 package work.xeltica.craft.core.handlers;
 
 import java.io.IOException;
+import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
@@ -11,11 +13,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
+import work.xeltica.craft.core.events.PlayerCounterFinish;
+import work.xeltica.craft.core.events.PlayerCounterStart;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.CounterData;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.CounterStore;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.utils.Time;
 
 /**
  * Counter API処理用ハンドラー
@@ -27,8 +34,17 @@ public class CounterHandler implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onClickPlate(PlayerInteractEvent e) {
-        // 右クリックでなければ無視
-        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        final var isBlockClick = List.of(
+            Action.RIGHT_CLICK_BLOCK,
+            Action.LEFT_CLICK_BLOCK
+        ).contains(e.getAction());
+
+        final var logger = Bukkit.getLogger();
+
+        logger.info("isBlockClick: " + isBlockClick);
+
+        // ブロッククリックでなければ無視
+        if (!isBlockClick) return;
 
         final var pstore = PlayerStore.getInstance();
         final var store = CounterStore.getInstance();
@@ -39,17 +55,22 @@ public class CounterHandler implements Listener {
 
         final var record = pstore.open(player);
 
+        final var isCounterRegisterMode = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_MODE);
+        final var isPlate = Tag.PRESSURE_PLATES.isTagged(block.getType());
+        logger.info("isCounterRegisterMode: " + isCounterRegisterMode);
+        logger.info("isPlate: " + isPlate);
+
         // カウンター登録モードでなければ無視
-        if (!record.getBoolean(PlayerDataKey.COUNTER_REGISTER_MODE)) return;
+        if (!isCounterRegisterMode) return;
 
         // 感圧板でなければ無視
-        if (!Tag.PRESSURE_PLATES.isTagged(block.getType())) return;
+        if (!isPlate) return;
 
         final var name = record.getString(PlayerDataKey.COUNTER_REGISTER_NAME);
         final var loc = record.getLocation(PlayerDataKey.COUNTER_REGISTER_LOCATION);
         final var daily = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_IS_DAILY);
 
-        e.setCancelled(false);
+        e.setCancelled(true);
 
         try {
             // 始点登録
@@ -90,20 +111,69 @@ public class CounterHandler implements Listener {
         // ブロックがnullなら無視
         if (block == null) return;
 
-        final var record = pstore.open(player);
-
         // 感圧板でなければ無視
         if (!Tag.PRESSURE_PLATES.isTagged(block.getType())) return;
 
         var first = store.getByLocation1(block.getLocation());
         var last = store.getByLocation2(block.getLocation());
-        
+
+        final var record = pstore.open(player);
+        final var counterId = record.getString(PlayerDataKey.PLAYING_COUNTER_ID);
+        final var startedAt = Long.parseLong(record.getString(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, "0"));
+        final var counter = counterId == null ? null : store.get(counterId);
+
+        final var isUsingCounter = counter != null;
+
+        // カウンター開始する
         if (first != null) {
-            player.sendMessage("カウンター " + first.getName() + " の始点です");
+            if (isUsingCounter) {
+                ui.error(player, "既にカウントが始まっています！");
+                return;
+            }
+
+            final var ts = Long.toString(System.currentTimeMillis());
+            record.set(PlayerDataKey.PLAYING_COUNTER_ID, store.getIdOf(first), false);
+            record.set(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, ts, false);
+            try {
+                pstore.save();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            
+            player.showTitle(Title.title(Component.text("§6スタート！"), Component.empty()));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
+
+            Bukkit.getPluginManager().callEvent(new PlayerCounterStart(player, counter));
         }
         
+        // カウンター終了する
         if (last != null) {
-            player.sendMessage("カウンター " + last.getName() + " の終点です");
+            if (!isUsingCounter) {
+                ui.error(player, "まだカウントが開始していません。");
+                return;
+            }
+            if (!store.getIdOf(last).equals(counterId)) {
+                ui.error(player, "ゴールが異なります。");
+                return;
+            }
+            record.delete(PlayerDataKey.PLAYING_COUNTER_ID);
+            record.delete(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP);
+            var endAt = System.currentTimeMillis();
+            player.sendMessage("start: " + startedAt);
+            player.sendMessage("end: " + endAt);
+
+            final var diff = System.currentTimeMillis() - startedAt;
+            final var timeString = Time.msToString(diff);
+
+            player.sendMessage("ゴール！タイムは" + timeString + "でした。");
+
+            player.showTitle(Title.title(
+                Component.text("§6ゴール！"),
+                Component.text("タイム " + timeString)
+            ));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
+
+            Bukkit.getPluginManager().callEvent(new PlayerCounterFinish(player, counter, diff));
         }
     }
 }

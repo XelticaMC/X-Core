@@ -26,10 +26,8 @@ public class PlayerRecord {
     }
 
     public void set(PlayerDataKey key, Object value, boolean save) {
-        if (value != null && value.equals(get(key)))
-            return;
-        if (get(key) == null && value == null)
-            return;
+        if (value != null && value.equals(get(key))) return;
+        if (get(key) == null && value == null) return;
         section.set(key.getPhysicalKey(), value);
         if (save) save();
     }
