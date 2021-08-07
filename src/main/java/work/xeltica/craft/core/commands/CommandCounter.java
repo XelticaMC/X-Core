@@ -26,6 +26,8 @@ public class CommandCounter extends CommandPlayerOnlyBase {
 
         try {
             switch (subCommand) {
+                // 登録を行います。
+                // counter register
                 case "register" -> {
                     if (args.length < 2) return ui.error(player, "/counter register <name> [\"daily\"]");
                     final var name = args[1];
@@ -38,6 +40,8 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     player.sendMessage("カウンター登録モードは有効。カウンターの始点にする感圧板を右クリックかタップしてください。");
                     player.sendMessage("キャンセルする際には、 /counter cancel を実行します。");
                 }
+
+                // カウンター登録をキャンセルします。
                 // counter cancel
                 case "cancel" -> {
                     record.delete(PlayerDataKey.COUNTER_REGISTER_MODE, false);
@@ -48,6 +52,8 @@ public class CommandCounter extends CommandPlayerOnlyBase {
 
                     player.sendMessage("カウンター登録モードを無効化し、キャンセルしました。");
                 }
+
+                // カウンターを登録解除します。
                 // counter unregister <name>
                 case "unregister" -> {
                     if (args.length != 2) return ui.error(player, "/counter unregister <name>");
@@ -60,10 +66,14 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     store.remove(data);
                     player.sendMessage(name + "を登録解除しました。");
                 }
+
+                // カウンターをランキングに紐付けます。
                 // counter bind <playerType> <rankingName>
                 case "bind" -> {
                     return ui.error(player, "未実装");
                 }
+
+                // カウンターの情報を開示します。
                 // counter info <name>
                 case "info" -> {
                     if (args.length != 2) return ui.error(player, "/counter info <name>");
@@ -76,10 +86,35 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     player.sendMessage("1日1回かどうか: " + data.isDaily());
                     player.sendMessage("紐付いたランキングID: " + data.getRankingId());
                 }
+
+                // カウンターのプレイ済み履歴を全プレイヤー分削除します。
+                // counter resetdaily
+                case "resetdaily" -> {
+                    final var name = args[1];
+                    final var data = store.getByName(name);
+                    player.sendMessage("名前: " + name);
+                    player.sendMessage("ID: " + store.getIdOf(data));
+                    player.sendMessage("始点: " + data.getLocation1().toString());
+                    player.sendMessage("終点: " + data.getLocation2().toString());
+                    player.sendMessage("1日1回かどうか: " + data.isDaily());
+                    player.sendMessage("紐付いたランキングID: " + data.getRankingId());
+                }
+
+                // カウンターを一覧表示します。
                 // counter list
                 case "list" -> {
-                    store.getCounters().forEach(c -> player.sendMessage("* " + c.getName()));
+                    final var list = store.getCounters();
+                    if (list.size() == 0) {
+                        ui.error(player, "カウンターはまだ作成されていません。");
+                    } else {
+                        player.sendMessage("合計: " + list.size());
+                        list.forEach(c -> player.sendMessage("* " + c.getName()));
+                    }
                 }
+
+                // カウンターをデイリーイベント仕様にするかどうか設定する
+                // 現状は全部デイリーイベント仕様である
+                // counter setisdaily <true/false>
                 case "setisdaily" -> {
                     return ui.error(player, "未実装");
                 }
