@@ -7,11 +7,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.geysermc.floodgate.api.FloodgateApi;
+import org.geysermc.floodgate.util.DeviceOs;
+import org.jetbrains.annotations.Nullable;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
@@ -23,6 +27,7 @@ import work.xeltica.craft.core.models.CounterData;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.CounterStore;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.stores.RankingStore;
 import work.xeltica.craft.core.utils.Time;
 
 /**
@@ -80,7 +85,7 @@ public class CounterHandler implements Listener {
                 player.sendMessage("始点を登録しました。続いて終点を登録します。");
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
             } else {
-                store.add(new CounterData(name, loc, block.getLocation(), daily, null));
+                store.add(new CounterData(name, loc, block.getLocation(), daily, null, null, null, null));
                 player.sendMessage("カウンター " + name + "を登録しました。");
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1);
                 record.delete(PlayerDataKey.COUNTER_REGISTER_MODE, false);
@@ -165,7 +170,7 @@ public class CounterHandler implements Listener {
                 pstore.save();
 
                 final var endAt = System.currentTimeMillis();
-                final var diff = endAt - startedAt;
+                final var diff = (int)(endAt - startedAt);
                 final var timeString = Time.msToString(diff);
 
                 player.sendMessage("ゴール！タイムは" + timeString + "でした。");
@@ -175,6 +180,8 @@ public class CounterHandler implements Listener {
                     Component.text("タイム " + timeString)
                 ));
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
+
+                handleRanking(player, last, diff);
 
                 Bukkit.getPluginManager().callEvent(new PlayerCounterFinish(player, counter, diff));
             }
@@ -190,6 +197,33 @@ public class CounterHandler implements Listener {
             CounterStore.getInstance().resetAllPlayersPlayedLog();
         } catch (IOException e1) {
             e1.printStackTrace();
+        }
+    }
+
+    /**
+     * ランキングに投稿するやつ
+    */
+    private void handleRanking(Player player, CounterData counter, int diff) {
+        final var floodgate = FloodgateApi.getInstance();
+        if (floodgate.isFloodgatePlayer(player.getUniqueId())) {
+            // bedrock
+            final var type = floodgate.getPlayer(player.getUniqueId()).getDeviceOs();
+            addRanking(type == DeviceOs.UWP ? counter.getUwpRankingId() : counter.getPhoneRankingId(), player, diff);
+            addRanking(counter.getBedrockRankingId(), player, diff);
+        } else {
+            // java
+            addRanking(counter.getJavaRankingId(), player, diff);
+        }
+    }
+
+    private void addRanking(final @Nullable String id, Player player, int diff) {
+        final var rankingApi = RankingStore.getInstance();
+
+        if (id instanceof String && rankingApi.has(id)) {
+            final var ranking = rankingApi.get(id);
+            if (ranking.get(id) > diff) {
+                ranking.add(player.getUniqueId().toString(), diff);
+            }
         }
     }
 }

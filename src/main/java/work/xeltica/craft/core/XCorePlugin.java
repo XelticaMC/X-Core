@@ -31,6 +31,7 @@ import work.xeltica.craft.core.commands.CommandXPhone;
 import work.xeltica.craft.core.commands.CommandXtp;
 import work.xeltica.craft.core.commands.CommandPromo;
 import work.xeltica.craft.core.commands.CommandPvp;
+import work.xeltica.craft.core.commands.CommandRanking;
 import work.xeltica.craft.core.commands.CommandReport;
 import work.xeltica.craft.core.commands.CommandRespawn;
 import work.xeltica.craft.core.commands.CommandSignEdit;
@@ -58,6 +59,7 @@ import work.xeltica.craft.core.stores.MetaStore;
 import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.stores.RankingStore;
 import work.xeltica.craft.core.stores.VehicleStore;
 import work.xeltica.craft.core.stores.WorldStore;
 import work.xeltica.craft.core.utils.Ticks;
@@ -181,6 +183,7 @@ public class XCorePlugin extends JavaPlugin {
         new BossBarStore();
         new NickNameStore();
         new CounterStore();
+        new RankingStore();
     }
 
     private void loadCommands() {
@@ -207,6 +210,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("live", new CommandLive());
         commands.put("nick", new CommandNickName());
         commands.put("counter", new CommandCounter());
+        commands.put("ranking", new CommandRanking());
     }
 
     private void loadHandlers() {

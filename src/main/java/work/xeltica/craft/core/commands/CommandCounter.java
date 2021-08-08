@@ -37,7 +37,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     record.set(PlayerDataKey.COUNTER_REGISTER_IS_DAILY, isDaily, false);
                     pstore.save();
                                     
-                    player.sendMessage("カウンター登録モードは有効。カウンターの始点にする感圧板を右クリックかタップしてください。");
+                    player.sendMessage("カウンター登録モードは有効。カウンターの始点にする感圧板をクリックかタップしてください。");
                     player.sendMessage("キャンセルする際には、 /counter cancel を実行します。");
                 }
 
@@ -68,9 +68,72 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                 }
 
                 // カウンターをランキングに紐付けます。
-                // counter bind <playerType> <rankingName>
+                // counter bind <name> <playerType> [rankingName]
                 case "bind" -> {
-                    return ui.error(player, "未実装");
+                    if (args.length != 4) return ui.error(player, "/counter bind <name> <all/java/bedrock/uwp/phone> <rankingName>");
+                    final var name = args[1].toLowerCase();
+                    final var playerType = args[2].toLowerCase();
+                    final var rankingName = args[3];
+
+                    final var data = store.get(name);
+                    if (data == null) {
+                        return ui.error(player, name + "という名前のカウンターは存在しません。");
+                    }
+                    
+                    switch (playerType) {
+                        case "all" -> {
+                            data.setJavaRankingId(rankingName);
+                            data.setBedrockRankingId(rankingName);
+                        }
+                        case "java" -> {
+                            data.setJavaRankingId(rankingName);
+                        }
+                        case "bedrock" -> {
+                            data.setBedrockRankingId(rankingName);
+                        }
+                        case "uwp" -> {
+                            data.setUwpRankingId(rankingName);
+                        }
+                        case "phone" -> {
+                            data.setPhoneRankingId(rankingName);
+                        }
+                    }
+                    store.update(data);
+                    player.sendMessage("カウンターをランキングに紐付けました。");
+                }
+
+                // カウンターをランキングから紐付け解除します。
+                // counter unbind <name> <playerType>
+                case "unbind" -> {
+                    if (args.length != 3) return ui.error(player, "/counter unbind <name> <all/java/bedrock/uwp/phone>");
+                    final var name = args[1].toLowerCase();
+                    final var playerType = args[2].toLowerCase();
+
+                    final var data = store.get(name);
+                    if (data == null) {
+                        return ui.error(player, name + "という名前のカウンターは存在しません。");
+                    }
+                    
+                    switch (playerType) {
+                        case "all" -> {
+                            data.setJavaRankingId(null);
+                            data.setBedrockRankingId(null);
+                        }
+                        case "java" -> {
+                            data.setJavaRankingId(null);
+                        }
+                        case "bedrock" -> {
+                            data.setBedrockRankingId(null);
+                        }
+                        case "uwp" -> {
+                            data.setUwpRankingId(null);
+                        }
+                        case "phone" -> {
+                            data.setPhoneRankingId(null);
+                        }
+                    }
+                    store.update(data);
+                    player.sendMessage("カウンターをランキングから解除ました。");
                 }
 
                 // カウンターの情報を開示します。
@@ -83,7 +146,11 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     player.sendMessage("始点: " + data.getLocation1().toString());
                     player.sendMessage("終点: " + data.getLocation2().toString());
                     player.sendMessage("1日1回かどうか: " + data.isDaily());
-                    player.sendMessage("紐付いたランキングID: " + data.getRankingId());
+                    player.sendMessage("紐付いたランキングID: ");
+                    player.sendMessage(" Java: " + data.getJavaRankingId());
+                    player.sendMessage(" Bedrock: " + data.getBedrockRankingId());
+                    player.sendMessage(" UWP: " + data.getUwpRankingId());
+                    player.sendMessage(" Phone: " + data.getPhoneRankingId());
                 }
 
                 // カウンターのプレイ済み履歴を全プレイヤー分削除します。

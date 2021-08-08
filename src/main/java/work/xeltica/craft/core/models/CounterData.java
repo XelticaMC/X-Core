@@ -10,18 +10,31 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * カウンターの位置情報を登録するシステムです。
  */
 public class CounterData implements Cloneable, ConfigurationSerializable {
 
-    public CounterData(String name, Location location1, Location location2, boolean isDaily, @Nullable UUID rankingId) {
+    public CounterData(
+        String name, 
+        Location location1, 
+        Location location2, 
+        boolean isDaily, 
+        @Nullable String javaRankingId,
+        @Nullable String bedrockRankingId,
+        @Nullable String uwpRankingId,
+        @Nullable String phoneRankingId
+    ) {
         this.name = name;
         this.location1 = location1;
         this.location2 = location2;
         this.isDaily = isDaily;
-        this.rankingId = rankingId;
+        this.javaRankingId = javaRankingId;
+        this.bedrockRankingId = bedrockRankingId;
+        this.uwpRankingId = uwpRankingId;
+        this.phoneRankingId = phoneRankingId;
     }
 
     public @NotNull Map<String, Object> serialize() {
@@ -30,9 +43,10 @@ public class CounterData implements Cloneable, ConfigurationSerializable {
         serialized.put("location1", location1.serialize());
         serialized.put("location2", location2.serialize());
         serialized.put("isDaily", isDaily);
-        if (rankingId != null) {
-            serialized.put("rankingId", rankingId.toString());
-        }
+        serialized.put("javaRankingId", javaRankingId);
+        serialized.put("bedrockRankingId", bedrockRankingId);
+        serialized.put("uwpRankingId", uwpRankingId);
+        serialized.put("phoneRankingId", phoneRankingId);
         return serialized;
     }
 
@@ -41,7 +55,10 @@ public class CounterData implements Cloneable, ConfigurationSerializable {
         final Location location1;
         final Location location2;
         final boolean isDaily;
-        final UUID rankingId;
+        final String javaRankingId;
+        final String bedrockRankingId;
+        final String uwpRankingId;
+        final String phoneRankingId;
 
         assertKey(args, "name");
         assertKey(args, "location1");
@@ -53,11 +70,12 @@ public class CounterData implements Cloneable, ConfigurationSerializable {
         location2 = Location.deserialize((Map<String, Object>) args.get("location2"));
         isDaily = (Boolean)args.get("isDaily");
 
-        rankingId = args.containsKey("rankingId")
-            ? UUID.fromString((String)args.get("rankingId"))
-            : null;
+        javaRankingId = (String)args.get("javaRankingId");
+        bedrockRankingId = (String)args.get("bedrockRankingId");
+        uwpRankingId = (String)args.get("uwpRankingId");
+        phoneRankingId = (String)args.get("phoneRankingId");
 
-        return new CounterData(name, location1, location2, isDaily, rankingId);
+        return new CounterData(name, location1, location2, isDaily, javaRankingId, bedrockRankingId, uwpRankingId, phoneRankingId);
     }
 
     protected static void assertKey(Map<String, Object> args, @NotNull String key) {
@@ -68,5 +86,13 @@ public class CounterData implements Cloneable, ConfigurationSerializable {
     @Getter private final Location location1;
     @Getter private final Location location2;
     @Getter private final boolean isDaily;
-    @Nullable @Getter private final UUID rankingId;
+
+    /** Java版プレイヤー用 紐付けたランキングID */
+    @Nullable @Getter @Setter private String javaRankingId;
+    /** 統合版プレイヤー用 紐付けたランキングID */
+    @Nullable @Getter @Setter private String bedrockRankingId;
+    /** Windows10版プレイヤー用 紐付けたランキングID */
+    @Nullable @Getter @Setter private String uwpRankingId;
+    /** スマホ・タブレット・ゲーム機版プレイヤー用 紐付けたランキングID */
+    @Nullable @Getter @Setter private String phoneRankingId;
 }

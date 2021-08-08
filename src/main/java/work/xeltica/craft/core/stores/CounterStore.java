@@ -68,8 +68,7 @@ public class CounterStore {
     public void add(CounterData data) throws IOException {
         counters.put(data.getName(), data);
         addToIndex(data);
-        config.getConf().set(data.getName(), data);
-        config.save();
+        update(data);
     }
 
     /**
@@ -79,6 +78,12 @@ public class CounterStore {
      */
     public void remove(CounterData data) throws IOException {
         remove(data.getName());
+    }
+
+    public void update(CounterData data) throws IOException {
+        if (!counters.containsKey(data.getName())) throw new IllegalArgumentException();
+        config.getConf().set(data.getName(), data);
+        config.save();
     }
 
     /**
@@ -137,8 +142,6 @@ public class CounterStore {
 
     /** カウンターデータのマップ */
     private final Map<String, CounterData> counters = new HashMap<>();
-
-    /** IDに紐づくカウンターデータの一覧 */
 
     /** 始点座標による索引 */
     private final Map<Location, CounterData> location1Index = new HashMap<>();

@@ -1,9 +1,11 @@
 package work.xeltica.craft.core.commands;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import work.xeltica.craft.core.stores.RankingStore;
 
@@ -18,6 +20,7 @@ public class CommandRanking extends CommandBase {
 
         final var subCommand = args[0].toLowerCase();
         final var api = RankingStore.getInstance();
+        final var id = sender instanceof Player p ? p.getUniqueId().toString() : null;
 
         switch (subCommand) {
             case "create" -> {
@@ -27,15 +30,15 @@ public class CommandRanking extends CommandBase {
                 }
                 final var name = args[1].trim();
                 final var displayName = args[2].trim();
-                final var isPlayerMode = args.length >= 3 && args[3].equalsIgnoreCase("playermode");
+                final var isPlayerMode = args.length >= 4 && args[3].equalsIgnoreCase("playermode");
 
                 if (api.has(name)) {
                     sender.sendMessage("既に存在します。");
                     return true;
                 }
                 try {
-                    var ranking = api.create(name, displayName);
-                    ranking.setIsPlayerMode(isPlayerMode);
+                    api.create(name, displayName, isPlayerMode);
+                    sender.sendMessage("ランキング " + name + "を" + (isPlayerMode ? "プレイヤーモードで" : "") + "作成しました。");
                 } catch (IOException e) {
                     sender.sendMessage("IOエラーにより失敗しました。");
                 }
@@ -52,7 +55,7 @@ public class CommandRanking extends CommandBase {
                     return true;
                 }
                 try {
-                    sender.sendMessage(api.delete(name) ? "成功しました。" : "失敗しました。");
+                    sender.sendMessage(api.delete(name) ? "削除に成功しました。" : "削除に失敗しました。");
                 } catch (IOException e) {
                     sender.sendMessage("IOエラーにより失敗しました。");
                 }
@@ -71,7 +74,7 @@ public class CommandRanking extends CommandBase {
                 final var ranking = api.get(name).queryRanking();
                 for (var i = 0; i < ranking.length; i++) {
                     final var record = ranking[i];
-                    sender.sendMessage(String.format("§6%d位:§a%s &b%d点", i + 1, record.id(), record.score()));
+                    sender.sendMessage(String.format("§6%d位:§a%s §b%s", i + 1, record.id(), record.score()));
                 }
             }
             case "list" -> {
@@ -82,6 +85,74 @@ public class CommandRanking extends CommandBase {
                     list.stream()
                         .map(r -> String.format("%s §7(%s)", r.getName(), r.getDisplayName()))
                         .forEach(r -> sender.sendMessage(r));
+                }
+            }
+            case "set" -> {
+                if (args.length != 3) {
+                    sender.sendMessage("/ranking set <rankingName> <value>");
+                    return true;
+                }
+                if (id == null) {
+                    sender.sendMessage("プレイヤーが実行してください。");
+                    return true;
+                }
+                final var name = args[1].trim();
+                try {
+                    final var value = Integer.parseInt(args[2]);
+                    if (!api.has(name)) {
+                        sender.sendMessage("ランキングが存在しません。");
+                        return true;
+                    }
+                    final var ranking = api.get(name);
+                    ranking.add(id, value);
+                    sender.sendMessage("ランキングにレコードを追加しました。");
+                } catch (NumberFormatException e) {
+                    sender.sendMessage("値には数値のみ認められます。");
+                }
+            }
+            case "unset" -> {
+                if (args.length != 2) {
+                    sender.sendMessage("/ranking unset <rankingName>");
+                    return true;
+                }
+                if (id == null) {
+                    sender.sendMessage("プレイヤーが実行してください。");
+                    return true;
+                }
+                final var name = args[1].trim();
+                try {
+                    final var ranking = api.get(name);
+                    ranking.remove(id);
+                    sender.sendMessage("ランキングからレコードを削除しました。");
+                } catch (NumberFormatException e) {
+                    sender.sendMessage("値には数値のみ認められます。");
+                }
+            }
+            case "mode" -> {
+                if (args.length != 3) {
+                    sender.sendMessage("/ranking mode <rankingName> <normal/time/point>");
+                    return true;
+                }
+                final var name = args[1].trim();
+
+                if (!api.has(name)) {
+                    sender.sendMessage("存在しません。");
+                    return true;
+                }
+                final var mode = args[2].trim().toLowerCase();
+                if (!List.of("normal", "time", "point").contains(mode)) {
+                    sender.sendMessage("モードには次のものを指定できます。");
+                    sender.sendMessage("normal: 値を単位の無い普通の数値とみなす");
+                    sender.sendMessage("  time: 値をミリ秒時間とみなす。カウンターと併用する場合はこちら");
+                    sender.sendMessage(" point: 値を点数とみなす。");
+                    return true;
+                }
+                try {
+                    api.get(name).setMode(mode);
+                    sender.sendMessage("モードを設定しました。");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    sender.sendMessage("IOエラー");
                 }
             }
             default -> {

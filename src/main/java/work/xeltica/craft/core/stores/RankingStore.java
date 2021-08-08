@@ -24,11 +24,13 @@ public class RankingStore {
      * @throws IllegalArgumentException 既にランキングが存在する
      * @throws IOException 保存に失敗
      */
-    public Ranking create(String name, String displayName) throws IOException {
+    public Ranking create(String name, String displayName, boolean isPlayerMode) throws IOException {
         if (has(name)) throw new IllegalArgumentException();
 
         final var ranking = new Ranking(name, rankingConfig);
-        ranking.setDisplayName(displayName);
+        ranking.setDisplayName(displayName, false);
+        ranking.setIsPlayerMode(isPlayerMode, false);
+        ranking.save();
         return ranking;
     }
 
@@ -51,7 +53,7 @@ public class RankingStore {
      * @return ランキングが存在すればtrue、しなければfalse
      */
     public boolean has(String name) {
-        return !rankingConfig.getConf().contains(name);
+        return rankingConfig.getConf().contains(name);
     }
 
     /**

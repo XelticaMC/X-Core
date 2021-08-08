@@ -88,8 +88,12 @@ commands:
     permission: otanosimi.command.nickname
   counter:
     description: カウンター管理
-    usage: /counter <register/unregister/cancel/bind/info/list/setisdaily>
+    usage: /counter <register/unregister/cancel/bind/info/list/resetdaily>
     permission: otanoshimi.command.counter
+  ranking:
+    description: ランキング管理
+    usage: /ranking <create/delete/query/list/set/unset>
+    permission: otanoshimi.command.ranking
   __core_gui_event__:
     description: "?"
     usage: "?"
@@ -147,4 +151,6 @@ permissions:
   otanoshimi.command.nickname:
     default: true
   otanoshimi.command.counter:
+    default: op
+  otanoshimi.command.ranking:
     default: op
