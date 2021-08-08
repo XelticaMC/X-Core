@@ -17,6 +17,7 @@ import work.xeltica.craft.core.commands.CommandBase;
 import work.xeltica.craft.core.commands.CommandBoat;
 import work.xeltica.craft.core.commands.CommandCart;
 import work.xeltica.craft.core.commands.CommandCat;
+import work.xeltica.craft.core.commands.CommandCounter;
 import work.xeltica.craft.core.commands.CommandGiveCustomItem;
 import work.xeltica.craft.core.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.core.commands.CommandHint;
@@ -30,6 +31,7 @@ import work.xeltica.craft.core.commands.CommandXPhone;
 import work.xeltica.craft.core.commands.CommandXtp;
 import work.xeltica.craft.core.commands.CommandPromo;
 import work.xeltica.craft.core.commands.CommandPvp;
+import work.xeltica.craft.core.commands.CommandRanking;
 import work.xeltica.craft.core.commands.CommandReport;
 import work.xeltica.craft.core.commands.CommandRespawn;
 import work.xeltica.craft.core.commands.CommandSignEdit;
@@ -37,6 +39,7 @@ import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.handlers.LiveModeHandler;
 import work.xeltica.craft.core.handlers.XphoneHandler;
 import work.xeltica.craft.core.models.PlayerDataKey;
+import work.xeltica.craft.core.handlers.CounterHandler;
 import work.xeltica.craft.core.handlers.EbiPowerHandler;
 import work.xeltica.craft.core.handlers.HubHandler;
 import work.xeltica.craft.core.handlers.NewMorningHandler;
@@ -49,18 +52,21 @@ import work.xeltica.craft.core.plugins.CitizenTimerCalculator;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.runnables.DaylightObserver;
 import work.xeltica.craft.core.runnables.NightmareRandomEvent;
+import work.xeltica.craft.core.runnables.RealTimeObserver;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.MetaStore;
 import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.stores.RankingStore;
 import work.xeltica.craft.core.stores.VehicleStore;
 import work.xeltica.craft.core.stores.WorldStore;
 import work.xeltica.craft.core.utils.Ticks;
 import work.xeltica.craft.core.commands.CommandEpShop;
 import work.xeltica.craft.core.stores.BossBarStore;
 import work.xeltica.craft.core.stores.CloverStore;
+import work.xeltica.craft.core.stores.CounterStore;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 
@@ -85,8 +91,10 @@ public class XCorePlugin extends JavaPlugin {
         new DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1));
 
         new NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15));
-        // 4tickに1回
+
         // new FlyingObserver().runTaskTimer(this, 0, 4);
+
+        new RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1));
 
         final var tick = 10;
         new BukkitRunnable(){
@@ -174,6 +182,8 @@ public class XCorePlugin extends JavaPlugin {
         new MetaStore();
         new BossBarStore();
         new NickNameStore();
+        new CounterStore();
+        new RankingStore();
     }
 
     private void loadCommands() {
@@ -199,6 +209,8 @@ public class XCorePlugin extends JavaPlugin {
         commands.put("xphone", new CommandXPhone());
         commands.put("live", new CommandLive());
         commands.put("nick", new CommandNickName());
+        commands.put("counter", new CommandCounter());
+        commands.put("ranking", new CommandRanking());
     }
 
     private void loadHandlers() {
@@ -214,6 +226,7 @@ public class XCorePlugin extends JavaPlugin {
         pm.registerEvents(new XphoneHandler(), this);
         pm.registerEvents(new EbiPowerHandler(), this);
         pm.registerEvents(new LiveModeHandler(), this);
+        pm.registerEvents(new CounterHandler(), this);
         pm.registerEvents(Gui.getInstance(), this);
     }
 

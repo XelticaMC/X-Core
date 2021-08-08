@@ -9,6 +9,7 @@ depend:
   - Vault
   - floodgate
   - DiscordSRV
+  - HolographicDisplays
 commands:
   omikuji:
     description: おみくじを引きます。マイクラ内で1日に1回まで引けて、100エビパワーを消費します。
@@ -86,6 +87,14 @@ commands:
     description: ニックネームを変更
     usage: /nick [minecraft|discord|discord-nick]
     permission: otanosimi.command.nickname
+  counter:
+    description: カウンター管理
+    usage: /counter <register/unregister/cancel/bind/info/list/resetdaily>
+    permission: otanoshimi.command.counter
+  ranking:
+    description: ランキング管理
+    usage: /ranking <create/delete/query/list/set/unset/hologram>
+    permission: otanoshimi.command.ranking
   __core_gui_event__:
     description: "?"
     usage: "?"
@@ -139,6 +148,10 @@ permissions:
   otanoshimi.command.xphone:
     defualt: true
   otanoshimi.command.live:
-    defualt: true
-  otanosimmi.command.nickname:
     default: true
+  otanoshimi.command.nickname:
+    default: true
+  otanoshimi.command.counter:
+    default: op
+  otanoshimi.command.ranking:
+    default: op

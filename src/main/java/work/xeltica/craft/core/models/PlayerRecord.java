@@ -3,6 +3,7 @@ package work.xeltica.craft.core.models;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
 
@@ -25,10 +26,8 @@ public class PlayerRecord {
     }
 
     public void set(PlayerDataKey key, Object value, boolean save) {
-        if (value != null && value.equals(get(key)))
-            return;
-        if (get(key) == null && value == null)
-            return;
+        if (value != null && value.equals(get(key))) return;
+        if (get(key) == null && value == null) return;
         section.set(key.getPhysicalKey(), value);
         if (save) save();
     }
@@ -115,6 +114,18 @@ public class PlayerRecord {
 
     public boolean isVector(PlayerDataKey key) {
         return section.isVector(key.getPhysicalKey());
+    }
+    
+    public Location getLocation(PlayerDataKey key) {
+        return section.getLocation(key.getPhysicalKey());
+    }
+
+    public Location getLocation(PlayerDataKey key, Location defaultValue) {
+        return section.getLocation(key.getPhysicalKey(), defaultValue);
+    }
+
+    public boolean isLocation(PlayerDataKey key) {
+        return section.isLocation(key.getPhysicalKey());
     }
 
     public void delete(PlayerDataKey key) {

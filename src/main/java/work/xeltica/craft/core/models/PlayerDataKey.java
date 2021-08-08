@@ -14,6 +14,13 @@ public enum PlayerDataKey {
     FIRST_SPAWN("first_spawn"),
     LAST_JOINED("last_joined"),
     GIVEN_PHONE("given_phone"),
+    COUNTER_REGISTER_MODE("counter_register_mode"),
+    COUNTER_REGISTER_NAME("counter_register_name"),
+    COUNTER_REGISTER_IS_DAILY("counter_register_is_daily"),
+    COUNTER_REGISTER_LOCATION("counter_register_location"),
+    PLAYING_COUNTER_ID("counter_id"),
+    PLAYING_COUNTER_TIMESTAMP("counter_time"),
+    PLAYED_COUNTER("played_counter"),
 
     ;
 

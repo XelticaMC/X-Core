@@ -1,6 +1,6 @@
 package work.xeltica.craft.core.models;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -30,7 +30,7 @@ public class SignData implements Cloneable, ConfigurationSerializable {
     }
 
     public @NotNull Map<String, Object> serialize() {
-        final var result = new LinkedHashMap<String, Object>();
+        final var result = new HashMap<String, Object>();
         result.put("location", location.serialize());
         result.put("command", command);
         result.put("arg1", arg1);
