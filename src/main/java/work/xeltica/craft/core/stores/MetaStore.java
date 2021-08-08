@@ -60,8 +60,8 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-        "配信モードをオンにしたまま退出して5分経過した場合、オフにするよう改善",
-        "内部プログラムの最適化",
+        "カウンターシステム実装（イベント用）",
+        "ランキングシステム実装（イベント用）"
     };
 
     private static MetaStore instance;
