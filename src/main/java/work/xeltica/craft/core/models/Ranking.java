@@ -3,7 +3,9 @@ package work.xeltica.craft.core.models;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 import lombok.Getter;
@@ -44,6 +46,23 @@ public class Ranking {
     }
 
     /**
+     * このランキングがプレイヤーをキーとするかどうかを取得します。
+     * @return プレイヤーをキーとするランキングであればtrue、そうでなければfalse。
+     */
+    public boolean isPlayerMode() {
+        return thisSection.getBoolean("isPlayerMode");
+    }
+
+    /**
+     * このランキングがプレイヤーをキーとするかどうかを設定します。
+     * @param name プレイヤーをキーとするランキングであるかどうか
+     * @throws IOException 保存に失敗
+     */
+    public void setIsPlayerMode(boolean value) throws IOException {
+        set("isPlayerMode", value);
+    }
+
+    /**
      * 指定したレコードIDのレコードの値を取得します。
      * @return 順位でソートされたレコード
     */
@@ -66,7 +85,14 @@ public class Ranking {
     */
     public RankingRecord[] queryRanking(int count) {
         return records.entrySet().stream()
-            .map(e -> new RankingRecord(e.getKey(), e.getValue()))
+            .map(e -> {
+                var key = e.getKey();
+                if (isPlayerMode()) {
+                    final var player = Bukkit.getOfflinePlayer(UUID.fromString(key));
+                    if (player != null) key = player.getName();
+                }
+                return new RankingRecord(key, e.getValue());
+            })
             .sorted(Comparator.comparingInt(RankingRecord::score).reversed())
             .toArray(RankingRecord[]::new);
     }
