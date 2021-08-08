@@ -58,7 +58,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                 case "unregister" -> {
                     if (args.length != 2) return ui.error(player, "/counter unregister <name>");
                     final var name = args[1];
-                    final var data = store.getByName(name);
+                    final var data = store.get(name);
                     if (data == null) {
                         return ui.error(player, name + "という名前のカウンターは存在しません。");
                     }
@@ -78,9 +78,8 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                 case "info" -> {
                     if (args.length != 2) return ui.error(player, "/counter info <name>");
                     final var name = args[1];
-                    final var data = store.getByName(name);
+                    final var data = store.get(name);
                     player.sendMessage("名前: " + name);
-                    player.sendMessage("ID: " + store.getIdOf(data));
                     player.sendMessage("始点: " + data.getLocation1().toString());
                     player.sendMessage("終点: " + data.getLocation2().toString());
                     player.sendMessage("1日1回かどうか: " + data.isDaily());

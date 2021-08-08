@@ -139,7 +139,7 @@ public class CounterHandler implements Listener {
                 }
 
                 final var ts = Long.toString(System.currentTimeMillis());
-                record.set(PlayerDataKey.PLAYING_COUNTER_ID, store.getIdOf(first), false);
+                record.set(PlayerDataKey.PLAYING_COUNTER_ID, first.getName(), false);
                 record.set(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, ts, false);
                 pstore.save();
                 
@@ -155,7 +155,7 @@ public class CounterHandler implements Listener {
                     ui.error(player, "こちらはゴールです。スタートから開始してください。");
                     return;
                 }
-                if (!store.getIdOf(last).equals(counterId)) {
+                if (!last.getName().equals(counterId)) {
                     ui.error(player, "ゴールが異なります。");
                     return;
                 }

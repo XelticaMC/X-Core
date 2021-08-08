@@ -28,20 +28,12 @@ public class CounterStore {
     }
 
     /**
-     * IDを用いてCounterDataを取得します。
-     * @param id CounterData ID
-     * @return I対応するCounterData。なければnull
-     */
-    public @Nullable CounterData get(String id) {
-        return counters.get(id);
-    }
-
-    /**
      * 名前を用いてCounterDataを取得します。
+     * @param name CounterDataの名前
      * @return 対応するCounterData。なければnull
      */
-    public @Nullable CounterData getByName(String name) {
-        return nameIndex.get(name);
+    public @Nullable CounterData get(String name) {
+        return counters.get(name);
     }
 
     /**
@@ -61,14 +53,6 @@ public class CounterStore {
     }
 
     /**
-     * 終点座標を用いてCounterDataを取得します。
-     * @return 対応するCounterData。なければnull
-     */
-    public @Nullable String getIdOf(CounterData data) {
-        return idIndex.get(data);
-    }
-
-    /**
      * カウンターの一覧を取得します。
      * @return カウンターの一覧。
      */
@@ -79,18 +63,13 @@ public class CounterStore {
     /**
      * CounterDataを追加します。
      * @param data 追加するデータ
-     * @return 追加したデータのID。
      * @throws IOException 保存に失敗した
      */
-    public String add(CounterData data) throws IOException {
-        final var id = UUID.randomUUID().toString();
-
-        counters.put(id, data);
-        addToIndex(data, id);
-        config.getConf().set(id, data);
+    public void add(CounterData data) throws IOException {
+        counters.put(data.getName(), data);
+        addToIndex(data);
+        config.getConf().set(data.getName(), data);
         config.save();
-
-        return id;
     }
 
     /**
@@ -99,18 +78,18 @@ public class CounterStore {
      * @throws IOException 保存に失敗した
      */
     public void remove(CounterData data) throws IOException {
-        remove(getIdOf(data));
+        remove(data.getName());
     }
 
     /**
      * CounterDataを削除します。
-     * @param id 削除するデータ ID
+     * @param name 削除するデータの名前
      * @throws IOException 保存に失敗した
      */
-    public void remove(String id) throws IOException {
-        removeFromIndex(get(id));
-        counters.remove(id);
-        config.getConf().set(id, null);
+    public void remove(String name) throws IOException {
+        removeFromIndex(get(name));
+        counters.remove(name);
+        config.getConf().set(name, null);
         config.save();
     }
 
@@ -128,29 +107,25 @@ public class CounterStore {
     /**
      * インデックスにカウンターデータを追加する
      */
-    private void addToIndex(CounterData data, String id) {
-        nameIndex.put(data.getName(), data);
+    private void addToIndex(CounterData data) {
         location1Index.put(data.getLocation1(), data);
         location2Index.put(data.getLocation2(), data);
-        idIndex.put(data, id);
     }
     
     /**
      * インデックスからカウンターデータを削除する
      */
     private void removeFromIndex(CounterData data) {
-        nameIndex.remove(data.getName());
         location1Index.remove(data.getLocation1());
         location2Index.remove(data.getLocation2());
-        idIndex.remove(data);
     }
 
     private void loadAll() {
         final var yml = config.getConf();
-        yml.getKeys(false).forEach(id -> {
-            final var counter = yml.getObject(id, CounterData.class);
-            counters.put(id, counter);
-            addToIndex(counter, id);
+        yml.getKeys(false).forEach(name -> {
+            final var counter = yml.getObject(name, CounterData.class);
+            counters.put(name, counter);
+            addToIndex(counter);
         });
     }
 
@@ -165,12 +140,8 @@ public class CounterStore {
 
     /** IDに紐づくカウンターデータの一覧 */
 
-    /** 名前による索引 */
-    private final Map<String, CounterData> nameIndex = new HashMap<>();
     /** 始点座標による索引 */
     private final Map<Location, CounterData> location1Index = new HashMap<>();
     /** 終点座標による索引 */
     private final Map<Location, CounterData> location2Index = new HashMap<>();
-    /** IDの索引 */
-    private final Map<CounterData, String> idIndex = new HashMap<>();
 }
