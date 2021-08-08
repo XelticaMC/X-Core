@@ -83,10 +83,10 @@ commands:
     description: ヒントメニューを開きます。
     usage: /hint [hint-id]
     permission: otanoshimi.command.hint
-  nick:
-    description: ニックネームを変更
-    usage: /nick [minecraft|discord|discord-nick]
-    permission: otanosimi.command.nickname
+  # nick:
+  #   description: ニックネームを変更
+  #   usage: /nick [minecraft|discord|discord-nick]
+  #   permission: otanosimi.command.nickname
   counter:
     description: カウンター管理
     usage: /counter <register/unregister/cancel/bind/info/list/resetdaily>
