@@ -9,6 +9,7 @@ depend:
   - Vault
   - floodgate
   - DiscordSRV
+  - HolographicDisplays
 commands:
   omikuji:
     description: おみくじを引きます。マイクラ内で1日に1回まで引けて、100エビパワーを消費します。
@@ -92,7 +93,7 @@ commands:
     permission: otanoshimi.command.counter
   ranking:
     description: ランキング管理
-    usage: /ranking <create/delete/query/list/set/unset>
+    usage: /ranking <create/delete/query/list/set/unset/hologram>
     permission: otanoshimi.command.ranking
   __core_gui_event__:
     description: "?"

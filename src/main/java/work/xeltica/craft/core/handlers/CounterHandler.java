@@ -221,9 +221,17 @@ public class CounterHandler implements Listener {
 
         if (id instanceof String && rankingApi.has(id)) {
             final var ranking = rankingApi.get(id);
-            if (ranking.get(id) > diff) {
+            final var prev = ranking.get(player.getUniqueId().toString());
+
+            if (prev == 0 || prev > diff) {
                 ranking.add(player.getUniqueId().toString(), diff);
+                player.sendMessage("§a§l新記録達成！§cおめでとう！");
+                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1, 1);
+            } else {
+                player.sendMessage("§7新記録達成ならず…。");
+                player.playSound(player.getLocation(), Sound.ENTITY_CAT_AMBIENT, SoundCategory.PLAYERS, 1, 1);
             }
+            player.sendMessage("§dまたチャレンジしてね！");
         }
     }
 }

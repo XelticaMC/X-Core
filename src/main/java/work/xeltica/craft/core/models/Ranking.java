@@ -1,15 +1,22 @@
 package work.xeltica.craft.core.models;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import org.checkerframework.checker.units.qual.K;
 
 import lombok.Getter;
+import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.stores.RankingStore;
 import work.xeltica.craft.core.utils.Config;
 import work.xeltica.craft.core.utils.Time;
 
@@ -55,6 +62,7 @@ public class Ranking {
      */
     public void setDisplayName(String name, boolean save) throws IOException {
         set("displayName", name, save);
+        RankingStore.getInstance().renderAll();
     }
 
     /**
@@ -72,6 +80,7 @@ public class Ranking {
      */
     public void setMode(String mode) throws IOException {
         set("mode", mode);
+        RankingStore.getInstance().renderAll();
     }
 
     /**
@@ -98,6 +107,22 @@ public class Ranking {
      */
     public void setIsPlayerMode(boolean value, boolean save) throws IOException {
         set("isPlayerMode", value, save);
+        RankingStore.getInstance().renderAll();
+    }
+
+    public Location getHologramLocation() {
+        return thisSection.getLocation("hologramLocation");
+    }
+
+    public boolean getHologramHidden() {
+        return thisSection.getBoolean("hologramHidden");
+    }
+
+    public void setHologram(Location location, boolean isHidden) throws IOException {
+        set("hologramLocation", location, false);
+        set("hologramHidden", isHidden, false);
+        save();
+        RankingStore.getInstance().renderAll();
     }
 
     public void save() throws IOException {
@@ -127,7 +152,7 @@ public class Ranking {
     */
     public RankingRecord[] queryRanking(int count) {
         final var stream = records.entrySet().stream();
-        return (switch (getMode()) {
+        final var data = (switch (getMode()) {
             case "normal" ->
                 stream
                     .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
@@ -163,6 +188,7 @@ public class Ranking {
                     });
             default -> throw new IllegalArgumentException();
         }).toArray(RankingRecord[]::new);
+        return data.length > count ? Arrays.copyOf(data, count) : data;
     }
 
     /**
@@ -173,6 +199,7 @@ public class Ranking {
     public void add(String id, int score) {
         records.put(id, score);
         saveRecords();
+        RankingStore.getInstance().renderAll();
     }
 
     /**
@@ -181,6 +208,8 @@ public class Ranking {
     */
     public void remove(String id) {
         records.remove(id);
+        saveRecords();
+        RankingStore.getInstance().renderAll();
     }
 
     /** 値をセットし、ディスクに保存する
@@ -222,11 +251,15 @@ public class Ranking {
 
     /** ディスクにレコードを書き込む */
     private void saveRecords() {
+        // 全レコードを最初から書き込むので残ってるやつを消す
+        final var r = thisSection.getConfigurationSection("records");
+        final var recordsSection = r != null ? r : thisSection.createSection("records");
+        recordsSection.getKeys(false).forEach(k -> recordsSection.set(k, null));
+
         records.keySet().forEach(id -> {
-            var recordsSection = thisSection.getConfigurationSection("records");
-            if (recordsSection == null) recordsSection = thisSection.createSection("records");
             recordsSection.set(id, records.get(id));
         });
+
         try {
             conf.save();
         } catch (IOException e) {

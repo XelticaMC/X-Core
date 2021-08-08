@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+
 import org.jetbrains.annotations.Nullable;
 
 import lombok.Getter;
+import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.Ranking;
 import work.xeltica.craft.core.utils.Config;
 
@@ -17,6 +20,7 @@ public class RankingStore {
     public RankingStore() {
         instance = this;
         rankingConfig = new Config("ranking");
+        renderAll();
     }
 
     /**
@@ -31,6 +35,7 @@ public class RankingStore {
         ranking.setDisplayName(displayName, false);
         ranking.setIsPlayerMode(isPlayerMode, false);
         ranking.save();
+        renderAll();
         return ranking;
     }
 
@@ -44,6 +49,7 @@ public class RankingStore {
 
         rankingConfig.getConf().set(name, null);
         rankingConfig.save();
+        renderAll();
         return true;
     }
 
@@ -76,6 +82,25 @@ public class RankingStore {
         return rankingConfig.getConf().getKeys(false).stream()
             .map(name -> new Ranking(name, rankingConfig))
             .collect(Collectors.toSet());
+    }
+
+    public void renderAll() {
+        HologramsAPI.getHolograms(XCorePlugin.getInstance()).forEach(h -> h.delete());
+        getAll().forEach(ranks -> {
+            final var loc = ranks.getHologramLocation();
+            if (loc == null) return;
+            final var isHidden = ranks.getHologramHidden();
+            final var holo = HologramsAPI.createHologram(XCorePlugin.getInstance(), loc);
+
+            holo.appendTextLine("§a§l" + ranks.getDisplayName());
+            final var ranking = ranks.queryRanking();
+            for (var i = 0; i < 10; i++) {
+                final var name = isHidden ? "§k??????????" : ranking.length <= i ? "--------" : ranking[i].id();
+                final var value = isHidden ? "§k??????????" : ranking.length <= i ? "------" : ranking[i].score();
+                final var prefix = i == 0 ? "§e" : i == 1 ? "§f" : i == 2 ? "§6" : "§d";
+                holo.appendTextLine(String.format("%s§l%d位: %s (%s)", prefix, i + 1, name, value));
+            }
+        });
     }
 
     @Getter
