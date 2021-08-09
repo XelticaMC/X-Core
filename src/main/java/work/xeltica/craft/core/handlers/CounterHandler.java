@@ -191,6 +191,7 @@ public class CounterHandler implements Listener {
     public void onDailyReset(RealTimeNewDayEvent e) {
         try {
             CounterStore.getInstance().resetAllPlayersPlayedLog();
+            Bukkit.getLogger().info("カウンターのプレイ済み履歴をリセットしました。");
         } catch (IOException e1) {
             e1.printStackTrace();
         }

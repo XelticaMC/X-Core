@@ -104,7 +104,7 @@ public class CounterStore {
     public void resetAllPlayersPlayedLog() throws IOException {
         final var pstore = PlayerStore.getInstance();
         pstore.openAll()
-            .forEach(record -> record.delete(PlayerDataKey.PLAYED_COUNTER));
+            .forEach(record -> record.delete(PlayerDataKey.PLAYED_COUNTER, false));
         pstore.save();
     }
     
