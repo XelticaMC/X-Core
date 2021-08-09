@@ -1,6 +1,9 @@
 package work.xeltica.craft.core.handlers;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -42,7 +45,7 @@ public class WorldHandler implements Listener {
     @EventHandler
     public void onAdvancementDone(PlayerAdvancementDoneEvent e) {
         final var p = e.getPlayer();
-        if (p.getWorld().getName().equals("sandbox")) {
+        if (!advancementWhitelist.contains(p.getWorld().getName())) {
             final var advancement = e.getAdvancement();
 
             for (var criteria : advancement.getCriteria()) {
@@ -240,4 +243,10 @@ public class WorldHandler implements Listener {
             default -> null;
         };
     }
+
+    private final Set<String> advancementWhitelist = new HashSet<>(List.of(
+        "wildarea2",
+        "wildarea2_nether",
+        "wildarea2_the_end"
+    ));
 }
