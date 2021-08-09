@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.handlers;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -54,6 +55,7 @@ import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
+import work.xeltica.craft.core.utils.Ticks;
 import work.xeltica.craft.core.utils.TravelTicketUtil;
 
 /**
@@ -148,12 +150,19 @@ public class PlayerHandler implements Listener {
             p.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！");
             p.sendMessage("詳しくは §b/promo§rコマンドを実行してください。");
         }
-        if (pstore.hasOnlineStaff()) {
-            p.sendMessage("スタッフが参加しているため、「観光モード」は無効です。");
-        } else {
-            p.sendMessage("スタッフが全員不在のため、「観光モード」は有効です。");
-            p.sendMessage("観光モードがオンの時は、ブロックの設置、破壊、使用やモブへの攻撃などができなくなり、モブから襲われることも、体力や満腹度が減ることもありません。");
-        }
+
+        // TODO イベント終わったら消す
+        Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
+            if (!p.isOnline()) return;
+            final var eventDue = LocalDateTime.of(2021, 8, 9, 0, 0, 0);
+            final var date = LocalDateTime.now();
+            if (date.isBefore(eventDue)) {
+                p.sendMessage("「§6夏だ！§b海だ！§a水泳大会だ！§r」水泳イベント'21 §e§l開催中！");
+                p.sendMessage("§d初期スポーン駅 2F§rの§b特設プール§rで泳いで、§eランキング上位§rを目指そう！");
+                p.sendMessage("入賞者には§a豪華景品§rもあります！");
+                p.sendMessage("詳しくは… §b§nhttps://bit.ly/x-swim21§r");
+            }
+        }, Ticks.from(5));
     }
 
     @EventHandler
