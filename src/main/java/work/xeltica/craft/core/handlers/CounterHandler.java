@@ -47,8 +47,6 @@ public class CounterHandler implements Listener {
 
         final var logger = Bukkit.getLogger();
 
-        logger.info("isBlockClick: " + isBlockClick);
-
         // ブロッククリックでなければ無視
         if (!isBlockClick) return;
 
@@ -63,8 +61,6 @@ public class CounterHandler implements Listener {
 
         final var isCounterRegisterMode = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_MODE);
         final var isPlate = Tag.PRESSURE_PLATES.isTagged(block.getType());
-        logger.info("isCounterRegisterMode: " + isCounterRegisterMode);
-        logger.info("isPlate: " + isPlate);
 
         // カウンター登録モードでなければ無視
         if (!isCounterRegisterMode) return;
