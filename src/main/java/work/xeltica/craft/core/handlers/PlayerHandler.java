@@ -154,7 +154,7 @@ public class PlayerHandler implements Listener {
         // TODO イベント終わったら消す
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
             if (!p.isOnline()) return;
-            final var eventDue = LocalDateTime.of(2021, 8, 9, 0, 0, 0);
+            final var eventDue = LocalDateTime.of(2021, 8, 13, 0, 0, 0);
             final var date = LocalDateTime.now();
             if (date.isBefore(eventDue)) {
                 p.sendMessage("「§6夏だ！§b海だ！§a水泳大会だ！§r」水泳イベント'21 §e§l開催中！");
