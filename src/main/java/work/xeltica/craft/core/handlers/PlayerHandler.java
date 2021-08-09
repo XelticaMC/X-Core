@@ -144,16 +144,15 @@ public class PlayerHandler implements Listener {
             Component.text("§f詳しくは §b§nhttps://craft.xeltica.work§fを見てね！")
         ));
 
-        if (pstore.isCitizen(p))
-            return;
-        if (!pstore.open(p).has(PlayerDataKey.NEWCOMER_TIME)) {
-            p.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！");
-            p.sendMessage("詳しくは §b/promo§rコマンドを実行してください。");
+        if (!pstore.isCitizen(p)) {
+            if (!pstore.open(p).has(PlayerDataKey.NEWCOMER_TIME)) {
+                p.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！");
+                p.sendMessage("詳しくは §b/promo§rコマンドを実行してください。");
+            }
         }
 
         // TODO イベント終わったら消す
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-            if (!p.isOnline()) return;
             final var eventDue = LocalDateTime.of(2021, 8, 13, 0, 0, 0);
             final var date = LocalDateTime.now();
             if (date.isBefore(eventDue)) {
