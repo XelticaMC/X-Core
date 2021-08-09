@@ -60,8 +60,8 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-        "カウンターシステム実装（イベント用）",
-        "ランキングシステム実装（イベント用）"
+        "サンドボックス等で不正に進捗を達成できる不具合を修正",
+        "カウンターがリセットされない不具合を修正"
     };
 
     private static MetaStore instance;
