@@ -27,6 +27,11 @@ public class CommandCountdown extends CommandPlayerOnlyBase {
             final var count = Integer.parseInt(args[0]);
             if (count > 60) {
                 player.sendMessage("60秒を超えるカウントダウンを作成することはできません。");
+                return true;
+            }
+            if (count < 1) {
+                player.sendMessage("1秒未満のカウントダウンを作成することはできません。");
+                return true;
             }
             final var members = new HashSet<Player>();
             members.add(player);
