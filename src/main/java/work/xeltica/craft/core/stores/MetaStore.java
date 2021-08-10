@@ -60,8 +60,8 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-        "サンドボックス等で不正に進捗を達成できる不具合を修正",
-        "カウンターがリセットされない不具合を修正"
+        "メインワールド、クラシックワールド等でも進捗達成できるよう改善",
+        "進捗達成でEPを獲得できる仕様に不具合が多いため、一旦廃止"
     };
 
     private static MetaStore instance;

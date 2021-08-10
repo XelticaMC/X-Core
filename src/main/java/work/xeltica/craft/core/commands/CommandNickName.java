@@ -16,14 +16,7 @@ import java.util.List;
 /**
  * @author raink1208
  */
-public class CommandNickName extends CommandPlayerOnlyBase implements TabCompleter {
-    public CommandNickName() {
-        final var command = XCorePlugin.getInstance().getCommand("nick");
-        if (command != null) {
-            command.setTabCompleter(this);
-        }
-    }
-
+public class CommandNickName extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
         if (args.length == 0) return false;

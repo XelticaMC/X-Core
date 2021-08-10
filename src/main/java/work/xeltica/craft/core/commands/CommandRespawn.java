@@ -1,15 +1,18 @@
 package work.xeltica.craft.core.commands;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.stores.WorldStore;
@@ -120,5 +123,13 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
     }
 
     private final HashMap<UUID, Boolean> isWarpingMap = new HashMap<>();
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label,
+            String[] args) {
+        return COMMANDS;
+    }
+
+    private static final List<String> COMMANDS = List.of("bed");
 
 }

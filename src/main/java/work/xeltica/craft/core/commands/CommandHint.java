@@ -1,11 +1,14 @@
 package work.xeltica.craft.core.commands;
 
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.bukkit.Material;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
@@ -61,5 +64,11 @@ public class CommandHint extends CommandPlayerOnlyBase {
             Gui.getInstance().openMenu(player, "ヒント", items);
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label,
+            String[] args) {
+        return Stream.of(Hint.values()).map(h -> h.toString()).toList();
     }
 }

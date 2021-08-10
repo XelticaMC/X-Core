@@ -2,16 +2,20 @@ package work.xeltica.craft.core.commands;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Tag;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
+import org.jetbrains.annotations.NotNull;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 /**
  * 看板を編集するコマンド
@@ -55,4 +59,26 @@ public class CommandSignEdit extends CommandPlayerOnlyBase {
         return true;
     }
 
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label,
+            String[] args) {
+        final var errorNonSign = List.of("変更する対象の看板を見てください");
+        final var errorOutOfBounds = List.of("第一引数は0,1,2,3のいずれかにしてください");
+
+        if (args.length < 2) return COMMANDS;
+
+        if (commandSender instanceof Player player) {
+            final var block = player.getTargetBlock(null, 5);
+            if (!Tag.SIGNS.isTagged(block.getType())) return errorNonSign;
+            if (!List.of("0", "1", "2", "3").contains(args[0])) return errorOutOfBounds;
+            final var n = Integer.parseInt(args[0]);
+            
+            final var state = (Sign)block.getState();
+            return List.of(PlainTextComponentSerializer.plainText().serialize(state.line(n)));
+        } else {
+            return COMPLETE_LIST_EMPTY;
+        }
+    }
+
+    private static final List<String> COMMANDS = List.of("0", "1", "2", "3");
 }

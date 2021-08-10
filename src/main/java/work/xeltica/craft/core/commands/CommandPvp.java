@@ -1,8 +1,12 @@
 package work.xeltica.craft.core.commands;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * PvPの有効・無効を切り替えるコマンド
@@ -21,6 +25,12 @@ public class CommandPvp extends CommandPlayerOnlyBase {
         player.sendMessage(ChatColor.GOLD + String.format("ワールド %s のPvPを%sしました", world.getName(), flag ? "許可" : "禁止"));
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label,
+            String[] args) {
+        return COMPLETE_LIST_ONOFF;
     }
 
 }

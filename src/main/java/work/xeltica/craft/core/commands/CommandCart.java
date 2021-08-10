@@ -1,11 +1,15 @@
 package work.xeltica.craft.core.commands;
 
+import java.util.List;
+
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.jetbrains.annotations.NotNull;
 
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.Hint;
@@ -31,5 +35,11 @@ public class CommandCart extends CommandPlayerOnlyBase {
 
         HintStore.getInstance().achieve(player, Hint.MINECART);
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label,
+            String[] args) {
+        return COMPLETE_LIST_EMPTY;
     }
 }

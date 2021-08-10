@@ -189,28 +189,28 @@ public class XCorePlugin extends JavaPlugin {
     private void loadCommands() {
         commands.clear();
 
-        commands.put("omikuji", new CommandOmikuji());
-        commands.put("respawn", new CommandRespawn());
-        commands.put("pvp", new CommandPvp());
-        commands.put("signedit", new CommandSignEdit());
-        commands.put("givetravelticket", new CommandGiveTravelTicket());
-        commands.put("givecustomitem", new CommandGiveCustomItem());
-        commands.put("report", new CommandReport());
-        commands.put("localtime", new CommandLocalTime());
-        commands.put("boat", new CommandBoat());
-        commands.put("cart", new CommandCart());
-        commands.put("promo", new CommandPromo());
-        commands.put("cat", new CommandCat());
-        commands.put("hub", new CommandHub());
-        commands.put("xtp", new CommandXtp());
-        commands.put("epshop", new CommandEpShop());
-        commands.put("hint", new CommandHint());
-        commands.put("__core_gui_event__", new CommandXCoreGuiEvent());
-        commands.put("xphone", new CommandXPhone());
-        commands.put("live", new CommandLive());
-        commands.put("nick", new CommandNickName());
-        commands.put("counter", new CommandCounter());
-        commands.put("ranking", new CommandRanking());
+        addCommand("omikuji", new CommandOmikuji());
+        addCommand("respawn", new CommandRespawn());
+        addCommand("pvp", new CommandPvp());
+        addCommand("signedit", new CommandSignEdit());
+        addCommand("givetravelticket", new CommandGiveTravelTicket());
+        addCommand("givecustomitem", new CommandGiveCustomItem());
+        addCommand("report", new CommandReport());
+        addCommand("localtime", new CommandLocalTime());
+        addCommand("boat", new CommandBoat());
+        addCommand("cart", new CommandCart());
+        addCommand("promo", new CommandPromo());
+        addCommand("cat", new CommandCat());
+        addCommand("hub", new CommandHub());
+        addCommand("xtp", new CommandXtp());
+        addCommand("epshop", new CommandEpShop());
+        addCommand("hint", new CommandHint());
+        addCommand("__core_gui_event__", new CommandXCoreGuiEvent());
+        addCommand("xphone", new CommandXPhone());
+        addCommand("live", new CommandLive());
+        addCommand("nick", new CommandNickName());
+        addCommand("counter", new CommandCounter());
+        addCommand("ranking", new CommandRanking());
     }
 
     private void loadHandlers() {
@@ -236,6 +236,22 @@ public class XCorePlugin extends JavaPlugin {
 
     private void unloadPlugins() {
         VaultPlugin.getInstance().onDisable(this);
+    }
+
+    /**
+     * コマンドをコアシステムに登録します。
+     * @param commandName コマンド名
+     * @param command コマンドのインスタンス
+     */
+    private void addCommand(String commandName, CommandBase command) {
+        commands.put(commandName, command);
+        final var cmd = getCommand(commandName);
+        if (cmd == null) {
+            logger.warning("Command " + commandName + " is not defined at the plugin.yml");
+            return;
+        }
+        cmd.setTabCompleter(command);
+        logger.info("Command " + commandName + " is registered");
     }
 
     private Logger logger;

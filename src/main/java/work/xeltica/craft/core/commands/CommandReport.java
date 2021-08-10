@@ -18,7 +18,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
-import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 

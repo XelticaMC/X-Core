@@ -1,7 +1,11 @@
 package work.xeltica.craft.core.commands;
 
+import java.util.List;
+
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
@@ -46,4 +50,9 @@ public class CommandCat extends CommandPlayerOnlyBase {
         return true;
     }
 
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label,
+            String[] args) {
+        return COMPLETE_LIST_ONOFF;
+    }
 }
