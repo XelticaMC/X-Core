@@ -95,13 +95,6 @@ public class EbiPowerHandler implements Listener{
     }
 
     @EventHandler
-    public void on(PlayerAdvancementDoneEvent e) {
-        final var p = e.getPlayer();
-        if (playerIsInBlacklisted(p)) return;
-        store().tryGive(p, ADVANCEMENT_POWER);
-    }
-
-    @EventHandler
     public void on(PlayerJoinEvent e) {
         final var now = new Date();
         final var ps = PlayerStore.getInstance();
