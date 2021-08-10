@@ -60,8 +60,10 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
+        "countdown コマンドを実装",
         "メインワールド、クラシックワールド等でも進捗達成できるよう改善",
-        "進捗達成でEPを獲得できる仕様に不具合が多いため、一旦廃止"
+        "進捗達成でEPを獲得できる仕様に不具合が多いため、一旦廃止",
+        "一部のコマンドをタブキー補完に対応"
     };
 
     private static MetaStore instance;
