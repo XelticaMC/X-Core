@@ -247,6 +247,15 @@ public class WorldHandler implements Listener {
     private final Set<String> advancementWhitelist = new HashSet<>(List.of(
         "wildarea2",
         "wildarea2_nether",
-        "wildarea2_the_end"
+        "wildarea2_the_end",
+        "main",
+        "nightmare2",
+
+        "world",
+        "world_nether",
+        "world_the_end",
+        "wildarea",
+        "travel_wildarea",
+        "travel_megawild"
     ));
 }
