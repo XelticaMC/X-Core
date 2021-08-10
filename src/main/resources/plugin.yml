@@ -95,6 +95,10 @@ commands:
     description: ランキング管理
     usage: /ranking <create/delete/query/list/set/unset/hologram>
     permission: otanoshimi.command.ranking
+  countdown:
+    description: カウントダウンを表示します。
+    usage: /ranking <秒数> [プレイヤー名...]
+    permission: otanoshimi.command.countdown
   __core_gui_event__:
     description: "?"
     usage: "?"
@@ -154,4 +158,6 @@ permissions:
   otanoshimi.command.counter:
     default: op
   otanoshimi.command.ranking:
+    default: op
+  otanoshimi.command.countdown:
     default: op

@@ -17,6 +17,7 @@ import work.xeltica.craft.core.commands.CommandBase;
 import work.xeltica.craft.core.commands.CommandBoat;
 import work.xeltica.craft.core.commands.CommandCart;
 import work.xeltica.craft.core.commands.CommandCat;
+import work.xeltica.craft.core.commands.CommandCountdown;
 import work.xeltica.craft.core.commands.CommandCounter;
 import work.xeltica.craft.core.commands.CommandGiveCustomItem;
 import work.xeltica.craft.core.commands.CommandGiveTravelTicket;
@@ -211,6 +212,7 @@ public class XCorePlugin extends JavaPlugin {
         addCommand("nick", new CommandNickName());
         addCommand("counter", new CommandCounter());
         addCommand("ranking", new CommandRanking());
+        addCommand("countdown", new CommandCountdown());
     }
 
     private void loadHandlers() {
