@@ -76,7 +76,4 @@ public class CommandCountdown extends CommandPlayerOnlyBase {
             }
         }, Ticks.from(1));
     }
-
-    private void show(Player player, String text, Sound sound, float pitch) {
-    }
 }
