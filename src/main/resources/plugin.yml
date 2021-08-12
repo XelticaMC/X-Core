@@ -97,7 +97,7 @@ commands:
     permission: otanoshimi.command.ranking
   countdown:
     description: カウントダウンを表示します。
-    usage: /ranking <秒数> [プレイヤー名...]
+    usage: /countdown <秒数> [プレイヤー名...]
     permission: otanoshimi.command.countdown
   __core_gui_event__:
     description: "?"
