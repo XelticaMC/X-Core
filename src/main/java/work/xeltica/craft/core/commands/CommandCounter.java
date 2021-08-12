@@ -2,6 +2,7 @@ package work.xeltica.craft.core.commands;
 
 import java.io.IOException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
@@ -153,11 +154,17 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     player.sendMessage(" Phone: " + data.getPhoneRankingId());
                 }
 
-                // カウンターのプレイ済み履歴を全プレイヤー分削除します。
-                // counter resetdaily
+                // カウンターのプレイ済み履歴を指定したプレイヤーか全プレイヤー分削除します。
+                // counter resetdaily [player]
                 case "resetdaily" -> {
-                    store.resetAllPlayersPlayedLog();
-                    player.sendMessage("全プレイヤーのプレイ済み履歴を削除しました。");
+                    if (args.length != 2) {
+                        store.resetAllPlayersPlayedLog();
+                        player.sendMessage("全プレイヤーのプレイ済み履歴を削除しました。");
+                    } else {
+                        final var name = args[1];
+                        pstore.open(Bukkit.getPlayerUniqueId(name)).delete(PlayerDataKey.PLAYED_COUNTER);
+                        player.sendMessage("そのプレイヤーのプレイ済み履歴を削除しました。");
+                    }
                 }
 
                 // カウンターを一覧表示します。
