@@ -60,7 +60,8 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-        "countdown コマンドでマイナスの数・60秒を超えるカウントダウンを作れてしまう不具合を修正",
+        "countdown コマンドの説明文を修正",
+        "counter 管理者コマンドを拡張",
     };
 
     private static MetaStore instance;
