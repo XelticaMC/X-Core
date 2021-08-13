@@ -60,7 +60,8 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-        "ランキングをカモフラージュしたときに重い問題を修正",
+        "モブをキルしたときのみEPが貯まるように",
+        "ヒント追加",
     };
 
     private static MetaStore instance;
