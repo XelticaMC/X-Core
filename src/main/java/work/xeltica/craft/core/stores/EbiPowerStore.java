@@ -70,11 +70,13 @@ public class EbiPowerStore {
     }
 
     public boolean tryGive(Player p, int amount) {
+        if (amount <= 0) throw new IllegalArgumentException("amountを0以下の数にはできない");
         final var vault = VaultPlugin.getInstance();
         return vault.tryDepositPlayer(p, amount);
     }
 
     public boolean tryTake(Player p, int amount) {
+        if (amount <= 0) throw new IllegalArgumentException("amountを0以下の数にはできない");
         final var vault = VaultPlugin.getInstance();
         return vault.tryWithdrawPlayer(p, amount);
     }
