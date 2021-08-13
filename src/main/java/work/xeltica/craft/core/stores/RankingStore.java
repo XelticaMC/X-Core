@@ -95,8 +95,8 @@ public class RankingStore {
             holo.appendTextLine("§a§l" + ranks.getDisplayName());
             final var ranking = ranks.queryRanking();
             for (var i = 0; i < 10; i++) {
-                final var name = isHidden ? "§k??????????" : ranking.length <= i ? "--------" : ranking[i].id();
-                final var value = isHidden ? "§k??????????" : ranking.length <= i ? "------" : ranking[i].score();
+                final var name = isHidden ? "??????????" : ranking.length <= i ? "--------" : ranking[i].id();
+                final var value = isHidden ? "??????????" : ranking.length <= i ? "------" : ranking[i].score();
                 final var prefix = i == 0 ? "§e" : i == 1 ? "§f" : i == 2 ? "§6" : "§d";
                 holo.appendTextLine(String.format("%s§l%d位: %s (%s)", prefix, i + 1, name, value));
             }
