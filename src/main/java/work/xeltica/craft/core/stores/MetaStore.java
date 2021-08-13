@@ -60,8 +60,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-        "countdown コマンドの説明文を修正",
-        "counter 管理者コマンドを拡張",
+        "ランキングをカモフラージュしたときに重い問題を修正",
     };
 
     private static MetaStore instance;
