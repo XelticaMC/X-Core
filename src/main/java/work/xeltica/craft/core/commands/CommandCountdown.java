@@ -11,6 +11,8 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.models.Hint;
+import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.utils.Ticks;
 
 /**
@@ -52,6 +54,7 @@ public class CommandCountdown extends CommandPlayerOnlyBase {
                 member.playSound(member.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 1, 0.6f); 
             });
             countDown(count - 1, members);
+            HintStore.getInstance().achieve(player, Hint.COUNTDOWN);
 
             return true;
         } catch (NumberFormatException e) {
