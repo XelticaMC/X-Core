@@ -6,11 +6,9 @@ import java.util.Random;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 /**
@@ -28,6 +26,9 @@ public class NightmareHandler implements Listener {
         superRareItems.addAll(Tag.ITEMS_MUSIC_DISCS.getValues());
     }
 
+    /**
+     * ベッド爆弾を再現する
+    */
     @EventHandler
     public void onPlayerUseBed(PlayerInteractEvent e) {
         final var block = e.getClickedBlock();
@@ -35,7 +36,6 @@ public class NightmareHandler implements Listener {
         final var loc = block.getLocation();
         if (!isNightmare(loc.getWorld())) return;
 
-        // ベッド爆弾の再現
         if (Tag.BEDS.isTagged(block.getType())) {
             block.breakNaturally();
             e.setCancelled(true);
@@ -43,18 +43,9 @@ public class NightmareHandler implements Listener {
         }
     }
 
-    @EventHandler
-    public void onProjecileLaunch(ProjectileLaunchEvent e) {
-        // TODO wip
-        final var type = e.getEntityType();
-        final var p = e.getEntity();
-        if (!(p.getShooter() instanceof Player)) return;
-        final var shooter = (Player)p.getShooter();
-        final var handheld = shooter.getInventory().getItemInMainHand();
-
-        // egg
-    }
-
+    /**
+     * レアアイテムの入手確率を下げる
+     */
     @EventHandler
     public void onDropRareItems(EntityDeathEvent e) {
         if (!isNightmare(e.getEntity().getWorld())) return;
