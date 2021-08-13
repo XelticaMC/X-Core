@@ -6,6 +6,8 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
+import work.xeltica.craft.core.models.Hint;
+import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.ItemStore;
 
 import java.util.Objects;
@@ -22,6 +24,7 @@ public class CommandXPhone extends CommandPlayerOnlyBase {
             player.getInventory().addItem(item);
             player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);
             player.sendMessage(Objects.requireNonNull(item.getItemMeta().displayName()).append(Component.text("を付与しました")));
+            HintStore.getInstance().achieve(player, Hint.TWIN_XPHONE);
         }
         return true;
     }

@@ -20,7 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerAdvancementDoneEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -80,16 +80,29 @@ public class EbiPowerHandler implements Listener{
                 notification(killer, "子供を殴るなんて！10EPを失った。");
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
                 HintStore.getInstance().achieve(killer, Hint.VIOLENCE_CHILD);
-            } else {
-                final var buff = getMobDropBonus(killer.getInventory().getItemInMainHand()) * 4;
-                var power = 3 + (buff > 0 ? random.nextInt(buff) : 0);
-
-                if ("nightmare2".equals(killer.getWorld().getName())) {
-                    power *= 2;
-                }
-                if (power > 0) {
-                    store().tryGive(killer, power);
-                }
+            }
+        }
+    }
+    
+    @EventHandler
+    public void on(EntityDeathEvent e) {
+        final var victim = e.getEntity();
+        final var killer = e.getEntity().getKiller();
+        if (killer != null) {
+            if (playerIsInBlacklisted(killer)) return;
+            // don't kill cats
+            if (victim instanceof Cat || victim instanceof Ocelot) return;
+            // don't kill tamed pets
+            if (victim instanceof Tameable pet && pet.isTamed()) return;
+            // don't kill non-monster children
+            if (victim instanceof Ageable man && !(victim instanceof Monster) && !(victim instanceof Hoglin) && !man.isAdult()) return;
+            // ignore creatures from spawner
+            if (victim.fromMobSpawner()) return;
+            var ep = "nightmare2".equals(killer.getWorld().getName()) ? 12 : 6;
+            final var buff = getMobDropBonus(killer.getInventory().getItemInMainHand()) * 4;
+            ep += (buff > 0 ? random.nextInt(buff) : 0);
+            if (ep > 0) {
+                store().tryGive(killer, ep);
             }
         }
     }
@@ -145,7 +158,6 @@ public class EbiPowerHandler implements Listener{
 
     private final HashSet<Material> crops = new HashSet<>();
 
-    private static final int ADVANCEMENT_POWER = 30;
     private static final int HARVEST_POWER_MULTIPLIER = 1;
     private static final int LOGIN_BONUS_POWER = 50;
 
