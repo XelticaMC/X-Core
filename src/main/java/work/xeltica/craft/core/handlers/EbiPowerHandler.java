@@ -23,6 +23,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 
 import net.kyori.adventure.text.Component;
 import work.xeltica.craft.core.models.Hint;
@@ -125,8 +126,18 @@ public class EbiPowerHandler implements Listener{
         final var p = e.getPlayer();
         if (playerIsInBlacklisted(p)) return;
         if (e.getBlock().getBlockData() instanceof org.bukkit.block.data.Ageable a && a.getAge() == a.getMaximumAge()) {
-            final var power = (1 + getBlockDropBonus(e.getPlayer().getInventory().getItemInMainHand())) * HARVEST_POWER_MULTIPLIER;
+            final var tool = p.getInventory().getItemInMainHand();
+            final var bonus = getBlockDropBonus(tool);
+            final var power = (1 + bonus) * HARVEST_POWER_MULTIPLIER;
             store().tryGive(p, power);
+            // もし幸運ボーナスがあれば30%の確率で耐久が減っていく
+            if (bonus > 0 && random.nextInt(100) < 30) {
+                tool.editMeta(meta -> {
+                    if (meta instanceof Damageable toolMeta) {
+                        toolMeta.setDamage(toolMeta.getDamage() - 1);
+                    }
+                });
+            }
         }
     }
 
