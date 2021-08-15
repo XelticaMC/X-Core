@@ -60,8 +60,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-        "モブをキルしたときのみEPが貯まるように",
-        "ヒント追加",
+        "幸運ツールによるエビパワーボーナスに起因するバグを修正"
     };
 
     private static MetaStore instance;
