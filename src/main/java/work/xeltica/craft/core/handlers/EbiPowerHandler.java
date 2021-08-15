@@ -134,7 +134,7 @@ public class EbiPowerHandler implements Listener{
             if (bonus > 0 && random.nextInt(100) < 30) {
                 tool.editMeta(meta -> {
                     if (meta instanceof Damageable toolMeta) {
-                        toolMeta.setDamage(toolMeta.getDamage() - 1);
+                        toolMeta.setDamage(toolMeta.getDamage() + 1);
                     }
                 });
             }
