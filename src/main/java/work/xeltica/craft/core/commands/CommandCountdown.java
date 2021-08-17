@@ -1,15 +1,23 @@
 package work.xeltica.craft.core.commands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.HintStore;
@@ -78,5 +86,17 @@ public class CommandCountdown extends CommandPlayerOnlyBase {
                 });
             }
         }, Ticks.from(1));
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+        if (args.length <= 1) return COMPLETE_LIST_EMPTY;
+        final var players = XCorePlugin.getInstance().getServer().getOnlinePlayers().stream().map(HumanEntity::getName).toList();
+        final var completions = new ArrayList<String>();
+        players.removeAll(Arrays.stream(Arrays.copyOfRange(args, 1, args.length - 1)).toList());
+        StringUtil.copyPartialMatches(args[args.length - 1], players, completions);
+        Collections.sort(completions);
+        return completions;
     }
 }
