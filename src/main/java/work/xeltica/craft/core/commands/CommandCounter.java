@@ -1,12 +1,21 @@
 package work.xeltica.craft.core.commands;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.models.CounterData;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.CounterStore;
 import work.xeltica.craft.core.stores.PlayerStore;
@@ -192,5 +201,38 @@ public class CommandCounter extends CommandPlayerOnlyBase {
             return ui.error(player, "§cIO エラーが発生したために処理を続行できませんでした。");
         }
         return true;
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+        if (args.length == 0) return COMPLETE_LIST_EMPTY;
+        final var subcommand = args[0].toLowerCase();
+        if (args.length == 1) {
+            final var commands = Arrays.asList("register", "unregister", "cancel", "bind", "info", "list", "resetdaily");
+            final var completions = new ArrayList<String>();
+            StringUtil.copyPartialMatches(subcommand, commands, completions);
+            Collections.sort(completions);
+            return completions;
+        } else if (args.length == 2) {
+            switch (subcommand) {
+                case "unregister", "info", "bind", "unbind" -> {
+                    final var store = CounterStore.getInstance();
+                    return store.getCounters().stream().map(CounterData::getName).toList();
+                }
+            }
+        } else if (args.length == 3) {
+            switch (subcommand) {
+                case "bind", "unbind" -> {
+                    final var playerType = args[2].toLowerCase();
+                    final var types = Arrays.asList("all", "java", "bedrock", "uwp", "phone");
+                    final var completions = new ArrayList<String>();
+                    StringUtil.copyPartialMatches(playerType, types, completions);
+                    Collections.sort(completions);
+                    return completions;
+                }
+            }
+        }
+        return COMPLETE_LIST_EMPTY;
     }
 }
