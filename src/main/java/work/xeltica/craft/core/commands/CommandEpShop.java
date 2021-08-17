@@ -1,5 +1,9 @@
 package work.xeltica.craft.core.commands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
@@ -7,11 +11,15 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
@@ -128,5 +136,18 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
         final var dn = item.getItemMeta().displayName();
         final var name = dn != null ? PlainTextComponentSerializer.plainText().serialize(dn) : item.getI18NDisplayName();
         return name;
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+        if (args.length == 1) {
+            var commands = Arrays.asList("add", "delete");
+            var completions = new ArrayList<String>();
+            StringUtil.copyPartialMatches(args[0], commands, completions);
+            Collections.sort(completions);
+            return completions;
+        }
+        return COMPLETE_LIST_EMPTY;
     }
 }
