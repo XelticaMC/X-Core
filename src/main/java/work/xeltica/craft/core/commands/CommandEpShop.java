@@ -142,8 +142,8 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
         if (args.length == 1) {
-            var commands = Arrays.asList("add", "delete");
-            var completions = new ArrayList<String>();
+            final var commands = Arrays.asList("add", "delete");
+            final var completions = new ArrayList<String>();
             StringUtil.copyPartialMatches(args[0], commands, completions);
             Collections.sort(completions);
             return completions;
