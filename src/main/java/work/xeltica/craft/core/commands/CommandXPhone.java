@@ -3,13 +3,17 @@ package work.xeltica.craft.core.commands;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.ItemStore;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -27,5 +31,11 @@ public class CommandXPhone extends CommandPlayerOnlyBase {
             HintStore.getInstance().achieve(player, Hint.TWIN_XPHONE);
         }
         return true;
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+        return COMPLETE_LIST_EMPTY;
     }
 }

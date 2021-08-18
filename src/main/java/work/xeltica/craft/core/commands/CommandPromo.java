@@ -2,13 +2,18 @@ package work.xeltica.craft.core.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.query.QueryOptions;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.Ticks;
+
+import java.util.List;
 
 /**
  * 市民システムの情報表示コマンド
@@ -70,5 +75,11 @@ public class CommandPromo extends CommandPlayerOnlyBase {
         return elapsedTimeMinutes > 0
             ? elapsedTimeMinutes + "分" + elapsedTimeSeconds + "秒"
             : elapsedTimeSeconds + "秒";
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+        return COMPLETE_LIST_EMPTY;
     }
 }
