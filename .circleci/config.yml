@@ -24,7 +24,7 @@ jobs:
           fingerprints:
             - "d2:1b:72:bd:6c:b7:d6:ef:41:50:1c:73:dd:f0:84:bb"
       - run: echo 'dev.craft.xeltica.work,172.105.228.229 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts
-      - run: sftp xeltica@dev.craft.xeltica.work:/srv/papermc/plugins <<< $'put ~/project/target/XCore.jar'
+      - run: sftp xeltica@dev.craft.xeltica.work:/srv/papermc/plugins \<< 'put ~/project/target/XCore.jar'
       - run: ssh xeltica@dev.craft.xeltica.work 'sh /srv/deploy-core.sh'
 
 workflows:
