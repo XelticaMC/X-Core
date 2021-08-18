@@ -4,17 +4,22 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.utils.Ticks;
+
+import java.util.List;
 
 /**
  * おみくじを引くコマンド
@@ -93,5 +98,11 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
         }.runTaskLater(XCorePlugin.getInstance(), 20 * 3);
 
         return true;
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+        return COMPLETE_LIST_EMPTY;
     }
 }
