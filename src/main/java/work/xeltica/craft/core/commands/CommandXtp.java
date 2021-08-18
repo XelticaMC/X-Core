@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import org.bukkit.util.StringUtil;
@@ -54,11 +53,7 @@ public class CommandXtp extends CommandBase {
             Collections.sort(completions);
             return completions;
         } else if (args.length == 2) {
-            final var players = XCorePlugin.getInstance().getServer().getOnlinePlayers().stream().map(HumanEntity::getName).toList();
-            final var completions = new ArrayList<String>();
-            StringUtil.copyPartialMatches(args[1], players, completions);
-            Collections.sort(completions);
-            return completions;
+            return null;
         }
         return COMPLETE_LIST_EMPTY;
     }
