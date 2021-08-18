@@ -150,18 +150,6 @@ public class PlayerHandler implements Listener {
                 p.sendMessage("詳しくは §b/promo§rコマンドを実行してください。");
             }
         }
-
-        // TODO イベント終わったら消す
-        Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-            final var eventDue = LocalDateTime.of(2021, 8, 13, 0, 0, 0);
-            final var date = LocalDateTime.now();
-            if (date.isBefore(eventDue)) {
-                p.sendMessage("「§6夏だ！§b海だ！§a水泳大会だ！§r」水泳イベント'21 §e§l開催中！");
-                p.sendMessage("§d初期スポーン駅 2F§rの§b特設プール§rで泳いで、§eランキング上位§rを目指そう！");
-                p.sendMessage("入賞者には§a豪華景品§rもあります！");
-                p.sendMessage("詳しくは… §b§nhttps://bit.ly/x-swim21§r");
-            }
-        }, Ticks.from(5));
     }
 
     @EventHandler
