@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
@@ -11,6 +12,7 @@ import work.xeltica.craft.core.stores.NickNameStore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,9 +29,14 @@ public class CommandNickName extends CommandPlayerOnlyBase {
         return true;
     }
 
+    @Nullable
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        return COMMANDS;
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+        if (args.length != 1) return COMPLETE_LIST_EMPTY;
+        final var completions = new ArrayList<String>();
+        StringUtil.copyPartialMatches(args[0], COMMANDS, completions);
+        Collections.sort(completions);
+        return completions;
     }
 
     private static final List<String> COMMANDS = new ArrayList<>(Arrays.asList("minecraft", "discord", "discord-nick"));
