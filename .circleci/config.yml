@@ -20,17 +20,12 @@ jobs:
           command: mvn -B -DskipTests clean package
       - store_artifacts:
           path: ~/project/target/XCore.jar
-  deploy:
-    machine:
-        image: circleci/classic:edge
-    steps:
-        - checkout
-        # CircleCI に登録した秘密鍵を呼び出す
-        - add_ssh_keys:
-            fingerprints:
-              - "d2:1b:72:bd:6c:b7:d6:ef:41:50:1c:73:dd:f0:84:bb"
-        # CircleCI に登録した環境変数を使って SSH
-        - run: ssh xeltica@dev.craft.xeltica.work 'cd /srv && sh deploy-core'
+      - add_ssh_keys:
+          fingerprints:
+            - "d2:1b:72:bd:6c:b7:d6:ef:41:50:1c:73:dd:f0:84:bb"
+      # CircleCI に登録した環境変数を使って SSH
+      - run: sftp xeltica@dev.craft.xeltica.work:/srv/papermc/plugins ~/project/target/XCore.jar
+      - run: ssh xeltica@dev.craft.xeltica.work 'sh /srv/deploy-core.sh'
 
 workflows:
   # Below is the definition of your workflow.
@@ -40,6 +35,3 @@ workflows:
   sample: 
     jobs:
       - build
-      - deploy:
-          requires:
-            - build
