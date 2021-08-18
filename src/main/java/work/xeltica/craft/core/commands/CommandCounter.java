@@ -17,8 +17,10 @@ import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.CounterData;
 import work.xeltica.craft.core.models.PlayerDataKey;
+import work.xeltica.craft.core.models.Ranking;
 import work.xeltica.craft.core.stores.CounterStore;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.stores.RankingStore;
 
 /**
  * トロッコを出現させるコマンド
@@ -209,7 +211,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
         if (args.length == 0) return COMPLETE_LIST_EMPTY;
         final var subcommand = args[0].toLowerCase();
         if (args.length == 1) {
-            final var commands = Arrays.asList("register", "unregister", "cancel", "bind", "info", "list", "resetdaily");
+            final var commands = Arrays.asList("register", "unregister", "cancel", "bind", "unbind", "info", "list", "resetdaily");
             final var completions = new ArrayList<String>();
             StringUtil.copyPartialMatches(subcommand, commands, completions);
             Collections.sort(completions);
@@ -231,6 +233,15 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     Collections.sort(completions);
                     return completions;
                 }
+            }
+        } else if (args.length == 4) {
+            if ("bind".equals(subcommand)) {
+                final var store = RankingStore.getInstance();
+                final var rankings = store.getAll().stream().map(Ranking::getName).toList();
+                final var completions = new ArrayList<String>();
+                StringUtil.copyPartialMatches(args[3], rankings, completions);
+                Collections.sort(completions);
+                return completions;
             }
         }
         return COMPLETE_LIST_EMPTY;
