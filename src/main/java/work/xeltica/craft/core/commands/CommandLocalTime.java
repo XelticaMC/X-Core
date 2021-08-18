@@ -1,10 +1,18 @@
 package work.xeltica.craft.core.commands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 現在いるワールドのみの時間を操作するコマンド
@@ -76,6 +84,27 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
             return builtinTimeMap.get(timeString);
         }
         return Integer.parseInt(timeString);
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+        if (args.length == 1) {
+            final var commands = Arrays.asList("set", "add", "query");
+            final var completions = new ArrayList<String>();
+            StringUtil.copyPartialMatches(args[0], commands, completions);
+            Collections.sort(completions);
+            return completions;
+        } else if (args.length == 2) {
+            if (args[1].equals("set")) {
+                final var times = Arrays.asList("day", "night", "noon", "midnight", "sunrise", "sunset");
+                final var completions = new ArrayList<String>();
+                StringUtil.copyPartialMatches(args[1], times, completions);
+                Collections.sort(completions);
+                return completions;
+            }
+        }
+        return COMPLETE_LIST_EMPTY;
     }
 
     /**
