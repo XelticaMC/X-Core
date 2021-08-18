@@ -148,6 +148,7 @@ public class XCorePlugin extends JavaPlugin {
         }
 
         logger.info("Booted XelticaMC Core System.");
+        logger.info("TEST!");
     }
 
     @Override
