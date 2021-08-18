@@ -40,4 +40,6 @@ workflows:
   sample: 
     jobs:
       - build
-      - deploy
+      - deploy:
+          requires:
+            - build
