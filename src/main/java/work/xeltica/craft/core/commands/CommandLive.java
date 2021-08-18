@@ -1,6 +1,5 @@
 package work.xeltica.craft.core.commands;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -37,6 +36,6 @@ public class CommandLive extends CommandPlayerOnlyBase {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
         if (args.length != 1) return COMPLETE_LIST_EMPTY;
-        return Arrays.asList("on", "off");
+        return COMPLETE_LIST_ONOFF;
     }
 }
