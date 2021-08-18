@@ -4,7 +4,7 @@ version: 2.1
 
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
-  build-and-test:  
+  build:  
     # These next lines define a Docker executor: https://circleci.com/docs/2.0/executor-types/
     # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # Be sure to update the Docker image tag below to openjdk version of your application.
@@ -19,8 +19,18 @@ jobs:
           name: Build
           command: mvn -B -DskipTests clean package
       - store_artifacts:
-          path: /target/
-          destination: Jar
+          path: ~/project/target/XCore.jar
+  deploy:
+    machine:
+        image: circleci/classic:edge
+    steps:
+        - checkout
+        # CircleCI に登録した秘密鍵を呼び出す
+        - add_ssh_keys:
+            fingerprints:
+              - "d2:1b:72:bd:6c:b7:d6:ef:41:50:1c:73:dd:f0:84:bb"
+        # CircleCI に登録した環境変数を使って SSH
+        - run: ssh xeltica@dev.craft.xeltica.work 'cd /srv && sh deploy-core'
 
 workflows:
   # Below is the definition of your workflow.
@@ -29,4 +39,5 @@ workflows:
   # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
   sample: 
     jobs:
-      - build-and-test
+      - build
+      - deploy
