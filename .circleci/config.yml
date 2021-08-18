@@ -15,6 +15,14 @@ jobs:
       # Checkout the code as the first step.
       - checkout
       # Use mvn clean and package as the standard maven build phase
+      - restore_cache: # 初回実行後、または `pom.xml` を変更した場合に、保存されているキャッシュを復元します
+          # 依存関係のキャッシュについては https://circleci.com/ja/docs/2.0/caching/ をお読みください
+          key: x-cache-{{ checksum "pom.xml" }}
+      - run: mvn dependency:go-offline # プロジェクトの依存関係を取得します
+      - save_cache: # プロジェクトの依存関係を保存します
+          paths:
+            - ~/.m2
+          key: x-cache-{{ checksum "pom.xml" }}
       - run:
           name: Build
           command: mvn -B -DskipTests clean package
