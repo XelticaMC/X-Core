@@ -1,12 +1,19 @@
 package work.xeltica.craft.core.commands;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import work.xeltica.craft.core.models.Ranking;
 import work.xeltica.craft.core.stores.RankingStore;
 
 /**
@@ -189,5 +196,42 @@ public class CommandRanking extends CommandBase {
         return true;
     }
 
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+        if (args.length == 1) {
+            final var commands = Arrays.asList("create", "delete", "query", "list", "set", "unset", "hologram", "mode");
+            final var completions = new ArrayList<String>();
+            StringUtil.copyPartialMatches(args[0], commands, completions);
+            Collections.sort(completions);
+            return completions;
+        } else if (args.length == 2) {
+            if (!Arrays.asList("delete", "query", "set", "unset", "hologram", "mode").contains(args[0])) return COMPLETE_LIST_EMPTY;
+            final var store = RankingStore.getInstance();
+            final var rankings = store.getAll().stream().map(Ranking::getName).toList();
+            final var completions = new ArrayList<String>();
+            StringUtil.copyPartialMatches(args[1], rankings, completions);
+            Collections.sort(rankings);
+            return rankings;
+        } else if (args.length == 3) {
+            switch (args[0]) {
+                case "mode" -> {
+                    final var modes = Arrays.asList("normal", "time", "point");
+                    final var completions = new ArrayList<String>();
+                    StringUtil.copyPartialMatches(args[2], modes, completions);
+                    Collections.sort(completions);
+                    return completions;
+                }
+                case "hologram" -> {
+                    final var subCommands = Arrays.asList("spawn", "despawn", "obfuscate", "deobfuscate");
+                    final var completions = new ArrayList<String>();
+                    StringUtil.copyPartialMatches(args[2], subCommands, completions);
+                    Collections.sort(completions);
+                    return completions;
+                }
+            }
+        }
+        return COMPLETE_LIST_EMPTY;
+    }
 }
 
