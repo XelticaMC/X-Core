@@ -19,7 +19,7 @@ jobs:
           name: Build
           command: mvn -B -DskipTests clean package
       - store_artifacts:
-          path: /target/XCore.jar
+          path: /target/
           destination: Jar
 
 workflows:
