@@ -38,6 +38,7 @@ import work.xeltica.craft.core.commands.CommandRespawn;
 import work.xeltica.craft.core.commands.CommandSignEdit;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.handlers.LiveModeHandler;
+import work.xeltica.craft.core.handlers.NbsHandler;
 import work.xeltica.craft.core.handlers.XphoneHandler;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.handlers.CounterHandler;
@@ -57,6 +58,7 @@ import work.xeltica.craft.core.runnables.RealTimeObserver;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.MetaStore;
+import work.xeltica.craft.core.stores.NbsStore;
 import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
@@ -148,7 +150,6 @@ public class XCorePlugin extends JavaPlugin {
         }
 
         logger.info("Booted XelticaMC Core System.");
-        logger.info("TEST!");
     }
 
     @Override
@@ -159,6 +160,7 @@ public class XCorePlugin extends JavaPlugin {
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         final var luckPerms = provider.getProvider();
         luckPerms.getContextManager().unregisterCalculator(calculator);
+        NbsStore.getInstance().stopAll();
     }
 
     @Override
@@ -186,6 +188,7 @@ public class XCorePlugin extends JavaPlugin {
         new NickNameStore();
         new CounterStore();
         new RankingStore();
+        new NbsStore();
     }
 
     private void loadCommands() {
@@ -230,6 +233,7 @@ public class XCorePlugin extends JavaPlugin {
         pm.registerEvents(new EbiPowerHandler(), this);
         pm.registerEvents(new LiveModeHandler(), this);
         pm.registerEvents(new CounterHandler(), this);
+        pm.registerEvents(new NbsHandler(), this);
         pm.registerEvents(Gui.getInstance(), this);
     }
 
