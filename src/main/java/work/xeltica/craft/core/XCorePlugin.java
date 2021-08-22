@@ -223,18 +223,31 @@ public class XCorePlugin extends JavaPlugin {
         final var pm = getServer().getPluginManager();
 
         pm.registerEvents(new NewMorningHandler(), this);
+        logger.info("Loaded NewMorningHandler");
         pm.registerEvents(new PlayerHandler(this), this);
+        logger.info("Loaded PlayerHandler");
         pm.registerEvents(new VehicleHandler(), this);
+        logger.info("Loaded VehicleHandler");
         pm.registerEvents(new WakabaHandler(), this);
+        logger.info("Loaded WakabaHandler");
         pm.registerEvents(new HubHandler(), this);
+        logger.info("Loaded HubHandler");
         pm.registerEvents(new WorldHandler(), this);
+        logger.info("Loaded WorldHandler");
         pm.registerEvents(new NightmareHandler(), this);
+        logger.info("Loaded NightmareHandler");
         pm.registerEvents(new XphoneHandler(), this);
+        logger.info("Loaded XphoneHandler");
         pm.registerEvents(new EbiPowerHandler(), this);
+        logger.info("Loaded EbiPowerHandler");
         pm.registerEvents(new LiveModeHandler(), this);
+        logger.info("Loaded LiveModeHandler");
         pm.registerEvents(new CounterHandler(), this);
+        logger.info("Loaded CounterHandler");
         pm.registerEvents(new NbsHandler(), this);
+        logger.info("Loaded NbsHandler");
         pm.registerEvents(Gui.getInstance(), this);
+        logger.info("Loaded Gui");
     }
 
     private void loadPlugins() {

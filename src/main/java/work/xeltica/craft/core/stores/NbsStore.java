@@ -6,7 +6,9 @@ import com.xxmicloxx.NoteBlockAPI.songplayer.PositionSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RangeSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.HashMap;
@@ -51,10 +53,13 @@ public class NbsStore {
         if (!file.exists()) throw new IllegalArgumentException();
 
         final var song = NBSDecoder.parse(file);
-        final RangeSongPlayer player = new PositionSongPlayer(song, SoundCategory.VOICE);
+        final var player = new PositionSongPlayer(song, SoundCategory.VOICE);
+        player.setTargetLocation(location);
         player.setDistance(distance);
         player.setRepeatMode(RepeatMode.ALL);
         player.setPlaying(true);
+        Bukkit.getOnlinePlayers().forEach(p -> player.addPlayer(p));
+        playerCache.put(location, player);
     }
 
     /**
@@ -84,7 +89,15 @@ public class NbsStore {
      * @param location 位置
      */
     public boolean has(Location location) {
-        return playerCache.get(location) != null;
+        return get(location) != null;
+    }
+
+    /**
+     * 指定した位置の音楽を取得します。
+     * @param location 位置
+     */
+    public RangeSongPlayer get(Location location) {
+        return playerCache.get(location);
     }
 
     /**
@@ -93,6 +106,14 @@ public class NbsStore {
      */
     public int getDistance(Location location) {
         return playerCache.get(location).getDistance();
+    }
+
+    public void addAudience(Player p) {
+        playerCache.values().forEach(player -> player.addPlayer(p));
+    }
+
+    public void removeAudience(Player p) {
+        playerCache.values().forEach(player -> player.removePlayer(p));
     }
 
     private final Map<Location, RangeSongPlayer> playerCache = new HashMap<>();

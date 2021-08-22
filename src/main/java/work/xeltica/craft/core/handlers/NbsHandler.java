@@ -1,97 +1,92 @@
 package work.xeltica.craft.core.handlers;
 
-import com.xxmicloxx.NoteBlockAPI.model.Song;
-import com.xxmicloxx.NoteBlockAPI.songplayer.NoteBlockSongPlayer;
-import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
-
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.block.NotePlayEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.stores.NbsStore;
 
 public class NbsHandler implements Listener {
-    @EventHandler
-    /**
-     * 音を出したりなんやら
-     */
-    public void onNoteRedstone(BlockRedstoneEvent e) {
-        final var store = NbsStore.getInstance();
-        final var rs = e.getNewCurrent();
-        if (rs == e.getOldCurrent()) return;
-
-        final var distance = rs * 2;
-        final var loc = e.getBlock().getLocation();
-
-        if (store.has(loc)) {
-            store.changeDistance(loc, distance);
-        } else if (rs > 0) {
-            final var songId = getSongId(loc);
-            if (songId == null) {
-                loc.getWorld().playSound(loc, Sound.BLOCK_DISPENSER_FAIL, SoundCategory.BLOCKS, 1, 1);
-                return;
-            }
-            store.play(loc, songId, distance);
-        }
-    }
-
-    @EventHandler
     /**
      * ブロック破壊したときに音を止める
      */
+    @EventHandler
     public void onNoteBreak(BlockBreakEvent e) {
         final var store = NbsStore.getInstance();
-
         final var loc = e.getBlock().getLocation();
+
         if (store.has(loc)) {
             store.stop(loc);
         }
     }
 
-    @EventHandler
     /**
      * 元々の音符ブロックの挙動をブロックする
      */
+    @EventHandler
     public void onNotePlay(NotePlayEvent e) {
         final var store = NbsStore.getInstance();
         final var location = e.getBlock().getLocation();
 
-        if (store.has(location)) e.setCancelled(true);
-        if (getSongId(location) != null) e.setCancelled(true);
+        final var song = getSong(location);
+
+        if (store.has(location)) {
+            store.stop(location);
+            e.setCancelled(true);
+        } else if (song != null) {
+            store.play(location, song.songId, song.distance);
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        final var store = NbsStore.getInstance();
+        store.addAudience(e.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent e) {
+        final var store = NbsStore.getInstance();
+        store.removeAudience(e.getPlayer());
     }
 
     @Nullable
-    public String getSongId(Location location) {
+    public NBSSignModel getSong(Location location) {
         final var block1 = location.add(-1, 0, 0).getBlock();
         final var block2 = location.add(1, 0, 0).getBlock();
         final var block3 = location.add(0, 0, -1).getBlock();
         final var block4 = location.add(0, 0, 1).getBlock();
 
-        var songId = getSongIdFromSign(block1);
-        if (songId == null) songId = getSongIdFromSign(block2);
-        if (songId == null) songId = getSongIdFromSign(block3);
-        if (songId == null) songId = getSongIdFromSign(block4);
+        var songId = getSongFromSign(block1);
+        if (songId == null) songId = getSongFromSign(block2);
+        if (songId == null) songId = getSongFromSign(block3);
+        if (songId == null) songId = getSongFromSign(block4);
 
         return songId;
     }
 
     @Nullable
-    private String getSongIdFromSign(Block block) {
+    private NBSSignModel getSongFromSign(Block block) {
         if (Tag.WALL_SIGNS.isTagged(block.getType())) {
-            if (block.getBlockData() instanceof Sign s) {
-                return PlainTextComponentSerializer.plainText().serialize(s.line(0));
+            if (block.getState() instanceof Sign s) {
+                final var id = PlainTextComponentSerializer.plainText().serialize(s.line(0));
+                final var distance = Integer.parseInt(PlainTextComponentSerializer.plainText().serialize(s.line(1)));
+
+                return new NBSSignModel(id, distance);
             }
         }
         return null;
     }
+
+    record NBSSignModel(String songId, int distance) {}
 }
