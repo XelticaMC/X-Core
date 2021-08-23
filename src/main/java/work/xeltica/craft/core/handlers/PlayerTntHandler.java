@@ -7,6 +7,8 @@ import org.bukkit.event.Listener;
 public class PlayerTntHandler implements Listener {
     @EventHandler
     public void onTNTPrime(TNTPrimeEvent e){
-        e.setCancelled(true);
+        if (e.getBlock().isBlockPowered()) {
+            e.setCancelled(true);
+        }
     }
 }
