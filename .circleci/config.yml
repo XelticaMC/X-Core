@@ -56,7 +56,7 @@ workflows:
             branches:
               only: 
                 - develop
-      - build-tag:
+      - build-master:
           filters:
             branches:
               only: 
