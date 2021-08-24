@@ -38,6 +38,7 @@ import work.xeltica.craft.core.commands.CommandRespawn;
 import work.xeltica.craft.core.commands.CommandSignEdit;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.handlers.LiveModeHandler;
+import work.xeltica.craft.core.handlers.MiscHandler;
 import work.xeltica.craft.core.handlers.XphoneHandler;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.handlers.CounterHandler;
@@ -127,6 +128,11 @@ public class XCorePlugin extends JavaPlugin {
         calculator = new CitizenTimerCalculator();
 
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        if (provider == null) {
+            Bukkit.getLogger().severe("X-CoreはLuckPermsを必要とします。X-Coreを終了します。");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
         final var luckPerms = provider.getProvider();
         luckPerms.getContextManager().registerCalculator(calculator);
 
@@ -139,7 +145,7 @@ public class XCorePlugin extends JavaPlugin {
                 var prev = meta.getPreviousVersion();
                 if (prev == null) prev = "unknown";
                 final var current = meta.getCurrentVersion();
-                final var text = String.format("§aCore Systemが更新されました。%s -> %s", prev, current);
+                final var text = String.format("§aコアシステムを更新しました。%s -> %s", prev, current);
                 a.sendMessage(Component.text(text));
                 for (var log : meta.getChangeLog()) {
                     a.sendMessage(Component.text("・" + log));
@@ -157,8 +163,10 @@ public class XCorePlugin extends JavaPlugin {
         Gui.resetInstance();
         unloadPlugins();
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        final var luckPerms = provider.getProvider();
-        luckPerms.getContextManager().unregisterCalculator(calculator);
+        if (provider != null) {
+            final var luckPerms = provider.getProvider();
+            luckPerms.getContextManager().unregisterCalculator(calculator);
+        }
     }
 
     @Override
@@ -230,6 +238,7 @@ public class XCorePlugin extends JavaPlugin {
         pm.registerEvents(new EbiPowerHandler(), this);
         pm.registerEvents(new LiveModeHandler(), this);
         pm.registerEvents(new CounterHandler(), this);
+        pm.registerEvents(new MiscHandler(), this);
         pm.registerEvents(Gui.getInstance(), this);
     }
 

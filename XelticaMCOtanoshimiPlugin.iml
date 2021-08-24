@@ -47,6 +47,8 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: it.unimi.dsi:fastutil:8.2.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.logging.log4j:log4j-api:2.14.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.7.30" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:adventure-api:4.8.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:adventure-key:4.8.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:examination-api:1.1.0" level="project" />
@@ -55,7 +57,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:adventure-text-serializer-gson:4.8.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:adventure-text-serializer-legacy:4.8.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:adventure-text-serializer-plain:4.8.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.logging.log4j:log4j-api:2.14.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm:9.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-commons:9.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.ow2.asm:asm-tree:9.1" level="project" />
@@ -70,7 +71,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.java-websocket:Java-WebSocket:1.5.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.CloudburstMC.Protocol:bedrock-v440:1656151" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.CloudburstMC.Protocol:bedrock-v431:1656151" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.CloudburstMC.Protocol:bedrock-v428:1656151" level="project" />
@@ -199,5 +199,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:text-adapter-bukkit:3.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.kyori:text-serializer-gson:3.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.spigotmc:spigot-api:1.14-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0" level="project" />
   </component>
 </module>
