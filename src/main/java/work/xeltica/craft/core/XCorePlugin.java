@@ -163,6 +163,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.clear();
         Gui.resetInstance();
         unloadPlugins();
+        NbsStore.getInstance().stopAll();
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             final var luckPerms = provider.getProvider();
