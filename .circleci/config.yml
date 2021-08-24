@@ -30,7 +30,7 @@ jobs:
             sudo apt-get install lftp; 
       - run:
           name: サーバーへのプラグインのアップロード
-          command: lftp sftp://xeltica@dev.craft.xeltica.work:/srv/papermc/plugins -c 'put ~/project/target/XCore.jar'
+          command: lftp sftp://xeltica@dev.craft.xeltica.work:/srv/papermc/plugins -e 'put ~/project/target/XCore.jar; bye'
       - run: 
           name: サーバーへのプラグインのインストール
           command: ssh xeltica@dev.craft.xeltica.work 'sh /srv/deploy-core.sh'
@@ -63,7 +63,7 @@ jobs:
             sudo apt-get install lftp; 
       - run:
           name: サーバーへのプラグインのアップロード
-          command: lftp sftp://xeltica@play.craft.xeltica.work:/srv/papermc/plugins -c 'put ~/project/target/XCore.jar'
+          command: lftp sftp://xeltica@play.craft.xeltica.work:/srv/papermc/plugins -e 'put ~/project/target/XCore.jar; bye'
       - run: 
           name: サーバーへのプラグインのインストール
           command: ssh xeltica@play.craft.xeltica.work 'sh /srv/deploy-core.sh'
