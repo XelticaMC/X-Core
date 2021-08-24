@@ -25,7 +25,7 @@ public class MiscHandler implements Listener {
         final var y = loc.getBlockY();
         final var z = loc.getBlockZ();
         // NOTE: イベント終わったら破棄するコードなので、的の位置をハードコーディングしています
-        if (x == -35 && y == 74 && z == -369) {
+        if (x == -35 && y == 74 && z == -369 && "main".equals(loc.getWorld().getName())) {
             if (e.getEntity().getShooter() instanceof Player p) {
                 HintStore.getInstance().achieve(p, Hint.TAIKO);
             }
