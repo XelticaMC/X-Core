@@ -17,15 +17,16 @@ jobs:
           key: x-cache-{{ checksum "pom.xml" }}
       - store_artifacts:
           path: ~/project/target/XCore.jar
-      - add_ssh_keys:
-          fingerprints:
-            - "d2:1b:72:bd:6c:b7:d6:ef:41:50:1c:73:dd:f0:84:bb"
       - run: 
-          name: 鍵登録(1/2)
+          name: フィンガープリント登録
           command: echo 'dev.craft.xeltica.work,172.105.228.229 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts;
       - run: 
-          name: 鍵登録(2/2)
-          command: echo '  User xeltica' >> ~/.ssh/config; cat ~/.ssh/config
+          name: 秘密鍵登録
+          command: 
+            echo 'Host dev.craft.xeltica.work' > ~/.ssh/config;
+            echo '  IdentityFile /home/circleci/.ssh/id_rsa_d21b72bd6cb7d6ef41501c73ddf084bb' >> ~/.ssh/config;
+            echo '  User xeltica' >> ~/.ssh/config;
+            cat ~/.ssh/config;
       - run:
           name: LFTPのインストール
           command: sudo apt-get update && sudo apt-get install lftp
@@ -51,20 +52,22 @@ jobs:
           key: x-cache-{{ checksum "pom.xml" }}
       - store_artifacts:
           path: ~/project/target/XCore.jar
-      - add_ssh_keys:
-          fingerprints:
-            - "d2:1b:72:bd:6c:b7:d6:ef:41:50:1c:73:dd:f0:84:bb"
       - run: 
-          name: 鍵登録
-          command: echo 'play.craft.xeltica.work,172.105.228.229 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts
+          name: フィンガープリント登録
+          command: echo 'play.craft.xeltica.work,172.105.242.153 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHi9ZWNTLt55UEnlid3bWIryFIGhLtI249vL0R8WsYvQ8RY5dSeyr11BvqS0WvYnpTWzmNFBmuoKrgn65YoGZwk=' >> ~/.ssh/known_hosts;
+      - run: 
+          name: 秘密鍵登録
+          command: 
+            echo 'Host play.craft.xeltica.work' > ~/.ssh/config;
+            echo '  IdentityFile /home/circleci/.ssh/id_rsa_d21b72bd6cb7d6ef41501c73ddf084bb' >> ~/.ssh/config;
+            echo '  User xeltica' >> ~/.ssh/config;
+            cat ~/.ssh/config;
       - run:
           name: LFTPのインストール
-          command: |
-            sudo apt-get update;
-            sudo apt-get install lftp; 
+          command: sudo apt-get update && sudo apt-get install lftp
       - run:
           name: サーバーへのプラグインのアップロード
-          command: lftp sftp://xeltica@play.craft.xeltica.work:/srv/papermc/plugins -e 'put ~/project/target/XCore.jar; bye'
+          command: mkdir p && mv ./target/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://play.craft.xeltica.work
       - run: 
           name: サーバーへのプラグインのインストール
           command: ssh xeltica@play.craft.xeltica.work 'sh /srv/deploy-core.sh'
