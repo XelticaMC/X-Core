@@ -101,47 +101,83 @@ public class NbsStore {
      * @param location 位置
      */
     public boolean has(Location location) {
-        return get(location) != null;
+        return getPlayer(location) != null;
     }
 
     /**
-     * 指定した位置の音楽を取得します。
+     * 指定した位置の音楽プレイヤーを取得します。
      * @param location 位置
      */
-    public RangeSongPlayer get(Location location) {
+    public RangeSongPlayer getPlayer(Location location) {
         return playerCache.get(location);
     }
 
     /**
-     * 指定した位置に音楽があるかどうかを取得します。
+     * 指定した位置の音楽モデルを取得します。
+     * @param location 位置
+     */
+    public NbsModel getModel(Location location) {
+        return modelCache.get(location);
+    }
+
+    /**
+     * 指定した位置の音楽プレイヤーを取得します。
      * @param location 位置
      */
     public int getDistance(Location location) {
         return playerCache.get(location).getDistance();
     }
 
+    /**
+     * プレイヤーを聴衆に加えます。
+     * @param p プレイヤー
+     */
     public void addAudience(Player p) {
         playerCache.values().forEach(player -> player.addPlayer(p));
     }
 
+    /**
+     * プレイヤーを聴衆から外します。
+     * @param p プレイヤー
+     */
     public void removeAudience(Player p) {
         playerCache.values().forEach(player -> player.removePlayer(p));
     }
 
+    /**
+     * モデルをシステムに追加します。
+     * @param location 位置
+     * @param model モデル
+     */
     private void addModel(Location location, NbsModel model) {
         addModel(location, model, true);
     }
 
+    /**
+     * モデルをシステムに追加します。
+     * @param location 位置
+     * @param model モデル
+     * @param save 保存するかどうか
+     */
     private void addModel(Location location, NbsModel model, boolean save) {
         modelCache.put(location, model);
         models.add(model);
         saveModels();
     }
 
+    /**
+     * モデルをシステムから削除します。
+     * @param location 位置
+     */
     private void removeModel(Location location) {
         removeModel(location, true);
     }
 
+    /**
+     * モデルをシステムから削除します。
+     * @param location 位置
+     * @param save 保存するかどうか
+     */
     private void removeModel(Location location, boolean save) {
         final var model = modelCache.get(location);
         modelCache.remove(location);
@@ -149,10 +185,16 @@ public class NbsStore {
         saveModels();
     }
 
+    /**
+     * ディスクからモデルを読み込みます。
+     */
     private void loadModels() {
         models = (List<NbsModel>)nbs.getConf().getList("models", new ArrayList<NbsModel>());
     }
 
+    /**
+     * ディスクにモデルを書き込みます。
+     */
     private void saveModels() {
         nbs.getConf().set("models", models);
         try {

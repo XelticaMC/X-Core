@@ -40,7 +40,7 @@ public class NbsHandler implements Listener {
 
         final var song = getSong(location);
 
-        if (store.has(location)) {
+        if (store.has(location) && store.getModel(location).getPlaybackMode() != NbsModel.PlaybackMode.ONESHOT) {
             store.stop(location);
             e.setCancelled(true);
         } else if (song != null) {
