@@ -25,7 +25,7 @@ jobs:
           command: echo 'dev.craft.xeltica.work,172.105.228.229 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts;
       - run: 
           name: 鍵登録(2/2)
-          command: echo '\n  User xeltica' >> ~/.ssh/config; echo ~/.ssh/config
+          command: echo '\n  User xeltica' >> ~/.ssh/config; cat ~/.ssh/config
       - run:
           name: LFTPのインストール
           command: sudo apt-get update && sudo apt-get install lftp
