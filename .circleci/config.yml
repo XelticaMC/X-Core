@@ -9,7 +9,7 @@ jobs:
       - restore_cache:
           key: x-cache-{{ checksum "pom.xml" }}
       - run:
-          name: Build
+          name: ビルド
           command: mvn -B -DskipTests package
       - save_cache:
           paths:
@@ -17,12 +17,25 @@ jobs:
           key: x-cache-{{ checksum "pom.xml" }}
       - store_artifacts:
           path: ~/project/target/XCore.jar
-      - add_ssh_keys:
-          fingerprints:
-            - "d2:1b:72:bd:6c:b7:d6:ef:41:50:1c:73:dd:f0:84:bb"
-      - run: echo 'dev.craft.xeltica.work,172.105.228.229 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts
-      - run: sftp xeltica@dev.craft.xeltica.work:/srv/papermc/plugins \<< 'put ~/project/target/XCore.jar'
-      - run: ssh xeltica@dev.craft.xeltica.work 'sh /srv/deploy-core.sh'
+      - run: 
+          name: フィンガープリント登録
+          command: echo 'dev.craft.xeltica.work,172.105.228.229 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts;
+      - run: 
+          name: 秘密鍵登録
+          command: 
+            echo 'Host dev.craft.xeltica.work' > ~/.ssh/config;
+            echo '  IdentityFile /home/circleci/.ssh/id_rsa_d21b72bd6cb7d6ef41501c73ddf084bb' >> ~/.ssh/config;
+            echo '  User xeltica' >> ~/.ssh/config;
+            cat ~/.ssh/config;
+      - run:
+          name: LFTPのインストール
+          command: sudo apt-get update && sudo apt-get install lftp
+      - run:
+          name: サーバーへのプラグインのアップロード
+          command: mkdir p && mv ./target/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://dev.craft.xeltica.work
+      - run: 
+          name: サーバーへのプラグインのインストール
+          command: ssh xeltica@dev.craft.xeltica.work 'sh /srv/deploy-core.sh'
   build-master:  
     docker:
       - image: cimg/openjdk:16.0
@@ -31,7 +44,7 @@ jobs:
       - restore_cache:
           key: x-cache-{{ checksum "pom.xml" }}
       - run:
-          name: Build
+          name: ビルド
           command: mvn -B -DskipTests package
       - save_cache:
           paths:
@@ -39,12 +52,25 @@ jobs:
           key: x-cache-{{ checksum "pom.xml" }}
       - store_artifacts:
           path: ~/project/target/XCore.jar
-      - add_ssh_keys:
-          fingerprints:
-            - "d2:1b:72:bd:6c:b7:d6:ef:41:50:1c:73:dd:f0:84:bb"
-      - run: echo 'play.craft.xeltica.work,172.105.242.153 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts
-      - run: sftp xeltica@play.craft.xeltica.work:/srv/papermc/plugins \<< 'put ~/project/target/XCore.jar'
-      - run: ssh xeltica@play.craft.xeltica.work 'sh /srv/deploy-core.sh'
+      - run: 
+          name: フィンガープリント登録
+          command: echo 'play.craft.xeltica.work,172.105.242.153 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHi9ZWNTLt55UEnlid3bWIryFIGhLtI249vL0R8WsYvQ8RY5dSeyr11BvqS0WvYnpTWzmNFBmuoKrgn65YoGZwk=' >> ~/.ssh/known_hosts;
+      - run: 
+          name: 秘密鍵登録
+          command: 
+            echo 'Host play.craft.xeltica.work' > ~/.ssh/config;
+            echo '  IdentityFile /home/circleci/.ssh/id_rsa_d21b72bd6cb7d6ef41501c73ddf084bb' >> ~/.ssh/config;
+            echo '  User xeltica' >> ~/.ssh/config;
+            cat ~/.ssh/config;
+      - run:
+          name: LFTPのインストール
+          command: sudo apt-get update && sudo apt-get install lftp
+      - run:
+          name: サーバーへのプラグインのアップロード
+          command: mkdir p && mv ./target/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://play.craft.xeltica.work
+      - run: 
+          name: サーバーへのプラグインのインストール
+          command: ssh xeltica@play.craft.xeltica.work 'sh /srv/deploy-core.sh'
 
 workflows:
   build: 
