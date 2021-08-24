@@ -10,6 +10,7 @@ depend:
   - floodgate
   - DiscordSRV
   - HolographicDisplays
+  - NoteBlockAPI
 commands:
   omikuji:
     description: おみくじを引きます。マイクラ内で1日に1回まで引けて、100エビパワーを消費します。

@@ -38,6 +38,7 @@ import work.xeltica.craft.core.commands.CommandRespawn;
 import work.xeltica.craft.core.commands.CommandSignEdit;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.handlers.LiveModeHandler;
+import work.xeltica.craft.core.handlers.NbsHandler;
 import work.xeltica.craft.core.handlers.PlayerTntHandler;
 import work.xeltica.craft.core.handlers.MiscHandler;
 import work.xeltica.craft.core.handlers.XphoneHandler;
@@ -59,6 +60,7 @@ import work.xeltica.craft.core.runnables.RealTimeObserver;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.MetaStore;
+import work.xeltica.craft.core.stores.NbsStore;
 import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
@@ -155,7 +157,6 @@ public class XCorePlugin extends JavaPlugin {
         }
 
         logger.info("Booted XelticaMC Core System.");
-        logger.info("TEST!");
     }
 
     @Override
@@ -163,6 +164,7 @@ public class XCorePlugin extends JavaPlugin {
         commands.clear();
         Gui.resetInstance();
         unloadPlugins();
+        NbsStore.getInstance().stopAll();
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             final var luckPerms = provider.getProvider();
@@ -195,6 +197,7 @@ public class XCorePlugin extends JavaPlugin {
         new NickNameStore();
         new CounterStore();
         new RankingStore();
+        new NbsStore();
     }
 
     private void loadCommands() {
@@ -229,19 +232,35 @@ public class XCorePlugin extends JavaPlugin {
         final var pm = getServer().getPluginManager();
 
         pm.registerEvents(new NewMorningHandler(), this);
+        logger.info("Loaded NewMorningHandler");
         pm.registerEvents(new PlayerHandler(this), this);
+        logger.info("Loaded PlayerHandler");
         pm.registerEvents(new VehicleHandler(), this);
+        logger.info("Loaded VehicleHandler");
         pm.registerEvents(new WakabaHandler(), this);
+        logger.info("Loaded WakabaHandler");
         pm.registerEvents(new HubHandler(), this);
+        logger.info("Loaded HubHandler");
         pm.registerEvents(new WorldHandler(), this);
+        logger.info("Loaded WorldHandler");
         pm.registerEvents(new NightmareHandler(), this);
+        logger.info("Loaded NightmareHandler");
         pm.registerEvents(new XphoneHandler(), this);
+        logger.info("Loaded XphoneHandler");
         pm.registerEvents(new EbiPowerHandler(), this);
+        logger.info("Loaded EbiPowerHandler");
         pm.registerEvents(new LiveModeHandler(), this);
+        logger.info("Loaded LiveModeHandler");
         pm.registerEvents(new CounterHandler(), this);
+        logger.info("Loaded CounterHandler");
+        pm.registerEvents(new NbsHandler(), this);
+        logger.info("Loaded NbsHandler");
         pm.registerEvents(new PlayerTntHandler(), this);
+        logger.info("Loaded PlayTntHandler");
         pm.registerEvents(new MiscHandler(), this);
+        logger.info("Loaded MiscHandler");
         pm.registerEvents(Gui.getInstance(), this);
+        logger.info("Loaded Gui");
     }
 
     private void loadPlugins() {
