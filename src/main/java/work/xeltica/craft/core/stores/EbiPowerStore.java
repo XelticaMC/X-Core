@@ -49,14 +49,15 @@ public class EbiPowerStore {
     }
 
     public Result tryBuyItem(Player p, EbiPowerItem item) {
-        if (!tryTake(p, item.cost())) {
+        final var isFree = item.cost() == 0;
+        if (!isFree && !tryTake(p, item.cost())) {
             return Result.NO_ENOUGH_POWER;
         }
 
         final var res = p.getInventory().addItem(item.item().clone());
         if (res.size() != 0) {
             // 購入失敗なので返金
-            tryGive(p, item.cost());
+            if (!isFree) tryGive(p, item.cost());
 
             return Result.NO_ENOUGH_INVENTORY;
         } else {
