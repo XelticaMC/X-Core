@@ -13,6 +13,7 @@ import org.bukkit.event.block.NotePlayEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.Nullable;
+import work.xeltica.craft.core.models.NbsModel;
 import work.xeltica.craft.core.stores.NbsStore;
 
 public class NbsHandler implements Listener {
@@ -43,7 +44,7 @@ public class NbsHandler implements Listener {
             store.stop(location);
             e.setCancelled(true);
         } else if (song != null) {
-            store.play(location, song.songId, song.distance);
+            store.play(location, song.songId, song.distance, song.mode);
             e.setCancelled(true);
         }
     }
@@ -81,12 +82,18 @@ public class NbsHandler implements Listener {
             if (block.getState() instanceof Sign s) {
                 final var id = PlainTextComponentSerializer.plainText().serialize(s.line(0));
                 final var distance = Integer.parseInt(PlainTextComponentSerializer.plainText().serialize(s.line(1)));
+                final var modeString = PlainTextComponentSerializer.plainText().serialize(s.line(2));
+                final var mode = switch (modeString.toLowerCase()) {
+                    case "loop" -> NbsModel.PlaybackMode.LOOP;
+                    case "oneshot" -> NbsModel.PlaybackMode.ONESHOT;
+                    default -> NbsModel.PlaybackMode.NORMAL;
+                };
 
-                return new NBSSignModel(id, distance);
+                return new NBSSignModel(id, distance, mode);
             }
         }
         return null;
     }
 
-    record NBSSignModel(String songId, int distance) {}
+    record NBSSignModel(String songId, int distance, NbsModel.PlaybackMode mode) {}
 }
