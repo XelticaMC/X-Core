@@ -49,7 +49,6 @@ public class NbsStore {
             playerCache.remove(location);
             removeModel(location, false);
         });
-        saveModels();
     }
 
     /**
