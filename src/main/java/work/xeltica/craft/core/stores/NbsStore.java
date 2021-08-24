@@ -46,8 +46,6 @@ public class NbsStore {
     public void stopAll() {
         playerCache.keySet().forEach(location -> {
             playerCache.get(location).setPlaying(false);
-            playerCache.remove(location);
-            removeModel(location, false);
         });
     }
 
