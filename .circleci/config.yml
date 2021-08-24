@@ -25,12 +25,10 @@ jobs:
           command: echo 'dev.craft.xeltica.work,172.105.228.229 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts
       - run:
           name: LFTPのインストール
-          command: |
-            sudo apt-get update;
-            sudo apt-get install lftp; 
+          command: sudo apt-get update && sudo apt-get install lftp
       - run:
           name: サーバーへのプラグインのアップロード
-          command: lftp sftp://xeltica@dev.craft.xeltica.work:/srv/papermc/plugins -e 'put ~/project/target/XCore.jar; bye'
+          command: lftp -e "mirror --only-newer . /srv/papermc/plugins && exit" sftp://xeltica@dev.craft.xeltica.work
       - run: 
           name: サーバーへのプラグインのインストール
           command: ssh xeltica@dev.craft.xeltica.work 'sh /srv/deploy-core.sh'
