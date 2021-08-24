@@ -21,15 +21,17 @@ jobs:
           fingerprints:
             - "d2:1b:72:bd:6c:b7:d6:ef:41:50:1c:73:dd:f0:84:bb"
       - run: 
-          name: 鍵登録
-          command: echo 'dev.craft.xeltica.work,172.105.228.229 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts; cat ~/.ssh/config
-
+          name: 鍵登録(1/2)
+          command: echo 'dev.craft.xeltica.work,172.105.228.229 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts;
+      - run: 
+          name: 鍵登録(2/2)
+          command: echo '\n  User xeltica' >> ~/.ssh/config; echo ~/.ssh/config
       - run:
           name: LFTPのインストール
           command: sudo apt-get update && sudo apt-get install lftp
       - run:
           name: サーバーへのプラグインのアップロード
-          command: lftp -e "mirror --only-newer . /srv/papermc/plugins && exit" sftp://xeltica@dev.craft.xeltica.work
+          command: mkdir p && mv ./target/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://dev.craft.xeltica.work
       - run: 
           name: サーバーへのプラグインのインストール
           command: ssh xeltica@dev.craft.xeltica.work 'sh /srv/deploy-core.sh'
