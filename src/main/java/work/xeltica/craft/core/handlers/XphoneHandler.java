@@ -107,15 +107,15 @@ public class XphoneHandler implements Listener {
         final var appFirework = new MenuItem(summerLoginBonusReceived ? "花火を購入（80EP/5個）" : "花火を引き換える", i -> {
             final var verb = summerLoginBonusReceived ? "購入" : "入手";
             if (summerLoginBonusReceived && !EbiPowerStore.getInstance().tryTake(player, 80)) {
-                ui().error(player, "アイテムを" + summerLoginBonusReceived + "できませんでした。エビパワーが足りません。");
+                ui().error(player, "アイテムを" + verb + "できませんでした。エビパワーが足りません。");
                 return;
             }
             final var size = player.getInventory().addItem(PlayerStore.getInstance().getRandomFireworkByUUID(player.getUniqueId(), 5)).size();
             if (size > 0) {
-                ui().error(player, "アイテムを" + summerLoginBonusReceived + "できませんでした。持ち物がいっぱいです。整理してからもう一度お試し下さい。");
+                ui().error(player, "アイテムを" + verb + "できませんでした。持ち物がいっぱいです。整理してからもう一度お試し下さい。");
                 EbiPowerStore.getInstance().tryGive(player, 80);
             } else {
-                player.sendMessage("花火を" + summerLoginBonusReceived + "しました！");
+                player.sendMessage("花火を" + verb + "しました！");
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 2);
             }
             if (!summerLoginBonusReceived) {

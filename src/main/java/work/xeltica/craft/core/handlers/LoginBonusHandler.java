@@ -54,7 +54,7 @@ public class LoginBonusHandler implements Listener {
                 EbiPowerStore.getInstance().tryGive(p, LOGIN_BONUS_EBIPOWER);
                 p.sendMessage("§a§lログインボーナス達成！§6" + LOGIN_BONUS_EBIPOWER + "EP§fを手に入れた！");
                 p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 2);
-                record.set(PlayerDataKey.RECEIVED_LOGIN_BONUS, true);
+                pstore.open(p).set(PlayerDataKey.RECEIVED_LOGIN_BONUS, true);
             }, Ticks.from(2));
         }
 
