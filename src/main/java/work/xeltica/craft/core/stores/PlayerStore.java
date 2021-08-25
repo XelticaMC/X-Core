@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -14,6 +17,8 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.bossbar.BossBar.Color;
 import net.kyori.adventure.bossbar.BossBar.Overlay;
 import net.kyori.adventure.text.Component;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import work.xeltica.craft.core.events.StaffJoinEvent;
 import work.xeltica.craft.core.events.StaffLeaveEvent;
 import work.xeltica.craft.core.models.PlayerDataKey;
@@ -57,11 +62,11 @@ public class PlayerStore {
 
     public List<PlayerRecord> openAll() {
         return playerStores
-            .getConf()
-            .getKeys(false)
-            .stream()
-            .map(k -> open(UUID.fromString(k)))
-            .toList();
+                .getConf()
+                .getKeys(false)
+                .stream()
+                .map(k -> open(UUID.fromString(k)))
+                .toList();
     }
 
     public void save() throws IOException {
@@ -104,6 +109,23 @@ public class PlayerStore {
         return liveBarMap.containsKey(p.getUniqueId());
     }
 
+    public ItemStack getRandomFireworkByUUID(UUID id, int amount) {
+        final var random = new Random(id.hashCode());
+        final var item = new ItemStack(Material.FIREWORK_ROCKET);
+        item.editMeta(meta -> {
+            final var firework = (FireworkMeta) meta;
+            final var effect = FireworkEffect.builder()
+                    .trail(random.nextBoolean())
+                    .flicker(random.nextBoolean())
+                    .with(FireworkEffect.Type.values()[random.nextInt(5)])
+                    .withColor(colors[random.nextInt(colors.length)])
+                    .build();
+            firework.addEffect(effect);
+            firework.setPower(1);
+        });
+        return item;
+    }
+
     private void checkAndMigrate() {
         if (!Config.exists("flags") && !Config.exists("newcomers")) return;
 
@@ -120,7 +142,7 @@ public class PlayerStore {
 
     private void migrate() throws IOException {
         // cat
-        final var catUUIDs = flags.getConf().getStringList("cats").stream().map(id -> UUID.fromString(id)).toList();
+        final var catUUIDs = flags.getConf().getStringList("cats").stream().map(UUID::fromString).toList();
         for (var id : catUUIDs) {
             open(id).set(PlayerDataKey.CAT_MODE, true, false);
         }
@@ -140,4 +162,20 @@ public class PlayerStore {
     private final Config newcomers;
     private final Config playerStores;
     private static Map<UUID, BossBar> liveBarMap;
+
+    private static org.bukkit.Color[] colors = {
+            // from XelticaUI
+            org.bukkit.Color.fromRGB(0xe23731), // red
+            org.bukkit.Color.fromRGB(0xeb6101), // vermilion
+            org.bukkit.Color.fromRGB(0xf08300), // orange
+            org.bukkit.Color.fromRGB(0xe9be00), // yellow
+            org.bukkit.Color.fromRGB(0xb8d200), // lime
+            org.bukkit.Color.fromRGB(0x3eb370), // green
+            org.bukkit.Color.fromRGB(0x20c0a0), // teal
+            org.bukkit.Color.fromRGB(0x43fcf3), // cyan
+            org.bukkit.Color.fromRGB(0x00b7ff), // skyblue
+            org.bukkit.Color.fromRGB(0x2571ff), // blue
+            org.bukkit.Color.fromRGB(0xff55a1), // magenta
+            org.bukkit.Color.fromRGB(0xff5c84), // pink
+    };
 }

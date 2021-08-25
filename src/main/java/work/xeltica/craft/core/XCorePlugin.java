@@ -38,6 +38,7 @@ import work.xeltica.craft.core.commands.CommandRespawn;
 import work.xeltica.craft.core.commands.CommandSignEdit;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.handlers.LiveModeHandler;
+import work.xeltica.craft.core.handlers.LoginBonusHandler;
 import work.xeltica.craft.core.handlers.NbsHandler;
 import work.xeltica.craft.core.handlers.PlayerTntHandler;
 import work.xeltica.craft.core.handlers.MiscHandler;
@@ -259,6 +260,8 @@ public class XCorePlugin extends JavaPlugin {
         logger.info("Loaded PlayTntHandler");
         pm.registerEvents(new MiscHandler(), this);
         logger.info("Loaded MiscHandler");
+        pm.registerEvents(new LoginBonusHandler(), this);
+        logger.info("Loaded LoginBonusHandler");
         pm.registerEvents(Gui.getInstance(), this);
         logger.info("Loaded Gui");
     }

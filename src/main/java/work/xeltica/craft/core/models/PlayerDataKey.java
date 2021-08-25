@@ -21,6 +21,8 @@ public enum PlayerDataKey {
     PLAYING_COUNTER_ID("counter_id"),
     PLAYING_COUNTER_TIMESTAMP("counter_time"),
     PLAYED_COUNTER("played_counter"),
+    RECEIVED_LOGIN_BONUS("login_bonus"),
+    RECEIVED_LOGIN_BONUS_SUMMER("login_bonus_summer"),
 
     ;
 

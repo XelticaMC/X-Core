@@ -152,7 +152,8 @@ public class Gui implements Listener {
         }
         final var list = stream.map(p -> {
                 final var head = ItemStore.getInstance().getPlayerHead(p);
-                final var name = p.displayName() != null ? PlainTextComponentSerializer.plainText().serialize(p.displayName()) : p.getName();
+                    p.displayName();
+                    final var name = PlainTextComponentSerializer.plainText().serialize(p.displayName());
                 return new MenuItem(name, (a) -> {
                     if (onSelect != null) onSelect.accept(p);
                 }, head, p);
@@ -172,7 +173,6 @@ public class Gui implements Listener {
         final var t = bookHandlersMap.get(id);
         t.handler.accept(t.eventArgs);
         bookHandlersMap.remove(id);
-        return;
     }
 
     /**
@@ -203,7 +203,7 @@ public class Gui implements Listener {
         final var menuItems = invMap.get(inv);
         final var id = e.getRawSlot();
 
-        if (menuItems.length <= id || menuItems.length < 0) return;
+        if (menuItems.length <= id || id < 0) return;
         p.closeInventory();
         final var handler = menuItems[id].getOnClick();
         if (handler != null) handler.accept(menuItems[id]);
@@ -252,7 +252,7 @@ public class Gui implements Listener {
             item.setItemMeta(meta);
 
             return item;
-        }).forEach(i -> inv.addItem(i));
+        }).forEach(inv::addItem);
 
         invMap.put(inv, items);
         player.openInventory(inv);
