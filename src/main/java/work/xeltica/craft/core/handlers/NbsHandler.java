@@ -1,5 +1,8 @@
 package work.xeltica.craft.core.handlers;
 
+import com.xxmicloxx.NoteBlockAPI.event.SongEndEvent;
+import com.xxmicloxx.NoteBlockAPI.event.SongStoppedEvent;
+import com.xxmicloxx.NoteBlockAPI.songplayer.PositionSongPlayer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -38,6 +41,9 @@ public class NbsHandler implements Listener {
         final var store = NbsStore.getInstance();
         final var location = e.getBlock().getLocation();
 
+        Bukkit.getLogger().info(location.toString());
+        Bukkit.getLogger().info(location.getBlock().getType().toString());
+
         final var song = getSong(location);
 
         if (store.has(location) && store.getModel(location).getPlaybackMode() != NbsModel.PlaybackMode.ONESHOT) {
@@ -61,12 +67,17 @@ public class NbsHandler implements Listener {
         store.removeAudience(e.getPlayer());
     }
 
+    @EventHandler
+    public void onSongFinished(SongEndEvent e) {
+        NbsStore.getInstance().removeModel(((PositionSongPlayer)e.getSongPlayer()).getTargetLocation());
+    }
+
     @Nullable
     public NBSSignModel getSong(Location location) {
-        final var block1 = location.add(-1, 0, 0).getBlock();
-        final var block2 = location.add(1, 0, 0).getBlock();
-        final var block3 = location.add(0, 0, -1).getBlock();
-        final var block4 = location.add(0, 0, 1).getBlock();
+        final var block1 = location.clone().add(-1, 0, 0).getBlock();
+        final var block2 = location.clone().add(1, 0, 0).getBlock();
+        final var block3 = location.clone().add(0, 0, -1).getBlock();
+        final var block4 = location.clone().add(0, 0, 1).getBlock();
 
         var songId = getSongFromSign(block1);
         if (songId == null) songId = getSongFromSign(block2);
@@ -78,6 +89,7 @@ public class NbsHandler implements Listener {
 
     @Nullable
     private NBSSignModel getSongFromSign(Block block) {
+        Bukkit.getLogger().info(block.getType().toString());
         if (Tag.WALL_SIGNS.isTagged(block.getType())) {
             if (block.getState() instanceof Sign s) {
                 final var id = PlainTextComponentSerializer.plainText().serialize(s.line(0));

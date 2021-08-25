@@ -15,7 +15,7 @@ import java.util.Map;
  */
 @Data
 @AllArgsConstructor
-public class NbsModel implements ConfigurationSerializable {
+public class NbsModel implements Cloneable, ConfigurationSerializable {
 
     @Override
     public @NotNull Map<String, Object> serialize() {

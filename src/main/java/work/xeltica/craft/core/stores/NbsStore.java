@@ -27,8 +27,10 @@ import java.util.Map;
  */
 public class NbsStore {
     public NbsStore() {
-        ConfigurationSerialization.registerClass(EbiPowerItem.class, "EbiPowerItem");
+        ConfigurationSerialization.registerClass(NbsModel.class, "NbsModel");
+        nbs = new Config("nbs");
         loadModels();
+        Bukkit.getLogger().info("音楽モデルを" + models.size() + "つ読み込みました");
         playAll();
         instance = this;
     }
@@ -44,12 +46,11 @@ public class NbsStore {
      * 音を全部停止します。
      */
     public void stopAll() {
-        playerCache.keySet().forEach(location -> {
+        playerCache.keySet().stream().toList().forEach(location -> {
             playerCache.get(location).setPlaying(false);
             playerCache.remove(location);
             removeModel(location, false);
         });
-        saveModels();
     }
 
     /**
@@ -149,7 +150,7 @@ public class NbsStore {
      * @param location 位置
      * @param model モデル
      */
-    private void addModel(Location location, NbsModel model) {
+    public void addModel(Location location, NbsModel model) {
         addModel(location, model, true);
     }
 
@@ -159,7 +160,7 @@ public class NbsStore {
      * @param model モデル
      * @param save 保存するかどうか
      */
-    private void addModel(Location location, NbsModel model, boolean save) {
+    public void addModel(Location location, NbsModel model, boolean save) {
         modelCache.put(location, model);
         models.add(model);
         saveModels();
@@ -169,7 +170,7 @@ public class NbsStore {
      * モデルをシステムから削除します。
      * @param location 位置
      */
-    private void removeModel(Location location) {
+    public void removeModel(Location location) {
         removeModel(location, true);
     }
 
@@ -180,9 +181,12 @@ public class NbsStore {
      */
     private void removeModel(Location location, boolean save) {
         final var model = modelCache.get(location);
+        playerCache.remove(location);
         modelCache.remove(location);
         models.remove(model);
-        saveModels();
+        if (save) {
+            saveModels();
+        }
     }
 
     /**
@@ -190,6 +194,9 @@ public class NbsStore {
      */
     private void loadModels() {
         models = (List<NbsModel>)nbs.getConf().getList("models", new ArrayList<NbsModel>());
+        for (final var model : models) {
+            modelCache.put(model.getLocation(), model);
+        }
     }
 
     /**
@@ -220,6 +227,8 @@ public class NbsStore {
         player.setPlaying(true);
         Bukkit.getOnlinePlayers().forEach(player::addPlayer);
 
+        Bukkit.getLogger().info(String.format("%sを範囲%dに、再生を開始た゜", model.getSongId(), model.getDistance()));
+
         playerCache.put(model.getLocation(), player);
     }
 
@@ -227,7 +236,7 @@ public class NbsStore {
     private final Map<Location, RangeSongPlayer> playerCache = new HashMap<>();
     private List<NbsModel> models;
     private final Map<Location, NbsModel> modelCache = new HashMap<>();
-    private final Config nbs = new Config("nbs");
+    private Config nbs;
 
     @Getter
     private static NbsStore instance;
