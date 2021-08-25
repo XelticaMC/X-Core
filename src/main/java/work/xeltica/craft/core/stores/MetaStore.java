@@ -60,7 +60,9 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "イベント開催期間中、メインワールドで寝られないように"
+            "夏祭り開催期間中、メインワールドでX Phoneを開くことで花火を購入可能に",
+            "ログインボーナス(毎日250EPが貰える)",
+            "夏祭り限定ログインボーナス(毎日5つの花火がX Phoneから貰える)",
     };
 
     private static MetaStore instance;
