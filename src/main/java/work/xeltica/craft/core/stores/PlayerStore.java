@@ -111,7 +111,7 @@ public class PlayerStore {
 
     public ItemStack getRandomFireworkByUUID(UUID id, int amount) {
         final var random = new Random(id.hashCode());
-        final var item = new ItemStack(Material.FIREWORK_ROCKET);
+        final var item = new ItemStack(Material.FIREWORK_ROCKET, amount);
         item.editMeta(meta -> {
             final var firework = (FireworkMeta) meta;
             final var effect = FireworkEffect.builder()
