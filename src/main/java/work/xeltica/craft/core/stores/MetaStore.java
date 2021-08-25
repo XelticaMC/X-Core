@@ -60,8 +60,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "NoteBlock Systemの簡易版をイベント用に追加",
-            "わかばロールに「ボタン」の使用を許可",
+            "イベント開催期間中、メインワールドで寝られないように"
     };
 
     private static MetaStore instance;
