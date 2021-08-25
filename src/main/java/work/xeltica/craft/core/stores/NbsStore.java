@@ -30,7 +30,6 @@ public class NbsStore {
         ConfigurationSerialization.registerClass(NbsModel.class, "NbsModel");
         nbs = new Config("nbs");
         loadModels();
-        Bukkit.getLogger().info("音楽モデルを" + models.size() + "つ読み込みました");
         playAll();
         instance = this;
     }
@@ -225,7 +224,6 @@ public class NbsStore {
         player.setPlaying(true);
         Bukkit.getOnlinePlayers().forEach(player::addPlayer);
 
-        Bukkit.getLogger().info(String.format("%sを範囲%dに、再生を開始た゜", model.getSongId(), model.getDistance()));
 
         playerCache.put(model.getLocation(), player);
     }

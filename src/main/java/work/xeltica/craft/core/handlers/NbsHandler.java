@@ -41,9 +41,6 @@ public class NbsHandler implements Listener {
         final var store = NbsStore.getInstance();
         final var location = e.getBlock().getLocation();
 
-        Bukkit.getLogger().info(location.toString());
-        Bukkit.getLogger().info(location.getBlock().getType().toString());
-
         final var song = getSong(location);
 
         if (store.has(location) && store.getModel(location).getPlaybackMode() != NbsModel.PlaybackMode.ONESHOT) {
@@ -89,7 +86,6 @@ public class NbsHandler implements Listener {
 
     @Nullable
     private NBSSignModel getSongFromSign(Block block) {
-        Bukkit.getLogger().info(block.getType().toString());
         if (Tag.WALL_SIGNS.isTagged(block.getType())) {
             if (block.getState() instanceof Sign s) {
                 final var id = PlainTextComponentSerializer.plainText().serialize(s.line(0));
