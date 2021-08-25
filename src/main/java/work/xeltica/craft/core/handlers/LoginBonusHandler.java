@@ -54,7 +54,7 @@ public class LoginBonusHandler implements Listener {
                 EbiPowerStore.getInstance().tryGive(p, LOGIN_BONUS_EBIPOWER);
                 p.sendMessage("§a§lログインボーナス達成！§6" + LOGIN_BONUS_EBIPOWER + "EP§fを手に入れた！");
                 p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 2);
-                record.set(PlayerDataKey.RECEIVED_LOGIN_BONUS, true, false);
+                record.set(PlayerDataKey.RECEIVED_LOGIN_BONUS, true);
             }, Ticks.from(2));
         }
 
@@ -63,14 +63,7 @@ public class LoginBonusHandler implements Listener {
             Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
                 if (!p.isOnline()) return;
                 p.sendMessage("§c§l夏祭り限定ログインボーナス達成！§e花火§fを手に入れた！");
-                final var nokori = p.getInventory().addItem(PlayerStore.getInstance().getRandomFireworkByUUID(p.getUniqueId(), 5));
-                p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 2);
-                if (nokori.size() > 0) {
-                    nokori.values().forEach(item -> p.getWorld().dropItem(p.getLocation(), item));
-                    p.sendMessage("アイテムが入り切らなかったため、手元に落ちています。忘れず拾ってください。");
-                }
-                record.set(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER, true, false);
-
+                p.sendMessage("X Phoneで無料で受け取ることができます。");
             }, Ticks.from(5));
         }
     }

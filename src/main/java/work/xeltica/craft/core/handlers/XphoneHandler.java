@@ -95,6 +95,7 @@ public class XphoneHandler implements Listener {
         final var catMode = PlayerStore.getInstance().open(player).getBoolean(PlayerDataKey.CAT_MODE);
         final var isLiveMode = PlayerStore.getInstance().isLiveMode(player);
         final var worldName = player.getWorld().getName();
+        final var summerLoginBonusReceived = PlayerStore.getInstance().open(player).getBoolean(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER);
 
         final var appPromo = new MenuItem("市民システム", i -> player.performCommand("promo"), Material.NETHER_STAR, null);
         final var appSidebar = new MenuItem("サイドバー切り替え", i -> player.performCommand("sb toggle"), Material.FILLED_MAP, null);
@@ -103,20 +104,24 @@ public class XphoneHandler implements Listener {
         final var appBoat = new MenuItem("ボート", i -> player.performCommand("boat"), Material.OAK_BOAT, null);
         final var appCart = new MenuItem("トロッコ", i -> player.performCommand("cart"), Material.MINECART, null);
 
-        final var appFirework = new MenuItem("花火を購入（80EP/5個）", i -> {
-            if (!EbiPowerStore.getInstance().tryTake(player, 80)) {
-                ui().error(player, "アイテムを購入できませんでした。エビパワーが足りません。");
+        final var appFirework = new MenuItem(summerLoginBonusReceived ? "花火を購入（80EP/5個）" : "花火を引き換える", i -> {
+            final var verb = summerLoginBonusReceived ? "購入" : "入手";
+            if (summerLoginBonusReceived && !EbiPowerStore.getInstance().tryTake(player, 80)) {
+                ui().error(player, "アイテムを" + summerLoginBonusReceived + "できませんでした。エビパワーが足りません。");
                 return;
             }
             final var size = player.getInventory().addItem(PlayerStore.getInstance().getRandomFireworkByUUID(player.getUniqueId(), 5)).size();
             if (size > 0) {
-                ui().error(player, "アイテムを購入できませんでした。持ち物がいっぱいです。整理してからもう一度お試し下さい。");
+                ui().error(player, "アイテムを" + summerLoginBonusReceived + "できませんでした。持ち物がいっぱいです。整理してからもう一度お試し下さい。");
                 EbiPowerStore.getInstance().tryGive(player, 80);
             } else {
-                player.sendMessage("花火を購入しました！");
+                player.sendMessage("花火を" + summerLoginBonusReceived + "しました！");
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 2);
             }
-        }, Material.FIREWORK_ROCKET, null, true);
+            if (!summerLoginBonusReceived) {
+                PlayerStore.getInstance().open(player).set(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER, true);
+            }
+        }, Material.FIREWORK_ROCKET, null, !summerLoginBonusReceived);
 
         final var appCPrivate = new MenuItem("プライベート保護", i -> player.performCommand("cprivate"), Material.TRIPWIRE_HOOK, null);
         final var appCPublic = new MenuItem("パブリック保護", i -> player.performCommand("cpublic"), Material.TRIPWIRE_HOOK, null);
