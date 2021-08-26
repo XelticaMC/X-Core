@@ -65,6 +65,7 @@ import work.xeltica.craft.core.stores.NbsStore;
 import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.stores.QuickChatStore;
 import work.xeltica.craft.core.stores.RankingStore;
 import work.xeltica.craft.core.stores.VehicleStore;
 import work.xeltica.craft.core.stores.WorldStore;
@@ -199,6 +200,7 @@ public class XCorePlugin extends JavaPlugin {
         new CounterStore();
         new RankingStore();
         new NbsStore();
+        new QuickChatStore();
     }
 
     private void loadCommands() {
