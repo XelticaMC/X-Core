@@ -30,6 +30,7 @@ import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.stores.QuickChatStore;
 import work.xeltica.craft.core.stores.WorldStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 
@@ -148,6 +149,7 @@ public class XphoneHandler implements Listener {
         final var appGeyserAdvancements = new MenuItem("進捗", i -> player.performCommand("geyser advancements"), Material.BEDROCK, null);
         final var appGeyserStatistics = new MenuItem("統計", i -> player.performCommand("geyser advancements"), Material.BEDROCK, null);
         final var appGeyserOffhand = new MenuItem("持ち物をオフハンドに移動", i -> player.performCommand("geyser offhand"), Material.BEDROCK, null);
+        final var appQuickChat = new MenuItem("クイックチャット", i -> openQuickChatApp(player), Material.PAPER, null);
 
         final var isBedrock = FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId());
 
@@ -187,6 +189,8 @@ public class XphoneHandler implements Listener {
             items.add(bedrockDisclaimer);
         }
 
+        items.add(appQuickChat);
+
         ui().openMenu(player, "X Phone OS", items);
     }
 
@@ -219,6 +223,18 @@ public class XphoneHandler implements Listener {
             target.sendMessage(String.format("%sが5秒後にあなたの現在位置にテレポートします。", player.getName()));
             Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> player.teleport(loc), 20 * 5);
         });
+    }
+
+    private void openQuickChatApp(Player player) {
+        final var store = QuickChatStore.getInstance();
+        final var list = new ArrayList<MenuItem>();
+
+        for (String chat: store.getAllPrefix()) {
+            final var msg = store.chatFormat(store.getMessage(chat), player);
+            list.add(new MenuItem(chat+": "+msg, i -> player.chat(msg), Material.PAPER));
+        }
+
+        ui().openMenu(player, "QuickChat", list);
     }
 
     private ItemStore store() { return ItemStore.getInstance(); }
