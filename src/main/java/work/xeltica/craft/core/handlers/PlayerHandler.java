@@ -54,8 +54,8 @@ import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.stores.QuickChatStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
-import work.xeltica.craft.core.utils.Ticks;
 import work.xeltica.craft.core.utils.TravelTicketUtil;
 
 /**
@@ -223,6 +223,17 @@ public class PlayerHandler implements Listener {
                     HintStore.getInstance().achieve(e.getPlayer(), Hint.KUSA);
                 }
             }.runTask(plugin);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerChat(AsyncPlayerChatEvent e) {
+        var msg = e.getMessage();
+        final var store = QuickChatStore.getInstance();
+        if (!msg.startsWith(".")) return;
+        msg = msg.substring(1);
+        if (store.getAllPrefix().contains(msg)) {
+            e.setMessage(store.getMessage(msg));
         }
     }
 
