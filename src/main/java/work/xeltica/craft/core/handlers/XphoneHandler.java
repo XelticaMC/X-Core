@@ -110,9 +110,15 @@ public class XphoneHandler implements Listener {
                 ui().error(player, "アイテムを" + verb + "できませんでした。エビパワーが足りません。");
                 return;
             }
-            final var size = player.getInventory().addItem(PlayerStore.getInstance().getRandomFireworkByUUID(player.getUniqueId(), 5)).size();
+            final var stack = PlayerStore.getInstance().getRandomFireworkByUUID(player.getUniqueId(), 5);
+            final var size = player.getInventory().addItem(stack).size();
             if (size > 0) {
                 ui().error(player, "アイテムを" + verb + "できませんでした。持ち物がいっぱいです。整理してからもう一度お試し下さい。");
+                if (size - 5 > 0) {
+                    final var stackToRemove = stack.clone();
+                    stackToRemove.setAmount(size - 5);
+                    player.getInventory().remove(stackToRemove);
+                }
                 EbiPowerStore.getInstance().tryGive(player, 80);
             } else {
                 player.sendMessage("花火を" + verb + "しました！");
