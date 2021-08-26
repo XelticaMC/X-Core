@@ -60,7 +60,10 @@ public class MiscHandler implements Listener {
      */
     @EventHandler
     public void onGuardCraftingWithCustomItem(CraftItemEvent e) {
-        final var hasLoreInMatrix = Arrays.stream(e.getInventory().getMatrix()).anyMatch(item -> item.getItemMeta().lore().size() > 0);
+        final var hasLoreInMatrix = Arrays.stream(e.getInventory().getMatrix())
+                .map(item -> item.getItemMeta().lore())
+                .anyMatch(l -> l != null && l.size() > 0);
+
         if (hasLoreInMatrix) {
             e.setCancelled(true);
             if (e.getWhoClicked() instanceof Player player) {
