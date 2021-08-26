@@ -24,6 +24,7 @@ public class LoginBonusHandler implements Listener {
 
         // ログボ記録を削除
         records.forEach(record -> record.delete(PlayerDataKey.RECEIVED_LOGIN_BONUS, false));
+        records.forEach(record -> record.delete(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER, false));
 
         // いる人にログボ
         Bukkit.getOnlinePlayers().forEach(this::giveLoginBonus);
