@@ -15,6 +15,7 @@ import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.HintStore;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 軽微な機能に関するハンドラー。
@@ -61,6 +62,7 @@ public class MiscHandler implements Listener {
     @EventHandler
     public void onGuardCraftingWithCustomItem(CraftItemEvent e) {
         final var hasLoreInMatrix = Arrays.stream(e.getInventory().getMatrix())
+                .filter(Objects::nonNull)
                 .map(item -> item.getItemMeta().lore())
                 .anyMatch(l -> l != null && l.size() > 0);
 
