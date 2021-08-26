@@ -55,6 +55,7 @@ import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.QuickChatStore;
+import work.xeltica.craft.core.stores.WorldStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 import work.xeltica.craft.core.utils.TravelTicketUtil;
 
@@ -230,10 +231,20 @@ public class PlayerHandler implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent e) {
         var msg = e.getMessage();
         final var store = QuickChatStore.getInstance();
+        final var player = e.getPlayer();
         if (!msg.startsWith(".")) return;
         msg = msg.substring(1);
         if (store.getAllPrefix().contains(msg)) {
-            e.setMessage(store.getMessage(msg));
+            var quickMsg = store.getMessage(msg);
+
+            if (msg.equals("loc")) {
+                quickMsg = quickMsg.replace("{world}", WorldStore.getInstance().getWorldDisplayName(player.getWorld()));
+                quickMsg = quickMsg.replace("{x}", String.valueOf(player.getLocation().getBlockX()));
+                quickMsg = quickMsg.replace("{y}", String.valueOf(player.getLocation().getBlockY()));
+                quickMsg = quickMsg.replace("{z}", String.valueOf(player.getLocation().getBlockZ()));
+            }
+
+            e.setMessage(quickMsg);
         }
     }
 
