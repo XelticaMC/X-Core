@@ -9,6 +9,7 @@ import org.bukkit.entity.Bee;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Piglin;
+import org.bukkit.entity.Shulker;
 import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -46,7 +47,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
             sl.setY(sl.getWorld().getHighestBlockYAt(sl.getBlockX(), sl.getBlockZ()));
             sl.getWorld().strikeLightning(sl);
 
-            final var dice = random.nextInt(8);
+            final var dice = random.nextInt(9);
 
             final var MODE_BLAZE = 0;
             final var MODE_PIGLIN = 1;
@@ -55,6 +56,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
             final var MODE_WOLVES = 5;
             final var MODE_LIGHTNING = 6;
             final var MODE_CREEPER = 7;
+            final var MODE_SHULKER = 8;
 
             final var pivot = l.add(new Vector(random.nextInt(10) + 5, 0, random.nextInt(10) + 5));
             pivot.setY(l.getWorld().getHighestBlockYAt(pivot.getBlockX(), pivot.getBlockZ()));
@@ -142,6 +144,14 @@ public class NightmareRandomEvent extends BukkitRunnable {
                     scheduler.runTaskLater(plugin, () -> {
                         creeper.ignite();
                     }, 20 * 60 * 5);
+                }
+                case MODE_SHULKER -> {
+                    for (var i = 0; i < amount; i++) {
+                        final var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
+                        loc.setY(l.getWorld().getHighestBlockYAt(loc.getBlockX(), loc.getBlockZ()) + 1);
+
+                        nightmare.spawnEntity(loc, random.nextInt(100) > 80 ? EntityType.SHULKER : EntityType.ENDERMAN);
+                    }
                 }
             }
         }

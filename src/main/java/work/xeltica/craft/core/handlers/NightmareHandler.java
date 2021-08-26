@@ -1,13 +1,17 @@
 package work.xeltica.craft.core.handlers;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -52,6 +56,36 @@ public class NightmareHandler implements Listener {
         if (random.nextDouble() > superRareItemsDropRatio) {
             final var drops = e.getDrops();
             drops.removeIf(st -> superRareItems.contains(st.getType()));
+        }
+    }
+
+    /**
+     * ナイトメアでの水没ダメージを抑制
+     */
+    @EventHandler
+    public void onEntityTouchWater(EntityDamageEvent e) {
+        if (!isNightmare(e.getEntity().getWorld())) return;
+        if (e.getEntityType() == EntityType.PLAYER) return;
+
+        if (e.getCause() == EntityDamageEvent.DamageCause.DROWNING) {
+            e.setCancelled(true);
+        }
+    }
+
+    /**
+     * クリーパーが爆発ダメージで爆発するように
+     */
+    @EventHandler
+    public void onCreeperPrim(EntityDamageEvent e) {
+        if (!isNightmare(e.getEntity().getWorld())) return;
+        if (e.getEntityType() != EntityType.CREEPER) return;
+        final var creeper = (Creeper)e.getEntity();
+
+        if (List.of(
+                EntityDamageEvent.DamageCause.ENTITY_EXPLOSION,
+                EntityDamageEvent.DamageCause.BLOCK_EXPLOSION
+        ).contains(e.getCause())) {
+            creeper.ignite();
         }
     }
 
