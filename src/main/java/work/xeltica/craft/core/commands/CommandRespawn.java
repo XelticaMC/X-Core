@@ -53,6 +53,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             getRespawnWorld(player.getWorld());
         } catch (Exception e) {
             player.sendMessage(ChatColor.RED + "このワールドでは許可されていません");
+            isWarpingMap.put(player.getUniqueId(), false);
             return;
         }
 
@@ -60,6 +61,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
 
         if (loc == null) {
             player.sendMessage("ベッドが存在しないか、塞がれているためにテレポートできません。");
+            isWarpingMap.put(player.getUniqueId(), false);
             return;
         }
 
@@ -108,8 +110,6 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         // TODO 旅行券のときに位置情報保存しておいてーとかそういう処理に対応したい
         if (w.getName().startsWith("travel_")) return "world";
         return switch (w.getName()) {
-            default -> w.getName();
-
             case "wildarea2_nether" -> "wildarea2";
             case "wildarea2_the_end" -> "wildarea2";
 
@@ -119,6 +119,8 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             case "nightmare" -> "world";
 
             case "pvp" -> throw new Exception();
+
+            default -> w.getName();
         };
     }
 
