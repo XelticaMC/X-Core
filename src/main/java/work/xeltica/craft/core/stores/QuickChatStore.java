@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.stores;
 
+import org.bukkit.entity.Player;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.utils.Config;
 
@@ -24,6 +25,16 @@ public class QuickChatStore {
 
     public String getMessage(String prefix) {
         return config.getConf().getString(prefix);
+    }
+
+    public String chatFormat(String msg, Player player) {
+
+        msg = msg.replace("{world}", WorldStore.getInstance().getWorldDisplayName(player.getWorld()));
+        msg = msg.replace("{x}", String.valueOf(player.getLocation().getBlockX()));
+        msg = msg.replace("{y}", String.valueOf(player.getLocation().getBlockY()));
+        msg = msg.replace("{z}", String.valueOf(player.getLocation().getBlockZ()));
+
+        return msg;
     }
 
     public boolean register(String prefix, String msg) {

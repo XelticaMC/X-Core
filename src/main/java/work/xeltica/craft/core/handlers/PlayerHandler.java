@@ -236,15 +236,10 @@ public class PlayerHandler implements Listener {
         msg = msg.substring(1);
         if (store.getAllPrefix().contains(msg)) {
             var quickMsg = store.getMessage(msg);
-
-            if (msg.equals("loc")) {
-                quickMsg = quickMsg.replace("{world}", WorldStore.getInstance().getWorldDisplayName(player.getWorld()));
-                quickMsg = quickMsg.replace("{x}", String.valueOf(player.getLocation().getBlockX()));
-                quickMsg = quickMsg.replace("{y}", String.valueOf(player.getLocation().getBlockY()));
-                quickMsg = quickMsg.replace("{z}", String.valueOf(player.getLocation().getBlockZ()));
+            if (quickMsg != null) {
+                quickMsg = store.chatFormat(quickMsg, player);
+                e.setMessage(quickMsg);
             }
-
-            e.setMessage(quickMsg);
         }
     }
 
