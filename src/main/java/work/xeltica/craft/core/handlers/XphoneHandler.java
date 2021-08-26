@@ -22,9 +22,11 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
+import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.EbiPowerStore;
+import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.PlayerStore;
@@ -123,6 +125,11 @@ public class XphoneHandler implements Listener {
             } else {
                 player.sendMessage("花火を" + verb + "しました！");
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 2);
+
+                // 購入の場合、ヒント達成する
+                if (summerLoginBonusReceived) {
+                    HintStore.getInstance().achieve(player, Hint.BUY_FIREWORKS);
+                }
             }
             if (!summerLoginBonusReceived) {
                 PlayerStore.getInstance().open(player).set(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER, true);

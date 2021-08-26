@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.handlers;
 
 import io.papermc.paper.event.block.TargetHitEvent;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -8,8 +9,10 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.HintStore;
@@ -54,6 +57,23 @@ public class MiscHandler implements Listener {
         final var player = e.getPlayer();
         player.sendMessage("あたりは夏祭りムード。こんなときに眠っちゃいられない！");
         player.playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT_LAND, SoundCategory.PLAYERS, 1, 1);
+    }
+
+    /**
+     * 花火を打ち上げたときにヒントを達成する
+     */
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent e) {
+        // 右クリでなければ抜ける
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        final var item = e.getItem();
+        // 花火を持っていなければ抜ける
+        if (item == null || item.getType() != Material.FIREWORK_ROCKET) return;
+        // メインワールドでなければ抜ける
+        if (!"main".equals(e.getPlayer().getWorld().getName())) return;
+
+        HintStore.getInstance().achieve(e.getPlayer(), Hint.FIREWORKS);
     }
 
     /**
