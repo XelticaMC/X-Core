@@ -100,6 +100,10 @@ commands:
     description: カウントダウンを表示します。
     usage: /countdown <秒数> [プレイヤー名...]
     permission: otanoshimi.command.countdown
+  qchat:
+    description: QuickChatの設定
+    usage: /qchat <register/unregister/list>
+    permission: otanoshimi.command.qchat
   __core_gui_event__:
     description: "?"
     usage: "?"
@@ -161,4 +165,6 @@ permissions:
   otanoshimi.command.ranking:
     default: op
   otanoshimi.command.countdown:
+    default: op
+  otanoshimi.command.qchat:
     default: op

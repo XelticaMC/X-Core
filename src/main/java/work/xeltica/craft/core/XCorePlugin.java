@@ -27,6 +27,7 @@ import work.xeltica.craft.core.commands.CommandLive;
 import work.xeltica.craft.core.commands.CommandLocalTime;
 import work.xeltica.craft.core.commands.CommandNickName;
 import work.xeltica.craft.core.commands.CommandOmikuji;
+import work.xeltica.craft.core.commands.CommandQuickChat;
 import work.xeltica.craft.core.commands.CommandXCoreGuiEvent;
 import work.xeltica.craft.core.commands.CommandXPhone;
 import work.xeltica.craft.core.commands.CommandXtp;
@@ -229,6 +230,7 @@ public class XCorePlugin extends JavaPlugin {
         addCommand("counter", new CommandCounter());
         addCommand("ranking", new CommandRanking());
         addCommand("countdown", new CommandCountdown());
+        addCommand("qchat", new CommandQuickChat());
     }
 
     private void loadHandlers() {
