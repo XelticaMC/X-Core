@@ -43,6 +43,7 @@ import work.xeltica.craft.core.handlers.LoginBonusHandler;
 import work.xeltica.craft.core.handlers.NbsHandler;
 import work.xeltica.craft.core.handlers.PlayerTntHandler;
 import work.xeltica.craft.core.handlers.MiscHandler;
+import work.xeltica.craft.core.handlers.TicketWildareaBHandler;
 import work.xeltica.craft.core.handlers.XphoneHandler;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.handlers.CounterHandler;
@@ -97,11 +98,8 @@ public class XCorePlugin extends JavaPlugin {
         loadHandlers();
 
         new DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1));
-
         new NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15));
-
         // new FlyingObserver().runTaskTimer(this, 0, 4);
-
         new RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1));
 
         final var tick = 10;
@@ -266,6 +264,8 @@ public class XCorePlugin extends JavaPlugin {
         logger.info("Loaded MiscHandler");
         pm.registerEvents(new LoginBonusHandler(), this);
         logger.info("Loaded LoginBonusHandler");
+        pm.registerEvents(new TicketWildareaBHandler(), this);
+        logger.info("Loaded TicketWildareaBHandler");
         pm.registerEvents(Gui.getInstance(), this);
         logger.info("Loaded Gui");
     }

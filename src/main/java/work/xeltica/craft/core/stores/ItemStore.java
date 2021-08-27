@@ -32,7 +32,7 @@ public class ItemStore {
     public ItemStore() {
         ItemStore.instance = this;
         registerItems();
-        Bukkit.getOnlinePlayers().forEach(p -> givePhoneIfNeeded(p));
+        Bukkit.getOnlinePlayers().forEach(this::givePhoneIfNeeded);
     }
 
     public static ItemStore getInstance() {
