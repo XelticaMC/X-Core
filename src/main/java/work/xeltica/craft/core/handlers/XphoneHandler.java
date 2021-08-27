@@ -53,10 +53,7 @@ public class XphoneHandler implements Listener {
         final var phone = store().getItem(ItemStore.ITEM_NAME_XPHONE);
 
         // 右クリック以外はガード
-        if (!List.of(
-            Action.RIGHT_CLICK_AIR,
-            Action.RIGHT_CLICK_BLOCK
-        ).contains(e.getAction())) return;
+        if (!List.of(Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK).contains(e.getAction())) return;
 
         // 古いX Phone
         if (!store().compareCustomItem(item, phone)) {
