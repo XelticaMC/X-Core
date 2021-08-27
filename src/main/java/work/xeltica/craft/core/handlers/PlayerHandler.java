@@ -43,6 +43,7 @@ import net.luckperms.api.event.node.NodeAddEvent;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.types.InheritanceNode;
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.OmikujiScore;
@@ -169,7 +170,7 @@ public class PlayerHandler implements Listener {
     public void onPlayerPortal(PlayerPortalEvent e) {
         // サンドボックスと旅行先からポータルを開けることを禁止
         final var name = e.getPlayer().getWorld().getName();
-        if (name.startsWith("travel_") || name.equals("sandbox") || name.equals("wildarea")) {
+        if (name.startsWith("travel_") || name.equals("sandbox") || name.equals("wildarea") || name.equals("wildareab")) {
             e.setCancelled(true);
         }
     }
@@ -269,8 +270,10 @@ public class PlayerHandler implements Listener {
                 || worldName.equals("hub")
                 || worldName.equals("hub2")
                 || worldName.equals("sandbox")
+                || worldName.equals("wildareab")
                 ;
             if (isBedDisabledWorld && Tag.BEDS.isTagged(Objects.requireNonNull(e.getClickedBlock()).getType())) {
+                Gui.getInstance().error(p, "ベッドはこの世界では使えない…");
                 e.setCancelled(true);
             }
             return;
@@ -329,11 +332,14 @@ public class PlayerHandler implements Listener {
                 for (var pl : Bukkit.getOnlinePlayers()) {
                     pl.sendMessage(String.format("§6%s§rさんが§a%s§rに行きます！§b行ってらっしゃい！", p.getDisplayName(), type.getDisplayName()));
                 }
-                p.teleportAsync(loc);
-                p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS, 1, 0.5f);
-                p.sendTitle(ChatColor.GOLD + type.getDisplayName(), "良い旅を！", 5, 100, 5);
-                p.sendMessage("ようこそ、§6" + type.getDisplayName() + "§rへ！");
-                p.sendMessage("元の世界に帰る場合は、§a/respawn§rコマンドを使用します。");
+                p.teleportAsync(loc).thenAccept((c) -> {
+                    Bukkit.getScheduler().runTask(XCorePlugin.getInstance(), () -> {
+                        p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS, 1, 0.5f);
+                        p.sendTitle(ChatColor.GOLD + type.getDisplayName(), "良い旅を！", 5, 100, 5);
+                        p.sendMessage("ようこそ、§6" + type.getDisplayName() + "§rへ！");
+                        p.sendMessage("元の世界に帰る場合は、§a/respawn§rコマンドを使用します。");
+                    });
+                });
                 movingPlayer = null;
             });
         }

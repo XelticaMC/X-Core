@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -74,6 +75,7 @@ public class XphoneHandler implements Listener {
 
         openSpringBoard(player);
     }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onOffhandUse(PlayerInteractEvent e) {
         if (e.getHand() != EquipmentSlot.OFF_HAND) return;
@@ -209,6 +211,25 @@ public class XphoneHandler implements Listener {
 
         list.add(new MenuItem("初期スポーン", i -> p.performCommand("respawn"), Material.FIREWORK_ROCKET));
         list.add(new MenuItem("ベッド", i -> p.performCommand("respawn bed"), Material.RED_BED));
+
+        if ("main".equals(currentWorldName)) {
+            list.add(new MenuItem("ワイルドエリアBへ行く", i -> {
+                final var loc = p.getLocation();
+                final var x = loc.getBlockX() * 16;
+                final var z = loc.getBlockZ() * 16;
+                final var y = p.getWorld().getHighestBlockYAt(x, z) + 1;
+                final var wildareab = Bukkit.getWorld("wildareab");
+                if (wildareab == null) {
+                    ui().error(p, "テレポートに失敗しました。ワールドが作成されていないようです。");
+                    return;
+                }
+                p.teleportAsync(new Location(wildareab, x, y, z));
+            }, Material.GRASS_BLOCK));
+        } else if ("wildareab".contains(currentWorldName)) {
+            list.add(new MenuItem("ワイルドエリアBへ行く", i -> {
+                WorldStore.getInstance().teleportToSavedLocation(p, "main");
+            }, Material.CREEPER_HEAD));
+        }
 
         ui().openMenu(p, "テレポート", list);
     }

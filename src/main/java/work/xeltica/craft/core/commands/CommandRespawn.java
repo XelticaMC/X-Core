@@ -119,6 +119,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             case "nightmare" -> "world";
 
             case "pvp" -> throw new Exception();
+            case "wildareab" -> throw new Exception();
 
             default -> w.getName();
         };

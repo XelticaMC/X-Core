@@ -123,7 +123,8 @@ public class WorldStore {
         worldNameMap.put("nightmare2", "ナイトメア");
         worldNameMap.put("pvp", "PvPアリーナ");
         worldNameMap.put("test", "実験ワールド");
-        worldNameMap.put("wildarea2", "ワイルドエリア");
+        worldNameMap.put("wildarea2", "ワイルドエリアA");
+        worldNameMap.put("wildareab", "ワイルドエリアB");
         worldNameMap.put("wildarea2_nether", "ワイルドネザー");
         worldNameMap.put("wildarea2_the_end", "ワイルドエンド");
         worldNameMap.put("hub2", "ロビー");
@@ -141,19 +142,16 @@ public class WorldStore {
         worldDescMap.put("sandbox2",
             "ここは、§bクリエイティブモード§rで好きなだけ遊べる§cサンドボックスワールド§r。\n" +
             "元の世界の道具や経験値はお預かりしているので、好きなだけあそんでね！" +
-            "§7(あ、でも他の人の建築物を壊したりしないでね)" +
-            "帰るときは、§a/hub §rコマンドを実行してください。"
+            "§7(あ、でも他の人の建築物を壊したりしないでね)"
         );
         worldDescMap.put("nightmare2",
             "ここは怖い敵がうじゃうじゃいる§cナイトメアワールド§r。\n" +
-            "手に入れたアイテムは持ち帰れます。\n" +
-            "帰るときは、§a/hub §rコマンドを実行してください。"
+            "手に入れたアイテムは持ち帰れます。"
         );
         worldDescMap.put("art",
             "ここは、§b地上絵§rに特化した§cアートワールド§r。\n" +
             "元の世界の道具や経験値はお預かりしているので、安心して地上絵を作成・観覧できます！\n" +
-            "§7(他の人の作った地上絵を壊さないようお願いします。)\n" +
-            "帰るときは、§a/hub §rコマンドを実行してください。"
+            "§7(他の人の作った地上絵を壊さないようお願いします。)"
         );
         worldDescMap.put("test",
             "よくここを見つけたな...。ここはデバッグワールド。\n" +
@@ -167,8 +165,13 @@ public class WorldStore {
         );
 
         worldDescMap.put("wildarea2",
-            "ここは、資源が豊富な§cワイルドエリア§r。\n" +
+            "ここは、資源が豊富な§cワイルドエリアA§r。\n" +
             "メインワールドで生活するための資源を回収したり、サバイバル生活をしたり、使い方は無限大。"
+        );
+
+        worldDescMap.put("wildareab",
+                "ここは、資源が豊富な§cワイルドエリアB§r。\n" +
+                "メインワールドで生活するための資源を回収したり、サバイバル生活をしたり、使い方は無限大。"
         );
     }
 

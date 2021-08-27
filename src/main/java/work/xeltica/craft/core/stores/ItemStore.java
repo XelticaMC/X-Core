@@ -27,6 +27,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
  */
 public class ItemStore {
     public static final String ITEM_NAME_XPHONE = "xphone";
+    public static final String ITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT = "ticket_wildareab_ocean_monument";
 
     public ItemStore() {
         ItemStore.instance = this;
@@ -132,6 +133,7 @@ public class ItemStore {
 
     private void registerItems() {
         customItems.put(ITEM_NAME_XPHONE, createCustomItem("X Phone SE", "XelticaMCの独自機能にアクセスできるスマホ。"));
+        customItems.put(ITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT, createCustomItem("海底神殿行きワイルドエリアB旅行券", "メイン ✈ 海底神殿"));
     }
 
     private final Map<String, ItemStack> customItems = new HashMap<>();

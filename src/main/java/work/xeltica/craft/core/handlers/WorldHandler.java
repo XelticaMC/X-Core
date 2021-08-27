@@ -105,6 +105,7 @@ public class WorldHandler implements Listener {
             case "wildarea2" -> Hint.GOTO_WILDAREA;
             case "wildarea2_nether" -> Hint.GOTO_WILDNETHER;
             case "wildarea2_the_end" -> Hint.GOTO_WILDEND;
+            case "wildareab" -> Hint.GOTO_WILDAREAB;
             case "sandbox2" -> Hint.GOTO_SANDBOX;
             case "art" -> Hint.GOTO_ART;
             case "nightmare2" -> Hint.GOTO_NIGHTMARE;
