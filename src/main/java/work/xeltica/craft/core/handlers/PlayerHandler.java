@@ -248,9 +248,12 @@ public class PlayerHandler implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerRespawnEvent e) {
         final var p = e.getPlayer();
-        if (p.getWorld().getName().startsWith("travel_")) {
-            final var world = Bukkit.getWorld("world");
-            p.teleportAsync(Objects.requireNonNull(world).getSpawnLocation());
+        if (p.getWorld().getName().startsWith("wildareab")) {
+            var respawnLocation = p.getBedSpawnLocation();
+            if (respawnLocation == null) {
+                respawnLocation = Bukkit.getWorld("main").getSpawnLocation();
+            }
+            e.setRespawnLocation(respawnLocation);
         }
     }
 
