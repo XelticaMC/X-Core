@@ -141,6 +141,7 @@ public class XphoneHandler implements Listener {
         final var appCPublic = new MenuItem("パブリック保護", i -> player.performCommand("cpublic"), Material.TRIPWIRE_HOOK, null);
         final var appCRemove = new MenuItem("保護削除", i -> player.performCommand("cremove"), Material.TRIPWIRE_HOOK, null);
         final var appStore = new MenuItem("エビパワーストア", i -> player.performCommand("epshop"), Material.HEART_OF_THE_SEA, null);
+        // TODO: 処罰システムを改良したら実装する
         final var appPunishment = new MenuItem("処罰", i -> player.performCommand("report"), Material.BARRIER, null);
         final var appHint = new MenuItem("ヒント", i -> player.performCommand("hint"), Material.LIGHT, null);
         final var bedrockDisclaimer = new MenuItem("統合版プレイヤーのあなたへ", i -> BedrockDisclaimerUtil.showDisclaimer(player), Material.BEDROCK, null);
@@ -229,9 +230,10 @@ public class XphoneHandler implements Listener {
         final var store = QuickChatStore.getInstance();
         final var list = new ArrayList<MenuItem>();
 
-        for (String chat: store.getAllPrefix()) {
+        for (String chat : store.getAllPrefix()) {
             final var msg = store.chatFormat(store.getMessage(chat), player);
-            list.add(new MenuItem(chat+": "+msg, i -> player.chat(msg), Material.PAPER));
+            list.add(new MenuItem(String.format("%s §7(.%s)", msg, chat), i -> player.chat(msg), Material.PAPER));
+            HintStore.getInstance().achieve(player, Hint.QUICKCHAT_APP);
         }
 
         ui().openMenu(player, "QuickChat", list);

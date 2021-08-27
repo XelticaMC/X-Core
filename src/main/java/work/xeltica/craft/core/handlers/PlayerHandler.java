@@ -227,8 +227,8 @@ public class PlayerHandler implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerChat(AsyncPlayerChatEvent e) {
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerQuickChat(AsyncPlayerChatEvent e) {
         var msg = e.getMessage();
         final var store = QuickChatStore.getInstance();
         final var player = e.getPlayer();
@@ -239,6 +239,7 @@ public class PlayerHandler implements Listener {
             if (quickMsg != null) {
                 quickMsg = store.chatFormat(quickMsg, player);
                 e.setMessage(quickMsg);
+                HintStore.getInstance().achieve(player, Hint.QUICKCHAT);
             }
         }
     }
