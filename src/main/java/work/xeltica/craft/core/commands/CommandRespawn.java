@@ -68,7 +68,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         new BukkitRunnable() {
             @Override
             public void run() {
-                player.teleport(loc, TeleportCause.PLUGIN);
+                player.teleportAsync(loc, TeleportCause.PLUGIN);
                 isWarpingMap.put(player.getUniqueId(), false);
             }
         }.runTaskLater(XCorePlugin.getInstance(), 20 * 5);
@@ -95,7 +95,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         new BukkitRunnable() {
             @Override
             public void run() {
-                player.teleport(respawn, TeleportCause.PLUGIN);
+                player.teleportAsync(respawn, TeleportCause.PLUGIN);
                 isWarpingMap.put(player.getUniqueId(), false);
             }
         }.runTaskLater(XCorePlugin.getInstance(), 20 * 5);

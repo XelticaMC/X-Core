@@ -103,7 +103,7 @@ public class WorldStore {
             player.sendMessage("§bテレポートに失敗しました。ワールドが存在しないようです。");
             return;
         }
-        player.teleport(world.getSpawnLocation());
+        player.teleportAsync(world.getSpawnLocation());
     }
 
     public void teleportToSavedLocation(Player player, String worldName) {
@@ -113,7 +113,7 @@ public class WorldStore {
             teleport(player, worldName);
             return;
         }
-        player.teleport(loc);
+        player.teleportAsync(loc);
     }
 
     private void loadWorldName() {

@@ -329,7 +329,7 @@ public class PlayerHandler implements Listener {
                 for (var pl : Bukkit.getOnlinePlayers()) {
                     pl.sendMessage(String.format("§6%s§rさんが§a%s§rに行きます！§b行ってらっしゃい！", p.getDisplayName(), type.getDisplayName()));
                 }
-                p.teleport(loc);
+                p.teleportAsync(loc);
                 p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS, 1, 0.5f);
                 p.sendTitle(ChatColor.GOLD + type.getDisplayName(), "良い旅を！", 5, 100, 5);
                 p.sendMessage("ようこそ、§6" + type.getDisplayName() + "§rへ！");

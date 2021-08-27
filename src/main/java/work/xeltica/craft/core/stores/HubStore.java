@@ -68,7 +68,7 @@ public class HubStore {
 
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
             if (hub.getLocation() != null) {
-                player.teleport(hub.getSpigotLocation(), TeleportCause.PLUGIN);
+                player.teleportAsync(hub.getSpigotLocation(), TeleportCause.PLUGIN);
             } else {
                 WorldStore.getInstance().teleport(player, hub.getWorldName());
             }

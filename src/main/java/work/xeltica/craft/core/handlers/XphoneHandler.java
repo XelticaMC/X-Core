@@ -222,7 +222,7 @@ public class XphoneHandler implements Listener {
             player.sendMessage("5秒後にテレポートします…。");
             final var loc = target.getLocation();
             target.sendMessage(String.format("%sが5秒後にあなたの現在位置にテレポートします。", player.getName()));
-            Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> player.teleport(loc), 20 * 5);
+            Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> player.teleportAsync(loc), 20 * 5);
         });
     }
 

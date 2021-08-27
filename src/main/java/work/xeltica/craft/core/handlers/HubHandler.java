@@ -40,7 +40,7 @@ public class HubHandler implements Listener {
             e.setCancelled(true);
             if (e.getCause() == DamageCause.VOID) {
                 final var loc = player.getWorld().getSpawnLocation();
-                player.teleport(loc, TeleportCause.PLUGIN);
+                player.teleportAsync(loc, TeleportCause.PLUGIN);
             }
         }
     }
