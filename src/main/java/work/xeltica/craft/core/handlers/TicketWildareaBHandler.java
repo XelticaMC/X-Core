@@ -1,11 +1,8 @@
 package work.xeltica.craft.core.handlers;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
 import org.bukkit.StructureType;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -13,7 +10,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.stores.ItemStore;
 
@@ -59,6 +55,13 @@ public class TicketWildareaBHandler implements Listener {
         }
 
         final var loc = wildareab.locateNearestStructure(wildareab.getSpawnLocation(), StructureType.OCEAN_MONUMENT, 200, true);
+        if (loc == null) {
+            Gui.getInstance().error(player, "みつかりませんでした。");
+            return;
+        }
+        loc.setY(64);
+        loc.getBlock().setType(Material.STONE);
+        loc.setY(65);
         player.teleportAsync(loc);
     }
 }
