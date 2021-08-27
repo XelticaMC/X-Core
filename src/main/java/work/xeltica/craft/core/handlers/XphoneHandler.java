@@ -232,8 +232,10 @@ public class XphoneHandler implements Listener {
 
         for (String chat : store.getAllPrefix()) {
             final var msg = store.chatFormat(store.getMessage(chat), player);
-            list.add(new MenuItem(String.format("%s §7(.%s)", msg, chat), i -> player.chat(msg), Material.PAPER));
-            HintStore.getInstance().achieve(player, Hint.QUICKCHAT_APP);
+            list.add(new MenuItem(String.format("%s §7(.%s)", msg, chat), i -> {
+                player.chat(msg);
+                HintStore.getInstance().achieve(player, Hint.QUICKCHAT_APP);
+            }, Material.PAPER));
         }
 
         ui().openMenu(player, "QuickChat", list);
