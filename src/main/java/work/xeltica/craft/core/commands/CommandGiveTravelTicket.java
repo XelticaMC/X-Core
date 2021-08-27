@@ -29,10 +29,10 @@ public class CommandGiveTravelTicket extends CommandPlayerOnlyBase {
             return true;
         }
         try {
-        final var typeString = args.length >= 2 ? args[1] : null;
-        final var type = typeString == null ? TicketType.WILDAREA : TicketType.valueOf(typeString);
-        final var amount = args.length >= 3 ? Integer.parseInt(args[2]) : 1;
-        p.getInventory().addItem(TravelTicketUtil.GenerateTravelTicket(amount, type));
+            final var typeString = args.length >= 2 ? args[1] : null;
+            final var type = typeString == null ? TicketType.WILDAREA : TicketType.valueOf(typeString);
+            final var amount = args.length >= 3 ? Integer.parseInt(args[2]) : 1;
+            p.getInventory().addItem(TravelTicketUtil.GenerateTravelTicket(amount, type));
         } catch (IllegalArgumentException e) {
             player.sendMessage("引数がおかしい");
             return true;

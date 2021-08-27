@@ -214,16 +214,19 @@ public class XphoneHandler implements Listener {
                 final var loc = p.getLocation();
                 final var x = loc.getBlockX() * 16;
                 final var z = loc.getBlockZ() * 16;
-                final var y = p.getWorld().getHighestBlockYAt(x, z) + 1;
-                final var wildareab = Bukkit.getWorld("wildareab");
-                if (wildareab == null) {
-                    ui().error(p, "テレポートに失敗しました。ワールドが作成されていないようです。");
-                    return;
-                }
-                p.teleportAsync(new Location(wildareab, x, y, z));
+                p.sendMessage("ワールドを準備中です…");
+                p.getWorld().getChunkAtAsync(x, z).thenAccept((c) -> {
+                    final var y = p.getWorld().getHighestBlockYAt(x, z) + 1;
+                    final var wildareab = Bukkit.getWorld("wildareab");
+                    if (wildareab == null) {
+                        ui().error(p, "テレポートに失敗しました。ワールドが作成されていないようです。");
+                        return;
+                    }
+                    p.teleportAsync(new Location(wildareab, x, y, z));
+                });
             }, Material.GRASS_BLOCK));
         } else if ("wildareab".contains(currentWorldName)) {
-            list.add(new MenuItem("ワイルドエリアBへ行く", i -> {
+            list.add(new MenuItem("メインワールドに帰る", i -> {
                 WorldStore.getInstance().teleportToSavedLocation(p, "main");
             }, Material.CREEPER_HEAD));
         }
