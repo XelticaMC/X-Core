@@ -20,6 +20,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
+import work.xeltica.craft.core.utils.DiscordService;
 
 /**
  * 処罰コマンド
@@ -140,6 +141,8 @@ public class CommandReport extends CommandPlayerOnlyBase {
         Bukkit.getServer().sendMessage(
             Component.text(String.format(broadcastTemplate, name, abuses, timeString + command))
         );
+
+        DiscordService.getInstance().reportDiscord(badGuy.getPlayer(), abuses, timeString, command);
 
         final var cmd = time != null ? String.format("temp%s %s %s %s", command, name, time, message) : String.format("%s %s %s", command, name, message);
         moderator.performCommand(cmd);
