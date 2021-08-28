@@ -39,14 +39,6 @@ public class ItemStore {
         return instance;
     }
 
-    /**
-     * 代わりに getItem(ItemStore.ITEM_NAME_XPHONE) を使ってください
-     */
-    @Deprecated(forRemoval = true)
-    public ItemStack getXPhone() {
-        return customItems.get(ITEM_NAME_XPHONE);
-    }
-
     public ItemStack getItem(String key) {
         return customItems.get(key).clone();
     }
