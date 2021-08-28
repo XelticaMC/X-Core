@@ -216,11 +216,15 @@ public class XphoneHandler implements Listener {
                 final var z = loc.getBlockZ() * 16;
                 p.sendMessage("ワールドを準備中です…");
                 p.getWorld().getChunkAtAsync(x, z).thenAccept((c) -> {
-                    final var y = p.getWorld().getHighestBlockYAt(x, z) + 1;
                     final var wildareab = Bukkit.getWorld("wildareab");
                     if (wildareab == null) {
                         ui().error(p, "テレポートに失敗しました。ワールドが作成されていないようです。");
                         return;
+                    }
+                    final var y = wildareab.getHighestBlockYAt(x, z) + 1;
+                    final var land = new Location(wildareab, x, y - 1, z);
+                    if (land.getBlock().getType() == Material.WATER) {
+                        land.getBlock().setType(Material.STONE);
                     }
                     p.teleportAsync(new Location(wildareab, x, y, z));
                 });

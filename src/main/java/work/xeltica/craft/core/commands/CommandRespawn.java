@@ -32,14 +32,14 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             return true;
         }
 
+        isWarpingMap.put(player.getUniqueId(), true);
+
         // 第一引数の内容によってテレポート先を分岐
         if (args.length > 0 && args[0].equalsIgnoreCase("bed")) {
             teleportToBedSpawn(player);
         } else {
             teleportToInitialSpawn(player);
         }
-
-        isWarpingMap.put(player.getUniqueId(), true);
         return true;
     }
 
