@@ -71,6 +71,7 @@ import work.xeltica.craft.core.stores.QuickChatStore;
 import work.xeltica.craft.core.stores.RankingStore;
 import work.xeltica.craft.core.stores.VehicleStore;
 import work.xeltica.craft.core.stores.WorldStore;
+import work.xeltica.craft.core.utils.DiscordService;
 import work.xeltica.craft.core.utils.Ticks;
 import work.xeltica.craft.core.commands.CommandEpShop;
 import work.xeltica.craft.core.stores.BossBarStore;
@@ -96,6 +97,7 @@ public class XCorePlugin extends JavaPlugin {
         loadStores();
         loadCommands();
         loadHandlers();
+        new DiscordService();
 
         new DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1));
         new NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15));
