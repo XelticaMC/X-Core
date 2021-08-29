@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
@@ -16,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
@@ -150,6 +156,7 @@ public class XphoneHandler implements Listener {
         final var appGeyserStatistics = new MenuItem("統計", i -> player.performCommand("geyser advancements"), Material.BEDROCK, null);
         final var appGeyserOffhand = new MenuItem("持ち物をオフハンドに移動", i -> player.performCommand("geyser offhand"), Material.BEDROCK, null);
         final var appQuickChat = new MenuItem("クイックチャット", i -> openQuickChatApp(player), Material.PAPER, null);
+        final var launchFireworkApp = new MenuItem("花火を打ち上げる", i -> openFireworkLaunchApp(player), Material.FIREWORK_ROCKET, null);
 
         final var isBedrock = FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId());
 
@@ -190,6 +197,9 @@ public class XphoneHandler implements Listener {
         }
 
         items.add(appQuickChat);
+        if (player.hasPermission("otanoshimi.app.fireworks")) {
+            items.add(launchFireworkApp);
+        }
 
         ui().openMenu(player, "X Phone OS", items);
     }
@@ -266,6 +276,77 @@ public class XphoneHandler implements Listener {
         ui().openMenu(player, "QuickChat", list);
     }
 
+    private void openFireworkLaunchApp(Player player) {
+        final var list = new ArrayList<MenuItem>();
+
+        for (FireworkType fireworkType: FireworkType.values()) {
+            list.add(new MenuItem(fireworkType.type.name(), i -> chooseFireworkColor(player, fireworkType.type), fireworkType.material));
+        }
+
+        ui().openMenu(player, "Launch Firework", list);
+    }
+
+    private void chooseFireworkColor(Player player, FireworkEffect.Type type) {
+        final var list = new ArrayList<MenuItem>();
+
+        for (FireworkColor fireworkColor: FireworkColor.values()) {
+            list.add(new MenuItem(fireworkColor.name(), i -> spawnFirework(player, type, fireworkColor.color), fireworkColor.material));
+        }
+
+        ui().openMenu(player, "Launch Firework", list);
+    }
+
+    private void spawnFirework(Player player, FireworkEffect.Type type, Color color) {
+        final var firework = player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK);
+        if (firework instanceof Firework) {
+            final var meta = ((Firework) firework).getFireworkMeta();
+            meta.addEffect(FireworkEffect.builder().with(type).withColor(color).build());
+            ((Firework) firework).setFireworkMeta(meta);
+        }
+    }
+
     private ItemStore store() { return ItemStore.getInstance(); }
     private Gui ui() { return Gui.getInstance(); }
+
+    enum FireworkType {
+        SMALL(FireworkEffect.Type.BALL,Material.FIRE_CHARGE),
+        LARGE(FireworkEffect.Type.BALL_LARGE,Material.FIRE_CHARGE),
+        STAR(FireworkEffect.Type.STAR,Material.NETHER_STAR),
+        BURST(FireworkEffect.Type.BURST,Material.TNT),
+        CREEPER(FireworkEffect.Type.CREEPER ,Material.CREEPER_HEAD);
+
+        FireworkType(FireworkEffect.Type type, Material material) {
+            this.type = type;
+            this.material = material;
+        }
+
+        private final FireworkEffect.Type type;
+        private final Material material;
+    }
+
+    enum FireworkColor {
+        ORANGE(Material.ORANGE_WOOL, Color.ORANGE),
+        FUCHSIA(Material.MAGENTA_WOOL, Color.FUCHSIA),
+        LIGHTBLUE(Material.LIGHT_BLUE_WOOL, Color.AQUA),
+        YELLOW(Material.YELLOW_WOOL, Color.YELLOW),
+        LIME(Material.LIME_WOOL, Color.LIME),
+        PINK(Material.PINK_WOOL, Color.fromRGB(0xff5c84)),
+        GRAY(Material.GRAY_WOOL, Color.GRAY),
+        LIGHTGRAY(Material.LIGHT_GRAY_WOOL, Color.fromRGB(0x808080)),
+        CYAN(Material.CYAN_WOOL, Color.fromRGB(0x43fcf3)),
+        PURPLE(Material.PURPLE_WOOL, Color.PURPLE),
+        BLUE(Material.BLUE_WOOL, Color.BLUE),
+        BROWN(Material.BROWN_WOOL, Color.fromRGB(0x734e30)),
+        GREEN(Material.GREEN_WOOL, Color.GREEN),
+        RED(Material.RED_WOOL, Color.RED),
+        BLACK(Material.BLACK_WOOL, Color.BLACK);
+
+        FireworkColor(Material material ,Color color) {
+            this.material = material;
+            this.color = color;
+        }
+
+        private final Material material;
+        private final Color color;
+    }
 }

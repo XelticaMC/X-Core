@@ -168,3 +168,5 @@ permissions:
     default: op
   otanoshimi.command.qchat:
     default: op
+  otanoshimi.app.fireworks:
+    default: false
