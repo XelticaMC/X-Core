@@ -2,6 +2,7 @@ package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -277,30 +278,34 @@ public class XphoneHandler implements Listener {
     }
 
     private void openFireworkLaunchApp(Player player) {
-        final var list = new ArrayList<MenuItem>();
+        final var list = Stream.of(FireworkType.values())
+            .map(f -> new MenuItem(f.name, i -> chooseFireworkColor(player, f.type), f.material))
+            .toList();
 
-        for (FireworkType fireworkType: FireworkType.values()) {
-            list.add(new MenuItem(fireworkType.name, i -> chooseFireworkColor(player, fireworkType.type), fireworkType.material));
-        }
-
-        ui().openMenu(player, "Launch Firework", list);
+        ui().openMenu(player, "花火の形状を選んでください", list);
     }
 
     private void chooseFireworkColor(Player player, FireworkEffect.Type type) {
-        final var list = new ArrayList<MenuItem>();
+        final var list = Stream.of(FireworkColor.values())
+            .map(f -> new MenuItem(f.name, i -> chooseFireworkPower(player, type, f.color), f.material))
+            .toList();
 
-        for (FireworkColor fireworkColor: FireworkColor.values()) {
-            list.add(new MenuItem(fireworkColor.name, i -> spawnFirework(player, type, fireworkColor.color), fireworkColor.material));
-        }
-
-        ui().openMenu(player, "Launch Firework", list);
+        ui().openMenu(player, "花火の色を選んでください", list);
     }
 
-    private void spawnFirework(Player player, FireworkEffect.Type type, Color color) {
+    private void chooseFireworkPower(Player player, FireworkEffect.Type type, Color color) {
+        ui().openMenu(player, "花火の飛翔時間を選んでください", List.of(
+            new MenuItem("1", i -> spawnFirework(player, type, color, 1), Material.REDSTONE_TORCH),
+            new MenuItem("2", i -> spawnFirework(player, type, color, 2), Material.REPEATER),
+            new MenuItem("3", i -> spawnFirework(player, type, color, 3), Material.COMPARATOR)
+        ));
+    }
+
+    private void spawnFirework(Player player, FireworkEffect.Type type, Color color, int power) {
         final var entity = player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK);
         if (entity instanceof Firework firework) {
             final var meta = firework.getFireworkMeta();
-            meta.setPower(3);
+            meta.setPower(power);
             meta.addEffect(FireworkEffect.builder().with(type).withColor(color).build());
             firework.setFireworkMeta(meta);
         }
