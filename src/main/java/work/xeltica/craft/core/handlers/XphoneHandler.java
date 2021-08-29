@@ -27,6 +27,7 @@ import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
@@ -41,6 +42,8 @@ import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.QuickChatStore;
 import work.xeltica.craft.core.stores.WorldStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
+
+import javax.annotation.Nonnull;
 
 /**
  * X Phoneに関する機能をまとめています。
@@ -295,13 +298,28 @@ public class XphoneHandler implements Listener {
 
     private void chooseFireworkPower(Player player, FireworkEffect.Type type, Color color) {
         ui().openMenu(player, "花火の飛翔時間を選んでください", List.of(
-            new MenuItem("1", i -> spawnFirework(player, type, color, 1), Material.REDSTONE_TORCH),
-            new MenuItem("2", i -> spawnFirework(player, type, color, 2), Material.REPEATER),
-            new MenuItem("3", i -> spawnFirework(player, type, color, 3), Material.COMPARATOR)
+            new MenuItem("1", i -> chooseFireworkAttributes(player, type, color, 1, null), Material.REDSTONE_TORCH),
+            new MenuItem("2", i -> chooseFireworkAttributes(player, type, color, 2, null), Material.REPEATER),
+            new MenuItem("3", i -> chooseFireworkAttributes(player, type, color, 3, null), Material.COMPARATOR)
         ));
     }
 
-    private void spawnFirework(Player player, FireworkEffect.Type type, Color color, int power) {
+    private void chooseFireworkAttributes(Player player, FireworkEffect.Type type, Color color, int power, @Nullable FireworkAttribute attribute) {
+        final var attr = attribute == null ? new FireworkAttribute() : attribute;
+        ui().openMenu(player, "花火の属性を選んでください", List.of(
+                new MenuItem("点滅エフェクト (現在: " + (attr.flicker ? "オン" : "オフ") + ")", (i) -> {
+                    attr.flicker ^= true;
+                    chooseFireworkAttributes(player, type, color, power, attr);
+                }, ui().getIconOfFlag(attr.flicker)),
+                new MenuItem("軌跡エフェクト (現在: " + (attr.trail ? "オン" : "オフ") + ")", (i) -> {
+                    attr.trail ^= true;
+                    chooseFireworkAttributes(player, type, color, power, attr);
+                }, ui().getIconOfFlag(attr.trail)),
+                new MenuItem("決定", (i) -> spawnFirework(player, type, color, power, attr))
+        ));
+    }
+
+    private void spawnFirework(Player player, FireworkEffect.Type type, Color color, int power, @Nonnull FireworkAttribute attribute) {
         final var entity = player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK);
         if (entity instanceof Firework firework) {
             final var meta = firework.getFireworkMeta();
@@ -358,5 +376,10 @@ public class XphoneHandler implements Listener {
         private final Material material;
         private final Color color;
         private final String name;
+    }
+
+    class FireworkAttribute {
+        private boolean flicker;
+        private boolean trail;
     }
 }

@@ -176,6 +176,15 @@ public class Gui implements Listener {
     }
 
     /**
+     * ブーリアン値に対応するアイコンを取得します
+     * @param flag
+     * @return
+     */
+    public Material getIconOfFlag(boolean flag) {
+        return flag ? Material.LIME_DYE : Material.GRAY_DYE;
+    }
+
+    /**
      * エラーをプレイヤーに表示します。
      * @param p エラーを表示させるプレイヤー
      * @param message エラー内容
