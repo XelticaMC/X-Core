@@ -280,7 +280,7 @@ public class XphoneHandler implements Listener {
         final var list = new ArrayList<MenuItem>();
 
         for (FireworkType fireworkType: FireworkType.values()) {
-            list.add(new MenuItem(fireworkType.type.name(), i -> chooseFireworkColor(player, fireworkType.type), fireworkType.material));
+            list.add(new MenuItem(fireworkType.name, i -> chooseFireworkColor(player, fireworkType.type), fireworkType.material));
         }
 
         ui().openMenu(player, "Launch Firework", list);
@@ -290,7 +290,7 @@ public class XphoneHandler implements Listener {
         final var list = new ArrayList<MenuItem>();
 
         for (FireworkColor fireworkColor: FireworkColor.values()) {
-            list.add(new MenuItem(fireworkColor.name(), i -> spawnFirework(player, type, fireworkColor.color), fireworkColor.material));
+            list.add(new MenuItem(fireworkColor.name, i -> spawnFirework(player, type, fireworkColor.color), fireworkColor.material));
         }
 
         ui().openMenu(player, "Launch Firework", list);
@@ -309,44 +309,48 @@ public class XphoneHandler implements Listener {
     private Gui ui() { return Gui.getInstance(); }
 
     enum FireworkType {
-        SMALL(FireworkEffect.Type.BALL,Material.FIRE_CHARGE),
-        LARGE(FireworkEffect.Type.BALL_LARGE,Material.FIRE_CHARGE),
-        STAR(FireworkEffect.Type.STAR,Material.NETHER_STAR),
-        BURST(FireworkEffect.Type.BURST,Material.TNT),
-        CREEPER(FireworkEffect.Type.CREEPER ,Material.CREEPER_HEAD);
+        SMALL(FireworkEffect.Type.BALL,Material.FIRE_CHARGE, "小さい花火"),
+        LARGE(FireworkEffect.Type.BALL_LARGE,Material.FIRE_CHARGE, "大きい花火"),
+        STAR(FireworkEffect.Type.STAR,Material.NETHER_STAR, "星型"),
+        BURST(FireworkEffect.Type.BURST,Material.TNT, "爆発型"),
+        CREEPER(FireworkEffect.Type.CREEPER ,Material.CREEPER_HEAD, "クリーパー型");
 
-        FireworkType(FireworkEffect.Type type, Material material) {
+        FireworkType(FireworkEffect.Type type, Material material, String name) {
             this.type = type;
             this.material = material;
+            this.name = name;
         }
 
         private final FireworkEffect.Type type;
         private final Material material;
+        private final String name;
     }
 
     enum FireworkColor {
-        ORANGE(Material.ORANGE_WOOL, Color.ORANGE),
-        FUCHSIA(Material.MAGENTA_WOOL, Color.FUCHSIA),
-        LIGHTBLUE(Material.LIGHT_BLUE_WOOL, Color.AQUA),
-        YELLOW(Material.YELLOW_WOOL, Color.YELLOW),
-        LIME(Material.LIME_WOOL, Color.LIME),
-        PINK(Material.PINK_WOOL, Color.fromRGB(0xff5c84)),
-        GRAY(Material.GRAY_WOOL, Color.GRAY),
-        LIGHTGRAY(Material.LIGHT_GRAY_WOOL, Color.fromRGB(0x808080)),
-        CYAN(Material.CYAN_WOOL, Color.fromRGB(0x43fcf3)),
-        PURPLE(Material.PURPLE_WOOL, Color.PURPLE),
-        BLUE(Material.BLUE_WOOL, Color.BLUE),
-        BROWN(Material.BROWN_WOOL, Color.fromRGB(0x734e30)),
-        GREEN(Material.GREEN_WOOL, Color.GREEN),
-        RED(Material.RED_WOOL, Color.RED),
-        BLACK(Material.BLACK_WOOL, Color.BLACK);
+        ORANGE(Material.ORANGE_WOOL, Color.ORANGE, "オレンジ"),
+        FUCHSIA(Material.MAGENTA_WOOL, Color.FUCHSIA, "マゼンタ"),
+        LIGHTBLUE(Material.LIGHT_BLUE_WOOL, Color.AQUA, "ライトブルー"),
+        YELLOW(Material.YELLOW_WOOL, Color.YELLOW, "イエロー"),
+        LIME(Material.LIME_WOOL, Color.LIME, "ライム"),
+        PINK(Material.PINK_WOOL, Color.fromRGB(0xff5c84), "ピンク"),
+        GRAY(Material.GRAY_WOOL, Color.GRAY, "グレー"),
+        LIGHTGRAY(Material.LIGHT_GRAY_WOOL, Color.fromRGB(0x808080), "ライトグレー"),
+        CYAN(Material.CYAN_WOOL, Color.fromRGB(0x43fcf3), "シアン"),
+        PURPLE(Material.PURPLE_WOOL, Color.PURPLE, "パープル"),
+        BLUE(Material.BLUE_WOOL, Color.BLUE, "ブルー"),
+        BROWN(Material.BROWN_WOOL, Color.fromRGB(0x734e30), "ブラウン"),
+        GREEN(Material.GREEN_WOOL, Color.GREEN, "グリーン"),
+        RED(Material.RED_WOOL, Color.RED, "レッド"),
+        BLACK(Material.BLACK_WOOL, Color.BLACK, "ブラック");
 
-        FireworkColor(Material material ,Color color) {
+        FireworkColor(Material material ,Color color, String name) {
             this.material = material;
             this.color = color;
+            this.name = name;
         }
 
         private final Material material;
         private final Color color;
+        private final String name;
     }
 }
