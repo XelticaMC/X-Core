@@ -297,11 +297,12 @@ public class XphoneHandler implements Listener {
     }
 
     private void spawnFirework(Player player, FireworkEffect.Type type, Color color) {
-        final var firework = player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK);
-        if (firework instanceof Firework) {
-            final var meta = ((Firework) firework).getFireworkMeta();
+        final var entity = player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK);
+        if (entity instanceof Firework firework) {
+            final var meta = firework.getFireworkMeta();
+            meta.setPower(3);
             meta.addEffect(FireworkEffect.builder().with(type).withColor(color).build());
-            ((Firework) firework).setFireworkMeta(meta);
+            firework.setFireworkMeta(meta);
         }
     }
 
