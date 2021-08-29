@@ -324,7 +324,14 @@ public class XphoneHandler implements Listener {
         if (entity instanceof Firework firework) {
             final var meta = firework.getFireworkMeta();
             meta.setPower(power);
-            meta.addEffect(FireworkEffect.builder().with(type).withColor(color).build());
+            meta.addEffect(
+                    FireworkEffect.builder()
+                            .with(type)
+                            .withColor(color)
+                            .flicker(attribute.flicker)
+                            .trail(attribute.trail)
+                            .build()
+            );
             firework.setFireworkMeta(meta);
         }
     }
