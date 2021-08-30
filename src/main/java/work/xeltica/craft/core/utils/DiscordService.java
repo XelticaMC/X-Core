@@ -30,7 +30,7 @@ public class DiscordService {
         final var guild = DiscordSRV.getPlugin().getMainGuild();
         final var channel = guild.getGuildChannelById(reportChannelID);
         if (channel instanceof TextChannel textChannel) {
-            textChannel.sendMessage(String.format(reportTemplate, badPlayer.getName(), abuses, time+command)).queue();
+            textChannel.sendMessage(String.format(reportTemplate, badPlayer.getName(), abuses, time + command)).queue();
             final var member = getMember(badPlayer);
             if (member != null) {
                 final var role = guild.getRoleById(lockRoleID);
