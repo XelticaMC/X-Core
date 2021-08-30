@@ -324,6 +324,7 @@ public class XphoneHandler implements Listener {
                         int count = 0;
                         @Override
                         public void run() {
+                            spawnFirework(player, type, color, power, attr);
                             if (count > 4 * 5) {
                                 this.cancel();
                             }
