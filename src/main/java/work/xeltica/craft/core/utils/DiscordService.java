@@ -29,8 +29,8 @@ public class DiscordService {
     public void reportDiscord(Player badPlayer, String abuses, String time, String command) {
         final var guild = DiscordSRV.getPlugin().getMainGuild();
         final var channel = guild.getGuildChannelById(reportChannelID);
-        if (channel instanceof TextChannel) {
-            ((TextChannel) channel).sendMessage(String.format(reportTemplate, badPlayer.getName(), abuses, time+command)).queue();
+        if (channel instanceof TextChannel textChannel) {
+            textChannel.sendMessage(String.format(reportTemplate, badPlayer.getName(), abuses, time+command)).queue();
             final var member = getMember(badPlayer);
             if (member != null) {
                 final var role = guild.getRoleById(lockRoleID);
