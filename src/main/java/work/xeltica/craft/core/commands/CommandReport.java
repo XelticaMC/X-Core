@@ -134,6 +134,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
             message = String.format(punishLogTemplate, abuses);
         } else if (command.equals("mute")) {
             message = String.format(punishLogTemplate, abuses);
+            DiscordService.getInstance().reportDiscord(badGuy.getPlayer(), abuses, timeString, command);
         } else {
             moderator.sendMessage(ChatColor.RED + "無効なコマンド: " + command);
             return;
