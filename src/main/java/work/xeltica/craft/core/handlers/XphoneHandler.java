@@ -302,14 +302,12 @@ public class XphoneHandler implements Listener {
 
     private void chooseFireworkColor2(Player player, FireworkEffect.Type type, Color color) {
         final var list = Stream.of(FireworkColor.values())
-                .map(f -> new MenuItem(f.name, i -> chooseFireworkPower(player, type, f.color, null), f.material))
+                .map(f -> new MenuItem(f.name, i -> chooseFireworkPower(player, type, color, f.color), f.material))
                 .toList();
         final var list2 = new ArrayList<MenuItem>(list);
         list2.add(0, new MenuItem("なし", i -> chooseFireworkPower(player, type, color, null), Material.BARRIER));
 
-
-
-        ui().openMenu(player, "花火のフェード色を選んでください", list);
+        ui().openMenu(player, "花火のフェード色を選んでください", list2);
     }
 
     private void chooseFireworkPower(Player player, FireworkEffect.Type type, Color color, Color color2) {
