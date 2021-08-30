@@ -60,7 +60,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "イベンタースタッフ用のアプリを更新",
+            "ばぐ修正",
     };
 
     private static MetaStore instance;
