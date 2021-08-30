@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -293,38 +294,50 @@ public class XphoneHandler implements Listener {
 
     private void chooseFireworkColor(Player player, FireworkEffect.Type type) {
         final var list = Stream.of(FireworkColor.values())
-            .map(f -> new MenuItem(f.name, i -> chooseFireworkPower(player, type, f.color), f.material))
+            .map(f -> new MenuItem(f.name, i -> chooseFireworkColor2(player, type, f.color), f.material))
             .toList();
 
         ui().openMenu(player, "花火の色を選んでください", list);
     }
 
-    private void chooseFireworkPower(Player player, FireworkEffect.Type type, Color color) {
+    private void chooseFireworkColor2(Player player, FireworkEffect.Type type, Color color) {
+        final var list = Stream.of(FireworkColor.values())
+                .map(f -> new MenuItem(f.name, i -> chooseFireworkPower(player, type, f.color, null), f.material))
+                .toList();
+        final var list2 = new ArrayList<MenuItem>(list);
+        list2.add(0, new MenuItem("なし", i -> chooseFireworkPower(player, type, color, null), Material.BARRIER));
+
+
+
+        ui().openMenu(player, "花火のフェード色を選んでください", list);
+    }
+
+    private void chooseFireworkPower(Player player, FireworkEffect.Type type, Color color, Color color2) {
         ui().openMenu(player, "花火の飛翔時間を選んでください", List.of(
-            new MenuItem("1", i -> chooseFireworkAttributes(player, type, color, 1, null), Material.REDSTONE_TORCH),
-            new MenuItem("2", i -> chooseFireworkAttributes(player, type, color, 2, null), Material.REPEATER),
-            new MenuItem("3", i -> chooseFireworkAttributes(player, type, color, 3, null), Material.COMPARATOR)
+            new MenuItem("1", i -> chooseFireworkAttributes(player, type, color, color2, 1, null), Material.REDSTONE_TORCH),
+            new MenuItem("2", i -> chooseFireworkAttributes(player, type, color, color2, 2, null), Material.REPEATER),
+            new MenuItem("3", i -> chooseFireworkAttributes(player, type, color, color2, 3, null), Material.COMPARATOR)
         ));
     }
 
-    private void chooseFireworkAttributes(Player player, FireworkEffect.Type type, Color color, int power, @Nullable FireworkAttribute attribute) {
+    private void chooseFireworkAttributes(Player player, FireworkEffect.Type type, Color color, Color color2, int power, @Nullable FireworkAttribute attribute) {
         final var attr = attribute == null ? new FireworkAttribute() : attribute;
         ui().openMenu(player, "花火の属性を選んでください", List.of(
                 new MenuItem("点滅エフェクト (現在: " + (attr.flicker ? "オン" : "オフ") + ")", (i) -> {
                     attr.flicker ^= true;
-                    chooseFireworkAttributes(player, type, color, power, attr);
+                    chooseFireworkAttributes(player, type, color, color2, power, attr);
                 }, ui().getIconOfFlag(attr.flicker), null, attr.flicker),
                 new MenuItem("軌跡エフェクト (現在: " + (attr.trail ? "オン" : "オフ") + ")", (i) -> {
                     attr.trail ^= true;
-                    chooseFireworkAttributes(player, type, color, power, attr);
+                    chooseFireworkAttributes(player, type, color, color2, power, attr);
                 }, ui().getIconOfFlag(attr.trail), null, attr.trail),
-                new MenuItem("射出", (i) -> spawnFirework(player, type, color, power, attr), Material.DISPENSER),
+                new MenuItem("射出", (i) -> spawnFirework(player, type, color, color2, power, attr), Material.DISPENSER),
                 new MenuItem("連射", (i) -> {
                     final var runnable = new BukkitRunnable() {
                         int count = 0;
                         @Override
                         public void run() {
-                            spawnFirework(player, type, color, power, attr);
+                            spawnFirework(player, type, color, color2, power, attr);
                             if (count > 4 * 5) {
                                 this.cancel();
                             }
@@ -333,45 +346,43 @@ public class XphoneHandler implements Listener {
                     };
                     runnable.runTaskTimer(XCorePlugin.getInstance(), 0, 4);
                 }, Material.COMPARATOR),
-                new MenuItem("ダウンロード", (i) -> downloadFirework(player, type, color, power, attr), Material.FIREWORK_ROCKET)
+                new MenuItem("ダウンロード", (i) -> downloadFirework(player, type, color, color2, power, attr), Material.FIREWORK_ROCKET)
         ));
     }
 
-    private void spawnFirework(Player player, FireworkEffect.Type type, Color color, int power, @Nonnull FireworkAttribute attribute) {
+    private void spawnFirework(Player player, FireworkEffect.Type type, Color color, Color color2, int power, @Nonnull FireworkAttribute attribute) {
         final var entity = player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK);
         if (entity instanceof Firework firework) {
             final var meta = firework.getFireworkMeta();
             meta.setPower(power);
-            meta.addEffect(
-                    FireworkEffect.builder()
-                            .with(type)
-                            .withColor(color)
-                            .flicker(attribute.flicker)
-                            .trail(attribute.trail)
-                            .build()
-            );
+            meta.addEffect(getEffect(type, color, color2, attribute));
             firework.setFireworkMeta(meta);
         }
     }
 
-    private void downloadFirework(Player player, FireworkEffect.Type type, Color color, int power, @Nonnull FireworkAttribute attribute) {
+    private void downloadFirework(Player player, FireworkEffect.Type type, Color color, Color color2, int power, @Nonnull FireworkAttribute attribute) {
         final var stack = new ItemStack(Material.FIREWORK_ROCKET);
         stack.editMeta(meta -> {
             if (meta instanceof FireworkMeta firework) {
                 firework.setPower(power);
-                firework.addEffect(
-                        FireworkEffect.builder()
-                                .with(type)
-                                .withColor(color)
-                                .flicker(attribute.flicker)
-                                .trail(attribute.trail)
-                                .build()
-                );
+                firework.addEffect(getEffect(type, color, color2, attribute));
             }
         });
         player.getInventory().addItem(stack);
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);
         player.sendMessage("花火をダウンロードしました");
+    }
+
+    private FireworkEffect getEffect(FireworkEffect.Type type, Color color, Color color2, @Nonnull FireworkAttribute attribute) {
+        final var effect = FireworkEffect.builder()
+                .with(type)
+                .withColor(color)
+                .flicker(attribute.flicker)
+                .trail(attribute.trail);
+        if (color2 != null) {
+            effect.withFade(color2);
+        }
+        return effect.build();
     }
 
     private ItemStore store() { return ItemStore.getInstance(); }
