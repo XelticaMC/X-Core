@@ -129,6 +129,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
             return;
         } else if (command.equals("ban")) {
             message = String.format(punishLogTemplate, abuses);
+            DiscordService.getInstance().reportDiscord(badGuy.getPlayer(), abuses, timeString, command);
         } else if (command.equals("kick")) {
             message = String.format(punishLogTemplate, abuses);
         } else if (command.equals("mute")) {
@@ -141,8 +142,6 @@ public class CommandReport extends CommandPlayerOnlyBase {
         Bukkit.getServer().sendMessage(
             Component.text(String.format(broadcastTemplate, name, abuses, timeString + command))
         );
-
-        DiscordService.getInstance().reportDiscord(badGuy.getPlayer(), abuses, timeString, command);
 
         final var cmd = time != null ? String.format("temp%s %s %s %s", command, name, time, message) : String.format("%s %s %s", command, name, message);
         moderator.performCommand(cmd);
