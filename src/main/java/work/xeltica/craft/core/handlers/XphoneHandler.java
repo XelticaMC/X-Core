@@ -22,7 +22,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkEffectMeta;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.jetbrains.annotations.NotNull;
 
@@ -310,12 +313,26 @@ public class XphoneHandler implements Listener {
                 new MenuItem("点滅エフェクト (現在: " + (attr.flicker ? "オン" : "オフ") + ")", (i) -> {
                     attr.flicker ^= true;
                     chooseFireworkAttributes(player, type, color, power, attr);
-                }, ui().getIconOfFlag(attr.flicker)),
+                }, ui().getIconOfFlag(attr.flicker), null, attr.flicker),
                 new MenuItem("軌跡エフェクト (現在: " + (attr.trail ? "オン" : "オフ") + ")", (i) -> {
                     attr.trail ^= true;
                     chooseFireworkAttributes(player, type, color, power, attr);
-                }, ui().getIconOfFlag(attr.trail)),
-                new MenuItem("決定", (i) -> spawnFirework(player, type, color, power, attr))
+                }, ui().getIconOfFlag(attr.trail), null, attr.trail),
+                new MenuItem("射出", (i) -> spawnFirework(player, type, color, power, attr), Material.DISPENSER),
+                new MenuItem("連射", (i) -> {
+                    final var runnable = new BukkitRunnable() {
+                        int count = 0;
+                        @Override
+                        public void run() {
+                            if (count > 4 * 5) {
+                                this.cancel();
+                            }
+                            count++;
+                        }
+                    };
+                    runnable.runTaskTimer(XCorePlugin.getInstance(), 0, 4);
+                }, Material.COMPARATOR),
+                new MenuItem("ダウンロード", (i) -> downloadFirework(player, type, color, power, attr), Material.FIREWORK_ROCKET)
         ));
     }
 
@@ -334,6 +351,26 @@ public class XphoneHandler implements Listener {
             );
             firework.setFireworkMeta(meta);
         }
+    }
+
+    private void downloadFirework(Player player, FireworkEffect.Type type, Color color, int power, @Nonnull FireworkAttribute attribute) {
+        final var stack = new ItemStack(Material.FIREWORK_ROCKET);
+        stack.editMeta(meta -> {
+            if (meta instanceof FireworkMeta firework) {
+                firework.setPower(power);
+                firework.addEffect(
+                        FireworkEffect.builder()
+                                .with(type)
+                                .withColor(color)
+                                .flicker(attribute.flicker)
+                                .trail(attribute.trail)
+                                .build()
+                );
+            }
+        });
+        player.getInventory().addItem(stack);
+        player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);
+        player.sendMessage("花火をダウンロードしました");
     }
 
     private ItemStore store() { return ItemStore.getInstance(); }
