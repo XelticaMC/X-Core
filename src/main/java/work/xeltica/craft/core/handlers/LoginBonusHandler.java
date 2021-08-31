@@ -58,15 +58,6 @@ public class LoginBonusHandler implements Listener {
                 pstore.open(p).set(PlayerDataKey.RECEIVED_LOGIN_BONUS, true);
             }, Ticks.from(2));
         }
-
-        // 夏祭り限定
-        if (!record.getBoolean(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER)) {
-            Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-                if (!p.isOnline()) return;
-                p.sendMessage("§c§l夏祭り限定ログインボーナス達成！§e花火§fを手に入れた！");
-                p.sendMessage("X Phoneで無料で受け取ることができます。");
-            }, Ticks.from(5));
-        }
     }
 
     private static final int LOGIN_BONUS_EBIPOWER = 250;

@@ -141,9 +141,9 @@ public class XphoneHandler implements Listener {
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 2);
 
                 // 購入の場合、ヒント達成する
-                if (summerLoginBonusReceived) {
-                    HintStore.getInstance().achieve(player, Hint.BUY_FIREWORKS);
-                }
+                // if (summerLoginBonusReceived) {
+                //    HintStore.getInstance().achieve(player, Hint.BUY_FIREWORKS);
+                // }
             }
             if (!summerLoginBonusReceived) {
                 PlayerStore.getInstance().open(player).set(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER, true);
@@ -176,10 +176,6 @@ public class XphoneHandler implements Listener {
             items.add(appCRemove);
         }
 
-        if ("main".equals(worldName)) {
-            items.add(appFirework);
-        }
-
         if (isBedrock) {
             items.add(appGeyserAdvancements);
             items.add(appGeyserStatistics);
@@ -205,9 +201,6 @@ public class XphoneHandler implements Listener {
         }
 
         items.add(appQuickChat);
-        if (player.hasPermission("otanoshimi.app.fireworks")) {
-            items.add(launchFireworkApp);
-        }
 
         ui().openMenu(player, "X Phone OS", items);
     }
@@ -304,7 +297,7 @@ public class XphoneHandler implements Listener {
         final var list = Stream.of(FireworkColor.values())
                 .map(f -> new MenuItem(f.name, i -> chooseFireworkPower(player, type, color, f.color), f.material))
                 .toList();
-        final var list2 = new ArrayList<MenuItem>(list);
+        final var list2 = new ArrayList<>(list);
         list2.add(0, new MenuItem("なし", i -> chooseFireworkPower(player, type, color, null), Material.BARRIER));
 
         ui().openMenu(player, "花火のフェード色を選んでください", list2);

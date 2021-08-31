@@ -27,56 +27,6 @@ import java.util.Objects;
  */
 public class MiscHandler implements Listener {
     /**
-     * Hint.TAIKO を解除するためのハンドラー
-     */
-    @EventHandler
-    public void onTargetHit(TargetHitEvent e) {
-        final var block = e.getHitBlock();
-        if (block == null) return;
-        final var loc = block.getLocation();
-        final var x = loc.getBlockX();
-        final var y = loc.getBlockY();
-        final var z = loc.getBlockZ();
-        // NOTE: イベント終わったら破棄するコードなので、的の位置をハードコーディングしています
-        if (x == -35 && y == 74 && z == -369 && "main".equals(loc.getWorld().getName())) {
-            if (e.getEntity().getShooter() instanceof Player p) {
-                HintStore.getInstance().achieve(p, Hint.TAIKO);
-            }
-        }
-    }
-
-    /**
-     * お祭り期間中寝かせない
-     */
-    @EventHandler
-    public void onSleep(PlayerBedEnterEvent e) {
-        if (e.getBedEnterResult() != PlayerBedEnterEvent.BedEnterResult.OK) return;
-        if (!"main".equals(e.getPlayer().getWorld().getName())) return;
-
-        e.setUseBed(Event.Result.DENY);
-        final var player = e.getPlayer();
-        player.sendMessage("あたりは夏祭りムード。こんなときに眠っちゃいられない！");
-        player.playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_HURT_LAND, SoundCategory.PLAYERS, 1, 1);
-    }
-
-    /**
-     * 花火を打ち上げたときにヒントを達成する
-     */
-    @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent e) {
-        // 右クリでなければ抜ける
-        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-
-        final var item = e.getItem();
-        // 花火を持っていなければ抜ける
-        if (item == null || item.getType() != Material.FIREWORK_ROCKET) return;
-        // メインワールドでなければ抜ける
-        if (!"main".equals(e.getPlayer().getWorld().getName())) return;
-
-        HintStore.getInstance().achieve(e.getPlayer(), Hint.FIREWORKS);
-    }
-
-    /**
      * カスタムアイテムのクラフト材料としての利用を禁止する
      */
     @EventHandler
