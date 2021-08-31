@@ -60,7 +60,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "処罰者の通知をDiscordに出力するように",
+            "夏祭りイベント関連機能の廃止",
     };
 
     private static MetaStore instance;
