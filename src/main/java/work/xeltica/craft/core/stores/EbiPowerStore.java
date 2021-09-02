@@ -8,12 +8,10 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 
 import lombok.Getter;
-import org.bukkit.potion.PotionEffect;
 import work.xeltica.craft.core.models.EbiPowerEffect;
 import work.xeltica.craft.core.models.EbiPowerItem;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.utils.Config;
-import work.xeltica.craft.core.utils.Ticks;
 
 /**
  * エビパワーショップの販売品管理などを行います。
@@ -91,8 +89,8 @@ public class EbiPowerStore {
     }
 
     public Result tryBuyItem(Player p, EbiPowerEffect item) {
-        final var isFree = item.getCost() == 0;
-        if (!isFree && !tryTake(p, item.getCost())) {
+        final var isFree = item.cost() == 0;
+        if (!isFree && !tryTake(p, item.cost())) {
             return Result.NO_ENOUGH_POWER;
         }
 

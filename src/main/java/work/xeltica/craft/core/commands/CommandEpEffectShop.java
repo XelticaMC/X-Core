@@ -15,8 +15,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.StringUtil;
@@ -26,7 +24,6 @@ import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.models.EbiPowerEffect;
-import work.xeltica.craft.core.models.EbiPowerItem;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
@@ -95,9 +92,9 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
                 case SUCCESS -> {
                     player.sendMessage(String.format(
                             "ポーション効果「&b%s&r」&aレベル%d&rを&6%d秒間&r付与しました。",
-                            toJapanese(item.getEffectType()),
-                            item.getLevel(),
-                            item.getTime()
+                            toJapanese(item.effectType()),
+                            item.level(),
+                            item.time()
                     ));
                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 1);
                     HintStore.getInstance().achieve(player, Hint.EPSHOP);
@@ -131,10 +128,10 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
                     });
                     final var displayName = String.format(
                             "%s レベル%d × %d (%dEP)",
-                            toJapanese(m.getEffectType()),
-                            m.getLevel(),
-                            m.getTime(),
-                            m.getCost()
+                            toJapanese(m.effectType()),
+                            m.level(),
+                            m.time(),
+                            m.cost()
                     );
 
                     return new MenuItem(displayName, (a) -> {

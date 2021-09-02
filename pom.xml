@@ -133,6 +133,27 @@
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
+        <plugin>
+          <groupId>org.jetbrains.kotlin</groupId>
+          <artifactId>kotlin-maven-plugin</artifactId>
+          <version>${kotlin.version}</version>
+          <executions>
+            <execution>
+              <id>compile</id>
+              <phase>compile</phase>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>test-compile</id>
+              <phase>test-compile</phase>
+              <goals>
+                <goal>test-compile</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
@@ -146,6 +167,30 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.0</version>
+          <executions>
+              <execution>
+                  <id>default-compile</id>
+                  <phase>none</phase>
+              </execution>
+              <execution>
+                  <id>default-testCompile</id>
+                  <phase>none</phase>
+              </execution>
+              <execution>
+                  <id>compile</id>
+                  <phase>compile</phase>
+                  <goals>
+                      <goal>compile</goal>
+                  </goals>
+              </execution>
+              <execution>
+                  <id>testCompile</id>
+                  <phase>test-compile</phase>
+                  <goals>
+                      <goal>testCompile</goal>
+                  </goals>
+              </execution>
+          </executions>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -174,37 +219,6 @@
         <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.jetbrains.kotlin</groupId>
-          <artifactId>kotlin-maven-plugin</artifactId>
-          <version>${kotlin.version}</version>
-          <executions>
-            <execution>
-              <id>compile</id>
-              <phase>compile</phase>
-              <goals>
-                <goal>compile</goal>
-              </goals>
-              <configuration>
-                <sourceDirs>
-                  <source>target/generated-sources/annotations</source>
-                  <source>target/generated-test-sources/test-annotations</source>
-                  <source>src/main/java</source>
-                </sourceDirs>
-              </configuration>
-            </execution>
-            <execution>
-              <id>test-compile</id>
-              <phase>test-compile</phase>
-              <goals>
-                <goal>test-compile</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <jvmTarget>1.8</jvmTarget>
-          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
