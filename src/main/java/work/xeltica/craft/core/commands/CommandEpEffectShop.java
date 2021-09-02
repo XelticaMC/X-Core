@@ -98,7 +98,7 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
                             item.time()
                     ));
                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 1);
-                    HintStore.getInstance().achieve(player, Hint.EPSHOP);
+                    HintStore.getInstance().achieve(player, Hint.EPEFFECTSHOP);
                 }
                 default -> {
                     player.sendMessage("不明なエラーが発生しました。");
