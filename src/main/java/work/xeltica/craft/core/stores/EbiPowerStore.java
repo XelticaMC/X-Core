@@ -20,6 +20,7 @@ import work.xeltica.craft.core.utils.Config;
 public class EbiPowerStore {
     public EbiPowerStore() {
         ConfigurationSerialization.registerClass(EbiPowerItem.class, "EbiPowerItem");
+        ConfigurationSerialization.registerClass(EbiPowerEffect.class, "EbiPowerEffect");
         EbiPowerStore.instance = this;
 
         // エビパワー保存データを読み込む

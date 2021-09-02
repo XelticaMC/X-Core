@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -99,6 +100,8 @@ public class XCorePlugin extends JavaPlugin {
         loadCommands();
         loadHandlers();
         new DiscordService();
+
+        Bukkit.getOnlinePlayers().forEach(p -> p.updateCommands());
 
         new DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1));
         new NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15));
@@ -233,6 +236,7 @@ public class XCorePlugin extends JavaPlugin {
         addCommand("countdown", new CommandCountdown());
         addCommand("qchat", new CommandQuickChat());
         addCommand("epeffectshop", new CommandEpEffectShop());
+        Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
     }
 
     private void loadHandlers() {
