@@ -165,6 +165,7 @@ public class XphoneHandler implements Listener {
         final var appGeyserOffhand = new MenuItem("持ち物をオフハンドに移動", i -> player.performCommand("geyser offhand"), Material.BEDROCK, null);
         final var appQuickChat = new MenuItem("クイックチャット", i -> openQuickChatApp(player), Material.PAPER, null);
         final var launchFireworkApp = new MenuItem("花火を打ち上げる", i -> openFireworkLaunchApp(player), Material.FIREWORK_ROCKET, null);
+        final var appEffectStore = new MenuItem("エビパワードラッグストア", i -> player.performCommand("epeffectshop"), Material.BREWING_STAND, null);
 
         final var isBedrock = FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId());
 
@@ -191,6 +192,7 @@ public class XphoneHandler implements Listener {
             items.add(appCart);
         }
         items.add(appStore);
+        items.add(appEffectStore);
 
         items.add(appHint);
 
