@@ -17,7 +17,7 @@ public record EbiPowerEffect(PotionEffectType effectType, int level, int time, i
     @Override
     public Map<String, Object> serialize() {
         final var result = new HashMap<String, Object>();
-        result.put("effectType", effectType);
+        result.put("effectType", effectType.toString());
         result.put("level", level);
         result.put("time", time);
         result.put("cost", cost);
