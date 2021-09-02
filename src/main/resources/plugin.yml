@@ -104,6 +104,10 @@ commands:
     description: QuickChatの設定
     usage: /qchat <register/unregister/list>
     permission: otanoshimi.command.qchat
+  epeffectshop:
+    description: エビパワードラッグストアを開きます。
+    usage: /epeffectshop
+    permission: otanoshimi.command.epeffectshop
   __core_gui_event__:
     description: "?"
     usage: "?"
@@ -170,3 +174,9 @@ permissions:
     default: op
   otanoshimi.app.fireworks:
     default: false
+  otanoshimi.command.epeffectshop:
+    default: true
+  otanoshimi.command.epeffectshop.add:
+    default: op
+  otanoshimi.command.epeffectshop.delete:
+    default: op
