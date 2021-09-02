@@ -19,6 +19,7 @@ import work.xeltica.craft.core.commands.CommandCart;
 import work.xeltica.craft.core.commands.CommandCat;
 import work.xeltica.craft.core.commands.CommandCountdown;
 import work.xeltica.craft.core.commands.CommandCounter;
+import work.xeltica.craft.core.commands.CommandEpEffectShop;
 import work.xeltica.craft.core.commands.CommandGiveCustomItem;
 import work.xeltica.craft.core.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.core.commands.CommandHint;
@@ -231,6 +232,7 @@ public class XCorePlugin extends JavaPlugin {
         addCommand("ranking", new CommandRanking());
         addCommand("countdown", new CommandCountdown());
         addCommand("qchat", new CommandQuickChat());
+        addCommand("epeffectshop", new CommandEpEffectShop());
     }
 
     private void loadHandlers() {

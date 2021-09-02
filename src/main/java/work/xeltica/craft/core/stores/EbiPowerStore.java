@@ -8,9 +8,12 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 
 import lombok.Getter;
+import org.bukkit.potion.PotionEffect;
+import work.xeltica.craft.core.models.EbiPowerEffect;
 import work.xeltica.craft.core.models.EbiPowerItem;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.utils.Config;
+import work.xeltica.craft.core.utils.Ticks;
 
 /**
  * エビパワーショップの販売品管理などを行います。
@@ -25,6 +28,8 @@ public class EbiPowerStore {
         ep = new Config("ep", (conf) -> {
             final var c = conf.getConf();
             this.shopItems = (List<EbiPowerItem>)c.getList(CONFIG_KEY_SHOP_ITEMS, new ArrayList<EbiPowerItem>());
+            this.effectShopItems = (List<EbiPowerEffect>)c.getList(
+                    CONFIG_KEY_EFFECT_SHOP_ITEMS, new ArrayList<EbiPowerEffect>());
         });
     }
 
@@ -41,6 +46,26 @@ public class EbiPowerStore {
     public void addItem(EbiPowerItem item) {
         shopItems.add(item);
         ep.getConf().set(CONFIG_KEY_SHOP_ITEMS, shopItems);
+        try {
+            ep.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteItem(EbiPowerEffect item) {
+        effectShopItems.remove(item);
+        ep.getConf().set(CONFIG_KEY_EFFECT_SHOP_ITEMS, effectShopItems);
+        try {
+            ep.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addItem(EbiPowerEffect item) {
+        effectShopItems.add(item);
+        ep.getConf().set(CONFIG_KEY_EFFECT_SHOP_ITEMS, effectShopItems);
         try {
             ep.save();
         } catch (IOException e) {
@@ -65,6 +90,16 @@ public class EbiPowerStore {
         }
     }
 
+    public Result tryBuyItem(Player p, EbiPowerEffect item) {
+        final var isFree = item.getCost() == 0;
+        if (!isFree && !tryTake(p, item.getCost())) {
+            return Result.NO_ENOUGH_POWER;
+        }
+
+        p.addPotionEffect(item.toPotionEffect());
+        return Result.SUCCESS;
+    }
+
     public int get(Player p) {
         final var vault = VaultPlugin.getInstance();
         return (int)vault.getBalance(p);
@@ -87,9 +122,13 @@ public class EbiPowerStore {
     @Getter
     private List<EbiPowerItem> shopItems = new ArrayList<>();
 
+    @Getter
+    private List<EbiPowerEffect> effectShopItems = new ArrayList<>();
+
     private final Config ep;
 
     private static final String CONFIG_KEY_SHOP_ITEMS = "shopItems";
+    private static final String CONFIG_KEY_EFFECT_SHOP_ITEMS = "effectShopItems";
 
     public enum Result {
         SUCCESS,
