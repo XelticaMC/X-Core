@@ -94,7 +94,7 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
                     player.sendMessage(String.format(
                             "§b%s%s§rを§6%d秒間§r付与しました。",
                             toJapanese(item.effectType()),
-                            StringUtils.repeat("I", item.level()),
+                            item.level() > 1 ? Integer.toString(item.level()) : "",
                             item.time()
                     ));
                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 1);
@@ -125,6 +125,7 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
                     stack.editMeta(meta -> {
                         if (meta instanceof PotionMeta potion) {
                             potion.addCustomEffect(m.toPotionEffect(), true);
+                            potion.setColor(m.effectType().getColor());
                         }
                     });
                     final var displayName = String.format(
