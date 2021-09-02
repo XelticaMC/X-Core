@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -91,16 +92,16 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
                 }
                 case SUCCESS -> {
                     player.sendMessage(String.format(
-                            "ポーション効果「&b%s&r」&aレベル%d&rを&6%d秒間&r付与しました。",
+                            "§b%s%s§rを§6%d秒間§r付与しました。",
                             toJapanese(item.effectType()),
-                            item.level(),
+                            StringUtils.repeat("I", item.level()),
                             item.time()
                     ));
                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 1);
                     HintStore.getInstance().achieve(player, Hint.EPSHOP);
                 }
                 default -> {
-                    player.sendMessage("謎のエラーだゾ");
+                    player.sendMessage("不明なエラーが発生しました。");
                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1, 0.5f);
                 }
             }
@@ -127,9 +128,9 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
                         }
                     });
                     final var displayName = String.format(
-                            "%s レベル%d × %d (%dEP)",
+                            "%s%s %d秒 (%dEP)",
                             toJapanese(m.effectType()),
-                            m.level(),
+                            StringUtils.repeat("I", m.level()),
                             m.time(),
                             m.cost()
                     );
@@ -146,7 +147,41 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
 
     private String toJapanese(PotionEffectType type) {
         // TODO マップから変換
-        return type.getName();
+        return switch (type.getName()) {
+            case "SPEED" -> "移動速度上昇";
+            case "SLOW" -> "移動速度低下";
+            case "FAST_DIGGING" -> "採掘速度上昇";
+            case "SLOW_DIGGING" -> "採掘速度低下";
+            case "INCREASE_DAMAGE" -> "攻撃力上昇";
+            case "HEAL" -> "即時回復";
+            case "HARM" -> "即時ダメージ";
+            case "JUMP" -> "跳躍力上昇";
+            case "CONFUSION" -> "吐き気";
+            case "REGENERATION" -> "再生能力";
+            case "DAMAGE_RESISTANCE" -> "耐性";
+            case "FIRE_RESISTANCE" -> "火炎耐性";
+            case "WATER_BREATHING" -> "水中呼吸";
+            case "INVISIBILITY" -> "透明化";
+            case "BLINDNESS" -> "盲目";
+            case "NIGHT_VISION" -> "暗視";
+            case "HUNGER" -> "空腹";
+            case "WEAKNESS" -> "弱体化";
+            case "POISON" -> "毒";
+            case "WITHER" -> "衰弱";
+            case "HEALTH_BOOST" -> "体力増強";
+            case "ABSORPTION" -> "衝撃吸収";
+            case "SATURATION" -> "満腹度回復";
+            case "GLOWING" -> "発光";
+            case "LEVITATION" -> "浮遊";
+            case "LUCK" -> "幸運";
+            case "UNLUCK" -> "不運";
+            case "SLOW_FALLING" -> "落下速度低下";
+            case "CONDUIT_POWER" -> "コンジットパワー";
+            case "DOLPHINS_GRACE" -> "イルカの好意";
+            case "BAD_OMEN" -> "不吉な予感";
+            case "HERO_OF_THE_VILLAGE" -> "村の英雄";
+            default -> "不明";
+        };
     }
 
     @Nullable
