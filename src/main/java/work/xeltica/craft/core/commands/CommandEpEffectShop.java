@@ -130,7 +130,7 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
                     final var displayName = String.format(
                             "%s%s %d秒 (%dEP)",
                             toJapanese(m.effectType()),
-                            StringUtils.repeat("I", m.level()),
+                            m.level() > 1 ? Integer.toString(m.level()) : "",
                             m.time(),
                             m.cost()
                     );
