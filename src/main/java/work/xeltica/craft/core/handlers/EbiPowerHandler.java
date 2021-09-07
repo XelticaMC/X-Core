@@ -28,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 
 import net.kyori.adventure.text.Component;
+import work.xeltica.craft.core.events.RealTimeNewDayEvent;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.EbiPowerStore;
@@ -192,6 +193,11 @@ public class EbiPowerHandler implements Listener{
             HintStore.getInstance().achieve(e.getPlayer(), Hint.MINERS_DREAM);
         }
         store().tryGive(e.getPlayer(), 1);
+    }
+
+    @EventHandler
+    public void onNewDayToResetBrokenBlocksCount(RealTimeNewDayEvent e) {
+        PlayerStore.getInstance().openAll().forEach(record -> record.set(PlayerDataKey.BROKEN_BLOCKS_COUNT, 0));
     }
 
     private void notification(Player p, String mes) {
