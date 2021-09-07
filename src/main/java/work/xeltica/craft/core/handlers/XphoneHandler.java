@@ -269,6 +269,7 @@ public class XphoneHandler implements Listener {
     private void openQuickChatApp(Player player) {
         final var store = QuickChatStore.getInstance();
         final var list = new ArrayList<MenuItem>();
+        ui().playSound(player, Sound.ENTITY_VILLAGER_WORK_CARTOGRAPHER, 1, SoundPitch.F_1);
 
         for (String chat : store.getAllPrefix()) {
             final var msg = store.chatFormat(store.getMessage(chat), player);

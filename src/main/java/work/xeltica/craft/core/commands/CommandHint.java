@@ -30,7 +30,7 @@ public class CommandHint extends CommandPlayerOnlyBase {
             // 指定されたIDのヒントの詳細をプレイヤーに表示
 
             final var optionalHint = hints.filter(h -> subCommand.equalsIgnoreCase(h.name())).findFirst();
-            if (!optionalHint.isPresent()) {
+            if (optionalHint.isEmpty()) {
                 player.sendMessage("ヒントが存在しません。");
                 return true;
             }
@@ -55,7 +55,7 @@ public class CommandHint extends CommandPlayerOnlyBase {
                 final var isQuest = h.getPower() > 0;
 
                 final var name = h.getName() + (isQuest ? (" (" + h.getPower() + "EP)") : "");
-                final var icon = !isQuest ? Material.NETHER_STAR : isAchieved ? Material.GOLD_BLOCK : Material.GOLD_NUGGET;
+                final var icon = getIcon(h, isAchieved);
                 final Consumer<MenuItem> onClick = (m) -> player.performCommand("hint " + h.name());
 
                 return new MenuItem(name, onClick, icon, null, 1, isAchieved);
@@ -66,9 +66,18 @@ public class CommandHint extends CommandPlayerOnlyBase {
         return true;
     }
 
+    private Material getIcon(Hint h, boolean isAchieved) {
+        if (h.getPower() == 0) return Material.NETHER_STAR;
+
+        return switch (h.getType()) {
+            case NORMAL -> isAchieved ? Material.GOLD_BLOCK : Material.GOLD_NUGGET;
+            case CHALLENGE -> isAchieved ? Material.DIAMOND_BLOCK : Material.DIAMOND;
+        };
+    }
+
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label,
             String[] args) {
-        return Stream.of(Hint.values()).map(h -> h.toString()).toList();
+        return Stream.of(Hint.values()).map(Enum::toString).toList();
     }
 }

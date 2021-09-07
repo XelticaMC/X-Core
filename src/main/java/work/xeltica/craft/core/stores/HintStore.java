@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -49,7 +50,12 @@ public class HintStore {
                 .clickEvent(ClickEvent.clickEvent(net.kyori.adventure.text.event.ClickEvent.Action.RUN_COMMAND, "/hint " + hint.name())))
             .append(Component.text("を達成した！"))
             .asComponent();
-        Bukkit.getServer().audiences().forEach(a -> a.sendMessage(component));
+        Bukkit.getServer().audiences().forEach(a -> {
+            a.sendMessage(component);
+            if (hint.getType() == Hint.HintType.CHALLENGE) {
+                a.playSound(net.kyori.adventure.sound.Sound.sound(Key.key("ui.toast.challenge_complete"), net.kyori.adventure.sound.Sound.Source.PLAYER, 1, 1));
+            }
+        });
         try {
             save();
         } catch (IOException e) {
