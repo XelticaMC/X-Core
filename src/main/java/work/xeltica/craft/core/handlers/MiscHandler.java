@@ -41,8 +41,8 @@ public class MiscHandler implements Listener {
      */
     @EventHandler
     public void onGuardCobbleStoneGenerator(BlockFormEvent e) {
-        if (e.getBlock().getType() == Material.STONE) {
-            e.getBlock().setType(Material.COBBLESTONE);
+        if (e.getNewState().getType() == Material.STONE) {
+            e.getNewState().setType(Material.COBBLESTONE);
         }
     }
 }
