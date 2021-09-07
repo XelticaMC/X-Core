@@ -38,6 +38,7 @@ import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.PlayerDataKey;
+import work.xeltica.craft.core.models.SoundPitch;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.HubStore;
@@ -204,6 +205,7 @@ public class XphoneHandler implements Listener {
 
         items.add(appQuickChat);
 
+        playStartupSound(player);
         ui().openMenu(player, "X Phone OS", items);
     }
 
@@ -376,6 +378,16 @@ public class XphoneHandler implements Listener {
             effect.withFade(color2);
         }
         return effect.build();
+    }
+
+    private void playStartupSound(Player player) {
+        ui().playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1, SoundPitch.A1);
+        ui().playSoundAfter(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1, SoundPitch.D2, 4);
+        ui().playSoundAfter(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1, SoundPitch.C_2, 8);
+    }
+
+    private void playTapSound(Player player) {
+        ui().playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1, SoundPitch.A1);
     }
 
     private ItemStore store() { return ItemStore.getInstance(); }
