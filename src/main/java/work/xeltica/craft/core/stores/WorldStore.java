@@ -179,6 +179,7 @@ public class WorldStore {
         lockedWorldNames.add("art");
         lockedWorldNames.add("sandbox");
         lockedWorldNames.add("nightmare");
+        lockedWorldNames.add("nightmare2");
     }
 
     private void loadCreativeWorldNames() {
