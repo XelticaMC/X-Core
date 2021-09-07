@@ -17,6 +17,7 @@
         <autoDetectTypes>
           <platformType>ADVENTURE</platformType>
           <platformType>BUKKIT</platformType>
+          <platformType>SPIGOT</platformType>
         </autoDetectTypes>
       </configuration>
     </facet>

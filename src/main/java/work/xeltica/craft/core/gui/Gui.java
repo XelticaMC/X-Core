@@ -33,6 +33,8 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.models.SoundPitch;
 import work.xeltica.craft.core.stores.ItemStore;
 
 /**
@@ -177,8 +179,8 @@ public class Gui implements Listener {
 
     /**
      * ブーリアン値に対応するアイコンを取得します
-     * @param flag
-     * @return
+     * @param flag アイコンとなる値
+     * @return 対応するアイコン
      */
     public Material getIconOfFlag(boolean flag) {
         return flag ? Material.LIME_DYE : Material.GRAY_DYE;
@@ -246,6 +248,33 @@ public class Gui implements Listener {
             e.getPlayer().sendMessage("てすてすてすとですとよ");
             Bukkit.getLogger().info("テスト");
         }
+    }
+
+    /**
+     * プレイヤーの位置でサウンドを再生します。
+     * @param player プレイヤー
+     * @param sound 効果音
+     * @param volume ボリューム
+     * @param pitch ピッチ
+     */
+    public void playSound(Player player, Sound sound, float volume, SoundPitch pitch) {
+        player.playSound(player.getLocation(), sound, SoundCategory.PLAYERS, volume, pitch.getPitch());
+    }
+
+    /**
+     * プレイヤーの位置で指定Tick後にサウンドを再生します。
+     * @param player プレイヤー
+     * @param sound 効果音
+     * @param volume ボリューム
+     * @param pitch ピッチ
+     * @param delay Tick
+     */
+    public void playSoundAfter(Player player, Sound sound, float volume, SoundPitch pitch, int delay) {
+        Bukkit.getScheduler().runTaskLater(
+                XCorePlugin.getInstance(),
+                () -> playSound(player, sound, volume, pitch),
+                delay
+        );
     }
 
     private void openMenuJavaImpl(Player player, String title, MenuItem[] items) {
