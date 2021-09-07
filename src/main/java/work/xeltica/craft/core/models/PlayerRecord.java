@@ -8,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
 
 import lombok.Getter;
+import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.Config;
 
 /**
@@ -22,14 +23,15 @@ public class PlayerRecord {
     }
 
     public void set(PlayerDataKey key, Object value) {
-        set(key, value, true);
-    }
-
-    public void set(PlayerDataKey key, Object value, boolean save) {
         if (value != null && value.equals(get(key))) return;
         if (get(key) == null && value == null) return;
         section.set(key.getPhysicalKey(), value);
-        if (save) save();
+        PlayerStore.getInstance().setChanged(true);
+    }
+
+    @Deprecated(since = "Use set(PlayerDataKey, Object) instead.")
+    public void set(PlayerDataKey key, Object value, boolean save) {
+        set(key, value);
     }
 
     public boolean has(PlayerDataKey key) {

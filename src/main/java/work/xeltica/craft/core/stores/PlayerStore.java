@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -19,11 +21,14 @@ import net.kyori.adventure.bossbar.BossBar.Overlay;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.scheduler.BukkitTask;
+import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.events.StaffJoinEvent;
 import work.xeltica.craft.core.events.StaffLeaveEvent;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.PlayerRecord;
 import work.xeltica.craft.core.utils.Config;
+import work.xeltica.craft.core.utils.Ticks;
 
 /**
  * プレイヤー固有データの管理を行い、読み書きを行うPlayer Store APIを提供します。
@@ -38,6 +43,8 @@ public class PlayerStore {
         playerStores = new Config("playerStores");
 
         checkAndMigrate();
+
+        Bukkit.getScheduler().runTaskTimer(XCorePlugin.getInstance(), this::saveTask, 0, Ticks.from(10));
     }
 
     public static PlayerStore getInstance() {
@@ -144,16 +151,25 @@ public class PlayerStore {
         // cat
         final var catUUIDs = flags.getConf().getStringList("cats").stream().map(UUID::fromString).toList();
         for (var id : catUUIDs) {
-            open(id).set(PlayerDataKey.CAT_MODE, true, false);
+            open(id).set(PlayerDataKey.CAT_MODE, true);
         }
 
         // new comers
         final var newComerIds = newcomers.getConf().getKeys(false);
         for (var id : newComerIds) {
-            open(UUID.fromString(id)).set(PlayerDataKey.NEWCOMER_TIME, newcomers.getConf().getInt(id), false);
+            open(UUID.fromString(id)).set(PlayerDataKey.NEWCOMER_TIME, newcomers.getConf().getInt(id));
         }
+    }
 
-        playerStores.save();
+    private void saveTask() {
+        if (!isAutoSave()) return;
+        if (!isChanged()) return;
+        try {
+            save();
+            setChanged(false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static PlayerStore instance;
@@ -161,7 +177,14 @@ public class PlayerStore {
     private final Config flags;
     private final Config newcomers;
     private final Config playerStores;
+    private BukkitTask scheduledSaver;
     private static Map<UUID, BossBar> liveBarMap;
+
+    @Getter @Setter
+    private boolean changed;
+
+    @Getter @Setter
+    private boolean autoSave = true;
 
     private static org.bukkit.Color[] colors = {
             // from XelticaUI
