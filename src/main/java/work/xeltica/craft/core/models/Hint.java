@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.models;
 
 import lombok.Getter;
+import work.xeltica.craft.core.handlers.EbiPowerHandler;
 
 /**
  * ヒントを定義しています。
@@ -134,7 +135,11 @@ public enum Hint {
     ),
     MINERS_DREAM(
             "マイナーズ・ドリーム",
-            "ブロックをひたすら掘り続けて、1日で8000EP稼ごう。石や鉱石、土などのブロックを採掘することで、1つ1EP、1日8000EPまで稼ぐことができます。",
+            "ブロックをひたすら掘り続けて、1日で"
+                    + EbiPowerHandler.BREAK_BLOCK_BONUS_LIMIT
+                    + "EP稼ごう。石や鉱石、土などのブロックを採掘することで、1つ1EP、1日"
+                    + EbiPowerHandler.BREAK_BLOCK_BONUS_LIMIT
+                    + "EPまで稼ぐことができます。",
             2000,
             HintType.CHALLENGE
     ),

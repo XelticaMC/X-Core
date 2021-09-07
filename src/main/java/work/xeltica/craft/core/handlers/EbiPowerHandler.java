@@ -226,7 +226,7 @@ public class EbiPowerHandler implements Listener{
 
     private static final int HARVEST_POWER_MULTIPLIER = 1;
     private static final int LOGIN_BONUS_POWER = 50;
-    private static final int BREAK_BLOCK_BONUS_LIMIT = 8000;
+    public static final int BREAK_BLOCK_BONUS_LIMIT = 4000;
 
     private static final Random random = new Random();
 }
