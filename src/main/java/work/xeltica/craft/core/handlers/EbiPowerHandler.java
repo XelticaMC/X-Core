@@ -15,6 +15,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -92,7 +93,7 @@ public class EbiPowerHandler implements Listener{
                 notification(killer, "可愛い可愛いネコちゃんを殴るなんて！100EPを失った。");
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
                 HintStore.getInstance().achieve(killer, Hint.VIOLENCE_CAT);
-            } else if (victim instanceof Tameable pet && pet.isTamed()) {
+            } else if (victim instanceof Tameable pet && pet.isTamed() && !(victim instanceof SkeletonHorse)) {
                 store().tryTake(killer, 10);
                 notification(killer, "ペットを殴るなんて！10EPを失った。");
                 killer.playSound(killer.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f);
@@ -115,7 +116,7 @@ public class EbiPowerHandler implements Listener{
             // don't kill cats
             if (victim instanceof Cat || victim instanceof Ocelot) return;
             // don't kill tamed pets
-            if (victim instanceof Tameable pet && pet.isTamed()) return;
+            if (victim instanceof Tameable pet && pet.isTamed() && !(victim instanceof SkeletonHorse)) return;
             // don't kill non-monster children
             if (victim instanceof Ageable man && !(victim instanceof Monster) && !(victim instanceof Hoglin) && !man.isAdult()) return;
             // ignore creatures from spawner
