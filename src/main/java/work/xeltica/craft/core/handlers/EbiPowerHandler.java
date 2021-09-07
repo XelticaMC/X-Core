@@ -187,6 +187,10 @@ public class EbiPowerHandler implements Listener{
         if (item.containsEnchantment(Enchantment.SILK_TOUCH)) return;
 
         record.set(PlayerDataKey.BROKEN_BLOCKS_COUNT, brokenBlocksCount + 1);
+
+        if (brokenBlocksCount + 1 >= BREAK_BLOCK_BONUS_LIMIT) {
+            HintStore.getInstance().achieve(e.getPlayer(), Hint.MINERS_DREAM);
+        }
         store().tryGive(e.getPlayer(), 1);
     }
 
