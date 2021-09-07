@@ -19,6 +19,7 @@ import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -56,10 +57,30 @@ public class EbiPowerHandler implements Listener{
         epBlackList.add("travel_maikura_city");
 
         crops.addAll(Tag.CROPS.getValues());
+
+        breakBonusList.addAll(Tag.BASE_STONE_OVERWORLD.getValues());
+        breakBonusList.addAll(Tag.BASE_STONE_NETHER.getValues());
+        breakBonusList.addAll(Tag.ICE.getValues());
+        breakBonusList.addAll(Tag.DIRT.getValues());
+        breakBonusList.addAll(Tag.SAND.getValues());
+
+        breakBonusList.addAll(Tag.COAL_ORES.getValues());
+        breakBonusList.addAll(Tag.IRON_ORES.getValues());
+        breakBonusList.addAll(Tag.COPPER_ORES.getValues());
+        breakBonusList.addAll(Tag.GOLD_ORES.getValues());
+        breakBonusList.addAll(Tag.REDSTONE_ORES.getValues());
+        breakBonusList.addAll(Tag.EMERALD_ORES.getValues());
+        breakBonusList.addAll(Tag.LAPIS_ORES.getValues());
+        breakBonusList.addAll(Tag.DIAMOND_ORES.getValues());
+        breakBonusList.addAll(Tag.LOGS.getValues());
+
+        breakBonusList.add(Material.NETHER_QUARTZ_ORE);
+        breakBonusList.add(Material.OBSIDIAN);
+        breakBonusList.add(Material.ANCIENT_DEBRIS);
     }
 
     @EventHandler
-    public void onCombat(EntityDamageByEntityEvent e) {
+    public void onPlayerDamageFrailCreatures(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Player killer && e.getEntity() instanceof LivingEntity victim) {
             if (playerIsInBlacklisted(killer)) return;
             // スポナーは対象外
@@ -86,7 +107,7 @@ public class EbiPowerHandler implements Listener{
     }
     
     @EventHandler
-    public void on(EntityDeathEvent e) {
+    public void onPlayerKillMobs(EntityDeathEvent e) {
         final var victim = e.getEntity();
         final var killer = e.getEntity().getKiller();
         if (killer != null) {
@@ -109,7 +130,7 @@ public class EbiPowerHandler implements Listener{
     }
 
     @EventHandler
-    public void on(PlayerJoinEvent e) {
+    public void onPlayerLoggedIn(PlayerJoinEvent e) {
         final var now = new Date();
         final var ps = PlayerStore.getInstance();
         final var record = ps.open(e.getPlayer());
@@ -122,7 +143,7 @@ public class EbiPowerHandler implements Listener{
     }
 
     @EventHandler
-    public void on(BlockBreakEvent e) {
+    public void onHarvestCrops(BlockBreakEvent e) {
         final var p = e.getPlayer();
         if (playerIsInBlacklisted(p)) return;
         if (e.getBlock().getBlockData() instanceof org.bukkit.block.data.Ageable a && a.getAge() == a.getMaximumAge()) {
@@ -139,6 +160,33 @@ public class EbiPowerHandler implements Listener{
                 });
             }
         }
+    }
+
+    @EventHandler
+    public void onBreedEntities(EntityBreedEvent e) {
+        if (e.getBreeder() instanceof Player player) {
+            EbiPowerStore.getInstance().tryGive(player, 2);
+        }
+    }
+
+    @EventHandler
+    public void onMineBlocks(BlockBreakEvent e) {
+        if (!breakBonusList.contains(e.getBlock().getType())) return;
+
+        final var record = PlayerStore.getInstance().open(e.getPlayer());
+        final var brokenBlocksCount = record.getInt(PlayerDataKey.BROKEN_BLOCKS_COUNT);
+        // リミット超えていたら対象外
+        if (brokenBlocksCount > BREAK_BLOCK_BONUS_LIMIT) return;
+
+        // 回収できなかったら対象外
+        if (!e.isDropItems()) return;
+
+        // シルクタッチは対象外
+        final var item = e.getPlayer().getInventory().getItemInMainHand();
+        if (item.containsEnchantment(Enchantment.SILK_TOUCH)) return;
+
+        record.set(PlayerDataKey.BROKEN_BLOCKS_COUNT, brokenBlocksCount + 1);
+        store().tryGive(e.getPlayer(), 1);
     }
 
     private void notification(Player p, String mes) {
@@ -168,9 +216,12 @@ public class EbiPowerHandler implements Listener{
     private final HashSet<String> epBlackList = new HashSet<>();
 
     private final HashSet<Material> crops = new HashSet<>();
+    private final HashSet<Material> breakBonusList = new HashSet<>();
+    private final HashSet<Material> placeBonusList = new HashSet<>();
 
     private static final int HARVEST_POWER_MULTIPLIER = 1;
     private static final int LOGIN_BONUS_POWER = 50;
+    private static final int BREAK_BLOCK_BONUS_LIMIT = 8000;
 
     private static final Random random = new Random();
 }
