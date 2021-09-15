@@ -5,6 +5,7 @@ import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -26,15 +27,17 @@ public class DiscordService {
         return DiscordSRV.getPlugin().getMainGuild().getMemberById(discordId);
     }
 
-    public void reportDiscord(Player badPlayer, String abuses, String time, String command) {
+    public void reportDiscord(OfflinePlayer badPlayer, String abuses, String time, String command) {
         final var guild = DiscordSRV.getPlugin().getMainGuild();
         final var channel = guild.getGuildChannelById(reportChannelID);
         if (channel instanceof TextChannel textChannel) {
             textChannel.sendMessage(String.format(reportTemplate, badPlayer.getName(), abuses, time + command)).queue();
-            final var member = getMember(badPlayer);
-            if (member != null) {
-                final var role = guild.getRoleById(lockRoleID);
-                if (role != null) guild.addRoleToMember(member, role).queue();
+            if (badPlayer instanceof Player player) {
+                final var member = getMember(player);
+                if (member != null) {
+                    final var role = guild.getRoleById(lockRoleID);
+                    if (role != null) guild.addRoleToMember(member, role).queue();
+                }
             }
         }
     }

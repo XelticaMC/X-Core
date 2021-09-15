@@ -129,12 +129,12 @@ public class CommandReport extends CommandPlayerOnlyBase {
             return;
         } else if (command.equals("ban")) {
             message = String.format(punishLogTemplate, abuses);
-            DiscordService.getInstance().reportDiscord(badGuy.getPlayer(), abuses, timeString, command);
+            DiscordService.getInstance().reportDiscord(badGuy, abuses, timeString, command);
         } else if (command.equals("kick")) {
             message = String.format(punishLogTemplate, abuses);
         } else if (command.equals("mute")) {
             message = String.format(punishLogTemplate, abuses);
-            DiscordService.getInstance().reportDiscord(badGuy.getPlayer(), abuses, timeString, command);
+            DiscordService.getInstance().reportDiscord(badGuy, abuses, timeString, command);
         } else {
             moderator.sendMessage(ChatColor.RED + "無効なコマンド: " + command);
             return;
