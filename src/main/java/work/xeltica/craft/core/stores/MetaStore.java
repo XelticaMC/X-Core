@@ -60,7 +60,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "採掘EPボーナスの制限が、日付が変わってもリセットされない不具合を修正"
+            "オフラインプレイヤーをBANできない不具合を修正"
     };
 
     private static MetaStore instance;
