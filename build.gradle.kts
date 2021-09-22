@@ -55,7 +55,7 @@ dependencies {
 }
 
 group = "work.xeltica.craft.core"
-version = "2.16.0"
+version = "2.18.2"
 description = "X-Core"
 java.sourceCompatibility = JavaVersion.VERSION_16
 
@@ -65,6 +65,6 @@ publishing {
     }
 }
 
-tasks.withType<JavaCompile> {
+tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
 }

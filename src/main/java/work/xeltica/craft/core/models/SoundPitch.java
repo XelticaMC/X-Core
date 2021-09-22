@@ -35,4 +35,8 @@ public enum SoundPitch {
 
     @Getter
     private final float pitch;
+
+    public float getPitch() {
+        return this.pitch;
+    }
 }

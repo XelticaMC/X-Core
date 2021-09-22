@@ -214,6 +214,22 @@ public enum Hint {
     @Getter
     private final HintType type;
 
+    public String getName() {
+        return this.name;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public int getPower() {
+        return this.power;
+    }
+
+    public HintType getType() {
+        return this.type;
+    }
+
     public enum HintType {
         NORMAL,
         CHALLENGE,
