@@ -26,7 +26,7 @@ repositories {
     }
 
     maven {
-        url = uri("https://repo.opencollab.dev/maven-snapshots/")
+        url = uri("https://repo.opencollab.dev/maven-releases/")
     }
 
     maven {
@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.skinsrestorer:skinsrestorer:14.1.1-SNAPSHOT")
+    implementation("net.skinsrestorer:skinsrestorer:14.1.4-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.30")
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
@@ -57,7 +57,7 @@ dependencies {
 group = "work.xeltica.craft.core"
 version = "2.16.0"
 description = "X-Core"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_16
 
 publishing {
     publications.create<MavenPublication>("maven") {
@@ -65,6 +65,6 @@ publishing {
     }
 }
 
-tasks.withType<JavaCompile>() {
+tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }

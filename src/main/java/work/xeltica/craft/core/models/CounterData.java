@@ -1,16 +1,12 @@
 package work.xeltica.craft.core.models;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * カウンターの位置情報を登録するシステムです。
@@ -18,10 +14,10 @@ import lombok.Setter;
 public class CounterData implements Cloneable, ConfigurationSerializable {
 
     public CounterData(
-        String name, 
-        Location location1, 
-        Location location2, 
-        boolean isDaily, 
+        String name,
+        Location location1,
+        Location location2,
+        boolean isDaily,
         @Nullable String javaRankingId,
         @Nullable String bedrockRankingId,
         @Nullable String uwpRankingId,
@@ -82,17 +78,69 @@ public class CounterData implements Cloneable, ConfigurationSerializable {
         if (!args.containsKey(key)) throw new IllegalArgumentException(key + " is null");
     }
 
-    @Getter private final String name;
-    @Getter private final Location location1;
-    @Getter private final Location location2;
-    @Getter private final boolean isDaily;
+    private final String name;
+    private final Location location1;
+    private final Location location2;
+    private final boolean isDaily;
 
     /** Java版プレイヤー用 紐付けたランキングID */
-    @Nullable @Getter @Setter private String javaRankingId;
+    @Nullable
+    private String javaRankingId;
     /** 統合版プレイヤー用 紐付けたランキングID */
-    @Nullable @Getter @Setter private String bedrockRankingId;
+    @Nullable
+    private String bedrockRankingId;
     /** Windows10版プレイヤー用 紐付けたランキングID */
-    @Nullable @Getter @Setter private String uwpRankingId;
+    @Nullable
+    private String uwpRankingId;
     /** スマホ・タブレット・ゲーム機版プレイヤー用 紐付けたランキングID */
-    @Nullable @Getter @Setter private String phoneRankingId;
+    @Nullable
+    private String phoneRankingId;
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Location getLocation1() {
+        return this.location1;
+    }
+
+    public Location getLocation2() {
+        return this.location2;
+    }
+
+    public boolean isDaily() {
+        return this.isDaily;
+    }
+
+    public @Nullable String getJavaRankingId() {
+        return this.javaRankingId;
+    }
+
+    public @Nullable String getBedrockRankingId() {
+        return this.bedrockRankingId;
+    }
+
+    public @Nullable String getUwpRankingId() {
+        return this.uwpRankingId;
+    }
+
+    public @Nullable String getPhoneRankingId() {
+        return this.phoneRankingId;
+    }
+
+    public void setJavaRankingId(@Nullable String javaRankingId) {
+        this.javaRankingId = javaRankingId;
+    }
+
+    public void setBedrockRankingId(@Nullable String bedrockRankingId) {
+        this.bedrockRankingId = bedrockRankingId;
+    }
+
+    public void setUwpRankingId(@Nullable String uwpRankingId) {
+        this.uwpRankingId = uwpRankingId;
+    }
+
+    public void setPhoneRankingId(@Nullable String phoneRankingId) {
+        this.phoneRankingId = phoneRankingId;
+    }
 }

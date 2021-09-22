@@ -32,6 +32,10 @@ public class EbiPowerStore {
         });
     }
 
+    public static EbiPowerStore getInstance() {
+        return EbiPowerStore.instance;
+    }
+
     public void deleteItem(EbiPowerItem item) {
         shopItems.remove(item);
         ep.getConf().set(CONFIG_KEY_SHOP_ITEMS, shopItems);
@@ -128,6 +132,14 @@ public class EbiPowerStore {
 
     private static final String CONFIG_KEY_SHOP_ITEMS = "shopItems";
     private static final String CONFIG_KEY_EFFECT_SHOP_ITEMS = "effectShopItems";
+
+    public List<EbiPowerItem> getShopItems() {
+        return this.shopItems;
+    }
+
+    public List<EbiPowerEffect> getEffectShopItems() {
+        return this.effectShopItems;
+    }
 
     public enum Result {
         SUCCESS,

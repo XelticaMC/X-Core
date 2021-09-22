@@ -17,6 +17,13 @@ import java.util.Map;
 @AllArgsConstructor
 public class NbsModel implements Cloneable, ConfigurationSerializable {
 
+    public NbsModel(Location location, String songId, int distance, PlaybackMode playbackMode) {
+        this.location = location;
+        this.songId = songId;
+        this.distance = distance;
+        this.playbackMode = playbackMode;
+    }
+
     @Override
     public @NotNull Map<String, Object> serialize() {
         final var result = new HashMap<String, Object>();
@@ -47,6 +54,78 @@ public class NbsModel implements Cloneable, ConfigurationSerializable {
         }
 
         return new NbsModel(location, songId, distance, playbackMode);
+    }
+
+    public Location getLocation() {
+        return this.location;
+    }
+
+    public String getSongId() {
+        return this.songId;
+    }
+
+    public int getDistance() {
+        return this.distance;
+    }
+
+    public PlaybackMode getPlaybackMode() {
+        return this.playbackMode;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public void setSongId(String songId) {
+        this.songId = songId;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public void setPlaybackMode(PlaybackMode playbackMode) {
+        this.playbackMode = playbackMode;
+    }
+
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof NbsModel)) return false;
+        final NbsModel other = (NbsModel) o;
+        if (!other.canEqual((Object) this)) return false;
+        final Object this$location = this.getLocation();
+        final Object other$location = other.getLocation();
+        if (this$location == null ? other$location != null : !this$location.equals(other$location)) return false;
+        final Object this$songId = this.getSongId();
+        final Object other$songId = other.getSongId();
+        if (this$songId == null ? other$songId != null : !this$songId.equals(other$songId)) return false;
+        if (this.getDistance() != other.getDistance()) return false;
+        final Object this$playbackMode = this.getPlaybackMode();
+        final Object other$playbackMode = other.getPlaybackMode();
+        if (this$playbackMode == null ? other$playbackMode != null : !this$playbackMode.equals(other$playbackMode))
+            return false;
+        return true;
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof NbsModel;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        final Object $location = this.getLocation();
+        result = result * PRIME + ($location == null ? 43 : $location.hashCode());
+        final Object $songId = this.getSongId();
+        result = result * PRIME + ($songId == null ? 43 : $songId.hashCode());
+        result = result * PRIME + this.getDistance();
+        final Object $playbackMode = this.getPlaybackMode();
+        result = result * PRIME + ($playbackMode == null ? 43 : $playbackMode.hashCode());
+        return result;
+    }
+
+    public String toString() {
+        return "NbsModel(location=" + this.getLocation() + ", songId=" + this.getSongId() + ", distance=" + this.getDistance() + ", playbackMode=" + this.getPlaybackMode() + ")";
     }
 
     public enum PlaybackMode {

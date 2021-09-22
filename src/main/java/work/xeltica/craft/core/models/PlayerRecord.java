@@ -1,14 +1,12 @@
 package work.xeltica.craft.core.models;
 
-import java.io.IOException;
-import java.util.UUID;
-
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
-
-import lombok.Getter;
 import work.xeltica.craft.core.utils.Config;
+
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * プレイヤーごとのデータを読み書きするインターフェイスです。
@@ -103,7 +101,7 @@ public class PlayerRecord {
     public boolean isLong(PlayerDataKey key) {
         return section.isLong(key.getPhysicalKey());
     }
-    
+
     public Vector getVector(PlayerDataKey key) {
         return section.getVector(key.getPhysicalKey());
     }
@@ -115,7 +113,7 @@ public class PlayerRecord {
     public boolean isVector(PlayerDataKey key) {
         return section.isVector(key.getPhysicalKey());
     }
-    
+
     public Location getLocation(PlayerDataKey key) {
         return section.getLocation(key.getPhysicalKey());
     }
@@ -147,6 +145,9 @@ public class PlayerRecord {
     private final Config conf;
     private final ConfigurationSection section;
 
-    @Getter
     private final UUID playerId;
+
+    public UUID getPlayerId() {
+        return this.playerId;
+    }
 }

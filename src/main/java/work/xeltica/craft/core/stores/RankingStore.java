@@ -1,17 +1,14 @@
 package work.xeltica.craft.core.stores;
 
-import java.io.IOException;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
-
 import org.jetbrains.annotations.Nullable;
-
-import lombok.Getter;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.Ranking;
 import work.xeltica.craft.core.utils.Config;
+
+import java.io.IOException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 時間計測カウンターの情報を管理します。
@@ -21,6 +18,10 @@ public class RankingStore {
         instance = this;
         rankingConfig = new Config("ranking");
         renderAll();
+    }
+
+    public static RankingStore getInstance() {
+        return RankingStore.instance;
     }
 
     /**
@@ -103,7 +104,6 @@ public class RankingStore {
         });
     }
 
-    @Getter
     private static RankingStore instance;
 
     /** ranking.yml */

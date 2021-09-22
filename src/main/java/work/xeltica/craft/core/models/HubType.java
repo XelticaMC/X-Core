@@ -47,4 +47,12 @@ public enum HubType {
     String worldName;
     @Getter
     Vector3 location;
+
+    public String getWorldName() {
+        return this.worldName;
+    }
+
+    public Vector3 getLocation() {
+        return this.location;
+    }
 }

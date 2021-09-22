@@ -23,4 +23,8 @@ public enum OmikujiScore {
 
     @Getter
     private final String displayName;
+
+    public String getDisplayName() {
+        return this.displayName;
+    }
 }

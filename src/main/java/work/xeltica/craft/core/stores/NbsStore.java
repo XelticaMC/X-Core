@@ -5,12 +5,10 @@ import com.xxmicloxx.NoteBlockAPI.model.SoundCategory;
 import com.xxmicloxx.NoteBlockAPI.songplayer.PositionSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RangeSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
-import work.xeltica.craft.core.models.EbiPowerItem;
 import work.xeltica.craft.core.models.NbsModel;
 import work.xeltica.craft.core.utils.Config;
 
@@ -32,6 +30,10 @@ public class NbsStore {
         loadModels();
         playAll();
         instance = this;
+    }
+
+    public static NbsStore getInstance() {
+        return NbsStore.instance;
     }
 
     /**
@@ -234,7 +236,6 @@ public class NbsStore {
     private final Map<Location, NbsModel> modelCache = new HashMap<>();
     private Config nbs;
 
-    @Getter
     private static NbsStore instance;
 
     private static final String NBS_PATH = "/srv/nbs/";

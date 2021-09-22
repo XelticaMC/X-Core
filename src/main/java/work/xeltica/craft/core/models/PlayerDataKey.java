@@ -32,4 +32,8 @@ public enum PlayerDataKey {
 
     @Getter
     private final String physicalKey;
+
+    public String getPhysicalKey() {
+        return this.physicalKey;
+    }
 }
