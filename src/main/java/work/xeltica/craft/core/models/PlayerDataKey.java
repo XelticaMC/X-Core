@@ -23,6 +23,7 @@ public enum PlayerDataKey {
     PLAYED_COUNTER("played_counter"),
     RECEIVED_LOGIN_BONUS("login_bonus"),
     RECEIVED_LOGIN_BONUS_SUMMER("login_bonus_summer"),
+    BROKEN_BLOCKS_COUNT("broken_blocks_count"),
 
     ;
 

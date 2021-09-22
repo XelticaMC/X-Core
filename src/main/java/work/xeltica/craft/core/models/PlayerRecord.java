@@ -1,12 +1,15 @@
 package work.xeltica.craft.core.models;
 
+import java.io.IOException;
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
-import work.xeltica.craft.core.utils.Config;
 
-import java.io.IOException;
-import java.util.UUID;
+import lombok.Getter;
+import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.utils.Config;
 
 /**
  * プレイヤーごとのデータを読み書きするインターフェイスです。
@@ -20,14 +23,15 @@ public class PlayerRecord {
     }
 
     public void set(PlayerDataKey key, Object value) {
-        set(key, value, true);
-    }
-
-    public void set(PlayerDataKey key, Object value, boolean save) {
         if (value != null && value.equals(get(key))) return;
         if (get(key) == null && value == null) return;
         section.set(key.getPhysicalKey(), value);
-        if (save) save();
+        PlayerStore.getInstance().setChanged(true);
+    }
+
+    @Deprecated(since = "Use set(PlayerDataKey, Object) instead.")
+    public void set(PlayerDataKey key, Object value, boolean save) {
+        set(key, value);
     }
 
     public boolean has(PlayerDataKey key) {
@@ -101,7 +105,7 @@ public class PlayerRecord {
     public boolean isLong(PlayerDataKey key) {
         return section.isLong(key.getPhysicalKey());
     }
-
+    
     public Vector getVector(PlayerDataKey key) {
         return section.getVector(key.getPhysicalKey());
     }
@@ -113,7 +117,7 @@ public class PlayerRecord {
     public boolean isVector(PlayerDataKey key) {
         return section.isVector(key.getPhysicalKey());
     }
-
+    
     public Location getLocation(PlayerDataKey key) {
         return section.getLocation(key.getPhysicalKey());
     }
@@ -145,9 +149,6 @@ public class PlayerRecord {
     private final Config conf;
     private final ConfigurationSection section;
 
+    @Getter
     private final UUID playerId;
-
-    public UUID getPlayerId() {
-        return this.playerId;
-    }
 }
