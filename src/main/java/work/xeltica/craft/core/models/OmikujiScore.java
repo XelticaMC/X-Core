@@ -1,6 +1,5 @@
 package work.xeltica.craft.core.models;
 
-import lombok.Getter;
 
 /**
  * おみくじの結果を定義しています。
@@ -21,7 +20,6 @@ public enum OmikujiScore {
         this.displayName = displayName;
     }
 
-    @Getter
     private final String displayName;
 
     public String getDisplayName() {

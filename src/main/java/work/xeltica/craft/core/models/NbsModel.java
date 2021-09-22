@@ -1,7 +1,5 @@
 package work.xeltica.craft.core.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +11,6 @@ import java.util.Map;
  *
  * @author Xeltica
  */
-@Data
-@AllArgsConstructor
 public class NbsModel implements Cloneable, ConfigurationSerializable {
 
     public NbsModel(Location location, String songId, int distance, PlaybackMode playbackMode) {

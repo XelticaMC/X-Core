@@ -3,7 +3,6 @@ package work.xeltica.craft.core.models;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-import lombok.Getter;
 
 /**
  * ロビーの種類を定義しています。
@@ -43,9 +42,7 @@ public enum HubType {
         return new Location(Bukkit.getWorld(getWorldName()), getX() + .5, getY() + .5, getZ() + .5);
     }
 
-    @Getter
     String worldName;
-    @Getter
     Vector3 location;
 
     public String getWorldName() {

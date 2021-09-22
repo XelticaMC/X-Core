@@ -1,7 +1,5 @@
 package work.xeltica.craft.core.models;
 
-import lombok.Getter;
-
 /**
  * プレイヤーごとに保存するデータのキーを定義しています。
  * PlayerStore で使用します。
@@ -31,7 +29,6 @@ public enum PlayerDataKey {
         this.physicalKey = physicalKey;
     }
 
-    @Getter
     private final String physicalKey;
 
     public String getPhysicalKey() {

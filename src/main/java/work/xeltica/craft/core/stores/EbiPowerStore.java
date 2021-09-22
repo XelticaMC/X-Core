@@ -7,7 +7,6 @@ import java.util.List;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 
-import lombok.Getter;
 import work.xeltica.craft.core.models.EbiPowerEffect;
 import work.xeltica.craft.core.models.EbiPowerItem;
 import work.xeltica.craft.core.plugins.VaultPlugin;
@@ -120,12 +119,9 @@ public class EbiPowerStore {
         return vault.tryWithdrawPlayer(p, amount);
     }
 
-    @Getter
     private static EbiPowerStore instance;
-    @Getter
     private List<EbiPowerItem> shopItems = new ArrayList<>();
 
-    @Getter
     private List<EbiPowerEffect> effectShopItems = new ArrayList<>();
 
     private final Config ep;

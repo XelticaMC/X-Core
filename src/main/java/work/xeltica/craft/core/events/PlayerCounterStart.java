@@ -5,7 +5,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-import lombok.Getter;
 import work.xeltica.craft.core.models.CounterData;
 
 /**
@@ -35,9 +34,15 @@ public class PlayerCounterStart extends Event {
 
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
-    @Getter
     private CounterData counter;
 
-    @Getter
     private Player player;
+
+    public CounterData getCounter() {
+        return this.counter;
+    }
+
+    public Player getPlayer() {
+        return this.player;
+    }
 }
