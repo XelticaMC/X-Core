@@ -1,24 +1,17 @@
 package work.xeltica.craft.core.models;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
-import org.checkerframework.checker.units.qual.K;
-
-import lombok.Getter;
-import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.stores.RankingStore;
 import work.xeltica.craft.core.utils.Config;
 import work.xeltica.craft.core.utils.Time;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * ランキングデータのインターフェイス
@@ -267,10 +260,13 @@ public class Ranking {
         }
     }
 
-    @Getter
     private String name;
 
     private HashMap<String, Integer> records;
     private ConfigurationSection thisSection;
     private Config conf;
+
+    public String getName() {
+        return this.name;
+    }
 }

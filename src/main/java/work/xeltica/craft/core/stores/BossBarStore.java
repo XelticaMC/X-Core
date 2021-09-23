@@ -1,12 +1,10 @@
 package work.xeltica.craft.core.stores;
 
-import java.util.ArrayList;
-
+import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import lombok.Getter;
-import net.kyori.adventure.bossbar.BossBar;
+import java.util.ArrayList;
 
 /**
  * 全体向けに表示するBossBarを管理します。
@@ -15,6 +13,10 @@ import net.kyori.adventure.bossbar.BossBar;
 public class BossBarStore {
     public BossBarStore() {
         BossBarStore.instance = this;
+    }
+
+    public static BossBarStore getInstance() {
+        return BossBarStore.instance;
     }
 
     public void add(BossBar bar) {
@@ -39,6 +41,5 @@ public class BossBarStore {
 
     private final ArrayList<BossBar> bossBars = new ArrayList<>();
 
-    @Getter
     private static BossBarStore instance;
 }

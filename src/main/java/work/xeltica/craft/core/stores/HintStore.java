@@ -1,23 +1,21 @@
 package work.xeltica.craft.core.stores;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
-
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
-import org.bukkit.entity.Player;
-
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.Action;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.entity.Player;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.utils.Config;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * プレイヤーのヒントを達成する処理や、ヒントを達成しているかどうかの取得などを行います。
@@ -27,6 +25,10 @@ public class HintStore {
     public HintStore() {
         HintStore.instance = this;
         hints = new Config("hints");
+    }
+
+    public static HintStore getInstance() {
+        return HintStore.instance;
     }
 
     public boolean hasAchieved(Player p, Hint hint) {
@@ -75,7 +77,6 @@ public class HintStore {
         hints.save();
     }
 
-    @Getter
     private static HintStore instance;
     private final Config hints;
 }

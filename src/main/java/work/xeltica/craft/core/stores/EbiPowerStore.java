@@ -7,7 +7,6 @@ import java.util.List;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 
-import lombok.Getter;
 import work.xeltica.craft.core.models.EbiPowerEffect;
 import work.xeltica.craft.core.models.EbiPowerItem;
 import work.xeltica.craft.core.plugins.VaultPlugin;
@@ -30,6 +29,10 @@ public class EbiPowerStore {
             this.effectShopItems = (List<EbiPowerEffect>)c.getList(
                     CONFIG_KEY_EFFECT_SHOP_ITEMS, new ArrayList<EbiPowerEffect>());
         });
+    }
+
+    public static EbiPowerStore getInstance() {
+        return EbiPowerStore.instance;
     }
 
     public void deleteItem(EbiPowerItem item) {
@@ -116,18 +119,23 @@ public class EbiPowerStore {
         return vault.tryWithdrawPlayer(p, amount);
     }
 
-    @Getter
     private static EbiPowerStore instance;
-    @Getter
     private List<EbiPowerItem> shopItems = new ArrayList<>();
 
-    @Getter
     private List<EbiPowerEffect> effectShopItems = new ArrayList<>();
 
     private final Config ep;
 
     private static final String CONFIG_KEY_SHOP_ITEMS = "shopItems";
     private static final String CONFIG_KEY_EFFECT_SHOP_ITEMS = "effectShopItems";
+
+    public List<EbiPowerItem> getShopItems() {
+        return this.shopItems;
+    }
+
+    public List<EbiPowerEffect> getEffectShopItems() {
+        return this.effectShopItems;
+    }
 
     public enum Result {
         SUCCESS,

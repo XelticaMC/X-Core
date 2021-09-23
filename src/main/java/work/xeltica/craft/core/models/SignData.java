@@ -1,13 +1,11 @@
 package work.xeltica.craft.core.models;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * クラシックロビーのコマンド看板のデータを表すモデルです。
@@ -56,12 +54,24 @@ public class SignData implements Cloneable, ConfigurationSerializable {
         return new SignData(location, command, arg1, arg2);
     }
 
-    @Getter
     private final Location location;
-    @Getter
     private final String command;
-    @Getter
     private final String arg1;
-    @Getter
     private final String arg2;
+
+    public Location getLocation() {
+        return this.location;
+    }
+
+    public String getCommand() {
+        return this.command;
+    }
+
+    public String getArg1() {
+        return this.arg1;
+    }
+
+    public String getArg2() {
+        return this.arg2;
+    }
 }

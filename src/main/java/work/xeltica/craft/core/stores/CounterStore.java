@@ -1,19 +1,16 @@
 package work.xeltica.craft.core.stores;
 
+import org.bukkit.Location;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import work.xeltica.craft.core.models.CounterData;
+import work.xeltica.craft.core.models.PlayerDataKey;
+import work.xeltica.craft.core.utils.Config;
+
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import org.bukkit.Location;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
-
-import lombok.Getter;
-import work.xeltica.craft.core.models.CounterData;
-import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.utils.Config;
 
 /**
  * 時間計測カウンターの情報を管理します。
@@ -24,6 +21,10 @@ public class CounterStore {
         instance = this;
         config = new Config("counters");
         loadAll();
+    }
+
+    public static CounterStore getInstance() {
+        return CounterStore.instance;
     }
 
     /**
@@ -107,7 +108,7 @@ public class CounterStore {
             .forEach(record -> record.delete(PlayerDataKey.PLAYED_COUNTER, false));
         pstore.save();
     }
-    
+
     /**
      * インデックスにカウンターデータを追加する
      */
@@ -115,7 +116,7 @@ public class CounterStore {
         location1Index.put(data.getLocation1(), data);
         location2Index.put(data.getLocation2(), data);
     }
-    
+
     /**
      * インデックスからカウンターデータを削除する
      */
@@ -133,7 +134,6 @@ public class CounterStore {
         });
     }
 
-    @Getter
     private static CounterStore instance;
 
     /** counters.yml */

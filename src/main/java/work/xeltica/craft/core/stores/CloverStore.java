@@ -1,15 +1,12 @@
 package work.xeltica.craft.core.stores;
 
-import java.io.IOException;
-
 import com.google.common.collect.Lists;
-
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-
-import lombok.Getter;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.utils.Config;
+
+import java.io.IOException;
 
 /**
  * 廃止前のクローバー情報を格納するストアです。
@@ -50,7 +47,6 @@ public class CloverStore {
         return VaultPlugin.getInstance();
     }
 
-    @Getter
     private static CloverStore instance;
     private final Config clovers;
 }

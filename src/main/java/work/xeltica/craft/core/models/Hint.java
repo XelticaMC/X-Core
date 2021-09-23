@@ -1,6 +1,5 @@
 package work.xeltica.craft.core.models;
 
-import lombok.Getter;
 import work.xeltica.craft.core.handlers.EbiPowerHandler;
 
 /**
@@ -205,14 +204,26 @@ public enum Hint {
         this.type = type;
     }
 
-    @Getter
     private final String name;
-    @Getter
     private final String description;
-    @Getter
     private final int power;
-    @Getter
     private final HintType type;
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public int getPower() {
+        return this.power;
+    }
+
+    public HintType getType() {
+        return this.type;
+    }
 
     public enum HintType {
         NORMAL,

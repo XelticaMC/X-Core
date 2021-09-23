@@ -1,6 +1,5 @@
 package work.xeltica.craft.core.models;
 
-import lombok.Getter;
 
 public enum SoundPitch {
     F_0(0.5f),
@@ -33,6 +32,9 @@ public enum SoundPitch {
         this.pitch = pitch;
     }
 
-    @Getter
     private final float pitch;
+
+    public float getPitch() {
+        return this.pitch;
+    }
 }

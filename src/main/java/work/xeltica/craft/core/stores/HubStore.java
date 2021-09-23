@@ -1,12 +1,5 @@
 package work.xeltica.craft.core.stores;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -15,13 +8,18 @@ import org.bukkit.SoundCategory;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-
-import lombok.Getter;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.SignData;
 import work.xeltica.craft.core.utils.Config;
 import work.xeltica.craft.core.utils.LocationComparator;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * クラシックロビーのコマンド看板の保存・読み出しを行います。
@@ -36,6 +34,10 @@ public class HubStore {
             signData = (List<SignData>) s.getConf().getList("signs", new ArrayList<SignData>());
         });
         loadSignsFile();
+    }
+
+    public static HubStore getInstance() {
+        return HubStore.instance;
     }
 
     public void teleport(Player player, HubType type) {
@@ -160,7 +162,6 @@ public class HubStore {
         "sandbox2",
     };
 
-    @Getter
     private static HubStore instance;
 
     private final Config signs;

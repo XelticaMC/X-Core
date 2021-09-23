@@ -1,24 +1,14 @@
 package work.xeltica.craft.core.stores;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
-
-import lombok.Getter;
-import lombok.Setter;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.bossbar.BossBar.Color;
+import net.kyori.adventure.bossbar.BossBar.Overlay;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-
-import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.bossbar.BossBar.Color;
-import net.kyori.adventure.bossbar.BossBar.Overlay;
-import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitTask;
@@ -29,6 +19,13 @@ import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.PlayerRecord;
 import work.xeltica.craft.core.utils.Config;
 import work.xeltica.craft.core.utils.Ticks;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * プレイヤー固有データの管理を行い、読み書きを行うPlayer Store APIを提供します。
@@ -180,10 +177,8 @@ public class PlayerStore {
     private BukkitTask scheduledSaver;
     private static Map<UUID, BossBar> liveBarMap;
 
-    @Getter @Setter
     private boolean changed;
 
-    @Getter @Setter
     private boolean autoSave = true;
 
     private static org.bukkit.Color[] colors = {
@@ -201,4 +196,20 @@ public class PlayerStore {
             org.bukkit.Color.fromRGB(0xff55a1), // magenta
             org.bukkit.Color.fromRGB(0xff5c84), // pink
     };
+
+    public boolean isChanged() {
+        return this.changed;
+    }
+
+    public boolean isAutoSave() {
+        return this.autoSave;
+    }
+
+    public void setChanged(boolean changed) {
+        this.changed = changed;
+    }
+
+    public void setAutoSave(boolean autoSave) {
+        this.autoSave = autoSave;
+    }
 }
