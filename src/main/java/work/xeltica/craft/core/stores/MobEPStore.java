@@ -20,12 +20,7 @@ public class MobEPStore {
 
     public static MobEPStore getInstance() { return instance; }
 
-    public void playerKillEntity(Player player, Entity entity, EntityDeathEvent event) {
-        final var dropEP = getMobDropEP(entity, event);
-        EbiPowerStore.getInstance().tryGive(player, dropEP);
-    }
-
-    private int getMobDropEP(Entity entity, EntityDeathEvent event) {
+    public int getMobDropEP(Entity entity, EntityDeathEvent event) {
         final var conf = config.getConf();
         if (entity.getType() == EntityType.ENDERMAN) {
             if (event.getDrops().stream().map(ItemStack::getType).toList().contains(Material.ENDER_PEARL)) {
