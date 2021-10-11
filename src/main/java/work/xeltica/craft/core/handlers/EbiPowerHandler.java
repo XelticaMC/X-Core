@@ -33,6 +33,7 @@ import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.stores.MobEPStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 
 /**
@@ -122,7 +123,7 @@ public class EbiPowerHandler implements Listener{
             if (victim instanceof Ageable man && !(victim instanceof Monster) && !(victim instanceof Hoglin) && !man.isAdult()) return;
             // ignore creatures from spawner
             if (victim.fromMobSpawner()) return;
-            var ep = "nightmare2".equals(killer.getWorld().getName()) ? 12 : 6;
+            var ep = "nightmare2".equals(killer.getWorld().getName()) ? MobEPStore.getInstance().getMobDropEP(victim, e) : 6;
             final var buff = getMobDropBonus(killer.getInventory().getItemInMainHand()) * 4;
             ep += (buff > 0 ? random.nextInt(buff) : 0);
             if (ep > 0) {

@@ -9,11 +9,15 @@ import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import work.xeltica.craft.core.stores.MobEPStore;
 
 /**
  * ナイトメアワールドに関するハンドラーをまとめています。
@@ -86,6 +90,19 @@ public class NightmareHandler implements Listener {
                 EntityDamageEvent.DamageCause.BLOCK_EXPLOSION
         ).contains(e.getCause())) {
             creeper.ignite();
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onEntityDeath(EntityDeathEvent e) {
+        if (!isNightmare(e.getEntity().getWorld())) return;
+        final var entity = e.getEntity();
+        final var lastDamage = entity.getLastDamageCause();
+        if (lastDamage instanceof EntityDamageByEntityEvent lastEv) {
+            final var damager = lastEv.getDamager();
+            if (damager instanceof Player player) {
+                MobEPStore.getInstance().playerKillEntity(player, entity, e);
+            }
         }
     }
 
