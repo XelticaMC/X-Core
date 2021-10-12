@@ -1,22 +1,32 @@
 version: 2.1
 
 jobs:
-  build-develop:  
+  build-develop:
+    parallelism: 2
+    environment:
+      _JAVA_OPTIONS: "-Xmx3g"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
     docker:
       - image: cimg/openjdk:16.0
     steps:
       - checkout
       - restore_cache:
-          key: x-cache-{{ checksum "pom.xml" }}
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
       - run:
           name: ビルド
-          command: mvn -B -DskipTests package
+          command: ./gradlew build
       - save_cache:
           paths:
-            - ~/.m2
-          key: x-cache-{{ checksum "pom.xml" }}
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
       - store_artifacts:
-          path: ~/project/target/XCore.jar
+          path: ~/project/build/libs/XCore.jar
       - run: 
           name: フィンガープリント登録
           command: echo 'dev.craft.xeltica.work,172.105.228.229 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts;
@@ -32,7 +42,7 @@ jobs:
           command: sudo apt-get update && sudo apt-get install lftp
       - run:
           name: サーバーへのプラグインのアップロード
-          command: mkdir p && mv ./target/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://dev.craft.xeltica.work
+          command: mkdir p && mv ./build/libs/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://dev.craft.xeltica.work
       - run: 
           name: サーバーへのプラグインのインストール
           command: ssh xeltica@dev.craft.xeltica.work 'sh /srv/deploy-core.sh'
