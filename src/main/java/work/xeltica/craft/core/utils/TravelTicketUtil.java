@@ -16,6 +16,11 @@ import work.xeltica.craft.core.travels.TicketType;
  * @author Xeltica
  * @deprecated
  */
+@Deprecated(since = """
+作り直す可能性が大きいのでこのメソッドはできるだけ使用しないこと。
+今出ている警告は放置してOK（作り直したときに改修箇所を明らかにするため）
+"""
+)
 public class TravelTicketUtil {
 
     public static ItemStack GenerateTravelTicket(TicketType ticketType) {

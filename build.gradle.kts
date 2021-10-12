@@ -67,3 +67,7 @@ publishing {
 tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
 }
+
+tasks.jar {
+    archiveFileName.set("${project.name}.jar")
+}

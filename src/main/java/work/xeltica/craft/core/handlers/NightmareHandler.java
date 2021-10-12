@@ -93,19 +93,6 @@ public class NightmareHandler implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onEntityDeath(EntityDeathEvent e) {
-        if (!isNightmare(e.getEntity().getWorld())) return;
-        final var entity = e.getEntity();
-        final var lastDamage = entity.getLastDamageCause();
-        if (lastDamage instanceof EntityDamageByEntityEvent lastEv) {
-            final var damager = lastEv.getDamager();
-            if (damager instanceof Player player) {
-                MobEPStore.getInstance().playerKillEntity(player, entity, e);
-            }
-        }
-    }
-
     private boolean isNightmare(World w) {
         // TODO ハードコーディングをやめる
         return w.getName().equals("nightmare2");
