@@ -2,7 +2,6 @@ version: 2.1
 
 jobs:
   build-develop:
-    parallelism: 2
     environment:
       _JAVA_OPTIONS: "-Xmx3g"
     docker:
