@@ -60,7 +60,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "オフラインプレイヤーをBANできない不具合を修正"
+            "キルしたモブごとに入手EPを変動させる"
     };
 
     private static MetaStore instance;
