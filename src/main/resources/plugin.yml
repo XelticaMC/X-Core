@@ -1,6 +1,6 @@
-name: ${project.artifactId}
+name: "XCore"
 main: work.xeltica.craft.core.XCorePlugin
-version: ${project.version}
+version: "2.19.0"
 api-version: 1.17
 softdepend:
   - SkinsRestorer
