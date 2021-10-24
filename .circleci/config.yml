@@ -50,16 +50,22 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: x-cache-{{ checksum "pom.xml" }}
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle.kts" }}
       - run:
           name: ビルド
-          command: mvn -B -DskipTests package
+          command: ./gradlew build
       - save_cache:
           paths:
-            - ~/.m2
-          key: x-cache-{{ checksum "pom.xml" }}
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: v1-gradle-cache-{{ checksum "build.gradle.kts" }}
       - store_artifacts:
-          path: ~/project/target/XCore.jar
+          path: ~/project/build/libs/XCore.jar
       - run: 
           name: フィンガープリント登録
           command: echo 'play.craft.xeltica.work,172.105.242.153 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHi9ZWNTLt55UEnlid3bWIryFIGhLtI249vL0R8WsYvQ8RY5dSeyr11BvqS0WvYnpTWzmNFBmuoKrgn65YoGZwk=' >> ~/.ssh/known_hosts;
@@ -75,7 +81,7 @@ jobs:
           command: sudo apt-get update && sudo apt-get install lftp
       - run:
           name: サーバーへのプラグインのアップロード
-          command: mkdir p && mv ./target/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://play.craft.xeltica.work
+          command: mkdir p && ./build/libs/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://play.craft.xeltica.work
       - run: 
           name: サーバーへのプラグインのインストール
           command: ssh xeltica@play.craft.xeltica.work 'sh /srv/deploy-core.sh'
