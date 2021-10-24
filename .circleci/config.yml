@@ -81,7 +81,7 @@ jobs:
           command: sudo apt-get update && sudo apt-get install lftp
       - run:
           name: サーバーへのプラグインのアップロード
-          command: mkdir p && ./build/libs/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://play.craft.xeltica.work
+          command: mkdir p && mv ./build/libs/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://play.craft.xeltica.work
       - run: 
           name: サーバーへのプラグインのインストール
           command: ssh xeltica@play.craft.xeltica.work 'sh /srv/deploy-core.sh'
