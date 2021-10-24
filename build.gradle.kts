@@ -26,7 +26,7 @@ repositories {
     }
 
     maven {
-        url = uri("https://repo.opencollab.dev/maven-releases/")
+        url = uri("https://repo.opencollab.dev/maven-snapshots/")
     }
 
     maven {
