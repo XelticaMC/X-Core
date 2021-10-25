@@ -81,6 +81,7 @@ import work.xeltica.craft.core.stores.CloverStore;
 import work.xeltica.craft.core.stores.CounterStore;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.stores.MobEPStore;
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
@@ -206,6 +207,7 @@ public class XCorePlugin extends JavaPlugin {
         new RankingStore();
         new NbsStore();
         new QuickChatStore();
+        new MobEPStore();
     }
 
     private void loadCommands() {
