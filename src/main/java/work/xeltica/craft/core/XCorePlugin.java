@@ -206,6 +206,7 @@ public class XCorePlugin extends JavaPlugin {
         new RankingStore();
         new NbsStore();
         new QuickChatStore();
+        new MobEPStore();
     }
 
     private void loadCommands() {
