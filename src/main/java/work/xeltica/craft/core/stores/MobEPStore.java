@@ -15,7 +15,7 @@ public class MobEPStore {
     public MobEPStore() {
         instance = this;
         XCorePlugin.getInstance().saveResource("mobEP.yml", false);
-        config = new Config("mobEP.yml");
+        config = new Config("mobEP");
     }
 
     public static MobEPStore getInstance() { return instance; }
@@ -32,8 +32,8 @@ public class MobEPStore {
                 return conf.getInt("charged_creeper");
             }
         }
-        if (conf.contains(entity.getType().name())) {
-            return conf.getInt(entity.getType().name());
+        if (conf.contains(entity.getType().name().toLowerCase())) {
+            return conf.getInt(entity.getType().name().toLowerCase());
         }
 
         if (entity instanceof Monster) {
