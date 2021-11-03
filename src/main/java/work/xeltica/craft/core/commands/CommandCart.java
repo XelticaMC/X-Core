@@ -2,8 +2,6 @@ package work.xeltica.craft.core.commands;
 
 import java.util.List;
 
-import com.destroystokyo.paper.block.TargetBlockInfo;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.data.Rail;
