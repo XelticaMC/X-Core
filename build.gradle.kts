@@ -5,6 +5,8 @@
 plugins {
     java
     `maven-publish`
+
+    id("net.minecrell.plugin-yml.bukkit") version "0.5.0"
 }
 
 repositories {
@@ -55,12 +57,249 @@ dependencies {
     compileOnly("com.discordsrv:discordsrv:1.21.1")
     compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
     compileOnly("com.github.koca2000:NoteBlockAPI:-SNAPSHOT")
+
+    library("com.google.code.gson", "gson", "2.8.7")
+    bukkitLibrary("com.google.code.gson", "gson", "2.8.7")
 }
 
 group = "work.xeltica.craft.core"
 version = "2.19.1"
 description = "X-Core"
 java.sourceCompatibility = JavaVersion.VERSION_16
+
+bukkit {
+    name = "XCore"
+    main = "work.xeltica.craft.core.XCorePlugin"
+    version = getVersion().toString()
+    apiVersion = "1.17"
+    softDepend = listOf("SkinsRestorer")
+    depend = listOf("Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
+
+    commands {
+        register("omikuji") {
+            description = "おみくじを引きます。マイクラ内で1日に1回まで引けて、100エビパワーを消費します。"
+            usage = "/omikuji"
+        }
+        register("respawn") {
+            description = "メインワールドの初期スポーンに戻ります。"
+            usage = "/respawn"
+        }
+        register("pvp") {
+            description = "現在のワールドのPvP設定を変更します。"
+            usage = "/pvp <on/off>"
+            permission = "otanoshimi.command.pvp"
+        }
+        register("signedit") {
+            description = "看板の指定行を編集します。"
+            usage = "/signedit <行番号> <テキスト>"
+            permission = "otanoshimi.command.signedit"
+        }
+        register("givetravelticket") {
+            description = "トラベルチケットを授与します。"
+            usage = "/givetravelticket <playerName> [type=NORMAL] [amount=1]"
+            permission = "otanoshimi.command.givetravelticket"
+        }
+        register("givecustomitem") {
+            description = "XelticaMCオリジナルアイテムを授与します。"
+            usage = "/givetravelticket <playerName> <xphone>"
+            permission = "otanoshimi.command.givecustomitem"
+        }
+        register("report") {
+            description = "処罰GUIを表示します。"
+            usage = "/report <playerName>"
+            permission = "otanoshimi.command.report"
+        }
+        register("localtime") {
+            description = "現在いるワールドの時間を設定します。"
+            usage = "/localtime <add|set|query> [day|night|noon|midnight|sunrise|sunset|(数値)]"
+            permission = "otanoshimi.command.localtime"
+        }
+        register("boat") {
+            description = "ボートを召喚します。"
+            usage = "/boat"
+            permission = "otanoshimi.command.boat"
+        }
+        register("cart") {
+            description = "トロッコを召喚します。"
+            usage = "/cart"
+            permission = "otanoshimi.command.cart"
+        }
+        register("promo") {
+            description = "市民への昇格方法を確認します。"
+            usage = "/promo"
+        }
+        register("cat") {
+            description = "CATモードの有効/無効を切り替えるか、現在のモードを取得します。"
+            usage = "/cat [on/off]"
+            permission = "otanoshimi.command.cat"
+        }
+        register("hub") {
+            description = "ロビーに移動します。"
+            usage = "/hub help"
+        }
+        register("xtp") {
+            description = "保存された過去位置を用いてテレポートします。"
+            usage = "/xtp <world> [player]"
+            permission = "otanoshimi.command.xtp"
+            aliases = listOf("xteleport")
+        }
+        register("xphone") {
+            description = "X Phone を入手する"
+            usage = "/xphone"
+            permission = "otanoshimi.command.xphone"
+            aliases = listOf("phone")
+        }
+        register("live") {
+            description = "ライブ配信モードを切り替える"
+            usage = "/live <on/off>"
+            permission = "otanoshimi.command.live"
+        }
+        register("epshop") {
+            description = "エビパワーストアを開きます。"
+            usage = "/epshop"
+            permission = "otanoshimi.command.epshop"
+        }
+        register("hint") {
+            description = "ヒントメニューを開きます。"
+            usage = "/hint [hint-id]"
+            permission = "otanoshimi.command.hint"
+        }
+        register("counter") {
+            description = "カウンター管理"
+            usage = "/counter <register/unregister/cancel/bind/info/list/resetdaily>"
+            permission = "otanoshimi.command.counter"
+        }
+        register("ranking") {
+            description = "ランキング管理"
+            usage = "/ranking <create/delete/query/list/set/unset/hologram>"
+            permission = "otanoshimi.command.ranking"
+        }
+        register("countdown") {
+            description = "カウントダウンを表示します。"
+            usage = "/countdown <秒数> [プレイヤー名...]"
+            permission = "otanoshimi.command.countdown"
+        }
+        register("qchat") {
+            description = "QuickChatの設定"
+            usage = "/qchat <register/unregister/list>"
+            permission = "otanoshimi.command.qchat"
+        }
+        register("epeffectshop") {
+            description = "エビパワードラッグストアを開きます。"
+            usage = "/epeffectshop"
+            permission = "otanoshimi.command.epeffectshop"
+        }
+        register("__core_gui_event__") {
+            description = "?"
+            usage = "?"
+        }
+    }
+
+    permissions {
+        register("otanoshimi.command.pvp") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.givetravelticket") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.givecustomitem") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.signedit") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.report") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.localtime") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.boat") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.cart") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.citizen") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.staff") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.cat") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
+        }
+        register("hub.teleport.sandbox") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("hub.teleport.art") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("hub.teleport.nightmare") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("hub.gatekeeper.citizen") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("hub.gatekeeper.staff") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.debug") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.xtp") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.xtp.other") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.epshop") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
+        }
+        register("otanoshimi.command.epshop.add") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.epshop.delete") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.hint") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
+        }
+        register("otanoshimi.command.xphone") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
+        }
+        register("otanoshimi.command.live") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
+        }
+        register("otanoshimi.command.nickname") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
+        }
+        register("otanoshimi.command.counter") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.ranking") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.countdown") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.qchat") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.app.fireworks") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.FALSE
+        }
+        register("otanoshimi.command.epeffectshop") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
+        }
+        register("otanoshimi.command.epeffectshop.add") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.epeffectshop.delete") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+    }
+}
 
 publishing {
     publications.create<MavenPublication>("maven") {
