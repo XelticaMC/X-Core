@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.block.data.Rail;
+import org.bukkit.block.data.type.RedstoneRail;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -27,13 +29,20 @@ public class CommandCart extends CommandPlayerOnlyBase {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。");
         }
 
-        final var loc = player.getLocation();
-        loc.getWorld().spawnEntity(loc, EntityType.MINECART, SpawnReason.CUSTOM);
+        final var lookBlock = player.getTargetBlock(5);
 
-        player.sendMessage("トロッコを足元に召喚した。");
-        player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 2);
+        if (lookBlock == null) return true;
 
-        HintStore.getInstance().achieve(player, Hint.MINECART);
+        if (lookBlock.getType().data == Rail.class || lookBlock.getType().data == RedstoneRail.class) {
+            final var spawnLoc = lookBlock.getLocation().add(0, 0.5,0);
+            spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.MINECART, SpawnReason.CUSTOM);
+            player.sendMessage("トロッコを召喚した。");
+            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 2);
+
+            HintStore.getInstance().achieve(player, Hint.MINECART);
+        } else {
+            return Gui.getInstance().error(player,"ここには召喚できない");
+        }
         return true;
     }
 
