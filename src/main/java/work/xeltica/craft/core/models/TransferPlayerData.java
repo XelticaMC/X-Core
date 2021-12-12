@@ -1,22 +1,65 @@
 package work.xeltica.craft.core.models;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class TransferPlayerData {
+    public enum TransferPlayerType {
+        FROM_PLAYER,
+        TO_PLAYER
+    }
+
     public TransferPlayerData(Player from, Player to) {
         this.from = from;
         this.to = to;
+
+        standby.put(from.getUniqueId(), this);
+        standby.put(to.getUniqueId(), this);
+
+        from.sendMessage("引っ越しの申請をしました");
+        to.sendMessage("引っ越しの受け取りができます");
     }
 
-    private void process() {
+    public TransferPlayerType getType(Player player) {
+        if (player.getUniqueId() == from.getUniqueId()) {
+            return TransferPlayerType.FROM_PLAYER;
+        } else if (player.getUniqueId() == to.getUniqueId()) {
+            return TransferPlayerType.TO_PLAYER;
+        } else {
+            return null;
+        }
+    }
+    public void process() {
+        from.sendMessage("引っ越しを開始します");
+        to.sendMessage("引っ越しを開始します");
+
         transferEbiPower();
         transferHint();
         transferPlayerStoreData();
+
+        to.sendMessage("引っ越しが完了しました");
+        from.kick(Component.text("引っ越しが完了しました"));
+
+        close();
+    }
+
+    public void cancel() {
+        from.sendMessage("引っ越しがキャンセルされました");
+        to.sendMessage("引っ越しがキャンセルされました");
+        close();
+    }
+
+    public void close() {
+        standby.remove(from.getUniqueId());
+        standby.remove(to.getUniqueId());
     }
 
     private void transferEbiPower() {
@@ -55,5 +98,12 @@ public class TransferPlayerData {
     }
 
     private final Player from;
+
     private final Player to;
+
+    public static TransferPlayerData getInstance(Player player) {
+        return standby.get(player.getUniqueId());
+    }
+
+    private static final Map<UUID, TransferPlayerData> standby = new HashMap<>();
 }
