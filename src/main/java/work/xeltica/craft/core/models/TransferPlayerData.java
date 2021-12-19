@@ -2,6 +2,7 @@ package work.xeltica.craft.core.models;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import work.xeltica.craft.core.stores.CloverStore;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.PlayerStore;
@@ -44,6 +45,7 @@ public class TransferPlayerData {
         transferEbiPower();
         transferHint();
         transferPlayerStoreData();
+        transferClover();
 
         to.sendMessage("引っ越しが完了しました");
         from.kick(Component.text("引っ越しが完了しました"));
@@ -95,6 +97,13 @@ public class TransferPlayerData {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void transferClover() {
+        final var cloverStore = CloverStore.getInstance();
+        final var hasClover = cloverStore.getCloverOf(from);
+        cloverStore.set(to, hasClover);
+        cloverStore.delete(from);
     }
 
     private final Player from;
