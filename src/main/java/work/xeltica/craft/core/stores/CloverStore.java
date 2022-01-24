@@ -3,6 +3,7 @@ package work.xeltica.craft.core.stores;
 import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.utils.Config;
 
@@ -20,6 +21,8 @@ public class CloverStore {
         CloverStore.instance = this;
         clovers = new Config("clovers");
     }
+
+    public static CloverStore getInstance() { return instance; }
 
     public void saveAllCloversAccount() {
         final var eco = plugin().getEconomy();
@@ -41,6 +44,18 @@ public class CloverStore {
 
     public double getCloverOf(OfflinePlayer p) {
         return clovers.getConf().getDouble(p.getUniqueId().toString());
+    }
+
+    public void set(Player player, double balance) {
+        clovers.getConf().set(player.getUniqueId().toString(), balance);
+    }
+
+    public void delete(Player player) {
+        clovers.getConf().set(player.getUniqueId().toString(), null);
+    }
+
+    public void save() throws IOException {
+        clovers.save();
     }
 
     private VaultPlugin plugin() {

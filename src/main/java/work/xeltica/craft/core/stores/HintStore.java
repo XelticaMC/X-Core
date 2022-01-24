@@ -31,6 +31,17 @@ public class HintStore {
         return HintStore.instance;
     }
 
+    public List<String> getArchived(Player p) { return open(p); }
+
+    public void deleteArchiveData(Player p) {
+        hints.getConf().set(p.getUniqueId().toString(), null);
+        try {
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean hasAchieved(Player p, Hint hint) {
         return open(p).contains(hint.name());
     }

@@ -39,6 +39,7 @@ import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.SoundPitch;
+import work.xeltica.craft.core.models.TransferPlayerData;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.HubStore;
@@ -205,8 +206,39 @@ public class XphoneHandler implements Listener {
 
         items.add(appQuickChat);
 
+        final var transferPlayerData = TransferPlayerData.getInstance(player);
+
+        if (transferPlayerData != null) {
+            if (transferPlayerData.getType(player) == TransferPlayerData.TransferPlayerType.FROM_PLAYER) {
+                items.add(new MenuItem("引っ越しキャンセル", i -> cancelTransferPlayerData(player), Material.CHEST_MINECART, null, true));
+            } else if (transferPlayerData.getType(player) == TransferPlayerData.TransferPlayerType.TO_PLAYER) {
+                items.add(new MenuItem("引っ越しを受け入れる", i -> acceptTransferPlayerData(player), Material.CHEST_MINECART, null, true));
+            }
+        } else {
+            items.add(new MenuItem("引っ越し", i -> openTransferPlayerDataApp(player), Material.CHEST_MINECART));
+        }
+
         playStartupSound(player);
         ui().openMenu(player, "X Phone OS", items);
+    }
+
+    private void openTransferPlayerDataApp(Player player) {
+        final var list = new ArrayList<MenuItem>();
+
+        for (Player p: player.getServer().getOnlinePlayers()) {
+            if (p.getUniqueId() == player.getUniqueId()) continue;
+            list.add(new MenuItem(p.getName(), i -> new TransferPlayerData(player, p)));
+        }
+        ui().openMenu(player, "引っ越し先の選択", list);
+    }
+
+    private void acceptTransferPlayerData(Player player) {
+        final var transferPlayerData = TransferPlayerData.getInstance(player);
+        transferPlayerData.process();
+    }
+
+    private void cancelTransferPlayerData(Player player) {
+        TransferPlayerData.getInstance(player).cancel();
     }
 
     private void openTeleportApp(Player p) {
