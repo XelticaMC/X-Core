@@ -2,7 +2,6 @@ package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -291,7 +290,6 @@ public class WorldHandler implements Listener {
                 }
 
                 if (flag) {
-                    System.out.println(recipe.getFixedRecipe());
                     for (ItemStack itemStack: inventory.getContents()) {
                         if (itemStack == null) continue;
                         inventory.remove(itemStack);
