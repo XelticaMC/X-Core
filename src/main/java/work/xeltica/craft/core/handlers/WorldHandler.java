@@ -2,6 +2,7 @@ package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +34,14 @@ import org.bukkit.event.world.ChunkPopulateEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
+import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.material.Directional;
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.models.CraftRecipe;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.HintStore;
@@ -248,52 +253,65 @@ public class WorldHandler implements Listener {
             }
         }
         if (itemFlame == null) return;
+        event.setCancelled(true);
 
         final var item = itemFlame.getItem();
-        final var ingredients = new ArrayList<ItemStack>();
+        final var recipes = new ArrayList<CraftRecipe>();
         for (Recipe recipe: Bukkit.getServer().getRecipesFor(item)) {
             if (recipe instanceof ShapedRecipe shapedRecipe) {
+                final var ingredients = new ArrayList<ItemStack>();
                 for (ItemStack i: shapedRecipe.getIngredientMap().values()) {
                     ingredients.add(new ItemStack(i.getType(),1));
                 }
+                recipes.add(new CraftRecipe(ingredients, recipe.getResult()));
+            }
+            if (recipe instanceof ShapelessRecipe shapelessRecipe) {
+                final var ingredients = new ArrayList<ItemStack>();
+                for (ItemStack i: shapelessRecipe.getIngredientList()) {
+                    ingredients.add(new ItemStack(i.getType(), 1));
+                }
+                recipes.add(new CraftRecipe(ingredients, recipe.getResult()));
             }
         }
 
-        final var fixedIngredient = ingredients.stream().collect(
-                Collectors.groupingBy(x -> x.getType(), Collectors.counting())
-        );
-
         if (block.getState() instanceof Dispenser dispenser) {
-            var flag = true;
             final var inventory = dispenser.getInventory();
-            final var fixedInventory = Arrays.stream(inventory.getContents()).filter(Objects::nonNull).collect(
-                    Collectors.groupingBy(x -> x.getType(), Collectors.summingInt(ItemStack::getAmount))
-            );
 
-            for (Material ingredient: fixedIngredient.keySet()) {
-                if (fixedInventory.containsKey(ingredient) && fixedInventory.get(ingredient) >= fixedIngredient.get(ingredient)) {
-                    fixedInventory.replace(ingredient, fixedInventory.get(ingredient) - fixedIngredient.get(ingredient).intValue());
-                    continue;
-                }
-                flag = false;
-                break;
-            }
-
-            if (flag) {
-                event.setCancelled(true);
-                for (ItemStack itemStack: inventory.getContents()) {
-                    if (itemStack == null) continue;
-                    inventory.remove(itemStack);
-                }
-                for (Map.Entry<Material, Integer> entry: fixedInventory.entrySet()) {
-                    final var itemStack = new ItemStack(entry.getKey());
-                    itemStack.setAmount(entry.getValue());
-                    inventory.addItem(itemStack);
+            for (CraftRecipe recipe: recipes) {
+                final var fixedInventory = Arrays.stream(inventory.getContents()).filter(Objects::nonNull).collect(
+                        Collectors.groupingBy(x -> x.getType(), Collectors.summingInt(ItemStack::getAmount))
+                );
+                var flag = true;
+                for (Material ingredient: recipe.getFixedRecipe().keySet()) {
+                    if (fixedInventory.containsKey(ingredient) && fixedInventory.get(ingredient) >= recipe.getFixedRecipe().get(ingredient)) {
+                        fixedInventory.replace(ingredient, fixedInventory.get(ingredient) - recipe.getFixedRecipe().get(ingredient));
+                        continue;
+                    }
+                    flag = false;
                 }
 
+                if (flag) {
+                    System.out.println(recipe.getFixedRecipe());
+                    for (ItemStack itemStack: inventory.getContents()) {
+                        if (itemStack == null) continue;
+                        inventory.remove(itemStack);
+                    }
+                    for (Map.Entry<Material, Integer> entry: fixedInventory.entrySet()) {
+                        final var itemStack = new ItemStack(entry.getKey());
+                        itemStack.setAmount(entry.getValue());
+                        inventory.addItem(itemStack);
+                    }
 
-
-                block.getWorld().dropItem(block.getLocation(), item);
+                    if (event.getBlock().getState().getData() instanceof Directional directional) {
+                        final var location = block.getLocation().toBlockLocation().add(directional.getFacing().getDirection());
+                        if (location.getBlock().getState() instanceof BlockInventoryHolder inventoryHolder) {
+                            inventoryHolder.getInventory().addItem(recipe.result());
+                            return;
+                        }
+                        block.getWorld().dropItem(location, recipe.result());
+                        return;
+                    }
+                }
             }
         }
 
