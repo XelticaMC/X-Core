@@ -1,11 +1,15 @@
 package work.xeltica.craft.core.handlers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.papermc.paper.event.block.BlockPreDispenseEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
@@ -13,6 +17,9 @@ import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.block.Dispenser;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.GlowItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,6 +33,9 @@ import org.bukkit.event.world.ChunkPopulateEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
@@ -221,6 +231,72 @@ public class WorldHandler implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onDispenser(BlockPreDispenseEvent event) {
+        final var block = event.getBlock();
+        if (block.getBlockData().getMaterial() != Material.DISPENSER) return;
+        GlowItemFrame itemFlame = null;
+
+        for (Entity entity: block.getLocation().toCenterLocation().getNearbyEntitiesByType(GlowItemFrame.class, 1)) {
+            if (entity instanceof GlowItemFrame flame) {
+                if (flame.getLocation().add(flame.getAttachedFace().getDirection()).getBlock().getLocation().toBlockLocation().equals(block.getLocation().toBlockLocation())) {
+                    itemFlame = flame;
+                    break;
+                }
+            }
+        }
+        if (itemFlame == null) return;
+
+        final var item = itemFlame.getItem();
+        final var ingredients = new ArrayList<ItemStack>();
+        for (Recipe recipe: Bukkit.getServer().getRecipesFor(item)) {
+            if (recipe instanceof ShapedRecipe shapedRecipe) {
+                for (ItemStack i: shapedRecipe.getIngredientMap().values()) {
+                    ingredients.add(new ItemStack(i.getType(),1));
+                }
+            }
+        }
+
+        final var fixedIngredient = ingredients.stream().collect(
+                Collectors.groupingBy(x -> x.getType(), Collectors.counting())
+        );
+
+        if (block.getState() instanceof Dispenser dispenser) {
+            var flag = true;
+            final var inventory = dispenser.getInventory();
+            final var fixedInventory = Arrays.stream(inventory.getContents()).filter(Objects::nonNull).collect(
+                    Collectors.groupingBy(x -> x.getType(), Collectors.summingInt(ItemStack::getAmount))
+            );
+
+            for (Material ingredient: fixedIngredient.keySet()) {
+                if (fixedInventory.containsKey(ingredient) && fixedInventory.get(ingredient) >= fixedIngredient.get(ingredient)) {
+                    fixedInventory.replace(ingredient, fixedInventory.get(ingredient) - fixedIngredient.get(ingredient).intValue());
+                    continue;
+                }
+                flag = false;
+                break;
+            }
+
+            if (flag) {
+                event.setCancelled(true);
+                for (ItemStack itemStack: inventory.getContents()) {
+                    if (itemStack == null) continue;
+                    inventory.remove(itemStack);
+                }
+                for (Map.Entry<Material, Integer> entry: fixedInventory.entrySet()) {
+                    final var itemStack = new ItemStack(entry.getKey());
+                    itemStack.setAmount(entry.getValue());
+                    inventory.addItem(itemStack);
+                }
+
+
+
+                block.getWorld().dropItem(block.getLocation(), item);
+            }
+        }
+
     }
 
     private Material replace(Material mat) {
