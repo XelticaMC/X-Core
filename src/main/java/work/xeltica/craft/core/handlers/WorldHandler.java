@@ -25,8 +25,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 
@@ -303,7 +306,12 @@ public class WorldHandler implements Listener {
                     if (event.getBlock().getState().getData() instanceof Directional directional) {
                         final var location = block.getLocation().toBlockLocation().add(directional.getFacing().getDirection());
                         if (location.getBlock().getState() instanceof BlockInventoryHolder inventoryHolder) {
-                            inventoryHolder.getInventory().addItem(recipe.result());
+                            final var result = inventoryHolder.getInventory().addItem(recipe.result());
+                            if (!result.isEmpty()) {
+                                for (ItemStack i: result.values()) {
+                                    block.getWorld().dropItem(location, i);
+                                }
+                            }
                             return;
                         }
                         block.getWorld().dropItem(location, recipe.result());
