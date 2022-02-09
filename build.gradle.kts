@@ -27,12 +27,12 @@ repositories {
         url = uri("https://jitpack.io")
     }
     
-//     maven {
-//         url = uri("https://repo.opencollab.dev/maven-releases/")
-//     }
-    
     maven {
         url = uri("https://repo.opencollab.dev/maven-snapshots/")
+    }
+    
+    maven {
+        url = uri("https://repo.opencollab.dev/maven-releases/")
     }
 
     maven {
