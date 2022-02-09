@@ -9,6 +9,11 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.5.0"
 }
 
+maven {
+    name 'm2-dv8tion'
+    url 'https://m2.dv8tion.net/releases'
+}
+
 repositories {
     mavenLocal()
     maven {
@@ -54,7 +59,7 @@ dependencies {
     compileOnly("org.geysermc:connector:1.4.0-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.8.0")
-    compileOnly("com.discordsrv:discordsrv:1.21.1")
+    compileOnly("com.discordsrv:discordsrv:1.24.0")
     compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
     compileOnly("com.github.koca2000:NoteBlockAPI:-SNAPSHOT")
 
