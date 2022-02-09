@@ -9,11 +9,6 @@ plugins {
     id("net.minecrell.plugin-yml.bukkit") version "0.5.0"
 }
 
-maven {
-    name 'm2-dv8tion'
-    url 'https://m2.dv8tion.net/releases'
-}
-
 repositories {
     mavenLocal()
     maven {
