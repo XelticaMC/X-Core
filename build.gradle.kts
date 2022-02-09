@@ -51,7 +51,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     compileOnly("net.luckperms:api:5.3")
-    compileOnly("org.geysermc:connector:1.4.0-SNAPSHOT")
+    compileOnly("org.geysermc:connector:1.4.3-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.8.0")
     compileOnly("com.discordsrv:discordsrv:1.24.0")
