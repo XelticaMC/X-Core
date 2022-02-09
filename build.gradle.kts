@@ -19,12 +19,16 @@ repositories {
         url = uri("https://repo.codemc.org/repository/maven-public/")
     }
 
-    maven {
-        url = uri("https://repo.codemc.org/repository/maven-snapshots/")
-    }
+//     maven {
+//         url = uri("https://repo.codemc.org/repository/maven-snapshots/")
+//     }
 
     maven {
         url = uri("https://jitpack.io")
+    }
+    
+    maven {
+        url = uri("https://repo.opencollab.dev/maven-releases/")
     }
     
     maven {
