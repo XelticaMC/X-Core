@@ -31,9 +31,9 @@ repositories {
         url = uri("https://repo.opencollab.dev/maven-releases/")
     }
     
-    maven {
-        url = uri("https://repo.opencollab.dev/maven-snapshots/")
-    }
+//     maven {
+//         url = uri("https://repo.opencollab.dev/maven-snapshots/")
+//     }
 
     maven {
         url = uri("https://nexus.scarsz.me/content/groups/public/")
