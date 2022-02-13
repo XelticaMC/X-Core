@@ -12,9 +12,9 @@ plugins {
 repositories {
     mavenLocal()
     maven {
-	url = uri("https://repo1.maven.org/maven2/")
+	url = uri("https://repo.maven.apache.org/maven2/")
     }
-    
+
     maven {
         url = uri("https://papermc.io/repo/repository/maven-public/")
     }
@@ -22,10 +22,6 @@ repositories {
     maven {
         url = uri("https://repo.codemc.org/repository/maven-public/")
     }
-
-//     maven {
-//         url = uri("https://repo.codemc.org/repository/maven-snapshots/")
-//     }
 
     maven {
         url = uri("https://jitpack.io")
@@ -44,11 +40,11 @@ repositories {
     }
 
     maven {
-        url = uri("https://nexus.scarsz.me/content/groups/public/")
+        url = uri("https://repo.phoenix616.dev/")
     }
 
     maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
+        url = uri("https://nexus.scarsz.me/content/groups/public/")
     }
 }
 
