@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.geysermc.connector.common.ChatColor;
+import org.geysermc.cumulus.CustomForm;
 import org.geysermc.cumulus.SimpleForm;
 import org.geysermc.floodgate.api.FloodgateApi;
 
@@ -369,6 +371,26 @@ public class Gui implements Listener {
                 }
             });
         api.getPlayer(player.getUniqueId()).sendForm(form);
+    }
+
+    public void openTextInput(Player player, String title, Consumer<String> responseHandler) {
+        if (isBedrock(player)) {
+            openTextInputBedrockImpl(player, title, responseHandler);
+        } else {
+            openTextInputJavaImpl(player, title, responseHandler);
+        }
+    }
+
+    private void openTextInputJavaImpl(Player player, String title, Consumer<String> responseHandler) {
+        new AnvilGUI.Builder().title(title).onComplete((p, text) -> {
+            responseHandler.accept(text);
+            return AnvilGUI.Response.close();
+        }).itemLeft(new ItemStack(Material.GRAY_STAINED_GLASS_PANE)).plugin(XCorePlugin.getInstance()).open(player);
+    }
+
+    private void openTextInputBedrockImpl(Player player, String title, Consumer<String> responseHandler) {
+        final var fPlayer = FloodgateApi.getInstance().getPlayer(player.getUniqueId());
+        fPlayer.sendForm(CustomForm.builder().title(title).input("").responseHandler(responseHandler).build());
     }
 
     private static boolean isBedrock(Player player) {

@@ -46,6 +46,9 @@ repositories {
     maven {
         url = uri("https://nexus.scarsz.me/content/groups/public/")
     }
+    maven {
+        url = uri("https://repo.codemc.io/repository/maven-snapshots/")
+    }
 }
 
 dependencies {
@@ -61,6 +64,7 @@ dependencies {
     implementation("com.discordsrv:discordsrv:1.24.0")
     compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
     compileOnly("com.github.koca2000:NoteBlockAPI:-SNAPSHOT")
+    implementation("net.wesjd:anvilgui:1.5.3-SNAPSHOT")
 
     library("com.google.code.gson", "gson", "2.8.7")
     bukkitLibrary("com.google.code.gson", "gson", "2.8.7")
@@ -317,4 +321,6 @@ tasks.withType<JavaCompile>() {
 
 tasks.jar {
     archiveFileName.set("${project.name}.jar")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
 }
