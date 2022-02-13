@@ -263,6 +263,7 @@ public class WorldHandler implements Listener {
             if (recipe instanceof ShapedRecipe shapedRecipe) {
                 final var ingredients = new ArrayList<ItemStack>();
                 for (ItemStack i: shapedRecipe.getIngredientMap().values()) {
+                    if (i == null) continue;
                     ingredients.add(new ItemStack(i.getType(),1));
                 }
                 recipes.add(new CraftRecipe(ingredients, recipe.getResult()));
@@ -270,6 +271,7 @@ public class WorldHandler implements Listener {
             if (recipe instanceof ShapelessRecipe shapelessRecipe) {
                 final var ingredients = new ArrayList<ItemStack>();
                 for (ItemStack i: shapelessRecipe.getIngredientList()) {
+                    if (i == null) continue;
                     ingredients.add(new ItemStack(i.getType(), 1));
                 }
                 recipes.add(new CraftRecipe(ingredients, recipe.getResult()));
