@@ -1,11 +1,15 @@
 package work.xeltica.craft.core.handlers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.papermc.paper.event.block.BlockPreDispenseEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
@@ -13,20 +17,33 @@ import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.block.Dispenser;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.GlowItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
+import org.bukkit.inventory.BlockInventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.material.Directional;
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.models.CraftRecipe;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.HintStore;
@@ -221,6 +238,89 @@ public class WorldHandler implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onDispenser(BlockPreDispenseEvent event) {
+        final var block = event.getBlock();
+        if (block.getBlockData().getMaterial() != Material.DISPENSER) return;
+        GlowItemFrame itemFlame = null;
+
+        for (Entity entity: block.getLocation().toCenterLocation().getNearbyEntitiesByType(GlowItemFrame.class, 1)) {
+            if (entity instanceof GlowItemFrame flame) {
+                if (flame.getLocation().add(flame.getAttachedFace().getDirection()).getBlock().getLocation().toBlockLocation().equals(block.getLocation().toBlockLocation())) {
+                    itemFlame = flame;
+                    break;
+                }
+            }
+        }
+        if (itemFlame == null) return;
+        event.setCancelled(true);
+
+        final var item = itemFlame.getItem();
+        final var recipes = new ArrayList<CraftRecipe>();
+        for (Recipe recipe: Bukkit.getServer().getRecipesFor(item)) {
+            if (recipe instanceof ShapedRecipe shapedRecipe) {
+                final var ingredients = new ArrayList<ItemStack>();
+                for (ItemStack i: shapedRecipe.getIngredientMap().values()) {
+                    ingredients.add(new ItemStack(i.getType(),1));
+                }
+                recipes.add(new CraftRecipe(ingredients, recipe.getResult()));
+            }
+            if (recipe instanceof ShapelessRecipe shapelessRecipe) {
+                final var ingredients = new ArrayList<ItemStack>();
+                for (ItemStack i: shapelessRecipe.getIngredientList()) {
+                    ingredients.add(new ItemStack(i.getType(), 1));
+                }
+                recipes.add(new CraftRecipe(ingredients, recipe.getResult()));
+            }
+        }
+
+        if (block.getState() instanceof Dispenser dispenser) {
+            final var inventory = dispenser.getInventory();
+
+            for (CraftRecipe recipe: recipes) {
+                final var fixedInventory = Arrays.stream(inventory.getContents()).filter(Objects::nonNull).collect(
+                        Collectors.groupingBy(x -> x.getType(), Collectors.summingInt(ItemStack::getAmount))
+                );
+                var flag = true;
+                for (Material ingredient: recipe.getFixedRecipe().keySet()) {
+                    if (fixedInventory.containsKey(ingredient) && fixedInventory.get(ingredient) >= recipe.getFixedRecipe().get(ingredient)) {
+                        fixedInventory.replace(ingredient, fixedInventory.get(ingredient) - recipe.getFixedRecipe().get(ingredient));
+                        continue;
+                    }
+                    flag = false;
+                }
+
+                if (flag) {
+                    for (ItemStack itemStack: inventory.getContents()) {
+                        if (itemStack == null) continue;
+                        inventory.remove(itemStack);
+                    }
+                    for (Map.Entry<Material, Integer> entry: fixedInventory.entrySet()) {
+                        final var itemStack = new ItemStack(entry.getKey());
+                        itemStack.setAmount(entry.getValue());
+                        inventory.addItem(itemStack);
+                    }
+
+                    if (event.getBlock().getState().getData() instanceof Directional directional) {
+                        final var location = block.getLocation().toBlockLocation().add(directional.getFacing().getDirection());
+                        if (location.getBlock().getState() instanceof BlockInventoryHolder inventoryHolder) {
+                            final var result = inventoryHolder.getInventory().addItem(recipe.result());
+                            if (!result.isEmpty()) {
+                                for (ItemStack i: result.values()) {
+                                    block.getWorld().dropItem(location, i);
+                                }
+                            }
+                            return;
+                        }
+                        block.getWorld().dropItem(location, recipe.result());
+                        return;
+                    }
+                }
+            }
+        }
+
     }
 
     private Material replace(Material mat) {
