@@ -373,22 +373,22 @@ public class Gui implements Listener {
         api.getPlayer(player.getUniqueId()).sendForm(form);
     }
 
-    public void openTextInputGui(Player player, String title, Consumer<String> responseHandler) {
+    public void openTextInput(Player player, String title, Consumer<String> responseHandler) {
         if (isBedrock(player)) {
-            openTextInputGuiBedrockImpl(player, title, responseHandler);
+            openTextInputBedrockImpl(player, title, responseHandler);
         } else {
-            openTextInputGuiJavaImpl(player, title, responseHandler);
+            openTextInputJavaImpl(player, title, responseHandler);
         }
     }
 
-    private void openTextInputGuiJavaImpl(Player player, String title, Consumer<String> responseHandler) {
+    private void openTextInputJavaImpl(Player player, String title, Consumer<String> responseHandler) {
         new AnvilGUI.Builder().title(title).onComplete((p, text) -> {
             responseHandler.accept(text);
             return AnvilGUI.Response.close();
         }).itemLeft(new ItemStack(Material.GRAY_STAINED_GLASS_PANE)).plugin(XCorePlugin.getInstance()).open(player);
     }
 
-    private void openTextInputGuiBedrockImpl(Player player, String title, Consumer<String> responseHandler) {
+    private void openTextInputBedrockImpl(Player player, String title, Consumer<String> responseHandler) {
         final var fPlayer = FloodgateApi.getInstance().getPlayer(player.getUniqueId());
         fPlayer.sendForm(CustomForm.builder().title(title).input("").responseHandler(responseHandler).build());
     }
