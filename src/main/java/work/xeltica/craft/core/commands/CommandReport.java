@@ -140,8 +140,15 @@ public class CommandReport extends CommandPlayerOnlyBase {
             return;
         }
 
+        final var commandString = switch (command) {
+            case "ban" -> "BAN";
+            case "mute" -> "ミュート";
+            case "kick" -> "キック";
+            default -> "何か";
+        };
+
         Bukkit.getServer().sendMessage(
-            Component.text(String.format(broadcastTemplate, name, abuses, timeString + command))
+            Component.text(String.format(broadcastTemplate, name, abuses, timeString + commandString))
         );
 
         final var cmd = time != null ? String.format("temp%s %s %s %s", command, name, time, message) : String.format("%s %s %s", command, name, message);
@@ -156,7 +163,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
     private final String warnTemplateWithoutAfterDoing = "利用規約の「%s」に違反しています。今すぐ停止してください。本警告を無視した場合、%s。";
     private final String warnTemplate = "%sは規約違反です。今すぐ停止し、%s。本警告を無視した場合、%s。";
     private final String punishLogTemplate = "利用規約で禁止されている「%s」を行った";
-    private final String broadcastTemplate = "§c§l[報告] §r§b%s§c: 「§a%s§c」により、%s";
+    private final String broadcastTemplate = "§c§l[報告] §r§b%s§cは「§a%s§c」により、%sされました。";
 
     private static final String WILL_MUTE = "あなたの発言を今後ミュートします";
     private static final String WILL_BAN = "あなたを本サーバーから追放します";

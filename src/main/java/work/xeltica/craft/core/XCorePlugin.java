@@ -149,14 +149,17 @@ public class XCorePlugin extends JavaPlugin {
 
         final var meta = MetaStore.getInstance();
 
-        if (MetaStore.getInstance().isUpdated()) {
+        if (meta.isUpdated()) {
+            var prev = meta.getPreviousVersion();
+            if (prev == null) prev = "unknown";
+            final var current = meta.getCurrentVersion();
+            final var text = String.format("§aコアシステムを更新しました。%s -> %s", prev, current);
+            if (meta.getPostToDiscord()) {
+                DiscordService.getInstance().postChangelog(current, meta.getChangeLog());
+            }
             Bukkit.getServer()
             .audiences()
             .forEach(a -> {
-                var prev = meta.getPreviousVersion();
-                if (prev == null) prev = "unknown";
-                final var current = meta.getCurrentVersion();
-                final var text = String.format("§aコアシステムを更新しました。%s -> %s", prev, current);
                 a.sendMessage(Component.text(text));
                 for (var log : meta.getChangeLog()) {
                     a.sendMessage(Component.text("・" + log));

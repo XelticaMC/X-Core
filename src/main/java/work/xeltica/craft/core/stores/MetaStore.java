@@ -32,6 +32,10 @@ public class MetaStore {
         return isUpdated;
     }
 
+    public boolean getPostToDiscord() {
+        return postToDiscord;
+    }
+
     public String[] getChangeLog() {
         return changeLog;
     }
@@ -39,6 +43,10 @@ public class MetaStore {
     private void checkUpdate() {
         final var conf = meta.getConf();
         final var currentVersion = conf.getString("version", null);
+        postToDiscord = conf.getBoolean("postToDiscord", false);
+        if (!conf.contains("postToDiscord")) {
+            conf.set("postToDiscord", false);
+        }
         previousVersion = conf.getString("previousVersion", null);
         if (currentVersion == null || !currentVersion.equals(getCurrentVersion())) {
             conf.set("version", getCurrentVersion());
@@ -56,6 +64,7 @@ public class MetaStore {
     private final Config meta;
     private String previousVersion;
     private boolean isUpdated;
+    private boolean postToDiscord;
 
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
