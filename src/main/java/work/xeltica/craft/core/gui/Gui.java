@@ -385,12 +385,12 @@ public class Gui implements Listener {
         new AnvilGUI.Builder().title(title).onComplete((p, text) -> {
             responseHandler.accept(text);
             return AnvilGUI.Response.close();
-        }).itemLeft(new ItemStack(Material.IRON_SWORD)).plugin(XCorePlugin.getInstance()).open(player);
+        }).itemLeft(new ItemStack(Material.GRAY_STAINED_GLASS_PANE)).plugin(XCorePlugin.getInstance()).open(player);
     }
 
     private void openTextInputGuiBedrockImpl(Player player, String title, Consumer<String> responseHandler) {
         final var fPlayer = FloodgateApi.getInstance().getPlayer(player.getUniqueId());
-        fPlayer.sendForm(CustomForm.builder().title(title).input("test").responseHandler(responseHandler).build());
+        fPlayer.sendForm(CustomForm.builder().title(title).input("").responseHandler(responseHandler).build());
     }
 
     private static boolean isBedrock(Player player) {
