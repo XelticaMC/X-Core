@@ -12,6 +12,10 @@ plugins {
 repositories {
     mavenLocal()
     maven {
+	url = uri("https://repo1.maven.org/maven2/")
+    }
+    
+    maven {
         url = uri("https://papermc.io/repo/repository/maven-public/")
     }
 
@@ -28,11 +32,15 @@ repositories {
     }
     
     maven {
-        url = uri("https://repo.opencollab.dev/maven-snapshots/")
+       url = uri("https://m2.dv8tion.net/releases")
     }
     
     maven {
-        url = uri("https://repo.opencollab.dev/maven-releases/")
+        url = uri("https://repo.opencollab.dev/maven-snapshots")
+    }
+
+    maven {
+        url = uri("https://repo.opencollab.dev/maven-releases")
     }
 
     maven {
