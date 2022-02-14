@@ -9,15 +9,16 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.stores.MobBallStore
 
 class CommandGiveMobBall : CommandPlayerOnlyBase() {
-    override fun execute(player: Player?, command: Command?, label: String?, args: Array<out String>?): Boolean {
-        val name = if (args!!.isNotEmpty()) args[0] else null
+    override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
+        val name = if (args.isNotEmpty()) args[0] else null
         val p = if (name == null) player else Bukkit.getPlayer(name)
         if (p == null) {
-            player?.sendMessage(ChatColor.RED.toString() + "そのようなプレイヤーはいません")
+            player.sendMessage(ChatColor.RED.toString() + "そのようなプレイヤーはいません")
             return true
         }
         val amount = if (args.size > 1) Integer.parseInt(args[1]) else 1
-        val type = if (args.size > 2) args[2] else "normal"
+        // TODO: 別のタイプのボールを追加するときに外す
+        // val type = if (args.size > 2) args[2] else "normal"
 
         p.inventory.addItem(MobBallStore.getInstance().createMobBall(amount))
         p.sendMessage("${p.name}にモブボールを${amount}個付与しました。")
