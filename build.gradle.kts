@@ -3,10 +3,13 @@
  */
 
 plugins {
+    id("org.jetbrains.kotlin.jvm") version "1.6.10"
+
     java
     `maven-publish`
 
     id("net.minecrell.plugin-yml.bukkit") version "0.5.0"
+    id("com.github.johnrengelman.shadow") version "2.0.4"
 }
 
 repositories {
@@ -50,7 +53,7 @@ repositories {
 
 dependencies {
     implementation("net.skinsrestorer:skinsrestorer:14.1.4-SNAPSHOT")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.30")
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
@@ -77,7 +80,7 @@ bukkit {
     version = getVersion().toString()
     apiVersion = "1.17"
     softDepend = listOf("SkinsRestorer")
-    depend = listOf("Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
+    depend = listOf("kotlin-stdlib", "Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
 
     commands {
         register("omikuji") {
@@ -107,6 +110,11 @@ bukkit {
             description = "XelticaMCオリジナルアイテムを授与します。"
             usage = "/givetravelticket <playerName> <xphone>"
             permission = "otanoshimi.command.givecustomitem"
+        }
+        register("givemobball") {
+            description = "モブボールを入手します。。"
+            usage = "/givemobball <playerName> [amount=1] [type:normal|super|ultra]"
+            permission = "otanoshimi.command.givemobball"
         }
         register("report") {
             description = "処罰GUIを表示します。"
@@ -193,6 +201,11 @@ bukkit {
             usage = "/epeffectshop"
             permission = "otanoshimi.command.epeffectshop"
         }
+        register("xreload") {
+            description = "X-Coreの設定をリロードします。"
+            usage = "/xreload"
+            permission = "otanoshimi.command.xreload"
+        }
         register("__core_gui_event__") {
             description = "?"
             usage = "?"
@@ -207,6 +220,9 @@ bukkit {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.givecustomitem") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.givemobball") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.signedit") {
@@ -302,6 +318,9 @@ bukkit {
         register("otanoshimi.command.epeffectshop.delete") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
+        register("otanoshimi.command.xreload") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
     }
 }
 
@@ -313,6 +332,12 @@ publishing {
 
 tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "16"
+    }
 }
 
 tasks.jar {
