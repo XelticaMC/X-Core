@@ -25,7 +25,7 @@ class MobBallHandler : Listener {
     fun onPlayerThrowMobBall(e: PlayerEggThrowEvent) {
         if (!MobBallStore.getInstance().isMobBall(e.egg.item)) return
 
-        e.isHatching = false;
+        e.isHatching = false
     }
 
     @EventHandler
@@ -41,7 +41,7 @@ class MobBallHandler : Listener {
             egg.world.playSound(egg.location, Sound.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1f, 0.5f)
             return
         }
-        val ownerId = if (target is Tameable) target.ownerUniqueId else null;
+        val ownerId = if (target is Tameable) target.ownerUniqueId else null
         // 飼育可能かつ飼育済みかつ親IDがあり親が自分でなければ弾く
         if (ownerId is UUID && ownerId != player.uniqueId) {
             egg.world.dropItem(egg.location, egg.item)
@@ -68,7 +68,7 @@ class MobBallHandler : Listener {
         val eggNbt = restoreMob(target, spawnEgg)
         val eggEntity = egg.world.dropItem(egg.location, spawnEgg)
         val calculated = MobBallStore.getInstance().calculate(target)
-        var isGotcha = false;
+        var isGotcha = false
         eggEntity.setCanMobPickup(false)
         eggEntity.setCanPlayerPickup(false)
         object: BukkitRunnable() {
@@ -76,9 +76,8 @@ class MobBallHandler : Listener {
                 val particleLoc = eggEntity.location.add(0.0, 0.2, 0.0)
                 if (i % 20 == 0) {
                     val randNum = Random.nextInt(100)
-                    isGotcha = randNum < calculated;
-                       i = if (isGotcha) i else 80
-                    player.sendMessage("$randNum, $calculated")
+                    isGotcha = randNum < calculated
+                    i = if (isGotcha) i else 80
                     eggEntity.world.playSound(eggEntity.location, Sound.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 1f, 1.5f)
                 }
                 eggEntity.world.spawnParticle(Particle.SMOKE_NORMAL, particleLoc, 1)
@@ -109,11 +108,11 @@ class MobBallHandler : Listener {
 
     @EventHandler
     fun onReleaseMob(e: PlayerInteractEvent) {
-        val item = e.item ?: return;
-        val block = e.clickedBlock ?: return;
+        val item = e.item ?: return
+        val block = e.clickedBlock ?: return
         val nbt = NBTItem(item)
         if (!nbt.hasKey("mobCase")) return
-        e.isCancelled = true;
+        e.isCancelled = true
 
         if (!nbt.getBoolean("isActive")) {
             return
@@ -136,9 +135,9 @@ class MobBallHandler : Listener {
 
     @EventHandler
     fun onRestoreMob(e: PlayerInteractEntityEvent) {
-        val p = e.player;
-        val entity = e.rightClicked as? Mob ?: return;
-        val item = p.inventory.itemInMainHand;
+        val p = e.player
+        val entity = e.rightClicked as? Mob ?: return
+        val item = p.inventory.itemInMainHand
         val nbt = NBTItem(item)
         if (!nbt.hasKey("mobCase")) return
         e.isCancelled = true
