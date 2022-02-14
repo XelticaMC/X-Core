@@ -33,6 +33,8 @@ class MobBallHandler : Listener {
         val egg = e.entity as? Egg ?: return
         val player = egg.shooter as? Player ?: return
         if (!MobBallStore.getInstance().isMobBall(egg.item)) return
+
+        egg.remove()
         e.isCancelled = true
 
         val target = e.hitEntity as? Mob
@@ -46,12 +48,14 @@ class MobBallHandler : Listener {
         if (ownerId is UUID && ownerId != player.uniqueId) {
             egg.world.dropItem(egg.location, egg.item)
             egg.world.playSound(egg.location, Sound.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1f, 0.5f)
+            Gui.getInstance().error(player, "このモブは他人のペットです。人のモブを獲ったら泥棒！")
             return
         }
         val material = getSpawnEggMaterial(target.type)
         if (material == null) {
             egg.world.dropItem(egg.location, egg.item)
             egg.world.playSound(egg.location, Sound.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1f, 0.5f)
+            Gui.getInstance().error(player, "そのモブは捕獲できません。")
             return
         }
         if (target.persistentDataContainer.has(NamespacedKey(XCorePlugin.getInstance(), "isCaptured"), PersistentDataType.INTEGER)) {
@@ -61,13 +65,14 @@ class MobBallHandler : Listener {
             return
         }
 
-        egg.remove()
+        val isTamedByMe = target is Tameable && target.ownerUniqueId != null && target.ownerUniqueId!! == player.uniqueId
 
         var i = 1
         val spawnEgg = ItemStack(material, 1)
         val eggNbt = restoreMob(target, spawnEgg)
         val eggEntity = egg.world.dropItem(egg.location, spawnEgg)
-        val calculated = MobBallStore.getInstance().calculate(target)
+        // 自分のペットであれば100%捕獲に成功する
+        val calculated = if (isTamedByMe) 100 else MobBallStore.getInstance().calculate(target)
         var isGotcha = false
         eggEntity.setCanMobPickup(false)
         eggEntity.setCanPlayerPickup(false)

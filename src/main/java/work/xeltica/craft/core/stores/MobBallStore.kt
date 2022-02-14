@@ -9,7 +9,6 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Axolotl
 import org.bukkit.entity.Mob
 import org.bukkit.inventory.ItemStack
-import org.bukkit.potion.PotionEffectType
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.utils.Config
 import java.util.*
@@ -34,7 +33,7 @@ class MobBallStore() {
     }
 
     fun createMobBall(amount: Int): ItemStack {
-        val item = ItemStack(Material.EGG, amount);
+        val item = ItemStack(Material.EGG, amount)
         item.addUnsafeEnchantment(Enchantment.DURABILITY, 1)
         item.editMeta {
             it.displayName(Component.text("モブボール™"))
@@ -71,15 +70,7 @@ class MobBallStore() {
         val hpMax = mob.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 20.0
         Bukkit.getLogger().info(hpMax.toString())
         val tierDifficulty = difficulties[(tierMap[mobType] ?: 5) - 1]
-        val buffBonus =
-            if (mob.hasPotionEffect(PotionEffectType.POISON)) 1.1
-            else if (mob.hasPotionEffect(PotionEffectType.WITHER)) 1.5
-            else if (mob.hasPotionEffect(PotionEffectType.SLOW)) 1.5
-            else if (mob.hasPotionEffect(PotionEffectType.WEAKNESS)) 1.5
-            else if (mob.isFrozen) 1.2
-            else if (mob.fireTicks > 0) 1.2
-            else 1.0
-        return (100 * ((1 - hp / (hpMax * 1.6)) * tierDifficulty * buffBonus)).toInt();
+        return (100 * ((1 - hp / (hpMax * 1.6)) * tierDifficulty)).toInt()
     }
 
     private fun isBall(item: ItemStack, ball: ItemStack): Boolean {
@@ -98,7 +89,7 @@ class MobBallStore() {
 
         @JvmStatic
         fun getInstance(): MobBallStore {
-            return instance;
+            return instance
         }
     }
 }
