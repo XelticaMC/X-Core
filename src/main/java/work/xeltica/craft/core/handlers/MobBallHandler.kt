@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.stores.MobBallStore
+import work.xeltica.craft.core.utils.CitizensApiProvider.Companion.isCitizensNpc
 import java.util.*
 
 class MobBallHandler : Listener {
@@ -37,35 +38,32 @@ class MobBallHandler : Listener {
         e.isCancelled = true
 
         val target = e.hitEntity
+        // モブにぶつからなかった場合はボールを返却する
         if (target !is Mob) {
-            egg.world.dropItem(egg.location, egg.item)
-            egg.world.playSound(egg.location, Sound.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1f, 0.5f)
+            dropEgg(egg, player)
             return
         }
+
+        // Citizens NPCであればボールを返却する
+        if (target.isCitizensNpc()) {
+            dropEgg(egg, player)
+            return
+        }
+
         val ownerId = if (target is Tameable) target.ownerUniqueId else null
-        // 飼育可能かつ飼育済みかつ親IDがあり親が自分でなければ弾く
+        // 飼育可能かつ飼育済みかつ親IDがあり親が自分でなければはボールを返却する
         if (ownerId is UUID && ownerId != player.uniqueId) {
-            egg.world.dropItem(egg.location, egg.item)
-            egg.world.playSound(egg.location, Sound.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1f, 0.5f)
-            Gui.getInstance().error(player, "このモブは他人のペットです。人のモブを獲ったら泥棒！")
+            dropEgg(egg, player, "このモブは他人のペットです。人のモブを獲ったら泥棒！")
             return
         }
-        val material = getSpawnEggMaterial(target.type)
-        if (material == null) {
-            egg.world.dropItem(egg.location, egg.item)
-            egg.world.playSound(egg.location, Sound.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1f, 0.5f)
-            Gui.getInstance().error(player, "そのモブは捕獲できません。")
-            return
-        }
+
         if (target.persistentDataContainer.has(NamespacedKey(XCorePlugin.getInstance(), "isCaptured"), PersistentDataType.INTEGER)) {
-            egg.world.dropItem(egg.location, egg.item)
-            egg.world.playSound(egg.location, Sound.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1f, 0.5f)
-            Gui.getInstance().error(player, "そのモブは既に捕獲されています。人のモブを獲ったら泥棒！")
+            dropEgg(egg, player, "そのモブは既に捕獲されています。")
             return
         }
 
+        val material = getSpawnEggMaterial(target.type)
         val isTamedByMe = target is Tameable && target.ownerUniqueId != null && target.ownerUniqueId!! == player.uniqueId
-
         var i = 1
         val spawnEgg = ItemStack(material, 1)
         val eggNbt = restoreMob(target, spawnEgg)
@@ -73,25 +71,27 @@ class MobBallHandler : Listener {
         // 自分のペットであれば100%捕獲に成功する
         val calculated = if (isTamedByMe) 100 else MobBallStore.getInstance().calculate(target)
         var isGotcha = false
+
         eggEntity.setCanMobPickup(false)
         eggEntity.setCanPlayerPickup(false)
         object: BukkitRunnable() {
             override fun run() {
-                val particleLoc = eggEntity.location.add(0.0, 0.2, 0.0)
                 if (i % 20 == 0) {
                     val randNum = random.nextInt(100)
                     isGotcha = randNum < calculated
                     i = if (isGotcha) i else 80
                     eggEntity.world.playSound(eggEntity.location, Sound.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 1f, 1.5f)
+                    if (i < 80) {
+                        showWaitingParticle(eggEntity.location)
+                    }
                 }
-                eggEntity.world.spawnParticle(Particle.SMOKE_NORMAL, particleLoc, 1)
                 i++
                 if (i > 80) {
                     this.cancel()
                     if (isGotcha) {
-                        eggEntity.world.spawnParticle(Particle.COMPOSTER, particleLoc, 10)
                         player.playSound(egg.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 0.5f)
                         player.sendMessage("§a§lおめでとう！§r${eggNbt.getString("mobCase")}を捕まえた！")
+                        showSuccessParticle(eggEntity.location)
                         eggEntity.setCanPlayerPickup(true)
                     } else {
                         egg.world.playSound(egg.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1f, 1f)
@@ -103,6 +103,7 @@ class MobBallHandler : Listener {
                         eggEntity.world.spawnEntity(eggEntity.location, type, CreatureSpawnEvent.SpawnReason.CUSTOM) {
                             NBTEntity(it).mergeCompound(entityTag)
                             it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
+                            showTeleportParticle(it.location)
                         }
                     }
                 }
@@ -130,6 +131,7 @@ class MobBallHandler : Listener {
             it.teleport(block.location.add(0.0, 1.0, 0.0))
             it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
             it.persistentDataContainer.set(NamespacedKey(XCorePlugin.getInstance(), "isCaptured"), PersistentDataType.INTEGER, 1)
+            showTeleportParticle(it.location)
         }
         nbt.setBoolean("isActive", false)
         nbt.applyNBT(item)
@@ -173,11 +175,32 @@ class MobBallHandler : Listener {
         MobBallStore.getInstance().setMobCaseMeta(spawnEgg)
         target.remove()
         target.world.playSound(target.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
+        showTeleportParticle(target.location)
         return eggNbt
     }
 
-    private fun getSpawnEggMaterial(type: EntityType): Material? {
-        return Material.values().firstOrNull { it.name == "${type.name}_SPAWN_EGG" }
+    private fun getSpawnEggMaterial(type: EntityType): Material {
+        // ムーシュルームだけ名前が:tokushu:なので特殊処理
+        if (type == EntityType.MUSHROOM_COW) return Material.MOOSHROOM_SPAWN_EGG
+        return Material.values().firstOrNull { it.name == "${type.name}_SPAWN_EGG" } ?: Material.CHICKEN_SPAWN_EGG
+    }
+
+    private fun dropEgg(egg: Egg, player: Player, string: String? = null) {
+        egg.world.dropItem(egg.location, egg.item)
+        egg.world.playSound(egg.location, Sound.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1f, 0.5f)
+        if (string != null) Gui.getInstance().error(player, string)
+    }
+
+    private fun showWaitingParticle(loc: Location) {
+        loc.world.spawnParticle(Particle.SMOKE_NORMAL, loc, 64, 0.3, 0.0, 0.3, 0.1)
+    }
+
+    private fun showSuccessParticle(loc: Location) {
+        loc.world.spawnParticle(Particle.COMPOSTER, loc, 64, 0.3, 0.5, 0.3, 0.1)
+    }
+
+    private fun showTeleportParticle(loc: Location) {
+        loc.world.spawnParticle(Particle.PORTAL, loc, 64, 1.4, 1.4, 1.4, 0.7)
     }
 
     private val random = Random()

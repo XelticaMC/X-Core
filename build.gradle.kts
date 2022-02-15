@@ -52,6 +52,10 @@ repositories {
     maven {
         url = uri("https://repo.codemc.io/repository/maven-snapshots/")
     }
+    maven {
+        url = uri("http://repo.citizensnpcs.co/")
+        isAllowInsecureProtocol = true
+    }
 }
 
 dependencies {
@@ -67,6 +71,7 @@ dependencies {
     implementation("com.discordsrv:discordsrv:1.24.0")
     compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
     compileOnly("com.github.koca2000:NoteBlockAPI:-SNAPSHOT")
+    compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
     implementation("net.wesjd:anvilgui:1.5.3-SNAPSHOT")
 
     library("com.google.code.gson", "gson", "2.8.7")
@@ -83,7 +88,7 @@ bukkit {
     main = "work.xeltica.craft.core.XCorePlugin"
     version = getVersion().toString()
     apiVersion = "1.17"
-    softDepend = listOf("SkinsRestorer")
+    softDepend = listOf("SkinsRestorer", "Citizens")
     depend = listOf("kotlin-stdlib", "Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
 
     commands {

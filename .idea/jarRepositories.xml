@@ -86,5 +86,15 @@
       <option name="name" value="maven8" />
       <option name="url" value="https://repo.phoenix616.dev/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven11" />
+      <option name="name" value="maven11" />
+      <option name="url" value="http://repo.citizensnpcs.co/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven10" />
+      <option name="name" value="maven10" />
+      <option name="url" value="https://repo.codemc.io/repository/maven-snapshots/" />
+    </remote-repository>
   </component>
 </project>
