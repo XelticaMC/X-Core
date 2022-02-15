@@ -37,8 +37,8 @@ class MobBallHandler : Listener {
         egg.remove()
         e.isCancelled = true
 
-        val target = e.hitEntity as? Mob
-        if (target == null) {
+        val target = e.hitEntity
+        if (target !is Mob) {
             egg.world.dropItem(egg.location, egg.item)
             egg.world.playSound(egg.location, Sound.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1f, 0.5f)
             return
