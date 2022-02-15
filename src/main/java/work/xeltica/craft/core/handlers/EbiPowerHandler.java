@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityBreedEvent;
@@ -82,7 +83,7 @@ public class EbiPowerHandler implements Listener{
         breakBonusList.add(Material.ANCIENT_DEBRIS);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDamageFrailCreatures(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Player killer && e.getEntity() instanceof LivingEntity victim) {
             if (playerIsInBlacklisted(killer)) return;

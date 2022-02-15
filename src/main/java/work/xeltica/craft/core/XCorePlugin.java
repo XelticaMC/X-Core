@@ -22,6 +22,7 @@ import work.xeltica.craft.core.commands.CommandCountdown;
 import work.xeltica.craft.core.commands.CommandCounter;
 import work.xeltica.craft.core.commands.CommandEpEffectShop;
 import work.xeltica.craft.core.commands.CommandGiveCustomItem;
+import work.xeltica.craft.core.commands.CommandGiveMobBall;
 import work.xeltica.craft.core.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.core.commands.CommandHint;
 import work.xeltica.craft.core.commands.CommandHub;
@@ -32,6 +33,7 @@ import work.xeltica.craft.core.commands.CommandOmikuji;
 import work.xeltica.craft.core.commands.CommandQuickChat;
 import work.xeltica.craft.core.commands.CommandXCoreGuiEvent;
 import work.xeltica.craft.core.commands.CommandXPhone;
+import work.xeltica.craft.core.commands.CommandXReload;
 import work.xeltica.craft.core.commands.CommandXtp;
 import work.xeltica.craft.core.commands.CommandPromo;
 import work.xeltica.craft.core.commands.CommandPvp;
@@ -42,6 +44,7 @@ import work.xeltica.craft.core.commands.CommandSignEdit;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.handlers.LiveModeHandler;
 import work.xeltica.craft.core.handlers.LoginBonusHandler;
+import work.xeltica.craft.core.handlers.MobBallHandler;
 import work.xeltica.craft.core.handlers.NbsHandler;
 import work.xeltica.craft.core.handlers.PlayerTntHandler;
 import work.xeltica.craft.core.handlers.MiscHandler;
@@ -65,6 +68,7 @@ import work.xeltica.craft.core.runnables.RealTimeObserver;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.MetaStore;
+import work.xeltica.craft.core.stores.MobBallStore;
 import work.xeltica.craft.core.stores.NbsStore;
 import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
@@ -211,6 +215,7 @@ public class XCorePlugin extends JavaPlugin {
         new NbsStore();
         new QuickChatStore();
         new MobEPStore();
+        new MobBallStore();
     }
 
     private void loadCommands() {
@@ -222,6 +227,7 @@ public class XCorePlugin extends JavaPlugin {
         addCommand("signedit", new CommandSignEdit());
         addCommand("givetravelticket", new CommandGiveTravelTicket());
         addCommand("givecustomitem", new CommandGiveCustomItem());
+        addCommand("givemobball", new CommandGiveMobBall());
         addCommand("report", new CommandReport());
         addCommand("localtime", new CommandLocalTime());
         addCommand("boat", new CommandBoat());
@@ -241,6 +247,7 @@ public class XCorePlugin extends JavaPlugin {
         addCommand("countdown", new CommandCountdown());
         addCommand("qchat", new CommandQuickChat());
         addCommand("epeffectshop", new CommandEpEffectShop());
+        addCommand("xreload", new CommandXReload());
         Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
     }
 
@@ -279,6 +286,8 @@ public class XCorePlugin extends JavaPlugin {
         logger.info("Loaded LoginBonusHandler");
         pm.registerEvents(new TicketWildareaBHandler(), this);
         logger.info("Loaded TicketWildareaBHandler");
+        pm.registerEvents(new MobBallHandler(), this);
+        logger.info("Loaded MobBallHandler");
         pm.registerEvents(Gui.getInstance(), this);
         logger.info("Loaded Gui");
     }
