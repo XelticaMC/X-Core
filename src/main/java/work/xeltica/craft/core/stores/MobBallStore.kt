@@ -13,7 +13,7 @@ import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.utils.Config
 import java.util.*
 
-class MobBallStore() {
+class MobBallStore {
     init {
         instance = this
         XCorePlugin.getInstance().saveResource("mobCaptureDifficulty.yml", false)
