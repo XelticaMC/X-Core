@@ -226,10 +226,12 @@ public class WorldHandler implements Listener {
         if (!e.getWorld().getName().equals("main")) return;
         final var c = e.getChunk();
 
+        final var min = e.getWorld().getMinHeight();
+
         for (var z = 0; z < 16; z++) {
             for (var x = 0; x < 16; x++) {
                 final var yMax = c.getWorld().getHighestBlockYAt(c.getX() + x, c.getZ() + z);
-                for (int y = 1; y <= yMax; y++) {
+                for (int y = min + 1; y <= yMax; y++) {
                     final var block = c.getBlock(x, y, z);
                     final var replacer = replace(block.getType());
                     if (replacer != null) {
