@@ -213,6 +213,7 @@ public class XphoneHandler implements Listener {
                 items.add(new MenuItem("引っ越しキャンセル", i -> cancelTransferPlayerData(player), Material.CHEST_MINECART, null, true));
             } else if (transferPlayerData.getType(player) == TransferPlayerData.TransferPlayerType.TO_PLAYER) {
                 items.add(new MenuItem("引っ越しを受け入れる", i -> acceptTransferPlayerData(player), Material.CHEST_MINECART, null, true));
+                items.add(new MenuItem("引っ越しを受け入れない", i -> cancelTransferPlayerData(player), Material.CHEST_MINECART, null, true));
             }
         } else {
             items.add(new MenuItem("引っ越し", i -> openTransferPlayerDataApp(player), Material.CHEST_MINECART));
