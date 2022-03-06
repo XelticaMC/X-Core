@@ -38,6 +38,15 @@ public class TransferPlayerData {
             return null;
         }
     }
+
+    public Player getFrom() {
+        return from;
+    }
+
+    public Player getTo() {
+        return to;
+    }
+
     public void process() {
         from.sendMessage("引っ越しを開始します");
         to.sendMessage("引っ越しを開始します");

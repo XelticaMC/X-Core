@@ -224,19 +224,38 @@ public class XphoneHandler implements Listener {
     }
 
     private void openTransferPlayerDataApp(Player player) {
-        final var list = new ArrayList<MenuItem>();
+        final String transferPlayerDataWarning = """
+引っ越しにより、次の情報が新しいプレイヤーに§l上書き§rされます。元のデータは削除されます。
+> エビパワー
+> ヒント解禁状況
+> 各種設定項目
 
-        for (Player p: player.getServer().getOnlinePlayers()) {
-            if (p.getUniqueId() == player.getUniqueId()) continue;
-            if (TransferPlayerData.getInstance(p) != null) continue;
-            list.add(new MenuItem(p.getName(), i -> new TransferPlayerData(player, p)));
-        }
-        ui().openMenu(player, "引っ越し先の選択", list);
+問題なければ、[OK]を押下して次に進んでください。
+""";
+        ui().openDialog(player, "§4注意！§r", transferPlayerDataWarning, e -> ui().openTextInput(player, "引っ越し先のアカウント名を入力してください。", name -> {
+            final var to = player.getServer().getPlayer(name);
+            if (to == null) {
+                ui().error(player, "指定したアカウント名「" + name + "」は現在いないようです。名前が合っていることと、そのプレイヤーがサーバーにいることをご確認の上、もう一度お試しください！");
+                return;
+            }
+            new TransferPlayerData(player, to);
+        }));
     }
 
     private void acceptTransferPlayerData(Player player) {
-        final var transferPlayerData = TransferPlayerData.getInstance(player);
-        transferPlayerData.process();
+        final var pd = TransferPlayerData.getInstance(player);
+        final var fromName = pd.getFrom().getName();
+        ui().openDialog(player, "引っ越し", String.format("""
+§3%s§rをお使いのアカウントに移行します。
+
+問題がなければ[OK]ボタンを押下して次に進んでください。
+ """, fromName), e -> ui().openTextInput(player, fromName + " と入力してください。", name -> {
+            if (!fromName.equals(name)) {
+                ui().error(player, "入力した名前は間違っています。");
+                return;
+            }
+            pd.process();
+        }));
     }
 
     private void cancelTransferPlayerData(Player player) {
@@ -279,9 +298,7 @@ public class XphoneHandler implements Listener {
                 });
             }, Material.GRASS_BLOCK));
         } else if ("wildareab".contains(currentWorldName)) {
-            list.add(new MenuItem("メインワールドに帰る", i -> {
-                WorldStore.getInstance().teleportToSavedLocation(p, "main");
-            }, Material.CREEPER_HEAD));
+            list.add(new MenuItem("メインワールドに帰る", i -> WorldStore.getInstance().teleportToSavedLocation(p, "main"), Material.CREEPER_HEAD));
         }
 
         ui().openMenu(p, "テレポート", list);
@@ -474,7 +491,7 @@ public class XphoneHandler implements Listener {
         private final String name;
     }
 
-    class FireworkAttribute {
+    static class FireworkAttribute {
         private boolean flicker;
         private boolean trail;
     }
