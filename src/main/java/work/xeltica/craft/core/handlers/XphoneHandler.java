@@ -225,12 +225,10 @@ public class XphoneHandler implements Listener {
 
     private void openTransferPlayerDataApp(Player player) {
         final String transferPlayerDataWarning = """
-引っ越しにより、次の情報が新しいプレイヤーに§l上書き§rされます。元のデータは削除されます。
+§r引っ越しにより、次の情報が新しいプレイヤーに§l上書き§rされます。元のデータは削除されます。
 > エビパワー
 > ヒント解禁状況
 > 各種設定項目
-
-問題なければ、[OK]を押下して次に進んでください。
 """;
         ui().openDialog(player, "§4注意！§r", transferPlayerDataWarning, e -> ui().openTextInput(player, "引っ越し先のアカウント名を入力してください。", name -> {
             final var to = player.getServer().getPlayer(name);
