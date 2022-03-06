@@ -231,6 +231,9 @@ public class XphoneHandler implements Listener {
 > 各種設定項目
 """;
         ui().openDialog(player, "§4注意！§r", transferPlayerDataWarning, e -> ui().openTextInput(player, "引っ越し先のアカウント名を入力してください。", name -> {
+            if (name == null) {
+                return;
+            }
             final var to = player.getServer().getPlayer(name);
             if (to == null) {
                 ui().error(player, "指定したアカウント名「" + name + "」は現在いないようです。名前が合っていることと、そのプレイヤーがサーバーにいることをご確認の上、もう一度お試しください！");
@@ -248,7 +251,7 @@ public class XphoneHandler implements Listener {
 
 問題がなければ[OK]ボタンを押下して次に進んでください。
  """, fromName), e -> ui().openTextInput(player, fromName + " と入力してください。", name -> {
-            if (!fromName.equals(name)) {
+            if (!fromName.equalsIgnoreCase(name.trim())) {
                 ui().error(player, "入力した名前は間違っています。");
                 return;
             }
