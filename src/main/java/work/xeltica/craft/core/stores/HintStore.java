@@ -46,6 +46,22 @@ public class HintStore {
         return open(p).contains(hint.name());
     }
 
+    public void achieve(Player p, Hint hint, boolean reward) {
+        if (reward) {
+            achieve(p, hint);
+            return;
+        }
+        if (hasAchieved(p, hint)) return;
+        final var list = open(p);
+        list.add(hint.name());
+        hints.getConf().set(p.getUniqueId().toString(), list);
+        try {
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void achieve(Player p, Hint hint) {
         if (hasAchieved(p, hint)) return;
         final var list = open(p);

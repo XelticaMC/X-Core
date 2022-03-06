@@ -76,7 +76,7 @@ public class TransferPlayerData {
         for (String hintName: hintStore.getArchived(from)) {
             for (Hint hint: Hint.values()) {
                 if (hint.getName().equals(hintName)) {
-                    hintStore.achieve(to, hint);
+                    hintStore.achieve(to, hint, false);
                     break;
                 }
             }
