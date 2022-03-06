@@ -228,6 +228,7 @@ public class XphoneHandler implements Listener {
 
         for (Player p: player.getServer().getOnlinePlayers()) {
             if (p.getUniqueId() == player.getUniqueId()) continue;
+            if (TransferPlayerData.getInstance(p) != null) continue;
             list.add(new MenuItem(p.getName(), i -> new TransferPlayerData(player, p)));
         }
         ui().openMenu(player, "引っ越し先の選択", list);
