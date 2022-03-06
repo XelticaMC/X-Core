@@ -116,10 +116,11 @@ class MobBallHandler : Listener {
     @EventHandler
     fun onReleaseMob(e: PlayerInteractEvent) {
         val item = e.item ?: return
-        val block = e.clickedBlock ?: return
         val nbt = NBTItem(item)
         if (!nbt.hasKey("mobCase")) return
         e.isCancelled = true
+
+        val block = e.clickedBlock ?: return
 
         if (!nbt.getBoolean("isActive")) {
             return
@@ -131,7 +132,7 @@ class MobBallHandler : Listener {
         e.player.world.spawnEntity(block.location, type, CreatureSpawnEvent.SpawnReason.CUSTOM) {
             sanitizeReleasedMob(it)
             NBTEntity(it).mergeCompound(entityTag)
-            it.teleport(block.location.add(0.0, 1.0, 0.0))
+            it.teleport(block.location.add(e.blockFace.direction))
             it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
             it.persistentDataContainer.set(NamespacedKey(XCorePlugin.getInstance(), "isCaptured"), PersistentDataType.INTEGER, 1)
             showTeleportParticle(it.location)
