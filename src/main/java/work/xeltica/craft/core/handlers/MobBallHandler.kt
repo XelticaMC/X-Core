@@ -6,6 +6,7 @@ import org.bukkit.*
 import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.player.PlayerEggThrowEvent
@@ -159,6 +160,15 @@ class MobBallHandler : Listener {
         }
 
         restoreMob(entity, item)
+    }
+
+    @EventHandler
+    fun onUseMobBallInDispenser(e: BlockDispenseEvent) {
+        val item = e.item
+        val nbt = NBTItem(item)
+        if (!nbt.hasKey("mobCase")) return
+        // ディスペンサーでのモブケースの使用を禁止する
+        e.isCancelled = true
     }
 
     private fun restoreMob(target: Mob, spawnEgg: ItemStack): NBTItem {
