@@ -69,7 +69,7 @@ class MobBallHandler : Listener {
         val eggNbt = restoreMob(target, spawnEgg)
         val eggEntity = egg.world.dropItem(egg.location, spawnEgg)
         // 自分のペットであれば100%捕獲に成功する
-        val calculated = if (isTamedByMe) 100 else MobBallStore.getInstance().calculate(target)
+        val difficulty = if (isTamedByMe) 100 else MobBallStore.getInstance().calculate(target)
         var isGotcha = false
 
         eggEntity.setCanMobPickup(false)
@@ -78,7 +78,7 @@ class MobBallHandler : Listener {
             override fun run() {
                 if (i % 20 == 0) {
                     val randNum = random.nextInt(100)
-                    isGotcha = randNum < calculated
+                    isGotcha = randNum < difficulty
                     i = if (isGotcha) i else 80
                     eggEntity.world.playSound(eggEntity.location, Sound.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 1f, 1.5f)
                     if (i < 80) {
@@ -95,15 +95,15 @@ class MobBallHandler : Listener {
                         eggEntity.setCanPlayerPickup(true)
                     } else {
                         egg.world.playSound(egg.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1f, 1f)
-                        player.sendMessage("残念！ボールから出てきてしまった…。")
-                        eggEntity.remove()
                         val entityTag = eggNbt.getCompound("EntityTag")
                         entityTag.removeKey("Pos")
-                        val type = EntityType.fromName(eggNbt.getString("mobType"))!!
+                        val type = EntityType.valueOf(eggNbt.getString("mobType"))
                         eggEntity.world.spawnEntity(eggEntity.location, type, CreatureSpawnEvent.SpawnReason.CUSTOM) {
                             NBTEntity(it).mergeCompound(entityTag)
                             it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
                             showTeleportParticle(it.location)
+                            player.sendMessage("残念！ボールから出てきてしまった…。")
+                            eggEntity.remove()
                         }
                     }
                 }
@@ -125,7 +125,7 @@ class MobBallHandler : Listener {
         val entityTag = nbt.getCompound("EntityTag")
         entityTag.removeKey("Pos")
         nbt.applyNBT(item)
-        val type = EntityType.fromName(nbt.getString("mobType")) ?: return
+        val type = EntityType.valueOf(nbt.getString("mobType"))
         e.player.world.spawnEntity(block.location, type, CreatureSpawnEvent.SpawnReason.CUSTOM) {
             NBTEntity(it).mergeCompound(entityTag)
             it.teleport(block.location.add(0.0, 1.0, 0.0))
