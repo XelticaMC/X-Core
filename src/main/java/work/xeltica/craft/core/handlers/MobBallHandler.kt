@@ -100,6 +100,7 @@ class MobBallHandler : Listener {
                         entityTag.removeKey("Pos")
                         val type = EntityType.valueOf(eggNbt.getString("mobType"))
                         eggEntity.world.spawnEntity(eggEntity.location, type, CreatureSpawnEvent.SpawnReason.CUSTOM) {
+                            sanitizeFailedMob(it)
                             NBTEntity(it).mergeCompound(entityTag)
                             it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
                             showTeleportParticle(it.location)
@@ -128,6 +129,7 @@ class MobBallHandler : Listener {
         nbt.applyNBT(item)
         val type = EntityType.valueOf(nbt.getString("mobType"))
         e.player.world.spawnEntity(block.location, type, CreatureSpawnEvent.SpawnReason.CUSTOM) {
+            sanitizeReleasedMob(it)
             NBTEntity(it).mergeCompound(entityTag)
             it.teleport(block.location.add(0.0, 1.0, 0.0))
             it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
@@ -202,15 +204,63 @@ class MobBallHandler : Listener {
     }
 
     private fun showWaitingParticle(loc: Location) {
-        loc.world.spawnParticle(Particle.SMOKE_NORMAL, loc, 64, 0.3, 0.0, 0.3, 0.1)
+        loc.world.spawnParticle(Particle.SMOKE_NORMAL, loc, 16, 0.3, 0.0, 0.3, 0.1)
     }
 
     private fun showSuccessParticle(loc: Location) {
-        loc.world.spawnParticle(Particle.COMPOSTER, loc, 64, 0.3, 0.5, 0.3, 0.1)
+        loc.world.spawnParticle(Particle.COMPOSTER, loc, 16, 0.3, 0.5, 0.3, 0.1)
     }
 
     private fun showTeleportParticle(loc: Location) {
-        loc.world.spawnParticle(Particle.PORTAL, loc, 64, 1.4, 1.4, 1.4, 0.7)
+        loc.world.spawnParticle(Particle.CLOUD, loc, 12, 0.3, 0.3, 0.3, 0.1)
+    }
+
+    /**
+     * 捕獲に失敗したモブのサニタイズ処理
+     */
+    private fun sanitizeFailedMob(entity: Entity) {
+        if (entity is Zombie) {
+            // チキンジョッキー排除
+            val vehicle = entity.vehicle
+            if (vehicle != null) {
+                entity.leaveVehicle()
+                vehicle.remove()
+            }
+        }
+        if (entity is Skeleton) {
+            // スパイダージョッキー排除
+            val vehicle = entity.vehicle
+            if (vehicle != null) {
+                entity.leaveVehicle()
+                vehicle.remove()
+            }
+        }
+        if (entity is Ageable) {
+            // 勝手に子どもにならないように
+            entity.setAdult()
+        }
+        if (entity is Mob) {
+            // 全ての標準装備
+            entity.equipment.clear()
+        }
+    }
+
+    /**
+     * モブケースから射出したモブのサニタイズ処理
+     */
+    private fun sanitizeReleasedMob(entity: Entity) {
+        if (entity is Piglin) {
+            // モブケースから射出したピグリンは、ゾンビ化しないように
+            entity.isImmuneToZombification = true
+        }
+        if (entity is Hoglin) {
+            // モブケースから射出したホグリンは、ゾンビ化しないように
+            entity.isImmuneToZombification = true
+        }
+        if (entity is Ageable) {
+            // 勝手に子どもにならないように
+            entity.setAdult()
+        }
     }
 
     private val random = Random()
