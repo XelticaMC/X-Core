@@ -6,6 +6,7 @@ import org.bukkit.*
 import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.player.PlayerEggThrowEvent
@@ -69,7 +70,7 @@ class MobBallHandler : Listener {
         val eggNbt = restoreMob(target, spawnEgg)
         val eggEntity = egg.world.dropItem(egg.location, spawnEgg)
         // 自分のペットであれば100%捕獲に成功する
-        val calculated = if (isTamedByMe) 100 else MobBallStore.getInstance().calculate(target)
+        val difficulty = if (isTamedByMe) 100 else MobBallStore.getInstance().calculate(target)
         var isGotcha = false
 
         eggEntity.setCanMobPickup(false)
@@ -78,7 +79,7 @@ class MobBallHandler : Listener {
             override fun run() {
                 if (i % 20 == 0) {
                     val randNum = random.nextInt(100)
-                    isGotcha = randNum < calculated
+                    isGotcha = randNum < difficulty
                     i = if (isGotcha) i else 80
                     eggEntity.world.playSound(eggEntity.location, Sound.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 1f, 1.5f)
                     if (i < 80) {
@@ -95,15 +96,16 @@ class MobBallHandler : Listener {
                         eggEntity.setCanPlayerPickup(true)
                     } else {
                         egg.world.playSound(egg.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1f, 1f)
-                        player.sendMessage("残念！ボールから出てきてしまった…。")
-                        eggEntity.remove()
                         val entityTag = eggNbt.getCompound("EntityTag")
                         entityTag.removeKey("Pos")
-                        val type = EntityType.fromName(eggNbt.getString("mobType"))!!
+                        val type = EntityType.valueOf(eggNbt.getString("mobType"))
                         eggEntity.world.spawnEntity(eggEntity.location, type, CreatureSpawnEvent.SpawnReason.CUSTOM) {
+                            sanitizeFailedMob(it)
                             NBTEntity(it).mergeCompound(entityTag)
                             it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
                             showTeleportParticle(it.location)
+                            player.sendMessage("残念！ボールから出てきてしまった…。")
+                            eggEntity.remove()
                         }
                     }
                 }
@@ -125,8 +127,9 @@ class MobBallHandler : Listener {
         val entityTag = nbt.getCompound("EntityTag")
         entityTag.removeKey("Pos")
         nbt.applyNBT(item)
-        val type = EntityType.fromName(nbt.getString("mobType")) ?: return
+        val type = EntityType.valueOf(nbt.getString("mobType"))
         e.player.world.spawnEntity(block.location, type, CreatureSpawnEvent.SpawnReason.CUSTOM) {
+            sanitizeReleasedMob(it)
             NBTEntity(it).mergeCompound(entityTag)
             it.teleport(block.location.add(0.0, 1.0, 0.0))
             it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
@@ -161,6 +164,15 @@ class MobBallHandler : Listener {
         restoreMob(entity, item)
     }
 
+    @EventHandler
+    fun onUseMobBallInDispenser(e: BlockDispenseEvent) {
+        val item = e.item
+        val nbt = NBTItem(item)
+        if (!nbt.hasKey("mobCase")) return
+        // ディスペンサーでのモブケースの使用を禁止する
+        e.isCancelled = true
+    }
+
     private fun restoreMob(target: Mob, spawnEgg: ItemStack): NBTItem {
         val targetNbt = NBTEntity(target)
         val eggNbt = NBTItem(spawnEgg)
@@ -192,15 +204,63 @@ class MobBallHandler : Listener {
     }
 
     private fun showWaitingParticle(loc: Location) {
-        loc.world.spawnParticle(Particle.SMOKE_NORMAL, loc, 64, 0.3, 0.0, 0.3, 0.1)
+        loc.world.spawnParticle(Particle.SMOKE_NORMAL, loc, 16, 0.3, 0.0, 0.3, 0.1)
     }
 
     private fun showSuccessParticle(loc: Location) {
-        loc.world.spawnParticle(Particle.COMPOSTER, loc, 64, 0.3, 0.5, 0.3, 0.1)
+        loc.world.spawnParticle(Particle.COMPOSTER, loc, 16, 0.3, 0.5, 0.3, 0.1)
     }
 
     private fun showTeleportParticle(loc: Location) {
-        loc.world.spawnParticle(Particle.PORTAL, loc, 64, 1.4, 1.4, 1.4, 0.7)
+        loc.world.spawnParticle(Particle.CLOUD, loc, 12, 0.3, 0.3, 0.3, 0.1)
+    }
+
+    /**
+     * 捕獲に失敗したモブのサニタイズ処理
+     */
+    private fun sanitizeFailedMob(entity: Entity) {
+        if (entity is Zombie) {
+            // チキンジョッキー排除
+            val vehicle = entity.vehicle
+            if (vehicle != null) {
+                entity.leaveVehicle()
+                vehicle.remove()
+            }
+        }
+        if (entity is Skeleton) {
+            // スパイダージョッキー排除
+            val vehicle = entity.vehicle
+            if (vehicle != null) {
+                entity.leaveVehicle()
+                vehicle.remove()
+            }
+        }
+        if (entity is Ageable) {
+            // 勝手に子どもにならないように
+            entity.setAdult()
+        }
+        if (entity is Mob) {
+            // 全ての標準装備
+            entity.equipment.clear()
+        }
+    }
+
+    /**
+     * モブケースから射出したモブのサニタイズ処理
+     */
+    private fun sanitizeReleasedMob(entity: Entity) {
+        if (entity is Piglin) {
+            // モブケースから射出したピグリンは、ゾンビ化しないように
+            entity.isImmuneToZombification = true
+        }
+        if (entity is Hoglin) {
+            // モブケースから射出したホグリンは、ゾンビ化しないように
+            entity.isImmuneToZombification = true
+        }
+        if (entity is Ageable) {
+            // 勝手に子どもにならないように
+            entity.setAdult()
+        }
     }
 
     private val random = Random()
