@@ -69,9 +69,11 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "ナイトメアでモブをキルしてもEPが入らない不具合を再修正",
-            "ボート・トロッコの射出方法を改善",
-            "内部的な改善"
+            "Minecraft 1.18をサポート",
+            "モブボール機能を追加",
+            "自動クラフト機能を追加",
+            "引っ越し機能を追加",
+            "内部的な改善",
     };
 
     private static MetaStore instance;
