@@ -39,6 +39,7 @@ import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.SoundPitch;
+import work.xeltica.craft.core.models.TransferPlayerData;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.HubStore;
@@ -205,8 +206,61 @@ public class XphoneHandler implements Listener {
 
         items.add(appQuickChat);
 
+        final var transferPlayerData = TransferPlayerData.getInstance(player);
+
+        if (transferPlayerData != null) {
+            if (transferPlayerData.getType(player) == TransferPlayerData.TransferPlayerType.FROM_PLAYER) {
+                items.add(new MenuItem("引っ越しキャンセル", i -> cancelTransferPlayerData(player), Material.CHEST_MINECART, null, true));
+            } else if (transferPlayerData.getType(player) == TransferPlayerData.TransferPlayerType.TO_PLAYER) {
+                items.add(new MenuItem("引っ越しを受け入れる", i -> acceptTransferPlayerData(player), Material.CHEST_MINECART, null, true));
+                items.add(new MenuItem("引っ越しを受け入れない", i -> cancelTransferPlayerData(player), Material.CHEST_MINECART, null, true));
+            }
+        } else {
+            items.add(new MenuItem("引っ越し", i -> openTransferPlayerDataApp(player), Material.CHEST_MINECART));
+        }
+
         playStartupSound(player);
         ui().openMenu(player, "X Phone OS", items);
+    }
+
+    private void openTransferPlayerDataApp(Player player) {
+        final String transferPlayerDataWarning = """
+§r引っ越しにより、次の情報が新しいプレイヤーに§l上書き§rされます。元のデータは削除されます。
+> エビパワー
+> ヒント解禁状況
+> 各種設定項目
+""";
+        ui().openDialog(player, "§4注意！§r", transferPlayerDataWarning, e -> ui().openTextInput(player, "引っ越し先のアカウント名を入力してください。", name -> {
+            if (name == null) {
+                return;
+            }
+            final var to = player.getServer().getPlayer(name);
+            if (to == null) {
+                ui().error(player, "指定したアカウント名「" + name + "」は現在いないようです。名前が合っていることと、そのプレイヤーがサーバーにいることをご確認の上、もう一度お試しください！");
+                return;
+            }
+            new TransferPlayerData(player, to);
+        }));
+    }
+
+    private void acceptTransferPlayerData(Player player) {
+        final var pd = TransferPlayerData.getInstance(player);
+        final var fromName = pd.getFrom().getName();
+        ui().openDialog(player, "引っ越し", String.format("""
+§3%s§rをお使いのアカウントに移行します。
+
+問題がなければ[OK]ボタンを押下して次に進んでください。
+ """, fromName), e -> ui().openTextInput(player, fromName + " と入力してください。", name -> {
+            if (!fromName.equalsIgnoreCase(name.trim())) {
+                ui().error(player, "入力した名前は間違っています。");
+                return;
+            }
+            pd.process();
+        }));
+    }
+
+    private void cancelTransferPlayerData(Player player) {
+        TransferPlayerData.getInstance(player).cancel();
     }
 
     private void openTeleportApp(Player p) {
@@ -245,9 +299,7 @@ public class XphoneHandler implements Listener {
                 });
             }, Material.GRASS_BLOCK));
         } else if ("wildareab".contains(currentWorldName)) {
-            list.add(new MenuItem("メインワールドに帰る", i -> {
-                WorldStore.getInstance().teleportToSavedLocation(p, "main");
-            }, Material.CREEPER_HEAD));
+            list.add(new MenuItem("メインワールドに帰る", i -> WorldStore.getInstance().teleportToSavedLocation(p, "main"), Material.CREEPER_HEAD));
         }
 
         ui().openMenu(p, "テレポート", list);
@@ -440,7 +492,7 @@ public class XphoneHandler implements Listener {
         private final String name;
     }
 
-    class FireworkAttribute {
+    static class FireworkAttribute {
         private boolean flicker;
         private boolean trail;
     }

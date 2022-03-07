@@ -3,14 +3,21 @@
  */
 
 plugins {
+    id("org.jetbrains.kotlin.jvm") version "1.6.10"
+
     java
     `maven-publish`
 
     id("net.minecrell.plugin-yml.bukkit") version "0.5.0"
+    id("com.github.johnrengelman.shadow") version "2.0.4"
 }
 
 repositories {
     mavenLocal()
+    maven {
+	url = uri("https://repo.maven.apache.org/maven2/")
+    }
+
     maven {
         url = uri("https://papermc.io/repo/repository/maven-public/")
     }
@@ -20,50 +27,59 @@ repositories {
     }
 
     maven {
-        url = uri("https://repo.codemc.org/repository/maven-snapshots/")
-    }
-
-    maven {
         url = uri("https://jitpack.io")
-    }
-
-     maven {
-        url = uri("https://repo.opencollab.dev/maven-releases/")
     }
     
     maven {
-        url = uri("https://repo.opencollab.dev/maven-snapshots/")
+       url = uri("https://m2.dv8tion.net/releases")
+    }
+    
+    maven {
+        url = uri("https://repo.opencollab.dev/maven-snapshots")
+    }
+
+    maven {
+        url = uri("https://repo.opencollab.dev/maven-releases")
+    }
+
+    maven {
+        url = uri("https://repo.phoenix616.dev/")
     }
 
     maven {
         url = uri("https://nexus.scarsz.me/content/groups/public/")
     }
-
     maven {
-        url = uri("https://repo.maven.apache.org/maven2/")
+        url = uri("https://repo.codemc.io/repository/maven-snapshots/")
+    }
+    maven {
+        url = uri("http://repo.citizensnpcs.co/")
+        isAllowInsecureProtocol = true
     }
 }
 
 dependencies {
     implementation("net.skinsrestorer:skinsrestorer:14.1.4-SNAPSHOT")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.30")
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     compileOnly("net.luckperms:api:5.3")
-    compileOnly("org.geysermc:connector:1.4.0-SNAPSHOT")
+    compileOnly("org.geysermc:connector:1.4.3-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.8.0")
-    compileOnly("com.discordsrv:discordsrv:1.21.1")
+    implementation("com.discordsrv:discordsrv:1.24.0")
     compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
     compileOnly("com.github.koca2000:NoteBlockAPI:-SNAPSHOT")
+    compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
+    implementation("net.wesjd:anvilgui:1.5.3-SNAPSHOT")
 
     library("com.google.code.gson", "gson", "2.8.7")
     bukkitLibrary("com.google.code.gson", "gson", "2.8.7")
 }
 
 group = "work.xeltica.craft.core"
-version = "2.20.0-rc1"
+version = "2.21.0"
 description = "X-Core"
 java.sourceCompatibility = JavaVersion.VERSION_16
 
@@ -72,8 +88,8 @@ bukkit {
     main = "work.xeltica.craft.core.XCorePlugin"
     version = getVersion().toString()
     apiVersion = "1.17"
-    softDepend = listOf("SkinsRestorer")
-    depend = listOf("Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
+    softDepend = listOf("SkinsRestorer", "Citizens")
+    depend = listOf("kotlin-stdlib", "Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
 
     commands {
         register("omikuji") {
@@ -103,6 +119,11 @@ bukkit {
             description = "XelticaMCオリジナルアイテムを授与します。"
             usage = "/givetravelticket <playerName> <xphone>"
             permission = "otanoshimi.command.givecustomitem"
+        }
+        register("givemobball") {
+            description = "モブボールを入手します。。"
+            usage = "/givemobball <playerName> [amount=1] [type:normal|super|ultra]"
+            permission = "otanoshimi.command.givemobball"
         }
         register("report") {
             description = "処罰GUIを表示します。"
@@ -189,6 +210,11 @@ bukkit {
             usage = "/epeffectshop"
             permission = "otanoshimi.command.epeffectshop"
         }
+        register("xreload") {
+            description = "X-Coreの設定をリロードします。"
+            usage = "/xreload"
+            permission = "otanoshimi.command.xreload"
+        }
         register("__core_gui_event__") {
             description = "?"
             usage = "?"
@@ -203,6 +229,9 @@ bukkit {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.givecustomitem") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.givemobball") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.signedit") {
@@ -298,6 +327,9 @@ bukkit {
         register("otanoshimi.command.epeffectshop.delete") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
+        register("otanoshimi.command.xreload") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
     }
 }
 
@@ -311,6 +343,14 @@ tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "16"
+    }
+}
+
 tasks.jar {
     archiveFileName.set("${project.name}.jar")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
 }

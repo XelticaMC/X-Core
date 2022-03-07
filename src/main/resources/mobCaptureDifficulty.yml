@@ -1,0 +1,92 @@
+#　Tierごとの捕獲難易度係数
+difficulty:
+  - 2.4
+  - 1.17
+  - 1.2
+  - 0.8
+  - 0.4
+
+# Tier.1: 弱いモブ
+tier1:
+  - silverfish
+  - bat
+  - pig
+  - sheep
+  - cow
+  - chicken
+  - squid
+  - cod
+  - salmon
+
+# Tier.2: よくいるモブ
+tier2:
+  - donkey
+  - horse
+  - mule
+  - zombie
+  - skeleton
+  - spider
+  - creeper
+  - husk
+  - stray
+  - slime
+  - ghast
+  - zombified_piglin
+  - cave_spider
+  - magma_cube
+  - rabbit
+  - wolf
+  - goat
+  - axolotl
+  - strider
+  - hoglin
+  - piglin
+  - bee
+  - llama
+  - fox
+  - trader_llama
+  - wandering_trader
+  - cat
+  - drowned
+
+# Tier.3: ちょっと強い・ちょっとレアい
+tier3:
+  - skeleton_horse
+  - zombie_horse
+  - wither_skeleton
+  - zombie_villager
+  - blaze
+  - witch
+  - phantom
+  - guardian
+  - shulker
+  - pufferfish
+  - tropical_fish
+  - ocelot
+  - polar_bear
+  - villager
+  - zoglin
+  - dolphin
+  - turtle
+  - panda
+  - parrot
+
+# Tier.4: 強い・レアいモブ
+tier4:
+  - evoker
+  - vex
+  - enderman
+  - endermite
+  - mushroom_cow
+  - glow_squid
+  - _blue_axolotl # 青いウパ
+  - vindicator
+  - illusioner
+  - pillager
+
+# Tier.5: ボス
+tier5:
+  - _flagging_illager # 旗持ちの邪悪な村人
+  - elder_guardian
+  - piglin_brute
+  - ravager

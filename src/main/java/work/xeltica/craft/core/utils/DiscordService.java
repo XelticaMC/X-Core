@@ -8,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.stream.Stream;
+
 /**
  * @author raink1208
  */
@@ -42,6 +44,20 @@ public class DiscordService {
         }
     }
 
+    public void postChangelog(String version, String[] changeLog) {
+        final var guild = DiscordSRV.getPlugin().getMainGuild();
+        final var channel = guild.getGuildChannelById(changelogChannelId);
+        if (channel instanceof TextChannel textChannel) {
+            final var builder = new StringBuilder();
+            builder.append("**コアシステム更新**\n");
+            builder.append("ver").append(version).append('\n');
+            Stream.of(changeLog).forEach(l -> {
+                builder.append('・').append(l).append('\n');
+            });
+            textChannel.sendMessage(builder.toString()).queue();
+        }
+    }
+
     private boolean linkedToDiscord(Player player) {
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         final var luckPerms = provider.getProvider();
@@ -55,4 +71,5 @@ public class DiscordService {
 
     private final String reportChannelID = "869939558165397596";
     private final String lockRoleID = "873782147876552726";
+    private final String changelogChannelId = "872687386700689408";
 }
