@@ -251,6 +251,9 @@ public class XphoneHandler implements Listener {
 
 問題がなければ[OK]ボタンを押下して次に進んでください。
  """, fromName), e -> ui().openTextInput(player, fromName + " と入力してください。", name -> {
+            Bukkit.getLogger().info(name.trim());
+            Bukkit.getLogger().info(fromName);
+            Bukkit.getLogger().info(fromName.equalsIgnoreCase(name.trim()) ? "true" : "false");
             if (!fromName.equalsIgnoreCase(name.trim())) {
                 ui().error(player, "入力した名前は間違っています。");
                 return;
