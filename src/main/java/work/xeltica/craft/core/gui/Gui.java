@@ -27,6 +27,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.geysermc.connector.common.ChatColor;
 import org.geysermc.cumulus.CustomForm;
 import org.geysermc.cumulus.SimpleForm;
+import org.geysermc.cumulus.response.CustomFormResponse;
 import org.geysermc.floodgate.api.FloodgateApi;
 
 import net.kyori.adventure.text.Component;
@@ -390,7 +391,7 @@ public class Gui implements Listener {
 
     private void openTextInputBedrockImpl(Player player, String title, Consumer<String> responseHandler) {
         final var fPlayer = FloodgateApi.getInstance().getPlayer(player.getUniqueId());
-        fPlayer.sendForm(CustomForm.builder().title(title).input("").responseHandler(responseHandler).build());
+        fPlayer.sendForm(CustomForm.builder().title(title).input("").responseHandler((form, res) -> responseHandler.accept(form.parseResponse(res).getInput(0))).build());
     }
 
     private static boolean isBedrock(Player player) {
