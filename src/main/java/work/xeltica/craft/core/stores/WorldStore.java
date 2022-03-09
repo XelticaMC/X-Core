@@ -117,6 +117,37 @@ public class WorldStore {
         player.teleportAsync(loc);
     }
 
+    public void deleteSavedLocation(String worldName) {
+        final var conf = location.getConf();
+        conf.getKeys(false).forEach(pid -> {
+            var playerSection = conf.getConfigurationSection(pid);
+            if (playerSection == null) {
+                playerSection = conf.createSection(pid);
+            }
+            playerSection.set(worldName, null);
+        });
+        try {
+            location.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteSavedLocation(String worldName, Player player) {
+        final var conf = location.getConf();
+        final var pid = player.getUniqueId().toString();
+        var playerSection = conf.getConfigurationSection(pid);
+        if (playerSection == null) {
+            playerSection = conf.createSection(pid);
+        }
+        playerSection.set(worldName, null);
+        try {
+            location.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Nullable
     public String getRespawnWorld(World w) {
         return getRespawnWorld(w.getName());

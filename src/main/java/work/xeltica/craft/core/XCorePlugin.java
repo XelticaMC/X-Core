@@ -35,6 +35,7 @@ import work.xeltica.craft.core.commands.CommandXCoreGuiEvent;
 import work.xeltica.craft.core.commands.CommandXPhone;
 import work.xeltica.craft.core.commands.CommandXReload;
 import work.xeltica.craft.core.commands.CommandXtp;
+import work.xeltica.craft.core.commands.CommandXtpReset;
 import work.xeltica.craft.core.commands.CommandPromo;
 import work.xeltica.craft.core.commands.CommandPvp;
 import work.xeltica.craft.core.commands.CommandRanking;
@@ -106,7 +107,7 @@ public class XCorePlugin extends JavaPlugin {
         loadHandlers();
         new DiscordService();
 
-        Bukkit.getOnlinePlayers().forEach(p -> p.updateCommands());
+        Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
 
         new DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1));
         new NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15));
@@ -126,9 +127,9 @@ public class XCorePlugin extends JavaPlugin {
                     var time = record.getInt(PlayerDataKey.NEWCOMER_TIME, 0);
                     time -= tick;
                     if (time <= 0) {
-                        record.delete(PlayerDataKey.NEWCOMER_TIME, false);
+                        record.delete(PlayerDataKey.NEWCOMER_TIME);
                     } else {
-                        record.set(PlayerDataKey.NEWCOMER_TIME, time, false);
+                        record.set(PlayerDataKey.NEWCOMER_TIME, time);
                     }
                 });
                 try {
@@ -248,6 +249,7 @@ public class XCorePlugin extends JavaPlugin {
         addCommand("qchat", new CommandQuickChat());
         addCommand("epeffectshop", new CommandEpEffectShop());
         addCommand("xreload", new CommandXReload());
+        addCommand("xtpreset", new CommandXtpReset());
         Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
     }
 

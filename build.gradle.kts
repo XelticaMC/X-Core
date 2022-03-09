@@ -64,7 +64,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.30")
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
-    compileOnly("net.luckperms:api:5.3")
+    compileOnly("net.luckperms:api:5.4")
     compileOnly("org.geysermc:connector:1.4.3-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.8.0")
@@ -163,6 +163,12 @@ bukkit {
             usage = "/xtp <world> [player]"
             permission = "otanoshimi.command.xtp"
             aliases = listOf("xteleport")
+        }
+        register("xtpreset") {
+            description = "xtpコマンドで用いる過去位置をリセットします。プレイヤーを省略した場合、全員分をリセットします。"
+            usage = "/xtpreset <world> [player]"
+            permission = "otanoshimi.command.xtpreset"
+            aliases = listOf("xteleportreset")
         }
         register("xphone") {
             description = "X Phone を入手する"
@@ -328,6 +334,9 @@ bukkit {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.xreload") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.xtpreset") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
     }

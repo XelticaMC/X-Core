@@ -132,6 +132,7 @@ public class PlayerRecord {
         set(key, null);
     }
 
+    @Deprecated(since = "Use set(PlayerDataKey, Object) instead.")
     public void delete(PlayerDataKey key, boolean save) {
         set(key, null, save);
     }
