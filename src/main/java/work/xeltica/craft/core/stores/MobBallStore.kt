@@ -2,7 +2,6 @@ package work.xeltica.craft.core.stores
 
 import de.tr7zw.nbtapi.NBTItem
 import net.kyori.adventure.text.Component
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.enchantments.Enchantment
@@ -68,7 +67,6 @@ class MobBallStore {
         if (mob is Axolotl && mob.variant == Axolotl.Variant.BLUE) mobType = "_blue_axolotl"
         val hp = mob.health
         val hpMax = mob.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: 20.0
-        Bukkit.getLogger().info(hpMax.toString())
         val tierDifficulty = difficulties[(tierMap[mobType] ?: 5) - 1]
         return (100 * ((1 - hp / (hpMax * 1.6)) * tierDifficulty)).toInt()
     }
