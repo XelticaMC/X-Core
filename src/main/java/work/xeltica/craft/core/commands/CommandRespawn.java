@@ -48,17 +48,13 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
      * @param player リスポーンさせるプレイヤー
      */
     private void teleportToBedSpawn(Player player) {
-        try {
-            // respawn禁止されているかどうかの検証
-            getRespawnWorld(player.getWorld());
-        } catch (Exception e) {
+        if (WorldStore.getInstance().getRespawnWorld(player.getWorld()) == null) {
             player.sendMessage(ChatColor.RED + "このワールドでは許可されていません");
             isWarpingMap.put(player.getUniqueId(), false);
             return;
         }
 
         final var loc = player.getBedSpawnLocation();
-
         if (loc == null) {
             player.sendMessage("ベッドが存在しないか、塞がれているためにテレポートできません。");
             isWarpingMap.put(player.getUniqueId(), false);
@@ -80,10 +76,8 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
      * @param player テレポートさせるプレイヤー
      */
     private void teleportToInitialSpawn(Player player) {
-        final String respawnWorldName;
-        try {
-            respawnWorldName = getRespawnWorld(player.getWorld());
-        } catch (Exception e) {
+        final var respawnWorldName = WorldStore.getInstance().getRespawnWorld(player.getWorld());
+        if (respawnWorldName == null) {
             player.sendMessage(ChatColor.RED + "このワールドでは許可されていません");
             return;
         }
@@ -104,25 +98,6 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             ? "5秒後に初期スポーンに移動します..."
             : "5秒後に" + respawnWorldDisplayName + "の初期スポーンに移動します..."
         );
-    }
-
-    private String getRespawnWorld(World w) throws Exception {
-        // TODO 旅行券のときに位置情報保存しておいてーとかそういう処理に対応したい
-        if (w.getName().startsWith("travel_")) return "world";
-        return switch (w.getName()) {
-            case "wildarea2_nether" -> "wildarea2";
-            case "wildarea2_the_end" -> "wildarea2";
-
-            case "world_nether" -> "world";
-            case "world_the_end" -> "world";
-            case "wildarea" -> "world";
-            case "nightmare" -> "world";
-
-            case "pvp" -> throw new Exception();
-            case "wildareab" -> throw new Exception();
-
-            default -> w.getName();
-        };
     }
 
     private final HashMap<UUID, Boolean> isWarpingMap = new HashMap<>();

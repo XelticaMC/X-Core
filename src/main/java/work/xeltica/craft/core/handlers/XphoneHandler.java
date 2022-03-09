@@ -275,7 +275,9 @@ public class XphoneHandler implements Listener {
             }
         );
 
-        list.add(new MenuItem("初期スポーン", i -> p.performCommand("respawn"), Material.FIREWORK_ROCKET));
+        if (WorldStore.getInstance().getRespawnWorld(currentWorldName) != null) {
+            list.add(new MenuItem("初期スポーン", i -> p.performCommand("respawn"), Material.FIREWORK_ROCKET));
+        }
         list.add(new MenuItem("ベッド", i -> p.performCommand("respawn bed"), Material.RED_BED));
 
         if ("main".equals(currentWorldName)) {

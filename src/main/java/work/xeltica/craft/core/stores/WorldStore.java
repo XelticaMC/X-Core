@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.utils.Config;
 
 /**
@@ -114,6 +115,22 @@ public class WorldStore {
             return;
         }
         player.teleportAsync(loc);
+    }
+
+    @Nullable
+    public String getRespawnWorld(World w) {
+        return getRespawnWorld(w.getName());
+    }
+
+    public String getRespawnWorld(String worldName) {
+        // TODO 旅行券のときに位置情報保存しておいてーとかそういう処理に対応したい
+        if (worldName.startsWith("travel_")) return "world";
+        return switch (worldName) {
+            case "wildarea2_nether", "wildarea2_the_end" -> "wildarea2";
+            case "world_nether", "nightmare", "wildarea", "world_the_end" -> "world";
+            case "pvp", "wildareab", "hub", "hub2" -> null;
+            default -> worldName;
+        };
     }
 
     private void loadWorldName() {
