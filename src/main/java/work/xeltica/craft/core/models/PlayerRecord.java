@@ -7,6 +7,7 @@ import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.Config;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -54,6 +55,14 @@ public class PlayerRecord {
 
     public boolean isString(PlayerDataKey key) {
         return section.isString(key.getPhysicalKey());
+    }
+
+    public List<String> getStringList(PlayerDataKey key) {
+        return section.getStringList(key.getPhysicalKey());
+    }
+
+    public boolean isList(PlayerDataKey key) {
+        return section.isList(key.getPhysicalKey());
     }
 
     public int getInt(PlayerDataKey key) {

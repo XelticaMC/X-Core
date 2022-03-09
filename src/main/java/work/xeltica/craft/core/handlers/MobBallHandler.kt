@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.entity.CreatureSpawnEvent
+import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.player.PlayerEggThrowEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
@@ -17,7 +18,11 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.models.Hint
+import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.stores.HintStore
 import work.xeltica.craft.core.stores.MobBallStore
+import work.xeltica.craft.core.stores.PlayerStore
 import work.xeltica.craft.core.utils.CitizensApiProvider.Companion.isCitizensNpc
 import java.util.*
 
@@ -94,6 +99,12 @@ class MobBallHandler : Listener {
                         player.sendMessage("§a§lおめでとう！§r${eggNbt.getString("mobCase")}を捕まえた！")
                         showSuccessParticle(eggEntity.location)
                         eggEntity.setCanPlayerPickup(true)
+                        HintStore.getInstance().achieve(player, Hint.SUCCEEDED_TO_CATCH_MOB)
+                        val dex = PlayerStore.getInstance().open(player.uniqueId).getStringList(PlayerDataKey.MOB_DEX)
+                        val type = target.type.toString()
+                        if (!dex.contains(type)) {
+                            dex.add(target.type.toString())
+                        }
                     } else {
                         egg.world.playSound(egg.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1f, 1f)
                         val entityTag = eggNbt.getCompound("EntityTag")
@@ -107,6 +118,7 @@ class MobBallHandler : Listener {
                             player.sendMessage("残念！ボールから出てきてしまった…。")
                             eggEntity.remove()
                         }
+                        HintStore.getInstance().achieve(player, Hint.FAILED_TO_CATCH_MOB)
                     }
                 }
             }
@@ -172,6 +184,16 @@ class MobBallHandler : Listener {
         if (!nbt.hasKey("mobCase")) return
         // ディスペンサーでのモブケースの使用を禁止する
         e.isCancelled = true
+    }
+
+    @EventHandler
+    fun onPickupMobBall(e: EntityPickupItemEvent) {
+        val player = e.entity
+        if (player !is Player) return
+        val item = e.item.itemStack
+        if (MobBallStore.getInstance().isMobBall(item)) {
+            HintStore.getInstance().achieve(player, Hint.GET_BALL)
+        }
     }
 
     private fun restoreMob(target: Mob, spawnEgg: ItemStack): NBTItem {
