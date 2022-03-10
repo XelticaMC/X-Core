@@ -11,6 +11,7 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -103,14 +104,21 @@ public class NightmareHandler implements Listener {
     }
 
     /**
-     * 光源ブロックの設置を禁止
+     * ブロックの設置を禁止
      */
     @EventHandler
-    public void onLightSourcePlace(BlockPlaceEvent e) {
-        if (e.getBlock().getState().getLightLevel() > 0) {
-            e.setBuild(false);
-            Gui.getInstance().error(e.getPlayer(), "この世界に光源ブロックは存在できないようだ");
-        }
+    public void onBlockPlace(BlockPlaceEvent e) {
+        if (isNotNightmare(e.getPlayer().getWorld())) return;
+        e.setBuild(false);
+    }
+
+    /**
+     * ブロックの破壊を禁止
+     */
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent e) {
+        if (isNotNightmare(e.getPlayer().getWorld())) return;
+        e.setCancelled(true);
     }
 
     private boolean isNotNightmare(World w) {
