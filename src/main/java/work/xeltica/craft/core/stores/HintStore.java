@@ -6,12 +6,14 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.Action;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.utils.Config;
+import work.xeltica.craft.core.utils.DiscordService;
 
 import java.io.IOException;
 import java.util.List;
@@ -79,6 +81,7 @@ public class HintStore {
                 .clickEvent(ClickEvent.clickEvent(net.kyori.adventure.text.event.ClickEvent.Action.RUN_COMMAND, "/hint " + hint.name())))
             .append(Component.text("を達成した！"))
             .asComponent();
+        DiscordService.getInstance().broadcast(PlainTextComponentSerializer.plainText().serialize(component));
         Bukkit.getServer().audiences().forEach(a -> {
             a.sendMessage(component);
             if (hint.getType() == Hint.HintType.CHALLENGE) {
