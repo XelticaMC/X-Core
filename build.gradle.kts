@@ -59,7 +59,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.skinsrestorer:skinsrestorer:14.1.4-SNAPSHOT")
+    compileOnly("net.skinsrestorer:skinsrestorer:14.1.4-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.30")
     compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
@@ -68,7 +68,7 @@ dependencies {
     compileOnly("org.geysermc:connector:1.4.3-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.8.0")
-    implementation("com.discordsrv:discordsrv:1.24.0")
+    compileOnly("com.discordsrv:discordsrv:1.24.0")
     compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
     compileOnly("com.github.koca2000:NoteBlockAPI:-SNAPSHOT")
     compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")

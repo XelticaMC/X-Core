@@ -46,7 +46,7 @@ public class DiscordService {
     }
 
     public void broadcast(String text) {
-        final var discord = (DiscordSRV)Bukkit.getPluginManager().getPlugin("DiscordSRV");
+        final var discord = DiscordSRV.getPlugin();
         discord.getOptionalTextChannel("global").sendMessage(text);
     }
 
