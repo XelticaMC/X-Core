@@ -169,51 +169,6 @@ public class WorldHandler implements Listener {
         }, 20 * 5);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerTeleportNotify(PlayerTeleportEvent e) {
-        final var worldStore = WorldStore.getInstance();
-        final var player = e.getPlayer();
-        // スペクテイターはステルスっす
-        if (player.getGameMode() == GameMode.SPECTATOR)
-            return;
-        final var from = e.getFrom().getWorld();
-        final var to = e.getTo().getWorld();
-        if (from.getName().equals(to.getName()))
-            return;
-        final var fromName = worldStore.getWorldDisplayName(from);
-        final var toName = worldStore.getWorldDisplayName(to);
-
-        if (fromName == null || toName == null) return;
-
-        if (!player.hasPlayedBefore() && !PlayerStore.getInstance().open(player).getBoolean(PlayerDataKey.FIRST_SPAWN)) return;
-
-        if (e.isCancelled()) return;
-
-        final var toPlayers = to.getPlayers();
-        final var allPlayersExceptInDestination = Bukkit.getOnlinePlayers().stream()
-                // tpとマッチするUUIDがひとつも無いpのみを抽出
-                .filter(p -> toPlayers.stream().allMatch(tp -> !tp.getUniqueId().equals(p.getUniqueId())))
-                .collect(Collectors.toList());
-
-        // fromにいる人宛に「toに行く旨」を伝える
-        if (toName != null) {
-            for (Player p : allPlayersExceptInDestination) {
-                if (p.getUniqueId().equals(player.getUniqueId()))
-                    continue;
-                p.sendMessage(String.format("§a%s§bが§e%s§bに行きました", player.getDisplayName(), toName));
-            }
-        }
-
-        // toにいる人宛に「fromから来た旨」を伝える
-        if (fromName != null) {
-            for (Player p : toPlayers) {
-                if (p.getUniqueId().equals(player.getUniqueId()))
-                    continue;
-                p.sendMessage(String.format("§a%s§bが§e%s§bから来ました", player.getDisplayName(), fromName));
-            }
-        }
-    }
-
     @EventHandler
     public void onPlayerMoveWorld(PlayerChangedWorldEvent e) {
         final var name = WorldStore.getInstance().getWorldDisplayName(e.getPlayer().getWorld());
@@ -285,7 +240,7 @@ public class WorldHandler implements Listener {
 
             for (CraftRecipe recipe: recipes) {
                 final var fixedInventory = Arrays.stream(inventory.getContents()).filter(Objects::nonNull).collect(
-                        Collectors.groupingBy(x -> x.getType(), Collectors.summingInt(ItemStack::getAmount))
+                        Collectors.groupingBy(ItemStack::getType, Collectors.summingInt(ItemStack::getAmount))
                 );
                 var flag = true;
                 for (Material ingredient: recipe.getFixedRecipe().keySet()) {
