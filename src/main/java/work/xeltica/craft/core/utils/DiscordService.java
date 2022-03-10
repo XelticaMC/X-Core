@@ -47,7 +47,7 @@ public class DiscordService {
 
     public void broadcast(String text) {
         final var discord = DiscordSRV.getPlugin();
-        DiscordUtil.sendMessage(discord.getOptionalTextChannel("global"), text);
+        discord.getOptionalTextChannel("global").sendMessage(text);
     }
 
     public void postChangelog(String version, String[] changeLog) {
