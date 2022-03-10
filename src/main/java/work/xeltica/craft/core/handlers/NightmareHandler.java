@@ -107,7 +107,7 @@ public class NightmareHandler implements Listener {
      */
     @EventHandler
     public void onLightSourcePlace(BlockPlaceEvent e) {
-        if (e.getBlock().getLightLevel() > 0) {
+        if (e.getBlock().getState().getLightLevel() > 0) {
             e.setBuild(false);
             Gui.getInstance().error(e.getPlayer(), "この世界に光源ブロックは存在できないようだ");
         }
