@@ -42,10 +42,9 @@ public class NightmareRandomEvent extends BukkitRunnable {
             // プレイヤー周辺でランダムに雷を発生させる
             final var z = Math.sin(random.nextDouble() * 2 * Math.PI);
             final var x = Math.cos(random.nextDouble() * 2 * Math.PI);
-            final var sl = l;
-            sl.add(x * 64, 0, z * 64);
-            sl.setY(sl.getWorld().getHighestBlockYAt(sl.getBlockX(), sl.getBlockZ()));
-            sl.getWorld().strikeLightning(sl);
+            l.add(x * 64, 0, z * 64);
+            l.setY(l.getWorld().getHighestBlockYAt(l.getBlockX(), l.getBlockZ()));
+            l.getWorld().strikeLightning(l);
 
             final var dice = random.nextInt(9);
 
@@ -128,9 +127,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
                     }
                 }
                 case MODE_LIGHTNING -> {
-                    final Runnable strike = () -> {
-                        l.getWorld().strikeLightning(l);
-                    };
+                    final Runnable strike = () -> l.getWorld().strikeLightning(l);
                     // 今いる場所に、5分後に雷を3つ落とす
                     scheduler.runTaskLater(plugin, () -> {
                         scheduler.runTask(plugin, strike);
@@ -141,9 +138,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
                 case MODE_CREEPER -> {
                     final var creeper = (Creeper)l.getWorld().spawnEntity(l, EntityType.CREEPER);
                     creeper.setPowered(true);
-                    scheduler.runTaskLater(plugin, () -> {
-                        creeper.ignite();
-                    }, 20 * 60 * 5);
+                    scheduler.runTaskLater(plugin, creeper::ignite, 20 * 60 * 5);
                 }
                 case MODE_SHULKER -> {
                     for (var i = 0; i < amount; i++) {
@@ -161,9 +156,9 @@ public class NightmareRandomEvent extends BukkitRunnable {
     private final Random random = new Random();
     private final EntityType[] illigers = {
         EntityType.PILLAGER,
+        EntityType.PILLAGER,
         EntityType.VINDICATOR,
-        EntityType.RAVAGER,
+        EntityType.VINDICATOR,
         EntityType.WITCH,
-        EntityType.EVOKER,
     };
 }

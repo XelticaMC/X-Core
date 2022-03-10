@@ -76,9 +76,8 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerDeath(EntityDamageEvent e) {
-        if (!(e.getEntity() instanceof Player))
+        if (!(e.getEntity() instanceof final Player p))
             return;
-        final var p = (Player)e.getEntity();
         if (p.getHealth() - e.getFinalDamage() > 0)
             return;
 
@@ -215,11 +214,10 @@ public class PlayerHandler implements Listener {
                     }
 
                     final var id = e.getPlayer().getUniqueId();
-                    final var lastTime = last草edTimeMap.containsKey(id) ? last草edTimeMap.get(id) : Integer.MIN_VALUE;
+                    final var lastTime = last草edTimeMap.getOrDefault(id, Integer.MIN_VALUE);
                     final var nowTime = Bukkit.getCurrentTick();
                     if (lastTime == Integer.MIN_VALUE || nowTime - lastTime > 20 * 60) {
                         block.applyBoneMeal(BlockFace.UP);
-                        logger.info("Applied 草");
                     }
                     last草edTimeMap.put(id, nowTime);
                     HintStore.getInstance().achieve(e.getPlayer(), Hint.KUSA);
@@ -335,14 +333,12 @@ public class PlayerHandler implements Listener {
                 for (var pl : Bukkit.getOnlinePlayers()) {
                     pl.sendMessage(String.format("§6%s§rさんが§a%s§rに行きます！§b行ってらっしゃい！", p.getDisplayName(), type.getDisplayName()));
                 }
-                p.teleportAsync(loc).thenAccept((c) -> {
-                    Bukkit.getScheduler().runTask(XCorePlugin.getInstance(), () -> {
-                        p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS, 1, 0.5f);
-                        p.sendTitle(ChatColor.GOLD + type.getDisplayName(), "良い旅を！", 5, 100, 5);
-                        p.sendMessage("ようこそ、§6" + type.getDisplayName() + "§rへ！");
-                        p.sendMessage("元の世界に帰る場合は、§a/respawn§rコマンドを使用します。");
-                    });
-                });
+                p.teleportAsync(loc).thenAccept((c) -> Bukkit.getScheduler().runTask(XCorePlugin.getInstance(), () -> {
+                    p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS, 1, 0.5f);
+                    p.sendTitle(ChatColor.GOLD + type.getDisplayName(), "良い旅を！", 5, 100, 5);
+                    p.sendMessage("ようこそ、§6" + type.getDisplayName() + "§rへ！");
+                    p.sendMessage("元の世界に帰る場合は、§a/respawn§rコマンドを使用します。");
+                }));
                 movingPlayer = null;
             });
         }
