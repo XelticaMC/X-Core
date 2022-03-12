@@ -169,6 +169,7 @@ public class EbiPowerHandler implements Listener{
     @EventHandler
     public void onBreedEntities(EntityBreedEvent e) {
         if (e.getBreeder() instanceof Player player) {
+            if (playerIsInBlacklisted(player)) return;
             EbiPowerStore.getInstance().tryGive(player, 2);
         }
     }
@@ -176,6 +177,7 @@ public class EbiPowerHandler implements Listener{
     @EventHandler
     public void onMineBlocks(BlockBreakEvent e) {
         if (!breakBonusList.contains(e.getBlock().getType())) return;
+        if (playerIsInBlacklisted(e.getPlayer())) return;
 
         final var record = PlayerStore.getInstance().open(e.getPlayer());
         final var brokenBlocksCount = record.getInt(PlayerDataKey.BROKEN_BLOCKS_COUNT);
