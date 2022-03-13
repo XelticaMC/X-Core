@@ -1,15 +1,15 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.commands
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.ChatColor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 
 /**
  * プレイヤー限定のコマンドの基底クラス
  * @author Xeltica
  */
-public abstract class CommandPlayerOnlyBase extends CommandBase {
+abstract class CommandPlayerOnlyBase : CommandBase() {
     /**
      * プレイヤーがコマンドが呼び出されたときに動く関数
      * @param player コマンドを実行したプレイヤーの情報が入っている
@@ -18,14 +18,12 @@ public abstract class CommandPlayerOnlyBase extends CommandBase {
      * @param args 子コマンド(引数)が入っている
      * @return 正常に実行された場合はtrue、そうでない場合はfalse
      */
-    public abstract boolean execute(Player player, Command command, String label, String[] args);
-
-    @Override
-    public final boolean execute(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "プレイヤーが実行してください");
-            return true;
+    abstract fun execute(player: Player, command: Command, label: String, args: Array<String>): Boolean
+    override fun execute(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
+        if (sender !is Player) {
+            sender.sendMessage(ChatColor.RED.toString() + "プレイヤーが実行してください")
+            return true
         }
-        return execute((Player)sender, command, label, args);
+        return execute(sender, command, label, args)
     }
 }

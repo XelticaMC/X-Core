@@ -1,4 +1,4 @@
 /**
  * スラッシュコマンドを動作させるパッケージ
  */
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.commands

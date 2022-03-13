@@ -1,105 +1,92 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.commands
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Consumer;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.gui.MenuItem;
-import work.xeltica.craft.core.models.EbiPowerItem;
-import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.stores.EbiPowerStore;
-import work.xeltica.craft.core.stores.HintStore;
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.Bukkit
+import org.bukkit.Material
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import org.bukkit.util.StringUtil
+import work.xeltica.craft.core.COMPLETE_LIST_EMPTY
+import work.xeltica.craft.core.stores.EbiPowerStore
+import work.xeltica.craft.core.models.EbiPowerItem
+import work.xeltica.craft.core.stores.HintStore
+import work.xeltica.craft.core.XCorePlugin
+import java.lang.Runnable
+import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.gui.MenuItem
+import work.xeltica.craft.core.models.Hint
+import java.util.*
+import java.util.function.Consumer
 
 /**
  * エビパワーストアを開くコマンド
  * @author Xeltica
  */
-public class CommandEpShop extends CommandPlayerOnlyBase {
-
-    @Override
-    public boolean execute(Player player, Command command, String label, String[] args) {
-        final var subCommand = args.length > 0 ? args[0] : null;
-        final var store = EbiPowerStore.getInstance();
+class CommandEpShop : CommandPlayerOnlyBase() {
+    override fun execute(player: Player, command: Command, label: String, args: Array<String>): Boolean {
+        val subCommand = if (args.isNotEmpty()) args[0] else null
+        val store = EbiPowerStore.getInstance()
 
         // サブコマンドがなければお店UIを開く
-        if (subCommand == null || !player.hasPermission("otanoshimi.command.epshop." + subCommand.toLowerCase())) {
-            openShop(player);
-            return true;
+        if (subCommand == null || !player.hasPermission("otanoshimi.command.epshop." + subCommand.lowercase(Locale.getDefault()))) {
+            openShop(player)
+            return true
         }
-
-        switch (subCommand.toLowerCase()) {
-            // エビパワーストアに、手に持っている商品を追加
-            case "add" -> {
-                if (args.length != 2) {
-                    player.sendMessage("/epshop add <cost>");
-                    return true;
+        when (subCommand.lowercase(Locale.getDefault())) {
+            "add" -> {
+                if (args.size != 2) {
+                    player.sendMessage("/epshop add <cost>")
+                    return true
                 }
-                final var cost = Integer.parseInt(args[1]);
-                final var handheld = player.getInventory().getItemInMainHand();
-                if (handheld == null || handheld.getType() == Material.AIR) {
-                    player.sendMessage("アイテムを手に持っていないため追加できません。");
-                    return true;
+                val cost = args[1].toInt()
+                val handheld = player.inventory.itemInMainHand
+                if (handheld.type == Material.AIR) {
+                    player.sendMessage("アイテムを手に持っていないため追加できません。")
+                    return true
                 }
-                store.addItem(new EbiPowerItem(handheld, cost));
-                player.sendMessage("追加しました。");
+                store.addItem(EbiPowerItem(handheld, cost))
+                player.sendMessage("追加しました。")
             }
-
-            // エビパワーストアから商品を削除
-            case "delete" -> openShopMenu(player, "削除するアイテムを選んでください", (item) -> {
-                store.deleteItem(item);
-                player.sendMessage("削除しました。");
-            });
+            "delete" -> openShopMenu(player, "削除するアイテムを選んでください") { item: EbiPowerItem? ->
+                store.deleteItem(item)
+                player.sendMessage("削除しました。")
+            }
         }
-        return true;
+        return true
     }
 
     /**
      * 購入用のUIを開きます。
      * @param player UIを開くプレイヤー
      */
-    private void openShop(Player player) {
-        openShopMenu(player, "購入するアイテムを選んでください", (item) -> {
-            final var result = EbiPowerStore.getInstance().tryBuyItem(player, item);
-
-            switch (result) {
-                case NO_ENOUGH_INVENTORY -> {
-                    player.sendMessage("インベントリがいっぱいなため、購入に失敗しました。");
-                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1, 0.5f);
+    private fun openShop(player: Player) {
+        openShopMenu(player, "購入するアイテムを選んでください") { item: EbiPowerItem ->
+            when (EbiPowerStore.getInstance().tryBuyItem(player, item)) {
+                EbiPowerStore.Result.NO_ENOUGH_INVENTORY -> {
+                    player.sendMessage("インベントリがいっぱいなため、購入に失敗しました。")
+                    player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 0.5f)
                 }
-                case NO_ENOUGH_POWER -> {
-                    player.sendMessage("エビパワー不足のため、購入に失敗しました。");
-                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1, 0.5f);
+                EbiPowerStore.Result.NO_ENOUGH_POWER -> {
+                    player.sendMessage("エビパワー不足のため、購入に失敗しました。")
+                    player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 0.5f)
                 }
-                case SUCCESS -> {
-                    player.sendMessage(Component.text("§a" + getItemName(item.item()) + "§rを購入しました！"));
-                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 1);
-                    HintStore.getInstance().achieve(player, Hint.EPSHOP);
+                EbiPowerStore.Result.SUCCESS -> {
+                    player.sendMessage(Component.text("§a" + getItemName(item.item()) + "§rを購入しました！"))
+                    player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
+                    HintStore.getInstance().achieve(player, Hint.EPSHOP)
                 }
-                default -> {
-                    player.sendMessage("謎のエラーだゾ");
-                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1, 0.5f);
+                else -> {
+                    player.sendMessage("謎のエラーだゾ")
+                    player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 0.5f)
                 }
             }
-            Bukkit.getScheduler().runTask(XCorePlugin.getInstance(), () -> openShop(player));
-        });
+            Bukkit.getScheduler().runTask(XCorePlugin.getInstance(), Runnable { openShop(player) })
+        }
     }
 
     /**
@@ -108,23 +95,19 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
      * @param title メニューのタイトル
      * @param onChosen お店のメニューの一覧
      */
-    private void openShopMenu(Player player, String title, Consumer<EbiPowerItem> onChosen) {
-        final var ui = Gui.getInstance();
-        final var store = EbiPowerStore.getInstance();
-        final var items = store.getShopItems()
+    private fun openShopMenu(player: Player, title: String, onChosen: Consumer<EbiPowerItem>?) {
+        val ui = Gui.getInstance()
+        val store = EbiPowerStore.getInstance()
+        val items = store.shopItems
             .stream()
-            .map(m -> {
-                final var item = m.item();
-                final var name = getItemName(item);
-                final var displayName = name + "×" + item.getAmount() +  " (" + m.cost() + "EP)";
-                return new MenuItem(displayName, (a) -> {
-                    if (onChosen != null) {
-                        onChosen.accept(m);
-                    }
-                }, item.getType(), null, item.getAmount());
-            })
-            .toList();
-        ui.openMenu(player, title, items);
+            .map { m: EbiPowerItem ->
+                val item = m.item()
+                val name = getItemName(item)
+                val displayName = name + "×" + item.amount + " (" + m.cost() + "EP)"
+                MenuItem(displayName, { a: MenuItem? -> onChosen?.accept(m) }, item.type, null, item.amount)
+            }
+            .toList()
+        ui.openMenu(player, title, items)
     }
 
     /**
@@ -132,22 +115,19 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
      * @param item 取得するアイテム
      * @return アイテムのdisplayName
      */
-    private String getItemName(ItemStack item) {
-        final var dn = item.getItemMeta().displayName();
-        final var name = dn != null ? PlainTextComponentSerializer.plainText().serialize(dn) : item.getI18NDisplayName();
-        return name;
+    private fun getItemName(item: ItemStack): String {
+        val dn = item.itemMeta.displayName()
+        return if (dn != null) PlainTextComponentSerializer.plainText().serialize(dn) else item.i18NDisplayName!!
     }
 
-    @Nullable
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
-        if (args.length == 1) {
-            final var commands = Arrays.asList("add", "delete");
-            final var completions = new ArrayList<String>();
-            StringUtil.copyPartialMatches(args[0], commands, completions);
-            Collections.sort(completions);
-            return completions;
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String> {
+        if (args.size == 1) {
+            val commands = listOf("add", "delete")
+            val completions = ArrayList<String>()
+            StringUtil.copyPartialMatches(args[0], commands, completions)
+            completions.sort()
+            return completions
         }
-        return COMPLETE_LIST_EMPTY;
+        return COMPLETE_LIST_EMPTY
     }
 }

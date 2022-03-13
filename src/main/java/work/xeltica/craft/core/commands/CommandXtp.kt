@@ -1,60 +1,55 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.commands
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import org.bukkit.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.stores.WorldStore;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.bukkit.Bukkit
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import org.bukkit.util.StringUtil
+import work.xeltica.craft.core.COMPLETE_LIST_EMPTY
+import work.xeltica.craft.core.stores.WorldStore
+import work.xeltica.craft.core.XCorePlugin
+import java.util.ArrayList
 
 /**
  * 指定したワールドの最後にいた場所に転送するコマンド
  * @author Xeltica
  */
-public class CommandXtp extends CommandBase {
-
-    @Override
-    public boolean execute(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length != 1 && args.length != 2) return false;
-        if (args.length == 2 && !sender.hasPermission("otanoshimi.command.xtp.other")) {
-            sender.sendMessage("§c権限がありません。");
-            return true;
+class CommandXtp : CommandBase() {
+    override fun execute(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
+        if (args.size != 1 && args.size != 2) return false
+        if (args.size == 2 && !sender.hasPermission("otanoshimi.command.xtp.other")) {
+            sender.sendMessage("§c権限がありません。")
+            return true
         }
-        if (args.length == 1 && !(sender instanceof Player)) {
-            sender.sendMessage("プレイヤーが実行してください。");
-            return true;
+        if (args.size == 1 && sender !is Player) {
+            sender.sendMessage("プレイヤーが実行してください。")
+            return true
         }
-        final var worldName = args[0];
-        final var p = args.length == 2 ? Bukkit.getPlayer(args[1]) : (Player)sender;
+        val worldName = args[0]
+        val p = if (args.size == 2) Bukkit.getPlayer(args[1]) else sender as Player
         if (p == null) {
-            sender.sendMessage("§cプレイヤーが存在しません");
-            return true;
+            sender.sendMessage("§cプレイヤーが存在しません")
+            return true
         }
-        WorldStore.getInstance().teleportToSavedLocation(p, worldName);
-        return true;
+        WorldStore.getInstance().teleportToSavedLocation(p, worldName)
+        return true
     }
 
-    @Nullable
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
-        if (args.length == 1) {
-            final var worlds = XCorePlugin.getInstance().getServer().getWorlds().stream().map(World::getName).toList();
-            final var completions = new ArrayList<String>();
-            StringUtil.copyPartialMatches(args[0], worlds, completions);
-            Collections.sort(completions);
-            return completions;
-        } else if (args.length == 2) {
-            return null;
+    override fun onTabComplete(
+        commandSender: CommandSender,
+        command: Command,
+        label: String,
+        args: Array<String>
+    ): List<String>? {
+        if (args.size == 1) {
+            val worlds = XCorePlugin.getInstance().server.worlds.map { it.name }
+            val completions = ArrayList<String>()
+            StringUtil.copyPartialMatches(args[0], worlds, completions)
+            completions.sort()
+            return completions
+        } else if (args.size == 2) {
+            return null
         }
-        return COMPLETE_LIST_EMPTY;
+        return COMPLETE_LIST_EMPTY
     }
 }

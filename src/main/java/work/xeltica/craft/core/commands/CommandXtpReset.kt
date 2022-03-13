@@ -5,6 +5,7 @@ import org.bukkit.World
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
+import work.xeltica.craft.core.COMPLETE_LIST_EMPTY
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.stores.WorldStore
 import java.util.*

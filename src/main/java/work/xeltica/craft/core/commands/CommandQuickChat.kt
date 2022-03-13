@@ -1,74 +1,70 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.commands
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import work.xeltica.craft.core.stores.QuickChatStore;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.util.StringUtil
+import work.xeltica.craft.core.COMPLETE_LIST_EMPTY
+import work.xeltica.craft.core.stores.QuickChatStore
+import java.util.*
 
 /**
  * @author raink1208
  */
-public class CommandQuickChat extends CommandBase {
-    @Override
-    public boolean execute(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length == 0) return false;
-        final var subCmd = args[0].toLowerCase();
-        final var store = QuickChatStore.getInstance();
-
-        switch (subCmd) {
-            case "register" -> {
-                if (args.length < 3) return false;
+class CommandQuickChat : CommandBase() {
+    override fun execute(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
+        if (args.isEmpty()) return false
+        val subCmd = args[0].lowercase(Locale.getDefault())
+        val store = QuickChatStore.getInstance()
+        when (subCmd) {
+            "register" -> {
+                if (args.size < 3) return false
                 if (store.register(args[1], args[2])) {
-                    sender.sendMessage(args[1] + "に" + args[2] + "を登録しました");
+                    sender.sendMessage(args[1] + "に" + args[2] + "を登録しました")
                 } else {
-                    sender.sendMessage("既に" + args[1] + "は登録されています");
+                    sender.sendMessage("既に" + args[1] + "は登録されています")
                 }
             }
-            case "unregister" -> {
-                if (args.length < 2) return false;
+            "unregister" -> {
+                if (args.size < 2) return false
                 if (store.unregister(args[1])) {
-                    sender.sendMessage(args[1] + "を削除しました");
+                    sender.sendMessage(args[1] + "を削除しました")
                 } else {
-                    sender.sendMessage(args[1] + "は存在しません");
+                    sender.sendMessage(args[1] + "は存在しません")
                 }
             }
-            case "list" -> {
-                sender.sendMessage("===== Quick Chat List =====");
-                for (String prefix: store.getAllPrefix()) {
-                    sender.sendMessage(prefix + " : " + store.getMessage(prefix));
+            "list" -> {
+                sender.sendMessage("===== Quick Chat List =====")
+                for (prefix in store.allPrefix) {
+                    sender.sendMessage(prefix + " : " + store.getMessage(prefix))
                 }
             }
         }
-        return true;
+        return true
     }
 
-    @Nullable
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
-        if (args.length == 0) return COMPLETE_LIST_EMPTY;
-        final var subCmd = args[0].toLowerCase();
-        if (args.length == 1) {
-            final var commands = Arrays.asList("register", "unregister", "list");
-            final var completions = new ArrayList<String>();
-            StringUtil.copyPartialMatches(subCmd, commands, completions);
-            Collections.sort(completions);
-            return completions;
-        } else if (args.length == 2) {
-            if (subCmd.equals("unregister")) {
-                final var store = QuickChatStore.getInstance();
-                final var completions = new ArrayList<String>();
-                StringUtil.copyPartialMatches(args[1], store.getAllPrefix(), completions);
-                Collections.sort(completions);
-                return completions;
+    override fun onTabComplete(
+        commandSender: CommandSender,
+        command: Command,
+        label: String,
+        args: Array<String>
+    ): List<String> {
+        if (args.isEmpty()) return COMPLETE_LIST_EMPTY
+        val subCmd = args[0].lowercase(Locale.getDefault())
+        if (args.size == 1) {
+            val commands = listOf("register", "unregister", "list")
+            val completions = ArrayList<String>()
+            StringUtil.copyPartialMatches(subCmd, commands, completions)
+            completions.sort()
+            return completions
+        } else if (args.size == 2) {
+            if (subCmd == "unregister") {
+                val store = QuickChatStore.getInstance()
+                val completions = ArrayList<String>()
+                StringUtil.copyPartialMatches(args[1], store.allPrefix, completions)
+                completions.sort()
+                return completions
             }
         }
-        return COMPLETE_LIST_EMPTY;
+        return COMPLETE_LIST_EMPTY
     }
 }

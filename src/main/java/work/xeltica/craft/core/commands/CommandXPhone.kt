@@ -1,41 +1,35 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.commands
 
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import net.kyori.adventure.text.Component;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.stores.HintStore;
-import work.xeltica.craft.core.stores.ItemStore;
-
-import java.util.List;
-import java.util.Objects;
+import net.kyori.adventure.text.Component
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import work.xeltica.craft.core.COMPLETE_LIST_EMPTY
+import work.xeltica.craft.core.models.Hint
+import work.xeltica.craft.core.stores.ItemStore
+import work.xeltica.craft.core.stores.HintStore
+import java.util.*
 
 /**
  * X Phoneを受け取るコマンド
  * @author Xeltica
  */
-public class CommandXPhone extends CommandPlayerOnlyBase {
-    @Override
-    public boolean execute(Player player, Command command, String label, String[] args) {
-        final var item = ItemStore.getInstance().getItem("xphone");
+class CommandXPhone : CommandPlayerOnlyBase() {
+    override fun execute(player: Player, command: Command, label: String, args: Array<String>): Boolean {
+        val item = ItemStore.getInstance().getItem("xphone")
         if (item != null) {
-            player.getInventory().addItem(item);
-            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);
-            player.sendMessage(Objects.requireNonNull(item.getItemMeta().displayName()).append(Component.text("を付与しました")));
-            HintStore.getInstance().achieve(player, Hint.TWIN_XPHONE);
+            player.inventory.addItem(item)
+            player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
+            Objects.requireNonNull(item.itemMeta.displayName())
+                ?.let { player.sendMessage(it.append(Component.text("を付与しました"))) }
+            HintStore.getInstance().achieve(player, Hint.TWIN_XPHONE)
         }
-        return true;
+        return true
     }
 
-    @Nullable
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
-        return COMPLETE_LIST_EMPTY;
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String> {
+        return COMPLETE_LIST_EMPTY
     }
 }

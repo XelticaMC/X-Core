@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender
 import work.xeltica.craft.core.stores.MobBallStore
 
 class CommandXReload : CommandBase() {
-    override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+    override fun execute(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         if (args.isEmpty()) return false
         if (args[0] == "all" || args[0] == "mobball") MobBallStore.getInstance().reload()
         return true
@@ -15,7 +15,7 @@ class CommandXReload : CommandBase() {
         commandSender: CommandSender,
         command: Command,
         label: String,
-        args: Array<out String>
+        args: Array<String>
     ): MutableList<String> {
         return if (args.isEmpty()) mutableListOf("all", "mobball") else mutableListOf()
     }

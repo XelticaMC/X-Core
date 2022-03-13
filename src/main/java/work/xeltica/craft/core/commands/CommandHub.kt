@@ -3,6 +3,7 @@ package work.xeltica.craft.core.commands
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.COMPLETE_LIST_EMPTY
 import work.xeltica.craft.core.stores.HubStore
 import work.xeltica.craft.core.models.HubType
 
@@ -17,12 +18,7 @@ class CommandHub : CommandPlayerOnlyBase() {
         return true
     }
 
-    override fun onTabComplete(
-        commandSender: CommandSender,
-        command: Command,
-        label: String,
-        args: Array<String>
-    ): List<String>? {
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String> {
         return COMPLETE_LIST_EMPTY
     }
 }

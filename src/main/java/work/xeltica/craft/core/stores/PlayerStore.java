@@ -130,7 +130,7 @@ public class PlayerStore {
 
     private boolean changed;
 
-    private static org.bukkit.Color[] colors = {
+    private static final org.bukkit.Color[] colors = {
             // from XelticaUI
             org.bukkit.Color.fromRGB(0xe23731), // red
             org.bukkit.Color.fromRGB(0xeb6101), // vermilion

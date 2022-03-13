@@ -1,112 +1,98 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.commands
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Consumer;
-
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.gui.MenuItem;
-import work.xeltica.craft.core.models.EbiPowerEffect;
-import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.stores.EbiPowerStore;
-import work.xeltica.craft.core.stores.HintStore;
+import org.bukkit.Bukkit
+import org.bukkit.Material
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.inventory.meta.PotionMeta
+import org.bukkit.potion.PotionEffectType
+import org.bukkit.util.StringUtil
+import work.xeltica.craft.core.COMPLETE_LIST_EMPTY
+import work.xeltica.craft.core.stores.EbiPowerStore
+import work.xeltica.craft.core.models.EbiPowerEffect
+import work.xeltica.craft.core.stores.HintStore
+import work.xeltica.craft.core.XCorePlugin
+import java.lang.Runnable
+import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.gui.MenuItem
+import work.xeltica.craft.core.models.Hint
+import java.util.*
+import java.util.function.Consumer
 
 /**
  * エビパワードラッグストアを開くコマンド
  * @author Xeltica
  */
-public class CommandEpEffectShop extends CommandPlayerOnlyBase {
-
-    @Override
-    public boolean execute(Player player, Command command, String label, String[] args) {
-        final var subCommand = args.length > 0 ? args[0] : null;
-        final var store = EbiPowerStore.getInstance();
+class CommandEpEffectShop : CommandPlayerOnlyBase() {
+    override fun execute(player: Player, command: Command, label: String, args: Array<String>): Boolean {
+        val subCommand = if (args.isNotEmpty()) args[0] else null
+        val store = EbiPowerStore.getInstance()
 
         // サブコマンドがなければお店UIを開く
-        if (subCommand == null || !player.hasPermission("otanoshimi.command.epeffectshop." + subCommand.toLowerCase())) {
-            openShop(player);
-            return true;
+        if (subCommand == null || !player.hasPermission("otanoshimi.command.epeffectshop." + subCommand.lowercase(Locale.getDefault()))) {
+            openShop(player)
+            return true
         }
-
-        switch (subCommand.toLowerCase()) {
-            // エビパワーストアに、手に持っている商品を追加
-            case "add" -> {
-                if (args.length != 5) {
-                    player.sendMessage("/epeffectshop add <type> <power> <time> <cost>");
-                    return true;
+        when (subCommand.lowercase(Locale.getDefault())) {
+            "add" -> {
+                if (args.size != 5) {
+                    player.sendMessage("/epeffectshop add <type> <power> <time> <cost>")
+                    return true
                 }
-
-                final var type = PotionEffectType.getByName(args[1]);
+                val type = PotionEffectType.getByName(args[1])
                 if (type == null) {
-                    player.sendMessage("/epeffectshop add <type> <power> <time> <cost>");
-                    return true;
+                    player.sendMessage("/epeffectshop add <type> <power> <time> <cost>")
+                    return true
                 }
-
-                final var power = Integer.parseInt(args[2]);
-                final var time = Integer.parseInt(args[3]);
-                final var cost = Integer.parseInt(args[4]);
-
-                store.addItem(new EbiPowerEffect(type, power, time, cost));
-                player.sendMessage("追加しました。");
+                val power = args[2].toInt()
+                val time = args[3].toInt()
+                val cost = args[4].toInt()
+                store.addItem(EbiPowerEffect(type, power, time, cost))
+                player.sendMessage("追加しました。")
             }
-
-            // エビパワーストアから商品を削除
-            case "delete" -> openShopMenu(player, "削除するアイテムを選んでください", (item) -> {
-                store.deleteItem(item);
-                player.sendMessage("削除しました。");
-            });
+            "delete" -> openShopMenu(player, "削除するアイテムを選んでください") { item: EbiPowerEffect? ->
+                store.deleteItem(item)
+                player.sendMessage("削除しました。")
+            }
         }
-        return true;
+        return true
     }
 
     /**
      * 購入用のUIを開きます。
      * @param player UIを開くプレイヤー
      */
-    private void openShop(Player player) {
-        openShopMenu(player, "購入するステータス効果を選んでください", (item) -> {
-            final var result = EbiPowerStore.getInstance().tryBuyItem(player, item);
-
-            switch (result) {
-                case NO_ENOUGH_POWER -> {
-                    player.sendMessage("エビパワー不足のため、購入に失敗しました。");
-                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1, 0.5f);
+    private fun openShop(player: Player) {
+        openShopMenu(player, "購入するステータス効果を選んでください") { item: EbiPowerEffect ->
+            when (EbiPowerStore.getInstance().tryBuyItem(player, item)) {
+                EbiPowerStore.Result.NO_ENOUGH_POWER -> {
+                    player.sendMessage("エビパワー不足のため、購入に失敗しました。")
+                    player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 0.5f)
                 }
-                case SUCCESS -> {
-                    player.sendMessage(String.format(
+                EbiPowerStore.Result.SUCCESS -> {
+                    player.sendMessage(
+                        String.format(
                             "§b%s%s§rを§6%d秒間§r付与しました。",
                             toJapanese(item.effectType()),
-                            item.level() > 1 ? Integer.toString(item.level()) : "",
+                            if (item.level() > 1) item.level().toString() else "",
                             item.time()
-                    ));
-                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 1);
-                    HintStore.getInstance().achieve(player, Hint.EPEFFECTSHOP);
+                        )
+                    )
+                    player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
+                    HintStore.getInstance().achieve(player, Hint.EPEFFECTSHOP)
                 }
-                default -> {
-                    player.sendMessage("不明なエラーが発生しました。");
-                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1, 0.5f);
+                else -> {
+                    player.sendMessage("不明なエラーが発生しました。")
+                    player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 0.5f)
                 }
             }
-            Bukkit.getScheduler().runTask(XCorePlugin.getInstance(), () -> openShop(player));
-        });
+            Bukkit.getScheduler().runTask(XCorePlugin.getInstance(), Runnable { openShop(player) })
+        }
     }
 
     /**
@@ -115,88 +101,82 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
      * @param title メニューのタイトル
      * @param onChosen お店のメニューの一覧
      */
-    private void openShopMenu(Player player, String title, Consumer<EbiPowerEffect> onChosen) {
-        final var ui = Gui.getInstance();
-        final var store = EbiPowerStore.getInstance();
-        final var items = store.getEffectShopItems()
-                .stream()
-                .map(m -> {
-                    final var stack = new ItemStack(Material.POTION);
-                    stack.editMeta(meta -> {
-                        if (meta instanceof PotionMeta potion) {
-                            potion.addCustomEffect(m.toPotionEffect(), true);
-                            potion.setColor(m.effectType().getColor());
-                        }
-                    });
-                    final var displayName = String.format(
-                            "%s%s %d秒 (%dEP)",
-                            toJapanese(m.effectType()),
-                            m.level() > 1 ? Integer.toString(m.level()) : "",
-                            m.time(),
-                            m.cost()
-                    );
-
-                    return new MenuItem(displayName, (a) -> {
-                        if (onChosen != null) {
-                            onChosen.accept(m);
-                        }
-                    }, stack);
-                })
-                .toList();
-        ui.openMenu(player, title, items);
+    private fun openShopMenu(player: Player, title: String, onChosen: Consumer<EbiPowerEffect>?) {
+        val ui = Gui.getInstance()
+        val store = EbiPowerStore.getInstance()
+        val items = store.effectShopItems
+            .stream()
+            .map { m: EbiPowerEffect ->
+                val stack = ItemStack(Material.POTION)
+                stack.editMeta { meta: ItemMeta? ->
+                    if (meta is PotionMeta) {
+                        meta.addCustomEffect(m.toPotionEffect(), true)
+                        meta.color = m.effectType().color
+                    }
+                }
+                val displayName = String.format(
+                    "%s%s %d秒 (%dEP)",
+                    toJapanese(m.effectType()),
+                    if (m.level() > 1) m.level().toString() else "",
+                    m.time(),
+                    m.cost()
+                )
+                MenuItem(displayName, { onChosen?.accept(m) }, stack)
+            }
+            .toList()
+        ui.openMenu(player, title, items)
     }
 
-    private String toJapanese(PotionEffectType type) {
+    private fun toJapanese(type: PotionEffectType): String {
         // TODO マップから変換
-        return switch (type.getName()) {
-            case "SPEED" -> "移動速度上昇";
-            case "SLOW" -> "移動速度低下";
-            case "FAST_DIGGING" -> "採掘速度上昇";
-            case "SLOW_DIGGING" -> "採掘速度低下";
-            case "INCREASE_DAMAGE" -> "攻撃力上昇";
-            case "HEAL" -> "即時回復";
-            case "HARM" -> "即時ダメージ";
-            case "JUMP" -> "跳躍力上昇";
-            case "CONFUSION" -> "吐き気";
-            case "REGENERATION" -> "再生能力";
-            case "DAMAGE_RESISTANCE" -> "耐性";
-            case "FIRE_RESISTANCE" -> "火炎耐性";
-            case "WATER_BREATHING" -> "水中呼吸";
-            case "INVISIBILITY" -> "透明化";
-            case "BLINDNESS" -> "盲目";
-            case "NIGHT_VISION" -> "暗視";
-            case "HUNGER" -> "空腹";
-            case "WEAKNESS" -> "弱体化";
-            case "POISON" -> "毒";
-            case "WITHER" -> "衰弱";
-            case "HEALTH_BOOST" -> "体力増強";
-            case "ABSORPTION" -> "衝撃吸収";
-            case "SATURATION" -> "満腹度回復";
-            case "GLOWING" -> "発光";
-            case "LEVITATION" -> "浮遊";
-            case "LUCK" -> "幸運";
-            case "UNLUCK" -> "不運";
-            case "SLOW_FALLING" -> "落下速度低下";
-            case "CONDUIT_POWER" -> "コンジットパワー";
-            case "DOLPHINS_GRACE" -> "イルカの好意";
-            case "BAD_OMEN" -> "不吉な予感";
-            case "HERO_OF_THE_VILLAGE" -> "村の英雄";
-            default -> "不明";
-        };
+        return when (type.name) {
+            "SPEED" -> "移動速度上昇"
+            "SLOW" -> "移動速度低下"
+            "FAST_DIGGING" -> "採掘速度上昇"
+            "SLOW_DIGGING" -> "採掘速度低下"
+            "INCREASE_DAMAGE" -> "攻撃力上昇"
+            "HEAL" -> "即時回復"
+            "HARM" -> "即時ダメージ"
+            "JUMP" -> "跳躍力上昇"
+            "CONFUSION" -> "吐き気"
+            "REGENERATION" -> "再生能力"
+            "DAMAGE_RESISTANCE" -> "耐性"
+            "FIRE_RESISTANCE" -> "火炎耐性"
+            "WATER_BREATHING" -> "水中呼吸"
+            "INVISIBILITY" -> "透明化"
+            "BLINDNESS" -> "盲目"
+            "NIGHT_VISION" -> "暗視"
+            "HUNGER" -> "空腹"
+            "WEAKNESS" -> "弱体化"
+            "POISON" -> "毒"
+            "WITHER" -> "衰弱"
+            "HEALTH_BOOST" -> "体力増強"
+            "ABSORPTION" -> "衝撃吸収"
+            "SATURATION" -> "満腹度回復"
+            "GLOWING" -> "発光"
+            "LEVITATION" -> "浮遊"
+            "LUCK" -> "幸運"
+            "UNLUCK" -> "不運"
+            "SLOW_FALLING" -> "落下速度低下"
+            "CONDUIT_POWER" -> "コンジットパワー"
+            "DOLPHINS_GRACE" -> "イルカの好意"
+            "BAD_OMEN" -> "不吉な予感"
+            "HERO_OF_THE_VILLAGE" -> "村の英雄"
+            else -> "不明"
+        }
     }
 
-    @Nullable
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
-        if (args.length == 1) {
-            final var commands = Arrays.asList("add", "delete");
-            final var completions = new ArrayList<String>();
-            StringUtil.copyPartialMatches(args[0], commands, completions);
-            Collections.sort(completions);
-            return completions;
-        } else if (args.length == 2) {
-            return Arrays.stream(PotionEffectType.values()).map(PotionEffectType::getName).toList();
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String>? {
+        if (args.size == 1) {
+            val commands = listOf("add", "delete")
+            val completions = ArrayList<String>()
+            StringUtil.copyPartialMatches(args[0], commands, completions)
+            completions.sort()
+            return completions
+        } else if (args.size == 2) {
+            return Arrays.stream(PotionEffectType.values()).map { obj: PotionEffectType -> obj.name }
+                .toList()
         }
-        return COMPLETE_LIST_EMPTY;
+        return COMPLETE_LIST_EMPTY
     }
 }

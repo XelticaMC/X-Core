@@ -1,249 +1,201 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.commands
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import org.bukkit.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.models.CounterData;
-import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.models.Ranking;
-import work.xeltica.craft.core.stores.CounterStore;
-import work.xeltica.craft.core.stores.PlayerStore;
-import work.xeltica.craft.core.stores.RankingStore;
+import org.bukkit.Bukkit
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import org.bukkit.util.StringUtil
+import work.xeltica.craft.core.COMPLETE_LIST_EMPTY
+import work.xeltica.craft.core.stores.CounterStore
+import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.models.CounterData
+import work.xeltica.craft.core.models.PlayerDataKey
+import java.io.IOException
+import work.xeltica.craft.core.stores.RankingStore
+import work.xeltica.craft.core.models.Ranking
+import java.util.*
+import java.util.function.Consumer
 
 /**
  * トロッコを出現させるコマンド
  * @author Xeltica
  */
-public class CommandCounter extends CommandPlayerOnlyBase {
-    @Override
-    public boolean execute(Player player, Command command, String label, String[] args) {
-        if (args.length == 0) return false;
-        final var subCommand = args[0].toLowerCase();
-        final var store = CounterStore.getInstance();
-        final var pstore = PlayerStore.getInstance();
-        final var record = pstore.open(player);
-        final var ui = Gui.getInstance();
-
+class CommandCounter : CommandPlayerOnlyBase() {
+    override fun execute(player: Player, command: Command, label: String, args: Array<String>): Boolean {
+        if (args.isEmpty()) return false
+        val subCommand = args[0].lowercase(Locale.getDefault())
+        val store = CounterStore.getInstance()
+        val pstore = PlayerStore.getInstance()
+        val record = pstore.open(player)
+        val ui = Gui.getInstance()
         try {
-            switch (subCommand) {
-                // 登録を行います。
-                // counter register
-                case "register" -> {
-                    if (args.length < 2) return ui.error(player, "/counter register <name> [\"daily\"]");
-                    final var name = args[1];
-                    final var isDaily = args.length == 3 && "daily".equalsIgnoreCase(args[2]);
-                    record.set(PlayerDataKey.COUNTER_REGISTER_MODE, true, false);
-                    record.set(PlayerDataKey.COUNTER_REGISTER_NAME, name, false);
-                    record.set(PlayerDataKey.COUNTER_REGISTER_IS_DAILY, isDaily, false);
-                    pstore.save();
-                                    
-                    player.sendMessage("カウンター登録モードは有効。カウンターの始点にする感圧板をクリックかタップしてください。");
-                    player.sendMessage("キャンセルする際には、 /counter cancel を実行します。");
+            when (subCommand) {
+                "register" -> {
+                    if (args.size < 2) return ui.error(player, "/counter register <name> [\"daily\"]")
+                    record[PlayerDataKey.COUNTER_REGISTER_MODE] = true
+                    record[PlayerDataKey.COUNTER_REGISTER_NAME] =  args[1]
+                    record[PlayerDataKey.COUNTER_REGISTER_IS_DAILY] = args.size == 3 && "daily".equals(args[2], ignoreCase = true)
+                    pstore.save()
+                    player.sendMessage("カウンター登録モードは有効。カウンターの始点にする感圧板をクリックかタップしてください。")
+                    player.sendMessage("キャンセルする際には、 /counter cancel を実行します。")
                 }
-
-                // カウンター登録をキャンセルします。
-                // counter cancel
-                case "cancel" -> {
-                    record.delete(PlayerDataKey.COUNTER_REGISTER_MODE, false);
-                    record.delete(PlayerDataKey.COUNTER_REGISTER_NAME, false);
-                    record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY, false);
-                    record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION, false);
-                    pstore.save();
-
-                    player.sendMessage("カウンター登録モードを無効化し、キャンセルしました。");
+                "cancel" -> {
+                    record.delete(PlayerDataKey.COUNTER_REGISTER_MODE)
+                    record.delete(PlayerDataKey.COUNTER_REGISTER_NAME)
+                    record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY)
+                    record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION)
+                    pstore.save()
+                    player.sendMessage("カウンター登録モードを無効化し、キャンセルしました。")
                 }
-
-                // カウンターを登録解除します。
-                // counter unregister <name>
-                case "unregister" -> {
-                    if (args.length != 2) return ui.error(player, "/counter unregister <name>");
-                    final var name = args[1];
-                    final var data = store.get(name);
-                    if (data == null) {
-                        return ui.error(player, name + "という名前のカウンターは存在しません。");
-                    }
-
-                    store.remove(data);
-                    player.sendMessage(name + "を登録解除しました。");
+                "unregister" -> {
+                    if (args.size != 2) return ui.error(player, "/counter unregister <name>")
+                    val name = args[1]
+                    val data = store[name] ?: return ui.error(player, name + "という名前のカウンターは存在しません。")
+                    store.remove(data)
+                    player.sendMessage(name + "を登録解除しました。")
                 }
-
-                // カウンターをランキングに紐付けます。
-                // counter bind <name> <playerType> [rankingName]
-                case "bind" -> {
-                    if (args.length != 4) return ui.error(player, "/counter bind <name> <all/java/bedrock/uwp/phone> <rankingName>");
-                    final var name = args[1].toLowerCase();
-                    final var playerType = args[2].toLowerCase();
-                    final var rankingName = args[3];
-
-                    final var data = store.get(name);
-                    if (data == null) {
-                        return ui.error(player, name + "という名前のカウンターは存在しません。");
-                    }
-                    
-                    switch (playerType) {
-                        case "all" -> {
-                            data.setJavaRankingId(rankingName);
-                            data.setBedrockRankingId(rankingName);
+                "bind" -> {
+                    if (args.size != 4) return ui.error(
+                        player,
+                        "/counter bind <name> <all/java/bedrock/uwp/phone> <rankingName>"
+                    )
+                    val name = args[1].lowercase(Locale.getDefault())
+                    val playerType = args[2].lowercase(Locale.getDefault())
+                    val rankingName = args[3]
+                    val data = store[name] ?: return ui.error(player, name + "という名前のカウンターは存在しません。")
+                    when (playerType) {
+                        "all" -> {
+                            data.javaRankingId = rankingName
+                            data.bedrockRankingId = rankingName
                         }
-                        case "java" -> {
-                            data.setJavaRankingId(rankingName);
+                        "java" -> {
+                            data.javaRankingId = rankingName
                         }
-                        case "bedrock" -> {
-                            data.setBedrockRankingId(rankingName);
+                        "bedrock" -> {
+                            data.bedrockRankingId = rankingName
                         }
-                        case "uwp" -> {
-                            data.setUwpRankingId(rankingName);
+                        "uwp" -> {
+                            data.uwpRankingId = rankingName
                         }
-                        case "phone" -> {
-                            data.setPhoneRankingId(rankingName);
+                        "phone" -> {
+                            data.phoneRankingId = rankingName
                         }
                     }
-                    store.update(data);
-                    player.sendMessage("カウンターをランキングに紐付けました。");
+                    store.update(data)
+                    player.sendMessage("カウンターをランキングに紐付けました。")
                 }
-
-                // カウンターをランキングから紐付け解除します。
-                // counter unbind <name> <playerType>
-                case "unbind" -> {
-                    if (args.length != 3) return ui.error(player, "/counter unbind <name> <all/java/bedrock/uwp/phone>");
-                    final var name = args[1].toLowerCase();
-                    final var playerType = args[2].toLowerCase();
-
-                    final var data = store.get(name);
-                    if (data == null) {
-                        return ui.error(player, name + "という名前のカウンターは存在しません。");
-                    }
-                    
-                    switch (playerType) {
-                        case "all" -> {
-                            data.setJavaRankingId(null);
-                            data.setBedrockRankingId(null);
+                "unbind" -> {
+                    if (args.size != 3) return ui.error(player, "/counter unbind <name> <all/java/bedrock/uwp/phone>")
+                    val name = args[1].lowercase(Locale.getDefault())
+                    val playerType = args[2].lowercase(Locale.getDefault())
+                    val data = store[name] ?: return ui.error(player, name + "という名前のカウンターは存在しません。")
+                    when (playerType) {
+                        "all" -> {
+                            data.javaRankingId = null
+                            data.bedrockRankingId = null
                         }
-                        case "java" -> {
-                            data.setJavaRankingId(null);
+                        "java" -> {
+                            data.javaRankingId = null
                         }
-                        case "bedrock" -> {
-                            data.setBedrockRankingId(null);
+                        "bedrock" -> {
+                            data.bedrockRankingId = null
                         }
-                        case "uwp" -> {
-                            data.setUwpRankingId(null);
+                        "uwp" -> {
+                            data.uwpRankingId = null
                         }
-                        case "phone" -> {
-                            data.setPhoneRankingId(null);
+                        "phone" -> {
+                            data.phoneRankingId = null
                         }
                     }
-                    store.update(data);
-                    player.sendMessage("カウンターをランキングから解除ました。");
+                    store.update(data)
+                    player.sendMessage("カウンターをランキングから解除ました。")
                 }
-
-                // カウンターの情報を開示します。
-                // counter info <name>
-                case "info" -> {
-                    if (args.length != 2) return ui.error(player, "/counter info <name>");
-                    final var name = args[1];
-                    final var data = store.get(name);
-                    player.sendMessage("名前: " + name);
-                    player.sendMessage("始点: " + data.getLocation1().toString());
-                    player.sendMessage("終点: " + data.getLocation2().toString());
-                    player.sendMessage("1日1回かどうか: " + data.isDaily());
-                    player.sendMessage("紐付いたランキングID: ");
-                    player.sendMessage(" Java: " + data.getJavaRankingId());
-                    player.sendMessage(" Bedrock: " + data.getBedrockRankingId());
-                    player.sendMessage(" UWP: " + data.getUwpRankingId());
-                    player.sendMessage(" Phone: " + data.getPhoneRankingId());
+                "info" -> {
+                    if (args.size != 2) return ui.error(player, "/counter info <name>")
+                    val name = args[1]
+                    val data = store[name]
+                    player.sendMessage("名前: $name")
+                    player.sendMessage("始点: " + data!!.location1.toString())
+                    player.sendMessage("終点: " + data.location2.toString())
+                    player.sendMessage("1日1回かどうか: " + data.isDaily)
+                    player.sendMessage("紐付いたランキングID: ")
+                    player.sendMessage(" Java: " + data.javaRankingId)
+                    player.sendMessage(" Bedrock: " + data.bedrockRankingId)
+                    player.sendMessage(" UWP: " + data.uwpRankingId)
+                    player.sendMessage(" Phone: " + data.phoneRankingId)
                 }
-
-                // カウンターのプレイ済み履歴を指定したプレイヤーか全プレイヤー分削除します。
-                // counter resetdaily [player]
-                case "resetdaily" -> {
-                    if (args.length != 2) {
-                        store.resetAllPlayersPlayedLog();
-                        player.sendMessage("全プレイヤーのプレイ済み履歴を削除しました。");
+                "resetdaily" -> {
+                    if (args.size != 2) {
+                        store.resetAllPlayersPlayedLog()
+                        player.sendMessage("全プレイヤーのプレイ済み履歴を削除しました。")
                     } else {
-                        final var name = args[1];
-                        pstore.open(Bukkit.getPlayerUniqueId(name)).delete(PlayerDataKey.PLAYED_COUNTER);
-                        player.sendMessage("そのプレイヤーのプレイ済み履歴を削除しました。");
+                        val name = args[1]
+                        pstore.open(Bukkit.getPlayerUniqueId(name)).delete(PlayerDataKey.PLAYED_COUNTER)
+                        player.sendMessage("そのプレイヤーのプレイ済み履歴を削除しました。")
                     }
                 }
-
-                // カウンターを一覧表示します。
-                // counter list
-                case "list" -> {
-                    final var list = store.getCounters();
-                    if (list.size() == 0) {
-                        ui.error(player, "カウンターはまだ作成されていません。");
+                "list" -> {
+                    val list = store.counters
+                    if (list.size == 0) {
+                        ui.error(player, "カウンターはまだ作成されていません。")
                     } else {
-                        player.sendMessage("合計: " + list.size());
-                        list.forEach(c -> player.sendMessage("* " + c.getName()));
+                        player.sendMessage("合計: " + list.size)
+                        list.forEach(Consumer { c: CounterData -> player.sendMessage("* " + c.name) })
                     }
                 }
-
-                // カウンターをデイリーイベント仕様にするかどうか設定する
-                // 現状は全部デイリーイベント仕様である
-                // counter setisdaily <true/false>
-                case "setisdaily" -> {
-                    return ui.error(player, "未実装");
+                "setisdaily" -> {
+                    return ui.error(player, "未実装")
                 }
-                default -> { return false; }
+                else -> {
+                    return false
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ui.error(player, "§cIO エラーが発生したために処理を続行できませんでした。");
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return ui.error(player, "§cIO エラーが発生したために処理を続行できませんでした。")
         }
-        return true;
+        return true
     }
 
-    @Nullable
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
-        if (args.length == 0) return COMPLETE_LIST_EMPTY;
-        final var subcommand = args[0].toLowerCase();
-        if (args.length == 1) {
-            final var commands = Arrays.asList("register", "unregister", "cancel", "bind", "unbind", "info", "list", "resetdaily");
-            final var completions = new ArrayList<String>();
-            StringUtil.copyPartialMatches(subcommand, commands, completions);
-            Collections.sort(completions);
-            return completions;
-        } else if (args.length == 2) {
-            switch (subcommand) {
-                case "unregister", "info", "bind", "unbind" -> {
-                    final var store = CounterStore.getInstance();
-                    return store.getCounters().stream().map(CounterData::getName).toList();
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String>? {
+        if (args.isEmpty()) return COMPLETE_LIST_EMPTY
+        val subcommand = args[0].lowercase(Locale.getDefault())
+        if (args.size == 1) {
+            val commands = listOf("register", "unregister", "cancel", "bind", "unbind", "info", "list", "resetdaily")
+            val completions = ArrayList<String>()
+            StringUtil.copyPartialMatches(subcommand, commands, completions)
+            completions.sort()
+            return completions
+        } else if (args.size == 2) {
+            when (subcommand) {
+                "unregister", "info", "bind", "unbind" -> {
+                    val store = CounterStore.getInstance()
+                    return store.counters.stream().map { obj: CounterData -> obj.name }
+                        .toList()
                 }
             }
-        } else if (args.length == 3) {
-            switch (subcommand) {
-                case "bind", "unbind" -> {
-                    final var playerType = args[2].toLowerCase();
-                    final var types = Arrays.asList("all", "java", "bedrock", "uwp", "phone");
-                    final var completions = new ArrayList<String>();
-                    StringUtil.copyPartialMatches(playerType, types, completions);
-                    Collections.sort(completions);
-                    return completions;
+        } else if (args.size == 3) {
+            when (subcommand) {
+                "bind", "unbind" -> {
+                    val playerType = args[2].lowercase(Locale.getDefault())
+                    val types = listOf("all", "java", "bedrock", "uwp", "phone")
+                    val completions = ArrayList<String>()
+                    StringUtil.copyPartialMatches(playerType, types, completions)
+                    completions.sort()
+                    return completions
                 }
             }
-        } else if (args.length == 4) {
-            if ("bind".equals(subcommand)) {
-                final var store = RankingStore.getInstance();
-                final var rankings = store.getAll().stream().map(Ranking::getName).toList();
-                final var completions = new ArrayList<String>();
-                StringUtil.copyPartialMatches(args[3], rankings, completions);
-                Collections.sort(completions);
-                return completions;
+        } else if (args.size == 4) {
+            if ("bind" == subcommand) {
+                val store = RankingStore.getInstance()
+                val rankings = store.all.stream().map { obj: Ranking -> obj.name }.toList()
+                val completions = ArrayList<String>()
+                StringUtil.copyPartialMatches(args[3], rankings, completions)
+                completions.sort()
+                return completions
             }
         }
-        return COMPLETE_LIST_EMPTY;
+        return COMPLETE_LIST_EMPTY
     }
 }

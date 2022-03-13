@@ -4,12 +4,11 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.command.Command
-import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.stores.MobBallStore
 
 class CommandGiveMobBall : CommandPlayerOnlyBase() {
-    override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
+    override fun execute(player: Player, command: Command, label: String, args: Array<String>): Boolean {
         val name = if (args.isNotEmpty()) args[0] else null
         val p = if (name == null) player else Bukkit.getPlayer(name)
         if (p == null) {
@@ -25,14 +24,4 @@ class CommandGiveMobBall : CommandPlayerOnlyBase() {
         p.playSound(p.location, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
         return true
     }
-
-    override fun onTabComplete(
-        commandSender: CommandSender,
-        command: Command,
-        label: String,
-        args: Array<out String>
-    ): MutableList<String>? {
-        return super.onTabComplete(commandSender, command, label, args)
-    }
-
 }
