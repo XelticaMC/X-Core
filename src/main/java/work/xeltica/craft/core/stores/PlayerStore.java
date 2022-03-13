@@ -35,11 +35,7 @@ public class PlayerStore {
     public PlayerStore() {
         PlayerStore.instance = this;
         PlayerStore.liveBarMap = new HashMap<>();
-        flags = new Config("flags");
-        newcomers = new Config("newcomers");
         playerStores = new Config("playerStores");
-
-        checkAndMigrate();
 
         Bukkit.getScheduler().runTaskTimer(XCorePlugin.getInstance(), this::saveTask, 0, Ticks.from(10));
     }
@@ -77,20 +73,8 @@ public class PlayerStore {
         playerStores.save();
     }
 
-    public boolean hasOnlineStaff() {
-        return _hasOnlineStaff;
-    }
-
     public boolean isCitizen(Player p) {
         return p.hasPermission("otanoshimi.citizen");
-    }
-
-    public void updateHasOnlineStaff() {
-        final var flag = Bukkit.getOnlinePlayers().stream().anyMatch(p -> p.hasPermission("otanoshimi.staff"));
-        if (_hasOnlineStaff != flag) {
-            Bukkit.getPluginManager().callEvent(flag ? new StaffJoinEvent() : new StaffLeaveEvent());
-        }
-        _hasOnlineStaff = flag;
     }
 
     public void setLiveMode(Player player, boolean isLive) {
@@ -130,36 +114,7 @@ public class PlayerStore {
         return item;
     }
 
-    private void checkAndMigrate() {
-        if (!Config.exists("flags") && !Config.exists("newcomers")) return;
-
-        Bukkit.getLogger().info("古い保存データが残っています。Player Storeへのマイグレーションを行います。");
-        try {
-            migrate();
-            Config.delete("flags");
-            Config.delete("newcomers");
-            Bukkit.getLogger().info("マイグレーションが完了しました。");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void migrate() throws IOException {
-        // cat
-        final var catUUIDs = flags.getConf().getStringList("cats").stream().map(UUID::fromString).toList();
-        for (var id : catUUIDs) {
-            open(id).set(PlayerDataKey.CAT_MODE, true);
-        }
-
-        // new comers
-        final var newComerIds = newcomers.getConf().getKeys(false);
-        for (var id : newComerIds) {
-            open(UUID.fromString(id)).set(PlayerDataKey.NEWCOMER_TIME, newcomers.getConf().getInt(id));
-        }
-    }
-
     private void saveTask() {
-        if (!isAutoSave()) return;
         if (!isChanged()) return;
         try {
             save();
@@ -170,16 +125,10 @@ public class PlayerStore {
     }
 
     private static PlayerStore instance;
-    private boolean _hasOnlineStaff;
-    private final Config flags;
-    private final Config newcomers;
     private final Config playerStores;
-    private BukkitTask scheduledSaver;
     private static Map<UUID, BossBar> liveBarMap;
 
     private boolean changed;
-
-    private boolean autoSave = true;
 
     private static org.bukkit.Color[] colors = {
             // from XelticaUI
@@ -201,15 +150,7 @@ public class PlayerStore {
         return this.changed;
     }
 
-    public boolean isAutoSave() {
-        return this.autoSave;
-    }
-
     public void setChanged(boolean changed) {
         this.changed = changed;
-    }
-
-    public void setAutoSave(boolean autoSave) {
-        this.autoSave = autoSave;
     }
 }

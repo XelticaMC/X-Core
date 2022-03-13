@@ -126,9 +126,6 @@ public class WorldHandler implements Listener {
             case "sandbox2" -> Hint.GOTO_SANDBOX;
             case "art" -> Hint.GOTO_ART;
             case "nightmare2" -> Hint.GOTO_NIGHTMARE;
-            case "hub" -> Hint.GOTO_CLASSIC_LOBBY;
-            case "world" -> Hint.GOTO_CLASSIC_WORLD;
-            case "wildarea" -> Hint.GOTO_CLASSIC_WILDAREA;
             default -> null;
         };
 
@@ -141,7 +138,7 @@ public class WorldHandler implements Listener {
         if (isCreativeWorld) {
             p.setGameMode(GameMode.CREATIVE);
         }
-        if (name.equals("nightmare")) {
+        if (name.equals("nightmare2")) {
             world.setDifficulty(Difficulty.HARD);
             world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
             world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
@@ -152,13 +149,6 @@ public class WorldHandler implements Listener {
             world.setThundering(true);
             world.setThunderDuration(20000);
             p.playSound(p.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 1, 0.5f);
-        }
-        if (name.equals("wildarea") && e.getFrom().getWorld().getName().equals("hub")) {
-            // 最終ベッドがワイルドエリアにある場合、そこに飛ばす
-            final var bed = p.getBedSpawnLocation();
-            if (Objects.requireNonNull(bed).getWorld().getUID().equals(world.getUID())) {
-                e.setTo(bed);
-            }
         }
         if (desc != null) {
             p.sendMessage(desc);
@@ -309,13 +299,6 @@ public class WorldHandler implements Listener {
         "wildarea2_nether",
         "wildarea2_the_end",
         "main",
-        "nightmare2",
-
-        "world",
-        "world_nether",
-        "world_the_end",
-        "wildarea",
-        "travel_wildarea",
-        "travel_megawild"
+        "nightmare2"
     ));
 }

@@ -45,20 +45,11 @@ public class EbiPowerHandler implements Listener{
     public EbiPowerHandler() {
         // エビパワーが貯まらないワールドのリストを構築
         // TODO: 設定ファイルに移す
-        epBlackList.add("hub");
         epBlackList.add("hub2");
-        epBlackList.add("sandbox");
         epBlackList.add("art");
         epBlackList.add("sandbox2");
         epBlackList.add("pvp");
         epBlackList.add("hub_dev");
-        epBlackList.add("world");
-        epBlackList.add("world_nether");
-        epBlackList.add("world_the_end");
-        epBlackList.add("wildarea");
-        epBlackList.add("travel_wildarea");
-        epBlackList.add("travel_megawild");
-        epBlackList.add("travel_maikura_city");
 
         crops.addAll(Tag.CROPS.getValues());
 

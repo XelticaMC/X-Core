@@ -46,33 +46,6 @@ public class HubHandler implements Listener {
     }
 
     @EventHandler
-    public void onPlayerBreakSign(BlockBreakEvent e) {
-        final var p = e.getPlayer();
-        if (playerIsInClassicHub(p)) {
-            store().removeSign(p, e.getBlock().getLocation());
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerClickSign(PlayerInteractEvent e) {
-        final var p = e.getPlayer();
-        if (e.getAction() != Action.RIGHT_CLICK_BLOCK)
-            return;
-        if (playerIsInClassicHub(p)) {
-            e.setCancelled(store().processSigns(Objects.requireNonNull(e.getClickedBlock()).getLocation(), p));
-        }
-    }
-
-    @EventHandler
-    public void onPlayerClassicHubPortal(PlayerPortalEvent e) {
-        final var player = e.getPlayer();
-        if (playerIsInClassicHub(player)) {
-            e.setCancelled(true);
-            store().returnToClassicWorld(player);
-        }
-    }
-
-    @EventHandler
     public void onPlayerHunger(FoodLevelChangeEvent e) {
         final var player = e.getEntity();
         if (playerIsInHub(player)) {
@@ -81,65 +54,11 @@ public class HubHandler implements Listener {
         }
     }
 
-    @EventHandler
-    public void onSignChange(SignChangeEvent e) {
-        final var p = e.getPlayer();
-        if (!playerIsInClassicHub(p)) return;
-
-        final var lines = e.lines().stream()
-            .map(c -> PlainTextComponentSerializer.plainText().serialize(c))
-            .toList();
-
-        if (lines.get(0).equals("[Hub]")) {
-            final var command = lines.get(1).toLowerCase();
-            final var arg1 = lines.get(2);
-            final var arg2 = lines.get(3);
-
-            switch (command) {
-                case "teleport" -> {
-                    e.line(0, Component.text("[§a§lテレポート§r]"));
-                    e.line(1, Component.text(""));
-                    e.line(2, Component.text("§b" + WorldStore.getInstance().getWorldDisplayName(arg1)));
-                    e.line(3, Component.text("§rクリックorタップ"));
-                }
-                case "xteleport" -> {
-                    e.line(0, Component.text("[§b§lテレポート§r]"));
-                    e.line(1, Component.text(""));
-                    e.line(2, Component.text("§b" + WorldStore.getInstance().getWorldDisplayName(arg1)));
-                    e.line(3, Component.text("§rクリックorタップ"));
-                }
-                case "return" -> {
-                    e.line(0, Component.text("§a元の場所に帰る"));
-                    e.line(1, Component.text(""));
-                    e.line(2, Component.text(""));
-                    e.line(3, Component.text("§rクリックorタップ"));
-                }
-                default -> {
-                    p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1, 0.5f);
-                    p.sendMessage("設置に失敗しました。存在しないコマンドです。");
-                    return;
-                }
-            }
-
-            store().placeSign(p, e.getBlock().getLocation(), command, arg1, arg2);
-        }
-    }
-
     private boolean playerIsInHub(Entity p) {
-        return hubs.contains(p.getWorld().getName());
-    }
-
-    private boolean playerIsInClassicHub(Entity p) {
-        return p.getWorld().getName().equals("hub");
+        return p.getWorld().getName().equalsIgnoreCase("hub2");
     }
 
     private HubStore store() {
         return HubStore.getInstance();
     }
-
-    private final List<String> hubs = Lists.newArrayList(
-        "hub",
-        "hub2",
-        "hub_dev"
-    );
 }
