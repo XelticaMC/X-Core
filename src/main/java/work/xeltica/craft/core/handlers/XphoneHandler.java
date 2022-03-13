@@ -173,7 +173,7 @@ public class XphoneHandler implements Listener {
 
         items.add(appTeleport);
 
-        if (List.of("main", "wildarea2", "wildarea2_nether", "wildarea2_the_end", "wildarea", "world", "world_nether", "world_the_end").contains(worldName)) {
+        if (List.of("main", "wildarea2", "wildarea2_nether", "wildarea2_the_end").contains(worldName)) {
             items.add(appCPrivate);
             items.add(appCPublic);
             items.add(appCRemove);
@@ -267,17 +267,14 @@ public class XphoneHandler implements Listener {
         final var list = new ArrayList<MenuItem>();
         final var currentWorldName = p.getWorld().getName();
 
-        list.add(
-            switch (currentWorldName) {
-                case "hub" -> new MenuItem("メインロビー", i -> HubStore.getInstance().teleport(p, HubType.Main, true), Material.NETHERITE_BLOCK);
-                case "hub2" -> new MenuItem("クラシックロビー", i -> HubStore.getInstance().teleport(p, HubType.Classic, true), Material.GOLD_BLOCK);
-                default -> new MenuItem("ロビー", i -> p.performCommand("hub"), Material.NETHERITE_BLOCK);
-            }
-        );
+        if (!currentWorldName.equals("hub2")) {
+            list.add(new MenuItem("ロビー", i -> p.performCommand("hub"), Material.NETHERITE_BLOCK));
+        }
 
         if (WorldStore.getInstance().getRespawnWorld(currentWorldName) != null) {
             list.add(new MenuItem("初期スポーン", i -> p.performCommand("respawn"), Material.FIREWORK_ROCKET));
         }
+
         list.add(new MenuItem("ベッド", i -> p.performCommand("respawn bed"), Material.RED_BED));
 
         if ("main".equals(currentWorldName)) {

@@ -34,9 +34,7 @@ public class BossBarStore {
     }
 
     public void applyAll(Player p) {
-        bossBars.forEach(bar -> {
-            p.showBossBar(bar);
-        });
+        bossBars.forEach(p::showBossBar);
     }
 
     private final ArrayList<BossBar> bossBars = new ArrayList<>();

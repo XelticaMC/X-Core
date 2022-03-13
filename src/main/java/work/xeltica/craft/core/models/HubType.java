@@ -13,8 +13,6 @@ public enum HubType {
     Main("hub2"),
     // メインロビー(新規)
     NewComer("hub2", new Vector3(293, 11, 63)),
-    // クラシックロビー
-    Classic("hub"),
     ;
 
     HubType(String worldName) {

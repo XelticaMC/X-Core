@@ -23,7 +23,6 @@ import work.xeltica.craft.core.commands.CommandCounter;
 import work.xeltica.craft.core.commands.CommandEpEffectShop;
 import work.xeltica.craft.core.commands.CommandGiveCustomItem;
 import work.xeltica.craft.core.commands.CommandGiveMobBall;
-import work.xeltica.craft.core.commands.CommandGiveTravelTicket;
 import work.xeltica.craft.core.commands.CommandHint;
 import work.xeltica.craft.core.commands.CommandHub;
 import work.xeltica.craft.core.commands.CommandLive;
@@ -226,7 +225,6 @@ public class XCorePlugin extends JavaPlugin {
         addCommand("respawn", new CommandRespawn());
         addCommand("pvp", new CommandPvp());
         addCommand("signedit", new CommandSignEdit());
-        addCommand("givetravelticket", new CommandGiveTravelTicket());
         addCommand("givecustomitem", new CommandGiveCustomItem());
         addCommand("givemobball", new CommandGiveMobBall());
         addCommand("report", new CommandReport());

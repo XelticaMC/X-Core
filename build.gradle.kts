@@ -110,11 +110,6 @@ bukkit {
             usage = "/signedit <行番号> <テキスト>"
             permission = "otanoshimi.command.signedit"
         }
-        register("givetravelticket") {
-            description = "トラベルチケットを授与します。"
-            usage = "/givetravelticket <playerName> [type=NORMAL] [amount=1]"
-            permission = "otanoshimi.command.givetravelticket"
-        }
         register("givecustomitem") {
             description = "XelticaMCオリジナルアイテムを授与します。"
             usage = "/givetravelticket <playerName> <xphone>"
@@ -229,9 +224,6 @@ bukkit {
 
     permissions {
         register("otanoshimi.command.pvp") {
-            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
-        }
-        register("otanoshimi.command.givetravelticket") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.givecustomitem") {

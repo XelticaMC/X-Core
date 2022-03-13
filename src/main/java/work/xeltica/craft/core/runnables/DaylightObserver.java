@@ -20,7 +20,7 @@ public class DaylightObserver extends BukkitRunnable {
 
     @Override
     public void run() {
-        final var time = Objects.requireNonNull(plugin.getServer().getWorld("world")).getTime();
+        final var time = Objects.requireNonNull(plugin.getServer().getWorld("main")).getTime();
         if (time < this.prevTime) {
             // 時間が前よりも小さくなったのであれば、おそらく日をまたいだことになる
             final var event = new NewMorningEvent(time);

@@ -38,7 +38,7 @@ public class WorldStore {
     }
 
     public String getWorldDisplayName(String n) {
-        return n.startsWith("travel_") ? null : worldNameMap.get(n);
+        return worldNameMap.get(n);
     }
 
     public String getWorldDescription(World w) {
@@ -154,12 +154,9 @@ public class WorldStore {
     }
 
     public String getRespawnWorld(String worldName) {
-        // TODO 旅行券のときに位置情報保存しておいてーとかそういう処理に対応したい
-        if (worldName.startsWith("travel_")) return "world";
         return switch (worldName) {
             case "wildarea2_nether", "wildarea2_the_end" -> "wildarea2";
-            case "world_nether", "nightmare", "wildarea", "world_the_end" -> "world";
-            case "pvp", "wildareab", "hub", "hub2" -> null;
+            case "pvp", "wildareab", "hub2" -> null;
             default -> worldName;
         };
     }
@@ -176,14 +173,6 @@ public class WorldStore {
         worldNameMap.put("wildarea2_nether", "ワイルドネザー");
         worldNameMap.put("wildarea2_the_end", "ワイルドエンド");
         worldNameMap.put("hub2", "ロビー");
-
-        worldNameMap.put("world", "クラシックワールド");
-        worldNameMap.put("world_nether", "クラシックネザー");
-        worldNameMap.put("world_the_end", "クラシックエンド");
-        worldNameMap.put("hub", "クラシックロビー");
-        worldNameMap.put("sandbox", "サンドボックス(クラシック)");
-        worldNameMap.put("nightmare", "ナイトメア(クラシック)");
-        worldNameMap.put("wildarea", "ワイルドエリア(クラシック)");
     }
 
     private void loadWorldDescription() {
@@ -207,11 +196,6 @@ public class WorldStore {
             "自由に立ち入りできますが、何が起こってもサポートは致しかねます。"
         );
 
-        worldDescMap.put("wildarea",
-            "ここは、資源が豊富な§cワイルドエリア§r。\n" +
-            "メインワールドで生活するための資源を回収したり、サバイバル生活をしたり、使い方は無限大。"
-        );
-
         worldDescMap.put("wildarea2",
             "ここは、資源が豊富な§cワイルドエリアA§r。\n" +
             "メインワールドで生活するための資源を回収したり、サバイバル生活をしたり、使い方は無限大。"
@@ -225,15 +209,13 @@ public class WorldStore {
 
     private void loadLockedWorldNames() {
         lockedWorldNames.add("art");
-        lockedWorldNames.add("sandbox");
-        lockedWorldNames.add("nightmare");
         lockedWorldNames.add("nightmare2");
     }
 
     private void loadCreativeWorldNames() {
         creativeWorldNames.add("art");
+        creativeWorldNames.add("sandbox2");
         creativeWorldNames.add("test");
-        creativeWorldNames.add("sandbox");
     }
 
     private static WorldStore instance;
@@ -244,10 +226,6 @@ public class WorldStore {
     private final Set<String> creativeWorldNames = new HashSet<>();
 
     private final String[] summonVehicleWhiteList = {
-        "world",
-        "world_nether",
-        "world_the_end",
-        "wildarea",
         "wildarea2",
         "wildarea2_nether",
         "wildarea2_the_end",

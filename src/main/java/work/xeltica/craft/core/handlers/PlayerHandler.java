@@ -1,6 +1,5 @@
 package work.xeltica.craft.core.handlers;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -8,12 +7,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -22,13 +16,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -56,9 +47,7 @@ import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.QuickChatStore;
-import work.xeltica.craft.core.stores.WorldStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
-import work.xeltica.craft.core.utils.TravelTicketUtil;
 
 /**
  * プレイヤーに関するハンドラーをまとめています。
@@ -133,13 +122,6 @@ public class PlayerHandler implements Listener {
             BedrockDisclaimerUtil.showDisclaimerAsync(p);
         }
 
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                pstore.updateHasOnlineStaff();
-            }
-        }.runTask(plugin);
-
         p.showTitle(Title.title(
             Component.text("§aXelticaMCへ§6ようこそ！"),
             Component.text("§f詳しくは §b§nhttps://craft.xeltica.work§fを見てね！")
@@ -157,30 +139,6 @@ public class PlayerHandler implements Listener {
     public void onPlayerQuit(PlayerQuitEvent e) {
         final var name = PlainTextComponentSerializer.plainText().serialize(e.getPlayer().displayName());
         e.quitMessage(Component.text("§a" + name + "§b" + "さんがかえりました"));
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                PlayerStore.getInstance().updateHasOnlineStaff();
-            }
-        }.runTask(plugin);
-    }
-
-    @EventHandler
-    public void onPlayerPortal(PlayerPortalEvent e) {
-        // サンドボックスと旅行先からポータルを開けることを禁止
-        final var name = e.getPlayer().getWorld().getName();
-        if (name.startsWith("travel_") || name.equals("sandbox") || name.equals("wildarea") || name.equals("wildareab")) {
-            e.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onInventoryOpenEvent(InventoryOpenEvent e) {
-        final var isEnderChest = e.getInventory().getType() == InventoryType.ENDER_CHEST;
-        final var isSandbox = e.getPlayer().getWorld().getName().equals("sandbox");
-        if (isEnderChest && isSandbox) {
-            e.setCancelled(true);
-        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -261,15 +219,12 @@ public class PlayerHandler implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent e) {
+    public void onPlayerTryBed(PlayerInteractEvent e) {
         final var p = e.getPlayer();
         final var isSneaking = p.isSneaking();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             final var worldName = p.getWorld().getName();
-            final var isBedDisabledWorld =
-                   worldName.startsWith("travel_")
-                || worldName.equals("hub")
-                || worldName.equals("hub2")
+            final var isBedDisabledWorld = worldName.equals("hub2")
                 || worldName.equals("sandbox")
                 || worldName.equals("wildareab")
                 ;
@@ -277,70 +232,6 @@ public class PlayerHandler implements Listener {
                 Gui.getInstance().error(p, "ベッドはこの世界では使えない…");
                 e.setCancelled(true);
             }
-            return;
-        }
-        final var item = e.getItem();
-        if (TravelTicketUtil.isTravelTicket(item) && e.getAction() != Action.PHYSICAL) {
-            e.setCancelled(true);
-
-            if (movingPlayer != null) {
-                p.sendMessage(p.getUniqueId().equals(movingPlayer) ? "移動中です！" : "誰かが移動中です。少し待ってから再試行してください。");
-                return;
-            }
-
-            final var type = TravelTicketUtil.getTicketType(item);
-            final var worldName = "travel_" + type.toString().toLowerCase();
-            final var world = Bukkit.getWorld(worldName);
-
-            if (world == null) {
-                p.sendMessage("申し訳ありませんが、現在" + type.getDisplayName() + "には行けません。");
-                return;
-            }
-            if (world.getUID().equals(p.getWorld().getUID())) {
-                p.sendMessage("既に来ています！");
-                return;
-            }
-            movingPlayer = p.getUniqueId();
-
-            if (p.getGameMode() != GameMode.CREATIVE) {
-                item.setAmount(item.getAmount() - 1);
-            }
-            final int x;
-            final int z;
-            final var otherPlayers = world.getPlayers();
-
-            if (isSneaking || otherPlayers.size() == 0) {
-                x = rnd.nextInt(20000) - 10000;
-                z = rnd.nextInt(20000) - 10000;
-            } else {
-                final var chosen = otherPlayers.get(rnd.nextInt(otherPlayers.size()));
-                final var loc = chosen.getLocation();
-                final var range = 10;
-                x = loc.getBlockX() + rnd.nextInt(range) - range / 2;
-                z = loc.getBlockZ() + rnd.nextInt(range) - range / 2;
-            }
-            p.sendMessage("旅行券を使用しました。現在手配中です。その場で少しお待ちください！");
-            final var res = world.getChunkAtAsync(x, z);
-            res.whenComplete((ret, ex) -> {
-                final var y = world.getHighestBlockYAt(x, z);
-                final var loc = new Location(world, x, y, z);
-                final var block = world.getBlockAt(loc);
-                // 危険ブロックの場合、安全な石ブロックを敷いておく
-                // TODO: 対象ブロックをHashSetに入れてそれを使うようにする
-                if (block.getType() == Material.LAVA || block.getType() == Material.WATER) {
-                    block.setType(Material.STONE, false);
-                }
-                for (var pl : Bukkit.getOnlinePlayers()) {
-                    pl.sendMessage(String.format("§6%s§rさんが§a%s§rに行きます！§b行ってらっしゃい！", p.getDisplayName(), type.getDisplayName()));
-                }
-                p.teleportAsync(loc).thenAccept((c) -> Bukkit.getScheduler().runTask(XCorePlugin.getInstance(), () -> {
-                    p.playSound(p.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.PLAYERS, 1, 0.5f);
-                    p.sendTitle(ChatColor.GOLD + type.getDisplayName(), "良い旅を！", 5, 100, 5);
-                    p.sendMessage("ようこそ、§6" + type.getDisplayName() + "§rへ！");
-                    p.sendMessage("元の世界に帰る場合は、§a/respawn§rコマンドを使用します。");
-                }));
-                movingPlayer = null;
-            });
         }
     }
 
