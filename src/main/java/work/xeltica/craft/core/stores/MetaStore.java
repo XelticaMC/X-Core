@@ -69,9 +69,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "ナイトメアワールド: バランス調整",
-            "不正な方法でエビパワーを入手できてしまう重大な不具合を修正",
-            "",
+            "クラシックワールドを廃止"
     };
 
     private static MetaStore instance;
