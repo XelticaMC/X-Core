@@ -282,7 +282,7 @@ public class XphoneHandler implements Listener {
                 final var loc = p.getLocation();
                 final var x = loc.getBlockX() * 16;
                 final var z = loc.getBlockZ() * 16;
-                p.sendMessage("ワールドを準備中です…");
+                p.sendMessage("ワールドを準備中です…。そのまましばらくお待ちください。");
                 p.getWorld().getChunkAtAsync(x, z).thenAccept((c) -> {
                     final var wildareab = Bukkit.getWorld("wildareab");
                     if (wildareab == null) {
