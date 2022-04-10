@@ -159,7 +159,8 @@ class MobBallHandler : Listener {
     fun onRestoreMob(e: PlayerInteractEntityEvent) {
         val p = e.player
         val entity = e.rightClicked as? Mob ?: return
-        val item = p.inventory.itemInMainHand
+        val item = p.inventory.itemInMainHand ?: return
+        if (item.type == Material.AIR) return
         val nbt = NBTItem(item)
         if (!nbt.hasKey("mobCase")) return
         e.isCancelled = true
