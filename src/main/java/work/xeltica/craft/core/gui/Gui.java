@@ -261,7 +261,7 @@ public class Gui implements Listener {
      * @param pitch ピッチ
      */
     public void playSound(Player player, Sound sound, float volume, SoundPitch pitch) {
-        player.playSound(player.getLocation(), sound, SoundCategory.PLAYERS, volume, pitch.getPitch());
+        player.getWorld().playSound(player.getLocation(), sound, SoundCategory.PLAYERS, volume, pitch.getPitch());
     }
 
     /**
@@ -273,11 +273,7 @@ public class Gui implements Listener {
      * @param delay Tick
      */
     public void playSoundAfter(Player player, Sound sound, float volume, SoundPitch pitch, int delay) {
-        Bukkit.getScheduler().runTaskLater(
-                XCorePlugin.getInstance(),
-                () -> playSound(player, sound, volume, pitch),
-                delay
-        );
+        Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> playSound(player, sound, volume, pitch), delay);
     }
 
     private void openMenuJavaImpl(Player player, String title, MenuItem[] items) {
