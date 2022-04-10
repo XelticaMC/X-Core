@@ -101,15 +101,11 @@ public class WorldHandler implements Listener {
         final var fromId = from.getUID();
         final var toId = to.getUID();
 
-        if (fromId.equals(toId))
-            return;
+        if (fromId.equals(toId)) return;
 
         if (isLockedWorld && !p.hasPermission("hub.teleport." + name)) {
             p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 0.5f);
-            p.sendMessage(
-                "§aわかば§rプレイヤーは§6" + displayName + "§rに行くことができません！\n" +
-                "§b/promo§rコマンドを実行して、昇格方法を確認してください！"
-            );
+            p.sendMessage("§aわかば§rプレイヤーは§6" + displayName + "§rに行くことができません！\n§b/promo§rコマンドを実行して、昇格方法を確認してください！");
             e.setCancelled(true);
             return;
         }
@@ -165,27 +161,27 @@ public class WorldHandler implements Listener {
         e.getPlayer().showTitle(Title.title(Component.text(name).color(TextColor.color(0xFFB300)), Component.empty()));
     }
 
-    @EventHandler()
-    public void onChunkPopulateEvent(ChunkPopulateEvent e) {
-        // TODO ハードコードをやめる
-        if (!e.getWorld().getName().equals("main")) return;
-        final var c = e.getChunk();
-
-        final var min = e.getWorld().getMinHeight();
-
-        for (var z = 0; z < 16; z++) {
-            for (var x = 0; x < 16; x++) {
-                final var yMax = c.getWorld().getHighestBlockYAt(c.getX() + x, c.getZ() + z);
-                for (int y = min + 1; y <= yMax; y++) {
-                    final var block = c.getBlock(x, y, z);
-                    final var replacer = replace(block.getType());
-                    if (replacer != null) {
-                        block.setType(replacer, false);
-                    }
-                }
-            }
-        }
-    }
+//    @EventHandler()
+//    public void onChunkPopulateEvent(ChunkPopulateEvent e) {
+//        // TODO ハードコードをやめる
+//        if (!e.getWorld().getName().equals("main")) return;
+//        final var c = e.getChunk();
+//
+//        final var min = e.getWorld().getMinHeight();
+//
+//        for (var z = 0; z < 16; z++) {
+//            for (var x = 0; x < 16; x++) {
+//                final var yMax = c.getWorld().getHighestBlockYAt(c.getX() + x, c.getZ() + z);
+//                for (int y = min + 1; y <= yMax; y++) {
+//                    final var block = c.getBlock(x, y, z);
+//                    final var replacer = replace(block.getType());
+//                    if (replacer != null) {
+//                        block.setType(replacer, false);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     @EventHandler
     public void onDispenser(BlockPreDispenseEvent event) {
