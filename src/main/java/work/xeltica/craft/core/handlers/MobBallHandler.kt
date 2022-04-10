@@ -165,9 +165,7 @@ class MobBallHandler : Listener {
         if (!nbt.hasKey("mobCase")) return
         e.isCancelled = true
 
-        if (nbt.getBoolean("isActive")) {
-            return
-        }
+        if (nbt.getBoolean("isActive")) return
 
         val entityTag = nbt.getCompound("EntityTag")
         if (!entityTag.getUUID("UUID").equals(entity.uniqueId)) {
