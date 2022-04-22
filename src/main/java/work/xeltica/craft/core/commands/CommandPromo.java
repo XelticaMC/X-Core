@@ -43,20 +43,18 @@ public class CommandPromo extends CommandPlayerOnlyBase {
             final var ctx = luckPerms.getContextManager().getContext(player);
             final var linked = ctx.contains("discordsrv:linked", "true");
             final var crafterRole = ctx.contains("discordsrv:role", "クラフター");
-            final var citizenRole = ctx.contains("discordsrv:role", "市民");
             final var tick = record.getInt(PlayerDataKey.NEWCOMER_TIME);
 
             player.sendMessage("§b§lクイック認証に必要な条件: ");
             sendMessage(player, "Discord 連携済み", linked);
             sendMessage(player, "クラフターロール付与済み", crafterRole);
-            sendMessage(player, "市民ロール付与済み", citizenRole);
             sendMessage(player, "初参加から30分経過(残り" + tickToString(tick) + ")", tick == 0);
             player.sendMessage(
-                linked && crafterRole && citizenRole
+                linked && crafterRole
                     ? "§b全ての条件を満たしているため、あなたは市民です！"
                     : "§cあなたはまだいくつかの条件を満たしていないため、市民ではありません。"
             );
-            if (!(linked && crafterRole && citizenRole)) {
+            if (!(linked && crafterRole)) {
                 player.sendMessage("クイック認証が面倒であれば§6§l手動認証§rもできます。");
             }
         }
