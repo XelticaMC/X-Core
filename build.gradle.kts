@@ -73,6 +73,7 @@ dependencies {
     compileOnly("com.github.koca2000:NoteBlockAPI:-SNAPSHOT")
     compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
     implementation("net.wesjd:anvilgui:1.5.3-SNAPSHOT")
+    compileOnly("com.vexsoftware:nuvotifier-universal:2.7.2")
 
     library("com.google.code.gson", "gson", "2.8.7")
     bukkitLibrary("com.google.code.gson", "gson", "2.8.7")
