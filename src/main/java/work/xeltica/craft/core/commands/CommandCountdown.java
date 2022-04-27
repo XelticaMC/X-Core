@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -92,7 +93,7 @@ public class CommandCountdown extends CommandPlayerOnlyBase {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
         if (args.length <= 1) return COMPLETE_LIST_EMPTY;
-        final var players = XCorePlugin.getInstance().getServer().getOnlinePlayers().stream().map(HumanEntity::getName).toList();
+        final var players = new LinkedList<>(XCorePlugin.getInstance().getServer().getOnlinePlayers().stream().map(HumanEntity::getName).toList());
         final var completions = new ArrayList<String>();
         players.removeAll(Arrays.stream(Arrays.copyOfRange(args, 1, args.length - 1)).toList());
         StringUtil.copyPartialMatches(args[args.length - 1], players, completions);
