@@ -70,7 +70,7 @@ dependencies {
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.8.0")
     compileOnly("com.discordsrv:discordsrv:1.24.0")
     compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
-    compileOnly("com.github.koca2000:NoteBlockAPI:-SNAPSHOT")
+    compileOnly("com.github.koca2000:NoteBlockAPI:1.6.1")
     compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
     implementation("net.wesjd:anvilgui:1.5.3-SNAPSHOT")
 
