@@ -69,7 +69,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "市民ロールを廃止"
+            "countdownコマンドの補完に失敗する不具合を修正"
     };
 
     private static MetaStore instance;
