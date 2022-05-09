@@ -12,12 +12,12 @@ public class Ticks {
 
     /** 分、秒をTickに変換 */
     public static int from(int minute, double second) {
-        return from(second) * minute;
+        return from(minute * 60) + from(second);
     }
 
     /** 時間、分、秒をTickに変換 */
     public static int from(int hour, int minute, double second) {
-        return from(second) * minute * hour;
+        return from(hour * 3600) + from(minute * 60) + from(second);
     }
 
     /** Tickを秒に変換 */
