@@ -202,8 +202,8 @@ public class WorldStore {
         );
 
         worldDescMap.put("wildareab",
-                "ここは、資源が豊富な§cワイルドエリアB§r。\n" +
-                "メインワールドで生活するための資源を回収したり、サバイバル生活をしたり、使い方は無限大。"
+            "ここは、資源が豊富な§cワイルドエリアB§r。\n" +
+            "メインワールドで生活するための資源を回収したり、サバイバル生活をしたり、使い方は無限大。"
         );
     }
 
@@ -231,5 +231,6 @@ public class WorldStore {
         "wildarea2_the_end",
         "main",
         "nightmare2",
+        "wildareab"
     };
 }

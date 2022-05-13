@@ -2,6 +2,8 @@ package work.xeltica.craft.core.handlers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -122,30 +124,28 @@ public class XphoneHandler implements Listener {
         final var appBoat = new MenuItem("ボート", i -> player.performCommand("boat"), Material.OAK_BOAT, null);
         final var appCart = new MenuItem("トロッコ", i -> player.performCommand("cart"), Material.MINECART, null);
 
-        final var appFirework = new MenuItem(summerLoginBonusReceived ? "花火を購入（80EP/5個）" : "花火を引き換える", i -> {
+        final var FIREWORK_COUNT = 16;
+        final var FIREWORK_COST = 100;
+
+        final var appFirework = new MenuItem(summerLoginBonusReceived ? "花火を購入（" + FIREWORK_COST + "EP/" + FIREWORK_COUNT + "個）" : "花火を引き換える", i -> {
             final var verb = summerLoginBonusReceived ? "購入" : "入手";
             if (summerLoginBonusReceived && !EbiPowerStore.getInstance().tryTake(player, 80)) {
                 ui().error(player, "アイテムを" + verb + "できませんでした。エビパワーが足りません。");
                 return;
             }
-            final var stack = PlayerStore.getInstance().getRandomFireworkByUUID(player.getUniqueId(), 5);
+            final var stack = PlayerStore.getInstance().getRandomFireworkByUUID(player.getUniqueId(), FIREWORK_COUNT);
             final var size = player.getInventory().addItem(stack).size();
             if (size > 0) {
                 ui().error(player, "アイテムを" + verb + "できませんでした。持ち物がいっぱいです。整理してからもう一度お試し下さい。");
-                if (size - 5 > 0) {
+                if (size - FIREWORK_COUNT > 0) {
                     final var stackToRemove = stack.clone();
-                    stackToRemove.setAmount(size - 5);
+                    stackToRemove.setAmount(size - FIREWORK_COUNT);
                     player.getInventory().remove(stackToRemove);
                 }
-                EbiPowerStore.getInstance().tryGive(player, 80);
+                EbiPowerStore.getInstance().tryGive(player, FIREWORK_COST);
             } else {
                 player.sendMessage("花火を" + verb + "しました！");
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 2);
-
-                // 購入の場合、ヒント達成する
-                // if (summerLoginBonusReceived) {
-                //    HintStore.getInstance().achieve(player, Hint.BUY_FIREWORKS);
-                // }
             }
             if (!summerLoginBonusReceived) {
                 PlayerStore.getInstance().open(player).set(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER, true);
@@ -168,12 +168,12 @@ public class XphoneHandler implements Listener {
         final var appQuickChat = new MenuItem("クイックチャット", i -> openQuickChatApp(player), Material.PAPER, null);
         final var launchFireworkApp = new MenuItem("花火を打ち上げる", i -> openFireworkLaunchApp(player), Material.FIREWORK_ROCKET, null);
         final var appEffectStore = new MenuItem("エビパワードラッグストア", i -> player.performCommand("epeffectshop"), Material.BREWING_STAND, null);
-
+        final var appVote = new MenuItem("サーバー投票", i -> player.performCommand("votelist"), Material.NAME_TAG, null);
         final var isBedrock = FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId());
 
         items.add(appTeleport);
 
-        if (List.of("main", "wildarea2", "wildarea2_nether", "wildarea2_the_end").contains(worldName)) {
+        if ("main".equals(worldName)) {
             items.add(appCPrivate);
             items.add(appCPublic);
             items.add(appCRemove);
@@ -189,12 +189,17 @@ public class XphoneHandler implements Listener {
         items.add(appSidebar);
         items.add(appOmikuji);
         items.add(appCat);
+
         if (WorldStore.getInstance().canSummonVehicles(player.getWorld())) {
             items.add(appBoat);
             items.add(appCart);
         }
         items.add(appStore);
         items.add(appEffectStore);
+
+        if (isFireworkLoginBonusEnabled()) {
+            items.add(appFirework);
+        }
 
         items.add(appHint);
 
@@ -217,6 +222,10 @@ public class XphoneHandler implements Listener {
             }
         } else {
             items.add(new MenuItem("引っ越し", i -> openTransferPlayerDataApp(player), Material.CHEST_MINECART));
+        }
+
+        if (!isBedrock) {
+            items.add(appVote);
         }
 
         playStartupSound(player);
@@ -436,6 +445,13 @@ public class XphoneHandler implements Listener {
         ui().playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1, SoundPitch.A1);
         ui().playSoundAfter(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1, SoundPitch.D2, 4);
         ui().playSoundAfter(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1, SoundPitch.C_2, 8);
+    }
+
+    private boolean isFireworkLoginBonusEnabled() {
+        var date = Calendar.getInstance();
+        var month = date.get(Calendar.MONTH) + 1;
+        var day = date.get(Calendar.DATE);
+        return month == 5 && 15 <= day && day <= 21;
     }
 
     private void playTapSound(Player player) {
