@@ -34,6 +34,6 @@ class QuickChatApp : AppBase() {
                 }, Material.PAPER)
             )
         }
-        ui.openMenu(player, "QuickChat", list)
+        ui.openMenu(player, "クイックチャット", list)
     }
 }
