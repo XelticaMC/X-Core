@@ -86,6 +86,7 @@ import work.xeltica.craft.core.stores.CounterStore;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.MobEPStore;
+import work.xeltica.craft.core.xphone.XphoneOs;
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
@@ -105,6 +106,7 @@ public class XCorePlugin extends JavaPlugin {
         loadCommands();
         loadHandlers();
         new DiscordService();
+        XphoneOs.INSTANCE.onEnabled();
 
         Bukkit.getOnlinePlayers().forEach(Player::updateCommands);
 
@@ -180,6 +182,7 @@ public class XCorePlugin extends JavaPlugin {
         Gui.resetInstance();
         unloadPlugins();
         NbsStore.getInstance().stopAll();
+        XphoneOs.INSTANCE.onDisabled();
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             final var luckPerms = provider.getProvider();
