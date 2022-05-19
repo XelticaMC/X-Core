@@ -22,6 +22,9 @@ class XphoneHandler : Listener {
         if (itemMeta?.displayName() == null) return
         val player = e.player
 
+        val phone = store().getItem(ItemStore.ITEM_NAME_XPHONE)
+        if (!store().compareCustomItem(item, phone)) return
+
         // 右クリック以外はガード
         if (!listOf(Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK).contains(e.action)) return
         e.setUseItemInHand(Event.Result.DENY)

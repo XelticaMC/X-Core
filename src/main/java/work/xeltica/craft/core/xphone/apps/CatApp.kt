@@ -14,10 +14,10 @@ class CatApp : AppBase() {
         return "ネコ語モードを${if (isCat(player)) "オフ" else "オン"}にする"
     }
 
-    override fun getIcon(player: Player): Material = Material.GOLD_INGOT
+    override fun getIcon(player: Player): Material = Material.COD
 
     override fun onLaunch(player: Player) {
-        player.performCommand("omikuji")
+        player.performCommand("cat ${if (isCat(player)) "off" else "on"}")
     }
 
     override fun isShiny(player: Player): Boolean = isCat(player)
