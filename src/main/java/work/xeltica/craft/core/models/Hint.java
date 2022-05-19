@@ -172,6 +172,14 @@ public enum Hint {
             HintType.CHALLENGE
     ),
 
+    // 億万長者
+    EBIPOWER_1000000(
+            "100万あったら何したい？",
+            "100万EPを溜める",
+            0, // 100万いった瞬間にボーナスがはいっちゃうとちょっと余韻がないので…
+            HintType.CHALLENGE
+    ),
+
     // ヘルプ
     EBIPOWER(
             "エビパワーとは",
