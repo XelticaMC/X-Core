@@ -28,9 +28,8 @@ class TeleportApp : AppBase() {
 
         if (WorldStore.getInstance().getRespawnWorld(currentWorldName) != null) {
             list.add(MenuItem("初期スポーン", { player.performCommand("respawn") }, Material.FIREWORK_ROCKET))
+            list.add(MenuItem("ベッド", { player.performCommand("respawn bed") }, Material.RED_BED))
         }
-
-        list.add(MenuItem("ベッド", { player.performCommand("respawn bed") }, Material.RED_BED))
 
         if ("main" == currentWorldName) {
             list.add(MenuItem("ワイルドエリアBへ行く", { i: MenuItem? ->
@@ -54,7 +53,7 @@ class TeleportApp : AppBase() {
                         player.teleportAsync(Location(wildareab, x.toDouble(), y.toDouble(), z.toDouble()))
                     })
             }, Material.GRASS_BLOCK))
-        } else if ("wildareab".contains(currentWorldName)) {
+        } else if ("wildareab" == currentWorldName) {
             list.add(
                 MenuItem("メインワールドに帰る", { WorldStore.getInstance().teleportToSavedLocation(player, "main") }, Material.CREEPER_HEAD)
             )

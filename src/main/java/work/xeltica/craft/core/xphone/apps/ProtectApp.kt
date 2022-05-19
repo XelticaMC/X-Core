@@ -22,12 +22,10 @@ class ProtectApp : AppBase() {
         ))
     }
 
-    override fun isVisible(player: Player): Boolean = whitelistWorld.contains(player.world.name)
-
-    private val whitelistWorld = listOf(
+    override fun isVisible(player: Player): Boolean = listOf(
         "main",
         "wildarea2",
         "wildarea2_nether",
         "wildarea2_the_end",
-    )
+    ).contains(player.world.name)
 }

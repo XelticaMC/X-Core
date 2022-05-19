@@ -15,5 +15,14 @@ class EbipowerDrugStoreApp : AppBase() {
     override fun onLaunch(player: Player) {
         player.performCommand("epeffectshop")
     }
+
+    override fun isVisible(player: Player) = listOf(
+        "main",
+        "wildarea2",
+        "wildarea2_nether",
+        "wildarea2_the_end",
+        "wildareab",
+        "nightmare2",
+    ).contains(player.world.name)
 }
 
