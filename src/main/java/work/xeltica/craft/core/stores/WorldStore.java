@@ -231,6 +231,6 @@ public class WorldStore {
         "wildarea2_the_end",
         "main",
         "nightmare2",
-        "wildareab"
+        "wildareab",
     };
 }
