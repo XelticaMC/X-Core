@@ -69,17 +69,18 @@ public class HintStore {
         final var list = open(p);
         list.add(hint.name());
         hints.getConf().set(p.getUniqueId().toString(), list);
-
-        EbiPowerStore.getInstance().tryGive(p, hint.getPower());
+        if (hint.getPower() > 0) {
+            EbiPowerStore.getInstance().tryGive(p, hint.getPower());
+        }
         p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1.4f);
         final var component = p.displayName().color(TextColor.color(0x4CAF50))
-            .append(Component.text("さんがヒント "))
+            .append(Component.text("さんがヒント「"))
             .append(Component
-                .text(hint.getName())
+                .text(hint.getHintName())
                 .color(TextColor.color(0x03A9F4))
                 .hoverEvent(HoverEvent.hoverEvent(Action.SHOW_TEXT, Component.text(hint.getDescription())))
                 .clickEvent(ClickEvent.clickEvent(net.kyori.adventure.text.event.ClickEvent.Action.RUN_COMMAND, "/hint " + hint.name())))
-            .append(Component.text("を達成した！"))
+            .append(Component.text("」を達成しました！"))
             .asComponent();
         DiscordService.getInstance().broadcast(PlainTextComponentSerializer.plainText().serialize(component));
         Bukkit.getServer().audiences().forEach(a -> {

@@ -29,7 +29,7 @@ public class CommandHint extends CommandPlayerOnlyBase {
         if (subCommand != null) {
             // 指定されたIDのヒントの詳細をプレイヤーに表示
 
-            final var optionalHint = hints.filter(h -> subCommand.equalsIgnoreCase(h.name())).findFirst();
+            final var optionalHint = hints.filter(h -> subCommand.equalsIgnoreCase(h.getHintName())).findFirst();
             if (optionalHint.isEmpty()) {
                 player.sendMessage("ヒントが存在しません。");
                 return true;
@@ -44,9 +44,7 @@ public class CommandHint extends CommandPlayerOnlyBase {
                 }
             }
 
-            Gui.getInstance().openDialog(player, "§l" + hint.getName() + "§r", content, (d) -> {
-                player.performCommand("hint");
-            });
+            Gui.getInstance().openDialog(player, "§l" + hint.getHintName() + "§r", content, (d) -> player.performCommand("hint"));
         } else {
             // ヒント一覧をプレイヤーに表示
 
@@ -54,7 +52,7 @@ public class CommandHint extends CommandPlayerOnlyBase {
                 final var isAchieved = store.hasAchieved(player, h);
                 final var isQuest = h.getPower() > 0;
 
-                final var name = h.getName() + (isQuest ? (" (" + h.getPower() + "EP)") : "");
+                final var name = h.getHintName() + (isQuest ? (" (" + h.getPower() + "EP)") : "");
                 final var icon = getIcon(h, isAchieved);
                 final Consumer<MenuItem> onClick = (m) -> player.performCommand("hint " + h.name());
 
@@ -72,6 +70,7 @@ public class CommandHint extends CommandPlayerOnlyBase {
         return switch (h.getType()) {
             case NORMAL -> isAchieved ? Material.GOLD_BLOCK : Material.GOLD_NUGGET;
             case CHALLENGE -> isAchieved ? Material.DIAMOND_BLOCK : Material.DIAMOND;
+            case HELP -> Material.NETHER_STAR;
         };
     }
 
