@@ -15,7 +15,7 @@ import java.util.*
 class MobBallStore {
     init {
         instance = this
-        XCorePlugin.getInstance().saveResource("mobCaptureDifficulty.yml", false)
+        XCorePlugin.instance.saveResource("mobCaptureDifficulty.yml", false)
         reload()
     }
 

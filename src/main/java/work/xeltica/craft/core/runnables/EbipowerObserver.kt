@@ -25,13 +25,13 @@ class EbipowerObserver : BukkitRunnable() {
 
         val ebipower = store.get(player)
         if (ebipower >= 1000000) {
-            HintStore.getInstance().achieve(player, Hint.EBIPOWER_1000000)
+            HintStore.instance.achieve(player, Hint.EBIPOWER_1000000)
         }
         if (ebipower >= 5000000) {
-            HintStore.getInstance().achieve(player, Hint.EBIPOWER_5000000)
+            HintStore.instance.achieve(player, Hint.EBIPOWER_5000000)
         }
         if (ebipower >= 10000000) {
-            HintStore.getInstance().achieve(player, Hint.EBIPOWER_10000000)
+            HintStore.instance.achieve(player, Hint.EBIPOWER_10000000)
         }
 
         index++

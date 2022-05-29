@@ -134,13 +134,12 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
      */
     private String getItemName(ItemStack item) {
         final var dn = item.getItemMeta().displayName();
-        final var name = dn != null ? PlainTextComponentSerializer.plainText().serialize(dn) : item.getI18NDisplayName();
-        return name;
+        return dn != null ? PlainTextComponentSerializer.plainText().serialize(dn) : item.getI18NDisplayName();
     }
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 1) {
             final var commands = Arrays.asList("add", "delete");
             final var completions = new ArrayList<String>();

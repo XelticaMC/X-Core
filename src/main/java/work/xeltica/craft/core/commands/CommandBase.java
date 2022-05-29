@@ -27,13 +27,13 @@ public abstract class CommandBase implements TabCompleter {
 
     /**
      * プレイヤーがコマンドを入力している途中で表示する入力候補を決定する関数
-     * @param sender コマンドを入力中のプレイヤーかコンソールの情報が入っている
+     * @param commandSender コマンドを入力中のプレイヤーかコンソールの情報が入っている
      * @param command 実行されたコマンドに関する情報が入っている
      * @param label コマンド名が入っている
      * @param args 引数
      * @return 表示する入力候補のリスト。デフォルト値を表示する場合はnull。
      */
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         return null;
     }
 

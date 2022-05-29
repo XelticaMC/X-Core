@@ -63,7 +63,7 @@ class MobBallHandler : Listener {
             return
         }
 
-        if (target.persistentDataContainer.has(NamespacedKey(XCorePlugin.getInstance(), "isCaptured"), PersistentDataType.INTEGER)) {
+        if (target.persistentDataContainer.has(NamespacedKey(XCorePlugin.instance, "isCaptured"), PersistentDataType.INTEGER)) {
             dropEgg(egg, player, "そのモブは既に捕獲されています。")
             return
         }
@@ -99,7 +99,7 @@ class MobBallHandler : Listener {
                         player.sendMessage("§a§lおめでとう！§r${eggNbt.getString("mobCase")}を捕まえた！")
                         showSuccessParticle(eggEntity.location)
                         eggEntity.setCanPlayerPickup(true)
-                        HintStore.getInstance().achieve(player, Hint.SUCCEEDED_TO_CATCH_MOB)
+                        HintStore.instance.achieve(player, Hint.SUCCEEDED_TO_CATCH_MOB)
                         val dex = PlayerStore.getInstance().open(player.uniqueId).getStringList(PlayerDataKey.MOB_DEX)
                         val type = target.type.toString()
                         if (!dex.contains(type)) {
@@ -118,11 +118,11 @@ class MobBallHandler : Listener {
                             player.sendMessage("残念！ボールから出てきてしまった…。")
                             eggEntity.remove()
                         }
-                        HintStore.getInstance().achieve(player, Hint.FAILED_TO_CATCH_MOB)
+                        HintStore.instance.achieve(player, Hint.FAILED_TO_CATCH_MOB)
                     }
                 }
             }
-        }.runTaskTimer(XCorePlugin.getInstance(), 0, 1L)
+        }.runTaskTimer(XCorePlugin.instance, 0, 1L)
     }
 
     @EventHandler
@@ -146,7 +146,7 @@ class MobBallHandler : Listener {
             NBTEntity(it).mergeCompound(entityTag)
             it.teleport(block.location.add(e.blockFace.direction))
             it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
-            it.persistentDataContainer.set(NamespacedKey(XCorePlugin.getInstance(), "isCaptured"), PersistentDataType.INTEGER, 1)
+            it.persistentDataContainer.set(NamespacedKey(XCorePlugin.instance, "isCaptured"), PersistentDataType.INTEGER, 1)
             showTeleportParticle(it.location)
         }
         nbt.setBoolean("isActive", false)
@@ -159,7 +159,7 @@ class MobBallHandler : Listener {
     fun onRestoreMob(e: PlayerInteractEntityEvent) {
         val p = e.player
         val entity = e.rightClicked as? Mob ?: return
-        val item = p.inventory.itemInMainHand ?: return
+        val item = p.inventory.itemInMainHand
         if (item.type == Material.AIR) return
         val nbt = NBTItem(item)
         if (!nbt.hasKey("mobCase")) return
@@ -191,7 +191,7 @@ class MobBallHandler : Listener {
         if (player !is Player) return
         val item = e.item.itemStack
         if (MobBallStore.getInstance().isMobBall(item)) {
-            HintStore.getInstance().achieve(player, Hint.GET_BALL)
+            HintStore.instance.achieve(player, Hint.GET_BALL)
         }
     }
 

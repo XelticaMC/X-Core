@@ -88,7 +88,7 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 1) {
             final var commands = Arrays.asList("set", "add", "query");
             final var completions = new ArrayList<String>();

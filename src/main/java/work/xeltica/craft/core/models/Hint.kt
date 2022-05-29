@@ -150,11 +150,7 @@ enum class Hint constructor(
     ),
     MINERS_DREAM(
         "マイナーズ・ドリーム",
-        "ブロックをひたすら掘り続けて、1日で"
-                + EbiPowerHandler.BREAK_BLOCK_BONUS_LIMIT
-                + "EP稼ごう。石や鉱石、土などのブロックを採掘することで、1つ1EP、1日"
-                + EbiPowerHandler.BREAK_BLOCK_BONUS_LIMIT
-                + "EPまで稼ぐことができます。",
+        "ブロックをひたすら掘り続けて、1日で${EbiPowerHandler.BREAK_BLOCK_BONUS_LIMIT}EP稼ごう。石や鉱石、土などのブロックを採掘することで、1つ1EP、1日${EbiPowerHandler.BREAK_BLOCK_BONUS_LIMIT}EPまで稼ぐことができます。",
         2000,
         HintType.CHALLENGE
     ),  // 暴力反対

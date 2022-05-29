@@ -30,7 +30,7 @@ class QuickChatApp : AppBase() {
             list.add(
                 MenuItem(String.format("%s §7(.%s)", msg, chat), {
                     player.chat(msg)
-                    HintStore.getInstance().achieve(player, Hint.QUICKCHAT_APP)
+                    HintStore.instance.achieve(player, Hint.QUICKCHAT_APP)
                 }, Material.PAPER)
             )
         }

@@ -40,7 +40,7 @@ public class CommandSignEdit extends CommandPlayerOnlyBase {
                 player.sendMessage(ChatColor.RED + "行番号には0,1,2,3を指定してください");
                 return true;
             }
-            final var l = new LinkedList<String>(Arrays.asList(args));
+            final var l = new LinkedList<>(Arrays.asList(args));
             l.remove(0);
             final var line = String.join(" ", l);
             state.line(index, Component.text(line));
@@ -60,8 +60,8 @@ public class CommandSignEdit extends CommandPlayerOnlyBase {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label,
-            String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label,
+                                      String[] args) {
         final var errorNonSign = List.of("変更する対象の看板を見てください");
         final var errorOutOfBounds = List.of("第一引数は0,1,2,3のいずれかにしてください");
 

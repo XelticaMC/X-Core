@@ -104,7 +104,7 @@ class FireworkGeneratorApp : AppBase() {
                             count++
                         }
                     }
-                    runnable.runTaskTimer(XCorePlugin.getInstance(), 0, 4)
+                    runnable.runTaskTimer(XCorePlugin.instance, 0, 4)
                 }, Material.COMPARATOR),
                 MenuItem("ダウンロード", { downloadFirework(player, type, color, color2, power, attr) }, Material.FIREWORK_ROCKET)
             )

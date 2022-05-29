@@ -57,8 +57,8 @@ public class CommandCat extends CommandPlayerOnlyBase {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label,
-            String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label,
+                                      String[] args) {
         return COMPLETE_LIST_ONOFF;
     }
 }

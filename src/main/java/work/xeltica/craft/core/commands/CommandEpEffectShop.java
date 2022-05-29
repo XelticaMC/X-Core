@@ -187,7 +187,7 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 1) {
             final var commands = Arrays.asList("add", "delete");
             final var completions = new ArrayList<String>();

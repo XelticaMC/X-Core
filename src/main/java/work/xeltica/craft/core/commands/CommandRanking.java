@@ -84,7 +84,7 @@ public class CommandRanking extends CommandBase {
                     } else {
                         list.stream()
                             .map(r -> String.format("%s §7(%s)", r.getName(), r.getDisplayName()))
-                            .forEach(r -> sender.sendMessage(r));
+                            .forEach(sender::sendMessage);
                     }
                 }
                 case "set" -> {
@@ -170,18 +170,10 @@ public class CommandRanking extends CommandBase {
                     final var hSubCommand = args[2].toLowerCase();
 
                     switch (hSubCommand) {
-                        case "spawn" -> {
-                            data.setHologram(player.getLocation().add(0, 3, 0), data.getHologramHidden());
-                        }
-                        case "despawn" -> {
-                            data.setHologram(null, data.getHologramHidden());
-                        }
-                        case "obfuscate" -> {
-                            data.setHologram(data.getHologramLocation(), true);
-                        }
-                        case "deobfuscate" -> {
-                            data.setHologram(data.getHologramLocation(), false);                            
-                        }
+                        case "spawn" -> data.setHologram(player.getLocation().add(0, 3, 0), data.getHologramHidden());
+                        case "despawn" -> data.setHologram(null, data.getHologramHidden());
+                        case "obfuscate" -> data.setHologram(data.getHologramLocation(), true);
+                        case "deobfuscate" -> data.setHologram(data.getHologramLocation(), false);
                     }
                 }
                 default -> {
@@ -198,7 +190,7 @@ public class CommandRanking extends CommandBase {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 1) {
             final var commands = Arrays.asList("create", "delete", "query", "list", "set", "unset", "hologram", "mode");
             final var completions = new ArrayList<String>();
