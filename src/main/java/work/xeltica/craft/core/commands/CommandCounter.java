@@ -44,9 +44,9 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     if (args.length < 2) return ui.error(player, "/counter register <name> [\"daily\"]");
                     final var name = args[1];
                     final var isDaily = args.length == 3 && "daily".equalsIgnoreCase(args[2]);
-                    record.set(PlayerDataKey.COUNTER_REGISTER_MODE, true, false);
-                    record.set(PlayerDataKey.COUNTER_REGISTER_NAME, name, false);
-                    record.set(PlayerDataKey.COUNTER_REGISTER_IS_DAILY, isDaily, false);
+                    record.set(PlayerDataKey.COUNTER_REGISTER_MODE, true);
+                    record.set(PlayerDataKey.COUNTER_REGISTER_NAME, name);
+                    record.set(PlayerDataKey.COUNTER_REGISTER_IS_DAILY, isDaily);
                     pstore.save();
                                     
                     player.sendMessage("カウンター登録モードは有効。カウンターの始点にする感圧板をクリックかタップしてください。");
@@ -56,10 +56,10 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                 // カウンター登録をキャンセルします。
                 // counter cancel
                 case "cancel" -> {
-                    record.delete(PlayerDataKey.COUNTER_REGISTER_MODE, false);
-                    record.delete(PlayerDataKey.COUNTER_REGISTER_NAME, false);
-                    record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY, false);
-                    record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION, false);
+                    record.delete(PlayerDataKey.COUNTER_REGISTER_MODE);
+                    record.delete(PlayerDataKey.COUNTER_REGISTER_NAME);
+                    record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY);
+                    record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION);
                     pstore.save();
 
                     player.sendMessage("カウンター登録モードを無効化し、キャンセルしました。");
@@ -97,18 +97,10 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                             data.setJavaRankingId(rankingName);
                             data.setBedrockRankingId(rankingName);
                         }
-                        case "java" -> {
-                            data.setJavaRankingId(rankingName);
-                        }
-                        case "bedrock" -> {
-                            data.setBedrockRankingId(rankingName);
-                        }
-                        case "uwp" -> {
-                            data.setUwpRankingId(rankingName);
-                        }
-                        case "phone" -> {
-                            data.setPhoneRankingId(rankingName);
-                        }
+                        case "java" -> data.setJavaRankingId(rankingName);
+                        case "bedrock" -> data.setBedrockRankingId(rankingName);
+                        case "uwp" -> data.setUwpRankingId(rankingName);
+                        case "phone" -> data.setPhoneRankingId(rankingName);
                     }
                     store.update(data);
                     player.sendMessage("カウンターをランキングに紐付けました。");
@@ -131,18 +123,10 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                             data.setJavaRankingId(null);
                             data.setBedrockRankingId(null);
                         }
-                        case "java" -> {
-                            data.setJavaRankingId(null);
-                        }
-                        case "bedrock" -> {
-                            data.setBedrockRankingId(null);
-                        }
-                        case "uwp" -> {
-                            data.setUwpRankingId(null);
-                        }
-                        case "phone" -> {
-                            data.setPhoneRankingId(null);
-                        }
+                        case "java" -> data.setJavaRankingId(null);
+                        case "bedrock" -> data.setBedrockRankingId(null);
+                        case "uwp" -> data.setUwpRankingId(null);
+                        case "phone" -> data.setPhoneRankingId(null);
                     }
                     store.update(data);
                     player.sendMessage("カウンターをランキングから解除ました。");
@@ -207,7 +191,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 0) return COMPLETE_LIST_EMPTY;
         final var subcommand = args[0].toLowerCase();
         if (args.length == 1) {

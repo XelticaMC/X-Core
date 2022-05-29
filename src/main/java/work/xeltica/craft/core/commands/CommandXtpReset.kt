@@ -37,7 +37,7 @@ class CommandXtpReset : CommandBase() {
         args: Array<String>
     ): List<String>? {
         if (args.size == 1) {
-            val worlds = XCorePlugin.getInstance().server.worlds.stream().map { obj: World -> obj.name }
+            val worlds = XCorePlugin.instance.server.worlds.stream().map { obj: World -> obj.name }
                 .toList()
             val completions = ArrayList<String>()
             StringUtil.copyPartialMatches(args[0], worlds, completions)

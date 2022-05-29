@@ -103,8 +103,8 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
     private final HashMap<UUID, Boolean> isWarpingMap = new HashMap<>();
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label,
-            String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label,
+                                      String[] args) {
         return COMMANDS;
     }
 

@@ -51,7 +51,7 @@ public class CommandQuickChat extends CommandBase {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 0) return COMPLETE_LIST_EMPTY;
         final var subCmd = args[0].toLowerCase();
         if (args.length == 1) {

@@ -120,6 +120,7 @@ public class EbiPowerHandler implements Listener{
             ep += (buff > 0 ? random.nextInt(buff) : 0);
             if (ep > 0) {
                 store().tryGive(killer, ep);
+                HintStore.getInstance().achieve(killer, Hint.KILL_MOB_AND_EARN_MONEY);
             }
         }
     }
@@ -146,6 +147,7 @@ public class EbiPowerHandler implements Listener{
             final var bonus = getBlockDropBonus(tool);
             final var power = (1 + bonus) * HARVEST_POWER_MULTIPLIER;
             store().tryGive(p, power);
+            HintStore.getInstance().achieve(p, Hint.HARVEST_AND_EARN_MONEY);
             // もし幸運ボーナスがあれば30%の確率で耐久が減っていく
             if (bonus > 0 && random.nextInt(100) < 30) {
                 tool.editMeta(meta -> {
@@ -162,6 +164,7 @@ public class EbiPowerHandler implements Listener{
         if (e.getBreeder() instanceof Player player) {
             if (playerIsInBlacklisted(player)) return;
             EbiPowerStore.getInstance().tryGive(player, 2);
+            HintStore.getInstance().achieve(player, Hint.BREED_AND_EARN_MONEY);
         }
     }
 

@@ -34,7 +34,7 @@ public class CommandLive extends CommandPlayerOnlyBase {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length != 1) return COMPLETE_LIST_EMPTY;
         return COMPLETE_LIST_ONOFF;
     }
