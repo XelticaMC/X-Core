@@ -23,7 +23,7 @@ class CommandHint : CommandPlayerOnlyBase() {
         val hints = Stream.of(*Hint.values())
         if (subCommand != null) {
             // 指定されたIDのヒントの詳細をプレイヤーに表示
-            val optionalHint = hints.filter { h: Hint -> subCommand.equals(h.hintName, ignoreCase = true) }
+            val optionalHint = hints.filter { h: Hint -> subCommand.equals(h.name, ignoreCase = true) }
                 .findFirst()
             if (optionalHint.isEmpty) {
                 player.sendMessage("ヒントが存在しません。")
@@ -63,7 +63,7 @@ class CommandHint : CommandPlayerOnlyBase() {
     }
 
     private fun getIcon(h: Hint, isAchieved: Boolean): Material {
-        return if (h.power == 0) Material.NETHER_STAR else when (h.type) {
+        return when (h.type) {
             HintType.NORMAL -> if (isAchieved) Material.GOLD_BLOCK else Material.GOLD_NUGGET
             HintType.CHALLENGE -> if (isAchieved) Material.DIAMOND_BLOCK else Material.DIAMOND
             HintType.HELP -> Material.NETHER_STAR
