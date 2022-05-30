@@ -7,7 +7,6 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.stores.WorldStore
-import java.util.function.Consumer
 
 /**
  * テレポートアプリ
@@ -38,11 +37,11 @@ class TeleportApp : AppBase() {
                 val z = loc.blockZ * 16
                 player.sendMessage("ワールドを準備中です…。そのまましばらくお待ちください。")
                 player.world.getChunkAtAsync(x, z)
-                    .thenAccept(Consumer chunkLoaded@{
+                    .thenAccept {
                         val wildareab = Bukkit.getWorld("wildareab")
                         if (wildareab == null) {
                             Gui.getInstance().error(player, "テレポートに失敗しました。ワールドが作成されていないようです。")
-                            return@chunkLoaded
+                            return@thenAccept
                         }
                         val y = wildareab.getHighestBlockYAt(x, z) + 1
                         val land =
@@ -51,7 +50,7 @@ class TeleportApp : AppBase() {
                             land.block.type = Material.STONE
                         }
                         player.teleportAsync(Location(wildareab, x.toDouble(), y.toDouble(), z.toDouble()))
-                    })
+                    }
             }, Material.GRASS_BLOCK))
         } else if ("wildareab" == currentWorldName) {
             list.add(

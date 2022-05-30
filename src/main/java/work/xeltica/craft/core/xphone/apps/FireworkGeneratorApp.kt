@@ -38,9 +38,7 @@ class FireworkGeneratorApp : AppBase() {
     private fun chooseFireworkColor(player: Player, type: FireworkEffect.Type) {
         val list = FireworkColor.values()
             .map { f ->
-                MenuItem(f.colorName, { i: MenuItem? ->
-                    chooseFireworkColor2(player, type, f.color)
-                }, f.material)}
+                MenuItem(f.colorName, { chooseFireworkColor2(player, type, f.color) }, f.material)}
             .toList()
         Gui.getInstance().openMenu(player, "花火の色を選んでください", list)
     }
@@ -48,8 +46,7 @@ class FireworkGeneratorApp : AppBase() {
     private fun chooseFireworkColor2(player: Player, type: FireworkEffect.Type, color: Color) {
         val list = FireworkColor.values()
             .map { f -> MenuItem(f.colorName, {
-                chooseFireworkPower(player, type, color, f.color)
-            }, f.material)}
+                chooseFireworkPower(player, type, color, f.color) }, f.material)}
             .toList()
         val list2 = ArrayList(list)
         list2.add(0, MenuItem("なし", { chooseFireworkPower(player, type, color, null) }, Material.BARRIER))

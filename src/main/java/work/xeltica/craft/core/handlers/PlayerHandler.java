@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
+import com.github.ucchyocean.lc3.bukkit.event.LunaChatBukkitChannelMessageEvent;
+import com.github.ucchyocean.lc3.member.ChannelMemberPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -18,7 +20,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -145,43 +146,43 @@ public class PlayerHandler implements Listener {
     public void onPlayerChatForCat(AsyncPlayerChatEvent e) {
         // ネコであれば文章をいじる
         if (PlayerStore.getInstance().open(e.getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
-            var mes = e.getMessage();
-            mes = mes.replace("な", "にゃ");
-            mes = mes.replace("ナ", "ニャ");
-            mes = mes.replace("ﾅ", "ﾆｬ");
-            mes = mes.replace("everyone", "everynyan");
-            mes = mes.replace("morning", "mornyan");
-            mes = mes.replace("na", "nya");
-            mes = mes.replace("EVERYONE", "EVERYNYAN");
-            mes = mes.replace("MORNING", "MORNYAN");
-            mes = mes.replace("NA", "NYA");
-            e.setMessage(mes);
+            e.setMessage(nyaize(e.getMessage()));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerChatForCatOnChannel(LunaChatBukkitChannelMessageEvent e) {
+        // ネコであれば文章をいじる
+        final var member = e.getMember();
+        if (!(member instanceof ChannelMemberPlayer)) return;
+        if (PlayerStore.getInstance().open(((ChannelMemberPlayer) member).getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
+            e.setMessage(nyaize(e.getMessage()));
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayer草ed(AsyncPlayerChatEvent e) {
-        final var logger = Bukkit.getLogger();
-        if (e.getMessage().equals("草") || e.getMessage().equalsIgnoreCase("kusa") || e.getMessage().equalsIgnoreCase("w")) {
-            new BukkitRunnable(){
-                @Override
-                public void run() {
-                    final var block = e.getPlayer().getLocation().subtract(0, 1, 0).getBlock();
-                    if (block.getType() != Material.GRASS_BLOCK) {
-                        return;
-                    }
+        handle草(e.getMessage(), e.getPlayer());
+    }
 
-                    final var id = e.getPlayer().getUniqueId();
-                    final var lastTime = last草edTimeMap.getOrDefault(id, Integer.MIN_VALUE);
-                    final var nowTime = Bukkit.getCurrentTick();
-                    if (lastTime == Integer.MIN_VALUE || nowTime - lastTime > 20 * 60) {
-                        block.applyBoneMeal(BlockFace.UP);
-                    }
-                    last草edTimeMap.put(id, nowTime);
-                    HintStore.getInstance().achieve(e.getPlayer(), Hint.KUSA);
-                }
-            }.runTask(plugin);
-        }
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayer草edOnChannel(LunaChatBukkitChannelMessageEvent e) {
+        final var member = e.getMember();
+        if (!(member instanceof ChannelMemberPlayer)) return;
+        handle草(e.getOriginalMessage(), ((ChannelMemberPlayer)e.getMember()).getPlayer());
+    }
+
+    private String nyaize(String mes) {
+        mes = mes.replace("な", "にゃ");
+        mes = mes.replace("ナ", "ニャ");
+        mes = mes.replace("ﾅ", "ﾆｬ");
+        mes = mes.replace("everyone", "everynyan");
+        mes = mes.replace("morning", "mornyan");
+        mes = mes.replace("na", "nya");
+        mes = mes.replace("EVERYONE", "EVERYNYAN");
+        mes = mes.replace("MORNING", "MORNYAN");
+        mes = mes.replace("NA", "NYA");
+        return mes;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -214,11 +215,6 @@ public class PlayerHandler implements Listener {
     }
 
     @EventHandler
-    public void onPlayerItemHeld(PlayerItemHeldEvent e) {
-        // TODO 旅行券を持つとタイトル表示が発生するようにする
-    }
-
-    @EventHandler
     public void onPlayerTryBed(PlayerInteractEvent e) {
         final var p = e.getPlayer();
         final var isSneaking = p.isSneaking();
@@ -248,6 +244,29 @@ public class PlayerHandler implements Listener {
                 HintStore.getInstance().achieve(player, Hint.BE_CITIZEN);
             }
         });
+    }
+
+    private void handle草(String message, Player player) {
+        if (message.equals("草") || message.equalsIgnoreCase("kusa") || message.equalsIgnoreCase("w")) {
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    final var block = player.getLocation().subtract(0, 1, 0).getBlock();
+                    if (block.getType() != Material.GRASS_BLOCK) {
+                        return;
+                    }
+
+                    final var id = player.getUniqueId();
+                    final var lastTime = last草edTimeMap.getOrDefault(id, Integer.MIN_VALUE);
+                    final var nowTime = Bukkit.getCurrentTick();
+                    if (lastTime == Integer.MIN_VALUE || nowTime - lastTime > 20 * 60) {
+                        block.applyBoneMeal(BlockFace.UP);
+                    }
+                    last草edTimeMap.put(id, nowTime);
+                    HintStore.getInstance().achieve(player, Hint.KUSA);
+                }
+            }.runTask(plugin);
+        }
     }
 
     private final Plugin plugin;

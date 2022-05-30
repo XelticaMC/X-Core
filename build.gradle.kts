@@ -53,6 +53,7 @@ repositories {
         url = uri("https://repo.codemc.io/repository/maven-snapshots/")
     }
     maven {
+        name = "citizens"
         url = uri("http://repo.citizensnpcs.co/")
         isAllowInsecureProtocol = true
     }
@@ -72,6 +73,7 @@ dependencies {
     compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
     compileOnly("com.github.koca2000:NoteBlockAPI:1.6.1")
     compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
+    compileOnly("com.github.ucchyocean.lc:LunaChat:3.0.16")
     implementation("net.wesjd:anvilgui:1.5.3-SNAPSHOT")
 
     library("com.google.code.gson", "gson", "2.8.7")
