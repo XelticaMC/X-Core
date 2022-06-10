@@ -1,16 +1,25 @@
 package work.xeltica.craft.core.handlers;
 
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
+import work.xeltica.craft.core.models.Hint;
+import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.VehicleStore;
+
+import java.util.List;
 
 /**
  * 乗り物に関するハンドラーをまとめています。
@@ -19,8 +28,6 @@ import work.xeltica.craft.core.stores.VehicleStore;
 public class VehicleHandler implements Listener {
     @EventHandler
     public void onEnter(VehicleEnterEvent e) {
-        final var entity = e.getEntered();
-        if (!(entity instanceof Player)) return;
         VehicleStore.getInstance().unregisterVehicle(e.getVehicle());
     }
 
@@ -50,4 +57,30 @@ public class VehicleHandler implements Listener {
             e.getDrops().clear();
         }
     }
+
+    @EventHandler
+    public void onPlayerSpawnVehicle(PlayerInteractEvent e) {
+        final var block = e.getClickedBlock();
+        if (block == null) return;
+        if (vehicleItems.contains(e.getMaterial()) && e.getBlockFace() == BlockFace.UP) {
+            final var loc = block.getLocation().add(e.getBlockFace().getDirection());
+            loc.getWorld().spawnParticle(Particle.ASH, loc, 8, 1, 1, 1);
+            loc.getWorld().playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1, 1);
+            final var isCart = e.getMaterial() == Material.MINECART;
+            if (!HintStore.getInstance().hasAchieved(e.getPlayer(), isCart ? Hint.MINECART : Hint.BOAT)) {
+                e.getPlayer().sendMessage("§a" + (isCart ? "トロッコ" : "ボート") + "§rは§bX Phone§rを用いてどこでも召喚できます。X Phoneをお持ちでなければ§a/phone§rコマンドで入手できます。");
+            }
+            e.setCancelled(true);
+        }
+    }
+
+    private final List<Material> vehicleItems = List.of(
+            Material.ACACIA_BOAT,
+            Material.BIRCH_BOAT,
+            Material.DARK_OAK_BOAT,
+            Material.OAK_BOAT,
+            Material.JUNGLE_BOAT,
+            Material.SPRUCE_BOAT,
+            Material.MINECART
+    );
 }
