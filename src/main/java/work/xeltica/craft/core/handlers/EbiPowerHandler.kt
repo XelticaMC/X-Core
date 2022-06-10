@@ -45,8 +45,6 @@ class EbiPowerHandler: Listener {
     private val crops = HashSet<Material>()
     private val breakBonusList = HashSet<Material>()
 
-    private val placeBonusList = HashSet<Material>()
-
     init {
         // エビパワーが貯まらないワールドのリストを構築
         // TODO: 設定ファイルに移す
@@ -73,12 +71,25 @@ class EbiPowerHandler: Listener {
         breakBonusList.addAll(Tag.LAPIS_ORES.values)
         breakBonusList.addAll(Tag.DIAMOND_ORES.values)
         breakBonusList.addAll(Tag.LOGS.values)
+        breakBonusList.addAll(MaterialTags.TERRACOTTA.values)
 
         breakBonusList.add(Material.NETHER_QUARTZ_ORE)
         breakBonusList.add(Material.OBSIDIAN)
         breakBonusList.add(Material.ANCIENT_DEBRIS)
-        breakBonusList.add(Material.TERRACOTTA)
+        breakBonusList.add(Material.SANDSTONE)
         breakBonusList.add(Material.DEEPSLATE)
+        breakBonusList.add(Material.KELP_PLANT)
+        breakBonusList.add(Material.DRIPSTONE_BLOCK)
+        breakBonusList.add(Material.POINTED_DRIPSTONE)
+        breakBonusList.add(Material.POINTED_DRIPSTONE)
+        breakBonusList.add(Material.GRAVEL)
+        breakBonusList.add(Material.CLAY)
+        breakBonusList.add(Material.SOUL_SAND)
+        breakBonusList.add(Material.SOUL_SOIL)
+        breakBonusList.add(Material.END_STONE)
+        breakBonusList.add(Material.CHORUS_FLOWER)
+        breakBonusList.add(Material.CHORUS_PLANT)
+        breakBonusList.add(Material.PRISMARINE)
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -188,20 +199,21 @@ class EbiPowerHandler: Listener {
             HintStore.instance.achieve(e.player, Hint.MINERS_DREAM)
         }
 
-        var ep = 0
+        var ep = 1
         val tool = e.player.inventory.itemInMainHand
         val luck = tool.containsEnchantment(Enchantment.LOOT_BONUS_BLOCKS)
         if (MaterialTags.ORES.values.contains(e.block.type)) {
             ep = if (luck) getBlockDropBonus(tool) * 2 else 1
-        } else {
-            when (e.block.type) {
-                Material.DEEPSLATE -> if (luck) ep = 1
-                Material.OBSIDIAN -> ep = if (luck) getBlockDropBonus(tool) else 1
-                else -> ep = 1
+        } else if (luck) {
+            ep += when (e.block.type) {
+                Material.DEEPSLATE -> 1
+                Material.OBSIDIAN ->  getBlockDropBonus(tool)
+                else -> 0
             }
         }
 
         EbiPowerStore.getInstance().tryGive(e.player, ep)
+        HintStore.instance.achieve(e.player, Hint.MINERS_NEWBIE)
     }
 
     @EventHandler

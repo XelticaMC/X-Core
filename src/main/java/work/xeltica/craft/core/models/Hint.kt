@@ -150,12 +150,17 @@ enum class Hint constructor(
         "動物を繁殖させると、1度に2EP手に入る。新たな生命の誕生を感じよう。",
         200
     ),
+    MINERS_NEWBIE(
+        "エビパワーマイニング",
+        "石や鉱石、土などのブロックを採掘することでエビパワーを稼ぐことができる。さらに、幸運付きツルハシで鉱石などを掘るとボーナスが手に入る。"
+    ),
     MINERS_DREAM(
         "マイナーズ・ドリーム",
-        "ブロックをひたすら掘り続けて、1日で${EbiPowerHandler.BREAK_BLOCK_BONUS_LIMIT}EP稼ごう。石や鉱石、土などのブロックを採掘することで、1つ1EP、1日${EbiPowerHandler.BREAK_BLOCK_BONUS_LIMIT}EPまで稼ぐことができます。",
+        "ブロックをひたすら掘り続けて${EbiPowerHandler.BREAK_BLOCK_BONUS_LIMIT}EP稼ごう。",
         2000,
         HintType.CHALLENGE
-    ),  // 暴力反対
+    ),
+    // 暴力反対
     VIOLENCE_CHILD(
         "Don't touch the child!",
         "子どもモブを攻撃するとエビパワーが10減ります。殴っちゃダメよ。",
@@ -200,7 +205,8 @@ enum class Hint constructor(
         "1000万EPを溜める",
         0,  // 同上
         HintType.CHALLENGE
-    ),  // ヘルプ
+    ),
+    // ヘルプ
     EBIPOWER(
         "エビパワーとは",
         "エビパワーは、この世界で遊ぶほど貯まるポイントです。戦闘、採掘、ヒント達成、ログインボーナスなどで貰え、アイテム購入、飛行、おみくじなど様々なことに使えます。クラシックワールドでは貯まりません。",
