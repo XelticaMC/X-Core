@@ -18,6 +18,7 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.VehicleStore;
+import work.xeltica.craft.core.stores.WorldStore;
 
 import java.util.List;
 
@@ -60,6 +61,9 @@ public class VehicleHandler implements Listener {
 
     @EventHandler
     public void onPlayerSpawnVehicle(PlayerInteractEvent e) {
+        // クリエイティブワールドは対象外とする
+        if (WorldStore.getInstance().isCreativeWorld(e.getPlayer().getWorld())) return;
+
         final var block = e.getClickedBlock();
         if (block == null) return;
         if (vehicleItems.contains(e.getMaterial()) && e.getBlockFace() == BlockFace.UP) {
