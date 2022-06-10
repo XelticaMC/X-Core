@@ -202,12 +202,27 @@ class EbiPowerHandler: Listener {
         var ep = 1
         val tool = e.player.inventory.itemInMainHand
         val luck = tool.containsEnchantment(Enchantment.LOOT_BONUS_BLOCKS)
-        if (MaterialTags.ORES.values.contains(e.block.type)) {
-            ep = if (luck) getBlockDropBonus(tool) * 2 else 1
-        } else if (luck) {
+        if (luck) {
             ep += when (e.block.type) {
+                Material.COAL_ORE -> 1
+                Material.DEEPSLATE_COAL_ORE -> 1
+                Material.IRON_ORE -> 1
+                Material.DEEPSLATE_IRON_ORE -> 1
+                Material.COPPER_ORE -> 1
+                Material.DEEPSLATE_COPPER_ORE -> 1
+                Material.GOLD_ORE -> 4
+                Material.DEEPSLATE_GOLD_ORE -> 4
+                Material.REDSTONE_ORE -> 2
+                Material.DEEPSLATE_REDSTONE_ORE -> 2
+                Material.LAPIS_ORE -> 3
+                Material.DEEPSLATE_LAPIS_ORE -> 3
+                Material.DIAMOND_ORE -> 7
+                Material.DEEPSLATE_DIAMOND_ORE -> 7
+                Material.EMERALD_ORE -> 11
+                Material.DEEPSLATE_EMERALD_ORE -> 11
                 Material.DEEPSLATE -> 1
-                Material.OBSIDIAN ->  getBlockDropBonus(tool)
+                Material.OBSIDIAN -> 3
+                Material.ANCIENT_DEBRIS -> 19
                 else -> 0
             }
         }
