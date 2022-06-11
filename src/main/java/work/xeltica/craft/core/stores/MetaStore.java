@@ -69,8 +69,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "採掘によるエビパワー入手のバランスを再調整",
-            "クリエイティブワールドで、ボートおよびトロッコのアイテムからの召喚を許可するよう変更"
+            "敵を倒すと内部エラーが起こり、EPが増えない不具合を修正"
     };
 
     private static MetaStore instance;
