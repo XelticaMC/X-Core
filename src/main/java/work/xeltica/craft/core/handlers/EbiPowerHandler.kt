@@ -28,7 +28,6 @@ import work.xeltica.craft.core.stores.MobEPStore
 import work.xeltica.craft.core.stores.PlayerStore
 import java.util.*
 import java.util.function.Consumer
-import kotlin.random.Random
 
 /**
  * エビパワー関連のイベントハンドラをまとめています。
@@ -135,7 +134,7 @@ class EbiPowerHandler: Listener {
 
         var ep = if ("nightmare2" == killer.world.name) MobEPStore.getInstance().getMobDropEP(victim, e) else 6
         val buff = getMobDropBonus(killer.inventory.itemInMainHand) * 4
-        ep += if (buff > 0) Random.nextInt(buff) else 0
+        ep += if (buff > 0) random.nextInt(buff) else 0
         if (ep > 0) {
             EbiPowerStore.getInstance().tryGive(killer, ep)
             HintStore.instance.achieve(killer, Hint.KILL_MOB_AND_EARN_MONEY)
@@ -166,7 +165,7 @@ class EbiPowerHandler: Listener {
             val power = (1 + bonus) * HARVEST_POWER_MULTIPLIER
             EbiPowerStore.getInstance().tryGive(p, power)
             // もし幸運ボーナスがあれば30%の確率で耐久が減っていく
-            if (bonus > 0 && Random.nextInt(100) < 30) {
+            if (bonus > 0 && random.nextInt(100) < 30) {
                 tool.editMeta { meta ->
                     if (meta is Damageable) {
                         meta.damage += 1
@@ -255,4 +254,6 @@ class EbiPowerHandler: Listener {
     private fun getBlockDropBonus(stack: ItemStack): Int {
         return stack.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)
     }
+
+    private val random = Random()
 }
