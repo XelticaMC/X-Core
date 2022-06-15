@@ -145,6 +145,7 @@ bukkit {
         register("promo") {
             description = "市民への昇格方法を確認します。"
             usage = "/promo"
+            permission = "otanoshimi.command.promo"
         }
         register("cat") {
             description = "CATモードの有効/無効を切り替えるか、現在のモードを取得します。"
@@ -280,6 +281,12 @@ bukkit {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.xtp.other") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.promo") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
+        }
+        register("otanoshimi.command.promo.other") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.epshop") {
