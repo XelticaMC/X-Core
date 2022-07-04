@@ -42,7 +42,7 @@ public class CommandPromo extends CommandPlayerOnlyBase {
         }
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         final var luckPerms = provider.getProvider();
-        final var lpUser = luckPerms.getPlayerAdapter(OfflinePlayer.class).getUser(player);
+        final var lpUser = luckPerms.getPlayerAdapter(Player.class).getUser(player);
         final var store = PlayerStore.getInstance();
         final var record = store.open(player);
         final var isManualCitizen = lpUser.getInheritedGroups(QueryOptions.defaultContextualOptions()).stream().anyMatch(g -> g.getName().equals("citizen"));
