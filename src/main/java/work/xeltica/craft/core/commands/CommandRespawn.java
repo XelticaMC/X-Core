@@ -79,6 +79,7 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         final var respawnWorldName = WorldStore.getInstance().getRespawnWorld(player.getWorld());
         if (respawnWorldName == null) {
             player.sendMessage(ChatColor.RED + "このワールドでは許可されていません");
+            isWarpingMap.put(player.getUniqueId(), false);
             return;
         }
         final var respawnWorld = Bukkit.getWorld(respawnWorldName);
