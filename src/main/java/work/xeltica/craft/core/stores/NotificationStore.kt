@@ -9,6 +9,7 @@ import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.models.Notification
 import java.io.File
 import java.io.FileReader
+import java.util.UUID
 
 class NotificationStore {
     companion object {
@@ -22,6 +23,7 @@ class NotificationStore {
         private const val MESSAGE = "message"
         private const val GIFTS = "gifts"
         private const val EP = "ep"
+        private const val RECEIVER = "receiver"
 
         private const val GIFT_MATERIAL_NAME = "materialName"
         private const val GIFT_COUNT = "count"
@@ -51,8 +53,10 @@ class NotificationStore {
         val giftsObject = obj[GIFTS] as? JSONArray
         val gifts = loadGiftItems(giftsObject)
         val ep = obj[EP] as? Int
+        val receiverObject = obj[RECEIVER] as? JSONArray
+        val receiver = loadReceiver(receiverObject)
 
-        notifications.add(Notification(notificationID, message, gifts, ep))
+        notifications.add(Notification(notificationID, message, gifts, ep, receiver))
     }
 
     private fun loadGiftItems(obj: JSONArray?): List<ItemStack>? {
@@ -66,5 +70,16 @@ class NotificationStore {
             gifts.add(ItemStack(material, count))
         }
         return gifts
+    }
+
+    private fun loadReceiver(obj: JSONArray?): List<UUID>? {
+        if (obj == null) return null
+        val receiver = mutableListOf<UUID>()
+        for (name in obj) {
+            if (name !is String) continue
+            val player = XCorePlugin.instance.server.getPlayer(name) ?: continue
+            receiver.add(player.uniqueId)
+        }
+        return receiver
     }
 }
