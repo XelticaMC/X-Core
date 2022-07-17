@@ -67,9 +67,10 @@ class NotificationStore {
         val notificationID = obj[NOTIFICATION_ID] as? String ?: return
         val title = obj[TITLE] as? String ?: return
         val message = obj[MESSAGE] as? String ?: return
+        XCorePlugin.instance.logger.warning("通知" + title + "の読み込みをします")
         val giftsObject = obj[GIFTS] as? JSONArray
         val gifts = loadGiftItems(giftsObject)
-        val ep = obj[EP] as? Int
+        val ep = (obj[EP] as? Long)?.toInt()
         val receiverObject = obj[RECEIVER] as? JSONArray
         val receiver = loadReceiver(receiverObject)
 
@@ -82,8 +83,12 @@ class NotificationStore {
         for (gift in obj) {
             if (gift !is JSONObject) continue
             val name = gift[GIFT_MATERIAL_NAME] as? String ?: continue
-            val count = gift[GIFT_COUNT] as? Int ?: continue
-            val material = Material.getMaterial(name) ?: continue
+            val count = (gift[GIFT_COUNT] as? Long ?: continue).toInt()
+            val material = Material.getMaterial(name)
+            if (material == null) {
+                XCorePlugin.instance.logger.warning(name + "が読み込めませんでした")
+                continue
+            }
             gifts.add(ItemStack(material, count))
         }
         return gifts
