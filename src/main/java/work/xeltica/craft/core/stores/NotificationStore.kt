@@ -1,12 +1,14 @@
 package work.xeltica.craft.core.stores
 
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.models.Notification
+import work.xeltica.craft.core.utils.Config
 import java.io.File
 import java.io.FileReader
 import java.util.UUID
@@ -31,9 +33,19 @@ class NotificationStore {
 
     private val notifications: MutableList<Notification> = mutableListOf()
 
+    private val confirmed = Config("confirmed")
+
     init {
         instance = this
         load()
+    }
+
+    fun getUnreadNotification(player: Player): List<Notification> {
+        val playerNotification = notifications.toMutableList()
+        playerNotification.removeAll { it.receivePlayer?.contains(player.uniqueId) ?: false }
+        val confirmedNotification = confirmed.conf.getList(player.uniqueId.toString())
+        playerNotification.removeAll { confirmedNotification?.contains(it.notificationID) ?: false }
+        return playerNotification
     }
 
     private fun load() {
