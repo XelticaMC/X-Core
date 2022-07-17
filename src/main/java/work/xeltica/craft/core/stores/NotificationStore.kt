@@ -52,8 +52,11 @@ class NotificationStore {
     private fun load() {
         val folder = XCorePlugin.instance.dataFolder
         val file = File(folder, FILE_NAME)
+        if (!file.exists()) {
+            file.createNewFile()
+        }
         val jsonParser = JSONParser()
-        val jsonObject = jsonParser.parse(FileReader(file)) as? JSONArray ?: return
+        val jsonObject = jsonParser.parse(FileReader(file, Charsets.UTF_8)) as? JSONArray ?: return
         for (obj in jsonObject) {
             if (obj !is JSONObject) continue
             loadNotification(obj)
