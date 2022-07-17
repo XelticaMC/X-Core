@@ -49,6 +49,11 @@ class NotificationStore {
         return playerNotification
     }
 
+    fun readNotification(player: Player, notification: Notification) {
+        confirmed.conf.set(player.uniqueId.toString(), notification.notificationID)
+        confirmed.save()
+    }
+
     private fun load() {
         val folder = XCorePlugin.instance.dataFolder
         val file = File(folder, FILE_NAME)
