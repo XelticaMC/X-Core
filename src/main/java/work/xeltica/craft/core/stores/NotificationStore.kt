@@ -43,7 +43,7 @@ class NotificationStore {
 
     fun getUnreadNotification(player: Player): List<Notification> {
         val playerNotification = notifications.toMutableList()
-        playerNotification.removeAll { it.receivePlayer?.contains(player.uniqueId) ?: false }
+        playerNotification.removeAll { !(it.receivePlayer?.contains(player.uniqueId) ?: false) }
         val confirmedNotification = confirmed.conf.getList(player.uniqueId.toString())
         playerNotification.removeAll { confirmedNotification?.contains(it.notificationID) ?: false }
         return playerNotification
