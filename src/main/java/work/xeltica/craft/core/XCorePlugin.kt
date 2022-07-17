@@ -49,7 +49,7 @@ class XCorePlugin : JavaPlugin() {
                 val store = PlayerStore.getInstance()
                 store.openAll().forEach {
                     // オフラインなら処理しない
-                    if (!PlayerStore.getInstance().isOnline(it.playerId)) return
+                    if (Bukkit.getPlayer(it.playerId) == null) return
                     var time = it.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
                     time -= tick
                     if (time <= 0) {
@@ -137,6 +137,7 @@ class XCorePlugin : JavaPlugin() {
         QuickChatStore()
         MobEPStore()
         MobBallStore()
+        NotificationStore()
     }
 
     private fun loadCommands() {
