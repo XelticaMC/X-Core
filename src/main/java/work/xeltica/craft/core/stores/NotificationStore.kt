@@ -22,6 +22,7 @@ class NotificationStore {
         private const val FILE_NAME = "notification.json"
 
         private const val NOTIFICATION_ID = "notificationID"
+        private const val TITLE = "title"
         private const val MESSAGE = "message"
         private const val GIFTS = "gifts"
         private const val EP = "ep"
@@ -61,6 +62,7 @@ class NotificationStore {
 
     private fun loadNotification(obj: JSONObject) {
         val notificationID = obj[NOTIFICATION_ID] as? String ?: return
+        val title = obj[TITLE] as? String ?: return
         val message = obj[MESSAGE] as? String ?: return
         val giftsObject = obj[GIFTS] as? JSONArray
         val gifts = loadGiftItems(giftsObject)
@@ -68,7 +70,7 @@ class NotificationStore {
         val receiverObject = obj[RECEIVER] as? JSONArray
         val receiver = loadReceiver(receiverObject)
 
-        notifications.add(Notification(notificationID, message, gifts, ep, receiver))
+        notifications.add(Notification(notificationID, title, message, gifts, ep, receiver))
     }
 
     private fun loadGiftItems(obj: JSONArray?): List<ItemStack>? {
