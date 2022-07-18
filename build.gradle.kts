@@ -89,7 +89,7 @@ bukkit {
     name = "XCore"
     main = "work.xeltica.craft.core.XCorePlugin"
     version = getVersion().toString()
-    apiVersion = "1.19"
+    apiVersion = "1.18"
     softDepend = listOf("SkinsRestorer", "Citizens")
     depend = listOf("kotlin-stdlib", "Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
 
@@ -355,7 +355,7 @@ tasks.withType<JavaCompile>() {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "16"
+        jvmTarget = "17"
     }
 }
 
