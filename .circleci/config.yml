@@ -1,49 +1,6 @@
 version: 2.1
 
 jobs:
-  build-develop:
-    environment:
-      _JAVA_OPTIONS: "-Xmx3g"
-    docker:
-      - image: cimg/openjdk:16.0
-    steps:
-      - checkout
-      - restore_cache:
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - restore_cache:
-          key: v1-gradle-cache-{{ checksum "build.gradle.kts" }}
-      - run:
-          name: ビルド
-          command: ./gradlew build
-      - save_cache:
-          paths:
-            - ~/.gradle/wrapper
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - save_cache:
-          paths:
-            - ~/.gradle/caches
-          key: v1-gradle-cache-{{ checksum "build.gradle.kts" }}
-      - store_artifacts:
-          path: ~/project/build/libs/XCore.jar
-      - run: 
-          name: フィンガープリント登録
-          command: echo 'dev.craft.xeltica.work,172.105.228.229 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPM+9SLKKCgxISLxKq4Px2HQ95x8LAOPLY4/xQSyusyDYYp6zY3VlIbOTwKrXSzRR1P5LgMc+oUA0k9pVWdqhnc=' >> ~/.ssh/known_hosts;
-      - run: 
-          name: 秘密鍵登録
-          command: 
-            echo 'Host dev.craft.xeltica.work' > ~/.ssh/config;
-            echo '  IdentityFile /home/circleci/.ssh/id_rsa_d21b72bd6cb7d6ef41501c73ddf084bb' >> ~/.ssh/config;
-            echo '  User xeltica' >> ~/.ssh/config;
-            cat ~/.ssh/config;
-      - run:
-          name: LFTPのインストール
-          command: sudo apt-get update && sudo apt-get install lftp
-      - run:
-          name: サーバーへのプラグインのアップロード
-          command: mkdir p && mv ./build/libs/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://dev.craft.xeltica.work
-      - run: 
-          name: サーバーへのプラグインのインストール
-          command: ssh xeltica@dev.craft.xeltica.work 'sh /srv/deploy-core.sh'
   build-master:  
     docker:
       - image: cimg/openjdk:16.0
@@ -89,11 +46,6 @@ jobs:
 workflows:
   build: 
     jobs:
-      - build-develop:
-          filters:
-            branches:
-              only: 
-                - develop
       - build-master:
           filters:
             branches:
