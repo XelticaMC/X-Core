@@ -63,13 +63,13 @@ dependencies {
     compileOnly("net.skinsrestorer:skinsrestorer:14.1.4-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.30")
-    compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("org.geysermc:connector:1.4.3-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.8.0")
-    compileOnly("com.discordsrv:discordsrv:1.24.0")
+    compileOnly("com.discordsrv:discordsrv:1.25.1")
     compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
     compileOnly("com.github.koca2000:NoteBlockAPI:1.6.1")
     compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
@@ -83,13 +83,13 @@ dependencies {
 group = "work.xeltica.craft.core"
 version = "2.27.3"
 description = "X-Core"
-java.sourceCompatibility = JavaVersion.VERSION_16
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 bukkit {
     name = "XCore"
     main = "work.xeltica.craft.core.XCorePlugin"
     version = getVersion().toString()
-    apiVersion = "1.17"
+    apiVersion = "1.19"
     softDepend = listOf("SkinsRestorer", "Citizens")
     depend = listOf("kotlin-stdlib", "Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
 

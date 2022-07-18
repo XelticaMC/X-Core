@@ -17,6 +17,7 @@ tier1:
   - squid
   - cod
   - salmon
+  - tadpole
 
 # Tier.2: よくいるモブ
 tier2:
@@ -48,6 +49,7 @@ tier2:
   - wandering_trader
   - cat
   - drowned
+  - frog
 
 # Tier.3: ちょっと強い・ちょっとレアい
 tier3:
@@ -70,6 +72,7 @@ tier3:
   - turtle
   - panda
   - parrot
+  - allay
 
 # Tier.4: 強い・レアいモブ
 tier4:
@@ -90,3 +93,4 @@ tier5:
   - elder_guardian
   - piglin_brute
   - ravager
+  - warden

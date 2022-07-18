@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 
+import org.bukkit.inventory.ItemStack;
 import work.xeltica.craft.core.models.EbiPowerEffect;
 import work.xeltica.craft.core.models.EbiPowerItem;
 import work.xeltica.craft.core.plugins.VaultPlugin;
@@ -85,6 +86,11 @@ public class EbiPowerStore {
         if (res.size() != 0) {
             // 購入失敗なので返金
             if (!isFree) tryGive(p, item.cost());
+            final var partiallyAddedItemsCount = item.item().getAmount() - res.get(0).getAmount();
+            if (partiallyAddedItemsCount > 0) {
+                // 部分的に追加されてしまったアイテムを剥奪
+                p.getInventory().remove(new ItemStack(item.item().getType(), partiallyAddedItemsCount));
+            }
 
             return Result.NO_ENOUGH_INVENTORY;
         } else {
