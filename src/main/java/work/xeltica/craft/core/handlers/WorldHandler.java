@@ -49,6 +49,7 @@ import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.WorldStore;
+import work.xeltica.craft.core.utils.DiscordService;
 
 /**
  * ワールド制御に関するハンドラーをまとめています。
@@ -126,6 +127,15 @@ public class WorldHandler implements Listener {
         };
 
         final var isNotFirstTeleport = p.hasPlayedBefore() || PlayerStore.getInstance().open(p).getBoolean(PlayerDataKey.FIRST_SPAWN);
+
+        if (name.equals("main") && isNotFirstTeleport && !HintStore.getInstance().hasAchieved(p, Hint.GOTO_MAIN)) {
+            // はじめてメインワールドに入った場合、対象のスタッフに通知する
+            try {
+                DiscordService.getInstance().alertNewcomer(p);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
 
         if (hint != null && isNotFirstTeleport) {
             HintStore.getInstance().achieve(p, hint);

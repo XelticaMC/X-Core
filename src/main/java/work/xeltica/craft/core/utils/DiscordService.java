@@ -23,6 +23,11 @@ public class DiscordService {
         return instance;
     }
 
+    /**
+     * プレイヤーに紐づくDiscordユーザーを取得します。
+     * @param player プレイヤー
+     * @return 指定したプレイヤーに紐づく、Discordユーザー。未連携であれば null。
+     */
     public Member getMember(Player player) {
         if (!linkedToDiscord(player)) return null;
 
@@ -30,6 +35,13 @@ public class DiscordService {
         return DiscordSRV.getPlugin().getMainGuild().getMemberById(discordId);
     }
 
+    /**
+     * Discordに、処罰者を報告します。
+     * @param badPlayer 処罰者
+     * @param abuses 処罰理由
+     * @param time 期限
+     * @param command 処罰内容
+     */
     public void reportDiscord(OfflinePlayer badPlayer, String abuses, String time, String command) {
         final var guild = DiscordSRV.getPlugin().getMainGuild();
         final var channel = guild.getGuildChannelById(reportChannelID);
@@ -45,11 +57,33 @@ public class DiscordService {
         }
     }
 
+    /**
+     * 新規さんの来訪を担当スタッフにメンションします。
+     * @param newcomer 新規さん
+     */
+    public void alertNewcomer(Player newcomer) {
+        final var guild = DiscordSRV.getPlugin().getMainGuild();
+        final var channel = guild.getGuildChannelById(guideChannelId);
+        if (channel instanceof TextChannel textChannel) {
+            final var message = String.format("<@&%s> <@&%s> 新規さん「%s」がメインワールドに入りました。監視・案内をお願いします。", securityRoleId, guideRoleId, newcomer.getName());
+            textChannel.sendMessage(message);
+        }
+    }
+
+    /**
+     * ゲーム内チャットにメッセージを送信します。
+     * @param text 送信する内容
+     */
     public void broadcast(String text) {
         final var discord = DiscordSRV.getPlugin();
         discord.getOptionalTextChannel("global").sendMessage(text).queue();
     }
 
+    /**
+     * X-Core 変更内容を追記します。
+     * @param version X-Core のバージョン
+     * @param changeLog 変更内容
+     */
     public void postChangelog(String version, String[] changeLog) {
         final var guild = DiscordSRV.getPlugin().getMainGuild();
         final var channel = guild.getGuildChannelById(changelogChannelId);
@@ -76,4 +110,8 @@ public class DiscordService {
     private final String reportChannelID = "869939558165397596";
     private final String lockRoleID = "873782147876552726";
     private final String changelogChannelId = "872687386700689408";
+    private final String guideChannelId = "991964666051960872";
+
+    private final String guideRoleId = "991958217804492850";
+    private final String securityRoleId = "991957703930953758";
 }
