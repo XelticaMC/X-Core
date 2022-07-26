@@ -114,6 +114,14 @@ public class PlayerStore {
         return item;
     }
 
+    public boolean isOnline(Player player) {
+        return isOnline(player.getUniqueId());
+    }
+
+    public boolean isOnline(UUID id) {
+        return Bukkit.getOnlinePlayers().stream().anyMatch(p -> p.getUniqueId().equals(id));
+    }
+
     private void saveTask() {
         if (!isChanged()) return;
         try {
@@ -130,7 +138,7 @@ public class PlayerStore {
 
     private boolean changed;
 
-    private static org.bukkit.Color[] colors = {
+    private static final org.bukkit.Color[] colors = {
             // from XelticaUI
             org.bukkit.Color.fromRGB(0xe23731), // red
             org.bukkit.Color.fromRGB(0xeb6101), // vermilion

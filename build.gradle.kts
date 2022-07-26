@@ -219,6 +219,11 @@ bukkit {
             usage = "/xreload"
             permission = "otanoshimi.command.xreload"
         }
+        register("xdebug") {
+            description = "X-Core Debug Command"
+            usage = "/xdebug"
+            permission = "otanoshimi.command.xdebug"
+        }
         register("__core_gui_event__") {
             description = "?"
             usage = "?"
@@ -338,6 +343,9 @@ bukkit {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.xtpreset") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.xdebug") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
     }

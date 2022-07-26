@@ -1,17 +1,6 @@
 package work.xeltica.craft.core
 
 import net.kyori.adventure.text.Component
-import work.xeltica.craft.core.xphone.XphoneOs.onEnabled
-import work.xeltica.craft.core.xphone.XphoneOs.onDisabled
-import work.xeltica.craft.core.utils.DiscordService
-import work.xeltica.craft.core.runnables.DaylightObserver
-import work.xeltica.craft.core.runnables.NightmareRandomEvent
-import work.xeltica.craft.core.runnables.FlyingObserver
-import work.xeltica.craft.core.runnables.RealTimeObserver
-import work.xeltica.craft.core.runnables.EbipowerObserver
-import work.xeltica.craft.core.stores.VehicleStore
-import work.xeltica.craft.core.stores.PlayerStore
-import work.xeltica.craft.core.models.PlayerDataKey
 import java.io.IOException
 import work.xeltica.craft.core.plugins.CitizenTimerCalculator
 import net.luckperms.api.LuckPerms
@@ -20,72 +9,19 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
-import work.xeltica.craft.core.stores.MetaStore
-import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.stores.NbsStore
 import java.util.Locale
-import work.xeltica.craft.core.commands.CommandBase
-import work.xeltica.craft.core.stores.OmikujiStore
-import work.xeltica.craft.core.stores.HubStore
-import work.xeltica.craft.core.stores.WorldStore
-import work.xeltica.craft.core.stores.ItemStore
-import work.xeltica.craft.core.stores.CloverStore
-import work.xeltica.craft.core.stores.EbiPowerStore
-import work.xeltica.craft.core.stores.HintStore
-import work.xeltica.craft.core.stores.BossBarStore
-import work.xeltica.craft.core.stores.NickNameStore
-import work.xeltica.craft.core.stores.CounterStore
-import work.xeltica.craft.core.stores.RankingStore
-import work.xeltica.craft.core.stores.QuickChatStore
-import work.xeltica.craft.core.stores.MobEPStore
-import work.xeltica.craft.core.stores.MobBallStore
-import work.xeltica.craft.core.commands.CommandOmikuji
-import work.xeltica.craft.core.commands.CommandRespawn
-import work.xeltica.craft.core.commands.CommandPvp
-import work.xeltica.craft.core.commands.CommandSignEdit
-import work.xeltica.craft.core.commands.CommandGiveCustomItem
-import work.xeltica.craft.core.commands.CommandGiveMobBall
-import work.xeltica.craft.core.commands.CommandReport
-import work.xeltica.craft.core.commands.CommandLocalTime
-import work.xeltica.craft.core.commands.CommandBoat
-import work.xeltica.craft.core.commands.CommandCart
-import work.xeltica.craft.core.commands.CommandPromo
-import work.xeltica.craft.core.commands.CommandCat
-import work.xeltica.craft.core.commands.CommandHub
-import work.xeltica.craft.core.commands.CommandXtp
-import work.xeltica.craft.core.commands.CommandEpShop
-import work.xeltica.craft.core.commands.CommandHint
-import work.xeltica.craft.core.commands.CommandXCoreGuiEvent
-import work.xeltica.craft.core.commands.CommandXPhone
-import work.xeltica.craft.core.commands.CommandLive
-import work.xeltica.craft.core.commands.CommandNickName
-import work.xeltica.craft.core.commands.CommandCounter
-import work.xeltica.craft.core.commands.CommandRanking
-import work.xeltica.craft.core.commands.CommandCountdown
-import work.xeltica.craft.core.commands.CommandQuickChat
-import work.xeltica.craft.core.commands.CommandEpEffectShop
-import work.xeltica.craft.core.commands.CommandXReload
-import work.xeltica.craft.core.commands.CommandXtpReset
-import work.xeltica.craft.core.handlers.NewMorningHandler
-import work.xeltica.craft.core.handlers.PlayerHandler
-import work.xeltica.craft.core.handlers.VehicleHandler
-import work.xeltica.craft.core.handlers.WakabaHandler
-import work.xeltica.craft.core.handlers.HubHandler
-import work.xeltica.craft.core.handlers.WorldHandler
-import work.xeltica.craft.core.handlers.NightmareHandler
-import work.xeltica.craft.core.handlers.XphoneHandler
-import work.xeltica.craft.core.handlers.EbiPowerHandler
-import work.xeltica.craft.core.handlers.LiveModeHandler
-import work.xeltica.craft.core.handlers.CounterHandler
-import work.xeltica.craft.core.handlers.NbsHandler
-import work.xeltica.craft.core.handlers.PlayerTntHandler
-import work.xeltica.craft.core.handlers.MiscHandler
-import work.xeltica.craft.core.handlers.LoginBonusHandler
-import work.xeltica.craft.core.handlers.TicketWildareaBHandler
-import work.xeltica.craft.core.handlers.MobBallHandler
+import java.util.HashMap
+
 import work.xeltica.craft.core.plugins.VaultPlugin
 import work.xeltica.craft.core.utils.Ticks
-import java.util.HashMap
+import work.xeltica.craft.core.commands.*
+import work.xeltica.craft.core.stores.*
+import work.xeltica.craft.core.handlers.*
+import work.xeltica.craft.core.runnables.*
+import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.xphone.XphoneOs
+import work.xeltica.craft.core.utils.DiscordService
+import work.xeltica.craft.core.models.PlayerDataKey
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
@@ -99,7 +35,7 @@ class XCorePlugin : JavaPlugin() {
         loadCommands()
         loadHandlers()
         DiscordService()
-        onEnabled()
+        XphoneOs.onEnabled()
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
         DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15.0).toLong())
@@ -113,7 +49,7 @@ class XCorePlugin : JavaPlugin() {
                 val store = PlayerStore.getInstance()
                 store.openAll().forEach {
                     // オフラインなら処理しない
-                    if (Bukkit.getPlayer(it.playerId) == null) return
+                    if (!PlayerStore.getInstance().isOnline(it.playerId)) return
                     var time = it.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
                     time -= tick
                     if (time <= 0) {
@@ -166,7 +102,7 @@ class XCorePlugin : JavaPlugin() {
         Gui.resetInstance()
         unloadPlugins()
         NbsStore.getInstance().stopAll()
-        onDisabled()
+        XphoneOs.onDisabled()
         val provider = Bukkit.getServicesManager().getRegistration(
             LuckPerms::class.java
         )
@@ -232,6 +168,7 @@ class XCorePlugin : JavaPlugin() {
         addCommand("epeffectshop", CommandEpEffectShop())
         addCommand("xreload", CommandXReload())
         addCommand("xtpreset", CommandXtpReset())
+        addCommand("xdebug", CommandXDebug())
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
     }
 
