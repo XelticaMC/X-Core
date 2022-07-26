@@ -69,8 +69,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "1.19対応準備",
-            "エビパワーストア：まとめ買いアイテムの購入に失敗したとき、一部だけインベントリに入ってしまう問題を修正",
+            "新規プレイヤーの30分タイマーが進まない不具合を修正",
     };
 
     private static MetaStore instance;
