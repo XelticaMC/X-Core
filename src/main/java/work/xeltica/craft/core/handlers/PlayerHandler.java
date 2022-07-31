@@ -223,6 +223,7 @@ public class PlayerHandler implements Listener {
             final var isBedDisabledWorld = worldName.equals("hub2")
                 || worldName.equals("sandbox")
                 || worldName.equals("wildareab")
+                || worldName.equals("event")
                 ;
             if (isBedDisabledWorld && Tag.BEDS.isTagged(Objects.requireNonNull(e.getClickedBlock()).getType())) {
                 Gui.getInstance().error(p, "ベッドはこの世界では使えない…");

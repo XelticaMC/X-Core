@@ -173,6 +173,7 @@ public class WorldStore {
         worldNameMap.put("wildarea2_nether", "ワイルドネザー");
         worldNameMap.put("wildarea2_the_end", "ワイルドエンド");
         worldNameMap.put("hub2", "ロビー");
+        worldNameMap.put("event", "イベントワールド");
     }
 
     private void loadWorldDescription() {

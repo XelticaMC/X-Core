@@ -1,6 +1,9 @@
 package work.xeltica.craft.core.handlers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,11 +11,14 @@ import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.events.PlayerCounterFinish;
 import work.xeltica.craft.core.events.PlayerCounterStart;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.NbsModel;
+import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.NbsStore;
+import work.xeltica.craft.core.utils.Ticks;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -87,5 +93,23 @@ public class MiscHandler implements Listener {
         if (!"event".equals(player.getWorld().getName())) return;
 
         NbsStore.getInstance().stopRadio(player);
+
+        Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
+            player.sendMessage("＊ X Phoneをつかって、元のワールドに戻ったり、開始地点に戻ったりできます！");
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1.2f);
+        }, Ticks.from(3));
+    }
+
+    /**
+     * イベントマップに入ったとき、X Phoneがなければ追加する
+     */
+    @EventHandler
+    public void onEnterEventMap(PlayerTeleportEvent e) {
+        final var player = e.getPlayer();
+        // イベント発生後はまだテレポートが終わっていなかったりするので、5tickほど遅延させる
+        Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
+            if (!"event".equals(player.getWorld().getName())) return;
+            ItemStore.getInstance().givePhoneIfNeeded(player);
+        }, 5);
     }
 }

@@ -36,8 +36,4 @@ class QuickChatApp : AppBase() {
         }
         ui.openMenu(player, "クイックチャット", list)
     }
-
-    override fun isVisible(player: Player): Boolean {
-        return player.world.name != "event"
-    }
 }

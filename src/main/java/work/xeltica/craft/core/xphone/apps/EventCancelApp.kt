@@ -24,6 +24,7 @@ class EventCancelApp : AppBase() {
         record[PlayerDataKey.PLAYED_COUNTER] = true
 
         player.sendMessage("カウントダウンを中止しました。")
+        player.performCommand("respawn")
         player.playSound(player.location, Sound.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1f, 1f)
     }
 
