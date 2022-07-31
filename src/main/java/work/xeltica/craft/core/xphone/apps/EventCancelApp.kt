@@ -28,7 +28,7 @@ class EventCancelApp : AppBase() {
     }
 
     override fun isVisible(player: Player): Boolean {
-        return player.world.name === "event" && getRecord(player).getString(PlayerDataKey.PLAYING_COUNTER_ID) != null
+        return player.world.name == "event" && getRecord(player).getString(PlayerDataKey.PLAYING_COUNTER_ID) != null
     }
 
     private fun getRecord(player: Player): PlayerRecord {

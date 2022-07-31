@@ -17,7 +17,7 @@ class SidebarApp : AppBase() {
     }
 
     override fun isVisible(player: Player): Boolean {
-        return player.world.name !== "event"
+        return player.world.name != "event"
     }
 }
 
