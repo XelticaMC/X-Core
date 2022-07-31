@@ -19,6 +19,9 @@ object XphoneOs {
      */
     fun onEnabled() {
         apps.addAll(listOf(
+            EventRespawnApp(),
+            EventReturnWorldApp(),
+            EventCancelApp(),
             TeleportApp(),
             ProtectApp(),
             BedrockToolsApp(),

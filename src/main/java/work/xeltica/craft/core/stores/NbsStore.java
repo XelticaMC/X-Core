@@ -3,6 +3,7 @@ package work.xeltica.craft.core.stores;
 import com.xxmicloxx.NoteBlockAPI.model.RepeatMode;
 import com.xxmicloxx.NoteBlockAPI.model.SoundCategory;
 import com.xxmicloxx.NoteBlockAPI.songplayer.PositionSongPlayer;
+import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RangeSongPlayer;
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
 import org.bukkit.Bukkit;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * NoteBlock Systemに関するデータを保持します。
@@ -72,6 +74,31 @@ public class NbsStore {
     }
 
     /**
+     * 指定したプレイヤーを対象に、音楽を再生します。
+     * @param player プレイヤー
+     * @param songId 音楽ID
+     * @param playbackMode 再生モード
+     * @throws IllegalArgumentException 曲IDが存在しない
+     */
+    public void playRadio(Player player, String songId, NbsModel.PlaybackMode playbackMode) {
+        // ディレクトリトラバーサル対策
+        if (songId.startsWith(".")) throw new IllegalArgumentException();
+        final var file = getFile(songId);
+        if (!file.exists()) throw new IllegalArgumentException();
+
+        final var song = NBSDecoder.parse(getFile(songId));
+        final var radio = new RadioSongPlayer(song, SoundCategory.VOICE);
+
+        if (playbackMode == NbsModel.PlaybackMode.LOOP) {
+            radio.setRepeatMode(RepeatMode.ALL);
+        }
+        radio.addPlayer(player);
+        radio.setPlaying(true);
+
+        radioCache.put(player.getUniqueId(), radio);
+    }
+
+    /**
      * 指定した位置での曲のdistanceをいじります。
      * @param location 再生位置
      * @param distance 長さ
@@ -94,6 +121,17 @@ public class NbsStore {
         playerCache.get(location).setPlaying(false);
         playerCache.remove(location);
         removeModel(location);
+    }
+
+    /**
+     * 指定した位置にある音楽を停止します。
+     * @param player プレイヤー
+     */
+    public void stopRadio(Player player) {
+        final var id = player.getUniqueId();
+        if (!radioCache.containsKey(id)) return;
+        radioCache.get(id).setPlaying(false);
+        radioCache.remove(id);
     }
 
     /**
@@ -226,12 +264,11 @@ public class NbsStore {
         player.setPlaying(true);
         Bukkit.getOnlinePlayers().forEach(player::addPlayer);
 
-
         playerCache.put(model.getLocation(), player);
     }
 
-
     private final Map<Location, RangeSongPlayer> playerCache = new HashMap<>();
+    private final Map<UUID, RadioSongPlayer> radioCache = new HashMap<>();
     private List<NbsModel> models;
     private final Map<Location, NbsModel> modelCache = new HashMap<>();
     private Config nbs;

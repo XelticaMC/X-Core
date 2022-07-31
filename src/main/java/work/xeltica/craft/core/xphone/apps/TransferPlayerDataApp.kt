@@ -85,4 +85,8 @@ class TransferPlayerDataApp : AppBase() {
     }
 
     override fun isShiny(player: Player): Boolean = TransferPlayerData.getInstance(player) != null
+
+    override fun isVisible(player: Player): Boolean {
+        return player.world.name !== "event"
+    }
 }

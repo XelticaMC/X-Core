@@ -15,4 +15,8 @@ class PromoApp : AppBase() {
     override fun onLaunch(player: Player) {
         player.performCommand("promo")
     }
+
+    override fun isVisible(player: Player): Boolean {
+        return player.world.name !== "event"
+    }
 }

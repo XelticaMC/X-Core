@@ -84,10 +84,10 @@ public class CounterHandler implements Listener {
                 store.add(new CounterData(name, loc, block.getLocation(), daily, null, null, null, null));
                 player.sendMessage("カウンター " + name + "を登録しました。");
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1);
-                record.delete(PlayerDataKey.COUNTER_REGISTER_MODE, false);
-                record.delete(PlayerDataKey.COUNTER_REGISTER_NAME, false);
-                record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION, false);
-                record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY, false);
+                record.delete(PlayerDataKey.COUNTER_REGISTER_MODE);
+                record.delete(PlayerDataKey.COUNTER_REGISTER_NAME);
+                record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION);
+                record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY);
                 pstore.save();
             }
         } catch (IOException ex) {
@@ -116,8 +116,8 @@ public class CounterHandler implements Listener {
         // 感圧板でなければ無視
         if (!Tag.PRESSURE_PLATES.isTagged(block.getType())) return;
 
-        var first = store.getByLocation1(block.getLocation());
-        var last = store.getByLocation2(block.getLocation());
+        final var first = store.getByLocation1(block.getLocation());
+        final var last = store.getByLocation2(block.getLocation());
 
         final var record = pstore.open(player);
         final var counterId = record.getString(PlayerDataKey.PLAYING_COUNTER_ID);
@@ -126,64 +126,57 @@ public class CounterHandler implements Listener {
 
         final var isUsingCounter = counter != null;
 
-        try {
-            // カウンター開始する
-            if (first != null) {
-                if (isUsingCounter) {
-                    ui.error(player, "既にカウントが始まっています！");
-                    return;
-                }
-
-                if (record.getBoolean(PlayerDataKey.PLAYED_COUNTER)) {
-                    ui.error(player, "本日は既に挑戦済みです！また明日遊んでね。");
-                    return;
-                }
-
-                final var ts = Long.toString(System.currentTimeMillis());
-                record.set(PlayerDataKey.PLAYING_COUNTER_ID, first.getName(), false);
-                record.set(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, ts, false);
-                pstore.save();
-                
-                player.showTitle(Title.title(Component.text("§6スタート！"), Component.empty()));
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
-
-                Bukkit.getPluginManager().callEvent(new PlayerCounterStart(player, counter));
+        // カウンター開始する
+        if (first != null) {
+            if (isUsingCounter) {
+                ui.error(player, "既にタイムアタックが始まっています！");
+                return;
             }
-            
-            // カウンター終了する
-            if (last != null) {
-                if (!isUsingCounter) {
-                    ui.error(player, "こちらはゴールです。スタートから開始してください。");
-                    return;
-                }
-                if (!last.getName().equals(counterId)) {
-                    ui.error(player, "ゴールが異なります。");
-                    return;
-                }
-                record.delete(PlayerDataKey.PLAYING_COUNTER_ID, false);
-                record.delete(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, false);
-                record.set(PlayerDataKey.PLAYED_COUNTER, true, false);
-                pstore.save();
 
-                final var endAt = System.currentTimeMillis();
-                final var diff = (int)(endAt - startedAt);
-                final var timeString = Time.msToString(diff);
-
-                player.sendMessage("ゴール！タイムは" + timeString + "でした。");
-
-                player.showTitle(Title.title(
-                    Component.text("§6ゴール！"),
-                    Component.text("タイム " + timeString)
-                ));
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
-
-                handleRanking(player, last, diff);
-
-                Bukkit.getPluginManager().callEvent(new PlayerCounterFinish(player, counter, diff));
+            if (record.getBoolean(PlayerDataKey.PLAYED_COUNTER)) {
+                ui.error(player, "本日は既に挑戦済みです！また明日遊んでね。");
+                return;
             }
-        } catch (IOException e1) {
-            e1.printStackTrace();
-            ui.error(player, "§cIO エラーが発生したために処理を続行できませんでした。");
+
+            final var ts = Long.toString(System.currentTimeMillis());
+            record.set(PlayerDataKey.PLAYING_COUNTER_ID, first.getName());
+            record.set(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, ts);
+
+            player.showTitle(Title.title(Component.text("§6スタート！"), Component.empty()));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
+
+            Bukkit.getPluginManager().callEvent(new PlayerCounterStart(player, first));
+        }
+
+        // カウンター終了する
+        if (last != null) {
+            if (!isUsingCounter) {
+                ui.error(player, "こちらはゴールです。スタート地点から開始してください。");
+                return;
+            }
+            if (!last.getName().equals(counterId)) {
+                ui.error(player, "ゴールが異なります。");
+                return;
+            }
+            record.delete(PlayerDataKey.PLAYING_COUNTER_ID);
+            record.delete(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP);
+            record.set(PlayerDataKey.PLAYED_COUNTER, true);
+
+            final var endAt = System.currentTimeMillis();
+            final var diff = (int)(endAt - startedAt);
+            final var timeString = Time.msToString(diff);
+
+            player.sendMessage("ゴール！タイムは" + timeString + "でした。");
+
+            player.showTitle(Title.title(
+                Component.text("§6ゴール！"),
+                Component.text("タイム " + timeString)
+            ));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
+
+            handleRanking(player, last, diff);
+
+            Bukkit.getPluginManager().callEvent(new PlayerCounterFinish(player, last, diff));
         }
     }
 
@@ -191,7 +184,7 @@ public class CounterHandler implements Listener {
     public void onDailyReset(RealTimeNewDayEvent e) {
         try {
             CounterStore.getInstance().resetAllPlayersPlayedLog();
-            Bukkit.getLogger().info("カウンターのプレイ済み履歴をリセットしました。");
+            Bukkit.getLogger().info("タイムアタックのプレイ済み履歴をリセットしました。");
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -216,7 +209,7 @@ public class CounterHandler implements Listener {
     private void addRanking(final @Nullable String id, Player player, int diff) {
         final var rankingApi = RankingStore.getInstance();
 
-        if (id instanceof String && rankingApi.has(id)) {
+        if (id != null && rankingApi.has(id)) {
             final var ranking = rankingApi.get(id);
             final var prev = ranking.get(player.getUniqueId().toString());
 

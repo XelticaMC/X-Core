@@ -7,6 +7,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.stores.WorldStore
+import java.util.Calendar
 
 /**
  * テレポートアプリ
@@ -58,6 +59,27 @@ class TeleportApp : AppBase() {
             )
         }
 
+        val calendar = Calendar.getInstance()
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH) + 1
+        if ((month == 8 && day <= 15) || player.isOp) {
+            list.add(
+                MenuItem("イベント", {
+                    val eventWorldLocation = Bukkit.getWorld("event")?.spawnLocation
+                    if (eventWorldLocation == null) {
+                        player.sendMessage("")
+                        return@MenuItem
+                    }
+                    player.teleportAsync(eventWorldLocation)
+
+                }, Material.TROPICAL_FISH)
+            )
+        }
+
         Gui.getInstance().openMenu(player, "テレポート", list)
+    }
+
+    override fun isVisible(player: Player): Boolean {
+        return player.world.name !== "event"
     }
 }

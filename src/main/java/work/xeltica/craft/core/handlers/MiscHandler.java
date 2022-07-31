@@ -5,8 +5,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFormEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import work.xeltica.craft.core.events.PlayerCounterFinish;
+import work.xeltica.craft.core.events.PlayerCounterStart;
 import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.models.NbsModel;
+import work.xeltica.craft.core.stores.NbsStore;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -44,5 +50,42 @@ public class MiscHandler implements Listener {
         if (e.getNewState().getType() == Material.STONE) {
             e.getNewState().setType(Material.COBBLESTONE);
         }
+    }
+
+    /**
+     * イベントマップでのダメージおよび死を防ぐ
+     */
+    @EventHandler
+    public void onHurtInEventMap(EntityDamageEvent e) {
+        if (!(e.getEntity() instanceof final Player player)) return;
+        if ("event".equals(player.getWorld().getName())) {
+            e.setCancelled(true);
+            if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
+                final var loc = player.getWorld().getSpawnLocation();
+                player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }
+        }
+    }
+
+    /**
+     * イベントマップ：TA開始イベント
+     */
+    @EventHandler
+    public void onCounterStart(PlayerCounterStart e) {
+        final var player = e.getPlayer();
+        if (!"event".equals(player.getWorld().getName())) return;
+
+        NbsStore.getInstance().playRadio(player, "submerged2", NbsModel.PlaybackMode.LOOP);
+    }
+
+    /**
+     * イベントマップ：TA終了イベント
+     */
+    @EventHandler
+    public void onCounterFinish(PlayerCounterFinish e) {
+        final var player = e.getPlayer();
+        if (!"event".equals(player.getWorld().getName())) return;
+
+        NbsStore.getInstance().stopRadio(player);
     }
 }

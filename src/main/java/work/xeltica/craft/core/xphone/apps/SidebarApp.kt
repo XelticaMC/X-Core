@@ -15,5 +15,9 @@ class SidebarApp : AppBase() {
     override fun onLaunch(player: Player) {
         player.performCommand("sb toggle")
     }
+
+    override fun isVisible(player: Player): Boolean {
+        return player.world.name !== "event"
+    }
 }
 
