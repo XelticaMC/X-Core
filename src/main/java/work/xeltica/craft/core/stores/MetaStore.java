@@ -69,7 +69,8 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "新規プレイヤーの30分タイマーが進まない不具合を修正",
+            "イベント用機能追加",
+            "タイムアタック機能のNPEエラーバグを修正",
     };
 
     private static MetaStore instance;
