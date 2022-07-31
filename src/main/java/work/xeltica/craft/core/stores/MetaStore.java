@@ -69,8 +69,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "イベント用機能追加",
-            "タイムアタック機能のNPEエラーバグを修正",
+            "不具合修正",
     };
 
     private static MetaStore instance;
