@@ -69,7 +69,10 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "調整",
+            "タイムアタック達成時にチャットログに表示するように",
+            "プレイ済みのタイムアタックに再挑戦できるよう変更（ランキングには反映されない）",
+            "スタッフ向け機能の不具合修正",
+            "その他、軽微な調整"
     };
 
     private static MetaStore instance;
