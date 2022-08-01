@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.handlers
 
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.Sound
@@ -149,12 +150,13 @@ class CounterHandler : Listener {
             if (last.isDaily && record.getBoolean(PlayerDataKey.PLAYED_COUNTER)) {
                 player.sendMessage(ChatColor.RED + "既にチャレンジ済みのため、ランキングは更新されません。")
             } else {
+                val playerName = PlainTextComponentSerializer.plainText().serialize(player.displayName())
                 Bukkit.getOnlinePlayers()
                     .filter { it.uniqueId != player.uniqueId }
                     .forEach {
-                        it.sendMessage("${ChatColor.GREEN}${player.displayName()}さん${ChatColor.RESET}がタイムアタックで${ChatColor.AQUA}${timeString}${ChatColor.RESET}を達成しました！")
+                        it.sendMessage("${ChatColor.GREEN}${playerName}さん${ChatColor.RESET}がタイムアタックで${ChatColor.AQUA}${timeString}${ChatColor.RESET}を達成しました！")
                     }
-                DiscordService.getInstance().broadcast("${player.displayName()}さんがタイムアタックで${timeString}を達成しました！")
+                DiscordService.getInstance().broadcast("${playerName}さんがタイムアタックで${timeString}を達成しました！")
 
                 handleRanking(player, last, diff)
             }
