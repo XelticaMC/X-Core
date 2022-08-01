@@ -69,7 +69,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "カウントダウンをリタイアしたときにBGMが停止しない問題を修正"
+            "タイムアタック達成メッセージの表示バグを修正"
     };
 
     private static MetaStore instance;
