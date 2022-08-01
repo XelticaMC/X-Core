@@ -22,7 +22,7 @@ class EventCancelApp : AppBase() {
         record.delete(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP)
         record[PlayerDataKey.PLAYED_COUNTER] = true
 
-        player.sendMessage("カウントダウンを中止しました。")
+        player.sendMessage("カウントダウンをリタイアしました。")
         player.performCommand("respawn")
         NbsStore.getInstance().stopRadio(player)
     }
