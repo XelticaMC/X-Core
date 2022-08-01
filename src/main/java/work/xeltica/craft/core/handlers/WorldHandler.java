@@ -126,9 +126,10 @@ public class WorldHandler implements Listener {
             default -> null;
         };
 
+        // 以前サーバーに来ている or FIRST_SPAWN フラグが立っている
         final var isNotFirstTeleport = p.hasPlayedBefore() || PlayerStore.getInstance().open(p).getBoolean(PlayerDataKey.FIRST_SPAWN);
 
-        if (name.equals("main") && isNotFirstTeleport && !HintStore.getInstance().hasAchieved(p, Hint.GOTO_MAIN)) {
+        if (to.getName().equals("main") && isNotFirstTeleport && !HintStore.getInstance().hasAchieved(p, Hint.GOTO_MAIN)) {
             // はじめてメインワールドに入った場合、対象のスタッフに通知する
             try {
                 DiscordService.getInstance().alertNewcomer(p);
