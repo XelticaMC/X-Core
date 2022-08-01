@@ -1,228 +1,200 @@
-package work.xeltica.craft.core.handlers;
+package work.xeltica.craft.core.handlers
 
-import java.io.IOException;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
-import org.bukkit.Tag;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.geysermc.connector.common.ChatColor;
-import org.geysermc.floodgate.api.FloodgateApi;
-import org.geysermc.floodgate.util.DeviceOs;
-import org.jetbrains.annotations.Nullable;
-
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.title.Title;
-import work.xeltica.craft.core.events.PlayerCounterFinish;
-import work.xeltica.craft.core.events.PlayerCounterStart;
-import work.xeltica.craft.core.events.RealTimeNewDayEvent;
-import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.models.CounterData;
-import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.stores.CounterStore;
-import work.xeltica.craft.core.stores.PlayerStore;
-import work.xeltica.craft.core.stores.RankingStore;
-import work.xeltica.craft.core.utils.Time;
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.title.Title
+import org.bukkit.Bukkit
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
+import org.bukkit.Tag
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
+import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
+import org.bukkit.event.player.PlayerInteractEvent
+import org.geysermc.connector.common.ChatColor
+import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.stores.CounterStore
+import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.models.PlayerDataKey
+import java.io.IOException
+import work.xeltica.craft.core.events.PlayerCounterStart
+import work.xeltica.craft.core.events.PlayerCounterFinish
+import work.xeltica.craft.core.events.RealTimeNewDayEvent
+import org.geysermc.floodgate.api.FloodgateApi
+import org.geysermc.floodgate.util.DeviceOs
+import work.xeltica.craft.core.models.CounterData
+import work.xeltica.craft.core.stores.RankingStore
+import work.xeltica.craft.core.utils.Time
 
 /**
  * Counter API処理用ハンドラー
  */
-public class CounterHandler implements Listener {
-
+class CounterHandler : Listener {
     /**
      * カウンター登録モードのときに感圧板を右クリックした
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onClickPlate(PlayerInteractEvent e) {
-        final var isBlockClick = List.of(
+    fun onClickPlate(e: PlayerInteractEvent) {
+        val isBlockClick = listOf(
             Action.RIGHT_CLICK_BLOCK,
             Action.LEFT_CLICK_BLOCK
-        ).contains(e.getAction());
-
-        final var logger = Bukkit.getLogger();
+        ).contains(e.action)
 
         // ブロッククリックでなければ無視
-        if (!isBlockClick) return;
-
-        final var pstore = PlayerStore.getInstance();
-        final var store = CounterStore.getInstance();
-        final var ui = Gui.getInstance();
-
-        final var player = e.getPlayer();
-        final var block = e.getClickedBlock();
-
-        final var record = pstore.open(player);
-
-        final var isCounterRegisterMode = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_MODE);
-        final var isPlate = Tag.PRESSURE_PLATES.isTagged(block.getType());
+        if (!isBlockClick) return
+        val pstore = PlayerStore.getInstance()
+        val store = CounterStore.getInstance()
+        val ui = Gui.getInstance()
+        val player = e.player
+        val block = e.clickedBlock
+        val record = pstore.open(player)
+        val isCounterRegisterMode = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_MODE)
+        val isPlate = Tag.PRESSURE_PLATES.isTagged(block!!.type)
 
         // カウンター登録モードでなければ無視
-        if (!isCounterRegisterMode) return;
+        if (!isCounterRegisterMode) return
 
         // 感圧板でなければ無視
-        if (!isPlate) return;
-
-        final var name = record.getString(PlayerDataKey.COUNTER_REGISTER_NAME);
-        final var loc = record.getLocation(PlayerDataKey.COUNTER_REGISTER_LOCATION);
-        final var daily = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_IS_DAILY);
-
-        e.setCancelled(true);
-
+        if (!isPlate) return
+        val name = record.getString(PlayerDataKey.COUNTER_REGISTER_NAME)
+        val loc = record.getLocation(PlayerDataKey.COUNTER_REGISTER_LOCATION)
+        val daily = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_IS_DAILY)
+        e.isCancelled = true
         try {
             // 始点登録
             if (loc == null) {
-                record.set(PlayerDataKey.COUNTER_REGISTER_LOCATION, block.getLocation());
-                player.sendMessage("始点を登録しました。続いて終点を登録します。");
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
+                record[PlayerDataKey.COUNTER_REGISTER_LOCATION] = block.location
+                player.sendMessage("始点を登録しました。続いて終点を登録します。")
+                player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
             } else {
-                store.add(new CounterData(name, loc, block.getLocation(), daily, null, null, null, null));
-                player.sendMessage("カウンター " + name + "を登録しました。");
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1);
-                record.delete(PlayerDataKey.COUNTER_REGISTER_MODE);
-                record.delete(PlayerDataKey.COUNTER_REGISTER_NAME);
-                record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION);
-                record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY);
-                pstore.save();
+                store.add(CounterData(name, loc, block.location, daily, null, null, null, null))
+                player.sendMessage("カウンター " + name + "を登録しました。")
+                player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1f)
+                record.delete(PlayerDataKey.COUNTER_REGISTER_MODE)
+                record.delete(PlayerDataKey.COUNTER_REGISTER_NAME)
+                record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION)
+                record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY)
+                pstore.save()
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            ui.error(player, "§cIO エラーが発生したために処理を続行できませんでした。");
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            ui.error(player, "§cIO エラーが発生したために処理を続行できませんでした。")
         }
     }
+
     /**
      * カウンター感圧板を踏んだ
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onUsePlate(PlayerInteractEvent e) {
+    fun onUsePlate(e: PlayerInteractEvent) {
         // 踏んだわけじゃないのなら無視
-        if (e.getAction() != Action.PHYSICAL) return;
+        if (e.action != Action.PHYSICAL) return
+        val pstore = PlayerStore.getInstance()
+        val store = CounterStore.getInstance()
+        val ui = Gui.getInstance()
+        val player = e.player
+        val block = e.clickedBlock ?: return
 
-        final var pstore = PlayerStore.getInstance();
-        final var store = CounterStore.getInstance();
-        final var ui = Gui.getInstance();
-
-        final var player = e.getPlayer();
-        final var block = e.getClickedBlock();
-
-        // ブロックがnullなら無視
-        if (block == null) return;
+        // ブロックがnullなら無視 
 
         // 感圧板でなければ無視
-        if (!Tag.PRESSURE_PLATES.isTagged(block.getType())) return;
-
-        final var first = store.getByLocation1(block.getLocation());
-        final var last = store.getByLocation2(block.getLocation());
-
-        final var record = pstore.open(player);
-        final var counterId = record.getString(PlayerDataKey.PLAYING_COUNTER_ID);
-        final var startedAt = Long.parseLong(record.getString(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, "0"));
-        final var counter = counterId == null ? null : store.get(counterId);
-
-        final var isUsingCounter = counter != null;
+        if (!Tag.PRESSURE_PLATES.isTagged(block.type)) return
+        val first = store.getByLocation1(block.location)
+        val last = store.getByLocation2(block.location)
+        val record = pstore.open(player)
+        val counterId = record.getString(PlayerDataKey.PLAYING_COUNTER_ID)
+        val startedAt = record.getString(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, "0").toLong()
+        val counter = if (counterId == null) null else store[counterId]
+        val isUsingCounter = counter != null
 
         // カウンター開始する
         if (first != null) {
             if (isUsingCounter) {
-                ui.error(player, "既にタイムアタックが始まっています！");
-                return;
+                ui.error(player, "既にタイムアタックが始まっています！")
+                return
             }
-
-            final var ts = Long.toString(System.currentTimeMillis());
-            record.set(PlayerDataKey.PLAYING_COUNTER_ID, first.getName());
-            record.set(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, ts);
-
-            player.showTitle(Title.title(Component.text("§6スタート！"), Component.empty()));
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
-
-            Bukkit.getPluginManager().callEvent(new PlayerCounterStart(player, first));
+            val ts = System.currentTimeMillis().toString()
+            record[PlayerDataKey.PLAYING_COUNTER_ID] = first.name
+            record[PlayerDataKey.PLAYING_COUNTER_TIMESTAMP] = ts
+            player.showTitle(Title.title(Component.text("§6スタート！"), Component.empty()))
+            player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
+            Bukkit.getPluginManager().callEvent(PlayerCounterStart(player, first))
         }
 
         // カウンター終了する
         if (last != null) {
             if (!isUsingCounter) {
-                ui.error(player, "こちらはゴールです。スタート地点から開始してください。");
-                return;
+                ui.error(player, "こちらはゴールです。スタート地点から開始してください。")
+                return
             }
-            if (!last.getName().equals(counterId)) {
-                ui.error(player, "ゴールが異なります。");
-                return;
+            if (last.name != counterId) {
+                ui.error(player, "ゴールが異なります。")
+                return
             }
-            record.delete(PlayerDataKey.PLAYING_COUNTER_ID);
-            record.delete(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP);
-
-            final var endAt = System.currentTimeMillis();
-            final var diff = (int)(endAt - startedAt);
-            final var timeString = Time.msToString(diff);
-
-            player.sendMessage("ゴール！タイムは" + timeString + "でした。");
-
-            player.showTitle(Title.title(
-                Component.text("§6ゴール！"),
-                Component.text("タイム " + timeString)
-            ));
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
-
-            if (last.isDaily() && record.getBoolean(PlayerDataKey.PLAYED_COUNTER)) {
-                player.sendMessage(ChatColor.RED + "既にチャレンジ済みのため、ランキングは更新されません。");
+            record.delete(PlayerDataKey.PLAYING_COUNTER_ID)
+            record.delete(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP)
+            val endAt = System.currentTimeMillis()
+            val diff = (endAt - startedAt).toInt()
+            val timeString = Time.msToString(diff.toLong())
+            player.sendMessage("ゴール！タイムは" + timeString + "でした。")
+            player.showTitle(
+                Title.title(
+                    Component.text("§6ゴール！"),
+                    Component.text("タイム $timeString")
+                )
+            )
+            player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
+            if (last.isDaily && record.getBoolean(PlayerDataKey.PLAYED_COUNTER)) {
+                player.sendMessage(ChatColor.RED + "既にチャレンジ済みのため、ランキングは更新されません。")
             } else {
-                handleRanking(player, last, diff);
+                handleRanking(player, last, diff)
             }
-
-            record.set(PlayerDataKey.PLAYED_COUNTER, true);
-
-            Bukkit.getPluginManager().callEvent(new PlayerCounterFinish(player, last, diff));
+            record[PlayerDataKey.PLAYED_COUNTER] = true
+            Bukkit.getPluginManager().callEvent(PlayerCounterFinish(player, last, diff.toLong()))
         }
     }
 
     @EventHandler
-    public void onDailyReset(RealTimeNewDayEvent e) {
+    fun onDailyReset(e: RealTimeNewDayEvent?) {
         try {
-            CounterStore.getInstance().resetAllPlayersPlayedLog();
-            Bukkit.getLogger().info("タイムアタックのプレイ済み履歴をリセットしました。");
-        } catch (IOException e1) {
-            e1.printStackTrace();
+            CounterStore.getInstance().resetAllPlayersPlayedLog()
+            Bukkit.getLogger().info("タイムアタックのプレイ済み履歴をリセットしました。")
+        } catch (e1: IOException) {
+            e1.printStackTrace()
         }
     }
 
     /**
      * ランキングに投稿するやつ
-    */
-    private void handleRanking(Player player, CounterData counter, int diff) {
-        final var floodgate = FloodgateApi.getInstance();
-        if (floodgate.isFloodgatePlayer(player.getUniqueId())) {
+     */
+    private fun handleRanking(player: Player, counter: CounterData, diff: Int) {
+        val floodgate = FloodgateApi.getInstance()
+        if (floodgate.isFloodgatePlayer(player.uniqueId)) {
             // bedrock
-            final var type = floodgate.getPlayer(player.getUniqueId()).getDeviceOs();
-            addRanking(type == DeviceOs.UWP ? counter.getUwpRankingId() : counter.getPhoneRankingId(), player, diff);
-            addRanking(counter.getBedrockRankingId(), player, diff);
+            val type = floodgate.getPlayer(player.uniqueId).deviceOs
+            addRanking(if (type == DeviceOs.UWP) counter.uwpRankingId else counter.phoneRankingId, player, diff)
+            addRanking(counter.bedrockRankingId, player, diff)
         } else {
             // java
-            addRanking(counter.getJavaRankingId(), player, diff);
+            addRanking(counter.javaRankingId, player, diff)
         }
     }
 
-    private void addRanking(final @Nullable String id, Player player, int diff) {
-        final var rankingApi = RankingStore.getInstance();
-
+    private fun addRanking(id: String?, player: Player, diff: Int) {
+        val rankingApi = RankingStore.getInstance()
         if (id != null && rankingApi.has(id)) {
-            final var ranking = rankingApi.get(id);
-            final var prev = ranking.get(player.getUniqueId().toString());
-
+            val ranking = rankingApi[id]
+            val prev = ranking!![player.uniqueId.toString()]
             if (prev == 0 || prev > diff) {
-                ranking.add(player.getUniqueId().toString(), diff);
-                player.sendMessage("§a§l新記録達成！§cおめでとう！");
-                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1, 1);
+                ranking.add(player.uniqueId.toString(), diff)
+                player.sendMessage("§a§l新記録達成！§cおめでとう！")
+                player.playSound(player.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1f, 1f)
             } else {
-                player.sendMessage("§7新記録達成ならず…。");
-                player.playSound(player.getLocation(), Sound.ENTITY_CAT_AMBIENT, SoundCategory.PLAYERS, 1, 1);
+                player.sendMessage("§7新記録達成ならず…。")
+                player.playSound(player.location, Sound.ENTITY_CAT_AMBIENT, SoundCategory.PLAYERS, 1f, 1f)
             }
-            player.sendMessage("§dまたチャレンジしてね！");
+            player.sendMessage("§dまたチャレンジしてね！")
         }
     }
 }
