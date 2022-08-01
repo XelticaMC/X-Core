@@ -25,6 +25,7 @@ import org.geysermc.floodgate.api.FloodgateApi
 import org.geysermc.floodgate.util.DeviceOs
 import work.xeltica.craft.core.models.CounterData
 import work.xeltica.craft.core.stores.RankingStore
+import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.utils.Time
 
 /**
@@ -148,6 +149,13 @@ class CounterHandler : Listener {
             if (last.isDaily && record.getBoolean(PlayerDataKey.PLAYED_COUNTER)) {
                 player.sendMessage(ChatColor.RED + "既にチャレンジ済みのため、ランキングは更新されません。")
             } else {
+                Bukkit.getOnlinePlayers()
+                    .filter { it.uniqueId != player.uniqueId }
+                    .forEach {
+                        it.sendMessage("${ChatColor.GREEN}${player.displayName()}さん${ChatColor.RESET}がタイムアタックで${ChatColor.AQUA}${timeString}${ChatColor.RESET}を達成しました！")
+                    }
+                DiscordService.getInstance().broadcast("${player.displayName()}さんがタイムアタックで${timeString}を達成しました！")
+
                 handleRanking(player, last, diff)
             }
             record[PlayerDataKey.PLAYED_COUNTER] = true
