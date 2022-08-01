@@ -1,11 +1,10 @@
 package work.xeltica.craft.core.xphone.apps
 
 import org.bukkit.Material
-import org.bukkit.Sound
-import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.models.PlayerRecord
+import work.xeltica.craft.core.stores.NbsStore
 import work.xeltica.craft.core.stores.PlayerStore
 
 /**
@@ -25,7 +24,7 @@ class EventCancelApp : AppBase() {
 
         player.sendMessage("カウントダウンを中止しました。")
         player.performCommand("respawn")
-        player.playSound(player.location, Sound.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 1f, 1f)
+        NbsStore.getInstance().stopRadio(player)
     }
 
     override fun isVisible(player: Player): Boolean {
