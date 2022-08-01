@@ -203,7 +203,7 @@ public class CommandRanking extends CommandBase {
             final var rankings = store.getAll().stream().map(Ranking::getName).toList();
             final var completions = new ArrayList<String>();
             StringUtil.copyPartialMatches(args[1], rankings, completions);
-            Collections.sort(rankings);
+            Collections.sort(completions);
             return rankings;
         } else if (args.length == 3) {
             switch (args[0]) {
