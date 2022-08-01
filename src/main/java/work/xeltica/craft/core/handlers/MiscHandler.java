@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.handlers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -95,7 +96,7 @@ public class MiscHandler implements Listener {
         NbsStore.getInstance().stopRadio(player);
 
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-            player.sendMessage("＊ X Phoneをつかって、元のワールドに戻ったり、開始地点に戻ったりできます！");
+            player.sendMessage(ChatColor.AQUA + "メインワールドに戻る場合は、X Phoneをお使いください。");
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1.2f);
         }, Ticks.from(3));
     }

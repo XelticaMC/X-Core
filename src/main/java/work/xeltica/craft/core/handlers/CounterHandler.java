@@ -13,6 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.geysermc.connector.common.ChatColor;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.geysermc.floodgate.util.DeviceOs;
 import org.jetbrains.annotations.Nullable;
@@ -133,11 +134,6 @@ public class CounterHandler implements Listener {
                 return;
             }
 
-            if (record.getBoolean(PlayerDataKey.PLAYED_COUNTER)) {
-                ui.error(player, "本日は既に挑戦済みです！また明日遊んでね。");
-                return;
-            }
-
             final var ts = Long.toString(System.currentTimeMillis());
             record.set(PlayerDataKey.PLAYING_COUNTER_ID, first.getName());
             record.set(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, ts);
@@ -160,7 +156,6 @@ public class CounterHandler implements Listener {
             }
             record.delete(PlayerDataKey.PLAYING_COUNTER_ID);
             record.delete(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP);
-            record.set(PlayerDataKey.PLAYED_COUNTER, true);
 
             final var endAt = System.currentTimeMillis();
             final var diff = (int)(endAt - startedAt);
@@ -174,7 +169,13 @@ public class CounterHandler implements Listener {
             ));
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1, 2);
 
-            handleRanking(player, last, diff);
+            if (last.isDaily() && record.getBoolean(PlayerDataKey.PLAYED_COUNTER)) {
+                player.sendMessage(ChatColor.RED + "既にチャレンジ済みのため、ランキングは更新されません。");
+            } else {
+                handleRanking(player, last, diff);
+            }
+
+            record.set(PlayerDataKey.PLAYED_COUNTER, true);
 
             Bukkit.getPluginManager().callEvent(new PlayerCounterFinish(player, last, diff));
         }
