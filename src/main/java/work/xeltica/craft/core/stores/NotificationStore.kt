@@ -50,7 +50,11 @@ class NotificationStore {
     }
 
     fun readNotification(player: Player, notification: Notification) {
-        confirmed.conf.set(player.uniqueId.toString(), notification.notificationID)
+        val confirmedList = confirmed.conf.getStringList(player.uniqueId.toString())
+        val list = mutableListOf<String>()
+        list.addAll(confirmedList)
+        list.add(notification.notificationID)
+        confirmed.conf.set(player.uniqueId.toString(), list)
         confirmed.save()
     }
 
