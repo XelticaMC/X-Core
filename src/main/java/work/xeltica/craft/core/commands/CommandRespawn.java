@@ -32,8 +32,6 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             return true;
         }
 
-        isWarpingMap.put(player.getUniqueId(), true);
-
         // 第一引数の内容によってテレポート先を分岐
         if (args.length > 0 && args[0].equalsIgnoreCase("bed")) {
             teleportToBedSpawn(player);
@@ -50,14 +48,12 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
     private void teleportToBedSpawn(Player player) {
         if (WorldStore.getInstance().getRespawnWorld(player.getWorld()) == null) {
             player.sendMessage(ChatColor.RED + "このワールドでは許可されていません");
-            isWarpingMap.put(player.getUniqueId(), false);
             return;
         }
 
         final var loc = player.getBedSpawnLocation();
         if (loc == null) {
             player.sendMessage("ベッドが存在しないか、塞がれているためにテレポートできません。");
-            isWarpingMap.put(player.getUniqueId(), false);
             return;
         }
 
@@ -69,6 +65,8 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             }
         }.runTaskLater(XCorePlugin.getInstance(), 20 * 5);
         player.sendMessage("5秒後にベッドの位置にテレポートします...");
+
+        isWarpingMap.put(player.getUniqueId(), true);
     }
 
     /**
@@ -79,7 +77,6 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
         final var respawnWorldName = WorldStore.getInstance().getRespawnWorld(player.getWorld());
         if (respawnWorldName == null) {
             player.sendMessage(ChatColor.RED + "このワールドでは許可されていません");
-            isWarpingMap.put(player.getUniqueId(), false);
             return;
         }
         final var respawnWorld = Bukkit.getWorld(respawnWorldName);
@@ -87,6 +84,12 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
 
         final var isSameWorld = player.getWorld().getUID().equals(respawnWorld.getUID());
         final var respawnWorldDisplayName = WorldStore.getInstance().getWorldDisplayName(respawnWorld);
+
+        if (noCooldownWorldNames.contains(respawnWorld.getName())) {
+            player.teleportAsync(respawn, TeleportCause.PLUGIN);
+            return;
+        }
+
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -99,9 +102,22 @@ public class CommandRespawn extends CommandPlayerOnlyBase {
             ? "5秒後に初期スポーンに移動します..."
             : "5秒後に" + respawnWorldDisplayName + "の初期スポーンに移動します..."
         );
+
+        isWarpingMap.put(player.getUniqueId(), true);
     }
 
     private final HashMap<UUID, Boolean> isWarpingMap = new HashMap<>();
+
+    private final List<String> noCooldownWorldNames = List.of(
+            "art",
+            "pvp",
+            "test",
+            "hub2",
+            "hub_dev",
+            "main",
+            "sandbox2",
+            "event"
+            );
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label,
