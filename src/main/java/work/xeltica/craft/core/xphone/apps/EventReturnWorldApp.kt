@@ -13,7 +13,7 @@ class EventReturnWorldApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.GRASS_BLOCK
 
     override fun onLaunch(player: Player) {
-        WorldStore.getInstance().teleport(player, "main")
+        WorldStore.getInstance().teleportToSavedLocation(player, "main")
     }
 
     override fun isVisible(player: Player): Boolean {
