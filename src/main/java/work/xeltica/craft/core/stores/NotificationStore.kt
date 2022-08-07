@@ -85,7 +85,7 @@ class NotificationStore {
         val notificationID = obj[NOTIFICATION_ID] as? String ?: return
         val title = obj[TITLE] as? String ?: return
         val message = obj[MESSAGE] as? String ?: return
-        XCorePlugin.instance.logger.warning("通知" + title + "の読み込みをします")
+        XCorePlugin.instance.logger.info("通知" + title + "の読み込みをします")
         val giftsObject = obj[GIFTS] as? JSONArray
         val gifts = loadGiftItems(giftsObject)
         val ep = (obj[EP] as? Long)?.toInt()
