@@ -39,6 +39,7 @@ object XphoneOs {
             QuickChatApp(),
             TransferPlayerDataApp(),
             VoteApp(),
+            NotificationApp()
         ))
     }
 
