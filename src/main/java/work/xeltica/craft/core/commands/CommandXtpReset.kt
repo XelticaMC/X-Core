@@ -6,6 +6,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.commands.CommandBase
 import work.xeltica.craft.core.stores.WorldStore
 import java.util.*
 

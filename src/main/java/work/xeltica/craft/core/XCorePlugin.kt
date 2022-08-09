@@ -9,19 +9,21 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
+import work.xeltica.craft.core.api.commands.CommandBase
 import java.util.Locale
 import java.util.HashMap
 
 import work.xeltica.craft.core.plugins.VaultPlugin
-import work.xeltica.craft.core.utils.Ticks
+import work.xeltica.craft.core.api.Ticks
 import work.xeltica.craft.core.commands.*
 import work.xeltica.craft.core.stores.*
 import work.xeltica.craft.core.handlers.*
-import work.xeltica.craft.core.runnables.*
+import work.xeltica.craft.core.timers.*
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.xphone.XphoneOs
-import work.xeltica.craft.core.utils.DiscordService
+import work.xeltica.craft.core.services.XphoneService
+import work.xeltica.craft.core.services.DiscordService
 import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.services.BossBarService
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
@@ -35,13 +37,16 @@ class XCorePlugin : JavaPlugin() {
         loadCommands()
         loadHandlers()
         DiscordService()
-        XphoneOs.onEnabled()
+        XphoneService.onEnable()
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
-        DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1.0).toLong())
-        NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15.0).toLong())
-        FlyingObserver().runTaskTimer(this, 0, 4)
-        RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
-        EbipowerObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
+        DaylightObserveTimer(this)
+            .runTaskTimer(this, 0, Ticks.from(1.0).toLong())
+        NightmareControlTimer(this)
+            .runTaskTimer(this, 0, Ticks.from(15.0).toLong())
+        FlyingObserveTimer().runTaskTimer(this, 0, 4)
+        RealTimeObserveTimer()
+            .runTaskTimer(this, 0, Ticks.from(1.0).toLong())
+        EbipowerObserveTimer().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         val tick = 10
         object : BukkitRunnable() {
             override fun run() {
@@ -102,7 +107,7 @@ class XCorePlugin : JavaPlugin() {
         Gui.resetInstance()
         unloadPlugins()
         NbsStore.getInstance().stopAll()
-        XphoneOs.onDisabled()
+        XphoneService.onDisable()
         val provider = Bukkit.getServicesManager().getRegistration(
             LuckPerms::class.java
         )
@@ -129,7 +134,7 @@ class XCorePlugin : JavaPlugin() {
         EbiPowerStore()
         HintStore()
         MetaStore()
-        BossBarStore()
+        BossBarService.onEnable()
         NickNameStore()
         CounterStore()
         RankingStore()

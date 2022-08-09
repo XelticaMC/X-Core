@@ -13,7 +13,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.Nullable;
-import work.xeltica.craft.core.utils.Config;
+import work.xeltica.craft.core.api.Ticks;
 
 /**
  * ワールドを管理するストアです。
@@ -26,7 +26,7 @@ public class WorldStore {
         loadWorldDescription();
         loadLockedWorldNames();
         loadCreativeWorldNames();
-        location = new Config("location");
+        location = new Ticks.Config("location");
     }
 
     public static WorldStore getInstance() {
@@ -220,7 +220,7 @@ public class WorldStore {
     }
 
     private static WorldStore instance;
-    private final Config location;
+    private final Ticks.Config location;
     private final Map<String, String> worldNameMap = new HashMap<>();
     private final Map<String, String> worldDescMap = new HashMap<>();
     private final Set<String> lockedWorldNames = new HashSet<>();

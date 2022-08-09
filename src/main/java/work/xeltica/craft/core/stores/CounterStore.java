@@ -2,9 +2,9 @@ package work.xeltica.craft.core.stores;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import work.xeltica.craft.core.api.Ticks;
 import work.xeltica.craft.core.models.CounterData;
 import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.utils.Config;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class CounterStore {
     public CounterStore() {
         ConfigurationSerialization.registerClass(CounterData.class, "CounterData");
         instance = this;
-        config = new Config("counters");
+        config = new Ticks.Config("counters");
         loadAll();
     }
 
@@ -137,7 +137,7 @@ public class CounterStore {
     private static CounterStore instance;
 
     /** counters.yml */
-    private Config config;
+    private Ticks.Config config;
 
     /** カウンターデータのマップ */
     private final Map<String, CounterData> counters = new HashMap<>();

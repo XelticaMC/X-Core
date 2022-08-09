@@ -2,7 +2,7 @@ package work.xeltica.craft.core.stores;
 
 import org.bukkit.entity.Player;
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.utils.Config;
+import work.xeltica.craft.core.api.Ticks;
 
 import java.io.IOException;
 import java.util.Set;
@@ -14,7 +14,7 @@ public class QuickChatStore {
     public QuickChatStore() {
         instance = this;
         XCorePlugin.getInstance().saveResource("quickChats.yml", false);
-        config = new Config("quickChats");
+        config = new Ticks.Config("quickChats");
     }
 
     public static QuickChatStore getInstance() { return instance; }
@@ -63,5 +63,5 @@ public class QuickChatStore {
     }
 
     private static QuickChatStore instance;
-    private final Config config;
+    private final Ticks.Config config;
 }

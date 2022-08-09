@@ -3,9 +3,8 @@ package work.xeltica.craft.core.models;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
+import work.xeltica.craft.core.api.Ticks;
 import work.xeltica.craft.core.stores.RankingStore;
-import work.xeltica.craft.core.utils.Config;
-import work.xeltica.craft.core.utils.Time;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,7 +23,7 @@ public class Ranking {
      * @param name ランキング名
      * @param conf ランキングが保存されるコンフィグデータ
      */
-    public Ranking(String name, Config conf) {
+    public Ranking(String name, Ticks.Config conf) {
         this.conf = conf;
         this.name = name;
         loadSection();
@@ -86,7 +85,7 @@ public class Ranking {
 
     /**
      * このランキングがプレイヤーをキーとするかどうかを設定します。
-     * @param name プレイヤーをキーとするランキングであるかどうか
+     * @param value プレイヤーをキーとするランキングであるかどうか
      * @throws IOException 保存に失敗
      */
     public void setIsPlayerMode(boolean value) throws IOException {
@@ -95,7 +94,7 @@ public class Ranking {
 
     /**
      * このランキングがプレイヤーをキーとするかどうかを設定します。
-     * @param name プレイヤーをキーとするランキングであるかどうか
+     * @param value プレイヤーをキーとするランキングであるかどうか
      * @throws IOException 保存に失敗
      */
     public void setIsPlayerMode(boolean value, boolean save) throws IOException {
@@ -127,7 +126,7 @@ public class Ranking {
      * @return 順位でソートされたレコード
     */
     public int get(String id) {
-        return records.containsKey(id) ? records.get(id) : 0;
+        return records.getOrDefault(id, 0);
     }
 
     /**
@@ -159,14 +158,14 @@ public class Ranking {
                     });
             case "time" ->
                 stream
-                    .sorted(Map.Entry.<String, Integer>comparingByValue())
+                    .sorted(Map.Entry.comparingByValue())
                     .map(e -> {
                         var key = e.getKey();
                         if (isPlayerMode()) {
                             final var player = Bukkit.getOfflinePlayer(UUID.fromString(key));
                             if (player != null) key = player.getName();
                         }
-                        return new RankingRecord(key, Time.msToString(e.getValue()));
+                        return new RankingRecord(key, Ticks.Time.msToString(e.getValue()));
                     });
             case "point" ->
                 stream
@@ -264,7 +263,7 @@ public class Ranking {
 
     private HashMap<String, Integer> records;
     private ConfigurationSection thisSection;
-    private Config conf;
+    private Ticks.Config conf;
 
     public String getName() {
         return this.name;

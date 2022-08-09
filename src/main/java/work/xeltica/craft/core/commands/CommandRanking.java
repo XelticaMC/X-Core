@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import work.xeltica.craft.core.api.commands.CommandBase;
 import work.xeltica.craft.core.models.Ranking;
 import work.xeltica.craft.core.stores.RankingStore;
 
@@ -74,7 +75,7 @@ public class CommandRanking extends CommandBase {
                     final var ranking = api.get(name).queryRanking();
                     for (var i = 0; i < ranking.length; i++) {
                         final var record = ranking[i];
-                        sender.sendMessage(String.format("§6%d位:§a%s §b%s", i + 1, record.id(), record.score()));
+                        sender.sendMessage(String.format("§6%d位:§a%s §b%s", i + 1, record.getId(), record.getScore()));
                     }
                 }
                 case "list" -> {

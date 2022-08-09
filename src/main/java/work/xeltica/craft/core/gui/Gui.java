@@ -27,7 +27,6 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.geysermc.connector.common.ChatColor;
 import org.geysermc.cumulus.CustomForm;
 import org.geysermc.cumulus.SimpleForm;
-import org.geysermc.cumulus.response.CustomFormResponse;
 import org.geysermc.floodgate.api.FloodgateApi;
 
 import net.kyori.adventure.text.Component;
@@ -37,6 +36,8 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.models.DialogEventArgs;
+import work.xeltica.craft.core.models.MenuItem;
 import work.xeltica.craft.core.models.SoundPitch;
 import work.xeltica.craft.core.stores.ItemStore;
 
@@ -399,7 +400,7 @@ public class Gui implements Listener {
     private final HashSet<BookMeta> bookSet = new HashSet<>();
     private static Gui instance;
 
-    class HandlerTuple {
+    static class HandlerTuple {
         public Consumer<DialogEventArgs> handler;
         public BookMeta meta;
         public DialogEventArgs eventArgs;

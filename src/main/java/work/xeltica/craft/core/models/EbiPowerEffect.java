@@ -7,7 +7,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import work.xeltica.craft.core.utils.Ticks;
+import work.xeltica.craft.core.api.Ticks;
 
 /**
  * エビパワードラッグストアの商品を表します。

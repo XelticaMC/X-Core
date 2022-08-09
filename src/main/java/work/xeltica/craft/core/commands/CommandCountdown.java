@@ -20,9 +20,10 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.HintStore;
-import work.xeltica.craft.core.utils.Ticks;
+import work.xeltica.craft.core.api.Ticks;
 
 /**
  * カウントダウンコマンド

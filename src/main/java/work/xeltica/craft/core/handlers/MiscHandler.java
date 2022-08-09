@@ -13,13 +13,13 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.events.PlayerCounterFinish;
-import work.xeltica.craft.core.events.PlayerCounterStart;
+import work.xeltica.craft.core.api.events.PlayerCounterFinish;
+import work.xeltica.craft.core.api.events.PlayerCounterStart;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.NbsModel;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.NbsStore;
-import work.xeltica.craft.core.utils.Ticks;
+import work.xeltica.craft.core.api.Ticks;
 
 import java.util.Arrays;
 import java.util.Objects;

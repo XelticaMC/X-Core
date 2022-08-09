@@ -18,7 +18,7 @@ import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
-import work.xeltica.craft.core.events.RealTimeNewDayEvent
+import work.xeltica.craft.core.api.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.models.PlayerRecord

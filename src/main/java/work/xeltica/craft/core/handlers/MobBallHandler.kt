@@ -23,7 +23,7 @@ import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.stores.HintStore
 import work.xeltica.craft.core.stores.MobBallStore
 import work.xeltica.craft.core.stores.PlayerStore
-import work.xeltica.craft.core.utils.CitizensApiProvider.Companion.isCitizensNpc
+import work.xeltica.craft.core.services.CitizensService.Companion.isCitizensNpc
 import java.util.*
 
 class MobBallHandler : Listener {

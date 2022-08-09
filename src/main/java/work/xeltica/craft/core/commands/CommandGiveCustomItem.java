@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import net.kyori.adventure.text.Component;
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.stores.ItemStore;
 
 import java.util.Objects;

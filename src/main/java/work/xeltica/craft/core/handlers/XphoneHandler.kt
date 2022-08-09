@@ -8,7 +8,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 import work.xeltica.craft.core.stores.ItemStore
-import work.xeltica.craft.core.xphone.XphoneOs
+import work.xeltica.craft.core.services.XphoneService
 
 /**
  * X Phoneに関する機能をまとめています。
@@ -29,7 +29,7 @@ class XphoneHandler : Listener {
         if (!listOf(Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK).contains(e.action)) return
         e.setUseItemInHand(Event.Result.DENY)
 
-        XphoneOs.openSpringBoard(player)
+        XphoneService.openSpringBoard(player)
     }
 
     @EventHandler(priority = EventPriority.HIGH)

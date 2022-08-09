@@ -18,9 +18,10 @@ import org.bukkit.potion.PotionEffectType;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.gui.MenuItem;
-import work.xeltica.craft.core.utils.DiscordService;
+import work.xeltica.craft.core.models.MenuItem;
+import work.xeltica.craft.core.services.DiscordService;
 
 /**
  * 処罰コマンド

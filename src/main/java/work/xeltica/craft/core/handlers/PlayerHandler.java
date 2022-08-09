@@ -40,7 +40,7 @@ import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.stores.BossBarStore;
+import work.xeltica.craft.core.services.BossBarService;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
@@ -48,7 +48,7 @@ import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.QuickChatStore;
-import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
+import work.xeltica.craft.core.services.BedrockDisclaimerService;
 
 /**
  * プレイヤーに関するハンドラーをまとめています。
@@ -113,14 +113,14 @@ public class PlayerHandler implements Listener {
 
         HintStore.getInstance().achieve(p, Hint.WELCOME);
 
-        BossBarStore.getInstance().applyAll(p);
+        BossBarService.INSTANCE.applyAll(p);
 
         if (PlayerStore.getInstance().isCitizen(p)) {
             HintStore.getInstance().achieve(p, Hint.BE_CITIZEN);
         }
 
         if (!record.getBoolean(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER)) {
-            BedrockDisclaimerUtil.showDisclaimerAsync(p);
+            BedrockDisclaimerService.INSTANCE.showDisclaimerAsync(p);
         }
 
         p.showTitle(Title.title(

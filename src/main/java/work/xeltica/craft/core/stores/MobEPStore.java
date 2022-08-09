@@ -5,17 +5,16 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.utils.Config;
+import work.xeltica.craft.core.api.Ticks;
 
 public class MobEPStore {
     public MobEPStore() {
         instance = this;
         XCorePlugin.getInstance().saveResource("mobEP.yml", false);
-        config = new Config("mobEP");
+        config = new Ticks.Config("mobEP");
     }
 
     public static MobEPStore getInstance() { return instance; }
@@ -44,5 +43,5 @@ public class MobEPStore {
     }
 
     private static MobEPStore instance;
-    private static Config config;
+    private static Ticks.Config config;
 }

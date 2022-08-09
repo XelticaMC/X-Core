@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -22,8 +21,9 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.gui.MenuItem;
+import work.xeltica.craft.core.models.MenuItem;
 import work.xeltica.craft.core.models.EbiPowerEffect;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.EbiPowerStore;

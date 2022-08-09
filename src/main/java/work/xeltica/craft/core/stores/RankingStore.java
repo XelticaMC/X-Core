@@ -3,8 +3,8 @@ package work.xeltica.craft.core.stores;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.api.Ticks;
 import work.xeltica.craft.core.models.Ranking;
-import work.xeltica.craft.core.utils.Config;
 
 import java.io.IOException;
 import java.util.Set;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class RankingStore {
     public RankingStore() {
         instance = this;
-        rankingConfig = new Config("ranking");
+        rankingConfig = new Ticks.Config("ranking");
         renderAll();
     }
 
@@ -96,8 +96,8 @@ public class RankingStore {
             holo.appendTextLine("§a§l" + ranks.getDisplayName());
             final var ranking = ranks.queryRanking();
             for (var i = 0; i < 10; i++) {
-                final var name = isHidden ? "??????????" : ranking.length <= i ? "--------" : ranking[i].id();
-                final var value = isHidden ? "??????????" : ranking.length <= i ? "------" : ranking[i].score();
+                final var name = isHidden ? "??????????" : ranking.length <= i ? "--------" : ranking[i].getId();
+                final var value = isHidden ? "??????????" : ranking.length <= i ? "------" : ranking[i].getScore();
                 final var prefix = i == 0 ? "§e" : i == 1 ? "§f" : i == 2 ? "§6" : "§d";
                 holo.appendTextLine(String.format("%s§l%d位: %s (%s)", prefix, i + 1, name, value));
             }
@@ -107,5 +107,5 @@ public class RankingStore {
     private static RankingStore instance;
 
     /** ranking.yml */
-    private Config rankingConfig;
+    private Ticks.Config rankingConfig;
 }

@@ -1,13 +1,12 @@
 package work.xeltica.craft.core.stores;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Random;
 
 import org.bukkit.entity.Player;
 
+import work.xeltica.craft.core.api.Ticks;
 import work.xeltica.craft.core.models.OmikujiScore;
-import work.xeltica.craft.core.utils.Config;
 
 /**
  * プレイヤーのおみくじ記録を保存・読み出しします。
@@ -16,7 +15,7 @@ import work.xeltica.craft.core.utils.Config;
 public class OmikujiStore {
     public OmikujiStore() {
         OmikujiStore.instance = this;
-        this.cm = new Config("omikujistore");
+        this.cm = new Ticks.Config("omikujistore");
     }
 
     public static OmikujiStore getInstance () {
@@ -73,7 +72,7 @@ public class OmikujiStore {
         return OmikujiScore.Kyou;
     }
 
-    private final Config cm;
+    private final Ticks.Config cm;
     private static OmikujiStore instance;
     private final Random random = new Random();
 }

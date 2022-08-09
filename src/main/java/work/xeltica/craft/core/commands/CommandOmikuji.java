@@ -13,11 +13,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.plugins.VaultPlugin;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
-import work.xeltica.craft.core.utils.Ticks;
+import work.xeltica.craft.core.api.Ticks;
 
 import java.util.List;
 

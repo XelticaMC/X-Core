@@ -1,7 +1,6 @@
 package work.xeltica.craft.core.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,9 +9,10 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.query.QueryOptions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.PlayerStore;
-import work.xeltica.craft.core.utils.Ticks;
+import work.xeltica.craft.core.api.Ticks;
 
 import java.util.List;
 

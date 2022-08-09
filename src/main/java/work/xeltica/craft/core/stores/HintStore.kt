@@ -13,10 +13,10 @@ import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.models.Hint
 import java.io.IOException
-import work.xeltica.craft.core.utils.DiscordService
+import work.xeltica.craft.core.services.DiscordService
 import java.util.UUID
 import kotlin.Throws
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Ticks.Config
 
 /**
  * プレイヤーのヒントを達成する処理や、ヒントを達成しているかどうかの取得などを行います。

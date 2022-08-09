@@ -8,11 +8,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.events.RealTimeNewDayEvent;
+import work.xeltica.craft.core.api.events.RealTimeNewDayEvent;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.PlayerStore;
-import work.xeltica.craft.core.utils.Ticks;
+import work.xeltica.craft.core.api.Ticks;
 
 import java.io.IOException;
 

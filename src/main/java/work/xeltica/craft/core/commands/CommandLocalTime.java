@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 
 /**
  * 現在いるワールドのみの時間を操作するコマンド

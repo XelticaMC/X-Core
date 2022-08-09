@@ -3,8 +3,8 @@ package work.xeltica.craft.core.models;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
+import work.xeltica.craft.core.api.Ticks;
 import work.xeltica.craft.core.stores.PlayerStore;
-import work.xeltica.craft.core.utils.Config;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.UUID;
  * @author Xeltica
  */
 public class PlayerRecord {
-    public PlayerRecord(Config conf, ConfigurationSection section, UUID playerId) {
+    public PlayerRecord(Ticks.Config conf, ConfigurationSection section, UUID playerId) {
         this.conf = conf;
         this.section = section;
         this.playerId = playerId;
@@ -154,7 +154,7 @@ public class PlayerRecord {
         }
     }
 
-    private final Config conf;
+    private final Ticks.Config conf;
     private final ConfigurationSection section;
 
     private final UUID playerId;

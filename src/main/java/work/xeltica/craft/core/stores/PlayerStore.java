@@ -11,14 +11,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scheduler.BukkitTask;
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.events.StaffJoinEvent;
-import work.xeltica.craft.core.events.StaffLeaveEvent;
-import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.PlayerRecord;
-import work.xeltica.craft.core.utils.Config;
-import work.xeltica.craft.core.utils.Ticks;
+import work.xeltica.craft.core.services.BossBarService;
+import work.xeltica.craft.core.api.Ticks;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -35,7 +31,7 @@ public class PlayerStore {
     public PlayerStore() {
         PlayerStore.instance = this;
         PlayerStore.liveBarMap = new HashMap<>();
-        playerStores = new Config("playerStores");
+        playerStores = new Ticks.Config("playerStores");
 
         Bukkit.getScheduler().runTaskTimer(XCorePlugin.getInstance(), this::saveTask, 0, Ticks.from(10));
     }
@@ -84,12 +80,12 @@ public class PlayerStore {
             final var bar = BossBar.bossBar(Component.text(name), BossBar.MAX_PROGRESS, Color.RED, Overlay.PROGRESS);
 
             liveBarMap.put(player.getUniqueId(), bar);
-            BossBarStore.getInstance().add(bar);
+            BossBarService.INSTANCE.add(bar);
         } else {
             final var bar = liveBarMap.get(player.getUniqueId());
 
             liveBarMap.remove(player.getUniqueId());
-            BossBarStore.getInstance().remove(bar);
+            BossBarService.INSTANCE.remove(bar);
         }
     }
 
@@ -133,7 +129,7 @@ public class PlayerStore {
     }
 
     private static PlayerStore instance;
-    private final Config playerStores;
+    private final Ticks.Config playerStores;
     private static Map<UUID, BossBar> liveBarMap;
 
     private boolean changed;

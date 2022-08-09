@@ -10,8 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
+import work.xeltica.craft.core.api.Ticks;
 import work.xeltica.craft.core.models.NbsModel;
-import work.xeltica.craft.core.utils.Config;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import java.util.UUID;
 public class NbsStore {
     public NbsStore() {
         ConfigurationSerialization.registerClass(NbsModel.class, "NbsModel");
-        nbs = new Config("nbs");
+        nbs = new Ticks.Config("nbs");
         loadModels();
         playAll();
         instance = this;
@@ -271,7 +271,7 @@ public class NbsStore {
     private final Map<UUID, RadioSongPlayer> radioCache = new HashMap<>();
     private List<NbsModel> models;
     private final Map<Location, NbsModel> modelCache = new HashMap<>();
-    private Config nbs;
+    private Ticks.Config nbs;
 
     private static NbsStore instance;
 
