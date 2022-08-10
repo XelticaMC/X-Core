@@ -330,7 +330,7 @@ public class Gui implements Listener {
 
         final var handleString = UUID.randomUUID().toString().replace("-", "");
 
-        final var comTitle = Component.text(title + "\n\n", Style.style(TextDecoration.BOLD));
+        final var comTitle = Component.text(title + "\n\n");
         final var comContent = Component.text(content + "\n\n");
         final var comOkButton = Component.text(okButtonText, Style.style(TextColor.color(0, 0, 0), TextDecoration.BOLD, TextDecoration.UNDERLINED))
             .clickEvent(ClickEvent.runCommand("/__core_gui_event__ " + handleString));
