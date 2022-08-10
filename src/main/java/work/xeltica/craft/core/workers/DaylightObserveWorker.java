@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.timers;
+package work.xeltica.craft.core.workers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -13,8 +13,8 @@ import java.util.Objects;
  * バックグラウンドタスクです。
  * @author Xeltica
  */
-public class DaylightObserveTimer extends BukkitRunnable {
-    public DaylightObserveTimer(Plugin plugin) {
+public class DaylightObserveWorker extends BukkitRunnable {
+    public DaylightObserveWorker(Plugin plugin) {
         this.plugin = plugin;
     }
 

@@ -3,7 +3,7 @@ package work.xeltica.craft.core.stores;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.api.Ticks;
+import work.xeltica.craft.core.api.Config;
 import work.xeltica.craft.core.models.Ranking;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class RankingStore {
     public RankingStore() {
         instance = this;
-        rankingConfig = new Ticks.Config("ranking");
+        rankingConfig = new Config("ranking");
         renderAll();
     }
 
@@ -107,5 +107,5 @@ public class RankingStore {
     private static RankingStore instance;
 
     /** ranking.yml */
-    private Ticks.Config rankingConfig;
+    private Config rankingConfig;
 }

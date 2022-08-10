@@ -3,7 +3,7 @@ package work.xeltica.craft.core.stores;
 import java.io.IOException;
 
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.api.Ticks;
+import work.xeltica.craft.core.api.Config;
 
 /**
  * プラグインのメタ情報を管理します。
@@ -12,7 +12,7 @@ import work.xeltica.craft.core.api.Ticks;
 public class MetaStore {
     public MetaStore() {
         MetaStore.instance = this;
-        meta = new Ticks.Config("meta");
+        meta = new Config("meta");
         checkUpdate();
     }
 
@@ -61,7 +61,7 @@ public class MetaStore {
         }
     }
 
-    private final Ticks.Config meta;
+    private final Config meta;
     private String previousVersion;
     private boolean isUpdated;
     private boolean postToDiscord;

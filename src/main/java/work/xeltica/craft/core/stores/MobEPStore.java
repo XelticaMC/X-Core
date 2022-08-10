@@ -8,13 +8,13 @@ import org.bukkit.entity.Monster;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.api.Ticks;
+import work.xeltica.craft.core.api.Config;
 
 public class MobEPStore {
     public MobEPStore() {
         instance = this;
         XCorePlugin.getInstance().saveResource("mobEP.yml", false);
-        config = new Ticks.Config("mobEP");
+        config = new Config("mobEP");
     }
 
     public static MobEPStore getInstance() { return instance; }
@@ -43,5 +43,5 @@ public class MobEPStore {
     }
 
     private static MobEPStore instance;
-    private static Ticks.Config config;
+    private static Config config;
 }

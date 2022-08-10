@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.timers;
+package work.xeltica.craft.core.workers;
 
 import java.util.Objects;
 import java.util.Random;
@@ -23,8 +23,8 @@ import work.xeltica.craft.core.XCorePlugin;
  * ナイトメアワールドを制御するバックグラウンドタスクです。
  * @author Xeltica
  */
-public class NightmareControlTimer extends BukkitRunnable {
-    public NightmareControlTimer(Plugin plugin) {
+public class NightmareControlWorker extends BukkitRunnable {
+    public NightmareControlWorker(Plugin plugin) {
         this.plugin = plugin;
     }
 

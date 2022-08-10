@@ -1,4 +1,4 @@
 /**
  * プラグインのバックグラウンドタスクが記述されているパッケージ
  */
-package work.xeltica.craft.core.timers;
+package work.xeltica.craft.core.workers;

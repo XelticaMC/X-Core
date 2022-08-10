@@ -34,7 +34,7 @@ class FireworkApp : AppBase() {
             ui.error(player, "アイテムを${verb}できませんでした。エビパワーが足りません。")
             return
         }
-        val stack = PlayerStore.getInstance().getRandomFireworkByUUID(player.uniqueId, fireworkCount)
+        val stack = PlayerStore.instance.getRandomFireworkByUUID(player.uniqueId, fireworkCount)
         val size = player.inventory.addItem(stack).size
         if (size > 0) {
             ui.error(player, "アイテムを${verb}できませんでした。持ち物がいっぱいです。整理してからもう一度お試し下さい。")
@@ -49,7 +49,7 @@ class FireworkApp : AppBase() {
             player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 2f)
         }
         if (!bonusReceived) {
-            PlayerStore.getInstance().open(player)[PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER] = true
+            PlayerStore.instance.open(player)[PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER] = true
         }
     }
 
@@ -62,6 +62,6 @@ class FireworkApp : AppBase() {
         return month == 5 && 15 <= day && day <= 21
     }
 
-    private fun isBonusReceived(player: Player) = PlayerStore.getInstance()
+    private fun isBonusReceived(player: Player) = PlayerStore.instance
         .open(player).getBoolean(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER)
 }

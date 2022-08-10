@@ -32,6 +32,6 @@ class EventCancelApp : AppBase() {
     }
 
     private fun getRecord(player: Player): PlayerRecord {
-        return PlayerStore.getInstance().open(player)
+        return PlayerStore.instance.open(player)
     }
 }

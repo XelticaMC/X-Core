@@ -144,7 +144,7 @@ class EbiPowerHandler: Listener {
     @EventHandler
     fun onPlayerLoggedIn(e: PlayerJoinEvent) {
         val now = Date()
-        val ps = PlayerStore.getInstance()
+        val ps = PlayerStore.instance
         val record = ps.open(e.player)
         val prev = Date(record.getLong(PlayerDataKey.LAST_JOINED, now.time))
         if (prev.year != now.year && prev.month != now.month && prev.date != now.date) {
@@ -187,7 +187,7 @@ class EbiPowerHandler: Listener {
     fun onMineBlocks(e: BlockBreakEvent) {
         if (!breakBonusList.contains(e.block.type)) return
         if (playerIsInBlacklisted(e.player)) return
-        val record = PlayerStore.getInstance().open(e.player)
+        val record = PlayerStore.instance.open(e.player)
         val brokenBlocksCount = record.getInt(PlayerDataKey.BROKEN_BLOCKS_COUNT)
 
         if (!e.isDropItems) return
@@ -232,7 +232,7 @@ class EbiPowerHandler: Listener {
 
     @EventHandler
     fun onNewDayToResetBrokenBlocksCount(e: RealTimeNewDayEvent) {
-        PlayerStore.getInstance().openAll().forEach(Consumer { record: PlayerRecord ->
+        PlayerStore.instance.openAll().forEach(Consumer { record: PlayerRecord ->
             record[PlayerDataKey.BROKEN_BLOCKS_COUNT] = 0
         })
     }

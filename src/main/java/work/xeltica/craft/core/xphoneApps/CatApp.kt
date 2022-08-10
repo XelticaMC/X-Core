@@ -22,5 +22,5 @@ class CatApp : AppBase() {
 
     override fun isShiny(player: Player): Boolean = isCat(player)
 
-    private fun isCat(player: Player) = PlayerStore.getInstance().open(player).getBoolean(PlayerDataKey.CAT_MODE)
+    private fun isCat(player: Player) = PlayerStore.instance.open(player).getBoolean(PlayerDataKey.CAT_MODE)
 }

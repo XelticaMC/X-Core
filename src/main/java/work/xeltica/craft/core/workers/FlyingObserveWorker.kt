@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.timers
+package work.xeltica.craft.core.workers
 
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -10,7 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable
  * ジェットのようなパーティクルを出すためのバックグラウンドタスクです。
  * @author Xeltica
  */
-class FlyingObserveTimer : BukkitRunnable() {
+class FlyingObserveWorker : BukkitRunnable() {
     override fun run() {
         Bukkit.getOnlinePlayers().filter { it != null && it.allowFlight && it.gameMode == GameMode.SURVIVAL }
             .forEach {

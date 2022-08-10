@@ -9,7 +9,7 @@ import org.bukkit.entity.Axolotl
 import org.bukkit.entity.Mob
 import org.bukkit.inventory.ItemStack
 import work.xeltica.craft.core.XCorePlugin
-import work.xeltica.craft.core.api.Ticks.Config
+import work.xeltica.craft.core.api.Config
 import java.util.*
 
 class MobBallStore {

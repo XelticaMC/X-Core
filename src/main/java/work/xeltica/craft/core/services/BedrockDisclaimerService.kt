@@ -40,9 +40,9 @@ object BedrockDisclaimerService {
     /**
      * 免責事項を表示します。
      */
-    fun showDisclaimer(p: Player?) {
-        Gui.getInstance().openDialog(p, BEDROCK_DISCLAIMER_TITLE, BEDROCK_DISCLAIMER_MESSAGE, { a: DialogEventArgs? ->
-            val record = PlayerStore.getInstance().open(p)
+    fun showDisclaimer(p: Player) {
+        Gui.getInstance().openDialog(p, BEDROCK_DISCLAIMER_TITLE, BEDROCK_DISCLAIMER_MESSAGE, {
+            val record = PlayerStore.instance.open(p)
             record[PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER] = true
         }, "わかりました")
     }

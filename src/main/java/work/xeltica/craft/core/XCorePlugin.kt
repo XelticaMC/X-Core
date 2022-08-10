@@ -18,11 +18,12 @@ import work.xeltica.craft.core.api.Ticks
 import work.xeltica.craft.core.commands.*
 import work.xeltica.craft.core.stores.*
 import work.xeltica.craft.core.handlers.*
-import work.xeltica.craft.core.timers.*
+import work.xeltica.craft.core.workers.*
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.services.XphoneService
 import work.xeltica.craft.core.services.DiscordService
 import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.repositories.CloverRepository
 import work.xeltica.craft.core.services.BossBarService
 
 /**
@@ -33,54 +34,12 @@ class XCorePlugin : JavaPlugin() {
     override fun onEnable() {
         instance = this
         loadPlugins()
-        loadStores()
-        loadCommands()
+        loadRepositories()
         loadHandlers()
-        DiscordService()
-        XphoneService.onEnable()
+        loadServices()
+        loadCommands()
+        loadWorkers()
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
-        DaylightObserveTimer(this)
-            .runTaskTimer(this, 0, Ticks.from(1.0).toLong())
-        NightmareControlTimer(this)
-            .runTaskTimer(this, 0, Ticks.from(15.0).toLong())
-        FlyingObserveTimer().runTaskTimer(this, 0, 4)
-        RealTimeObserveTimer()
-            .runTaskTimer(this, 0, Ticks.from(1.0).toLong())
-        EbipowerObserveTimer().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
-        val tick = 10
-        object : BukkitRunnable() {
-            override fun run() {
-                VehicleStore.getInstance().tick(tick)
-                val store = PlayerStore.getInstance()
-                store.openAll().forEach {
-                    // オフラインなら処理しない
-                    if (Bukkit.getPlayer(it.playerId) == null) return
-                    var time = it.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
-                    time -= tick
-                    if (time <= 0) {
-                        it.delete(PlayerDataKey.NEWCOMER_TIME)
-                    } else {
-                        it[PlayerDataKey.NEWCOMER_TIME] = time
-                    }
-                }
-                try {
-                    store.save()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-        }.runTaskTimer(this, 0, tick.toLong())
-        calculator = CitizenTimerCalculator()
-        val provider = Bukkit.getServicesManager().getRegistration(
-            LuckPerms::class.java
-        )
-        if (provider == null) {
-            logger.severe("X-CoreはLuckPermsを必要とします。X-Coreを終了します。")
-            Bukkit.getPluginManager().disablePlugin(this)
-            return
-        }
-        val luckPerms = provider.provider
-        luckPerms.contextManager.registerCalculator(calculator!!)
         val meta = MetaStore.getInstance()
         if (meta.isUpdated) {
             var prev = meta.previousVersion
@@ -123,18 +82,17 @@ class XCorePlugin : JavaPlugin() {
         return com.execute(sender, command, label, args)
     }
 
-    private fun loadStores() {
+    private fun loadRepositories() {
         OmikujiStore()
         VehicleStore()
         PlayerStore()
         HubStore()
         WorldStore()
         ItemStore()
-        CloverStore()
+        CloverRepository.onEnable()
         EbiPowerStore()
         HintStore()
         MetaStore()
-        BossBarService.onEnable()
         NickNameStore()
         CounterStore()
         RankingStore()
@@ -143,6 +101,12 @@ class XCorePlugin : JavaPlugin() {
         MobEPStore()
         MobBallStore()
         NotificationStore()
+    }
+
+    private fun loadServices() {
+        DiscordService()
+        XphoneService.onEnable()
+        BossBarService.onEnable()
     }
 
     private fun loadCommands() {
@@ -218,12 +182,57 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded Gui")
     }
 
+    private fun loadWorkers() {
+        DaylightObserveWorker(this).runTaskTimer(this, 0, Ticks.from(1.0).toLong())
+        NightmareControlWorker(this).runTaskTimer(this, 0, Ticks.from(15.0).toLong())
+        FlyingObserveWorker().runTaskTimer(this, 0, 4)
+        RealTimeObserveWorker().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
+        EbipowerObserveWorker().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
+        val tick = 10
+        object : BukkitRunnable() {
+            override fun run() {
+                VehicleStore.getInstance().tick(tick)
+                val store = PlayerStore.instance
+                store.openAll().forEach {
+                    // オフラインなら処理しない
+                    if (Bukkit.getPlayer(it.playerId) == null) return
+                    var time = it.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
+                    time -= tick
+                    if (time <= 0) {
+                        it.delete(PlayerDataKey.NEWCOMER_TIME)
+                    } else {
+                        it[PlayerDataKey.NEWCOMER_TIME] = time
+                    }
+                }
+                try {
+                    store.save()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }.runTaskTimer(this, 0, tick.toLong())
+    }
+
     private fun loadPlugins() {
         VaultPlugin.getInstance().onEnable(this)
+        calculator = CitizenTimerCalculator()
+        val provider = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)
+        if (provider == null) {
+            logger.severe("X-CoreはLuckPermsを必要とします。X-Coreを終了します。")
+            Bukkit.getPluginManager().disablePlugin(this)
+            return
+        }
+        val luckPerms = provider.provider
+        luckPerms.contextManager.registerCalculator(calculator)
     }
 
     private fun unloadPlugins() {
         VaultPlugin.getInstance().onDisable(this)
+        val provider = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)
+        if (provider != null) {
+            val luckPerms = provider.provider
+            luckPerms.contextManager.unregisterCalculator(calculator)
+        }
     }
 
     /**
@@ -243,7 +252,7 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private val commands = HashMap<String, CommandBase>()
-    private var calculator: CitizenTimerCalculator? = null
+    private lateinit var calculator: CitizenTimerCalculator
 
     companion object {
         @JvmStatic

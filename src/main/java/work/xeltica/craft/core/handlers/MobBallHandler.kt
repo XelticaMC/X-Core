@@ -100,7 +100,7 @@ class MobBallHandler : Listener {
                         showSuccessParticle(eggEntity.location)
                         eggEntity.setCanPlayerPickup(true)
                         HintStore.instance.achieve(player, Hint.SUCCEEDED_TO_CATCH_MOB)
-                        val dex = PlayerStore.getInstance().open(player.uniqueId).getStringList(PlayerDataKey.MOB_DEX)
+                        val dex = PlayerStore.instance.open(player.uniqueId).getStringList(PlayerDataKey.MOB_DEX)
                         val type = target.type.toString()
                         if (!dex.contains(type)) {
                             dex.add(target.type.toString())

@@ -16,7 +16,7 @@ import java.io.IOException
 import work.xeltica.craft.core.services.DiscordService
 import java.util.UUID
 import kotlin.Throws
-import work.xeltica.craft.core.api.Ticks.Config
+import work.xeltica.craft.core.api.Config
 
 /**
  * プレイヤーのヒントを達成する処理や、ヒントを達成しているかどうかの取得などを行います。

@@ -27,7 +27,7 @@ import org.geysermc.floodgate.util.DeviceOs
 import work.xeltica.craft.core.models.CounterData
 import work.xeltica.craft.core.stores.RankingStore
 import work.xeltica.craft.core.services.DiscordService
-import work.xeltica.craft.core.api.Ticks.Time
+import work.xeltica.craft.core.api.Time
 
 /**
  * Counter API処理用ハンドラー
@@ -45,8 +45,8 @@ class CounterHandler : Listener {
 
         // ブロッククリックでなければ無視
         if (!isBlockClick) return
-        val pstore = PlayerStore.getInstance()
-        val store = CounterStore.getInstance()
+        val pstore = PlayerStore.instance
+        val store = CounterStore.instance
         val ui = Gui.getInstance()
         val player = e.player
         val block = e.clickedBlock
@@ -92,8 +92,8 @@ class CounterHandler : Listener {
     fun onUsePlate(e: PlayerInteractEvent) {
         // 踏んだわけじゃないのなら無視
         if (e.action != Action.PHYSICAL) return
-        val pstore = PlayerStore.getInstance()
-        val store = CounterStore.getInstance()
+        val pstore = PlayerStore.instance
+        val store = CounterStore.instance
         val ui = Gui.getInstance()
         val player = e.player
         val block = e.clickedBlock ?: return
@@ -168,7 +168,7 @@ class CounterHandler : Listener {
     @EventHandler
     fun onDailyReset(e: RealTimeNewDayEvent?) {
         try {
-            CounterStore.getInstance().resetAllPlayersPlayedLog()
+            CounterStore.instance.resetAllPlayersPlayedLog()
             Bukkit.getLogger().info("タイムアタックのプレイ済み履歴をリセットしました。")
         } catch (e1: IOException) {
             e1.printStackTrace()

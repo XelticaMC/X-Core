@@ -9,7 +9,7 @@ import org.bukkit.entity.Boat;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.RideableMinecart;
 
-import work.xeltica.craft.core.api.Ticks;
+import work.xeltica.craft.core.api.Config;
 
 /**
  * サーバーに存在する乗り物を管理し、不要なものはデスポーンする処理などを行うストアです。
@@ -19,7 +19,7 @@ public class VehicleStore {
     public VehicleStore() {
         VehicleStore.instance = this;
         logger = Bukkit.getLogger();
-        this.cm = new Ticks.Config("vehicles");
+        this.cm = new Config("vehicles");
     }
 
     public static VehicleStore getInstance() {
@@ -92,6 +92,6 @@ public class VehicleStore {
     }
 
     private static VehicleStore instance;
-    private final Ticks.Config cm;
+    private final Config cm;
     private final Logger logger;
 }

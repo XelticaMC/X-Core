@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.timers
+package work.xeltica.craft.core.workers
 
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -10,7 +10,7 @@ import work.xeltica.craft.core.stores.HintStore
 /**
  * エビパワーに関するオブザーバー。
  */
-class EbipowerObserveTimer : BukkitRunnable() {
+class EbipowerObserveWorker : BukkitRunnable() {
 
     override fun run() {
         if (players.isEmpty()) {

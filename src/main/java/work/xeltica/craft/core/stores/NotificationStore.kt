@@ -8,7 +8,7 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.models.Notification
-import work.xeltica.craft.core.api.Ticks.Config
+import work.xeltica.craft.core.api.Config
 import java.io.File
 import java.io.FileReader
 import java.util.UUID

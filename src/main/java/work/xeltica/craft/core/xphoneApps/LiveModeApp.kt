@@ -14,8 +14,8 @@ class LiveModeApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.RED_DYE
 
     override fun onLaunch(player: Player) {
-        PlayerStore.getInstance().setLiveMode(player, !isLiveMode(player))
+        PlayerStore.instance.setLiveMode(player, !isLiveMode(player))
     }
 
-    private fun isLiveMode(player: Player) = PlayerStore.getInstance().isLiveMode(player)
+    private fun isLiveMode(player: Player) = PlayerStore.instance.isLiveMode(player)
 }

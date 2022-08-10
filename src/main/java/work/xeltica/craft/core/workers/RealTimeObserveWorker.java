@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.timers;
+package work.xeltica.craft.core.workers;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +12,7 @@ import work.xeltica.craft.core.api.events.RealTimeNewDayEvent;
  * 監視する時間には、サーバーOSのタイムゾーンを使用しています。
  * @author Xeltica
  */
-public class RealTimeObserveTimer extends BukkitRunnable {
+public class RealTimeObserveWorker extends BukkitRunnable {
     @Override
     public void run() {
         final var now = LocalDateTime.now();

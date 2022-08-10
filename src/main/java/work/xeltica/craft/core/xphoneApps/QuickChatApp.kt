@@ -20,7 +20,7 @@ class QuickChatApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.PAPER
 
     override fun onLaunch(player: Player) {
-        val store = QuickChatStore.getInstance()
+        val store = QuickChatStore.instance
         val list = ArrayList<MenuItem>()
         val ui = Gui.getInstance()
         ui.playSound(player, Sound.ENTITY_VILLAGER_WORK_CARTOGRAPHER, 1f, SoundPitch.F_1)

@@ -5,7 +5,7 @@ import java.util.Random;
 
 import org.bukkit.entity.Player;
 
-import work.xeltica.craft.core.api.Ticks;
+import work.xeltica.craft.core.api.Config;
 import work.xeltica.craft.core.models.OmikujiScore;
 
 /**
@@ -15,7 +15,7 @@ import work.xeltica.craft.core.models.OmikujiScore;
 public class OmikujiStore {
     public OmikujiStore() {
         OmikujiStore.instance = this;
-        this.cm = new Ticks.Config("omikujistore");
+        this.cm = new Config("omikujistore");
     }
 
     public static OmikujiStore getInstance () {
@@ -72,7 +72,7 @@ public class OmikujiStore {
         return OmikujiScore.Kyou;
     }
 
-    private final Ticks.Config cm;
+    private final Config cm;
     private static OmikujiStore instance;
     private final Random random = new Random();
 }

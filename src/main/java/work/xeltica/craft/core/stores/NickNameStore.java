@@ -5,7 +5,7 @@ import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import work.xeltica.craft.core.api.Ticks;
+import work.xeltica.craft.core.api.Config;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class NickNameStore {
     public NickNameStore() {
         instance = this;
-        config = new Ticks.Config("nickname");
+        config = new Config("nickname");
     }
 
     public static NickNameStore getInstance() { return instance; }
@@ -87,7 +87,7 @@ public class NickNameStore {
     }
 
     private static NickNameStore instance;
-    private final Ticks.Config config;
+    private final Config config;
 
     private final Integer nicknameLimit = 8;
 }

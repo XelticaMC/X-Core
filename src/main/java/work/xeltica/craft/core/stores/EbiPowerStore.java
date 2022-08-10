@@ -7,7 +7,7 @@ import java.util.List;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 
-import work.xeltica.craft.core.api.Ticks;
+import work.xeltica.craft.core.api.Config;
 import work.xeltica.craft.core.models.EbiPowerEffect;
 import work.xeltica.craft.core.models.EbiPowerItem;
 import work.xeltica.craft.core.plugins.VaultPlugin;
@@ -23,7 +23,7 @@ public class EbiPowerStore {
         EbiPowerStore.instance = this;
 
         // エビパワー保存データを読み込む
-        ep = new Ticks.Config("ep", (conf) -> {
+        ep = new Config("ep", (conf) -> {
             final var c = conf.getConf();
             this.shopItems = (List<EbiPowerItem>)c.getList(CONFIG_KEY_SHOP_ITEMS, new ArrayList<EbiPowerItem>());
             this.effectShopItems = (List<EbiPowerEffect>)c.getList(
@@ -131,7 +131,7 @@ public class EbiPowerStore {
 
     private List<EbiPowerEffect> effectShopItems = new ArrayList<>();
 
-    private final Ticks.Config ep;
+    private final Config ep;
 
     private static final String CONFIG_KEY_SHOP_ITEMS = "shopItems";
     private static final String CONFIG_KEY_EFFECT_SHOP_ITEMS = "effectShopItems";

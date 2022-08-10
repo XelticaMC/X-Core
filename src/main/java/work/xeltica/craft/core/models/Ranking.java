@@ -3,7 +3,8 @@ package work.xeltica.craft.core.models;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
-import work.xeltica.craft.core.api.Ticks;
+import work.xeltica.craft.core.api.Config;
+import work.xeltica.craft.core.api.Time;
 import work.xeltica.craft.core.stores.RankingStore;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class Ranking {
      * @param name ランキング名
      * @param conf ランキングが保存されるコンフィグデータ
      */
-    public Ranking(String name, Ticks.Config conf) {
+    public Ranking(String name, Config conf) {
         this.conf = conf;
         this.name = name;
         loadSection();
@@ -165,7 +166,7 @@ public class Ranking {
                             final var player = Bukkit.getOfflinePlayer(UUID.fromString(key));
                             if (player != null) key = player.getName();
                         }
-                        return new RankingRecord(key, Ticks.Time.msToString(e.getValue()));
+                        return new RankingRecord(key, Time.msToString(e.getValue()));
                     });
             case "point" ->
                 stream
@@ -263,7 +264,7 @@ public class Ranking {
 
     private HashMap<String, Integer> records;
     private ConfigurationSection thisSection;
-    private Ticks.Config conf;
+    private Config conf;
 
     public String getName() {
         return this.name;
