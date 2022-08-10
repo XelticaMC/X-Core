@@ -56,7 +56,8 @@ public class CommandBoat extends CommandPlayerOnlyBase {
             if (!flag) return Gui.getInstance().error(player, "狭すぎて置けない…");
         }
 
-        spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.BOAT, SpawnReason.CUSTOM);
+        final var boat = spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.BOAT, SpawnReason.CUSTOM);
+        boat.setRotation(player.getLocation().getYaw(), boat.getLocation().getPitch());
 
         player.sendMessage("ボートを足元に召喚した。");
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 2);
