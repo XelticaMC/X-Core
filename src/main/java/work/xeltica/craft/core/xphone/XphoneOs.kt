@@ -23,6 +23,7 @@ object XphoneOs {
             EventReturnWorldApp(),
             EventCancelApp(),
             TeleportApp(),
+            NotificationApp(),
             ProtectApp(),
             BedrockToolsApp(),
             PromoApp(),
@@ -38,8 +39,7 @@ object XphoneOs {
             LiveModeApp(),
             QuickChatApp(),
             TransferPlayerDataApp(),
-            VoteApp(),
-            NotificationApp()
+            VoteApp()
         ))
     }
 
