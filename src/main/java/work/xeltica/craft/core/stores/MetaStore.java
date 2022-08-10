@@ -69,9 +69,8 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "スタッフからのお知らせをX Phoneで確認できるように",
-            "イベント用機能追加",
-            "ボートを召喚したときの操作性を改善",
+            "通知アプリの機能を改善しました",
+            "Java版でのダイアログ表示を改善しました",
     };
 
     private static MetaStore instance;
