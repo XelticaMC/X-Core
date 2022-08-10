@@ -149,7 +149,7 @@ class CounterHandler : Listener {
             player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
             if (last.isDaily && record.getBoolean(PlayerDataKey.PLAYED_COUNTER)) {
                 player.sendMessage(ChatColor.RED + "既にチャレンジ済みのため、ランキングは更新されません。")
-            } else {
+            } else if (last.bedrockRankingId != null || last.javaRankingId != null || last.uwpRankingId != null || last.phoneRankingId != null) {
                 val playerName = PlainTextComponentSerializer.plainText().serialize(player.displayName())
                 Bukkit.getOnlinePlayers()
                     .filter { it.uniqueId != player.uniqueId }
