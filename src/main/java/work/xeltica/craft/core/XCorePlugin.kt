@@ -209,6 +209,8 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded TicketWildareaBHandler")
         pm.registerEvents(MobBallHandler(), this)
         logger.info("Loaded MobBallHandler")
+        pm.registerEvents(NotificationHandler(), this)
+        logger.info("Loaded NotificationHandler")
         pm.registerEvents(Gui.getInstance(), this)
         logger.info("Loaded Gui")
     }
