@@ -69,8 +69,8 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "通知アプリの機能を改善しました",
-            "Java版でのダイアログ表示を改善しました",
+            "メインワールドからのみイベントマップに行けるように変更",
+            "参加時、通知があれば5秒後に表示するように",
     };
 
     private static MetaStore instance;
