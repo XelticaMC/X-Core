@@ -53,26 +53,24 @@ class TeleportApp : AppBase() {
                         player.teleportAsync(Location(wildareab, x.toDouble(), y.toDouble(), z.toDouble()))
                     }
             }, Material.GRASS_BLOCK))
+
+            val calendar = Calendar.getInstance()
+            val month = calendar.get(Calendar.MONTH) + 1
+            if ((month == 8) || player.isOp) {
+                list.add(
+                    MenuItem("イベント", {
+                        val eventWorldLocation = Bukkit.getWorld("event")?.spawnLocation
+                        if (eventWorldLocation == null) {
+                            player.sendMessage("")
+                            return@MenuItem
+                        }
+                        player.teleportAsync(eventWorldLocation)
+                    }, Material.TROPICAL_FISH)
+                )
+            }
         } else if ("wildareab" == currentWorldName) {
             list.add(
                 MenuItem("メインワールドに帰る", { WorldStore.getInstance().teleportToSavedLocation(player, "main") }, Material.CREEPER_HEAD)
-            )
-        }
-
-        val calendar = Calendar.getInstance()
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val month = calendar.get(Calendar.MONTH) + 1
-        if ((month == 8 && day <= 15) || player.isOp) {
-            list.add(
-                MenuItem("イベント", {
-                    val eventWorldLocation = Bukkit.getWorld("event")?.spawnLocation
-                    if (eventWorldLocation == null) {
-                        player.sendMessage("")
-                        return@MenuItem
-                    }
-                    player.teleportAsync(eventWorldLocation)
-
-                }, Material.TROPICAL_FISH)
             )
         }
 
