@@ -1,5 +1,7 @@
 package work.xeltica.craft.core.stores
 
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -9,6 +11,7 @@ import org.json.simple.parser.JSONParser
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.models.Notification
 import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.xphone.XphoneOs
 import java.io.File
 import java.io.FileReader
 import java.util.UUID
@@ -38,9 +41,18 @@ class NotificationStore {
 
     init {
         instance = this
-        load()
+        reload()
     }
 
+    fun reload() {
+        notifications.clear()
+        load()
+        pushNotificationAll()
+    }
+
+    /**
+     * 指定したプレイヤーの未読通知を取得します。
+     */
     fun getUnreadNotification(player: Player): List<Notification> {
         val playerNotification = notifications.toMutableList()
         val confirmedList = confirmed.conf.getStringList(player.uniqueId.toString())
