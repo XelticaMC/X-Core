@@ -5,11 +5,11 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import work.xeltica.craft.core.stores.HintStore.Companion.instance
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.MenuItem
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.Hint.HintType
+import work.xeltica.craft.core.modules.HintModule
 import java.util.function.Consumer
 import java.util.stream.Stream
 
@@ -20,7 +20,6 @@ import java.util.stream.Stream
 class CommandHint : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<String>): Boolean {
         val subCommand = if (args.isNotEmpty()) args[0] else null
-        val store = instance
         val hints = Stream.of(*Hint.values())
         if (subCommand != null) {
             // 指定されたIDのヒントの詳細をプレイヤーに表示
@@ -36,7 +35,7 @@ class CommandHint : CommandPlayerOnlyBase() {
                 content += """
 
 §a§l報酬: §r§d${hint.power} エビパワー"""
-                if (store.hasAchieved(player, hint)) {
+                if (HintModule.hasAchieved(player, hint)) {
                     content += """
                         
                         §6§o✧達成済み✧
@@ -51,7 +50,7 @@ class CommandHint : CommandPlayerOnlyBase() {
         } else {
             // ヒント一覧をプレイヤーに表示
             val items = hints.map {
-                val isAchieved = store.hasAchieved(player, it)
+                val isAchieved = HintModule.hasAchieved(player, it)
                 val isQuest = it.power > 0
                 val name = it.hintName + if (isQuest) " (" + it.power + "EP)" else ""
                 val icon = getIcon(it, isAchieved)

@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.services
+package work.xeltica.craft.core.modules
 
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -7,7 +7,6 @@ import java.lang.Runnable
 
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.models.DialogEventArgs
 import work.xeltica.craft.core.stores.PlayerStore
 import work.xeltica.craft.core.models.PlayerDataKey
 
@@ -15,9 +14,9 @@ import work.xeltica.craft.core.models.PlayerDataKey
  * 統合版プレイヤー向けに免責事項を表示するためのメソッドを持ちます。
  * @author Xeltica
  */
-object BedrockDisclaimerService {
-    const val BEDROCK_DISCLAIMER_TITLE = "§l統合版プレイヤーのあなたへ"
-    const val BEDROCK_DISCLAIMER_MESSAGE =
+object BedrockDisclaimerModule : ModuleBase() {
+    private const val BEDROCK_DISCLAIMER_TITLE = "§l統合版プレイヤーのあなたへ"
+    private const val BEDROCK_DISCLAIMER_MESSAGE =
         """本サーバーはJava版と統合版の両方に対応しておりますが、サーバーはJava版となっております。 Java版と統合版は細部の仕様が異なり、それに起因する不具合や差異があります。例えば、
 
 ・看板の文字数が合わない

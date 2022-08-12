@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.services
+package work.xeltica.craft.core.modules
 
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -13,7 +13,7 @@ import java.lang.IllegalStateException
 /**
  * X Phone の基幹となるシステムです。
  */
-object XphoneService : ReloadableBase() {
+object XphoneModule : ModuleBase() {
     override fun onEnable() {
         registerApps(
             EventRespawnApp(),
@@ -43,6 +43,7 @@ object XphoneService : ReloadableBase() {
 
     override fun onDisable() {
         apps.clear()
+        super.onDisable()
     }
 
     /**

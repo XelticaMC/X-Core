@@ -4,8 +4,8 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.MenuItem
-import work.xeltica.craft.core.services.XphoneService
-import work.xeltica.craft.core.services.BedrockDisclaimerService
+import work.xeltica.craft.core.modules.XphoneModule
+import work.xeltica.craft.core.modules.BedrockDisclaimerModule
 
 /**
  * 統合版ユーザー向けツールを揃えたアプリ。
@@ -32,12 +32,12 @@ class BedrockToolsApp : AppBase() {
             ),
             MenuItem(
                 "免責事項",
-                { BedrockDisclaimerService.showDisclaimer(player) },
+                { BedrockDisclaimerModule.showDisclaimer(player) },
                 Material.BEDROCK,
                 null
             ),
         ))
     }
 
-    override fun isVisible(player: Player) = XphoneService.isBedrockPlayer(player)
+    override fun isVisible(player: Player) = XphoneModule.isBedrockPlayer(player)
 }

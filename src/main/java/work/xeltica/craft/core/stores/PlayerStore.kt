@@ -8,8 +8,8 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.FireworkMeta
 import org.bukkit.inventory.meta.ItemMeta
 import work.xeltica.craft.core.api.Ticks.from
-import work.xeltica.craft.core.services.BossBarService.add
-import work.xeltica.craft.core.services.BossBarService.remove
+import work.xeltica.craft.core.modules.BossBarModule.add
+import work.xeltica.craft.core.modules.BossBarModule.remove
 import work.xeltica.craft.core.models.PlayerRecord
 import kotlin.Throws
 import java.io.IOException

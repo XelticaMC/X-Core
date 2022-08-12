@@ -1,9 +1,8 @@
-package work.xeltica.craft.core.repositories
+package work.xeltica.craft.core.modules
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.Config
-import work.xeltica.craft.core.services.ReloadableBase
 import kotlin.Throws
 import java.io.IOException
 
@@ -14,7 +13,11 @@ import java.io.IOException
  * このクラスと関連クラスは廃止します。
  * @author Xeltica
  */
-object CloverRepository : ReloadableBase() {
+object CloverModule : ModuleBase() {
+    override fun onEnable() {
+        clovers = Config("clovers")
+    }
+
     fun getCloverOf(p: OfflinePlayer): Double {
         return clovers.conf.getDouble(p.uniqueId.toString())
     }
@@ -30,10 +33,6 @@ object CloverRepository : ReloadableBase() {
     @Throws(IOException::class)
     fun save() {
         clovers.save()
-    }
-
-    override fun onEnable() {
-        clovers = Config("clovers")
     }
 
     private lateinit var clovers: Config

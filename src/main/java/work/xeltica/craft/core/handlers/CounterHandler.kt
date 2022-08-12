@@ -15,7 +15,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.geysermc.connector.common.ChatColor
 import work.xeltica.craft.core.stores.PlayerStore
-import work.xeltica.craft.core.stores.CounterStore
+import work.xeltica.craft.core.plugins.CounterModule
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.PlayerDataKey
 import java.io.IOException
@@ -26,7 +26,7 @@ import org.geysermc.floodgate.api.FloodgateApi
 import org.geysermc.floodgate.util.DeviceOs
 import work.xeltica.craft.core.models.CounterData
 import work.xeltica.craft.core.stores.RankingStore
-import work.xeltica.craft.core.services.DiscordService
+import work.xeltica.craft.core.modules.DiscordModule
 import work.xeltica.craft.core.api.Time
 
 /**
@@ -46,7 +46,6 @@ class CounterHandler : Listener {
         // ブロッククリックでなければ無視
         if (!isBlockClick) return
         val pstore = PlayerStore.instance
-        val store = CounterStore.instance
         val ui = Gui.getInstance()
         val player = e.player
         val block = e.clickedBlock
@@ -70,7 +69,7 @@ class CounterHandler : Listener {
                 player.sendMessage("始点を登録しました。続いて終点を登録します。")
                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
             } else {
-                store.add(CounterData(name, loc, block.location, daily, null, null, null, null))
+                CounterModule.add(CounterData(name, loc, block.location, daily, null, null, null, null))
                 player.sendMessage("カウンター " + name + "を登録しました。")
                 player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1f)
                 record.delete(PlayerDataKey.COUNTER_REGISTER_MODE)
@@ -93,7 +92,6 @@ class CounterHandler : Listener {
         // 踏んだわけじゃないのなら無視
         if (e.action != Action.PHYSICAL) return
         val pstore = PlayerStore.instance
-        val store = CounterStore.instance
         val ui = Gui.getInstance()
         val player = e.player
         val block = e.clickedBlock ?: return
@@ -102,12 +100,12 @@ class CounterHandler : Listener {
 
         // 感圧板でなければ無視
         if (!Tag.PRESSURE_PLATES.isTagged(block.type)) return
-        val first = store.getByLocation1(block.location)
-        val last = store.getByLocation2(block.location)
+        val first = CounterModule.getByLocation1(block.location)
+        val last = CounterModule.getByLocation2(block.location)
         val record = pstore.open(player)
         val counterId = record.getString(PlayerDataKey.PLAYING_COUNTER_ID)
         val startedAt = record.getString(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, "0").toLong()
-        val counter = if (counterId == null) null else store[counterId]
+        val counter = if (counterId == null) null else CounterModule[counterId]
         val isUsingCounter = counter != null
 
         // カウンター開始する
@@ -156,7 +154,7 @@ class CounterHandler : Listener {
                     .forEach {
                         it.sendMessage("${ChatColor.GREEN}${playerName}さん${ChatColor.RESET}がタイムアタックで${ChatColor.AQUA}${timeString}${ChatColor.RESET}を達成しました！")
                     }
-                DiscordService.getInstance().broadcast("${playerName}さんがタイムアタックで${timeString}を達成しました！")
+                DiscordModule.broadcast("${playerName}さんがタイムアタックで${timeString}を達成しました！")
 
                 handleRanking(player, last, diff)
             }
@@ -168,7 +166,7 @@ class CounterHandler : Listener {
     @EventHandler
     fun onDailyReset(e: RealTimeNewDayEvent?) {
         try {
-            CounterStore.instance.resetAllPlayersPlayedLog()
+            CounterModule.resetAllPlayersPlayedLog()
             Bukkit.getLogger().info("タイムアタックのプレイ済み履歴をリセットしました。")
         } catch (e1: IOException) {
             e1.printStackTrace()

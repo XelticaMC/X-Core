@@ -19,7 +19,7 @@ import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.CounterData;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.Ranking;
-import work.xeltica.craft.core.stores.CounterStore;
+import work.xeltica.craft.core.plugins.CounterModule;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.RankingStore;
 
@@ -32,7 +32,6 @@ public class CommandCounter extends CommandPlayerOnlyBase {
     public boolean execute(Player player, Command command, String label, String[] args) {
         if (args.length == 0) return false;
         final var subCommand = args[0].toLowerCase();
-        final var store = CounterStore.getInstance();
         final var pstore = PlayerStore.getInstance();
         final var record = pstore.open(player);
         final var ui = Gui.getInstance();
@@ -71,12 +70,12 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                 case "unregister" -> {
                     if (args.length != 2) return ui.error(player, "/counter unregister <name>");
                     final var name = args[1];
-                    final var data = store.get(name);
+                    final var data = CounterModule.get(name);
                     if (data == null) {
                         return ui.error(player, name + "という名前のカウンターは存在しません。");
                     }
 
-                    store.remove(data);
+                    CounterModule.remove(data);
                     player.sendMessage(name + "を登録解除しました。");
                 }
 
@@ -88,7 +87,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     final var playerType = args[2].toLowerCase();
                     final var rankingName = args[3];
 
-                    final var data = store.get(name);
+                    final var data = CounterModule.get(name);
                     if (data == null) {
                         return ui.error(player, name + "という名前のカウンターは存在しません。");
                     }
@@ -103,7 +102,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                         case "uwp" -> data.setUwpRankingId(rankingName);
                         case "phone" -> data.setPhoneRankingId(rankingName);
                     }
-                    store.update(data);
+                    CounterModule.update(data);
                     player.sendMessage("カウンターをランキングに紐付けました。");
                 }
 
@@ -114,7 +113,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     final var name = args[1].toLowerCase();
                     final var playerType = args[2].toLowerCase();
 
-                    final var data = store.get(name);
+                    final var data = CounterModule.get(name);
                     if (data == null) {
                         return ui.error(player, name + "という名前のカウンターは存在しません。");
                     }
@@ -129,7 +128,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                         case "uwp" -> data.setUwpRankingId(null);
                         case "phone" -> data.setPhoneRankingId(null);
                     }
-                    store.update(data);
+                    CounterModule.update(data);
                     player.sendMessage("カウンターをランキングから解除ました。");
                 }
 
@@ -138,7 +137,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                 case "info" -> {
                     if (args.length != 2) return ui.error(player, "/counter info <name>");
                     final var name = args[1];
-                    final var data = store.get(name);
+                    final var data = CounterModule.get(name);
                     player.sendMessage("名前: " + name);
                     player.sendMessage("始点: " + data.getLocation1().toString());
                     player.sendMessage("終点: " + data.getLocation2().toString());
@@ -154,7 +153,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                 // counter resetdaily [player]
                 case "resetdaily" -> {
                     if (args.length != 2) {
-                        store.resetAllPlayersPlayedLog();
+                        CounterModule.resetAllPlayersPlayedLog();
                         player.sendMessage("全プレイヤーのプレイ済み履歴を削除しました。");
                     } else {
                         final var name = args[1];
@@ -166,7 +165,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                 // カウンターを一覧表示します。
                 // counter list
                 case "list" -> {
-                    final var list = store.getCounters();
+                    final var list = CounterModule.getCounters();
                     if (list.size() == 0) {
                         ui.error(player, "カウンターはまだ作成されていません。");
                     } else {
@@ -204,8 +203,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
         } else if (args.length == 2) {
             switch (subcommand) {
                 case "unregister", "info", "bind", "unbind" -> {
-                    final var store = CounterStore.getInstance();
-                    return store.getCounters().stream().map(CounterData::getName).toList();
+                    return CounterModule.getCounters().stream().map(CounterData::getName).toList();
                 }
             }
         } else if (args.length == 3) {

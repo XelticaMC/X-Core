@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.stores
+package work.xeltica.craft.core.modules
 
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -11,36 +11,13 @@ import org.json.simple.parser.JSONParser
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.models.Notification
 import work.xeltica.craft.core.api.Config
-import work.xeltica.craft.core.services.XphoneService
 import java.io.File
 import java.io.FileReader
 import java.util.UUID
 
-class NotificationStore {
-    companion object {
-        private lateinit var instance: NotificationStore
+object NotificationModule : ModuleBase() {
 
-        fun getInstance(): NotificationStore = instance
-
-        private const val FILE_NAME = "notification.json"
-
-        private const val NOTIFICATION_ID = "notificationID"
-        private const val TITLE = "title"
-        private const val MESSAGE = "message"
-        private const val GIFTS = "gifts"
-        private const val EP = "ep"
-        private const val RECEIVER = "receiver"
-
-        private const val GIFT_MATERIAL_NAME = "materialName"
-        private const val GIFT_COUNT = "count"
-    }
-
-    private val notifications: MutableList<Notification> = mutableListOf()
-
-    private val confirmed = Config("confirmed")
-
-    init {
-        instance = this
+    override fun onEnable() {
         reload()
     }
 
@@ -93,7 +70,7 @@ class NotificationStore {
             player.sendMessage("${ChatColor.GREEN}・${ChatColor.RESET}${it.title}")
         }
         player.sendMessage("${ChatColor.LIGHT_PURPLE}X Phoneの「通知アプリ」から確認できます。")
-        XphoneService.playTritone(player)
+        XphoneModule.playTritone(player)
     }
 
     /**
@@ -158,4 +135,20 @@ class NotificationStore {
         }
         return receiver
     }
+
+    private const val FILE_NAME = "notification.json"
+
+    private const val NOTIFICATION_ID = "notificationID"
+    private const val TITLE = "title"
+    private const val MESSAGE = "message"
+    private const val GIFTS = "gifts"
+    private const val EP = "ep"
+    private const val RECEIVER = "receiver"
+
+    private const val GIFT_MATERIAL_NAME = "materialName"
+    private const val GIFT_COUNT = "count"
+
+    private val notifications: MutableList<Notification> = mutableListOf()
+
+    private val confirmed = Config("confirmed")
 }

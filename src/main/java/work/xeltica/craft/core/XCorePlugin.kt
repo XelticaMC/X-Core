@@ -9,64 +9,48 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
-import work.xeltica.craft.core.api.commands.CommandBase
-import java.util.Locale
-import java.util.HashMap
 
 import work.xeltica.craft.core.plugins.VaultPlugin
 import work.xeltica.craft.core.api.Ticks
-import work.xeltica.craft.core.commands.*
+import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.stores.*
-import work.xeltica.craft.core.handlers.*
 import work.xeltica.craft.core.workers.*
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.services.XphoneService
-import work.xeltica.craft.core.services.DiscordService
 import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.repositories.CloverRepository
-import work.xeltica.craft.core.services.BossBarService
+import work.xeltica.craft.core.modules.*
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
  * @author Xeltica
  */
 class XCorePlugin : JavaPlugin() {
+
     override fun onEnable() {
         instance = this
         loadPlugins()
-        loadRepositories()
-        loadHandlers()
-        loadServices()
-        loadCommands()
         loadWorkers()
-        Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
-        val meta = MetaStore.getInstance()
-        if (meta.isUpdated) {
-            var prev = meta.previousVersion
-            if (prev == null) prev = "unknown"
-            val current = meta.currentVersion
-            val text = String.format("§aコアシステムを更新しました。%s -> %s", prev, current)
-            if (meta.postToDiscord) {
-                DiscordService.getInstance().postChangelog(current, meta.changeLog)
-            }
-            Bukkit.getServer()
-                .audiences()
-                .forEach {
-                    it!!.sendMessage(Component.text(text))
-                    for (log in meta.changeLog) {
-                        it.sendMessage(Component.text("・$log"))
-                    }
-                }
+
+        // モジュール初期化
+        modules.forEach {
+            it.onEnable()
         }
-        logger.info("Booted XelticaMC Core System.")
+
+        // モジュール初期化後処理（モジュール間連携の初期化など）
+        modules.forEach {
+            it.onPostEnable()
+        }
+
+        Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
+        logger.info("X-Core 準備完了。")
     }
 
     override fun onDisable() {
-        commands.clear()
+        CommandRegistry.clearMap()
         Gui.resetInstance()
         unloadPlugins()
-        NbsStore.getInstance().stopAll()
-        XphoneService.onDisable()
+        modules.forEach {
+            it.onDisable()
+        }
         val provider = Bukkit.getServicesManager().getRegistration(
             LuckPerms::class.java
         )
@@ -74,114 +58,11 @@ class XCorePlugin : JavaPlugin() {
             val luckPerms = provider.provider
             luckPerms.contextManager.unregisterCalculator(calculator!!)
         }
+        logger.info("X-Core を停止しました。")
     }
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
-        val name = command.name.lowercase(Locale.getDefault())
-        val com = commands[name] ?: return false
-        return com.execute(sender, command, label, args)
-    }
-
-    private fun loadRepositories() {
-        OmikujiStore()
-        VehicleStore()
-        PlayerStore()
-        HubStore()
-        WorldStore()
-        ItemStore()
-        CloverRepository.onEnable()
-        EbiPowerStore()
-        HintStore()
-        MetaStore()
-        NickNameStore()
-        CounterStore()
-        RankingStore()
-        NbsStore()
-        QuickChatStore()
-        MobEPStore()
-        MobBallStore()
-        NotificationStore()
-    }
-
-    private fun loadServices() {
-        DiscordService()
-        XphoneService.onEnable()
-        BossBarService.onEnable()
-    }
-
-    private fun loadCommands() {
-        commands.clear()
-        addCommand("omikuji", CommandOmikuji())
-        addCommand("respawn", CommandRespawn())
-        addCommand("pvp", CommandPvp())
-        addCommand("signedit", CommandSignEdit())
-        addCommand("givecustomitem", CommandGiveCustomItem())
-        addCommand("givemobball", CommandGiveMobBall())
-        addCommand("report", CommandReport())
-        addCommand("localtime", CommandLocalTime())
-        addCommand("boat", CommandBoat())
-        addCommand("cart", CommandCart())
-        addCommand("promo", CommandPromo())
-        addCommand("cat", CommandCat())
-        addCommand("hub", CommandHub())
-        addCommand("xtp", CommandXtp())
-        addCommand("epshop", CommandEpShop())
-        addCommand("hint", CommandHint())
-        addCommand("__core_gui_event__", CommandXCoreGuiEvent())
-        addCommand("xphone", CommandXPhone())
-        addCommand("live", CommandLive())
-        addCommand("nick", CommandNickName())
-        addCommand("counter", CommandCounter())
-        addCommand("ranking", CommandRanking())
-        addCommand("countdown", CommandCountdown())
-        addCommand("qchat", CommandQuickChat())
-        addCommand("epeffectshop", CommandEpEffectShop())
-        addCommand("xreload", CommandXReload())
-        addCommand("xtpreset", CommandXtpReset())
-        addCommand("xdebug", CommandXDebug())
-        Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
-    }
-
-    private fun loadHandlers() {
-        val pm = server.pluginManager
-        pm.registerEvents(NewMorningHandler(), this)
-        logger.info("Loaded NewMorningHandler")
-        pm.registerEvents(PlayerHandler(this), this)
-        logger.info("Loaded PlayerHandler")
-        pm.registerEvents(VehicleHandler(), this)
-        logger.info("Loaded VehicleHandler")
-        pm.registerEvents(WakabaHandler(), this)
-        logger.info("Loaded WakabaHandler")
-        pm.registerEvents(HubHandler(), this)
-        logger.info("Loaded HubHandler")
-        pm.registerEvents(WorldHandler(), this)
-        logger.info("Loaded WorldHandler")
-        pm.registerEvents(NightmareHandler(), this)
-        logger.info("Loaded NightmareHandler")
-        pm.registerEvents(XphoneHandler(), this)
-        logger.info("Loaded XphoneHandler")
-        pm.registerEvents(EbiPowerHandler(), this)
-        logger.info("Loaded EbiPowerHandler")
-        pm.registerEvents(LiveModeHandler(), this)
-        logger.info("Loaded LiveModeHandler")
-        pm.registerEvents(CounterHandler(), this)
-        logger.info("Loaded CounterHandler")
-        pm.registerEvents(NbsHandler(), this)
-        logger.info("Loaded NbsHandler")
-        pm.registerEvents(PlayerTntHandler(), this)
-        logger.info("Loaded PlayTntHandler")
-        pm.registerEvents(MiscHandler(), this)
-        logger.info("Loaded MiscHandler")
-        pm.registerEvents(LoginBonusHandler(), this)
-        logger.info("Loaded LoginBonusHandler")
-        pm.registerEvents(TicketWildareaBHandler(), this)
-        logger.info("Loaded TicketWildareaBHandler")
-        pm.registerEvents(MobBallHandler(), this)
-        logger.info("Loaded MobBallHandler")
-        pm.registerEvents(NotificationHandler(), this)
-        logger.info("Loaded NotificationHandler")
-        pm.registerEvents(Gui.getInstance(), this)
-        logger.info("Loaded Gui")
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+        return super.onCommand(sender, command, label, args)
     }
 
     private fun loadWorkers() {
@@ -233,23 +114,19 @@ class XCorePlugin : JavaPlugin() {
         luckPerms?.contextManager?.unregisterCalculator(calculator)
     }
 
-    /**
-     * コマンドをコアシステムに登録します。
-     * @param commandName コマンド名
-     * @param command コマンドのインスタンス
-     */
-    private fun addCommand(commandName: String, command: CommandBase) {
-        commands[commandName] = command
-        val cmd = getCommand(commandName)
-        if (cmd == null) {
-            logger.warning("Command $commandName is not defined at the plugin.yml")
-            return
-        }
-        cmd.tabCompleter = command
-        logger.info("Command $commandName is registered")
-    }
+    private val modules = listOf(
+        BedrockDisclaimerModule,
+        BossBarModule,
+        CloverModule,
+        DiscordModule,
+        HintModule,
+        MetaModule,
+        MobBallModule,
+        NotificationModule,
+        OmikujiModule,
+        XphoneModule,
+    )
 
-    private val commands = HashMap<String, CommandBase>()
     private lateinit var calculator: CitizenTimerCalculator
 
     companion object {

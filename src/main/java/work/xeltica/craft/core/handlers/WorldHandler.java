@@ -40,10 +40,10 @@ import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.CraftRecipe;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.modules.HintModule;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.WorldStore;
-import work.xeltica.craft.core.services.DiscordService;
+import work.xeltica.craft.core.modules.DiscordModule;
 
 /**
  * ワールド制御に関するハンドラーをまとめています。
@@ -123,17 +123,17 @@ public class WorldHandler implements Listener {
         // 以前サーバーに来ている or FIRST_SPAWN フラグが立っている
         final var isNotFirstTeleport = p.hasPlayedBefore() || PlayerStore.getInstance().open(p).getBoolean(PlayerDataKey.FIRST_SPAWN);
 
-        if (to.getName().equals("main") && isNotFirstTeleport && !HintStore.getInstance().hasAchieved(p, Hint.GOTO_MAIN)) {
+        if (to.getName().equals("main") && isNotFirstTeleport && !HintModule.hasAchieved(p, Hint.GOTO_MAIN)) {
             // はじめてメインワールドに入った場合、対象のスタッフに通知する
             try {
-                DiscordService.getInstance().alertNewcomer(p);
+                DiscordModule.alertNewcomer(p);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
 
         if (hint != null && isNotFirstTeleport) {
-            HintStore.getInstance().achieve(p, hint);
+            HintModule.achieve(p, hint);
         }
 
         if (isCreativeWorld) {

@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.services
+package work.xeltica.craft.core.modules
 
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.bossbar.BossBar
@@ -10,9 +10,10 @@ import java.util.ArrayList
  * 全体向けに表示するBossBarを管理します。
  * @author Xeltica
  */
-object BossBarService : ReloadableBase() {
+object BossBarModule : ModuleBase() {
     override fun onDisable() {
         bossBars.clear()
+        super.onDisable()
     }
 
     fun add(bar: BossBar) {

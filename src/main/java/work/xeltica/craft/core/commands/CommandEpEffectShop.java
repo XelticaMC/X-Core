@@ -27,7 +27,7 @@ import work.xeltica.craft.core.models.MenuItem;
 import work.xeltica.craft.core.models.EbiPowerEffect;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.EbiPowerStore;
-import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.modules.HintModule;
 
 /**
  * エビパワードラッグストアを開くコマンド
@@ -98,7 +98,7 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
                             item.time()
                     ));
                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 1);
-                    HintStore.getInstance().achieve(player, Hint.EPEFFECTSHOP);
+                    HintModule.achieve(player, Hint.EPEFFECTSHOP);
                 }
                 default -> {
                     player.sendMessage("不明なエラーが発生しました。");

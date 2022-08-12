@@ -3,10 +3,10 @@ package work.xeltica.craft.core.models
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.stores.EbiPowerStore
-import work.xeltica.craft.core.stores.HintStore
+import work.xeltica.craft.core.modules.HintModule
 import work.xeltica.craft.core.stores.PlayerStore
 import java.io.IOException
-import work.xeltica.craft.core.repositories.CloverRepository
+import work.xeltica.craft.core.modules.CloverModule
 import java.util.HashMap
 import java.util.UUID
 
@@ -56,16 +56,15 @@ class TransferPlayerData(val from: Player, val to: Player) {
     }
 
     private fun transferHint() {
-        val hintStore = HintStore.instance
-        for (hintName in hintStore.getArchived(from)) {
+        for (hintName in HintModule.getArchived(from)) {
             for (hint in Hint.values()) {
                 if (hint.hintName == hintName) {
-                    hintStore.achieve(to, hint, false)
+                    HintModule.achieve(to, hint, false)
                     break
                 }
             }
         }
-        hintStore.deleteArchiveData(from)
+        HintModule.deleteArchiveData(from)
     }
 
     private fun transferPlayerStoreData() {
@@ -84,9 +83,9 @@ class TransferPlayerData(val from: Player, val to: Player) {
     }
 
     private fun transferClover() {
-        val hasClover = CloverRepository.getCloverOf(from)
-        CloverRepository.set(to, hasClover)
-        CloverRepository.delete(from)
+        val hasClover = CloverModule.getCloverOf(from)
+        CloverModule.set(to, hasClover)
+        CloverModule.delete(from)
     }
 
     init {

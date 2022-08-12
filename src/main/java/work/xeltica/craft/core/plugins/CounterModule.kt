@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.stores
+package work.xeltica.craft.core.plugins
 
 import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerialization
@@ -8,18 +8,21 @@ import kotlin.Throws
 import java.io.IOException
 import work.xeltica.craft.core.models.PlayerRecord
 import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.modules.ModuleBase
+import work.xeltica.craft.core.stores.PlayerStore
 import java.util.HashMap
 import java.util.function.Consumer
 
 /**
  * 時間計測カウンターの情報を管理します。
  */
-class CounterStore {
+object CounterModule : ModuleBase() {
     /**
      * 名前を用いてCounterDataを取得します。
      * @param name CounterDataの名前
      * @return 対応するCounterData。なければnull
      */
+    @JvmStatic
     operator fun get(name: String): CounterData? {
         return counters[name]
     }
@@ -28,6 +31,7 @@ class CounterStore {
      * 始点座標を用いてCounterDataを取得します。
      * @return 対応するCounterData。なければnull
      */
+    @JvmStatic
     fun getByLocation1(location: Location): CounterData? {
         return location1Index[location]
     }
@@ -36,6 +40,7 @@ class CounterStore {
      * 終点座標を用いてCounterDataを取得します。
      * @return 対応するCounterData。なければnull
      */
+    @JvmStatic
     fun getByLocation2(location: Location): CounterData? {
         return location2Index[location]
     }
@@ -44,6 +49,7 @@ class CounterStore {
      * カウンターの一覧を取得します。
      * @return カウンターの一覧。
      */
+    @JvmStatic
     fun getCounters(): List<CounterData> {
         return counters.values.stream().toList()
     }
@@ -54,6 +60,7 @@ class CounterStore {
      * @throws IOException 保存に失敗した
      */
     @Throws(IOException::class)
+    @JvmStatic
     fun add(data: CounterData) {
         counters[data.name] = data
         addToIndex(data)
@@ -66,11 +73,13 @@ class CounterStore {
      * @throws IOException 保存に失敗した
      */
     @Throws(IOException::class)
+    @JvmStatic
     fun remove(data: CounterData) {
         remove(data.name)
     }
 
     @Throws(IOException::class)
+    @JvmStatic
     fun update(data: CounterData) {
         require(counters.containsKey(data.name))
         config.conf[data.name] = data
@@ -83,6 +92,7 @@ class CounterStore {
      * @throws IOException 保存に失敗した
      */
     @Throws(IOException::class)
+    @JvmStatic
     fun remove(name: String) {
         removeFromIndex(get(name))
         counters.remove(name)
@@ -95,11 +105,18 @@ class CounterStore {
      * @throws IOException 保存に失敗した
      */
     @Throws(IOException::class)
+    @JvmStatic
     fun resetAllPlayersPlayedLog() {
         val pstore = PlayerStore.instance
         pstore!!.openAll()
             .forEach(Consumer { record: PlayerRecord -> record.delete(PlayerDataKey.PLAYED_COUNTER, false) })
         pstore.save()
+    }
+
+    override fun onEnable() {
+        ConfigurationSerialization.registerClass(CounterData::class.java, "CounterData")
+        config = Config("counters")
+        loadAll()
     }
 
     /**
@@ -128,7 +145,7 @@ class CounterStore {
     }
 
     /** counters.yml  */
-    private val config: Config
+    private lateinit var config: Config
 
     /** カウンターデータのマップ  */
     private val counters: MutableMap<String, CounterData> = HashMap()
@@ -138,17 +155,4 @@ class CounterStore {
 
     /** 終点座標による索引  */
     private val location2Index: MutableMap<Location, CounterData> = HashMap()
-
-    init {
-        ConfigurationSerialization.registerClass(CounterData::class.java, "CounterData")
-        instance = this
-        config = Config("counters")
-        loadAll()
-    }
-
-    companion object {
-        @JvmStatic
-        lateinit var instance: CounterStore
-            private set
-    }
 }

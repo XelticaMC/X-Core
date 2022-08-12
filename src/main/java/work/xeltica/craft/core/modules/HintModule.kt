@@ -1,6 +1,5 @@
-package work.xeltica.craft.core.stores
+package work.xeltica.craft.core.modules
 
-import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
@@ -13,20 +12,26 @@ import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.models.Hint
 import java.io.IOException
-import work.xeltica.craft.core.services.DiscordService
 import java.util.UUID
 import kotlin.Throws
 import work.xeltica.craft.core.api.Config
+import work.xeltica.craft.core.stores.EbiPowerStore
 
 /**
  * プレイヤーのヒントを達成する処理や、ヒントを達成しているかどうかの取得などを行います。
  * @author Xeltica
  */
-class HintStore {
+object HintModule : ModuleBase() {
+    override fun onEnable() {
+        hints = Config("hints")
+    }
+
+    @JvmStatic
     fun getArchived(p: Player): List<String> {
         return open(p)
     }
 
+    @JvmStatic
     fun deleteArchiveData(p: Player) {
         hints.conf[p.uniqueId.toString()] = null
         try {
@@ -36,10 +41,12 @@ class HintStore {
         }
     }
 
+    @JvmStatic
     fun hasAchieved(p: Player, hint: Hint): Boolean {
         return open(p).contains(hint.name)
     }
 
+    @JvmStatic
     fun achieve(p: Player, hint: Hint, reward: Boolean) {
         if (reward) {
             achieve(p, hint)
@@ -56,6 +63,7 @@ class HintStore {
         }
     }
 
+    @JvmStatic
     fun achieve(p: Player, hint: Hint) {
         if (hasAchieved(p, hint)) return
         val list = open(p)
@@ -74,18 +82,11 @@ class HintStore {
                 .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/hint " + hint.name)))
             .append(Component.text("」を達成しました！"))
             .asComponent()
-        DiscordService.getInstance().broadcast(PlainTextComponentSerializer.plainText().serialize(component))
-        Bukkit.getServer().audiences().forEach { a: Audience? ->
-            a!!.sendMessage(component)
+        DiscordModule.broadcast(PlainTextComponentSerializer.plainText().serialize(component))
+        Bukkit.getServer().audiences().forEach {
+            it.sendMessage(component)
             if (hint.type === Hint.HintType.CHALLENGE) {
-                a.playSound(
-                    net.kyori.adventure.sound.Sound.sound(
-                        Key.key("ui.toast.challenge_complete"),
-                        net.kyori.adventure.sound.Sound.Source.PLAYER,
-                        1f,
-                        1f
-                    )
-                )
+                it.playSound(net.kyori.adventure.sound.Sound.sound(Key.key("ui.toast.challenge_complete"), net.kyori.adventure.sound.Sound.Source.PLAYER, 1f, 1f))
             }
         }
         try {
@@ -108,16 +109,5 @@ class HintStore {
         hints.save()
     }
 
-    private val hints: Config
-
-    init {
-        instance = this
-        hints = Config("hints")
-    }
-
-    companion object {
-        @JvmStatic
-        lateinit var instance: HintStore
-            private set
-    }
+    private lateinit var hints: Config
 }

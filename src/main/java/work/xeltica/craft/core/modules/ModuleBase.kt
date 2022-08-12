@@ -1,6 +1,6 @@
-package work.xeltica.craft.core.services
+package work.xeltica.craft.core.modules
 
-abstract class ReloadableBase {
+abstract class ModuleBase {
     /** X-Core が起動した時に実行されます。 */
     open fun onEnable() { }
     /**
@@ -10,5 +10,11 @@ abstract class ReloadableBase {
     open fun onPostEnable() { }
 
     /** X-Core が停止する時に実行されます。 */
-    open fun onDisable() { }
+    open fun onDisable() {
+        isInitialized = false
+    }
+
+
+    var isInitialized: Boolean = false
+        private set
 }

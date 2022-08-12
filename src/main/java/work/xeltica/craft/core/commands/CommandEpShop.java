@@ -27,8 +27,8 @@ import work.xeltica.craft.core.models.MenuItem;
 import work.xeltica.craft.core.models.EbiPowerItem;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.EbiPowerStore;
-import work.xeltica.craft.core.stores.HintStore;
-import work.xeltica.craft.core.stores.MobBallStore;
+import work.xeltica.craft.core.modules.HintModule;
+import work.xeltica.craft.core.modules.MobBallModule;
 
 /**
  * エビパワーストアを開くコマンド
@@ -93,9 +93,9 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
                 case SUCCESS -> {
                     player.sendMessage(Component.text("§a" + getItemName(item.item()) + "§rを購入しました！"));
                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 1);
-                    HintStore.getInstance().achieve(player, Hint.EPSHOP);
-                    if (MobBallStore.getInstance().isMobBall(item.item())) {
-                        HintStore.getInstance().achieve(player, Hint.GET_BALL);
+                    HintModule.achieve(player, Hint.EPSHOP);
+                    if (MobBallModule.isMobBall(item.item())) {
+                        HintModule.achieve(player, Hint.GET_BALL);
                     }
                 }
                 default -> {

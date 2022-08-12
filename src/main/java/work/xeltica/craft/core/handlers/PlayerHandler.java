@@ -40,15 +40,15 @@ import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.services.BossBarService;
-import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.modules.BossBarModule;
+import work.xeltica.craft.core.modules.HintModule;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.NickNameStore;
-import work.xeltica.craft.core.stores.OmikujiStore;
+import work.xeltica.craft.core.modules.OmikujiModule;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.QuickChatStore;
-import work.xeltica.craft.core.services.BedrockDisclaimerService;
+import work.xeltica.craft.core.modules.BedrockDisclaimerModule;
 
 /**
  * プレイヤーに関するハンドラーをまとめています。
@@ -71,7 +71,7 @@ public class PlayerHandler implements Listener {
         if (p.getHealth() - e.getFinalDamage() > 0)
             return;
 
-        final var score = OmikujiStore.getInstance().get(p);
+        final var score = OmikujiModule.get(p);
         final var th =
             score == OmikujiScore.Tokudaikichi ? 5 :
             score == OmikujiScore.Daikichi ? 1 : 0;
@@ -111,16 +111,16 @@ public class PlayerHandler implements Listener {
             record.set(PlayerDataKey.GIVEN_PHONE, true);
         }
 
-        HintStore.getInstance().achieve(p, Hint.WELCOME);
+        HintModule.achieve(p, Hint.WELCOME);
 
-        BossBarService.INSTANCE.applyAll(p);
+        BossBarModule.INSTANCE.applyAll(p);
 
         if (PlayerStore.getInstance().isCitizen(p)) {
-            HintStore.getInstance().achieve(p, Hint.BE_CITIZEN);
+            HintModule.achieve(p, Hint.BE_CITIZEN);
         }
 
         if (!record.getBoolean(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER)) {
-            BedrockDisclaimerService.INSTANCE.showDisclaimerAsync(p);
+            BedrockDisclaimerModule.INSTANCE.showDisclaimerAsync(p);
         }
 
         p.showTitle(Title.title(
@@ -197,7 +197,7 @@ public class PlayerHandler implements Listener {
             if (quickMsg != null) {
                 quickMsg = store.chatFormat(quickMsg, player);
                 e.setMessage(quickMsg);
-                HintStore.getInstance().achieve(player, Hint.QUICKCHAT);
+                HintModule.achieve(player, Hint.QUICKCHAT);
             }
         }
     }
@@ -242,7 +242,7 @@ public class PlayerHandler implements Listener {
             if (player == null) return;
 
             if (node instanceof InheritanceNode in && "citizen".equals(in.getGroupName())) {
-                HintStore.getInstance().achieve(player, Hint.BE_CITIZEN);
+                HintModule.achieve(player, Hint.BE_CITIZEN);
             }
         });
     }
@@ -264,7 +264,7 @@ public class PlayerHandler implements Listener {
                         block.applyBoneMeal(BlockFace.UP);
                     }
                     last草edTimeMap.put(id, nowTime);
-                    HintStore.getInstance().achieve(player, Hint.KUSA);
+                    HintModule.achieve(player, Hint.KUSA);
                 }
             }.runTask(plugin);
         }
