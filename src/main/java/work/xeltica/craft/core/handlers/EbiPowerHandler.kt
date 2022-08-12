@@ -221,6 +221,8 @@ class EbiPowerHandler: Listener {
                 Material.DEEPSLATE_EMERALD_ORE -> 11
                 Material.DEEPSLATE -> 1
                 Material.OBSIDIAN -> 3
+                Material.NETHER_QUARTZ_ORE -> 1
+                Material.NETHER_GOLD_ORE -> 1
                 Material.ANCIENT_DEBRIS -> 19
                 else -> 0
             }
