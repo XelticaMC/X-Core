@@ -58,6 +58,9 @@ class NotificationStore {
         return playerNotification
     }
 
+    /**
+     * 指定した通知を既読にします。
+     */
     fun readNotification(player: Player, notification: Notification) {
         val confirmedList = confirmed.conf.getStringList(player.uniqueId.toString())
         val list = mutableListOf<String>()
@@ -65,6 +68,27 @@ class NotificationStore {
         list.add(notification.notificationID)
         confirmed.conf.set(player.uniqueId.toString(), list)
         confirmed.save()
+    }
+
+    /**
+     * 指定したプレイヤーに、未読通知を送信します。
+     */
+    fun pushNotificationTo(player: Player) {
+        val unreadNotifications = getUnreadNotification(player)
+        if (unreadNotifications.isEmpty()) return
+        player.sendMessage("${ChatColor.LIGHT_PURPLE}${ChatColor.BOLD}${unreadNotifications.count()}件の通知があります！！")
+        unreadNotifications.forEach {
+            player.sendMessage("${ChatColor.GREEN}・${ChatColor.RESET}${it.title}")
+        }
+        player.sendMessage("${ChatColor.LIGHT_PURPLE}X Phoneの「通知アプリ」から確認できます。")
+        XphoneOs.playTritone(player)
+    }
+
+    /**
+     * オンラインの全プレイヤーに未読通知を送信します。
+     */
+    fun pushNotificationAll() {
+        Bukkit.getOnlinePlayers().forEach(::pushNotificationTo)
     }
 
     private fun load() {
