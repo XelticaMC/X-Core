@@ -20,6 +20,7 @@ object XphoneService : ReloadableBase() {
             EventReturnWorldApp(),
             EventCancelApp(),
             TeleportApp(),
+            NotificationApp(),
             ProtectApp(),
             BedrockToolsApp(),
             PromoApp(),
@@ -79,13 +80,25 @@ object XphoneService : ReloadableBase() {
     fun ui() = Gui.getInstance() ?: throw IllegalStateException("Try to call ui() in X Phone OS, but X-Core is not fully initialized.")
     fun store() = ItemStore.getInstance() ?: throw IllegalStateException("Try to call store() in X Phone OS, but X-Core is not fully initialized.")
 
-    private fun playStartupSound(player: Player) {
+    /**
+     * 起動音を再生します。
+     */
+    fun playStartupSound(player: Player) {
         ui().playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1f, SoundPitch.A1)
         ui().playSoundAfter(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1f, SoundPitch.D2, 4)
         ui().playSoundAfter(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1f, SoundPitch.C_2, 8)
     }
 
-    private val apps = mutableListOf<AppBase>()
+    /**
+     * 通知音を再生します。
+     */
+    fun playTritone(player: Player) {
+        ui().playSoundLocally(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.D1)
+        ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.A1, 2)
+        ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.D2, 4)
+    }
 
-    const val name = "X Phone OS 2.0"
+    const val name = "X Phone OS 2.1"
+
+    private val apps = mutableListOf<AppBase>()
 }

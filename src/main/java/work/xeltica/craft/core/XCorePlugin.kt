@@ -178,6 +178,8 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded TicketWildareaBHandler")
         pm.registerEvents(MobBallHandler(), this)
         logger.info("Loaded MobBallHandler")
+        pm.registerEvents(NotificationHandler(), this)
+        logger.info("Loaded NotificationHandler")
         pm.registerEvents(Gui.getInstance(), this)
         logger.info("Loaded Gui")
     }
@@ -216,23 +218,19 @@ class XCorePlugin : JavaPlugin() {
     private fun loadPlugins() {
         VaultPlugin.getInstance().onEnable(this)
         calculator = CitizenTimerCalculator()
-        val provider = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)
-        if (provider == null) {
+        val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
+        if (luckPerms == null) {
             logger.severe("X-CoreはLuckPermsを必要とします。X-Coreを終了します。")
             Bukkit.getPluginManager().disablePlugin(this)
             return
         }
-        val luckPerms = provider.provider
         luckPerms.contextManager.registerCalculator(calculator)
     }
 
     private fun unloadPlugins() {
         VaultPlugin.getInstance().onDisable(this)
-        val provider = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)
-        if (provider != null) {
-            val luckPerms = provider.provider
-            luckPerms.contextManager.unregisterCalculator(calculator)
-        }
+        val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
+        luckPerms?.contextManager?.unregisterCalculator(calculator)
     }
 
     /**

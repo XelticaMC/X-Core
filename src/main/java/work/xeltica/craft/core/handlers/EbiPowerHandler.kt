@@ -2,10 +2,7 @@ package work.xeltica.craft.core.handlers
 
 import com.destroystokyo.paper.MaterialTags
 import net.kyori.adventure.text.Component
-import org.bukkit.Material
-import org.bukkit.Sound
-import org.bukkit.SoundCategory
-import org.bukkit.Tag
+import org.bukkit.*
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
@@ -52,6 +49,9 @@ class EbiPowerHandler: Listener {
         epBlackList.add("sandbox2")
         epBlackList.add("pvp")
         epBlackList.add("hub_dev")
+        epBlackList.add("event")
+        epBlackList.add("event_dev")
+        epBlackList.add("event2")
 
         crops.addAll(Tag.CROPS.values)
 
@@ -92,7 +92,7 @@ class EbiPowerHandler: Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    fun onPlayerDamageFrailCreatures(e: EntityDamageByEntityEvent) {
+    fun onPlayerDamageFriendlyCreatures(e: EntityDamageByEntityEvent) {
         val killer = e.damager as? Player ?: return
         val victim = e.entity as? LivingEntity ?: return
 
@@ -221,6 +221,8 @@ class EbiPowerHandler: Listener {
                 Material.DEEPSLATE_EMERALD_ORE -> 11
                 Material.DEEPSLATE -> 1
                 Material.OBSIDIAN -> 3
+                Material.NETHER_QUARTZ_ORE -> 1
+                Material.NETHER_GOLD_ORE -> 1
                 Material.ANCIENT_DEBRIS -> 19
                 else -> 0
             }
@@ -243,6 +245,8 @@ class EbiPowerHandler: Listener {
     }
 
     private fun playerIsInBlacklisted(p: Player): Boolean {
+        // クリエイティブモードであれば、エビパワー取得対象外とする
+        if (p.gameMode == GameMode.CREATIVE) return true
         val wName = p.world.name
         return epBlackList.contains(wName)
     }

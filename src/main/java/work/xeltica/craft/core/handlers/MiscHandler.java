@@ -113,4 +113,26 @@ public class MiscHandler implements Listener {
             ItemStore.getInstance().givePhoneIfNeeded(player);
         }, 5);
     }
+
+    /**
+     * イベントマップ（開発）：TA開始イベント
+     */
+    @EventHandler
+    public void onCounterStartDev(PlayerCounterStart e) {
+        final var player = e.getPlayer();
+        if (!"event_dev".equals(player.getWorld().getName())) return;
+
+        NbsStore.getInstance().playRadio(player, "submerged3", NbsModel.PlaybackMode.LOOP);
+    }
+
+    /**
+     * イベントマップ（開発）：TA終了イベント
+     */
+    @EventHandler
+    public void onCounterFinishDev(PlayerCounterFinish e) {
+        final var player = e.getPlayer();
+        if (!"event_dev".equals(player.getWorld().getName())) return;
+
+        NbsStore.getInstance().stopRadio(player);
+    }
 }

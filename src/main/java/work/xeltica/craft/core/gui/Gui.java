@@ -255,7 +255,7 @@ public class Gui implements Listener {
     }
 
     /**
-     * プレイヤーの位置でサウンドを再生します。
+     * 指定したプレイヤーの位置でサウンドを再生します。
      * @param player プレイヤー
      * @param sound 効果音
      * @param volume ボリューム
@@ -266,7 +266,7 @@ public class Gui implements Listener {
     }
 
     /**
-     * プレイヤーの位置で指定Tick後にサウンドを再生します。
+     * 指定したプレイヤーの位置で指定Tick後にサウンドを再生します。
      * @param player プレイヤー
      * @param sound 効果音
      * @param volume ボリューム
@@ -275,6 +275,29 @@ public class Gui implements Listener {
      */
     public void playSoundAfter(Player player, Sound sound, float volume, SoundPitch pitch, int delay) {
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> playSound(player, sound, volume, pitch), delay);
+    }
+
+    /**
+     * 指定したプレイヤーにのみサウンドを再生します。
+     * @param player プレイヤー
+     * @param sound 効果音
+     * @param volume ボリューム
+     * @param pitch ピッチ
+     */
+    public void playSoundLocally(Player player, Sound sound, float volume, SoundPitch pitch) {
+        player.playSound(player.getLocation(), sound, SoundCategory.PLAYERS, volume, pitch.getPitch());
+    }
+
+    /**
+     * 指定したプレイヤーにのみ指定Tick後にサウンドを再生します。
+     * @param player プレイヤー
+     * @param sound 効果音
+     * @param volume ボリューム
+     * @param pitch ピッチ
+     * @param delay Tick
+     */
+    public void playSoundLocallyAfter(Player player, Sound sound, float volume, SoundPitch pitch, int delay) {
+        Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> playSoundLocally(player, sound, volume, pitch), delay);
     }
 
     private void openMenuJavaImpl(Player player, String title, MenuItem[] items) {
@@ -331,7 +354,7 @@ public class Gui implements Listener {
 
         final var handleString = UUID.randomUUID().toString().replace("-", "");
 
-        final var comTitle = Component.text(title + "\n\n", Style.style(TextDecoration.BOLD));
+        final var comTitle = Component.text(title + "\n\n");
         final var comContent = Component.text(content + "\n\n");
         final var comOkButton = Component.text(okButtonText, Style.style(TextColor.color(0, 0, 0), TextDecoration.BOLD, TextDecoration.UNDERLINED))
             .clickEvent(ClickEvent.runCommand("/__core_gui_event__ " + handleString));
