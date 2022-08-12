@@ -66,15 +66,12 @@ class XCorePlugin : JavaPlugin() {
             }
         }.runTaskTimer(this, 0, tick.toLong())
         calculator = CitizenTimerCalculator()
-        val provider = Bukkit.getServicesManager().getRegistration(
-            LuckPerms::class.java
-        )
-        if (provider == null) {
+        val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
+        if (luckPerms == null) {
             logger.severe("X-CoreはLuckPermsを必要とします。X-Coreを終了します。")
             Bukkit.getPluginManager().disablePlugin(this)
             return
         }
-        val luckPerms = provider.provider
         luckPerms.contextManager.registerCalculator(calculator!!)
         val meta = MetaStore.getInstance()
         if (meta.isUpdated) {
