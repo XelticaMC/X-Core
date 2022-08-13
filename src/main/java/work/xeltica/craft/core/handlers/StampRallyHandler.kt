@@ -58,13 +58,13 @@ class StampRallyHandler: Listener {
         val line1 = state.line(1)
         if (line1 is TextComponent) {
             val name = line1.content()
-            if (!stampRallyStore.contains(name)) return
+            val stampName = name.removePrefix("§b")
+            if (!stampRallyStore.contains(stampName)) return
             if (!player.hasPermission(StampRallyStore.DESTROY_PERMISSION)) {
                 player.sendMessage("スタンプを破壊する権限がありません")
                 event.isCancelled = true
                 return
             }
-            val stampName = name.removePrefix("§b")
             stampRallyStore.destroy(stampName)
             player.sendMessage("スタンプ: " + stampName + "を破壊しました")
         }
