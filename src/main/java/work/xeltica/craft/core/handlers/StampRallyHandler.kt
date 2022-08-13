@@ -37,7 +37,6 @@ class StampRallyHandler: Listener {
                 return
             }
 
-
             event.line(0, Component.text("［§aスタンプ§r］"))
 
             stampRallyStore.create(name, event.block.location)
@@ -61,6 +60,7 @@ class StampRallyHandler: Listener {
             if (!stampRallyStore.contains(name)) return
             if (!player.hasPermission(StampRallyStore.DESTROY_PERMISSION)) {
                 player.sendMessage("スタンプを破壊する権限がありません")
+                event.isCancelled = true
                 return
             }
             stampRallyStore.destroy(name)
@@ -82,7 +82,7 @@ class StampRallyHandler: Listener {
         }
     }
 
-    fun getNearStampSign(loc: Location): Sign? {
+    private fun getNearStampSign(loc: Location): Sign? {
         val directions = arrayOf(
             BlockFace.EAST.direction,
             BlockFace.NORTH.direction,
