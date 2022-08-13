@@ -37,23 +37,16 @@ public class DiscordService {
 
     /**
      * Discordに、処罰者を報告します。
-     * @param badPlayer 処罰者
+     * @param badPlayerName 処罰対象者名
      * @param abuses 処罰理由
      * @param time 期限
      * @param command 処罰内容
      */
-    public void reportDiscord(OfflinePlayer badPlayer, String abuses, String time, String command) {
+    public void reportDiscord(String badPlayerName, String abuses, String time, String command) {
         final var guild = DiscordSRV.getPlugin().getMainGuild();
         final var channel = guild.getGuildChannelById(reportChannelID);
         if (channel instanceof TextChannel textChannel) {
-            textChannel.sendMessage(String.format(reportTemplate, badPlayer.getName(), abuses, time + command)).queue();
-            if (badPlayer instanceof Player player) {
-                final var member = getMember(player);
-                if (member != null) {
-                    final var role = guild.getRoleById(lockRoleID);
-                    if (role != null) guild.addRoleToMember(member, role).queue();
-                }
-            }
+            textChannel.sendMessage(String.format(reportTemplate, badPlayerName, abuses, time + command)).queue();
         }
     }
 

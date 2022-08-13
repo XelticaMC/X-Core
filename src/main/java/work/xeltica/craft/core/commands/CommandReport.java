@@ -31,21 +31,18 @@ public class CommandReport extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player reporter, Command command, String label, String[] args) {
         if (args.length != 1) {
-            return false;
+            Gui.getInstance().openTextInput(reporter, "処罰対象のプレイヤー名", name -> {
+                choosePunishmentType(reporter, name);
+            });
+        } else {
+            choosePunishmentType(reporter, args[0]);
         }
-        final var playerName = args[0];
-        final var reportee = Bukkit.getPlayer(playerName);
-        if (reportee == null) {
-            reporter.sendMessage("そのような名前のプレイヤーはこのサーバーにはいないようです。");
-            return true;
-        }
-        choosePunishmentType(reporter, reportee);
         return true;
     }
 
     /** 処罰の種類を選ぶUIを表示します */
-    private void choosePunishmentType(Player reporter, OfflinePlayer reportee) {
-        final Consumer<MenuItem> cb = (m) -> chooseReason(reporter, reportee, (String)m.getCustomData(), null);
+    private void choosePunishmentType(Player reporter, String badPlayerName) {
+        final Consumer<MenuItem> cb = (m) -> chooseReason(reporter, badPlayerName, (String)m.getCustomData(), null);
         Gui.getInstance().openMenu(reporter, "処罰の種類"
             , new MenuItem("BAN", cb, Material.BARRIER, "ban")
             , new MenuItem("警告", cb, Material.BELL, "warn")
@@ -56,7 +53,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
 
 
     /** 処罰の理由を選ぶUIを表示します */
-    private void chooseReason(Player reporter, OfflinePlayer reportee, String command, HashSet<AbuseType> state) {
+    private void chooseReason(Player reporter, String badPlayerName, String command, HashSet<AbuseType> state) {
         final var types = AbuseType.values();
         final HashSet<AbuseType> currentState = state == null ? new HashSet<>() : state;
         final var menuItems = Arrays.stream(types).map(t -> new MenuItem(t.shortName, _null -> {
@@ -65,11 +62,11 @@ public class CommandReport extends CommandPlayerOnlyBase {
             } else {
                 currentState.add(t);
             }
-            chooseReason(reporter, reportee, command, currentState);
+            chooseReason(reporter, badPlayerName, command, currentState);
         }, t.icon, null, currentState.contains(t))).collect(Collectors.toList());
 
         menuItems.add(new MenuItem("戻る", _null -> {
-            choosePunishmentType(reporter, reportee);
+            choosePunishmentType(reporter, badPlayerName);
         }, Material.RED_WOOL));
 
         menuItems.add(
@@ -79,9 +76,9 @@ public class CommandReport extends CommandPlayerOnlyBase {
                     return;
                 }
                 if (command.equals("ban") || command.equals("mute")) {
-                    chooseTime(reporter, reportee, command, currentState);
+                    chooseTime(reporter, badPlayerName, command, currentState);
                 } else {
-                    takeDown(reporter, reportee, command, currentState, null);
+                    takeDown(reporter, badPlayerName, command, currentState, null);
                 }
             }, Material.GREEN_WOOL)
         );
@@ -90,8 +87,8 @@ public class CommandReport extends CommandPlayerOnlyBase {
     }
 
     /** 処罰期間を選ぶUIを表示します */
-    private void chooseTime(Player reporter, OfflinePlayer reportee, String command, HashSet<AbuseType> state) {
-        final Consumer<MenuItem> cb = (m) -> takeDown(reporter, reportee, command, state, (String)m.getCustomData());
+    private void chooseTime(Player reporter, String badPlayerName, String command, HashSet<AbuseType> state) {
+        final Consumer<MenuItem> cb = (m) -> takeDown(reporter, badPlayerName, command, state, (String)m.getCustomData());
 
         final String[] times = {
             "1d", "3d", "5d", "7d", "14d", "1mo", "3mo", "6mo", "12mo", null,
@@ -103,13 +100,13 @@ public class CommandReport extends CommandPlayerOnlyBase {
     }
 
     /** 処罰を下します */
-    private void takeDown(Player moderator, OfflinePlayer badGuy, String command, HashSet<AbuseType> state, String time) {
+    private void takeDown(Player moderator, String badPlayerName, String command, HashSet<AbuseType> state, String time) {
         final var abuses = String.join(",", state.stream().map(s -> s.shortName).toArray(String[]::new));
         final var timeString = convertTimeToLocaleString(time);
-        final var name = badGuy.getName();
         String message;
         if (command.equals("warn")) {
-            if (!(badGuy instanceof Player badPlayer)) {
+            final var badPlayer = Bukkit.getPlayer(badPlayerName);
+            if (badPlayer == null) {
                 moderator.sendMessage("オフラインのため、警告を送信できません。");
                 return;
             }
@@ -127,12 +124,12 @@ public class CommandReport extends CommandPlayerOnlyBase {
             return;
         } else if (command.equals("ban")) {
             message = String.format(punishLogTemplate, abuses);
-            DiscordService.getInstance().reportDiscord(badGuy, abuses, timeString, command);
+            DiscordService.getInstance().reportDiscord(badPlayerName, abuses, timeString, command);
         } else if (command.equals("kick")) {
             message = String.format(punishLogTemplate, abuses);
         } else if (command.equals("mute")) {
             message = String.format(punishLogTemplate, abuses);
-            DiscordService.getInstance().reportDiscord(badGuy, abuses, timeString, command);
+            DiscordService.getInstance().reportDiscord(badPlayerName, abuses, timeString, command);
         } else {
             moderator.sendMessage(ChatColor.RED + "無効なコマンド: " + command);
             return;
@@ -145,11 +142,9 @@ public class CommandReport extends CommandPlayerOnlyBase {
             default -> "何か";
         };
 
-        Bukkit.getServer().sendMessage(
-            Component.text(String.format(broadcastTemplate, name, abuses, timeString + commandString))
-        );
+        Bukkit.getServer().sendMessage(Component.text(String.format(broadcastTemplate, badPlayerName, abuses, timeString + commandString)));
 
-        final var cmd = time != null ? String.format("temp%s %s %s %s", command, name, time, message) : String.format("%s %s %s", command, name, message);
+        final var cmd = time != null ? String.format("temp%s %s %s %s", command, badPlayerName, time, message) : String.format("%s %s %s", command, badPlayerName, message);
         moderator.performCommand(cmd);
     }
 
