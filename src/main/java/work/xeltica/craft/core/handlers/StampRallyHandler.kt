@@ -71,6 +71,14 @@ class StampRallyHandler: Listener {
     }
 
     @EventHandler
+    fun breakBlock(event: BlockBreakEvent) {
+        val block = event.block
+        if (getNearStampSign(block.location) != null) {
+            event.isCancelled = true
+        }
+    }
+
+    @EventHandler
     fun activateStamp(event: PlayerInteractEvent) {
         if (event.action == Action.RIGHT_CLICK_BLOCK) {
             val block = event.clickedBlock ?: return
