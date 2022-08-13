@@ -25,6 +25,8 @@ class StampRallyStore {
     }
 
     fun activate(player: Player, stampName: String) {
+        if (!contains(stampName)) return
+
         val activated = activatedStamp.conf.getStringList(player.uniqueId.toString())
 
         if (activated.contains(stampName)) {
