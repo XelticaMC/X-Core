@@ -3,8 +3,10 @@ package work.xeltica.craft.core.stores
 import org.bukkit.Location
 import org.bukkit.configuration.MemorySection
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.models.Stamp
 import work.xeltica.craft.core.utils.Config
+import java.util.UUID
 
 class StampRallyStore {
     companion object {
@@ -22,6 +24,18 @@ class StampRallyStore {
         instance = this
         stampList = Config("stampList")
         activatedStamp = Config("activatedStamp")
+    }
+
+    fun getDonePlayerList(): List<Player> {
+        val keys = activatedStamp.conf.getKeys(false)
+        val stamp = HashSet(getEntireStampList())
+        val players = mutableListOf<Player>()
+        for (uuid in keys) {
+            val player = XCorePlugin.instance.server.getPlayer(UUID.fromString(uuid)) ?: continue
+            stamp.removeAll(activatedStamp.conf.getStringList(uuid).toSet())
+            if (stamp.isEmpty()) players.add(player)
+        }
+        return players
     }
 
     fun activate(player: Player, stampName: String) {

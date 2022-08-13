@@ -168,6 +168,7 @@ class XCorePlugin : JavaPlugin() {
         addCommand("xreload", CommandXReload())
         addCommand("xtpreset", CommandXtpReset())
         addCommand("xdebug", CommandXDebug())
+        addCommand("stamp", CommandStamp())
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
     }
 
