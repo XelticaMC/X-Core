@@ -38,6 +38,7 @@ class StampRallyHandler: Listener {
             }
 
             event.line(0, Component.text("［§aスタンプ§r］"))
+            event.line(1, Component.text("§b"+line1.content()))
 
             stampRallyStore.create(name, event.block.location)
             player.sendMessage("スタンプ: " + name + "を作成しました")
