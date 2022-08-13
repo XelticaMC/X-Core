@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.PlayerStoreModule;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,11 +27,10 @@ public class LiveModeHandler implements Listener {
     public void onPlayerQuit(PlayerQuitEvent e) {
         final Player p = e.getPlayer();
         final UUID uuid = p.getUniqueId();
-        final PlayerStore instance = PlayerStore.getInstance();
 
-        if (PlayerStore.getliveBarMap().containsKey(uuid)) {
+        if (PlayerStoreModule.getliveBarMap().containsKey(uuid)) {
             PlanToDeleteMap.put(uuid, Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-                instance.setLiveMode(p,false);
+                PlayerStoreModule.setLiveMode(p,false);
                 PlanToDeleteMap.remove(uuid);
             }, GRACE_TIME_TICK));
         }

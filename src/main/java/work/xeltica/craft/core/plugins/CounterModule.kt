@@ -9,7 +9,7 @@ import java.io.IOException
 import work.xeltica.craft.core.models.PlayerRecord
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.modules.ModuleBase
-import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.modules.PlayerStoreModule
 import java.util.HashMap
 import java.util.function.Consumer
 
@@ -107,10 +107,9 @@ object CounterModule : ModuleBase() {
     @Throws(IOException::class)
     @JvmStatic
     fun resetAllPlayersPlayedLog() {
-        val pstore = PlayerStore.instance
-        pstore!!.openAll()
+        PlayerStoreModule.openAll()
             .forEach(Consumer { record: PlayerRecord -> record.delete(PlayerDataKey.PLAYED_COUNTER, false) })
-        pstore.save()
+        PlayerStoreModule.save()
     }
 
     override fun onEnable() {

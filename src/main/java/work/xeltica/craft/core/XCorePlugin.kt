@@ -1,6 +1,5 @@
 package work.xeltica.craft.core
 
-import net.kyori.adventure.text.Component
 import java.io.IOException
 import work.xeltica.craft.core.plugins.CitizenTimerCalculator
 import net.luckperms.api.LuckPerms
@@ -31,13 +30,25 @@ class XCorePlugin : JavaPlugin() {
         loadWorkers()
 
         // モジュール初期化
-        modules.forEach {
-            it.onEnable()
+        for (mod in modules) {
+            try {
+                mod.onEnable()
+                logger.info("${mod.javaClass.name}を有効化しました")
+            } catch (e: Exception) {
+                logger.severe("${mod.javaClass.name} の有効化処理内で予期しないエラーが発生")
+                e.printStackTrace()
+            }
         }
 
         // モジュール初期化後処理（モジュール間連携の初期化など）
-        modules.forEach {
-            it.onPostEnable()
+        for (mod in modules) {
+            try {
+                mod.onEnable()
+                logger.info("${mod.javaClass.name}の初期化後処理が完了しました")
+            } catch (e: Exception) {
+                logger.severe("${mod.javaClass.name} の初期化後処理内で予期しないエラーが発生")
+                e.printStackTrace()
+            }
         }
 
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
@@ -75,8 +86,7 @@ class XCorePlugin : JavaPlugin() {
         object : BukkitRunnable() {
             override fun run() {
                 VehicleStore.getInstance().tick(tick)
-                val store = PlayerStore.instance
-                store.openAll().forEach {
+                PlayerStoreModule.openAll().forEach {
                     // オフラインなら処理しない
                     if (Bukkit.getPlayer(it.playerId) == null) return
                     var time = it.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
@@ -88,7 +98,7 @@ class XCorePlugin : JavaPlugin() {
                     }
                 }
                 try {
-                    store.save()
+                    PlayerStoreModule.save()
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -118,12 +128,17 @@ class XCorePlugin : JavaPlugin() {
         BedrockDisclaimerModule,
         BossBarModule,
         CloverModule,
+        CustomItemModule,
         DiscordModule,
+        EbipowerModule,
         HintModule,
+        HubModule,
         MetaModule,
         MobBallModule,
+        MobDroppingEpModule,
         NotificationModule,
         OmikujiModule,
+        PlayerStoreModule,
         XphoneModule,
     )
 

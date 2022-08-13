@@ -2,7 +2,7 @@ package work.xeltica.craft.core.xphoneApps
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.modules.PlayerStoreModule
 
 /**
  * 配信モード切り替えアプリ
@@ -14,8 +14,8 @@ class LiveModeApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.RED_DYE
 
     override fun onLaunch(player: Player) {
-        PlayerStore.instance.setLiveMode(player, !isLiveMode(player))
+        PlayerStoreModule.setLiveMode(player, !isLiveMode(player))
     }
 
-    private fun isLiveMode(player: Player) = PlayerStore.instance.isLiveMode(player)
+    private fun isLiveMode(player: Player) = PlayerStoreModule.isLiveMode(player)
 }

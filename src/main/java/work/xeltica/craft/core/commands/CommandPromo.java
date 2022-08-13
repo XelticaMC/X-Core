@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.PlayerStoreModule;
 import work.xeltica.craft.core.api.Ticks;
 
 import java.util.List;
@@ -43,11 +43,10 @@ public class CommandPromo extends CommandPlayerOnlyBase {
         final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         final var luckPerms = provider.getProvider();
         final var lpUser = luckPerms.getPlayerAdapter(Player.class).getUser(player);
-        final var store = PlayerStore.getInstance();
-        final var record = store.open(player);
+        final var record = PlayerStoreModule.open(player);
         final var isManualCitizen = lpUser.getInheritedGroups(QueryOptions.defaultContextualOptions()).stream().anyMatch(g -> g.getName().equals("citizen"));
 
-        if (!store.isCitizen(player)) {
+        if (!PlayerStoreModule.isCitizen(player)) {
             sender.sendMessage("本サーバーでは、プレイヤーさんを§aわかば§r、§b市民§rという大きく2つのロールに分類しています。");
             sender.sendMessage("§b市民§rにならなくても基本的なプレイはできますが、");
             sender.sendMessage("・§c一部ブロックが使えない§r");

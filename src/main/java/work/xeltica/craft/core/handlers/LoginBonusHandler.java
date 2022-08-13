@@ -10,8 +10,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.api.events.RealTimeNewDayEvent;
 import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.stores.EbiPowerStore;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.EbipowerModule;
+import work.xeltica.craft.core.modules.PlayerStoreModule;
 import work.xeltica.craft.core.api.Ticks;
 
 import java.io.IOException;
@@ -19,8 +19,7 @@ import java.io.IOException;
 public class LoginBonusHandler implements Listener {
     @EventHandler
     public void onLoginBonus(RealTimeNewDayEvent e) {
-        final var pstore = PlayerStore.getInstance();
-        final var records = pstore.openAll();
+        final var records = PlayerStoreModule.openAll();
 
         // ログボ記録を削除
         records.forEach(record -> record.delete(PlayerDataKey.RECEIVED_LOGIN_BONUS, false));
@@ -29,7 +28,7 @@ public class LoginBonusHandler implements Listener {
         // いる人にログボ
         Bukkit.getOnlinePlayers().forEach(this::giveLoginBonus);
         try {
-            pstore.save();
+            PlayerStoreModule.save();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -39,23 +38,22 @@ public class LoginBonusHandler implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         giveLoginBonus(e.getPlayer());
         try {
-            PlayerStore.getInstance().save();
+            PlayerStoreModule.save();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     private void giveLoginBonus(Player p) {
-        final var pstore = PlayerStore.getInstance();
-        final var record = pstore.open(p);
+        final var record = PlayerStoreModule.open(p);
 
         if (!record.getBoolean(PlayerDataKey.RECEIVED_LOGIN_BONUS)) {
             Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
                 if (!p.isOnline()) return;
-                EbiPowerStore.getInstance().tryGive(p, LOGIN_BONUS_EBIPOWER);
+                EbipowerModule.tryGive(p, LOGIN_BONUS_EBIPOWER);
                 p.sendMessage("§a§lログインボーナス達成！§6" + LOGIN_BONUS_EBIPOWER + "EP§fを手に入れた！");
                 p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 2);
-                pstore.open(p).set(PlayerDataKey.RECEIVED_LOGIN_BONUS, true);
+                PlayerStoreModule.open(p).set(PlayerDataKey.RECEIVED_LOGIN_BONUS, true);
             }, Ticks.from(2));
         }
     }

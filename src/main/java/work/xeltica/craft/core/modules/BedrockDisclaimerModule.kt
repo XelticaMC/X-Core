@@ -7,7 +7,6 @@ import java.lang.Runnable
 
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.stores.PlayerStore
 import work.xeltica.craft.core.models.PlayerDataKey
 
 /**
@@ -41,7 +40,7 @@ object BedrockDisclaimerModule : ModuleBase() {
      */
     fun showDisclaimer(p: Player) {
         Gui.getInstance().openDialog(p, BEDROCK_DISCLAIMER_TITLE, BEDROCK_DISCLAIMER_MESSAGE, {
-            val record = PlayerStore.instance.open(p)
+            val record = PlayerStoreModule.open(p)
             record[PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER] = true
         }, "わかりました")
     }

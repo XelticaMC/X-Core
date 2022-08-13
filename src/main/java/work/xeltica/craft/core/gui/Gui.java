@@ -39,7 +39,7 @@ import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.DialogEventArgs;
 import work.xeltica.craft.core.models.MenuItem;
 import work.xeltica.craft.core.models.SoundPitch;
-import work.xeltica.craft.core.stores.ItemStore;
+import work.xeltica.craft.core.modules.CustomItemModule;
 
 /**
  * UI システムのメインクラス。
@@ -157,7 +157,7 @@ public class Gui implements Listener {
             stream = stream.filter(filter);
         }
         final var list = stream.map(p -> {
-                final var head = ItemStore.getInstance().getPlayerHead(p);
+                final var head = CustomItemModule.getPlayerHead(p);
                     p.displayName();
                     final var name = PlainTextComponentSerializer.plainText().serialize(p.displayName());
                 return new MenuItem(name, (a) -> {

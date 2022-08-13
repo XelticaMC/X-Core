@@ -26,7 +26,7 @@ import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.MenuItem;
 import work.xeltica.craft.core.models.EbiPowerItem;
 import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.stores.EbiPowerStore;
+import work.xeltica.craft.core.modules.EbipowerModule;
 import work.xeltica.craft.core.modules.HintModule;
 import work.xeltica.craft.core.modules.MobBallModule;
 
@@ -39,7 +39,6 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
         final var subCommand = args.length > 0 ? args[0] : null;
-        final var store = EbiPowerStore.getInstance();
 
         // サブコマンドがなければお店UIを開く
         if (subCommand == null || !player.hasPermission("otanoshimi.command.epshop." + subCommand.toLowerCase())) {
@@ -60,13 +59,13 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
                     player.sendMessage("アイテムを手に持っていないため追加できません。");
                     return true;
                 }
-                store.addItem(new EbiPowerItem(handheld, cost));
+                EbipowerModule.addItem(new EbiPowerItem(handheld, cost));
                 player.sendMessage("追加しました。");
             }
 
             // エビパワーストアから商品を削除
             case "delete" -> openShopMenu(player, "削除するアイテムを選んでください", (item) -> {
-                store.deleteItem(item);
+                EbipowerModule.deleteItem(item);
                 player.sendMessage("削除しました。");
             });
         }
@@ -79,7 +78,7 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
      */
     private void openShop(Player player) {
         openShopMenu(player, "購入するアイテムを選んでください", (item) -> {
-            final var result = EbiPowerStore.getInstance().tryBuyItem(player, item);
+            final var result = EbipowerModule.tryBuyItem(player, item);
 
             switch (result) {
                 case NO_ENOUGH_INVENTORY -> {
@@ -115,8 +114,7 @@ public class CommandEpShop extends CommandPlayerOnlyBase {
      */
     private void openShopMenu(Player player, String title, Consumer<EbiPowerItem> onChosen) {
         final var ui = Gui.getInstance();
-        final var store = EbiPowerStore.getInstance();
-        final var items = store.getShopItems()
+        final var items = EbipowerModule.getShopItems()
             .stream()
             .map(m -> {
                 final var item = m.item();

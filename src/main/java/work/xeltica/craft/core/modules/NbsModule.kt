@@ -1,57 +1,58 @@
-package work.xeltica.craft.core.stores;
+package work.xeltica.craft.core.modules
 
-import com.xxmicloxx.NoteBlockAPI.model.RepeatMode;
-import com.xxmicloxx.NoteBlockAPI.model.SoundCategory;
-import com.xxmicloxx.NoteBlockAPI.songplayer.PositionSongPlayer;
-import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
-import com.xxmicloxx.NoteBlockAPI.songplayer.RangeSongPlayer;
-import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.entity.Player;
-import work.xeltica.craft.core.api.Config;
-import work.xeltica.craft.core.models.NbsModel;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import work.xeltica.craft.core.models.NbsModel
+import work.xeltica.craft.core.models.NbsModel.PlaybackMode
+import java.lang.IllegalArgumentException
+import java.io.File
+import com.xxmicloxx.NoteBlockAPI.model.RepeatMode
+import com.xxmicloxx.NoteBlockAPI.model.SoundCategory
+import com.xxmicloxx.NoteBlockAPI.songplayer.PositionSongPlayer
+import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
+import java.util.UUID
+import com.xxmicloxx.NoteBlockAPI.songplayer.RangeSongPlayer
+import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder
+import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.configuration.serialization.ConfigurationSerialization
+import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.Config
+import kotlin.jvm.JvmOverloads
+import java.io.IOException
+import java.util.ArrayList
+import java.util.HashMap
+import java.util.function.Consumer
 
 /**
  * NoteBlock Systemに関するデータを保持します。
  * @author Xeltica
  */
-public class NbsStore {
-    public NbsStore() {
-        ConfigurationSerialization.registerClass(NbsModel.class, "NbsModel");
-        nbs = new Config("nbs");
-        loadModels();
-        playAll();
-        instance = this;
+object NbsModule: ModuleBase() {
+    override fun onEnable() {
+        ConfigurationSerialization.registerClass(NbsModel::class.java, "NbsModel")
+        nbs = Config("nbs")
+        loadModels()
+        playAll()
     }
 
-    public static NbsStore getInstance() {
-        return NbsStore.instance;
+    override fun onDisable() {
+        stopAll()
     }
 
     /**
      * 保存されたNBSモデルを元に再生を開始します。
      */
-    public void playAll() {
-        models.forEach(this::playModel);
+    @JvmStatic
+    fun playAll() {
+        models!!.forEach(Consumer { model: NbsModel? -> playModel(model) })
     }
 
     /**
      * 音を全部停止します。
      */
-    public void stopAll() {
-        playerCache.keySet().stream().toList().forEach(location -> {
-            playerCache.get(location).setPlaying(false);
-        });
+    @JvmStatic
+    fun stopAll() {
+        playerCache.keys.stream().toList()
+            .forEach(Consumer { location: Location -> playerCache[location]!!.isPlaying = false })
     }
 
     /**
@@ -62,15 +63,15 @@ public class NbsStore {
      * @param playbackMode 再生モード
      * @throws IllegalArgumentException 曲IDが存在しない
      */
-    public void play(Location location, String songId, int distance, NbsModel.PlaybackMode playbackMode) {
+    @JvmStatic
+    fun play(location: Location?, songId: String, distance: Int, playbackMode: PlaybackMode?) {
         // ディレクトリトラバーサル対策
-        if (songId.startsWith(".")) throw new IllegalArgumentException();
-        final var file = getFile(songId);
-        if (!file.exists()) throw new IllegalArgumentException();
-
-        final var model = new NbsModel(location, songId, distance, playbackMode);
-        playModel(model);
-        addModel(location, model);
+        require(!songId.startsWith("."))
+        val file = getFile(songId)
+        require(file.exists())
+        val model = NbsModel(location, songId, distance, playbackMode)
+        playModel(model)
+        addModel(location, model)
     }
 
     /**
@@ -80,22 +81,20 @@ public class NbsStore {
      * @param playbackMode 再生モード
      * @throws IllegalArgumentException 曲IDが存在しない
      */
-    public void playRadio(Player player, String songId, NbsModel.PlaybackMode playbackMode) {
+    @JvmStatic
+    fun playRadio(player: Player, songId: String, playbackMode: PlaybackMode) {
         // ディレクトリトラバーサル対策
-        if (songId.startsWith(".")) throw new IllegalArgumentException();
-        final var file = getFile(songId);
-        if (!file.exists()) throw new IllegalArgumentException();
-
-        final var song = NBSDecoder.parse(getFile(songId));
-        final var radio = new RadioSongPlayer(song, SoundCategory.VOICE);
-
-        if (playbackMode == NbsModel.PlaybackMode.LOOP) {
-            radio.setRepeatMode(RepeatMode.ALL);
+        require(!songId.startsWith("."))
+        val file = getFile(songId)
+        require(file.exists())
+        val song = NBSDecoder.parse(getFile(songId))
+        val radio = RadioSongPlayer(song, SoundCategory.VOICE)
+        if (playbackMode == PlaybackMode.LOOP) {
+            radio.repeatMode = RepeatMode.ALL
         }
-        radio.addPlayer(player);
-        radio.setPlaying(true);
-
-        radioCache.put(player.getUniqueId(), radio);
+        radio.addPlayer(player)
+        radio.isPlaying = true
+        radioCache[player.uniqueId] = radio
     }
 
     /**
@@ -103,13 +102,14 @@ public class NbsStore {
      * @param location 再生位置
      * @param distance 長さ
      */
-    public void changeDistance(Location location, int distance) {
+    @JvmStatic
+    fun changeDistance(location: Location, distance: Int) {
         if (distance == 0) {
-            stop(location);
+            stop(location)
         } else {
-            playerCache.get(location).setDistance(distance);
-            modelCache.get(location).setDistance(distance);
-            saveModels();
+            playerCache[location]!!.distance = distance
+            modelCache[location]!!.distance = distance
+            saveModels()
         }
     }
 
@@ -117,98 +117,103 @@ public class NbsStore {
      * 指定した位置にある音楽を停止します。
      * @param location 位置
      */
-    public void stop(Location location) {
-        playerCache.get(location).setPlaying(false);
-        playerCache.remove(location);
-        removeModel(location);
+    @JvmStatic
+    fun stop(location: Location) {
+        playerCache[location]!!.isPlaying = false
+        playerCache.remove(location)
+        removeModel(location)
     }
 
     /**
      * 指定した位置にある音楽を停止します。
      * @param player プレイヤー
      */
-    public void stopRadio(Player player) {
-        final var id = player.getUniqueId();
-        if (!radioCache.containsKey(id)) return;
-        radioCache.get(id).setPlaying(false);
-        radioCache.remove(id);
+    @JvmStatic
+    fun stopRadio(player: Player) {
+        val id = player.uniqueId
+        if (!radioCache.containsKey(id)) return
+        radioCache[id]!!.isPlaying = false
+        radioCache.remove(id)
     }
 
     /**
      * 指定した位置に音楽があるかどうかを取得します。
      * @param location 位置
      */
-    public boolean has(Location location) {
-        return getPlayer(location) != null;
+    @JvmStatic
+    fun has(location: Location): Boolean {
+        return getPlayer(location) != null
     }
 
     /**
      * 指定した位置の音楽プレイヤーを取得します。
      * @param location 位置
      */
-    public RangeSongPlayer getPlayer(Location location) {
-        return playerCache.get(location);
+    @JvmStatic
+    fun getPlayer(location: Location): RangeSongPlayer? {
+        return playerCache[location]
     }
 
     /**
      * 指定した位置の音楽モデルを取得します。
      * @param location 位置
      */
-    public NbsModel getModel(Location location) {
-        return modelCache.get(location);
+    @JvmStatic
+    fun getModel(location: Location?): NbsModel? {
+        return modelCache[location]
     }
 
     /**
      * 指定した位置の音楽プレイヤーを取得します。
      * @param location 位置
      */
-    public int getDistance(Location location) {
-        return playerCache.get(location).getDistance();
+    @JvmStatic
+    fun getDistance(location: Location): Int {
+        return playerCache[location]!!.distance
     }
 
     /**
      * プレイヤーを聴衆に加えます。
      * @param p プレイヤー
      */
-    public void addAudience(Player p) {
-        playerCache.values().forEach(player -> player.addPlayer(p));
+    @JvmStatic
+    fun addAudience(p: Player?) {
+        playerCache.values.forEach(Consumer { player: RangeSongPlayer -> player.addPlayer(p) })
     }
 
     /**
      * プレイヤーを聴衆から外します。
      * @param p プレイヤー
      */
-    public void removeAudience(Player p) {
-        playerCache.values().forEach(player -> player.removePlayer(p));
+    @JvmStatic
+    fun removeAudience(p: Player?) {
+        playerCache.values.forEach(Consumer { player: RangeSongPlayer -> player.removePlayer(p) })
     }
-
-    /**
-     * モデルをシステムに追加します。
-     * @param location 位置
-     * @param model モデル
-     */
-    public void addModel(Location location, NbsModel model) {
-        addModel(location, model, true);
-    }
-
     /**
      * モデルをシステムに追加します。
      * @param location 位置
      * @param model モデル
      * @param save 保存するかどうか
      */
-    public void addModel(Location location, NbsModel model, boolean save) {
-        modelCache.put(location, model);
-        models.add(model);
-        saveModels();
+    /**
+     * モデルをシステムに追加します。
+     * @param location 位置
+     * @param model モデル
+     */
+    @JvmOverloads
+    fun addModel(location: Location?, model: NbsModel?, save: Boolean = true) {
+        modelCache[location] = model
+        models!!.add(model)
+        saveModels()
     }
 
     /**
      * モデルをシステムから削除します。
      * @param location 位置
      */
-    public void removeModel(Location location) {
-        removeModel(location, true);
+    @JvmStatic
+    fun removeModel(location: Location) {
+        removeModel(location, true)
     }
 
     /**
@@ -216,64 +221,63 @@ public class NbsStore {
      * @param location 位置
      * @param save 保存するかどうか
      */
-    private void removeModel(Location location, boolean save) {
-        final var model = modelCache.get(location);
-        playerCache.remove(location);
-        modelCache.remove(location);
-        models.remove(model);
+    private fun removeModel(location: Location, save: Boolean) {
+        val model = modelCache[location]
+        playerCache.remove(location)
+        modelCache.remove(location)
+        models!!.remove(model)
         if (save) {
-            saveModels();
+            saveModels()
         }
     }
 
     /**
      * ディスクからモデルを読み込みます。
      */
-    private void loadModels() {
-        models = (List<NbsModel>)nbs.getConf().getList("models", new ArrayList<NbsModel>());
-        for (final var model : models) {
-            modelCache.put(model.getLocation(), model);
+    private fun loadModels() {
+        models = nbs.conf.getList("models", ArrayList<NbsModel>()) as MutableList<NbsModel?>?
+        for (model in models!!) {
+            modelCache[model!!.location] = model
         }
     }
 
     /**
      * ディスクにモデルを書き込みます。
      */
-    private void saveModels() {
-        nbs.getConf().set("models", models);
+    private fun saveModels() {
+        nbs.conf["models"] = models
         try {
-            nbs.save();
-        } catch (IOException e) {
-            e.printStackTrace();
+            nbs.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 
-    private File getFile(String songId) {
-        return new File(NBS_PATH + songId + ".nbs");
+    private fun getFile(songId: String): File {
+        return File("$NBS_PATH$songId.nbs")
     }
 
-    private void playModel(NbsModel model) {
-        final var song = NBSDecoder.parse(getFile(model.getSongId()));
-        final var player = new PositionSongPlayer(song, SoundCategory.VOICE);
-        player.setTargetLocation(model.getLocation());
-        player.setDistance(model.getDistance());
-
-        if (model.getPlaybackMode() == NbsModel.PlaybackMode.LOOP) {
-            player.setRepeatMode(RepeatMode.ALL);
+    private fun playModel(model: NbsModel?) {
+        val song = NBSDecoder.parse(
+            getFile(
+                model!!.songId
+            )
+        )
+        val player = PositionSongPlayer(song, SoundCategory.VOICE)
+        player.targetLocation = model.location
+        player.distance = model.distance
+        if (model.playbackMode == PlaybackMode.LOOP) {
+            player.repeatMode = RepeatMode.ALL
         }
-        player.setPlaying(true);
-        Bukkit.getOnlinePlayers().forEach(player::addPlayer);
-
-        playerCache.put(model.getLocation(), player);
+        player.isPlaying = true
+        Bukkit.getOnlinePlayers().forEach { player.addPlayer(it) }
+        playerCache[model.location] = player
     }
 
-    private final Map<Location, RangeSongPlayer> playerCache = new HashMap<>();
-    private final Map<UUID, RadioSongPlayer> radioCache = new HashMap<>();
-    private List<NbsModel> models;
-    private final Map<Location, NbsModel> modelCache = new HashMap<>();
-    private Config nbs;
-
-    private static NbsStore instance;
-
-    private static final String NBS_PATH = "/srv/nbs/";
+    private val playerCache: MutableMap<Location, RangeSongPlayer> = HashMap()
+    private val radioCache: MutableMap<UUID, RadioSongPlayer> = HashMap()
+    private var models: MutableList<NbsModel?>? = null
+    private val modelCache: MutableMap<Location?, NbsModel?> = HashMap()
+    private lateinit var nbs: Config
+    private const val NBS_PATH = "/srv/nbs/"
 }

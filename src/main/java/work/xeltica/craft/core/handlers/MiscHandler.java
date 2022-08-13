@@ -17,8 +17,8 @@ import work.xeltica.craft.core.api.events.PlayerCounterFinish;
 import work.xeltica.craft.core.api.events.PlayerCounterStart;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.NbsModel;
-import work.xeltica.craft.core.stores.ItemStore;
-import work.xeltica.craft.core.stores.NbsStore;
+import work.xeltica.craft.core.modules.CustomItemModule;
+import work.xeltica.craft.core.modules.NbsModule;
 import work.xeltica.craft.core.api.Ticks;
 
 import java.util.Arrays;
@@ -82,7 +82,7 @@ public class MiscHandler implements Listener {
         final var player = e.getPlayer();
         if (!"event".equals(player.getWorld().getName())) return;
 
-        NbsStore.getInstance().playRadio(player, "submerged2", NbsModel.PlaybackMode.LOOP);
+        NbsModule.playRadio(player, "submerged2", NbsModel.PlaybackMode.LOOP);
     }
 
     /**
@@ -93,7 +93,7 @@ public class MiscHandler implements Listener {
         final var player = e.getPlayer();
         if (!"event".equals(player.getWorld().getName())) return;
 
-        NbsStore.getInstance().stopRadio(player);
+        NbsModule.stopRadio(player);
 
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
             player.sendMessage(ChatColor.AQUA + "メインワールドに戻る場合は、X Phoneをお使いください。");
@@ -110,7 +110,7 @@ public class MiscHandler implements Listener {
         // イベント発生後はまだテレポートが終わっていなかったりするので、5tickほど遅延させる
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
             if (!"event".equals(player.getWorld().getName())) return;
-            ItemStore.getInstance().givePhoneIfNeeded(player);
+            CustomItemModule.givePhoneIfNeeded(player);
         }, 5);
     }
 
@@ -122,7 +122,7 @@ public class MiscHandler implements Listener {
         final var player = e.getPlayer();
         if (!"event_dev".equals(player.getWorld().getName())) return;
 
-        NbsStore.getInstance().playRadio(player, "submerged3", NbsModel.PlaybackMode.LOOP);
+        NbsModule.playRadio(player, "submerged3", NbsModel.PlaybackMode.LOOP);
     }
 
     /**
@@ -133,6 +133,6 @@ public class MiscHandler implements Listener {
         final var player = e.getPlayer();
         if (!"event_dev".equals(player.getWorld().getName())) return;
 
-        NbsStore.getInstance().stopRadio(player);
+        NbsModule.stopRadio(player);
     }
 }

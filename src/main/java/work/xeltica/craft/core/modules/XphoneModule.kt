@@ -6,7 +6,6 @@ import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.MenuItem
 import work.xeltica.craft.core.models.SoundPitch
-import work.xeltica.craft.core.stores.ItemStore
 import work.xeltica.craft.core.xphoneApps.*
 import java.lang.IllegalStateException
 
@@ -79,7 +78,6 @@ object XphoneModule : ModuleBase() {
     }
 
     fun ui() = Gui.getInstance() ?: throw IllegalStateException("Try to call ui() in X Phone OS, but X-Core is not fully initialized.")
-    fun store() = ItemStore.getInstance() ?: throw IllegalStateException("Try to call store() in X Phone OS, but X-Core is not fully initialized.")
 
     /**
      * 起動音を再生します。

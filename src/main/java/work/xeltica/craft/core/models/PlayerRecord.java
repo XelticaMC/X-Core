@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
 import work.xeltica.craft.core.api.Config;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.PlayerStoreModule;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +25,7 @@ public class PlayerRecord {
         if (value != null && value.equals(get(key))) return;
         if (get(key) == null && value == null) return;
         section.set(key.getPhysicalKey(), value);
-        PlayerStore.getInstance().setChanged(true);
+        PlayerStoreModule.setChanged(true);
     }
 
     @Deprecated(since = "Use set(PlayerDataKey, Object) instead.")

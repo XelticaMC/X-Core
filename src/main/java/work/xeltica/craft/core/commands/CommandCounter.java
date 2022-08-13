@@ -20,7 +20,7 @@ import work.xeltica.craft.core.models.CounterData;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.Ranking;
 import work.xeltica.craft.core.plugins.CounterModule;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.PlayerStoreModule;
 import work.xeltica.craft.core.stores.RankingStore;
 
 /**
@@ -32,8 +32,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
     public boolean execute(Player player, Command command, String label, String[] args) {
         if (args.length == 0) return false;
         final var subCommand = args[0].toLowerCase();
-        final var pstore = PlayerStore.getInstance();
-        final var record = pstore.open(player);
+        final var record = PlayerStoreModule.open(player);
         final var ui = Gui.getInstance();
 
         try {
@@ -47,7 +46,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     record.set(PlayerDataKey.COUNTER_REGISTER_MODE, true);
                     record.set(PlayerDataKey.COUNTER_REGISTER_NAME, name);
                     record.set(PlayerDataKey.COUNTER_REGISTER_IS_DAILY, isDaily);
-                    pstore.save();
+                    PlayerStoreModule.save();
                                     
                     player.sendMessage("カウンター登録モードは有効。カウンターの始点にする感圧板をクリックかタップしてください。");
                     player.sendMessage("キャンセルする際には、 /counter cancel を実行します。");
@@ -60,7 +59,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                     record.delete(PlayerDataKey.COUNTER_REGISTER_NAME);
                     record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY);
                     record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION);
-                    pstore.save();
+                    PlayerStoreModule.save();
 
                     player.sendMessage("カウンター登録モードを無効化し、キャンセルしました。");
                 }
@@ -157,7 +156,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                         player.sendMessage("全プレイヤーのプレイ済み履歴を削除しました。");
                     } else {
                         final var name = args[1];
-                        pstore.open(Bukkit.getPlayerUniqueId(name)).delete(PlayerDataKey.PLAYED_COUNTER);
+                        PlayerStoreModule.open(Bukkit.getPlayerUniqueId(name)).delete(PlayerDataKey.PLAYED_COUNTER);
                         player.sendMessage("そのプレイヤーのプレイ済み履歴を削除しました。");
                     }
                 }

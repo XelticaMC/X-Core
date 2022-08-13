@@ -14,7 +14,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.geysermc.connector.common.ChatColor
-import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.modules.PlayerStoreModule
 import work.xeltica.craft.core.plugins.CounterModule
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.PlayerDataKey
@@ -45,11 +45,10 @@ class CounterHandler : Listener {
 
         // ブロッククリックでなければ無視
         if (!isBlockClick) return
-        val pstore = PlayerStore.instance
         val ui = Gui.getInstance()
         val player = e.player
         val block = e.clickedBlock
-        val record = pstore.open(player)
+        val record = PlayerStoreModule.open(player)
         val isCounterRegisterMode = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_MODE)
         val isPlate = Tag.PRESSURE_PLATES.isTagged(block!!.type)
 
@@ -76,7 +75,7 @@ class CounterHandler : Listener {
                 record.delete(PlayerDataKey.COUNTER_REGISTER_NAME)
                 record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION)
                 record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY)
-                pstore.save()
+                PlayerStoreModule.save()
             }
         } catch (ex: IOException) {
             ex.printStackTrace()
@@ -91,7 +90,6 @@ class CounterHandler : Listener {
     fun onUsePlate(e: PlayerInteractEvent) {
         // 踏んだわけじゃないのなら無視
         if (e.action != Action.PHYSICAL) return
-        val pstore = PlayerStore.instance
         val ui = Gui.getInstance()
         val player = e.player
         val block = e.clickedBlock ?: return
@@ -102,7 +100,7 @@ class CounterHandler : Listener {
         if (!Tag.PRESSURE_PLATES.isTagged(block.type)) return
         val first = CounterModule.getByLocation1(block.location)
         val last = CounterModule.getByLocation2(block.location)
-        val record = pstore.open(player)
+        val record = PlayerStoreModule.open(player)
         val counterId = record.getString(PlayerDataKey.PLAYING_COUNTER_ID)
         val startedAt = record.getString(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, "0").toLong()
         val counter = if (counterId == null) null else CounterModule[counterId]

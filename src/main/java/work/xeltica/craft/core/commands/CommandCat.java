@@ -14,7 +14,7 @@ import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.SoundPitch;
 import work.xeltica.craft.core.modules.HintModule;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.PlayerStoreModule;
 
 /**
  * 猫モードを切り替えるコマンド
@@ -24,7 +24,7 @@ public class CommandCat extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player sender, Command command, String label, String[] args) {
-        final var record = PlayerStore.getInstance().open(sender);
+        final var record = PlayerStoreModule.open(sender);
         // 引数がない場合は現在のモードを表示
         if (args.length == 0) {
             final var mes = record.getBoolean(PlayerDataKey.CAT_MODE)

@@ -10,11 +10,5 @@ abstract class ModuleBase {
     open fun onPostEnable() { }
 
     /** X-Core が停止する時に実行されます。 */
-    open fun onDisable() {
-        isInitialized = false
-    }
-
-
-    var isInitialized: Boolean = false
-        private set
+    open fun onDisable() { }
 }

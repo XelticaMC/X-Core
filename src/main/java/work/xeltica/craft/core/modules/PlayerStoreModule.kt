@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.stores
+package work.xeltica.craft.core.modules
 
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
@@ -22,11 +22,23 @@ import java.util.*
  * プレイヤー固有データの管理を行い、読み書きを行うPlayer Store APIを提供します。
  * @author Xeltica
  */
-class PlayerStore {
+object PlayerStoreModule : ModuleBase() {
+    override fun onEnable() {
+        playerStores = Config("playerStores")
+        Bukkit.getScheduler().runTaskTimer(XCorePlugin.instance, Runnable { saveTask() }, 0, from(10.0).toLong())
+    }
+
+    override fun onDisable() {
+        liveBarMap.clear()
+        super.onDisable()
+    }
+
+    @JvmStatic
     fun open(p: OfflinePlayer): PlayerRecord {
         return open(p.uniqueId)
     }
 
+    @JvmStatic
     fun open(id: UUID): PlayerRecord {
         var section = playerStores.conf.getConfigurationSection(id.toString())
         if (section == null) {
@@ -35,6 +47,7 @@ class PlayerStore {
         return PlayerRecord(playerStores, section, id)
     }
 
+    @JvmStatic
     fun openAll(): List<PlayerRecord> {
         return playerStores
             .conf
@@ -45,33 +58,38 @@ class PlayerStore {
     }
 
     @Throws(IOException::class)
+    @JvmStatic
     fun save() {
         playerStores.save()
     }
 
+    @JvmStatic
     fun isCitizen(p: Player): Boolean {
         return p.hasPermission("otanoshimi.citizen")
     }
 
+    @JvmStatic
     fun setLiveMode(player: Player, isLive: Boolean) {
         if (isLive == isLiveMode(player)) return
         if (isLive) {
             val name = String.format("%s が配信中", player.name)
             val bar =
                 BossBar.bossBar(Component.text(name), BossBar.MAX_PROGRESS, BossBar.Color.RED, BossBar.Overlay.PROGRESS)
-            liveBarMap!![player.uniqueId] = bar
+            liveBarMap[player.uniqueId] = bar
             add(bar)
         } else {
-            val bar = liveBarMap!![player.uniqueId]
-            liveBarMap!!.remove(player.uniqueId)
+            val bar = liveBarMap[player.uniqueId]
+            liveBarMap.remove(player.uniqueId)
             remove(bar!!)
         }
     }
 
+    @JvmStatic
     fun isLiveMode(p: Player): Boolean {
-        return liveBarMap!!.containsKey(p.uniqueId)
+        return liveBarMap.containsKey(p.uniqueId)
     }
 
+    @JvmStatic
     fun getRandomFireworkByUUID(id: UUID, amount: Int): ItemStack {
         val random = Random(id.hashCode().toLong())
         val item = ItemStack(Material.FIREWORK_ROCKET, amount)
@@ -89,12 +107,19 @@ class PlayerStore {
         return item
     }
 
+    @JvmStatic
     fun isOnline(player: Player): Boolean {
         return isOnline(player.uniqueId)
     }
 
+    @JvmStatic
     fun isOnline(id: UUID): Boolean {
         return Bukkit.getOnlinePlayers().stream().anyMatch { p: Player -> p.uniqueId == id }
+    }
+
+    @JvmStatic
+    fun getliveBarMap(): Map<UUID, BossBar>? {
+        return liveBarMap
     }
 
     private fun saveTask() {
@@ -107,39 +132,23 @@ class PlayerStore {
         }
     }
 
-    private val playerStores: Config
+    @JvmStatic
     var isChanged = false
 
-    init {
-        instance = this
-        liveBarMap = HashMap()
-        playerStores = Config("playerStores")
-        Bukkit.getScheduler().runTaskTimer(XCorePlugin.instance, Runnable { saveTask() }, 0, from(10.0).toLong())
-    }
-
-    companion object {
-        @JvmStatic
-        fun getliveBarMap(): Map<UUID, BossBar>? {
-            return liveBarMap
-        }
-
-        @JvmStatic
-        lateinit var instance: PlayerStore
-            private set
-        private var liveBarMap: MutableMap<UUID, BossBar>? = null
-        private val colors = arrayOf( // from XelticaUI
-            Color.fromRGB(0xe23731),  // red
-            Color.fromRGB(0xeb6101),  // vermilion
-            Color.fromRGB(0xf08300),  // orange
-            Color.fromRGB(0xe9be00),  // yellow
-            Color.fromRGB(0xb8d200),  // lime
-            Color.fromRGB(0x3eb370),  // green
-            Color.fromRGB(0x20c0a0),  // teal
-            Color.fromRGB(0x43fcf3),  // cyan
-            Color.fromRGB(0x00b7ff),  // skyblue
-            Color.fromRGB(0x2571ff),  // blue
-            Color.fromRGB(0xff55a1),  // magenta
-            Color.fromRGB(0xff5c84)
-        )
-    }
+    private lateinit var playerStores: Config
+    private val liveBarMap = mutableMapOf<UUID, BossBar>()
+    private val colors = arrayOf( // from XelticaUI
+        Color.fromRGB(0xe23731),  // red
+        Color.fromRGB(0xeb6101),  // vermilion
+        Color.fromRGB(0xf08300),  // orange
+        Color.fromRGB(0xe9be00),  // yellow
+        Color.fromRGB(0xb8d200),  // lime
+        Color.fromRGB(0x3eb370),  // green
+        Color.fromRGB(0x20c0a0),  // teal
+        Color.fromRGB(0x43fcf3),  // cyan
+        Color.fromRGB(0x00b7ff),  // skyblue
+        Color.fromRGB(0x2571ff),  // blue
+        Color.fromRGB(0xff55a1),  // magenta
+        Color.fromRGB(0xff5c84)
+    )
 }

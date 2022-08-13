@@ -6,8 +6,8 @@ import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.stores.EbiPowerStore
-import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.modules.EbipowerModule
+import work.xeltica.craft.core.modules.PlayerStoreModule
 import java.util.*
 
 /**
@@ -30,11 +30,11 @@ class FireworkApp : AppBase() {
         val bonusReceived = isBonusReceived(player)
         val verb = if (bonusReceived) "購入" else "入手"
         val ui = Gui.getInstance()
-        if (bonusReceived && !EbiPowerStore.getInstance().tryTake(player, 80)) {
+        if (bonusReceived && !EbipowerModule.tryTake(player, 80)) {
             ui.error(player, "アイテムを${verb}できませんでした。エビパワーが足りません。")
             return
         }
-        val stack = PlayerStore.instance.getRandomFireworkByUUID(player.uniqueId, fireworkCount)
+        val stack = PlayerStoreModule.getRandomFireworkByUUID(player.uniqueId, fireworkCount)
         val size = player.inventory.addItem(stack).size
         if (size > 0) {
             ui.error(player, "アイテムを${verb}できませんでした。持ち物がいっぱいです。整理してからもう一度お試し下さい。")
@@ -43,13 +43,13 @@ class FireworkApp : AppBase() {
                 stackToRemove.amount = size - fireworkCount
                 player.inventory.remove(stackToRemove)
             }
-            EbiPowerStore.getInstance().tryGive(player, fireworkCost)
+            EbipowerModule.tryGive(player, fireworkCost)
         } else {
             player.sendMessage("花火を${verb}しました！")
             player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 2f)
         }
         if (!bonusReceived) {
-            PlayerStore.instance.open(player)[PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER] = true
+            PlayerStoreModule.open(player)[PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER] = true
         }
     }
 
@@ -62,6 +62,5 @@ class FireworkApp : AppBase() {
         return month == 5 && 15 <= day && day <= 21
     }
 
-    private fun isBonusReceived(player: Player) = PlayerStore.instance
-        .open(player).getBoolean(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER)
+    private fun isBonusReceived(player: Player) = PlayerStoreModule.open(player).getBoolean(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER)
 }

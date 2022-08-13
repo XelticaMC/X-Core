@@ -11,7 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.stores.ItemStore;
+import work.xeltica.craft.core.modules.CustomItemModule;
 
 import java.util.List;
 
@@ -19,7 +19,6 @@ public class TicketWildareaBHandler implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onUse(PlayerInteractEvent e) {
-        final var store = ItemStore.getInstance();
         final var item = e.getItem();
         if (item == null) return;
 
@@ -28,12 +27,12 @@ public class TicketWildareaBHandler implements Listener {
 
         final var player = e.getPlayer();
 
-        final var ticket = store.getItem(ItemStore.ITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT);
+        final var ticket = CustomItemModule.getItem(CustomItemModule.getITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT());
 
         // 右クリック以外はガード
         if (!List.of(Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK).contains(e.getAction())) return;
 
-        if (!store.compareCustomItem(item, ticket)) {
+        if (!CustomItemModule.compareCustomItem(item, ticket)) {
             return;
         }
 

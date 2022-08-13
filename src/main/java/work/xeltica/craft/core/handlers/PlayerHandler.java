@@ -42,11 +42,11 @@ import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.modules.BossBarModule;
 import work.xeltica.craft.core.modules.HintModule;
-import work.xeltica.craft.core.stores.HubStore;
-import work.xeltica.craft.core.stores.ItemStore;
+import work.xeltica.craft.core.modules.HubModule;
+import work.xeltica.craft.core.modules.CustomItemModule;
 import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.modules.OmikujiModule;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.PlayerStoreModule;
 import work.xeltica.craft.core.stores.QuickChatStore;
 import work.xeltica.craft.core.modules.BedrockDisclaimerModule;
 
@@ -97,17 +97,16 @@ public class PlayerHandler implements Listener {
         NickNameStore.getInstance().setNickName(p);
 
         final var name = PlainTextComponentSerializer.plainText().serialize(p.displayName());
-        final var pstore = PlayerStore.getInstance();
         e.joinMessage(Component.text("§a" + name + "§b" + "さんがやってきました"));
         if (!p.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
-            pstore.open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
-            HubStore.getInstance().teleport(p, HubType.NewComer, true);
+            PlayerStoreModule.open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
+            HubModule.teleport(p, HubType.NewComer, true);
         }
-        final var record = pstore.open(p);
+        final var record = PlayerStoreModule.open(p);
 
         if (!record.getBoolean(PlayerDataKey.GIVEN_PHONE)) {
-            p.getInventory().addItem(ItemStore.getInstance().getItem(ItemStore.ITEM_NAME_XPHONE));
+            p.getInventory().addItem(CustomItemModule.getItem(CustomItemModule.getITEM_NAME_XPHONE()));
             record.set(PlayerDataKey.GIVEN_PHONE, true);
         }
 
@@ -115,7 +114,7 @@ public class PlayerHandler implements Listener {
 
         BossBarModule.INSTANCE.applyAll(p);
 
-        if (PlayerStore.getInstance().isCitizen(p)) {
+        if (PlayerStoreModule.isCitizen(p)) {
             HintModule.achieve(p, Hint.BE_CITIZEN);
         }
 
@@ -128,8 +127,8 @@ public class PlayerHandler implements Listener {
             Component.text("§f詳しくは §b§nhttps://craft.xeltica.work§fを見てね！")
         ));
 
-        if (!pstore.isCitizen(p)) {
-            if (!pstore.open(p).has(PlayerDataKey.NEWCOMER_TIME)) {
+        if (!PlayerStoreModule.isCitizen(p)) {
+            if (!PlayerStoreModule.open(p).has(PlayerDataKey.NEWCOMER_TIME)) {
                 p.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！");
                 p.sendMessage("詳しくは §b/promo§rコマンドを実行してください。");
             }
@@ -145,7 +144,7 @@ public class PlayerHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChatForCat(AsyncPlayerChatEvent e) {
         // ネコであれば文章をいじる
-        if (PlayerStore.getInstance().open(e.getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
+        if (PlayerStoreModule.open(e.getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
             e.setMessage(nyaize(e.getMessage()));
         }
     }
@@ -155,7 +154,7 @@ public class PlayerHandler implements Listener {
         // ネコであれば文章をいじる
         final var member = e.getMember();
         if (!(member instanceof ChannelMemberPlayer)) return;
-        if (PlayerStore.getInstance().open(((ChannelMemberPlayer) member).getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
+        if (PlayerStoreModule.open(((ChannelMemberPlayer) member).getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
             e.setMessage(nyaize(e.getMessage()));
         }
     }

@@ -19,10 +19,10 @@ import work.xeltica.craft.core.api.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.models.PlayerRecord
-import work.xeltica.craft.core.stores.EbiPowerStore
+import work.xeltica.craft.core.modules.EbipowerModule
 import work.xeltica.craft.core.modules.HintModule
-import work.xeltica.craft.core.stores.MobEPStore
-import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.modules.MobDroppingEpModule
+import work.xeltica.craft.core.modules.PlayerStoreModule
 import java.util.*
 import java.util.function.Consumer
 
@@ -98,19 +98,18 @@ class EbiPowerHandler: Listener {
 
         if (victim.fromMobSpawner()) return
 
-        val epStore = EbiPowerStore.getInstance()
         if (victim is Cat || victim is Ocelot) {
-            epStore.tryTake(killer, 100)
+            EbipowerModule.tryTake(killer, 100)
             notification(killer, "可愛い可愛いネコちゃんを殴るなんて！100EPを失った。")
             killer.playSound(killer.location, Sound.ENTITY_ZOMBIE_VILLAGER_AMBIENT, 0.7f, 0.5f)
             HintModule.achieve(killer, Hint.VIOLENCE_CAT)
         } else if (victim is Tameable && victim.isTamed && victim !is SkeletonHorse) {
-            epStore.tryTake(killer, 10)
+            EbipowerModule.tryTake(killer, 10)
             notification(killer, "ペットを殴るなんて！10EPを失った。")
             killer.playSound(killer.location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f)
             HintModule.achieve(killer, Hint.VIOLENCE_PET)
         } else if (victim is Ageable && victim !is Monster && victim !is Hoglin && !victim.isAdult) {
-            epStore.tryTake(killer, 10)
+            EbipowerModule.tryTake(killer, 10)
             notification(killer, "子供を殴るなんて！10EPを失った。")
             killer.playSound(killer.location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f)
             HintModule.achieve(killer, Hint.VIOLENCE_CHILD)
@@ -132,11 +131,11 @@ class EbiPowerHandler: Listener {
         // ignore creatures from spawner
         if (victim.fromMobSpawner()) return
 
-        var ep = if ("nightmare2" == killer.world.name) MobEPStore.getInstance().getMobDropEP(victim, e) else 6
+        var ep = if ("nightmare2" == killer.world.name) MobDroppingEpModule.getMobDropEP(victim, e) else 6
         val buff = getMobDropBonus(killer.inventory.itemInMainHand) * 4
         ep += if (buff > 0) random.nextInt(buff) else 0
         if (ep > 0) {
-            EbiPowerStore.getInstance().tryGive(killer, ep)
+            EbipowerModule.tryGive(killer, ep)
             HintModule.achieve(killer, Hint.KILL_MOB_AND_EARN_MONEY)
         }
     }
@@ -144,11 +143,10 @@ class EbiPowerHandler: Listener {
     @EventHandler
     fun onPlayerLoggedIn(e: PlayerJoinEvent) {
         val now = Date()
-        val ps = PlayerStore.instance
-        val record = ps.open(e.player)
+        val record = PlayerStoreModule.open(e.player)
         val prev = Date(record.getLong(PlayerDataKey.LAST_JOINED, now.time))
         if (prev.year != now.year && prev.month != now.month && prev.date != now.date) {
-            EbiPowerStore.getInstance().tryGive(e.player, LOGIN_BONUS_POWER)
+            EbipowerModule.tryGive(e.player, LOGIN_BONUS_POWER)
             notification(e.player, "ログボ達成！" + LOGIN_BONUS_POWER.toString() + "EPを獲得。")
         }
         record[PlayerDataKey.LAST_JOINED] = now.time
@@ -163,7 +161,7 @@ class EbiPowerHandler: Listener {
             val tool = p.inventory.itemInMainHand
             val bonus = getBlockDropBonus(tool)
             val power = (1 + bonus) * HARVEST_POWER_MULTIPLIER
-            EbiPowerStore.getInstance().tryGive(p, power)
+            EbipowerModule.tryGive(p, power)
             // もし幸運ボーナスがあれば30%の確率で耐久が減っていく
             if (bonus > 0 && random.nextInt(100) < 30) {
                 tool.editMeta { meta ->
@@ -179,7 +177,7 @@ class EbiPowerHandler: Listener {
     fun onBreedEntities(e: EntityBreedEvent) {
         val breeder = e.breeder as? Player ?: return
         if (playerIsInBlacklisted(breeder)) return
-        EbiPowerStore.getInstance().tryGive(breeder, 2)
+        EbipowerModule.tryGive(breeder, 2)
         HintModule.achieve(breeder, Hint.BREED_AND_EARN_MONEY)
     }
 
@@ -187,7 +185,7 @@ class EbiPowerHandler: Listener {
     fun onMineBlocks(e: BlockBreakEvent) {
         if (!breakBonusList.contains(e.block.type)) return
         if (playerIsInBlacklisted(e.player)) return
-        val record = PlayerStore.instance.open(e.player)
+        val record = PlayerStoreModule.open(e.player)
         val brokenBlocksCount = record.getInt(PlayerDataKey.BROKEN_BLOCKS_COUNT)
 
         if (!e.isDropItems) return
@@ -228,13 +226,13 @@ class EbiPowerHandler: Listener {
             }
         }
 
-        EbiPowerStore.getInstance().tryGive(e.player, ep)
+        EbipowerModule.tryGive(e.player, ep)
         HintModule.achieve(e.player, Hint.MINERS_NEWBIE)
     }
 
     @EventHandler
     fun onNewDayToResetBrokenBlocksCount(e: RealTimeNewDayEvent) {
-        PlayerStore.instance.openAll().forEach(Consumer { record: PlayerRecord ->
+        PlayerStoreModule.openAll().forEach(Consumer { record: PlayerRecord ->
             record[PlayerDataKey.BROKEN_BLOCKS_COUNT] = 0
         })
     }

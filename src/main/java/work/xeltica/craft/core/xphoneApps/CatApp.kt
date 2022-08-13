@@ -3,7 +3,7 @@ package work.xeltica.craft.core.xphoneApps
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.modules.PlayerStoreModule
 
 /**
  * ネコモードを切り替えるプラグイン。
@@ -22,5 +22,5 @@ class CatApp : AppBase() {
 
     override fun isShiny(player: Player): Boolean = isCat(player)
 
-    private fun isCat(player: Player) = PlayerStore.instance.open(player).getBoolean(PlayerDataKey.CAT_MODE)
+    private fun isCat(player: Player) = PlayerStoreModule.open(player).getBoolean(PlayerDataKey.CAT_MODE)
 }

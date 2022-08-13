@@ -1,31 +1,15 @@
 package work.xeltica.craft.core.handlers;
 
-import java.util.List;
-import java.util.Objects;
-
-import com.google.common.collect.Lists;
-
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.kyori.adventure.text.Component;
-import work.xeltica.craft.core.stores.HubStore;
-import work.xeltica.craft.core.stores.WorldStore;
+import work.xeltica.craft.core.modules.HubModule;
 
 /**
  * ロビーにまつわるイベントハンドラーをまとめています。
@@ -56,9 +40,5 @@ public class HubHandler implements Listener {
 
     private boolean playerIsInHub(Entity p) {
         return p.getWorld().getName().equalsIgnoreCase("hub2");
-    }
-
-    private HubStore store() {
-        return HubStore.getInstance();
     }
 }

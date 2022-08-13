@@ -15,7 +15,6 @@ import java.io.IOException
 import java.util.UUID
 import kotlin.Throws
 import work.xeltica.craft.core.api.Config
-import work.xeltica.craft.core.stores.EbiPowerStore
 
 /**
  * プレイヤーのヒントを達成する処理や、ヒントを達成しているかどうかの取得などを行います。
@@ -70,7 +69,7 @@ object HintModule : ModuleBase() {
         list.add(hint.name)
         hints.conf[p.uniqueId.toString()] = list
         if (hint.power > 0) {
-            EbiPowerStore.getInstance().tryGive(p, hint.power)
+            EbipowerModule.tryGive(p, hint.power)
         }
         p.playSound(p.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1.4f)
         val component = p.displayName().color(TextColor.color(0x4CAF50))

@@ -2,9 +2,9 @@ package work.xeltica.craft.core.models
 
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.stores.EbiPowerStore
+import work.xeltica.craft.core.modules.EbipowerModule
 import work.xeltica.craft.core.modules.HintModule
-import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.modules.PlayerStoreModule
 import java.io.IOException
 import work.xeltica.craft.core.modules.CloverModule
 import java.util.HashMap
@@ -49,10 +49,9 @@ class TransferPlayerData(val from: Player, val to: Player) {
     }
 
     private fun transferEbiPower() {
-        val ebiPowerStore = EbiPowerStore.getInstance()
-        val hasMoney = ebiPowerStore[from]
-        ebiPowerStore.tryTake(from, hasMoney)
-        ebiPowerStore.tryGive(to, hasMoney)
+        val hasMoney = EbipowerModule[from]
+        EbipowerModule.tryTake(from, hasMoney)
+        EbipowerModule.tryGive(to, hasMoney)
     }
 
     private fun transferHint() {
@@ -68,15 +67,14 @@ class TransferPlayerData(val from: Player, val to: Player) {
     }
 
     private fun transferPlayerStoreData() {
-        val playerStore = PlayerStore.instance
-        val fromPlayerRecord = playerStore!!.open(from.uniqueId)
-        val toPlayerRecord = playerStore.open(to.uniqueId)
+        val fromPlayerRecord = PlayerStoreModule.open(from.uniqueId)
+        val toPlayerRecord = PlayerStoreModule.open(to.uniqueId)
         for (key in PlayerDataKey.values()) {
             toPlayerRecord[key] = fromPlayerRecord[key]
             fromPlayerRecord.delete(key)
         }
         try {
-            playerStore.save()
+            PlayerStoreModule.save()
         } catch (e: IOException) {
             e.printStackTrace()
         }

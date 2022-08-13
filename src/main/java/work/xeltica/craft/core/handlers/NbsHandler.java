@@ -1,10 +1,8 @@
 package work.xeltica.craft.core.handlers;
 
 import com.xxmicloxx.NoteBlockAPI.event.SongEndEvent;
-import com.xxmicloxx.NoteBlockAPI.event.SongStoppedEvent;
 import com.xxmicloxx.NoteBlockAPI.songplayer.PositionSongPlayer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
@@ -17,7 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.models.NbsModel;
-import work.xeltica.craft.core.stores.NbsStore;
+import work.xeltica.craft.core.modules.NbsModule;
 
 public class NbsHandler implements Listener {
     /**
@@ -25,11 +23,10 @@ public class NbsHandler implements Listener {
      */
     @EventHandler
     public void onNoteBreak(BlockBreakEvent e) {
-        final var store = NbsStore.getInstance();
         final var loc = e.getBlock().getLocation();
 
-        if (store.has(loc)) {
-            store.stop(loc);
+        if (NbsModule.has(loc)) {
+            NbsModule.stop(loc);
         }
     }
 
@@ -38,35 +35,32 @@ public class NbsHandler implements Listener {
      */
     @EventHandler
     public void onNotePlay(NotePlayEvent e) {
-        final var store = NbsStore.getInstance();
         final var location = e.getBlock().getLocation();
 
         final var song = getSong(location);
 
-        if (store.has(location) && store.getModel(location).getPlaybackMode() != NbsModel.PlaybackMode.ONESHOT) {
-            store.stop(location);
+        if (NbsModule.has(location) && NbsModule.getModel(location).getPlaybackMode() != NbsModel.PlaybackMode.ONESHOT) {
+            NbsModule.stop(location);
             e.setCancelled(true);
         } else if (song != null) {
-            store.play(location, song.songId, song.distance, song.mode);
+            NbsModule.play(location, song.songId, song.distance, song.mode);
             e.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        final var store = NbsStore.getInstance();
-        store.addAudience(e.getPlayer());
+        NbsModule.addAudience(e.getPlayer());
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent e) {
-        final var store = NbsStore.getInstance();
-        store.removeAudience(e.getPlayer());
+        NbsModule.removeAudience(e.getPlayer());
     }
 
     @EventHandler
     public void onSongFinished(SongEndEvent e) {
-        NbsStore.getInstance().removeModel(((PositionSongPlayer)e.getSongPlayer()).getTargetLocation());
+        NbsModule.removeModel(((PositionSongPlayer)e.getSongPlayer()).getTargetLocation());
     }
 
     @Nullable

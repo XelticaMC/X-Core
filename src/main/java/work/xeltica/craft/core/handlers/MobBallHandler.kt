@@ -23,7 +23,7 @@ import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.plugins.CitizensPlugin.isCitizensNpc
 import work.xeltica.craft.core.modules.HintModule
 import work.xeltica.craft.core.modules.MobBallModule
-import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.modules.PlayerStoreModule
 import java.util.*
 
 class MobBallHandler : Listener {
@@ -100,7 +100,7 @@ class MobBallHandler : Listener {
                         showSuccessParticle(eggEntity.location)
                         eggEntity.setCanPlayerPickup(true)
                         HintModule.achieve(player, Hint.SUCCEEDED_TO_CATCH_MOB)
-                        val dex = PlayerStore.instance.open(player.uniqueId).getStringList(PlayerDataKey.MOB_DEX)
+                        val dex = PlayerStoreModule.open(player.uniqueId).getStringList(PlayerDataKey.MOB_DEX)
                         val type = target.type.toString()
                         if (!dex.contains(type)) {
                             dex.add(target.type.toString())

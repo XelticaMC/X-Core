@@ -4,7 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.models.Hint
-import work.xeltica.craft.core.stores.EbiPowerStore
+import work.xeltica.craft.core.modules.EbipowerModule
 import work.xeltica.craft.core.modules.HintModule
 
 /**
@@ -18,12 +18,11 @@ class EbipowerObserveWorker : BukkitRunnable() {
             return
         }
 
-        val store = EbiPowerStore.getInstance()
         val player = players[index]
 
         if (!player.isOnline) return
 
-        val ebipower = store.get(player)
+        val ebipower = EbipowerModule.get(player)
         if (ebipower >= 1000000) {
             HintModule.achieve(player, Hint.EBIPOWER_1000000)
         }

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.modules.HintModule;
-import work.xeltica.craft.core.stores.ItemStore;
+import work.xeltica.craft.core.modules.CustomItemModule;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +24,7 @@ import java.util.Objects;
 public class CommandXPhone extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        final var item = ItemStore.getInstance().getItem("xphone");
+        final var item = CustomItemModule.getItem("xphone");
         if (item != null) {
             player.getInventory().addItem(item);
             player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);

@@ -41,7 +41,7 @@ import work.xeltica.craft.core.models.CraftRecipe;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.modules.HintModule;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.PlayerStoreModule;
 import work.xeltica.craft.core.stores.WorldStore;
 import work.xeltica.craft.core.modules.DiscordModule;
 
@@ -121,7 +121,7 @@ public class WorldHandler implements Listener {
         };
 
         // 以前サーバーに来ている or FIRST_SPAWN フラグが立っている
-        final var isNotFirstTeleport = p.hasPlayedBefore() || PlayerStore.getInstance().open(p).getBoolean(PlayerDataKey.FIRST_SPAWN);
+        final var isNotFirstTeleport = p.hasPlayedBefore() || PlayerStoreModule.open(p).getBoolean(PlayerDataKey.FIRST_SPAWN);
 
         if (to.getName().equals("main") && isNotFirstTeleport && !HintModule.hasAchieved(p, Hint.GOTO_MAIN)) {
             // はじめてメインワールドに入った場合、対象のスタッフに通知する
@@ -156,7 +156,7 @@ public class WorldHandler implements Listener {
         }
 
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-            PlayerStore.getInstance().open(p).set(PlayerDataKey.FIRST_SPAWN, true);
+            PlayerStoreModule.open(p).set(PlayerDataKey.FIRST_SPAWN, true);
         }, 20 * 5);
     }
 

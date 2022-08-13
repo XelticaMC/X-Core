@@ -8,7 +8,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.MenuItem
 import work.xeltica.craft.core.models.Notification
-import work.xeltica.craft.core.stores.EbiPowerStore
+import work.xeltica.craft.core.modules.EbipowerModule
 import work.xeltica.craft.core.modules.NotificationModule
 
 class NotificationApp: AppBase() {
@@ -48,7 +48,7 @@ class NotificationApp: AppBase() {
 
     private fun readNotification(player: Player, notification: Notification) {
         if (notification.ep != null) {
-            EbiPowerStore.getInstance().tryGive(player, notification.ep)
+            EbipowerModule.tryGive(player, notification.ep)
             player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
             player.sendMessage("${notification.ep} EPを受け取りました。")
         }

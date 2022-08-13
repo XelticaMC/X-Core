@@ -17,7 +17,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.PlayerStoreModule;
 
 /**
  * わかばロール向けの機能制限に関するハンドラーをまとめています。
@@ -53,7 +53,7 @@ public class WakabaHandler implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-        if (flags().isCitizen(e.getPlayer())) return;
+        if (PlayerStoreModule.isCitizen(e.getPlayer())) return;
         final var mat = e.getBlock().getType();
         if (isDeniedMaterial(mat)) {
             prevent(e, e.getPlayer(), "ブロック " + mat + " を設置できません。");
@@ -62,7 +62,7 @@ public class WakabaHandler implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        if (flags().isCitizen(e.getPlayer())) return;
+        if (PlayerStoreModule.isCitizen(e.getPlayer())) return;
         final var mat = e.getBlock().getType();
         if (isDeniedMaterial(mat)) {
             prevent(e, e.getPlayer(), "ブロック " + mat + " を破壊できません。");
@@ -71,7 +71,7 @@ public class WakabaHandler implements Listener {
 
     @EventHandler
     public void onBlockInteract(PlayerInteractEvent e) {
-        if (flags().isCitizen(e.getPlayer())) return;
+        if (PlayerStoreModule.isCitizen(e.getPlayer())) return;
         final var clickedBlock = e.getClickedBlock();
         if (clickedBlock != null) {
             final var mat = e.getClickedBlock().getType();
@@ -92,7 +92,7 @@ public class WakabaHandler implements Listener {
     public void onEntityDamage(EntityDamageByEntityEvent e) {
         if (!(e.getDamager() instanceof Player)) return;
         final var p = (Player)e.getDamager();
-        if (flags().isCitizen(p))
+        if (PlayerStoreModule.isCitizen(p))
             return;
         if (e.getEntityType() == EntityType.ENDER_CRYSTAL) {
             prevent(e, p, "エンドクリスタルを破壊できません。");
@@ -114,10 +114,6 @@ public class WakabaHandler implements Listener {
     private boolean isDeniedItemMaterial(Material mat) {
         if (deniedItems.contains(mat)) return true;
         return deniedItemTags.stream().anyMatch(t -> t.isTagged(mat));
-    }
-
-    private PlayerStore flags() {
-        return PlayerStore.getInstance();
     }
 
     private final Set<Material> deniedBlocks = new HashSet<>();
