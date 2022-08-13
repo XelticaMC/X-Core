@@ -64,8 +64,9 @@ class StampRallyHandler: Listener {
                 event.isCancelled = true
                 return
             }
-            stampRallyStore.destroy(name)
-            player.sendMessage("スタンプ: " + name + "を破壊しました")
+            val stampName = name.removePrefix("§b")
+            stampRallyStore.destroy(stampName)
+            player.sendMessage("スタンプ: " + stampName + "を破壊しました")
         }
     }
 
@@ -78,7 +79,8 @@ class StampRallyHandler: Listener {
                 val location = block.location.add(0.0, -1.0, 0.0)
                 val sign = getNearStampSign(location) ?: return
                 val line1 = sign.line(1) as? TextComponent ?: return
-                StampRallyStore.getInstance().activate(event.player, line1.content())
+                val stampName = line1.content().removePrefix("§b")
+                StampRallyStore.getInstance().activate(event.player, stampName)
             }
         }
     }
