@@ -23,84 +23,54 @@ class TeleportApp : AppBase() {
         val currentWorldName: String = player.world.name
 
         if (currentWorldName != "hub2") {
-            list.add(
-                MenuItem(
-                    "ロビー",
-                    { player.performCommand("hub") },
-                    Material.NETHERITE_BLOCK
-                )
-            )
+            list.add(MenuItem("ロビー", { player.performCommand("hub") }, Material.NETHERITE_BLOCK))
         }
 
         if (WorldStore.getInstance().getRespawnWorld(currentWorldName) != null) {
-            list.add(
-                MenuItem(
-                    "初期スポーン",
-                    { player.performCommand("respawn") },
-                    Material.FIREWORK_ROCKET
-                )
-            )
-            list.add(
-                MenuItem(
-                    "ベッド",
-                    { player.performCommand("respawn bed") },
-                    Material.RED_BED
-                )
-            )
+            list.add(MenuItem("初期スポーン", { player.performCommand("respawn") }, Material.FIREWORK_ROCKET))
+            list.add(MenuItem("ベッド", { player.performCommand("respawn bed") }, Material.RED_BED))
         }
 
         if ("main" == currentWorldName) {
-            list.add(
-                MenuItem(
-                    "ワイルドエリアBへ行く",
-                    { i: MenuItem? ->
-                        val loc: Location = player.location
-                        val x = loc.blockX * 16
-                        val z = loc.blockZ * 16
-                        player.sendMessage("ワールドを準備中です…。そのまましばらくお待ちください。")
-                        player.world.getChunkAtAsync(x, z)
-                            .thenAccept {
-                                val wildareab = Bukkit.getWorld("wildareab")
-                                if (wildareab == null) {
-                                    Gui.getInstance().error(player, "テレポートに失敗しました。ワールドが作成されていないようです。")
-                                    return@thenAccept
-                                }
-                                val y = wildareab.getHighestBlockYAt(x, z) + 1
-                                val land =
-                                    Location(wildareab, x.toDouble(), (y - 1).toDouble(), z.toDouble())
-                                if (land.block.type == Material.WATER) {
-                                    land.block.type = Material.STONE
-                                }
-                                player.teleportAsync(Location(wildareab, x.toDouble(), y.toDouble(), z.toDouble()))
-                            }
-                    },
-                    Material.GRASS_BLOCK
+            list.add(MenuItem("ワイルドエリアBへ行く", { i: MenuItem? ->
+                val loc: Location = player.location
+                val x = loc.blockX * 16
+                val z = loc.blockZ * 16
+                player.sendMessage("ワールドを準備中です…。そのまましばらくお待ちください。")
+                player.world.getChunkAtAsync(x, z)
+                    .thenAccept {
+                        val wildareab = Bukkit.getWorld("wildareab")
+                        if (wildareab == null) {
+                            Gui.getInstance().error(player, "テレポートに失敗しました。ワールドが作成されていないようです。")
+                            return@thenAccept
+                        }
+                        val y = wildareab.getHighestBlockYAt(x, z) + 1
+                        val land =
+                            Location(wildareab, x.toDouble(), (y - 1).toDouble(), z.toDouble())
+                        if (land.block.type == Material.WATER) {
+                            land.block.type = Material.STONE
+                        }
+                        player.teleportAsync(Location(wildareab, x.toDouble(), y.toDouble(), z.toDouble()))
+                    }
+            }, Material.GRASS_BLOCK))
+
+            val calendar = Calendar.getInstance()
+            val month = calendar.get(Calendar.MONTH) + 1
+            if ((month == 8) || player.isOp) {
+                list.add(
+                    MenuItem("イベント", {
+                        val eventWorldLocation = Bukkit.getWorld("event")?.spawnLocation
+                        if (eventWorldLocation == null) {
+                            player.sendMessage("")
+                            return@MenuItem
+                        }
+                        player.teleportAsync(eventWorldLocation)
+                    }, Material.TROPICAL_FISH)
                 )
-            )
+            }
         } else if ("wildareab" == currentWorldName) {
             list.add(
-                MenuItem(
-                    "メインワールドに帰る",
-                    { WorldStore.getInstance().teleportToSavedLocation(player, "main") },
-                    Material.CREEPER_HEAD
-                )
-            )
-        }
-
-        val calendar = Calendar.getInstance()
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val month = calendar.get(Calendar.MONTH) + 1
-        if ((month == 8 && day <= 15) || player.isOp) {
-            list.add(
-                MenuItem("イベント", {
-                    val eventWorldLocation = Bukkit.getWorld("event")?.spawnLocation
-                    if (eventWorldLocation == null) {
-                        player.sendMessage("")
-                        return@MenuItem
-                    }
-                    player.teleportAsync(eventWorldLocation)
-
-                }, Material.TROPICAL_FISH)
+                MenuItem("メインワールドに帰る", { WorldStore.getInstance().teleportToSavedLocation(player, "main") }, Material.CREEPER_HEAD)
             )
         }
 
