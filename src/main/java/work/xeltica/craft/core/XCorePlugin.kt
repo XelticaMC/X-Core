@@ -4,8 +4,6 @@ import java.io.IOException
 import work.xeltica.craft.core.plugins.CitizenTimerCalculator
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
-import org.bukkit.command.Command
-import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 
@@ -67,13 +65,9 @@ class XCorePlugin : JavaPlugin() {
         )
         if (provider != null) {
             val luckPerms = provider.provider
-            luckPerms.contextManager.unregisterCalculator(calculator!!)
+            luckPerms.contextManager.unregisterCalculator(calculator)
         }
         logger.info("X-Core を停止しました。")
-    }
-
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
-        return super.onCommand(sender, command, label, args)
     }
 
     private fun loadWorkers() {

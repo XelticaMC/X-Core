@@ -29,7 +29,7 @@ object CommandRegistry : CommandExecutor {
         commandsMap.clear()
     }
 
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         val name = command.name.lowercase(Locale.getDefault())
         val com = commandsMap[name] ?: return false
         return com.execute(sender, command, label, args)

@@ -69,7 +69,7 @@ class TransferPlayerDataApp : AppBase() {
     }
 
     private fun acceptTransferPlayerData(player: Player) {
-        val playerData = TransferPlayerData.getInstance(player)
+        val playerData = TransferPlayerData.getInstance(player) ?: throw IllegalStateException()
         val fromName = playerData.from.name
         val ui = Gui.getInstance()
         ui.openDialog(player, "引っ越し", """
@@ -89,7 +89,7 @@ class TransferPlayerDataApp : AppBase() {
     }
 
     private fun cancelTransferPlayerData(player: Player) {
-        TransferPlayerData.getInstance(player).cancel()
+        (TransferPlayerData.getInstance(player) ?: throw IllegalStateException()).cancel()
     }
 
     override fun isShiny(player: Player): Boolean = TransferPlayerData.getInstance(player) != null
