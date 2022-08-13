@@ -54,6 +54,18 @@ class StampRallyStore {
         list.add(stampName)
         activatedStamp.conf.set(player.uniqueId.toString(), list)
         activatedStamp.save()
+
+        if (isStampAchieved(player)) {
+            player.sendMessage("ラリー達成おめでとうございます！5000EPを贈呈します")
+            EbiPowerStore.getInstance().tryGive(player, 5000)
+        }
+    }
+
+    fun isStampAchieved(player: Player): Boolean {
+        val entireStamp = HashSet(getEntireStampList())
+        val activated = activatedStamp.conf.getStringList(player.uniqueId.toString())
+        entireStamp.removeAll(activated.toSet())
+        return entireStamp.isEmpty()
     }
 
     fun getEntireStampList(): List<String> {
