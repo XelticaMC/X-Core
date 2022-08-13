@@ -39,7 +39,8 @@ object XphoneOs {
             LiveModeApp(),
             QuickChatApp(),
             TransferPlayerDataApp(),
-            VoteApp()
+            VoteApp(),
+            PunishApp(),
         ))
     }
 
