@@ -42,12 +42,8 @@ object XphoneOs {
             TransferPlayerDataApp(),
             VoteApp(),
             PunishApp(),
+            StampRallyApp(),
         ))
-        val today = LocalDate.now()
-        val startEventDay = LocalDate.of(2022, 8, 16)
-        val endEventDay = LocalDate.of(2022, 8, 31)
-        if (!(startEventDay.isAfter(today) || endEventDay.isBefore(today)))
-            apps.add(StampRallyApp())
     }
 
     /**
@@ -97,7 +93,7 @@ object XphoneOs {
         ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.D2, 4)
     }
 
-    const val name = "X Phone OS 2.1"
+    const val name = "X Phone OS 2.2"
 
     private val apps = mutableListOf<AppBase>()
 }
