@@ -32,7 +32,7 @@ class TeleportApp : AppBase() {
         }
 
         if ("main" == currentWorldName) {
-            list.add(MenuItem("ワイルドエリアBへ行く", { i: MenuItem? ->
+            list.add(MenuItem("資源ワールドへ行く", { i: MenuItem? ->
                 val loc: Location = player.location
                 val x = loc.blockX * 16
                 val z = loc.blockZ * 16
@@ -53,6 +53,14 @@ class TeleportApp : AppBase() {
                         player.teleportAsync(Location(wildareab, x.toDouble(), y.toDouble(), z.toDouble()))
                     }
             }, Material.GRASS_BLOCK))
+
+            list.add(MenuItem("資源ネザー", {
+                WorldStore.getInstance().teleportToSavedLocation(player, "shigen_nether")
+            }, Material.NETHERRACK))
+
+            list.add(MenuItem("資源エンド", {
+                WorldStore.getInstance().teleportToSavedLocation(player, "shigen_end")
+            }, Material.NETHERRACK))
 
             val calendar = Calendar.getInstance()
             val month = calendar.get(Calendar.MONTH) + 1

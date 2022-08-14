@@ -8,6 +8,7 @@ import work.xeltica.craft.core.models.MenuItem
 import work.xeltica.craft.core.models.SoundPitch
 import work.xeltica.craft.core.xphoneApps.*
 import java.lang.IllegalStateException
+import java.time.LocalDate
 
 /**
  * X Phone の基幹となるシステムです。
@@ -36,8 +37,10 @@ object XphoneModule : ModuleBase() {
             QuickChatApp(),
             TransferPlayerDataApp(),
             VoteApp(),
-            NotificationApp()
-        )
+            NotificationApp(),
+            PunishApp(),
+            StampRallyApp(),
+        ))
     }
 
     override fun onDisable() {
@@ -97,7 +100,7 @@ object XphoneModule : ModuleBase() {
         ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.D2, 4)
     }
 
-    const val name = "X Phone OS 2.1"
+    const val name = "X Phone OS 2.2"
 
     private val apps = mutableListOf<AppBase>()
 }

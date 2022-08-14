@@ -29,24 +29,16 @@ object DiscordModule: ModuleBase() {
 
     /**
      * Discordに、処罰者を報告します。
-     * @param badPlayer 処罰者
+     * @param badPlayerName 処罰対象者名
      * @param abuses 処罰理由
      * @param time 期限
      * @param command 処罰内容
      */
-    @JvmStatic
-    fun reportDiscord(badPlayer: OfflinePlayer, abuses: String, time: String, command: String) {
-        val guild = DiscordSRV.getPlugin().getMainGuild()
-        val channel = guild.getGuildChannelById(reportChannelID)
+    fun reportDiscord(badPlayerName: String, abuses: String, time: String, command: String) {
+        val guild = DiscordSRV.getPlugin().mainGuild;
+        val channel = guild.getGuildChannelById(reportChannelID);
         if (channel is TextChannel) {
-            channel.sendMessage(String.format(reportTemplate, badPlayer.getName(), abuses, time + command)).queue()
-            if (badPlayer is Player) {
-                val member = getMember(badPlayer)
-                if (member != null) {
-                    val role = guild.getRoleById(lockRoleID)
-                    if (role != null) guild.addRoleToMember(member, role).queue()
-                }
-            }
+            channel.sendMessage(String.format(reportTemplate, badPlayerName, abuses, time + command)).queue();
         }
     }
 
