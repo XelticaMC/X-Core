@@ -51,7 +51,7 @@ public class TicketWildareaBHandler implements Listener {
 
         player.sendMessage("旅行券を使用しました。現在手配中です。その場で少しお待ちください！");
         for (var pl : Bukkit.getOnlinePlayers()) {
-            pl.sendMessage(String.format("§6%s§rさんがワイルドエリアB:海底神殿への旅に行きます！§b行ってらっしゃい！", player.getDisplayName()));
+            pl.sendMessage(String.format("§6%s§rさんが資源ワールド:海底神殿への旅に行きます！§b行ってらっしゃい！", player.getDisplayName()));
         }
 
         final var loc = wildareab.locateNearestStructure(wildareab.getSpawnLocation(), StructureType.OCEAN_MONUMENT, 200, true);

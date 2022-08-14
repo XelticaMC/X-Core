@@ -123,6 +123,8 @@ public class WorldHandler implements Listener {
             case "sandbox2" -> Hint.GOTO_SANDBOX;
             case "art" -> Hint.GOTO_ART;
             case "nightmare2" -> Hint.GOTO_NIGHTMARE;
+            case "shigen_nether" -> Hint.GOTO_WILDNETHERB;
+            case "shigen_end" -> Hint.GOTO_WILDENDB;
             default -> null;
         };
 

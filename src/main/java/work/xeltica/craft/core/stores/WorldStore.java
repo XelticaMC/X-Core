@@ -168,10 +168,12 @@ public class WorldStore {
         worldNameMap.put("nightmare2", "ナイトメア");
         worldNameMap.put("pvp", "PvPアリーナ");
         worldNameMap.put("test", "実験ワールド");
-        worldNameMap.put("wildarea2", "ワイルドエリアA");
-        worldNameMap.put("wildareab", "ワイルドエリアB");
-        worldNameMap.put("wildarea2_nether", "ワイルドネザー");
-        worldNameMap.put("wildarea2_the_end", "ワイルドエンド");
+        worldNameMap.put("wildarea2", "共有ワールド");
+        worldNameMap.put("wildarea2_nether", "共有ネザー");
+        worldNameMap.put("wildarea2_the_end", "共有エンド");
+        worldNameMap.put("wildareab", "資源ワールド");
+        worldNameMap.put("shigen_nether", "資源ネザー");
+        worldNameMap.put("shigen_end", "資源エンド");
         worldNameMap.put("hub2", "ロビー");
         worldNameMap.put("event", "イベントワールド");
     }
@@ -182,29 +184,26 @@ public class WorldStore {
             "元の世界の道具や経験値はお預かりしているので、好きなだけあそんでね！" +
             "§7(あ、でも他の人の建築物を壊したりしないでね)"
         );
+
         worldDescMap.put("nightmare2",
             "ここは怖い敵がうじゃうじゃいる§cナイトメアワールド§r。\n" +
             "手に入れたアイテムは持ち帰れます。"
         );
+
         worldDescMap.put("art",
             "ここは、§b地上絵§rに特化した§cアートワールド§r。\n" +
             "元の世界の道具や経験値はお預かりしているので、安心して地上絵を作成・観覧できます！\n" +
             "§7(他の人の作った地上絵を壊さないようお願いします。)"
         );
-        worldDescMap.put("test",
-            "よくここを見つけたな...。ここはデバッグワールド。\n" +
-            "XelticaMC の開発者が機能をテストするために開放している場所。\n" +
-            "自由に立ち入りできますが、何が起こってもサポートは致しかねます。"
-        );
 
         worldDescMap.put("wildarea2",
-            "ここは、資源が豊富な§cワイルドエリアA§r。\n" +
-            "メインワールドで生活するための資源を回収したり、サバイバル生活をしたり、使い方は無限大。"
+            "ここは、§c共有ワールド§r。\n" +
+            "誰かが寄付してくれた資源を共有拠点にしまってあるので、有効にご活用ください。（独り占めはダメです）"
         );
 
         worldDescMap.put("wildareab",
-            "ここは、資源が豊富な§cワイルドエリアB§r。\n" +
-            "メインワールドで生活するための資源を回収したり、サバイバル生活をしたり、使い方は無限大。"
+            "ここは、§c資源ワールド§r。\n" +
+            "メインワールドで生活するための資源を探そう。"
         );
     }
 
