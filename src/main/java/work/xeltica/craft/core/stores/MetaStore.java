@@ -69,7 +69,8 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "スタッフ向けアプリ追加"
+            "イベント用のスタンプラリー機能を追加しました。",
+            "ワールド名の変更および、新ワールドに対応しました。",
     };
 
     private static MetaStore instance;
