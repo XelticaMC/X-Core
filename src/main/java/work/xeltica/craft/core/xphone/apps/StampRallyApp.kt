@@ -5,8 +5,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.stores.StampRallyStore
-import work.xeltica.craft.core.xphone.XphoneOs
-import java.time.LocalDate
+import work.xeltica.craft.core.utils.EventUtility
 import java.util.function.Consumer
 
 class StampRallyApp: AppBase() {
@@ -46,9 +45,6 @@ class StampRallyApp: AppBase() {
     }
 
     override fun isVisible(player: Player): Boolean {
-        val today = LocalDate.now()
-        val startEventDay = LocalDate.of(2022, 8, 16)
-        val endEventDay = LocalDate.of(2022, 8, 31)
-        return !(startEventDay.isAfter(today) || endEventDay.isBefore(today)) || player.isOp
+        return EventUtility.isEventNow() || player.isOp
     }
 }

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 class PunishApp : AppBase() {
     override fun getName(player: Player): String = "（スタッフ用）処罰"
 
-    override fun getIcon(player: Player): Material = Material.NETHER_STAR
+    override fun getIcon(player: Player): Material = Material.BARRIER
 
     override fun onLaunch(player: Player) {
         player.performCommand("report")

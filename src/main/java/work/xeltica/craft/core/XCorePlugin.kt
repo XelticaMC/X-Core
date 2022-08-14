@@ -5,8 +5,12 @@ import java.io.IOException
 import work.xeltica.craft.core.plugins.CitizenTimerCalculator
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
+import org.bukkit.Color
+import org.bukkit.FireworkEffect
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Firework
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.Locale
@@ -22,6 +26,8 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.xphone.XphoneOs
 import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.utils.EventUtility
+import java.util.Random
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
@@ -65,6 +71,57 @@ class XCorePlugin : JavaPlugin() {
                 }
             }
         }.runTaskTimer(this, 0, tick.toLong())
+
+        if (EventUtility.isEventNow()) {
+            object : BukkitRunnable() {
+                private val colors = arrayOf(
+                    Color.AQUA,
+                    Color.BLUE,
+                    Color.FUCHSIA,
+                    Color.GREEN,
+                    Color.LIME,
+                    Color.MAROON,
+                    Color.NAVY,
+                    Color.OLIVE,
+                    Color.ORANGE,
+                    Color.PURPLE,
+                    Color.RED,
+                    Color.SILVER,
+                    Color.TEAL,
+                    Color.WHITE,
+                    Color.YELLOW
+                )
+
+                private val types = arrayOf(
+                    FireworkEffect.Type.BALL,
+                    FireworkEffect.Type.STAR,
+                    FireworkEffect.Type.BURST,
+                )
+
+                override fun run() {
+                    Bukkit.getOnlinePlayers()
+                        .filter { it.world.name == "main" }
+                        .forEach {
+                            val sky = it.location.clone()
+                            sky.y = random.nextDouble(120.0, 150.0)
+                            sky.x += random.nextDouble(-16.0, 16.0)
+                            sky.z += random.nextDouble(-16.0, 16.0)
+                            val effect = FireworkEffect.builder()
+                                .with(types[random.nextInt(types.size)])
+                                .withColor(colors[random.nextInt(colors.size)])
+                                .build()
+                            val entity = sky.world.spawnEntity(sky, EntityType.FIREWORK)
+                            if (entity is Firework) {
+                                val meta = entity.fireworkMeta
+                                // すぐに爆発させる
+                                meta.power = 0
+                                meta.addEffect(effect)
+                                entity.fireworkMeta = meta
+                            }
+                        }
+                }
+            }.runTaskTimer(this, Ticks.from(30.0).toLong(), Ticks.from(30.0).toLong())
+        }
         calculator = CitizenTimerCalculator()
         val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
         if (luckPerms == null) {
@@ -242,6 +299,7 @@ class XCorePlugin : JavaPlugin() {
 
     private val commands = HashMap<String, CommandBase>()
     private var calculator: CitizenTimerCalculator? = null
+    private val random = Random()
 
     companion object {
         @JvmStatic

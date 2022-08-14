@@ -6,11 +6,13 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.events.PlayerCounterFinish;
@@ -19,6 +21,7 @@ import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.NbsModel;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.NbsStore;
+import work.xeltica.craft.core.utils.EventUtility;
 import work.xeltica.craft.core.utils.Ticks;
 
 import java.util.Arrays;
@@ -71,6 +74,17 @@ public class MiscHandler implements Listener {
                 final var loc = player.getWorld().getSpawnLocation();
                 player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
             }
+        }
+    }
+
+    /**
+     * イベント期間中は眠れないように
+     */
+    @EventHandler
+    public void onPlayerBed(PlayerBedEnterEvent e) {
+        if (EventUtility.isEventNow() && "main".equals(e.getPlayer().getWorld().getName())) {
+            e.setUseBed(Event.Result.DENY);
+            e.getPlayer().sendMessage(ChatColor.RED + "お祭りムードに溢れている。こんなテンションじゃ寝られない！");
         }
     }
 
