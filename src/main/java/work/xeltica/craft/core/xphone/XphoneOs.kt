@@ -9,6 +9,7 @@ import work.xeltica.craft.core.models.SoundPitch
 import work.xeltica.craft.core.stores.ItemStore
 import work.xeltica.craft.core.xphone.apps.*
 import java.lang.IllegalStateException
+import java.time.LocalDate
 
 /**
  * X Phone の基幹となるシステムです。
@@ -41,6 +42,11 @@ object XphoneOs {
             TransferPlayerDataApp(),
             VoteApp()
         ))
+        val today = LocalDate.now()
+        val startEventDay = LocalDate.of(2022, 8, 16)
+        val endEventDay = LocalDate.of(2022, 8, 31)
+        if (!(startEventDay.isAfter(today) || endEventDay.isBefore(today)))
+            apps.add(StampRallyApp())
     }
 
     /**
