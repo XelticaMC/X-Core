@@ -60,7 +60,7 @@ class TeleportApp : AppBase() {
 
             list.add(MenuItem("資源エンド", {
                 WorldStore.getInstance().teleportToSavedLocation(player, "shigen_end")
-            }, Material.NETHERRACK))
+            }, Material.END_STONE))
 
             val calendar = Calendar.getInstance()
             val month = calendar.get(Calendar.MONTH) + 1
