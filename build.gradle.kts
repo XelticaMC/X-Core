@@ -224,6 +224,11 @@ bukkit {
             usage = "/xdebug"
             permission = "otanoshimi.command.xdebug"
         }
+        register("stamp") {
+            description = "スタンプラリー用コマンド"
+            usage = "/stamp listDonePlayers"
+            permission = "otanoshimi.command.stamp"
+        }
         register("__core_gui_event__") {
             description = "?"
             usage = "?"
@@ -346,6 +351,9 @@ bukkit {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.xdebug") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.stamp") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
     }

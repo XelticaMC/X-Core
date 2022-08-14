@@ -135,6 +135,7 @@ class XCorePlugin : JavaPlugin() {
         MobEPStore()
         MobBallStore()
         NotificationStore()
+        StampRallyStore()
     }
 
     private fun loadCommands() {
@@ -167,6 +168,7 @@ class XCorePlugin : JavaPlugin() {
         addCommand("xreload", CommandXReload())
         addCommand("xtpreset", CommandXtpReset())
         addCommand("xdebug", CommandXDebug())
+        addCommand("stamp", CommandStamp())
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
     }
 
@@ -208,6 +210,8 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded MobBallHandler")
         pm.registerEvents(NotificationHandler(), this)
         logger.info("Loaded NotificationHandler")
+        pm.registerEvents(StampRallyHandler(), this)
+        logger.info("Loaded StampRallyHandler")
         pm.registerEvents(Gui.getInstance(), this)
         logger.info("Loaded Gui")
     }

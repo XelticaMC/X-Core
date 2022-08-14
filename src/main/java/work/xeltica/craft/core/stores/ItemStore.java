@@ -125,7 +125,7 @@ public class ItemStore {
 
     private void registerItems() {
         customItems.put(ITEM_NAME_XPHONE, createCustomItem("X Phone SE", "XelticaMCの独自機能にアクセスできるスマホ。"));
-        customItems.put(ITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT, createCustomItem("海底神殿行きワイルドエリアB旅行券", "メイン ✈ 海底神殿"));
+        customItems.put(ITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT, createCustomItem("海底神殿行き資源ワールド旅行券", "メイン ✈ 海底神殿"));
     }
 
     private final Map<String, ItemStack> customItems = new HashMap<>();
