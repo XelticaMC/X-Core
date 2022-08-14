@@ -8,7 +8,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.stores.EbiPowerStore
 import work.xeltica.craft.core.stores.PlayerStore
-import java.util.*
+import work.xeltica.craft.core.utils.EventUtility
 
 /**
  * 祭り用花火購入・入手アプリ
@@ -56,10 +56,7 @@ class FireworkApp : AppBase() {
     override fun isShiny(player: Player): Boolean = !isBonusReceived(player)
 
     override fun isVisible(player: Player): Boolean {
-        val date = Calendar.getInstance()
-        val month = date[Calendar.MONTH] + 1
-        val day = date[Calendar.DATE]
-        return month == 5 && 15 <= day && day <= 21
+        return EventUtility.isEventNow()
     }
 
     private fun isBonusReceived(player: Player) = PlayerStore.getInstance()
