@@ -40,7 +40,7 @@ object XphoneModule : ModuleBase() {
             NotificationApp(),
             PunishApp(),
             StampRallyApp(),
-        ))
+        )
     }
 
     override fun onDisable() {

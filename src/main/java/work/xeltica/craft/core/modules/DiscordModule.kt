@@ -34,6 +34,7 @@ object DiscordModule: ModuleBase() {
      * @param time 期限
      * @param command 処罰内容
      */
+    @JvmStatic
     fun reportDiscord(badPlayerName: String, abuses: String, time: String, command: String) {
         val guild = DiscordSRV.getPlugin().mainGuild;
         val channel = guild.getGuildChannelById(reportChannelID);
