@@ -69,9 +69,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "イベントに向けて、機能を追加しました。",
-            "ヒントの文言を調整しました。",
-            "テレポートアプリ：資源エンドのアイコンを修正",
+            "水泳大会シーズン2",
     };
 
     private static MetaStore instance;
