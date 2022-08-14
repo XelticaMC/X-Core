@@ -356,6 +356,12 @@ bukkit {
         register("otanoshimi.command.stamp") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
+        register("otanoshimi.stamp.create") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.stamp.destroy") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
     }
 }
 
