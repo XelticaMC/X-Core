@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.stores
 
 import org.bukkit.Location
+import org.bukkit.Sound
 import org.bukkit.configuration.MemorySection
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.XCorePlugin
@@ -49,6 +50,7 @@ class StampRallyStore {
         }
 
         player.sendMessage(stampName + "のスタンプを押しました!")
+        player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
         val list = mutableListOf<String>()
         list.addAll(activated)
         list.add(stampName)
