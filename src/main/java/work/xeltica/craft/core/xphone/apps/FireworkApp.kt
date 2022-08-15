@@ -56,7 +56,7 @@ class FireworkApp : AppBase() {
     override fun isShiny(player: Player): Boolean = !isBonusReceived(player)
 
     override fun isVisible(player: Player): Boolean {
-        return EventUtility.isEventNow()
+        return EventUtility.isEventNow() && player.world.name == "main"
     }
 
     private fun isBonusReceived(player: Player) = PlayerStore.getInstance()

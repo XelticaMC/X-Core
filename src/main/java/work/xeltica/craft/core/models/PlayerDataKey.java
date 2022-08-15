@@ -18,7 +18,7 @@ public enum PlayerDataKey {
     COUNTER_REGISTER_LOCATION("counter_register_location"),
     PLAYING_COUNTER_ID("counter_id"),
     PLAYING_COUNTER_TIMESTAMP("counter_time"),
-    PLAYED_COUNTER("played_counter"),
+    PLAYED_COUNTER_COUNT("counter_count"),
     RECEIVED_LOGIN_BONUS("login_bonus"),
     RECEIVED_LOGIN_BONUS_SUMMER("login_bonus_summer"),
     BROKEN_BLOCKS_COUNT("broken_blocks_count"),

@@ -157,7 +157,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
                         player.sendMessage("全プレイヤーのプレイ済み履歴を削除しました。");
                     } else {
                         final var name = args[1];
-                        pstore.open(Bukkit.getPlayerUniqueId(name)).delete(PlayerDataKey.PLAYED_COUNTER);
+                        pstore.open(Bukkit.getPlayerUniqueId(name)).delete(PlayerDataKey.PLAYED_COUNTER_COUNT);
                         player.sendMessage("そのプレイヤーのプレイ済み履歴を削除しました。");
                     }
                 }
