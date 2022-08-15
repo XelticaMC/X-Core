@@ -69,7 +69,9 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "修正",
+            "イベント：花火の射出アルゴリズムを調整",
+            "花火をメインワールド以外で受け取れてしまうバグを修正",
+            "通知のリワードを、メインワールドと独立したインベントリのあるワールドでは受け取れないように調整",
     };
 
     private static MetaStore instance;
