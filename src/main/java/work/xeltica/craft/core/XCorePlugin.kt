@@ -49,6 +49,7 @@ class XCorePlugin : JavaPlugin() {
         FlyingObserver().runTaskTimer(this, 0, 4)
         RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         EbipowerObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
+        TimeAttackObserver().runTaskTimer(this, 0, 5)
         val tick = 10
         object : BukkitRunnable() {
             override fun run() {
