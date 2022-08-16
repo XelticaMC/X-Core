@@ -21,6 +21,7 @@ import work.xeltica.craft.core.modules.*
 import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.plugins.CounterModule
+import work.xeltica.craft.core.runnables.TimeAttackObserveWorker
 import work.xeltica.craft.core.utils.EventUtility
 
 /**
@@ -83,6 +84,7 @@ class XCorePlugin : JavaPlugin() {
         FlyingObserveWorker().runTaskTimer(this, 0, 4)
         RealTimeObserveWorker().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         EbipowerObserveWorker().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
+        TimeAttackObserveWorker().runTaskTimer(this, 0, 5)
         val tick = 10
         object : BukkitRunnable() {
             override fun run() {
