@@ -7,7 +7,7 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
-import work.xeltica.craft.core.stores.NickNameStore;
+import work.xeltica.craft.core.modules.NickNameModule;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,9 +22,9 @@ public class CommandNickName extends CommandPlayerOnlyBase {
     public boolean execute(Player player, Command command, String label, String[] args) {
         if (args.length == 0) return false;
 
-        NickNameStore.getInstance().setNickNameType(player.getUniqueId(), args[0]);
+        NickNameModule.setNickNameType(player.getUniqueId(), args[0]);
         player.sendMessage("NickNameTypeを" + args[0] + "に変更しました");
-        NickNameStore.getInstance().setNickName(player);
+        NickNameModule.setNickName(player);
         return true;
     }
 

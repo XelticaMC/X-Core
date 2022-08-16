@@ -6,7 +6,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.MenuItem
-import work.xeltica.craft.core.stores.WorldStore
+import work.xeltica.craft.core.modules.WorldManagementModule
 import java.util.Calendar
 
 /**
@@ -26,7 +26,7 @@ class TeleportApp : AppBase() {
             list.add(MenuItem("ロビー", { player.performCommand("hub") }, Material.NETHERITE_BLOCK))
         }
 
-        if (WorldStore.getInstance().getRespawnWorld(currentWorldName) != null) {
+        if (WorldManagementModule.getRespawnWorld(currentWorldName) != null) {
             list.add(MenuItem("初期スポーン", { player.performCommand("respawn") }, Material.FIREWORK_ROCKET))
             list.add(MenuItem("ベッド", { player.performCommand("respawn bed") }, Material.RED_BED))
         }
@@ -55,11 +55,11 @@ class TeleportApp : AppBase() {
             }, Material.GRASS_BLOCK))
 
             list.add(MenuItem("資源ネザー", {
-                WorldStore.getInstance().teleportToSavedLocation(player, "shigen_nether")
+                WorldManagementModule.teleportToSavedLocation(player, "shigen_nether")
             }, Material.NETHERRACK))
 
             list.add(MenuItem("資源エンド", {
-                WorldStore.getInstance().teleportToSavedLocation(player, "shigen_end")
+                WorldManagementModule.teleportToSavedLocation(player, "shigen_end")
             }, Material.END_STONE))
 
             val calendar = Calendar.getInstance()
@@ -78,7 +78,7 @@ class TeleportApp : AppBase() {
             }
         } else if ("wildareab" == currentWorldName) {
             list.add(
-                MenuItem("メインワールドに帰る", { WorldStore.getInstance().teleportToSavedLocation(player, "main") }, Material.CREEPER_HEAD)
+                MenuItem("メインワールドに帰る", { WorldManagementModule.teleportToSavedLocation(player, "main") }, Material.CREEPER_HEAD)
             )
         }
 

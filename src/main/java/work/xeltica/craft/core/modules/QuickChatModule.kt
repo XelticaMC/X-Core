@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.stores
+package work.xeltica.craft.core.modules
 
 import org.bukkit.entity.Player
 import java.io.IOException
@@ -8,23 +8,31 @@ import work.xeltica.craft.core.api.Config
 /**
  * @author raink1208
  */
-class QuickChatStore {
-    val allPrefix: Set<String>
-        get() = config.conf.getKeys(false)
+object QuickChatModule : ModuleBase() {
+    @JvmStatic
+    val allPrefix: Set<String> get() = config.conf.getKeys(false)
 
+    override fun onEnable() {
+        XCorePlugin.instance.saveResource("quickChats.yml", false)
+        config = Config("quickChats")
+    }
+
+    @JvmStatic
     fun getMessage(prefix: String?): String {
         return config.conf.getString(prefix!!)!!
     }
 
+    @JvmStatic
     fun chatFormat(msg: String, player: Player): String {
-        var msg = msg
-        msg = msg.replace("{world}", WorldStore.getInstance().getWorldDisplayName(player.world))
-        msg = msg.replace("{x}", player.location.blockX.toString())
-        msg = msg.replace("{y}", player.location.blockY.toString())
-        msg = msg.replace("{z}", player.location.blockZ.toString())
-        return msg
+        var message = msg
+        message = message.replace("{world}", WorldManagementModule.getWorldDisplayName(player.world) ?: "不明")
+        message = message.replace("{x}", player.location.blockX.toString())
+        message = message.replace("{y}", player.location.blockY.toString())
+        message = message.replace("{z}", player.location.blockZ.toString())
+        return message
     }
 
+    @JvmStatic
     fun register(prefix: String?, msg: String?): Boolean {
         if (config.conf.contains(prefix!!)) return false
         config.conf[prefix] = msg
@@ -36,6 +44,7 @@ class QuickChatStore {
         return true
     }
 
+    @JvmStatic
     fun unregister(prefix: String?): Boolean {
         if (config.conf.contains(prefix!!)) {
             config.conf[prefix] = null
@@ -49,17 +58,5 @@ class QuickChatStore {
         return false
     }
 
-    private val config: Config
-
-    init {
-        instance = this
-        XCorePlugin.instance.saveResource("quickChats.yml", false)
-        config = Config("quickChats")
-    }
-
-    companion object {
-        @JvmStatic
-        lateinit var instance: QuickChatStore
-            private set
-    }
+    private lateinit var config: Config
 }

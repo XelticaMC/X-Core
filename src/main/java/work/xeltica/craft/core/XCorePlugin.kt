@@ -16,7 +16,6 @@ import work.xeltica.craft.core.plugins.VaultPlugin
 import work.xeltica.craft.core.plugins.CitizenTimerCalculator
 import work.xeltica.craft.core.api.Ticks
 import work.xeltica.craft.core.api.commands.CommandRegistry
-import work.xeltica.craft.core.stores.*
 import work.xeltica.craft.core.workers.*
 import work.xeltica.craft.core.modules.*
 import work.xeltica.craft.core.gui.Gui
@@ -86,7 +85,7 @@ class XCorePlugin : JavaPlugin() {
         val tick = 10
         object : BukkitRunnable() {
             override fun run() {
-                VehicleStore.getInstance().tick(tick)
+                VehicleModule.tick(tick)
                 PlayerStoreModule.openAll().forEach {
                     // オフラインなら処理しない
                     if (Bukkit.getPlayer(it.playerId) == null) return

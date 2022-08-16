@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.commands.CommandBase
-import work.xeltica.craft.core.stores.WorldStore
+import work.xeltica.craft.core.modules.WorldManagementModule
 import java.util.*
 
 /**
@@ -16,18 +16,17 @@ import java.util.*
  */
 class CommandXtpReset : CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
-        val store = WorldStore.getInstance()
         if (args.size != 1 && args.size != 2) return false
         val worldName = args[0]
         if (args.size == 1) {
-            store.deleteSavedLocation(worldName)
+            WorldManagementModule.deleteSavedLocation(worldName)
         }
         val p = if (args.size == 2) Bukkit.getPlayer(args[1]) else null
         if (p == null) {
             sender.sendMessage("§cプレイヤーが存在しません")
             return true
         }
-        store.deleteSavedLocation(worldName, p)
+        WorldManagementModule.deleteSavedLocation(worldName, p)
         return true
     }
 

@@ -5,7 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import work.xeltica.craft.core.api.Config;
 import work.xeltica.craft.core.api.Time;
-import work.xeltica.craft.core.stores.RankingStore;
+import work.xeltica.craft.core.modules.RankingModule;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -55,7 +55,7 @@ public class Ranking {
      */
     public void setDisplayName(String name, boolean save) throws IOException {
         set("displayName", name, save);
-        RankingStore.getInstance().renderAll();
+        RankingModule.renderAll();
     }
 
     /**
@@ -73,7 +73,7 @@ public class Ranking {
      */
     public void setMode(String mode) throws IOException {
         set("mode", mode);
-        RankingStore.getInstance().renderAll();
+        RankingModule.renderAll();
     }
 
     /**
@@ -100,7 +100,7 @@ public class Ranking {
      */
     public void setIsPlayerMode(boolean value, boolean save) throws IOException {
         set("isPlayerMode", value, save);
-        RankingStore.getInstance().renderAll();
+        RankingModule.renderAll();
     }
 
     public Location getHologramLocation() {
@@ -115,7 +115,7 @@ public class Ranking {
         set("hologramLocation", location, false);
         set("hologramHidden", isHidden, false);
         save();
-        RankingStore.getInstance().renderAll();
+        RankingModule.renderAll();
     }
 
     public void save() throws IOException {
@@ -192,7 +192,7 @@ public class Ranking {
     public void add(String id, int score) {
         records.put(id, score);
         saveRecords();
-        RankingStore.getInstance().renderAll();
+        RankingModule.renderAll();
     }
 
     /**
@@ -202,7 +202,7 @@ public class Ranking {
     public void remove(String id) {
         records.remove(id);
         saveRecords();
-        RankingStore.getInstance().renderAll();
+        RankingModule.renderAll();
     }
 
     /** 値をセットし、ディスクに保存する

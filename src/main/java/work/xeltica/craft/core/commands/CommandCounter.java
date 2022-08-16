@@ -21,7 +21,7 @@ import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.Ranking;
 import work.xeltica.craft.core.plugins.CounterModule;
 import work.xeltica.craft.core.modules.PlayerStoreModule;
-import work.xeltica.craft.core.stores.RankingStore;
+import work.xeltica.craft.core.modules.RankingModule;
 
 /**
  * トロッコを出現させるコマンド
@@ -218,8 +218,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
             }
         } else if (args.length == 4) {
             if ("bind".equals(subcommand)) {
-                final var store = RankingStore.getInstance();
-                final var rankings = store.getAll().stream().map(Ranking::getName).toList();
+                final var rankings = RankingModule.getAll().stream().map(Ranking::getName).toList();
                 final var completions = new ArrayList<String>();
                 StringUtil.copyPartialMatches(args[3], rankings, completions);
                 Collections.sort(completions);

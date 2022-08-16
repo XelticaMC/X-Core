@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import work.xeltica.craft.core.stores.WorldStore
+import work.xeltica.craft.core.modules.WorldManagementModule
 import java.util.UUID
 import java.util.HashMap
 
@@ -40,7 +40,7 @@ class CommandRespawn : CommandPlayerOnlyBase() {
      * @param player リスポーンさせるプレイヤー
      */
     private fun teleportToBedSpawn(player: Player) {
-        if (WorldStore.getInstance().getRespawnWorld(player.world) == null) {
+        if (WorldManagementModule.getRespawnWorld(player.world) == null) {
             player.sendMessage(ChatColor.RED.toString() + "このワールドでは許可されていません")
             return
         }
@@ -64,7 +64,7 @@ class CommandRespawn : CommandPlayerOnlyBase() {
      * @param player テレポートさせるプレイヤー
      */
     private fun teleportToInitialSpawn(player: Player) {
-        val respawnWorldName = WorldStore.getInstance().getRespawnWorld(player.world)
+        val respawnWorldName = WorldManagementModule.getRespawnWorld(player.world)
         if (respawnWorldName == null) {
             player.sendMessage(ChatColor.RED.toString() + "このワールドでは許可されていません")
             return
@@ -72,7 +72,7 @@ class CommandRespawn : CommandPlayerOnlyBase() {
         val respawnWorld = Bukkit.getWorld(respawnWorldName)
         val respawn = respawnWorld!!.spawnLocation
         val isSameWorld = player.world.uid == respawnWorld.uid
-        val respawnWorldDisplayName = WorldStore.getInstance().getWorldDisplayName(respawnWorld)
+        val respawnWorldDisplayName = WorldManagementModule.getWorldDisplayName(respawnWorld)
         if (noCooldownWorldNames.contains(respawnWorld.name)) {
             player.teleportAsync(respawn, PlayerTeleportEvent.TeleportCause.PLUGIN)
             return

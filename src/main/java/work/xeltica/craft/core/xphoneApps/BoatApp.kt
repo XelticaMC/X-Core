@@ -2,7 +2,7 @@ package work.xeltica.craft.core.xphoneApps
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.stores.WorldStore
+import work.xeltica.craft.core.modules.WorldManagementModule
 
 /**
  * ボートを射出するアプリ。
@@ -17,5 +17,5 @@ class BoatApp : AppBase() {
         player.performCommand("boat")
     }
 
-    override fun isVisible(player: Player) = WorldStore.getInstance().canSummonVehicles(player.world)
+    override fun isVisible(player: Player) = WorldManagementModule.canSummonVehicles(player.world)
 }

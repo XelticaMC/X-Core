@@ -4,7 +4,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.MenuItem
-import work.xeltica.craft.core.stores.StampRallyStore
+import work.xeltica.craft.core.modules.StampRallyModule
 import work.xeltica.craft.core.utils.EventUtility
 import java.util.function.Consumer
 
@@ -16,9 +16,8 @@ class StampRallyApp: AppBase() {
     }
 
     override fun onLaunch(player: Player) {
-        val stampRallyStore = StampRallyStore.getInstance()
-        val entireStamp = stampRallyStore.getEntireStampList()
-        val hasStamp = stampRallyStore.getActivatedStampList(player)
+        val entireStamp = StampRallyModule.getEntireStampList()
+        val hasStamp = StampRallyModule.getActivatedStampList(player)
 
         val ui = Gui.getInstance()
         val list = mutableListOf<MenuItem>()
@@ -27,7 +26,7 @@ class StampRallyApp: AppBase() {
         }
 
         val onClick = Consumer<MenuItem?> {
-            val stampInfo = stampRallyStore.getStampInfo(it.name ?: throw IllegalStateException())
+            val stampInfo = StampRallyModule.getStampInfo(it.name ?: throw IllegalStateException())
             val sb = StringBuilder()
             sb.append("world: " + stampInfo.loc.world.name + "\n")
             sb.append("x: " + stampInfo.loc.blockX + "\n")

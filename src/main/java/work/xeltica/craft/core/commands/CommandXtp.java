@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.api.commands.CommandBase;
-import work.xeltica.craft.core.stores.WorldStore;
+import work.xeltica.craft.core.modules.WorldManagementModule;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +40,7 @@ public class CommandXtp extends CommandBase {
             sender.sendMessage("§cプレイヤーが存在しません");
             return true;
         }
-        WorldStore.getInstance().teleportToSavedLocation(p, worldName);
+        WorldManagementModule.teleportToSavedLocation(p, worldName);
         return true;
     }
 

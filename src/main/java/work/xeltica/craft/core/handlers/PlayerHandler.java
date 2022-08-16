@@ -44,10 +44,10 @@ import work.xeltica.craft.core.modules.BossBarModule;
 import work.xeltica.craft.core.modules.HintModule;
 import work.xeltica.craft.core.modules.HubModule;
 import work.xeltica.craft.core.modules.CustomItemModule;
-import work.xeltica.craft.core.stores.NickNameStore;
+import work.xeltica.craft.core.modules.NickNameModule;
 import work.xeltica.craft.core.modules.OmikujiModule;
 import work.xeltica.craft.core.modules.PlayerStoreModule;
-import work.xeltica.craft.core.stores.QuickChatStore;
+import work.xeltica.craft.core.modules.QuickChatModule;
 import work.xeltica.craft.core.modules.BedrockDisclaimerModule;
 
 /**
@@ -94,7 +94,7 @@ public class PlayerHandler implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         final var p = e.getPlayer();
 
-        NickNameStore.getInstance().setNickName(p);
+        NickNameModule.setNickName(p);
 
         final var name = PlainTextComponentSerializer.plainText().serialize(p.displayName());
         e.joinMessage(Component.text("§a" + name + "§b" + "さんがやってきました"));
@@ -187,14 +187,13 @@ public class PlayerHandler implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuickChat(AsyncPlayerChatEvent e) {
         var msg = e.getMessage();
-        final var store = QuickChatStore.getInstance();
         final var player = e.getPlayer();
         if (!msg.startsWith(".")) return;
         msg = msg.substring(1);
-        if (store.getAllPrefix().contains(msg)) {
-            var quickMsg = store.getMessage(msg);
+        if (QuickChatModule.getAllPrefix().contains(msg)) {
+            var quickMsg = QuickChatModule.getMessage(msg);
             if (quickMsg != null) {
-                quickMsg = store.chatFormat(quickMsg, player);
+                quickMsg = QuickChatModule.chatFormat(quickMsg, player);
                 e.setMessage(quickMsg);
                 HintModule.achieve(player, Hint.QUICKCHAT);
             }

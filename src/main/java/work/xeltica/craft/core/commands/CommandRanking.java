@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.api.commands.CommandBase;
 import work.xeltica.craft.core.models.Ranking;
-import work.xeltica.craft.core.stores.RankingStore;
+import work.xeltica.craft.core.modules.RankingModule;
 
 /**
  * ランキングを操作するコマンド
@@ -27,7 +27,6 @@ public class CommandRanking extends CommandBase {
         if (args.length < 1) return false;
 
         final var subCommand = args[0].toLowerCase();
-        final var api = RankingStore.getInstance();
         final var id = sender instanceof Player p ? p.getUniqueId().toString() : null;
         
         try {
@@ -41,11 +40,11 @@ public class CommandRanking extends CommandBase {
                     final var displayName = args[2].trim();
                     final var isPlayerMode = args.length >= 4 && args[3].equalsIgnoreCase("playermode");
 
-                    if (api.has(name)) {
+                    if (RankingModule.has(name)) {
                         sender.sendMessage("既に存在します。");
                         return true;
                     }
-                    api.create(name, displayName, isPlayerMode);
+                    RankingModule.create(name, displayName, isPlayerMode);
                     sender.sendMessage("ランキング " + name + "を" + (isPlayerMode ? "プレイヤーモードで" : "") + "作成しました。");
                 }
                 case "delete" -> {
@@ -55,11 +54,11 @@ public class CommandRanking extends CommandBase {
                     }
                     final var name = args[1].trim();
 
-                    if (!api.has(name)) {
+                    if (!RankingModule.has(name)) {
                         sender.sendMessage("存在しません。");
                         return true;
                     }
-                    sender.sendMessage(api.delete(name) ? "削除に成功しました。" : "削除に失敗しました。");
+                    sender.sendMessage(RankingModule.delete(name) ? "削除に成功しました。" : "削除に失敗しました。");
                 }
                 case "query" -> {
                     if (args.length != 2) {
@@ -68,18 +67,18 @@ public class CommandRanking extends CommandBase {
                     }
                     final var name = args[1].trim();
 
-                    if (!api.has(name)) {
+                    if (!RankingModule.has(name)) {
                         sender.sendMessage("存在しません。");
                         return true;
                     }
-                    final var ranking = api.get(name).queryRanking();
+                    final var ranking = RankingModule.get(name).queryRanking();
                     for (var i = 0; i < ranking.length; i++) {
                         final var record = ranking[i];
                         sender.sendMessage(String.format("§6%d位:§a%s §b%s", i + 1, record.getId(), record.getScore()));
                     }
                 }
                 case "list" -> {
-                    final var list = api.getAll();
+                    final var list = RankingModule.getAll();
                     if (list.size() == 0) {
                         sender.sendMessage("一つもありません。");
                     } else {
@@ -100,11 +99,11 @@ public class CommandRanking extends CommandBase {
                     final var name = args[1].trim();
                     try {
                         final var value = Integer.parseInt(args[2]);
-                        if (!api.has(name)) {
+                        if (!RankingModule.has(name)) {
                             sender.sendMessage("ランキングが存在しません。");
                             return true;
                         }
-                        final var ranking = api.get(name);
+                        final var ranking = RankingModule.get(name);
                         ranking.add(id, value);
                         sender.sendMessage("ランキングにレコードを追加しました。");
                     } catch (NumberFormatException e) {
@@ -122,7 +121,7 @@ public class CommandRanking extends CommandBase {
                     }
                     final var name = args[1].trim();
                     try {
-                        final var ranking = api.get(name);
+                        final var ranking = RankingModule.get(name);
                         ranking.remove(id);
                         sender.sendMessage("ランキングからレコードを削除しました。");
                     } catch (NumberFormatException e) {
@@ -136,7 +135,7 @@ public class CommandRanking extends CommandBase {
                     }
                     final var name = args[1].trim();
 
-                    if (!api.has(name)) {
+                    if (!RankingModule.has(name)) {
                         sender.sendMessage("存在しません。");
                         return true;
                     }
@@ -148,7 +147,7 @@ public class CommandRanking extends CommandBase {
                         sender.sendMessage(" point: 値を点数とみなす。");
                         return true;
                     }
-                    api.get(name).setMode(mode);
+                    RankingModule.get(name).setMode(mode);
                     sender.sendMessage("モードを設定しました。");
                 }
                 case "hologram" -> {
@@ -163,11 +162,11 @@ public class CommandRanking extends CommandBase {
                     final var player = (Player)sender;
                     final var name = args[1];
 
-                    if (!api.has(name)) {
+                    if (!RankingModule.has(name)) {
                         sender.sendMessage("存在しません。");
                         return true;
                     }
-                    final var data = api.get(name);
+                    final var data = RankingModule.get(name);
                     final var hSubCommand = args[2].toLowerCase();
 
                     switch (hSubCommand) {
@@ -200,8 +199,7 @@ public class CommandRanking extends CommandBase {
             return completions;
         } else if (args.length == 2) {
             if (!Arrays.asList("delete", "query", "set", "unset", "hologram", "mode").contains(args[0])) return COMPLETE_LIST_EMPTY;
-            final var store = RankingStore.getInstance();
-            final var rankings = store.getAll().stream().map(Ranking::getName).toList();
+            final var rankings = RankingModule.getAll().stream().map(Ranking::getName).toList();
             final var completions = new ArrayList<String>();
             StringUtil.copyPartialMatches(args[1], rankings, completions);
             Collections.sort(completions);

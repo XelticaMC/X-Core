@@ -42,7 +42,7 @@ import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.modules.HintModule;
 import work.xeltica.craft.core.modules.PlayerStoreModule;
-import work.xeltica.craft.core.stores.WorldStore;
+import work.xeltica.craft.core.modules.WorldManagementModule;
 import work.xeltica.craft.core.modules.DiscordModule;
 
 /**
@@ -83,12 +83,11 @@ public class WorldHandler implements Listener {
         final var p = e.getPlayer();
         final var world = e.getTo().getWorld();
         final var name = world.getName();
-        final var store = WorldStore.getInstance();
 
-        final var isLockedWorld = store.isLockedWorld(name);
-        final var isCreativeWorld = store.isCreativeWorld(name);
-        final var displayName = store.getWorldDisplayName(name);
-        final var desc = store.getWorldDescription(name);
+        final var isLockedWorld = WorldManagementModule.isLockedWorld(name);
+        final var isCreativeWorld = WorldManagementModule.isCreativeWorld(name);
+        final var displayName = WorldManagementModule.getWorldDisplayName(name);
+        final var desc = WorldManagementModule.getWorldDescription(name);
 
         final var from = e.getFrom().getWorld();
         final var to = e.getTo().getWorld();
@@ -105,7 +104,7 @@ public class WorldHandler implements Listener {
             return;
         }
 
-        WorldStore.getInstance().saveCurrentLocation(p);
+        WorldManagementModule.saveCurrentLocation(p);
 
         final var hint = switch (to.getName()) {
             case "main" -> Hint.GOTO_MAIN;
@@ -164,7 +163,7 @@ public class WorldHandler implements Listener {
 
     @EventHandler
     public void onPlayerMoveWorld(PlayerChangedWorldEvent e) {
-        final var name = WorldStore.getInstance().getWorldDisplayName(e.getPlayer().getWorld());
+        final var name = WorldManagementModule.getWorldDisplayName(e.getPlayer().getWorld());
         e.getPlayer().showTitle(Title.title(Component.text(name).color(TextColor.color(0xFFB300)), Component.empty()));
     }
 

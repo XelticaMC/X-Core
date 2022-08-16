@@ -1,93 +1,84 @@
-package work.xeltica.craft.core.stores;
+package work.xeltica.craft.core.modules
 
-import github.scarsz.discordsrv.DiscordSRV;
-import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
-import net.luckperms.api.LuckPerms;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import work.xeltica.craft.core.api.Config;
-
-import java.io.IOException;
-import java.util.Objects;
-import java.util.UUID;
+import net.luckperms.api.LuckPerms
+import java.io.IOException
+import github.scarsz.discordsrv.DiscordSRV
+import github.scarsz.discordsrv.dependencies.jda.api.entities.Member
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.Config
+import java.util.*
+import kotlin.math.ceil
 
 /**
  * @author raink1208
  */
-public class NickNameStore {
-    public NickNameStore() {
-        instance = this;
-        config = new Config("nickname");
+object NickNameModule : ModuleBase() {
+    override fun onEnable() {
+        config = Config("nickname")
     }
 
-    public static NickNameStore getInstance() { return instance; }
-
-    public String getNickName(UUID uuid, String type) {
-        return switch (type) {
-            case "discord" -> getDiscordMember(uuid).getUser().getName();
-            case "discord-nick" -> getDiscordMember(uuid).getNickname();
-            default -> Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName();
-        };
+    @JvmStatic
+    fun getNickName(uuid: UUID, type: String): String {
+        val mcName = (Bukkit.getPlayer(uuid) ?: throw IllegalArgumentException()).name
+        return when (type) {
+            "discord" -> getDiscordMember(uuid)?.user?.name ?: mcName
+            "discord-nick" -> getDiscordMember(uuid)?.nickname ?: mcName
+            else -> mcName
+        }
     }
 
-    public void setNickName(Player player) {
-        final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        final var luckPerms = provider.getProvider();
-        final var ctx = luckPerms.getContextManager().getContext(player);
-        String type = getNickNameType(player.getUniqueId());
-
+    @JvmStatic
+    fun setNickName(player: Player) {
+        val provider = Bukkit.getServicesManager().getRegistration(
+            LuckPerms::class.java
+        )
+        val luckPerms = provider!!.provider
+        val ctx = luckPerms.contextManager.getContext(player)
+        var type = getNickNameType(player.uniqueId)
         if (!ctx.contains("discordsrv:linked", "true")) {
-            type = "minecraft";
+            type = "minecraft"
         }
-
-        final String nickname = getNickName(player.getUniqueId(), type);
-
+        val nickname = getNickName(player.uniqueId, type)
         if (nicknameLength(nickname) > nicknameLimit) {
-            player.sendMessage("nicknameの長さが " + nicknameLimit + "文字 より長いので変更できませんでした");
-            return;
+            player.sendMessage("nicknameの長さが " + nicknameLimit + "文字 より長いので変更できませんでした")
+            return
         }
-
-        player.setCustomName(nickname);
-        player.setPlayerListName(nickname);
-        player.setDisplayName(nickname);
+        player.customName = nickname
+        player.setPlayerListName(nickname)
+        player.setDisplayName(nickname)
     }
 
-    public String getNickNameType(UUID uuid) {
-        final var type = config.getConf().get(uuid.toString());
-        if (type instanceof String) {
-            return (String) type;
-        }
-        return "null";
+    @JvmStatic
+    fun getNickNameType(uuid: UUID): String {
+        val type = config.conf[uuid.toString()]
+        return if (type is String) type else "null"
     }
 
-    public void setNickNameType(UUID uuid, String type) {
-        config.getConf().set(uuid.toString(), type);
+    @JvmStatic
+    fun setNickNameType(uuid: UUID, type: String?) {
+        config.conf[uuid.toString()] = type
         try {
-            config.save();
-        } catch (IOException e) {
-            e.printStackTrace();
+            config.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 
-    public Member getDiscordMember(UUID uuid) {
-        final String discordId = DiscordSRV.getPlugin().getAccountLinkManager().getDiscordId(uuid);
-        return DiscordSRV.getPlugin().getMainGuild().getMemberById(discordId);
+    @JvmStatic
+    fun getDiscordMember(uuid: UUID?): Member? {
+        val discordId = DiscordSRV.getPlugin().accountLinkManager.getDiscordId(uuid)
+        return DiscordSRV.getPlugin().mainGuild.getMemberById(discordId)
     }
 
-    private Integer nicknameLength(String nickname) {
-        double length = 0.0;
-        for (Character c: nickname.toCharArray()) {
-            if (String.valueOf(c).getBytes().length < 2) {
-                length += 0.5;
-            } else {
-                length += 1;
-            }
+    private fun nicknameLength(nickname: String): Int {
+        var length = 0.0
+        for (c in nickname.toCharArray()) {
+            length += if (c.toString().toByteArray().size < 2) 0.5 else 1.0
         }
-        return (int) Math.ceil(length);
+        return ceil(length).toInt()
     }
 
-    private static NickNameStore instance;
-    private final Config config;
-
-    private final Integer nicknameLimit = 8;
+    private lateinit var config: Config
+    private const val nicknameLimit = 8
 }

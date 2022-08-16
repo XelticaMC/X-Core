@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.stores
+package work.xeltica.craft.core.modules
 
 import org.bukkit.Location
 import org.bukkit.Sound
@@ -7,27 +7,21 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.models.Stamp
-import work.xeltica.craft.core.modules.EbipowerModule
 import java.util.UUID
 
-class StampRallyStore {
-    companion object {
-        private lateinit var instance: StampRallyStore
-        fun getInstance(): StampRallyStore = instance
+object StampRallyModule : ModuleBase() {
+    const val CREATE_PERMISSION = "otanoshimi.stamp.create"
+    const val DESTROY_PERMISSION = "otanoshimi.stamp.destroy"
 
-        const val CREATE_PERMISSION = "otanoshimi.stamp.create"
-        const val DESTROY_PERMISSION = "otanoshimi.stamp.destroy"
-    }
+    private lateinit var stampList: Config
+    private lateinit var activatedStamp: Config
 
-    private val stampList: Config
-    private val activatedStamp: Config
-
-    init {
-        instance = this
+    override fun onEnable() {
         stampList = Config("stampList")
         activatedStamp = Config("activatedStamp")
     }
 
+    @JvmStatic
     fun getDonePlayerList(): List<Player> {
         val keys = activatedStamp.conf.getKeys(false)
         val stamp = HashSet(getEntireStampList())
@@ -40,6 +34,7 @@ class StampRallyStore {
         return players
     }
 
+    @JvmStatic
     fun activate(player: Player, stampName: String) {
         if (!contains(stampName)) return
 
@@ -64,6 +59,7 @@ class StampRallyStore {
         }
     }
 
+    @JvmStatic
     fun isStampAchieved(player: Player): Boolean {
         val entireStamp = HashSet(getEntireStampList())
         val activated = activatedStamp.conf.getStringList(player.uniqueId.toString())
@@ -71,19 +67,23 @@ class StampRallyStore {
         return entireStamp.isEmpty()
     }
 
+    @JvmStatic
     fun getEntireStampList(): List<String> {
         return stampList.conf.getStringList("stamps")
     }
 
+    @JvmStatic
     fun getActivatedStampList(player: Player): List<String> {
         return activatedStamp.conf.getStringList(player.uniqueId.toString())
     }
 
+    @JvmStatic
     fun getStampInfo(stampName: String): Stamp {
         val data = stampList.conf.get(stampName)
         return Stamp.deserialize(data as MemorySection)
     }
 
+    @JvmStatic
     fun create(stampName: String, location: Location) {
         if (contains(stampName)) return
         val stamps = getEntireStampList()
@@ -97,11 +97,13 @@ class StampRallyStore {
         stampList.save()
     }
 
+    @JvmStatic
     fun contains(stampName: String): Boolean {
         val stamps = getEntireStampList()
         return stamps.contains(stampName)
     }
 
+    @JvmStatic
     fun destroy(stampName: String) {
         if (!contains(stampName)) return
         val stamps = stampList.conf.getStringList("stamps")

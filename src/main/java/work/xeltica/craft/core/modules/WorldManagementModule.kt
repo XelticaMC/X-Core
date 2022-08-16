@@ -1,236 +1,236 @@
-package work.xeltica.craft.core.stores;
+package work.xeltica.craft.core.modules
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
-import org.jetbrains.annotations.Nullable;
-import work.xeltica.craft.core.api.Config;
+import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.World
+import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.Config
+import java.io.IOException
+import java.util.HashSet
+import java.util.HashMap
+import java.util.List
+import java.util.function.Consumer
 
 /**
  * ワールドを管理するストアです。
  * @author Xeltica
  */
-public class WorldStore {
-    public WorldStore() {
-        WorldStore.instance = this;
-        loadWorldName();
-        loadWorldDescription();
-        loadLockedWorldNames();
-        loadCreativeWorldNames();
-        location = new Config("location");
+object WorldManagementModule : ModuleBase() {
+    override fun onEnable() {
+        loadWorldName()
+        loadWorldDescription()
+        loadLockedWorldNames()
+        loadCreativeWorldNames()
+        location = Config("location")
     }
 
-    public static WorldStore getInstance() {
-        return instance;
+    @JvmStatic
+    fun getWorldDisplayName(w: World): String? {
+        return getWorldDisplayName(w.name)
     }
 
-    public String getWorldDisplayName(World w) {
-        return getWorldDisplayName(w.getName());
+    @JvmStatic
+    fun getWorldDisplayName(n: String): String? {
+        return worldNameMap[n]
     }
 
-    public String getWorldDisplayName(String n) {
-        return worldNameMap.get(n);
+    @JvmStatic
+    fun getWorldDescription(w: World): String? {
+        return getWorldDescription(w.name)
     }
 
-    public String getWorldDescription(World w) {
-        return getWorldDescription(w.getName());
+    @JvmStatic
+    fun getWorldDescription(n: String): String? {
+        return worldDescMap[n]
     }
 
-    public String getWorldDescription(String n) {
-        return worldDescMap.get(n);
+    @JvmStatic
+    fun isCreativeWorld(w: World): Boolean {
+        return isCreativeWorld(w.name)
     }
 
-    public boolean isCreativeWorld(World w) {
-        return isCreativeWorld(w.getName());
+    @JvmStatic
+    fun isCreativeWorld(n: String): Boolean {
+        return creativeWorldNames.contains(n)
     }
 
-    public boolean isCreativeWorld(String n) {
-        return creativeWorldNames.contains(n);
+    @JvmStatic
+    fun isLockedWorld(w: World): Boolean {
+        return isLockedWorld(w.name)
     }
 
-    public boolean isLockedWorld(World w) {
-        return isLockedWorld(w.getName());
+    @JvmStatic
+    fun isLockedWorld(n: String): Boolean {
+        return lockedWorldNames.contains(n)
     }
 
-    public boolean isLockedWorld(String n) {
-        return lockedWorldNames.contains(n);
+    @JvmStatic
+    fun canSummonVehicles(w: World): Boolean {
+        return canSummonVehicles(w.name)
     }
 
-    public boolean canSummonVehicles(World w) {
-        return canSummonVehicles(w.getName());
+    @JvmStatic
+    fun canSummonVehicles(worldName: String): Boolean {
+        return List.of(*summonVehicleWhiteList).contains(worldName)
     }
 
-    public boolean canSummonVehicles(String worldName) {
-        return List.of(summonVehicleWhiteList).contains(worldName);
-    }
-
-    public void saveCurrentLocation(Player p) {
-        final var conf = location.getConf();
-        final var pid = p.getUniqueId().toString();
-        var playerSection = conf.getConfigurationSection(pid);
+    @JvmStatic
+    fun saveCurrentLocation(p: Player) {
+        val conf = location.conf
+        val pid = p.uniqueId.toString()
+        var playerSection = conf.getConfigurationSection(pid)
         if (playerSection == null) {
-            playerSection = conf.createSection(pid);
+            playerSection = conf.createSection(pid)
         }
-        playerSection.set(p.getWorld().getName(), p.getLocation());
+        playerSection[p.world.name] = p.location
         try {
-            location.save();
-        } catch (IOException e) {
-            e.printStackTrace();
+            location.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 
-    public Location getLocation(Player p, String name) {
-        final var conf = location.getConf();
-        final var pid = p.getUniqueId().toString();
-        final var playerSection = conf.getConfigurationSection(pid);
-        if (playerSection == null) {
-            return null;
-        }
-        return playerSection.getLocation(name);
+    @JvmStatic
+    fun getLocation(p: Player, name: String?): Location? {
+        val conf = location.conf
+        val pid = p.uniqueId.toString()
+        val playerSection = conf.getConfigurationSection(pid) ?: return null
+        return playerSection.getLocation(name!!)
     }
 
-    public void teleport(Player player, String worldName) {
-        final var world = Bukkit.getWorld(worldName);
+    @JvmStatic
+    fun teleport(player: Player, worldName: String?) {
+        val world = Bukkit.getWorld(worldName!!)
         if (world == null) {
-            player.sendMessage("§bテレポートに失敗しました。ワールドが存在しないようです。");
-            return;
+            player.sendMessage("§bテレポートに失敗しました。ワールドが存在しないようです。")
+            return
         }
-        player.teleportAsync(world.getSpawnLocation());
+        player.teleportAsync(world.spawnLocation)
     }
 
-    public void teleportToSavedLocation(Player player, String worldName) {
-        final var loc = getLocation(player, worldName);
+    @JvmStatic
+    fun teleportToSavedLocation(player: Player, worldName: String?) {
+        val loc = getLocation(player, worldName)
         if (loc == null) {
             // 保存されていなければ普通にTP
-            teleport(player, worldName);
-            return;
+            teleport(player, worldName)
+            return
         }
-        player.teleportAsync(loc);
+        player.teleportAsync(loc)
     }
 
-    public void deleteSavedLocation(String worldName) {
-        final var conf = location.getConf();
-        conf.getKeys(false).forEach(pid -> {
-            var playerSection = conf.getConfigurationSection(pid);
+    @JvmStatic
+    fun deleteSavedLocation(worldName: String?) {
+        val conf = location.conf
+        conf.getKeys(false).forEach(Consumer { pid: String? ->
+            var playerSection = conf.getConfigurationSection(
+                pid!!
+            )
             if (playerSection == null) {
-                playerSection = conf.createSection(pid);
+                playerSection = conf.createSection(pid)
             }
-            playerSection.set(worldName, null);
-        });
+            playerSection[worldName!!] = null
+        })
         try {
-            location.save();
-        } catch (IOException e) {
-            e.printStackTrace();
+            location.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 
-    public void deleteSavedLocation(String worldName, Player player) {
-        final var conf = location.getConf();
-        final var pid = player.getUniqueId().toString();
-        var playerSection = conf.getConfigurationSection(pid);
+    @JvmStatic
+    fun deleteSavedLocation(worldName: String?, player: Player) {
+        val conf = location.conf
+        val pid = player.uniqueId.toString()
+        var playerSection = conf.getConfigurationSection(pid)
         if (playerSection == null) {
-            playerSection = conf.createSection(pid);
+            playerSection = conf.createSection(pid)
         }
-        playerSection.set(worldName, null);
+        playerSection[worldName!!] = null
         try {
-            location.save();
-        } catch (IOException e) {
-            e.printStackTrace();
+            location.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 
-    @Nullable
-    public String getRespawnWorld(World w) {
-        return getRespawnWorld(w.getName());
+    @JvmStatic
+    fun getRespawnWorld(w: World): String? {
+        return getRespawnWorld(w.name)
     }
 
-    public String getRespawnWorld(String worldName) {
-        return switch (worldName) {
-            case "wildarea2_nether", "wildarea2_the_end" -> "wildarea2";
-            case "pvp", "wildareab", "hub2" -> null;
-            default -> worldName;
-        };
+    @JvmStatic
+    fun getRespawnWorld(worldName: String): String? {
+        return when (worldName) {
+            "wildarea2_nether", "wildarea2_the_end" -> "wildarea2"
+            "pvp", "wildareab", "hub2" -> null
+            else -> worldName
+        }
     }
 
-    private void loadWorldName() {
-        worldNameMap.put("main", "メインワールド");
-        worldNameMap.put("sandbox2", "サンドボックス");
-        worldNameMap.put("art", "アートワールド");
-        worldNameMap.put("nightmare2", "ナイトメア");
-        worldNameMap.put("pvp", "PvPアリーナ");
-        worldNameMap.put("test", "実験ワールド");
-        worldNameMap.put("wildarea2", "共有ワールド");
-        worldNameMap.put("wildarea2_nether", "共有ネザー");
-        worldNameMap.put("wildarea2_the_end", "共有エンド");
-        worldNameMap.put("wildareab", "資源ワールド");
-        worldNameMap.put("shigen_nether", "資源ネザー");
-        worldNameMap.put("shigen_end", "資源エンド");
-        worldNameMap.put("hub2", "ロビー");
-        worldNameMap.put("event", "イベントワールド");
+    private fun loadWorldName() {
+        worldNameMap["main"] = "メインワールド"
+        worldNameMap["sandbox2"] = "サンドボックス"
+        worldNameMap["art"] = "アートワールド"
+        worldNameMap["nightmare2"] = "ナイトメア"
+        worldNameMap["pvp"] = "PvPアリーナ"
+        worldNameMap["test"] = "実験ワールド"
+        worldNameMap["wildarea2"] = "共有ワールド"
+        worldNameMap["wildarea2_nether"] = "共有ネザー"
+        worldNameMap["wildarea2_the_end"] = "共有エンド"
+        worldNameMap["wildareab"] = "資源ワールド"
+        worldNameMap["shigen_nether"] = "資源ネザー"
+        worldNameMap["shigen_end"] = "資源エンド"
+        worldNameMap["hub2"] = "ロビー"
+        worldNameMap["event"] = "イベントワールド"
     }
 
-    private void loadWorldDescription() {
-        worldDescMap.put("sandbox2",
-            "ここは、§bクリエイティブモード§rで好きなだけ遊べる§cサンドボックスワールド§r。\n" +
-            "元の世界の道具や経験値はお預かりしているので、好きなだけあそんでね！" +
-            "§7(あ、でも他の人の建築物を壊したりしないでね)"
-        );
-
-        worldDescMap.put("nightmare2",
-            "ここは怖い敵がうじゃうじゃいる§cナイトメアワールド§r。\n" +
-            "手に入れたアイテムは持ち帰れます。"
-        );
-
-        worldDescMap.put("art",
-            "ここは、§b地上絵§rに特化した§cアートワールド§r。\n" +
-            "元の世界の道具や経験値はお預かりしているので、安心して地上絵を作成・観覧できます！\n" +
-            "§7(他の人の作った地上絵を壊さないようお願いします。)"
-        );
-
-        worldDescMap.put("wildarea2",
-            "ここは、§c共有ワールド§r。\n" +
-            "誰かが寄付してくれた資源を共有拠点にしまってあるので、有効にご活用ください。（独り占めはダメです）"
-        );
-
-        worldDescMap.put("wildareab",
-            "ここは、§c資源ワールド§r。\n" +
-            "メインワールドで生活するための資源を探そう。"
-        );
+    private fun loadWorldDescription() {
+        worldDescMap["sandbox2"] = """
+            ここは、§bクリエイティブモード§rで好きなだけ遊べる§cサンドボックスワールド§r。
+            元の世界の道具や経験値はお預かりしているので、好きなだけあそんでね！§7(あ、でも他の人の建築物を壊したりしないでね)
+            """.trimIndent()
+        worldDescMap["nightmare2"] = """
+            ここは怖い敵がうじゃうじゃいる§cナイトメアワールド§r。
+            手に入れたアイテムは持ち帰れます。
+            """.trimIndent()
+        worldDescMap["art"] = """
+            ここは、§b地上絵§rに特化した§cアートワールド§r。
+            元の世界の道具や経験値はお預かりしているので、安心して地上絵を作成・観覧できます！
+            §7(他の人の作った地上絵を壊さないようお願いします。)
+            """.trimIndent()
+        worldDescMap["wildarea2"] = """
+            ここは、§c共有ワールド§r。
+            誰かが寄付してくれた資源を共有拠点にしまってあるので、有効にご活用ください。（独り占めはダメです）
+            """.trimIndent()
+        worldDescMap["wildareab"] = """
+            ここは、§c資源ワールド§r。
+            メインワールドで生活するための資源を探そう。
+            """.trimIndent()
     }
 
-    private void loadLockedWorldNames() {
-        lockedWorldNames.add("art");
-        lockedWorldNames.add("nightmare2");
+    private fun loadLockedWorldNames() {
+        lockedWorldNames.add("art")
+        lockedWorldNames.add("nightmare2")
     }
 
-    private void loadCreativeWorldNames() {
-        creativeWorldNames.add("art");
-        creativeWorldNames.add("sandbox2");
-        creativeWorldNames.add("test");
+    private fun loadCreativeWorldNames() {
+        creativeWorldNames.add("art")
+        creativeWorldNames.add("sandbox2")
+        creativeWorldNames.add("test")
     }
 
-    private static WorldStore instance;
-    private final Config location;
-    private final Map<String, String> worldNameMap = new HashMap<>();
-    private final Map<String, String> worldDescMap = new HashMap<>();
-    private final Set<String> lockedWorldNames = new HashSet<>();
-    private final Set<String> creativeWorldNames = new HashSet<>();
-
-    private final String[] summonVehicleWhiteList = {
+    private lateinit var location: Config
+    private val worldNameMap: MutableMap<String, String> = HashMap()
+    private val worldDescMap: MutableMap<String, String> = HashMap()
+    private val lockedWorldNames: MutableSet<String> = HashSet()
+    private val creativeWorldNames: MutableSet<String> = HashSet()
+    private val summonVehicleWhiteList = arrayOf(
         "wildarea2",
         "wildarea2_nether",
         "wildarea2_the_end",
         "main",
         "nightmare2",
-        "wildareab",
-    };
+        "wildareab"
+    )
 }

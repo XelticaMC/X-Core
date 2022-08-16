@@ -1,27 +1,23 @@
-package work.xeltica.craft.core.stores;
+package work.xeltica.craft.core.modules
 
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
-import org.jetbrains.annotations.Nullable;
-import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.api.Config;
-import work.xeltica.craft.core.models.Ranking;
-
-import java.io.IOException;
-import java.util.Set;
-import java.util.stream.Collectors;
+import kotlin.Throws
+import java.io.IOException
+import work.xeltica.craft.core.models.Ranking
+import java.lang.IllegalArgumentException
+import java.util.stream.Collectors
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI
+import work.xeltica.craft.core.XCorePlugin
+import com.gmail.filoghost.holographicdisplays.api.Hologram
+import work.xeltica.craft.core.api.Config
+import java.util.function.Consumer
 
 /**
  * 時間計測カウンターの情報を管理します。
  */
-public class RankingStore {
-    public RankingStore() {
-        instance = this;
-        rankingConfig = new Config("ranking");
-        renderAll();
-    }
-
-    public static RankingStore getInstance() {
-        return RankingStore.instance;
+object RankingModule : ModuleBase() {
+    override fun onEnable() {
+        rankingConfig = Config("ranking")
+        renderAll()
     }
 
     /**
@@ -29,15 +25,16 @@ public class RankingStore {
      * @throws IllegalArgumentException 既にランキングが存在する
      * @throws IOException 保存に失敗
      */
-    public Ranking create(String name, String displayName, boolean isPlayerMode) throws IOException {
-        if (has(name)) throw new IllegalArgumentException();
-
-        final var ranking = new Ranking(name, rankingConfig);
-        ranking.setDisplayName(displayName, false);
-        ranking.setIsPlayerMode(isPlayerMode, false);
-        ranking.save();
-        renderAll();
-        return ranking;
+    @Throws(IOException::class)
+    @JvmStatic
+    fun create(name: String?, displayName: String?, isPlayerMode: Boolean): Ranking {
+        require(!has(name))
+        val ranking = Ranking(name, rankingConfig)
+        ranking.setDisplayName(displayName, false)
+        ranking.setIsPlayerMode(isPlayerMode, false)
+        ranking.save()
+        renderAll()
+        return ranking
     }
 
     /**
@@ -45,13 +42,14 @@ public class RankingStore {
      * @return ランキング削除に成功すればtrue、そうでなければfalse。
      * @throws IOException 保存に失敗
      */
-    public boolean delete(String name) throws IOException {
-        if (!has(name)) return false;
-
-        rankingConfig.getConf().set(name, null);
-        rankingConfig.save();
-        renderAll();
-        return true;
+    @Throws(IOException::class)
+    @JvmStatic
+    fun delete(name: String?): Boolean {
+        if (!has(name)) return false
+        rankingConfig.conf[name!!] = null
+        rankingConfig.save()
+        renderAll()
+        return true
     }
 
     /**
@@ -59,8 +57,9 @@ public class RankingStore {
      * @param name ランキング名
      * @return ランキングが存在すればtrue、しなければfalse
      */
-    public boolean has(String name) {
-        return rankingConfig.getConf().contains(name);
+    @JvmStatic
+    fun has(name: String?): Boolean {
+        return rankingConfig.conf.contains(name!!)
     }
 
     /**
@@ -68,44 +67,39 @@ public class RankingStore {
      * @param name ランキング名
      * @return ランキング。存在しなければnull
      */
-    @Nullable
-    public Ranking get(String name) {
-        if (!has(name)) return null;
-
-        return new Ranking(name, rankingConfig);
+    @JvmStatic
+    operator fun get(name: String?): Ranking? {
+        return if (!has(name)) null else Ranking(name, rankingConfig)
     }
 
     /**
      * ランキングを全て取得します。
      * @return ランキング一覧。
      */
-    public Set<Ranking> getAll() {
-        return rankingConfig.getConf().getKeys(false).stream()
-            .map(name -> new Ranking(name, rankingConfig))
-            .collect(Collectors.toSet());
-    }
+    @JvmStatic
+    val all: Set<Ranking>
+        get() = rankingConfig.conf.getKeys(false).stream()
+            .map { name: String? -> Ranking(name, rankingConfig) }
+            .collect(Collectors.toSet())
 
-    public void renderAll() {
-        HologramsAPI.getHolograms(XCorePlugin.getInstance()).forEach(h -> h.delete());
-        getAll().forEach(ranks -> {
-            final var loc = ranks.getHologramLocation();
-            if (loc == null) return;
-            final var isHidden = ranks.getHologramHidden();
-            final var holo = HologramsAPI.createHologram(XCorePlugin.getInstance(), loc);
-
-            holo.appendTextLine("§a§l" + ranks.getDisplayName());
-            final var ranking = ranks.queryRanking();
-            for (var i = 0; i < 10; i++) {
-                final var name = isHidden ? "??????????" : ranking.length <= i ? "--------" : ranking[i].getId();
-                final var value = isHidden ? "??????????" : ranking.length <= i ? "------" : ranking[i].getScore();
-                final var prefix = i == 0 ? "§e" : i == 1 ? "§f" : i == 2 ? "§6" : "§d";
-                holo.appendTextLine(String.format("%s§l%d位: %s (%s)", prefix, i + 1, name, value));
+    @JvmStatic
+    fun renderAll() {
+        HologramsAPI.getHolograms(XCorePlugin.instance).forEach(Consumer { h: Hologram -> h.delete() })
+        all.forEach(Consumer { ranks: Ranking ->
+            val loc = ranks.hologramLocation ?: return@Consumer
+            val isHidden = ranks.hologramHidden
+            val holo = HologramsAPI.createHologram(XCorePlugin.instance, loc)
+            holo.appendTextLine("§a§l" + ranks.displayName)
+            val ranking = ranks.queryRanking()
+            for (i in 0..9) {
+                val name = if (isHidden) "??????????" else if (ranking.size <= i) "--------" else ranking[i].id
+                val value = if (isHidden) "??????????" else if (ranking.size <= i) "------" else ranking[i].score
+                val prefix = if (i == 0) "§e" else if (i == 1) "§f" else if (i == 2) "§6" else "§d"
+                holo.appendTextLine(String.format("%s§l%d位: %s (%s)", prefix, i + 1, name, value))
             }
-        });
+        })
     }
 
-    private static RankingStore instance;
-
-    /** ranking.yml */
-    private Config rankingConfig;
+    /** ranking.yml  */
+    private lateinit var rankingConfig: Config
 }

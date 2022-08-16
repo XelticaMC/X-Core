@@ -17,8 +17,8 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.modules.HintModule;
-import work.xeltica.craft.core.stores.VehicleStore;
-import work.xeltica.craft.core.stores.WorldStore;
+import work.xeltica.craft.core.modules.VehicleModule;
+import work.xeltica.craft.core.modules.WorldManagementModule;
 
 import java.util.List;
 
@@ -29,27 +29,27 @@ import java.util.List;
 public class VehicleHandler implements Listener {
     @EventHandler
     public void onEnter(VehicleEnterEvent e) {
-        VehicleStore.getInstance().unregisterVehicle(e.getVehicle());
+        VehicleModule.unregisterVehicle(e.getVehicle());
     }
 
     @EventHandler
     public void onExit(VehicleExitEvent e) {
-        VehicleStore.getInstance().registerVehicle(e.getVehicle());
+        VehicleModule.registerVehicle(e.getVehicle());
     }
 
     @EventHandler
     public void onCreated(VehicleCreateEvent e) {
-        VehicleStore.getInstance().registerVehicle(e.getVehicle());
+        VehicleModule.registerVehicle(e.getVehicle());
     }
 
     @EventHandler
     public void onDestroyed(VehicleDestroyEvent e) {
         final var v = e.getVehicle();
-        if (VehicleStore.getInstance().isValidVehicle(v)) {
+        if (VehicleModule.isValidVehicle(v)) {
             e.setCancelled(true);
             e.getVehicle().remove();
         }
-        VehicleStore.getInstance().unregisterVehicle(v);
+        VehicleModule.unregisterVehicle(v);
     }
 
     @EventHandler
@@ -62,7 +62,7 @@ public class VehicleHandler implements Listener {
     @EventHandler
     public void onPlayerSpawnVehicle(PlayerInteractEvent e) {
         // クリエイティブワールドは対象外とする
-        if (WorldStore.getInstance().isCreativeWorld(e.getPlayer().getWorld())) return;
+        if (WorldManagementModule.isCreativeWorld(e.getPlayer().getWorld())) return;
 
         final var block = e.getClickedBlock();
         if (block == null) return;
