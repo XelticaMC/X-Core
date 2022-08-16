@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.modules.VauleModule;
+import work.xeltica.craft.core.modules.VaultModule;
 import work.xeltica.craft.core.modules.HintModule;
 import work.xeltica.craft.core.modules.OmikujiModule;
 import work.xeltica.craft.core.api.Ticks;
@@ -42,8 +42,7 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
             player.sendMessage(ChatColor.GOLD + "また次の朝、引いてください！");
             return true;
         }
-        final var vault = VauleModule.getInstance();
-        if (vault.isEconomyEnabled() && !vault.tryWithdrawPlayer(player, 100)) {
+        if (VaultModule.isEconomyEnabled() && !VaultModule.tryWithdrawPlayer(player, 100)) {
             player.sendMessage(ChatColor.RED + "パワーが足りません！おみくじは1回100エビパワーが必要です。");
             return true;
         }

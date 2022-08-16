@@ -10,7 +10,7 @@ import java.util.logging.Logger
  * Vault プラグインと連携するためのX-Core プラグインです。
  * @author Xeltica
  */
-object VauleModule : ModuleBase() {
+object VaultModule : ModuleBase() {
     private const val VAULT_NOT_FOUND_ERROR_MESSAGE = "Vault is not found, so economy feature has been disabled.\""
     private const val ECONOMY_NOT_FOUND_ERROR_MESSAGE = "Economy plugin is not found, so economy feature has been disabled."
     override fun onEnable() {
@@ -19,12 +19,12 @@ object VauleModule : ModuleBase() {
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
             logger.warning(VAULT_NOT_FOUND_ERROR_MESSAGE)
         } else {
-            val economy = Bukkit.getServicesManager().getRegistration(Economy::class.java)
-            if (economy == null) {
+            val registration = Bukkit.getServicesManager().getRegistration(Economy::class.java)
+            if (registration == null) {
                 logger.warning(ECONOMY_NOT_FOUND_ERROR_MESSAGE)
                 return
             }
-            VauleModule.economy = economy.provider
+            economy = registration.provider
             isEconomyEnabled = true
             logger.info("Economy feature has been enabled!")
         }

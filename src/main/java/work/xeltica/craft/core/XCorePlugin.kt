@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 import net.luckperms.api.LuckPerms
 
-import work.xeltica.craft.core.modules.VauleModule
+import work.xeltica.craft.core.modules.VaultModule
 import work.xeltica.craft.core.plugins.CitizenTimerCalculator
 import work.xeltica.craft.core.api.Ticks
 import work.xeltica.craft.core.api.commands.CommandRegistry
@@ -20,6 +20,7 @@ import work.xeltica.craft.core.workers.*
 import work.xeltica.craft.core.modules.*
 import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.plugins.CounterModule
 import work.xeltica.craft.core.utils.EventUtility
 
 /**
@@ -161,7 +162,6 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private fun loadPlugins() {
-        VauleModule.instance.onEnable(this)
         calculator = CitizenTimerCalculator()
         val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
         if (luckPerms == null) {
@@ -173,26 +173,36 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private fun unloadPlugins() {
-        VauleModule.instance.onDisable(this)
         val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
         luckPerms?.contextManager?.unregisterCalculator(calculator)
     }
 
-    private val modules = listOf(
+    private val modules = listOf<ModuleBase>(
         BedrockDisclaimerModule,
         BossBarModule,
+        CitizensModule,
         CloverModule,
+        CounterModule,
         CustomItemModule,
         DiscordModule,
         EbipowerModule,
         HintModule,
         HubModule,
+        ItemModule,
         MetaModule,
         MobBallModule,
         MobDroppingEpModule,
+        NbsModule,
+        NickNameModule,
         NotificationModule,
         OmikujiModule,
         PlayerStoreModule,
+        QuickChatModule,
+        RankingModule,
+        StampRallyModule,
+        VaultModule,
+        VehicleModule,
+        WorldManagementModule,
         XphoneModule,
     )
 

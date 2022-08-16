@@ -107,15 +107,13 @@ object EbipowerModule : ModuleBase() {
     @JvmStatic
     fun tryGive(p: Player?, amount: Int): Boolean {
         require(amount > 0) { "amountを0以下の数にはできない" }
-        val vault = VauleModule.instance
-        return vault.tryDepositPlayer(p, amount.toDouble())
+        return VaultModule.tryDepositPlayer(p, amount.toDouble())
     }
 
     @JvmStatic
     fun tryTake(p: Player?, amount: Int): Boolean {
         require(amount > 0) { "amountを0以下の数にはできない" }
-        val vault = VauleModule.instance
-        return vault.tryWithdrawPlayer(p, amount.toDouble())
+        return VaultModule.tryWithdrawPlayer(p, amount.toDouble())
     }
 
     @JvmStatic
@@ -125,8 +123,7 @@ object EbipowerModule : ModuleBase() {
 
     @JvmStatic
     operator fun get(p: Player?): Int {
-        val vault = VauleModule.instance
-        return vault.getBalance(p).toInt()
+        return VaultModule.getBalance(p).toInt()
     }
 
     @JvmStatic
