@@ -6,20 +6,21 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import work.xeltica.craft.core.XCorePlugin;
+import work.xeltica.craft.core.api.Ticks;
 import work.xeltica.craft.core.api.events.PlayerCounterFinish;
 import work.xeltica.craft.core.api.events.PlayerCounterStart;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.NbsModel;
-import work.xeltica.craft.core.modules.CustomItemModule;
 import work.xeltica.craft.core.modules.NbsModule;
-import work.xeltica.craft.core.api.Ticks;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -75,6 +76,17 @@ public class MiscHandler implements Listener {
     }
 
     /**
+     * イベント期間中は眠れないように
+     */
+    @EventHandler
+    public void onPlayerBed(PlayerBedEnterEvent e) {
+        if (EventUtility.isEventNow() && "main".equals(e.getPlayer().getWorld().getName())) {
+            e.setUseBed(Event.Result.DENY);
+            e.getPlayer().sendMessage(ChatColor.RED + "お祭りムードに溢れている。こんなテンションじゃ寝られない！");
+        }
+    }
+
+    /**
      * イベントマップ：TA開始イベント
      */
     @EventHandler
@@ -82,7 +94,7 @@ public class MiscHandler implements Listener {
         final var player = e.getPlayer();
         if (!"event".equals(player.getWorld().getName())) return;
 
-        NbsModule.playRadio(player, "submerged2", NbsModel.PlaybackMode.LOOP);
+        NbsModule.playRadio(player, "submerged3", NbsModel.PlaybackMode.LOOP);
     }
 
     /**
@@ -112,27 +124,5 @@ public class MiscHandler implements Listener {
             if (!"event".equals(player.getWorld().getName())) return;
             CustomItemModule.givePhoneIfNeeded(player);
         }, 5);
-    }
-
-    /**
-     * イベントマップ（開発）：TA開始イベント
-     */
-    @EventHandler
-    public void onCounterStartDev(PlayerCounterStart e) {
-        final var player = e.getPlayer();
-        if (!"event_dev".equals(player.getWorld().getName())) return;
-
-        NbsModule.playRadio(player, "submerged3", NbsModel.PlaybackMode.LOOP);
-    }
-
-    /**
-     * イベントマップ（開発）：TA終了イベント
-     */
-    @EventHandler
-    public void onCounterFinishDev(PlayerCounterFinish e) {
-        final var player = e.getPlayer();
-        if (!"event_dev".equals(player.getWorld().getName())) return;
-
-        NbsModule.stopRadio(player);
     }
 }

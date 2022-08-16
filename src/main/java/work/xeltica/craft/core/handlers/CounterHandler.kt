@@ -143,7 +143,8 @@ class CounterHandler : Listener {
                 )
             )
             player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
-            if (last.isDaily && record.getBoolean(PlayerDataKey.PLAYED_COUNTER)) {
+            val count = record.getInt(PlayerDataKey.PLAYED_COUNTER_COUNT, 0)
+            if (last.isDaily && count >= 2) {
                 player.sendMessage(ChatColor.RED + "既にチャレンジ済みのため、ランキングは更新されません。")
             } else if (last.bedrockRankingId != null || last.javaRankingId != null || last.uwpRankingId != null || last.phoneRankingId != null) {
                 val playerName = PlainTextComponentSerializer.plainText().serialize(player.displayName())
@@ -153,10 +154,11 @@ class CounterHandler : Listener {
                         it.sendMessage("${ChatColor.GREEN}${playerName}さん${ChatColor.RESET}がタイムアタックで${ChatColor.AQUA}${timeString}${ChatColor.RESET}を達成しました！")
                     }
                 DiscordModule.broadcast("${playerName}さんがタイムアタックで${timeString}を達成しました！")
-
                 handleRanking(player, last, diff)
+                val message = if (count == 0) "あと1回チャレンジできます！" else "本日はもうチャレンジできません。"
+                player.sendMessage(ChatColor.GREEN + message)
             }
-            record[PlayerDataKey.PLAYED_COUNTER] = true
+            record[PlayerDataKey.PLAYED_COUNTER_COUNT] = count + 1
             Bukkit.getPluginManager().callEvent(PlayerCounterFinish(player, last, diff.toLong()))
         }
     }

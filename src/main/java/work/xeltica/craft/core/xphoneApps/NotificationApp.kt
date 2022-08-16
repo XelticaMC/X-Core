@@ -47,18 +47,32 @@ class NotificationApp: AppBase() {
     }
 
     private fun readNotification(player: Player, notification: Notification) {
-        if (notification.ep != null) {
-            EbipowerModule.tryGive(player, notification.ep)
-            player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
-            player.sendMessage("${notification.ep} EPを受け取りました。")
-        }
         if (notification.giftItems != null) {
+            if (!giftAllowedWorlds.contains(player.world.name)) {
+                Gui.getInstance().error(player, "メインワールドとは独立したインベントリを持つワールドにいるため、アイテムを受け取ることができません。\nメインワールドに移動してから通知を既読してください。")
+                return
+            }
             player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
             for (item in notification.giftItems) {
                 player.inventory.addItem(item)
                 player.sendMessage("${PlainTextComponentSerializer.plainText().serialize(item.displayName())} を受け取りました。")
             }
         }
+        if (notification.ep != null) {
+            EbipowerModule.tryGive(player, notification.ep)
+            player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
+            player.sendMessage("${notification.ep} EPを受け取りました。")
+        }
         NotificationModule.readNotification(player, notification)
     }
+
+    private val giftAllowedWorlds = arrayOf(
+        "main",
+        "wildarea2",
+        "wildarea2_nether",
+        "wildarea2_the_end",
+        "wildareab",
+        "shigen_nether",
+        "shigen_end",
+    )
 }

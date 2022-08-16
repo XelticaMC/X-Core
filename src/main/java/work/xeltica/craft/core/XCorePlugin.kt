@@ -1,20 +1,27 @@
 package work.xeltica.craft.core
 
 import java.io.IOException
-import work.xeltica.craft.core.plugins.CitizenTimerCalculator
-import net.luckperms.api.LuckPerms
+import java.util.Random
 import org.bukkit.Bukkit
+import org.bukkit.Color
+import org.bukkit.FireworkEffect
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Firework
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
+import net.luckperms.api.LuckPerms
 
 import work.xeltica.craft.core.plugins.VaultPlugin
+import work.xeltica.craft.core.plugins.CitizenTimerCalculator
 import work.xeltica.craft.core.api.Ticks
 import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.stores.*
 import work.xeltica.craft.core.workers.*
+import work.xeltica.craft.core.modules.*
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.modules.*
+import work.xeltica.craft.core.utils.EventUtility
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
@@ -98,6 +105,60 @@ class XCorePlugin : JavaPlugin() {
                 }
             }
         }.runTaskTimer(this, 0, tick.toLong())
+        if (EventUtility.isEventNow()) {
+            object : BukkitRunnable() {
+                private val colors = arrayOf(
+                    Color.AQUA,
+                    Color.BLUE,
+                    Color.FUCHSIA,
+                    Color.GREEN,
+                    Color.LIME,
+                    Color.MAROON,
+                    Color.NAVY,
+                    Color.OLIVE,
+                    Color.ORANGE,
+                    Color.PURPLE,
+                    Color.RED,
+                    Color.SILVER,
+                    Color.TEAL,
+                    Color.WHITE,
+                    Color.YELLOW
+                )
+
+                private val types = arrayOf(
+                    FireworkEffect.Type.BALL,
+                    FireworkEffect.Type.STAR,
+                    FireworkEffect.Type.BURST,
+                    FireworkEffect.Type.BALL_LARGE,
+                )
+
+                override fun run() {
+                    Bukkit.getOnlinePlayers()
+                        .filter { it.world.name == "main" }
+                        .forEach {
+                            for (i in 1..random.nextInt(5)) {
+                                val sky = it.location.clone()
+                                sky.y += random.nextDouble(10.0, 30.0)
+                                sky.x += random.nextDouble(-48.0, 48.0)
+                                sky.z += random.nextDouble(-48.0, 48.0)
+                                val effect = FireworkEffect.builder()
+                                    .with(types[random.nextInt(types.size)])
+                                    .withColor(colors[random.nextInt(colors.size)])
+                                    .build()
+                                sky.world.spawnEntity(sky, EntityType.FIREWORK, SpawnReason.CUSTOM) { theEntity ->
+                                    if (theEntity is Firework) {
+                                        val meta = theEntity.fireworkMeta
+                                        // すぐに爆発させる
+                                        meta.power = 0
+                                        meta.addEffect(effect)
+                                        theEntity.fireworkMeta = meta
+                                    }
+                                }
+                            }
+                        }
+                }
+            }.runTaskTimer(this, Ticks.from(3.0).toLong(), Ticks.from(10.0).toLong())
+        }
     }
 
     private fun loadPlugins() {
@@ -137,6 +198,7 @@ class XCorePlugin : JavaPlugin() {
     )
 
     private lateinit var calculator: CitizenTimerCalculator
+    private val random = Random()
 
     companion object {
         @JvmStatic

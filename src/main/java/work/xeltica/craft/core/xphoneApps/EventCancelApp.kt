@@ -17,12 +17,13 @@ class EventCancelApp : AppBase() {
 
     override fun onLaunch(player: Player) {
         val record = getRecord(player)
+        val count = record.getInt(PlayerDataKey.PLAYED_COUNTER_COUNT)
 
         record.delete(PlayerDataKey.PLAYING_COUNTER_ID)
         record.delete(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP)
-        record[PlayerDataKey.PLAYED_COUNTER] = true
+        record[PlayerDataKey.PLAYED_COUNTER_COUNT] = record.getInt(PlayerDataKey.PLAYED_COUNTER_COUNT, 0) + 1
 
-        player.sendMessage("カウントダウンをリタイアしました。")
+        player.sendMessage("カウントダウンをリタイアしました。本日は${if (count == 0) "あと1回再チャレンジできます。" else "もう再チャレンジできません。"}")
         player.performCommand("respawn")
         NbsModule.stopRadio(player)
     }

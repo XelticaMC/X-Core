@@ -8,7 +8,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.modules.EbipowerModule
 import work.xeltica.craft.core.modules.PlayerStoreModule
-import java.util.*
+import work.xeltica.craft.core.utils.EventUtility
 
 /**
  * 祭り用花火購入・入手アプリ
@@ -56,10 +56,7 @@ class FireworkApp : AppBase() {
     override fun isShiny(player: Player): Boolean = !isBonusReceived(player)
 
     override fun isVisible(player: Player): Boolean {
-        val date = Calendar.getInstance()
-        val month = date[Calendar.MONTH] + 1
-        val day = date[Calendar.DATE]
-        return month == 5 && 15 <= day && day <= 21
+        return EventUtility.isEventNow() && player.world.name == "main"
     }
 
     private fun isBonusReceived(player: Player) = PlayerStoreModule.open(player).getBoolean(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER)
