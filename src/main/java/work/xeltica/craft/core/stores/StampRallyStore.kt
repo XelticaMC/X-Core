@@ -1,6 +1,8 @@
 package work.xeltica.craft.core.stores
 
+import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.OfflinePlayer
 import org.bukkit.Sound
 import org.bukkit.configuration.MemorySection
 import org.bukkit.entity.Player
@@ -27,11 +29,11 @@ class StampRallyStore {
         activatedStamp = Config("activatedStamp")
     }
 
-    fun getDonePlayerList(): List<Player> {
+    fun getDonePlayerList(): List<OfflinePlayer> {
         val keys = activatedStamp.conf.getKeys(false)
-        val players = mutableListOf<Player>()
+        val players = mutableListOf<OfflinePlayer>()
         for (uuid in keys) {
-            val player = XCorePlugin.instance.server.getPlayer(UUID.fromString(uuid)) ?: continue
+            val player = Bukkit.getOfflinePlayer(UUID.fromString(uuid))
             val stamp = HashSet(getEntireStampList())
             stamp.removeAll(activatedStamp.conf.getStringList(uuid).toSet())
             if (stamp.isEmpty()) players.add(player)
