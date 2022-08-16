@@ -2,7 +2,7 @@ package work.xeltica.craft.core.xphoneApps
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.MenuItem
 import work.xeltica.craft.core.models.TransferPlayerData
 
@@ -24,7 +24,7 @@ class TransferPlayerDataApp : AppBase() {
 
     override fun onLaunch(player: Player) {
         val data = TransferPlayerData.getInstance(player)
-        val ui = Gui.getInstance()
+        val ui = UIModule.getInstance()
         if (data == null) {
             openTransferPlayerDataApp(player)
         } else if (data.getType(player) == TransferPlayerData.TransferPlayerType.TO_PLAYER) {
@@ -52,7 +52,7 @@ class TransferPlayerDataApp : AppBase() {
             > ヒント解禁状況
             > 各種設定項目
         """.trimIndent()
-        val ui = Gui.getInstance()
+        val ui = UIModule.getInstance()
             ui.openDialog(player, "§4注意！§r", transferPlayerDataWarning) {
                 ui.openTextInput(player, "引っ越し先のアカウント名を入力してください。") { name: String? ->
                     if (name == null) {
@@ -71,7 +71,7 @@ class TransferPlayerDataApp : AppBase() {
     private fun acceptTransferPlayerData(player: Player) {
         val playerData = TransferPlayerData.getInstance(player) ?: throw IllegalStateException()
         val fromName = playerData.from.name
-        val ui = Gui.getInstance()
+        val ui = UIModule.getInstance()
         ui.openDialog(player, "引っ越し", """
                 §3${fromName}§rをお使いのアカウントに移行します。
                 

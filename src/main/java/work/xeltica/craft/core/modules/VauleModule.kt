@@ -1,82 +1,62 @@
-package work.xeltica.craft.core.plugins;
+package work.xeltica.craft.core.modules
 
-import java.util.Objects;
-import java.util.logging.Logger;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
-import work.xeltica.craft.core.XCorePlugin;
+import net.milkbowl.vault.economy.Economy
+import net.milkbowl.vault.economy.EconomyResponse
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
+import java.util.logging.Logger
 
 /**
  * Vault プラグインと連携するためのX-Core プラグインです。
  * @author Xeltica
  */
-@SuppressWarnings("ALL")
-public class VaultPlugin extends PluginBase {
-    public static VaultPlugin getInstance() {
-        return instance == null ? (instance = new VaultPlugin()) : instance;
-    }
-
-    @Override
-    public void onEnable(XCorePlugin plugin) {
-        setEconomyEnabled(false);
-
-        this.logger = Bukkit.getLogger();
+object VauleModule : ModuleBase() {
+    private const val VAULT_NOT_FOUND_ERROR_MESSAGE = "Vault is not found, so economy feature has been disabled.\""
+    private const val ECONOMY_NOT_FOUND_ERROR_MESSAGE = "Economy plugin is not found, so economy feature has been disabled."
+    override fun onEnable() {
+        isEconomyEnabled = false
+        logger = Bukkit.getLogger()
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
-            this.logger.warning("Vault is not found, so economy feature has been disabled.");
+            logger.warning(VAULT_NOT_FOUND_ERROR_MESSAGE)
         } else {
-            final var provider = Bukkit.getServicesManager().getRegistration(Economy.class);
-            final var econ = Objects.requireNonNull(provider).getProvider();
-            if (econ == null) {
-                this.logger.warning("Economy plugin is not found, so economy feature has been disabled.");
-            } else {
-                this.setEconomyEnabled(true);
-                this.logger.info("Economy feature has been enabled!");
-                this.economy = econ;
+            val economy = Bukkit.getServicesManager().getRegistration(Economy::class.java)
+            if (economy == null) {
+                logger.warning(ECONOMY_NOT_FOUND_ERROR_MESSAGE)
+                return
             }
+            VauleModule.economy = economy.provider
+            isEconomyEnabled = true
+            logger.info("Economy feature has been enabled!")
         }
-        super.onEnable(plugin);
     }
 
-    @Override
-    public void onDisable(XCorePlugin plugin) {
-        super.onDisable(plugin);
-        setEconomyEnabled(false);
+    override fun onDisable() {
+        isEconomyEnabled = false
     }
 
-    public boolean isEconomyEnabled() {
-        return isEconomyEnabled;
+    @JvmStatic
+    fun tryDepositPlayer(p: Player?, amount: Double): Boolean {
+        return economy!!.depositPlayer(p, amount).type == EconomyResponse.ResponseType.SUCCESS
     }
 
-    public void setEconomyEnabled(boolean isEconomyEnabled) {
-        this.isEconomyEnabled = isEconomyEnabled;
+    @JvmStatic
+    fun tryWithdrawPlayer(p: Player?, amount: Double): Boolean {
+        return if (getBalance(p) - amount < 0) {
+            false
+        } else economy!!.withdrawPlayer(p, amount).type == EconomyResponse.ResponseType.SUCCESS
     }
 
-    public boolean tryDepositPlayer(Player p, double amount) {
-        return economy.depositPlayer(p, amount).type == ResponseType.SUCCESS;
+    @JvmStatic
+    fun getBalance(p: Player?): Double {
+        return economy!!.getBalance(p)
     }
 
-    public boolean tryWithdrawPlayer(Player p, double amount) {
-        if (getBalance(p) - amount < 0) {
-            return false;
-        }
-        return economy.withdrawPlayer(p, amount).type == ResponseType.SUCCESS;
-    }
+    @JvmStatic
+    var isEconomyEnabled = false
 
-    public double getBalance(Player p) {
-        return economy.getBalance(p);
-    }
+    @JvmStatic
+    var economy: Economy? = null
+        private set
 
-    public Economy getEconomy() {
-        return economy;
-    }
-
-    private boolean isEconomyEnabled;
-    private Economy economy;
-    private Logger logger;
-
-    private static VaultPlugin instance;
+    private lateinit var logger: Logger
 }

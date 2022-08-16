@@ -2,7 +2,7 @@ package work.xeltica.craft.core.xphoneApps
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.MenuItem
 
 /**
@@ -15,7 +15,7 @@ class ProtectApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.TRIPWIRE_HOOK
 
     override fun onLaunch(player: Player) {
-        Gui.getInstance().openMenu(player, "保護方法を選択…", listOf(
+        UIModule.getInstance().openMenu(player, "保護方法を選択…", listOf(
             MenuItem(
                 "個人保護",
                 { player.performCommand("cprivate") },

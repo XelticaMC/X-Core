@@ -14,7 +14,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.jetbrains.annotations.NotNull;
 
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
-import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.modules.UIModule;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.modules.HintModule;
 import work.xeltica.craft.core.modules.WorldManagementModule;
@@ -27,7 +27,7 @@ public class CommandCart extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
         if (!WorldManagementModule.canSummonVehicles(player.getWorld())) {
-            return Gui.getInstance().error(player, "§cここには召喚できないようだ…。");
+            return UIModule.getInstance().error(player, "§cここには召喚できないようだ…。");
         }
 
         final var lookBlock = player.getTargetBlock(5);
@@ -42,7 +42,7 @@ public class CommandCart extends CommandPlayerOnlyBase {
 
             HintModule.achieve(player, Hint.MINECART);
         } else {
-            return Gui.getInstance().error(player,"ここには召喚できない");
+            return UIModule.getInstance().error(player,"ここには召喚できない");
         }
         return true;
     }

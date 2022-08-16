@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
-import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.modules.UIModule;
 import work.xeltica.craft.core.modules.PlayerStoreModule;
 
 /**
@@ -25,7 +25,7 @@ public class CommandLive extends CommandPlayerOnlyBase {
         final var isLiveMode = args[0].equals("on");
 
         if (PlayerStoreModule.isLiveMode(player) == isLiveMode) {
-            return Gui.getInstance().error(player, "既に" + (isLiveMode ? "オン" : "オフ") + "です");
+            return UIModule.getInstance().error(player, "既に" + (isLiveMode ? "オン" : "オフ") + "です");
         }
 
         PlayerStoreModule.setLiveMode(player, isLiveMode);

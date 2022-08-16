@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.geysermc.connector.common.ChatColor
 import work.xeltica.craft.core.modules.PlayerStoreModule
 import work.xeltica.craft.core.plugins.CounterModule
-import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.PlayerDataKey
 import java.io.IOException
 import work.xeltica.craft.core.api.events.PlayerCounterStart
@@ -45,7 +45,7 @@ class CounterHandler : Listener {
 
         // ブロッククリックでなければ無視
         if (!isBlockClick) return
-        val ui = Gui.getInstance()
+        val ui = UIModule.getInstance()
         val player = e.player
         val block = e.clickedBlock
         val record = PlayerStoreModule.open(player)
@@ -90,7 +90,7 @@ class CounterHandler : Listener {
     fun onUsePlate(e: PlayerInteractEvent) {
         // 踏んだわけじゃないのなら無視
         if (e.action != Action.PHYSICAL) return
-        val ui = Gui.getInstance()
+        val ui = UIModule.getInstance()
         val player = e.player
         val block = e.clickedBlock ?: return
 

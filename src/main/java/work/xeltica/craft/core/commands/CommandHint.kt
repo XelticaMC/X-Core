@@ -5,7 +5,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.MenuItem
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.Hint.HintType
@@ -42,7 +42,7 @@ class CommandHint : CommandPlayerOnlyBase() {
                         """.trimIndent()
                 }
             }
-            Gui.getInstance().openDialog(
+            UIModule.getInstance().openDialog(
                 player,
                 "§l" + hint.hintName + "§r",
                 content
@@ -57,7 +57,7 @@ class CommandHint : CommandPlayerOnlyBase() {
                 val onClick = Consumer { _: MenuItem? -> player.performCommand("hint " + it.name) }
                 MenuItem(name, onClick, icon, null, 1, isAchieved)
             }.toList()
-            Gui.getInstance().openMenu(player, "ヒント", items)
+            UIModule.getInstance().openMenu(player, "ヒント", items)
         }
         return true
     }

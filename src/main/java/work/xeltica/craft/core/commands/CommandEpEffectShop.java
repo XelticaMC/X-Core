@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
-import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.modules.UIModule;
 import work.xeltica.craft.core.models.MenuItem;
 import work.xeltica.craft.core.models.EbiPowerEffect;
 import work.xeltica.craft.core.models.Hint;
@@ -115,7 +115,7 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
      * @param onChosen お店のメニューの一覧
      */
     private void openShopMenu(Player player, String title, Consumer<EbiPowerEffect> onChosen) {
-        final var ui = Gui.getInstance();
+        final var ui = UIModule.getInstance();
         final var items = EbipowerModule.getEffectShopItems()
                 .stream()
                 .map(m -> {

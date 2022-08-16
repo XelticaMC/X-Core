@@ -6,7 +6,6 @@ import org.geysermc.floodgate.api.FloodgateApi
 import java.lang.Runnable
 
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
-import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.PlayerDataKey
 
 /**
@@ -39,7 +38,7 @@ object BedrockDisclaimerModule : ModuleBase() {
      * 免責事項を表示します。
      */
     fun showDisclaimer(p: Player) {
-        Gui.getInstance().openDialog(p, BEDROCK_DISCLAIMER_TITLE, BEDROCK_DISCLAIMER_MESSAGE, {
+        UIModule.getInstance().openDialog(p, BEDROCK_DISCLAIMER_TITLE, BEDROCK_DISCLAIMER_MESSAGE, {
             val record = PlayerStoreModule.open(p)
             record[PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER] = true
         }, "わかりました")

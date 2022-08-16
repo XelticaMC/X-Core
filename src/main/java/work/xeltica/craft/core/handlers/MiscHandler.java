@@ -18,7 +18,7 @@ import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.api.Ticks;
 import work.xeltica.craft.core.api.events.PlayerCounterFinish;
 import work.xeltica.craft.core.api.events.PlayerCounterStart;
-import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.modules.UIModule;
 import work.xeltica.craft.core.models.NbsModel;
 import work.xeltica.craft.core.modules.CustomItemModule;
 import work.xeltica.craft.core.modules.NbsModule;
@@ -46,7 +46,7 @@ public class MiscHandler implements Listener {
         if (hasLoreInMatrix) {
             e.setCancelled(true);
             if (e.getWhoClicked() instanceof Player player) {
-                Gui.getInstance().error(player, "§cカスタムアイテムをクラフティングに使用することはできません。");
+                UIModule.getInstance().error(player, "§cカスタムアイテムをクラフティングに使用することはできません。");
             }
         }
     }

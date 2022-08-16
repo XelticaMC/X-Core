@@ -4,7 +4,7 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.modules.EbipowerModule
 import work.xeltica.craft.core.modules.PlayerStoreModule
@@ -29,7 +29,7 @@ class FireworkApp : AppBase() {
     override fun onLaunch(player: Player) {
         val bonusReceived = isBonusReceived(player)
         val verb = if (bonusReceived) "購入" else "入手"
-        val ui = Gui.getInstance()
+        val ui = UIModule.getInstance()
         if (bonusReceived && !EbipowerModule.tryTake(player, 80)) {
             ui.error(player, "アイテムを${verb}できませんでした。エビパワーが足りません。")
             return

@@ -3,7 +3,7 @@ package work.xeltica.craft.core.xphoneApps
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.MenuItem
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.SoundPitch
@@ -21,7 +21,7 @@ class QuickChatApp : AppBase() {
 
     override fun onLaunch(player: Player) {
         val list = ArrayList<MenuItem>()
-        val ui = Gui.getInstance()
+        val ui = UIModule.getInstance()
         ui.playSound(player, Sound.ENTITY_VILLAGER_WORK_CARTOGRAPHER, 1f, SoundPitch.F_1)
 
         for (chat in QuickChatModule.allPrefix) {

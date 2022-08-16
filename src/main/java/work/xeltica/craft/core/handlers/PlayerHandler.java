@@ -35,7 +35,7 @@ import net.luckperms.api.event.node.NodeAddEvent;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.types.InheritanceNode;
 import work.xeltica.craft.core.XCorePlugin;
-import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.modules.UIModule;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.OmikujiScore;
@@ -224,7 +224,7 @@ public class PlayerHandler implements Listener {
                 || worldName.equals("event")
                 ;
             if (isBedDisabledWorld && Tag.BEDS.isTagged(Objects.requireNonNull(e.getClickedBlock()).getType())) {
-                Gui.getInstance().error(p, "ベッドはこの世界では使えない…");
+                UIModule.getInstance().error(p, "ベッドはこの世界では使えない…");
                 e.setCancelled(true);
             }
         }

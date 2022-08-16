@@ -5,7 +5,7 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.MenuItem
 import work.xeltica.craft.core.models.Notification
 import work.xeltica.craft.core.modules.EbipowerModule
@@ -22,7 +22,7 @@ class NotificationApp: AppBase() {
     override fun isShiny(player: Player): Boolean = NotificationModule.getUnreadNotification(player).isNotEmpty()
 
     override fun onLaunch(player: Player) {
-        val ui = Gui.getInstance()
+        val ui = UIModule.getInstance()
         val list = mutableListOf<MenuItem>()
         val notifications = NotificationModule.getUnreadNotification(player)
         if (notifications.isEmpty()) {
@@ -49,7 +49,7 @@ class NotificationApp: AppBase() {
     private fun readNotification(player: Player, notification: Notification) {
         if (notification.giftItems != null) {
             if (!giftAllowedWorlds.contains(player.world.name)) {
-                Gui.getInstance().error(player, "メインワールドとは独立したインベントリを持つワールドにいるため、アイテムを受け取ることができません。\nメインワールドに移動してから通知を既読してください。")
+                UIModule.getInstance().error(player, "メインワールドとは独立したインベントリを持つワールドにいるため、アイテムを受け取ることができません。\nメインワールドに移動してから通知を既読してください。")
                 return
             }
             player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)

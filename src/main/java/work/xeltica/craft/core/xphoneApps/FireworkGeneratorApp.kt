@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.FireworkMeta
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
-import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.MenuItem
 import javax.annotation.Nonnull
 
@@ -36,7 +36,7 @@ class FireworkGeneratorApp : AppBase() {
             }
             .toList()
 
-        Gui.getInstance().openMenu(player, "花火の形状を選んでください", list)
+        UIModule.getInstance().openMenu(player, "花火の形状を選んでください", list)
     }
 
     private fun chooseFireworkColor(player: Player, type: FireworkEffect.Type) {
@@ -49,7 +49,7 @@ class FireworkGeneratorApp : AppBase() {
                 )
             }
             .toList()
-        Gui.getInstance().openMenu(player, "花火の色を選んでください", list)
+        UIModule.getInstance().openMenu(player, "花火の色を選んでください", list)
     }
 
     private fun chooseFireworkColor2(player: Player, type: FireworkEffect.Type, color: Color) {
@@ -68,11 +68,11 @@ class FireworkGeneratorApp : AppBase() {
                 Material.BARRIER
             )
         )
-        Gui.getInstance().openMenu(player, "花火のフェード色を選んでください", list2)
+        UIModule.getInstance().openMenu(player, "花火のフェード色を選んでください", list2)
     }
 
     private fun chooseFireworkPower(player: Player, type: FireworkEffect.Type, color: Color, color2: Color?) {
-        Gui.getInstance().openMenu(
+        UIModule.getInstance().openMenu(
             player, "花火の飛翔時間を選んでください", listOf(
                 MenuItem("1", {
                     chooseFireworkAttributes(player, type, color, color2, 1, null)
@@ -96,7 +96,7 @@ class FireworkGeneratorApp : AppBase() {
         attribute: FireworkAttribute?
     ) {
         val attr = attribute ?: FireworkAttribute()
-        val ui = Gui.getInstance()
+        val ui = UIModule.getInstance()
         ui.openMenu(
             player, "花火の属性を選んでください", listOf(
                 MenuItem(

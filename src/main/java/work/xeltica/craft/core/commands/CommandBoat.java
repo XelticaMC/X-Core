@@ -17,7 +17,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
-import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.modules.UIModule;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.modules.HintModule;
 import work.xeltica.craft.core.modules.WorldManagementModule;
@@ -30,7 +30,7 @@ public class CommandBoat extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
         if (!WorldManagementModule.canSummonVehicles(player.getWorld())) {
-            return Gui.getInstance().error(player, "§cここには召喚できないようだ…。");
+            return UIModule.getInstance().error(player, "§cここには召喚できないようだ…。");
         }
 
         var spawnLoc = player.getLocation();
@@ -54,7 +54,7 @@ public class CommandBoat extends CommandPlayerOnlyBase {
                     break;
                 }
             }
-            if (!flag) return Gui.getInstance().error(player, "狭すぎて置けない…");
+            if (!flag) return UIModule.getInstance().error(player, "狭すぎて置けない…");
         }
 
         final var boat = spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.BOAT, SpawnReason.CUSTOM);

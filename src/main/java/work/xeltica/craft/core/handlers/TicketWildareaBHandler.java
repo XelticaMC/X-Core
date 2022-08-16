@@ -10,7 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.modules.UIModule;
 import work.xeltica.craft.core.modules.CustomItemModule;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class TicketWildareaBHandler implements Listener {
 
         final var wildareab = Bukkit.getWorld("wildareab");
         if (wildareab == null) {
-            Gui.getInstance().error(player, "テレポートに失敗しました。ワールドが生成されていません。");
+            UIModule.getInstance().error(player, "テレポートに失敗しました。ワールドが生成されていません。");
             return;
         }
 
@@ -55,7 +55,7 @@ public class TicketWildareaBHandler implements Listener {
 
         final var loc = wildareab.locateNearestStructure(wildareab.getSpawnLocation(), StructureType.OCEAN_MONUMENT, 200, true);
         if (loc == null) {
-            Gui.getInstance().error(player, "みつかりませんでした。");
+            UIModule.getInstance().error(player, "みつかりませんでした。");
             return;
         }
         loc.setY(64);

@@ -3,12 +3,10 @@ package work.xeltica.craft.core.modules
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.geysermc.floodgate.api.FloodgateApi
-import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.MenuItem
 import work.xeltica.craft.core.models.SoundPitch
 import work.xeltica.craft.core.xphoneApps.*
 import java.lang.IllegalStateException
-import java.time.LocalDate
 
 /**
  * X Phone の基幹となるシステムです。
@@ -80,7 +78,7 @@ object XphoneModule : ModuleBase() {
         apps.addAll(listOf(*app))
     }
 
-    fun ui() = Gui.getInstance() ?: throw IllegalStateException("Try to call ui() in X Phone OS, but X-Core is not fully initialized.")
+    fun ui() = UIModule.getInstance() ?: throw IllegalStateException("Try to call ui() in X Phone OS, but X-Core is not fully initialized.")
 
     /**
      * 起動音を再生します。

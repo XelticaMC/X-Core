@@ -6,7 +6,6 @@ import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.models.EbiPowerItem
 import java.io.IOException
 import work.xeltica.craft.core.models.EbiPowerEffect
-import work.xeltica.craft.core.plugins.VaultPlugin
 import java.util.ArrayList
 
 /**
@@ -108,14 +107,14 @@ object EbipowerModule : ModuleBase() {
     @JvmStatic
     fun tryGive(p: Player?, amount: Int): Boolean {
         require(amount > 0) { "amountを0以下の数にはできない" }
-        val vault = VaultPlugin.getInstance()
+        val vault = VauleModule.instance
         return vault.tryDepositPlayer(p, amount.toDouble())
     }
 
     @JvmStatic
     fun tryTake(p: Player?, amount: Int): Boolean {
         require(amount > 0) { "amountを0以下の数にはできない" }
-        val vault = VaultPlugin.getInstance()
+        val vault = VauleModule.instance
         return vault.tryWithdrawPlayer(p, amount.toDouble())
     }
 
@@ -126,7 +125,7 @@ object EbipowerModule : ModuleBase() {
 
     @JvmStatic
     operator fun get(p: Player?): Int {
-        val vault = VaultPlugin.getInstance()
+        val vault = VauleModule.instance
         return vault.getBalance(p).toInt()
     }
 

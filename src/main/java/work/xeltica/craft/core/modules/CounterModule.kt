@@ -1,15 +1,15 @@
-package work.xeltica.craft.core.modules
+package work.xeltica.craft.core.plugins
 
 import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.models.CounterData
-import work.xeltica.craft.core.modules.PlayerStoreModule.openAll
-import work.xeltica.craft.core.modules.PlayerStoreModule.save
 import kotlin.Throws
 import java.io.IOException
 import work.xeltica.craft.core.models.PlayerRecord
 import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.modules.ModuleBase
+import work.xeltica.craft.core.modules.PlayerStoreModule
 import java.util.HashMap
 import java.util.function.Consumer
 
@@ -17,12 +17,6 @@ import java.util.function.Consumer
  * 時間計測カウンターの情報を管理します。
  */
 object CounterModule : ModuleBase() {
-    override fun onEnable() {
-        ConfigurationSerialization.registerClass(CounterData::class.java, "CounterData")
-        config = Config("counters")
-        loadAll()
-    }
-
     /**
      * 名前を用いてCounterDataを取得します。
      * @param name CounterDataの名前
@@ -113,9 +107,15 @@ object CounterModule : ModuleBase() {
     @Throws(IOException::class)
     @JvmStatic
     fun resetAllPlayersPlayedLog() {
-        openAll()
+        PlayerStoreModule.openAll()
             .forEach(Consumer { record: PlayerRecord -> record.delete(PlayerDataKey.PLAYED_COUNTER_COUNT, false) })
-        save()
+        PlayerStoreModule.save()
+    }
+
+    override fun onEnable() {
+        ConfigurationSerialization.registerClass(CounterData::class.java, "CounterData")
+        config = Config("counters")
+        loadAll()
     }
 
     /**

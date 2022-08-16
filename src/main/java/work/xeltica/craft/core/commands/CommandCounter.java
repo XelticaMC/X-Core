@@ -15,7 +15,7 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
-import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.modules.UIModule;
 import work.xeltica.craft.core.models.CounterData;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.Ranking;
@@ -33,7 +33,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
         if (args.length == 0) return false;
         final var subCommand = args[0].toLowerCase();
         final var record = PlayerStoreModule.open(player);
-        final var ui = Gui.getInstance();
+        final var ui = UIModule.getInstance();
 
         try {
             switch (subCommand) {

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
-import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.modules.UIModule;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.SoundPitch;
@@ -30,7 +30,7 @@ public class CommandCat extends CommandPlayerOnlyBase {
             final var mes = record.getBoolean(PlayerDataKey.CAT_MODE)
                 ? "§aあなたはCATモードです。§r"
                 : "§aあなたはCATモードではありません。§r";
-            Gui.getInstance().playSound(sender, Sound.ENTITY_CAT_AMBIENT, 2, SoundPitch.F_1);
+            UIModule.getInstance().playSound(sender, Sound.ENTITY_CAT_AMBIENT, 2, SoundPitch.F_1);
             sender.sendMessage(mes);
             return true;
         }
@@ -40,14 +40,14 @@ public class CommandCat extends CommandPlayerOnlyBase {
         switch (arg) {
             case "on" -> {
                 record.set(PlayerDataKey.CAT_MODE, true);
-                Gui.getInstance().playSound(sender, Sound.ENTITY_CAT_AMBIENT, 2, SoundPitch.F_2);
+                UIModule.getInstance().playSound(sender, Sound.ENTITY_CAT_AMBIENT, 2, SoundPitch.F_2);
                 sender.sendMessage("CATモードを§aオン§rにしました。");
 
                 HintModule.achieve(sender, Hint.CAT_MODE);
             }
             case "off" -> {
                 record.set(PlayerDataKey.CAT_MODE, false);
-                Gui.getInstance().playSound(sender, Sound.ENTITY_CAT_AMBIENT, 2, SoundPitch.F_0);
+                UIModule.getInstance().playSound(sender, Sound.ENTITY_CAT_AMBIENT, 2, SoundPitch.F_0);
                 sender.sendMessage("CATモードを§cオフ§rにしました。");
             }
             default -> {

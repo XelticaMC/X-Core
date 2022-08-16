@@ -18,7 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
-import work.xeltica.craft.core.gui.Gui;
+import work.xeltica.craft.core.modules.UIModule;
 import work.xeltica.craft.core.models.MenuItem;
 import work.xeltica.craft.core.modules.DiscordModule;
 
@@ -31,7 +31,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player reporter, Command command, String label, String[] args) {
         if (args.length != 1) {
-            Gui.getInstance().openTextInput(reporter, "処罰対象のプレイヤー名", name -> {
+            UIModule.getInstance().openTextInput(reporter, "処罰対象のプレイヤー名", name -> {
                 choosePunishmentType(reporter, name);
             });
         } else {
@@ -43,7 +43,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
     /** 処罰の種類を選ぶUIを表示します */
     private void choosePunishmentType(Player reporter, String badPlayerName) {
         final Consumer<MenuItem> cb = (m) -> chooseReason(reporter, badPlayerName, (String)m.getCustomData(), null);
-        Gui.getInstance().openMenu(reporter, "処罰の種類"
+        UIModule.getInstance().openMenu(reporter, "処罰の種類"
             , new MenuItem("BAN", cb, Material.BARRIER, "ban")
             , new MenuItem("警告", cb, Material.BELL, "warn")
             , new MenuItem("キック", cb, Material.RABBIT_FOOT, "kick")
@@ -83,7 +83,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
             }, Material.GREEN_WOOL)
         );
 
-        Gui.getInstance().openMenu(reporter, command + "すべき理由（複数選択可）", menuItems.toArray(MenuItem[]::new));
+        UIModule.getInstance().openMenu(reporter, command + "すべき理由（複数選択可）", menuItems.toArray(MenuItem[]::new));
     }
 
     /** 処罰期間を選ぶUIを表示します */
@@ -94,7 +94,7 @@ public class CommandReport extends CommandPlayerOnlyBase {
             "1d", "3d", "5d", "7d", "14d", "1mo", "3mo", "6mo", "12mo", null,
         };
 
-        Gui.getInstance().openMenu(reporter, "期間を指定してください", Arrays.stream(times).map(
+        UIModule.getInstance().openMenu(reporter, "期間を指定してください", Arrays.stream(times).map(
             t -> new MenuItem(convertTimeToLocaleString(t), cb, Material.LIGHT_GRAY_WOOL, t)
         ).toArray(MenuItem[]::new));
     }

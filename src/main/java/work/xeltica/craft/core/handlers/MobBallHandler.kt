@@ -17,10 +17,10 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
-import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.plugins.CitizensPlugin.isCitizensNpc
+import work.xeltica.craft.core.modules.CitizensModule.isCitizensNpc
 import work.xeltica.craft.core.modules.HintModule
 import work.xeltica.craft.core.modules.MobBallModule
 import work.xeltica.craft.core.modules.PlayerStoreModule
@@ -169,7 +169,7 @@ class MobBallHandler : Listener {
 
         val entityTag = nbt.getCompound("EntityTag")
         if (!entityTag.getUUID("UUID").equals(entity.uniqueId)) {
-            Gui.getInstance().error(p, "そのモブはモブケースに適合していません。")
+            UIModule.getInstance().error(p, "そのモブはモブケースに適合していません。")
             return
         }
 
@@ -222,7 +222,7 @@ class MobBallHandler : Listener {
     private fun dropEgg(egg: Egg, player: Player, string: String? = null) {
         egg.world.dropItem(egg.location, egg.item)
         egg.world.playSound(egg.location, Sound.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1f, 0.5f)
-        if (string != null) Gui.getInstance().error(player, string)
+        if (string != null) UIModule.getInstance().error(player, string)
     }
 
     private fun showWaitingParticle(loc: Location) {

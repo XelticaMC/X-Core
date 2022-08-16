@@ -2,7 +2,7 @@ package work.xeltica.craft.core.xphoneApps
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.MenuItem
 import work.xeltica.craft.core.modules.StampRallyModule
 import work.xeltica.craft.core.utils.EventUtility
@@ -19,7 +19,7 @@ class StampRallyApp: AppBase() {
         val entireStamp = StampRallyModule.getEntireStampList()
         val hasStamp = StampRallyModule.getActivatedStampList(player)
 
-        val ui = Gui.getInstance()
+        val ui = UIModule.getInstance()
         val list = mutableListOf<MenuItem>()
         val icon = fun (stampName: String): Material {
             return if (hasStamp.contains(stampName)) Material.LIME_DYE else Material.GRAY_DYE

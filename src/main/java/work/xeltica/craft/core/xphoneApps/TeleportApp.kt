@@ -4,7 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.modules.UIModule
 import work.xeltica.craft.core.models.MenuItem
 import work.xeltica.craft.core.modules.WorldManagementModule
 import java.util.Calendar
@@ -41,7 +41,7 @@ class TeleportApp : AppBase() {
                     .thenAccept {
                         val wildareab = Bukkit.getWorld("wildareab")
                         if (wildareab == null) {
-                            Gui.getInstance().error(player, "テレポートに失敗しました。ワールドが作成されていないようです。")
+                            UIModule.getInstance().error(player, "テレポートに失敗しました。ワールドが作成されていないようです。")
                             return@thenAccept
                         }
                         val y = wildareab.getHighestBlockYAt(x, z) + 1
@@ -82,7 +82,7 @@ class TeleportApp : AppBase() {
             )
         }
 
-        Gui.getInstance().openMenu(player, "テレポート", list)
+        UIModule.getInstance().openMenu(player, "テレポート", list)
     }
 
     override fun isVisible(player: Player): Boolean {

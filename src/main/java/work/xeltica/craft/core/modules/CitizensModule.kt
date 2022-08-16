@@ -1,10 +1,11 @@
-package work.xeltica.craft.core.plugins
+package work.xeltica.craft.core.modules
 
 import net.citizensnpcs.api.CitizensAPI
 import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
+import work.xeltica.craft.core.modules.ModuleBase
 
-object CitizensPlugin {
+object CitizensModule : ModuleBase() {
     /**
      * Citizensプラグイン由来のNPCであるかどうかを取得します。
      */

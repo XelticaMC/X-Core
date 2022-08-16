@@ -17,7 +17,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import work.xeltica.craft.core.gui.Gui;
 
 /**
  * ナイトメアワールドに関するハンドラーをまとめています。
