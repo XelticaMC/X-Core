@@ -24,10 +24,10 @@ object StampRallyModule : ModuleBase() {
     @JvmStatic
     fun getDonePlayerList(): List<Player> {
         val keys = activatedStamp.conf.getKeys(false)
-        val stamp = HashSet(getEntireStampList())
         val players = mutableListOf<Player>()
         for (uuid in keys) {
             val player = XCorePlugin.instance.server.getPlayer(UUID.fromString(uuid)) ?: continue
+            val stamp = HashSet(getEntireStampList())
             stamp.removeAll(activatedStamp.conf.getStringList(uuid).toSet())
             if (stamp.isEmpty()) players.add(player)
         }
