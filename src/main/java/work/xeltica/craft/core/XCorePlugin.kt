@@ -6,6 +6,7 @@ import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
+import org.bukkit.GameMode
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.EntityType
@@ -95,8 +96,9 @@ class XCorePlugin : JavaPlugin() {
 
                 override fun run() {
                     Bukkit.getOnlinePlayers()
-                        .filter { it.world.name == "main" }
                         .forEach {
+                            if (it.world.name != "main" || it.gameMode == GameMode.SPECTATOR) return@forEach
+
                             for (i in 1..random.nextInt(5)) {
                                 val sky = it.location.clone()
                                 sky.y += random.nextDouble(10.0, 30.0)
@@ -118,7 +120,7 @@ class XCorePlugin : JavaPlugin() {
                             }
                         }
                 }
-            }.runTaskTimer(this, Ticks.from(3.0).toLong(), Ticks.from(10.0).toLong())
+            }.runTaskTimer(this, Ticks.from(3.0).toLong(), Ticks.from(5.0).toLong())
         }
         calculator = CitizenTimerCalculator()
         val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
