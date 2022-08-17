@@ -1,7 +1,6 @@
 package work.xeltica.craft.core
 
 import net.kyori.adventure.text.Component
-import java.io.IOException
 import work.xeltica.craft.core.plugins.CitizenTimerCalculator
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
@@ -50,26 +49,19 @@ class XCorePlugin : JavaPlugin() {
         RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         EbipowerObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         TimeAttackObserver().runTaskTimer(this, 0, 5)
-        val tick = 10
+        val tick = Ticks.from(1.0)
         object : BukkitRunnable() {
             override fun run() {
                 VehicleStore.getInstance().tick(tick)
-                val store = PlayerStore.getInstance()
-                store.openAll().forEach {
-                    // オフラインなら処理しない
-                    if (Bukkit.getPlayer(it.playerId) == null) return
-                    var time = it.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
+                Bukkit.getOnlinePlayers().forEach {
+                    val record = PlayerStore.getInstance().open(it)
+                    var time = record.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
                     time -= tick
                     if (time <= 0) {
-                        it.delete(PlayerDataKey.NEWCOMER_TIME)
+                        record.delete(PlayerDataKey.NEWCOMER_TIME)
                     } else {
-                        it[PlayerDataKey.NEWCOMER_TIME] = time
+                        record[PlayerDataKey.NEWCOMER_TIME] = time
                     }
-                }
-                try {
-                    store.save()
-                } catch (e: IOException) {
-                    e.printStackTrace()
                 }
             }
         }.runTaskTimer(this, 0, tick.toLong())

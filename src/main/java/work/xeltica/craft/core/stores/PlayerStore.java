@@ -123,10 +123,8 @@ public class PlayerStore {
     }
 
     private void saveTask() {
-        if (!isChanged()) return;
         try {
             save();
-            setChanged(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,8 +133,6 @@ public class PlayerStore {
     private static PlayerStore instance;
     private final Config playerStores;
     private static Map<UUID, BossBar> liveBarMap;
-
-    private boolean changed;
 
     private static final org.bukkit.Color[] colors = {
             // from XelticaUI
@@ -153,12 +149,4 @@ public class PlayerStore {
             org.bukkit.Color.fromRGB(0xff55a1), // magenta
             org.bukkit.Color.fromRGB(0xff5c84), // pink
     };
-
-    public boolean isChanged() {
-        return this.changed;
-    }
-
-    public void setChanged(boolean changed) {
-        this.changed = changed;
-    }
 }
