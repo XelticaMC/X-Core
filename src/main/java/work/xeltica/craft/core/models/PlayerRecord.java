@@ -25,7 +25,6 @@ public class PlayerRecord {
         if (value != null && value.equals(get(key))) return;
         if (get(key) == null && value == null) return;
         section.set(key.getPhysicalKey(), value);
-        PlayerStore.getInstance().setChanged(true);
     }
 
     @Deprecated(since = "Use set(PlayerDataKey, Object) instead.")
