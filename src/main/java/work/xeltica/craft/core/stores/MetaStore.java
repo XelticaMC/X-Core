@@ -69,7 +69,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "タイムアタック：チャレンジ中にタイムを表示する機能を追加しました。",
+            "スタッフ向け更新です。",
     };
 
     private static MetaStore instance;
