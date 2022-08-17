@@ -9,7 +9,9 @@ import org.bukkit.entity.Boat;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.RideableMinecart;
 
+import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.utils.Config;
+import work.xeltica.craft.core.utils.Ticks;
 
 /**
  * サーバーに存在する乗り物を管理し、不要なものはデスポーンする処理などを行うストアです。
@@ -20,6 +22,7 @@ public class VehicleStore {
         VehicleStore.instance = this;
         logger = Bukkit.getLogger();
         this.cm = new Config("vehicles");
+        Bukkit.getScheduler().runTaskTimer(XCorePlugin.getInstance(), this::saveTask, 0, Ticks.from(10));
     }
 
     public static VehicleStore getInstance() {
@@ -70,11 +73,6 @@ public class VehicleStore {
                 unregisterVehicle(id);
             }
         }
-        try {
-            cm.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public boolean isValidVehicle(Vehicle v) {
@@ -84,6 +82,14 @@ public class VehicleStore {
     private void unregisterVehicle(String id) {
         // 削除
         cm.getConf().set(id, null);
+        try {
+            cm.save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveTask() {
         try {
             cm.save();
         } catch (IOException e) {

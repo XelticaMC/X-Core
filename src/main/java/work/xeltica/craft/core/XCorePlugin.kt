@@ -1,12 +1,12 @@
 package work.xeltica.craft.core
 
 import net.kyori.adventure.text.Component
-import java.io.IOException
 import work.xeltica.craft.core.plugins.CitizenTimerCalculator
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
+import org.bukkit.GameMode
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.EntityType
@@ -43,33 +43,25 @@ class XCorePlugin : JavaPlugin() {
         loadHandlers()
         DiscordService()
         XphoneOs.onEnabled()
-        Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
         DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15.0).toLong())
         FlyingObserver().runTaskTimer(this, 0, 4)
         RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         EbipowerObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         TimeAttackObserver().runTaskTimer(this, 0, 5)
-        val tick = 10
+        val tick = Ticks.from(1.0)
         object : BukkitRunnable() {
             override fun run() {
                 VehicleStore.getInstance().tick(tick)
-                val store = PlayerStore.getInstance()
-                store.openAll().forEach {
-                    // オフラインなら処理しない
-                    if (Bukkit.getPlayer(it.playerId) == null) return
-                    var time = it.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
+                Bukkit.getOnlinePlayers().forEach {
+                    val record = PlayerStore.getInstance().open(it)
+                    var time = record.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
                     time -= tick
                     if (time <= 0) {
-                        it.delete(PlayerDataKey.NEWCOMER_TIME)
+                        record.delete(PlayerDataKey.NEWCOMER_TIME)
                     } else {
-                        it[PlayerDataKey.NEWCOMER_TIME] = time
+                        record[PlayerDataKey.NEWCOMER_TIME] = time
                     }
-                }
-                try {
-                    store.save()
-                } catch (e: IOException) {
-                    e.printStackTrace()
                 }
             }
         }.runTaskTimer(this, 0, tick.toLong())
@@ -103,8 +95,9 @@ class XCorePlugin : JavaPlugin() {
 
                 override fun run() {
                     Bukkit.getOnlinePlayers()
-                        .filter { it.world.name == "main" }
                         .forEach {
+                            if (it.world.name != "main" || it.gameMode == GameMode.SPECTATOR) return@forEach
+
                             for (i in 1..random.nextInt(5)) {
                                 val sky = it.location.clone()
                                 sky.y += random.nextDouble(10.0, 30.0)
@@ -126,7 +119,7 @@ class XCorePlugin : JavaPlugin() {
                             }
                         }
                 }
-            }.runTaskTimer(this, Ticks.from(3.0).toLong(), Ticks.from(10.0).toLong())
+            }.runTaskTimer(this, Ticks.from(3.0).toLong(), Ticks.from(5.0).toLong())
         }
         calculator = CitizenTimerCalculator()
         val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
@@ -135,7 +128,7 @@ class XCorePlugin : JavaPlugin() {
             Bukkit.getPluginManager().disablePlugin(this)
             return
         }
-        luckPerms.contextManager.registerCalculator(calculator!!)
+        luckPerms.contextManager.registerCalculator(calculator)
         val meta = MetaStore.getInstance()
         if (meta.isUpdated) {
             var prev = meta.previousVersion
@@ -168,7 +161,7 @@ class XCorePlugin : JavaPlugin() {
         )
         if (provider != null) {
             val luckPerms = provider.provider
-            luckPerms.contextManager.unregisterCalculator(calculator!!)
+            luckPerms.contextManager.unregisterCalculator(calculator)
         }
     }
 
@@ -304,7 +297,7 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private val commands = HashMap<String, CommandBase>()
-    private var calculator: CitizenTimerCalculator? = null
+    private lateinit var calculator: CitizenTimerCalculator
     private val random = Random()
 
     companion object {
