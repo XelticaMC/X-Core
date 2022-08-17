@@ -9,6 +9,7 @@ import java.util.UUID;
 import com.github.ucchyocean.lc3.bukkit.event.LunaChatBukkitChannelMessageEvent;
 import com.github.ucchyocean.lc3.member.ChannelMemberPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.BlockFace;
@@ -19,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -229,6 +231,15 @@ public class PlayerHandler implements Listener {
                 Gui.getInstance().error(p, "ベッドはこの世界では使えない…");
                 e.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerGameModeChange(PlayerGameModeChangeEvent e) {
+        if (e.getNewGameMode() == GameMode.SPECTATOR) {
+            e.getPlayer().performCommand("dynmap hide");
+        } else if (e.getPlayer().hasPermission("dynmap.show")) {
+            e.getPlayer().performCommand("dynmap show");
         }
     }
 
