@@ -81,7 +81,7 @@ dependencies {
 }
 
 group = "work.xeltica.craft.core"
-version = "2.35.7"
+version = "2.35.7.1"
 description = "X-Core"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
