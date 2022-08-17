@@ -43,7 +43,6 @@ class XCorePlugin : JavaPlugin() {
         loadHandlers()
         DiscordService()
         XphoneOs.onEnabled()
-        Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
         DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15.0).toLong())
         FlyingObserver().runTaskTimer(this, 0, 4)
@@ -129,7 +128,7 @@ class XCorePlugin : JavaPlugin() {
             Bukkit.getPluginManager().disablePlugin(this)
             return
         }
-        luckPerms.contextManager.registerCalculator(calculator!!)
+        luckPerms.contextManager.registerCalculator(calculator)
         val meta = MetaStore.getInstance()
         if (meta.isUpdated) {
             var prev = meta.previousVersion
@@ -162,7 +161,7 @@ class XCorePlugin : JavaPlugin() {
         )
         if (provider != null) {
             val luckPerms = provider.provider
-            luckPerms.contextManager.unregisterCalculator(calculator!!)
+            luckPerms.contextManager.unregisterCalculator(calculator)
         }
     }
 
@@ -298,7 +297,7 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private val commands = HashMap<String, CommandBase>()
-    private var calculator: CitizenTimerCalculator? = null
+    private lateinit var calculator: CitizenTimerCalculator
     private val random = Random()
 
     companion object {
