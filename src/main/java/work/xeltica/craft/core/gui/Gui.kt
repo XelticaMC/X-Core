@@ -24,9 +24,12 @@ import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.models.SoundPitch
 import work.xeltica.craft.core.stores.ItemStore
-import java.util.*
+import java.util.ArrayDeque
+import java.util.UUID
 import java.util.function.Consumer
 import java.util.function.Predicate
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 class Gui: Listener {
     companion object {
@@ -343,15 +346,26 @@ class Gui: Listener {
         val handleString = UUID.randomUUID().toString().replace("-", "")
 
         val comTitle = Component.text(title + "\n\n")
-        val comContent = Component.text(content + "\n\n")
-        val comOkButton = Component.text(okButtonText,
+        val comOkButton = Component.text("\n\n"+okButtonText,
             Style.style(TextColor.color(0,0,0), TextDecoration.BOLD, TextDecoration.UNDERLINED)
                 .clickEvent(ClickEvent.runCommand("/__core_gui_event__ $handleString"))
         )
 
-        val component = comTitle.append(comContent).append(comOkButton)
+        val queue = ArrayDeque(eachSubString(content, 200))
 
-        meta.addPages(component)
+        val pages = mutableListOf<Component>()
+        pages.add(comTitle.append(Component.text(queue.poll())))
+
+        while (queue.isNotEmpty()) {
+            pages.add(Component.text(queue.poll()))
+        }
+
+        pages[pages.lastIndex] = pages.last().append(comOkButton)
+
+        for (page in pages) {
+            meta.addPages(page)
+        }
+
         meta.author = "XelticaMc"
         meta.title = title
 
@@ -362,6 +376,22 @@ class Gui: Listener {
         if (callback != null) {
             bookHandlersMap[handleString] = HandlerTuple(callback, DialogEventArgs(player), meta)
         }
+    }
+
+    private fun eachSubString(text: String, n: Int): List<String> {
+        var tmp = text
+        val length = text.length
+        val result = mutableListOf<String>()
+        for (i in 0..(length/n)) {
+            if (tmp.length > n) {
+                result.add(tmp.substring(0, n))
+                tmp = tmp.substring(n)
+                continue
+            }
+            result.add(tmp)
+            break
+        }
+        return result
     }
 
     private fun openDialogBedrockImpl(player: Player, title: String, content: String,
