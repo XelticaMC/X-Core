@@ -50,6 +50,8 @@ class Gui: Listener {
         fun isBedrock(player: Player): Boolean {
             return FloodgateApi.getInstance().isFloodgateId(player.uniqueId)
         }
+
+        private const val NEW_PAGE_CODE = "_NEW_PAGE_"
     }
 
     private val invMap: HashMap<Inventory, List<MenuItem>> = HashMap()
@@ -351,7 +353,7 @@ class Gui: Listener {
                 .clickEvent(ClickEvent.runCommand("/__core_gui_event__ $handleString"))
         )
 
-        val queue = ArrayDeque(eachSubString(content, 200))
+        val queue = ArrayDeque(content.split(NEW_PAGE_CODE))
 
         val pages = mutableListOf<Component>()
         pages.add(comTitle.append(Component.text(queue.poll())))
@@ -376,22 +378,6 @@ class Gui: Listener {
         if (callback != null) {
             bookHandlersMap[handleString] = HandlerTuple(callback, DialogEventArgs(player), meta)
         }
-    }
-
-    private fun eachSubString(text: String, n: Int): List<String> {
-        var tmp = text
-        val length = text.length
-        val result = mutableListOf<String>()
-        for (i in 0..(length/n)) {
-            if (tmp.length > n) {
-                result.add(tmp.substring(0, n))
-                tmp = tmp.substring(n)
-                continue
-            }
-            result.add(tmp)
-            break
-        }
-        return result
     }
 
     private fun openDialogBedrockImpl(player: Player, title: String, content: String,
