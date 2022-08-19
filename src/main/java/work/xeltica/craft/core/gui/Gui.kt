@@ -304,7 +304,7 @@ class Gui: Listener {
             meta.displayName(Component.text(it.name))
             item.itemMeta = meta
             inv.addItem(item)
-            return
+            return@map
         }
 
         invMap[inv] = items
