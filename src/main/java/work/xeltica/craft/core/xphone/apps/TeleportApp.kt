@@ -76,10 +76,8 @@ class TeleportApp : AppBase() {
                     }, Material.TROPICAL_FISH)
                 )
             }
-        } else if ("wildareab" == currentWorldName) {
-            list.add(
-                MenuItem("メインワールドに帰る", { WorldStore.getInstance().teleportToSavedLocation(player, "main") }, Material.CREEPER_HEAD)
-            )
+        } else if (shigenWorldsList.contains(currentWorldName)) {
+            list.add(MenuItem("メインワールドに帰る", { WorldStore.getInstance().teleportToSavedLocation(player, "main") }, Material.CREEPER_HEAD))
         }
 
         Gui.getInstance().openMenu(player, "テレポート", list)
@@ -88,4 +86,10 @@ class TeleportApp : AppBase() {
     override fun isVisible(player: Player): Boolean {
         return player.world.name != "event"
     }
+
+    private val shigenWorldsList = listOf(
+        "wildareab",
+        "shigen_nether",
+        "shigen_end",
+    )
 }

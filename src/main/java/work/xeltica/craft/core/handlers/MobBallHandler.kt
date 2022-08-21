@@ -148,6 +148,11 @@ class MobBallHandler : Listener {
             it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
             it.persistentDataContainer.set(NamespacedKey(XCorePlugin.instance, "isCaptured"), PersistentDataType.INTEGER, 1)
             showTeleportParticle(it.location)
+            // もしTameableなら、出した人を親とする
+            if (it is Tameable) {
+                it.isTamed = true
+                it.owner = e.player
+            }
         }
         nbt.setBoolean("isActive", false)
         nbt.applyNBT(item)
