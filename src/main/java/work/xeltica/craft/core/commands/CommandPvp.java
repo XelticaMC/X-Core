@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 
 /**
  * PvPの有効・無効を切り替えるコマンド

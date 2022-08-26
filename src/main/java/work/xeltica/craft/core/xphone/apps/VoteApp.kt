@@ -2,7 +2,7 @@ package work.xeltica.craft.core.xphone.apps
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.xphone.XphoneOs
+import work.xeltica.craft.core.modules.xphone.XphoneModule
 
 /**
  * サーバー投票アプリ
@@ -17,6 +17,6 @@ class VoteApp : AppBase() {
         player.performCommand("vote")
     }
 
-    override fun isVisible(player: Player): Boolean = !XphoneOs.isBedrockPlayer(player) &&  player.world.name != "event"
+    override fun isVisible(player: Player): Boolean = !XphoneModule.isBedrockPlayer(player) &&  player.world.name != "event"
 }
 

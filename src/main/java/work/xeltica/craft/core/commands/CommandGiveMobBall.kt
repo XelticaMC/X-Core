@@ -6,6 +6,7 @@ import org.bukkit.Sound
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.stores.MobBallStore
 
 class CommandGiveMobBall : CommandPlayerOnlyBase() {

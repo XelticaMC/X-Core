@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.api.commands;
 
 import java.util.ArrayList;
 import java.util.List;

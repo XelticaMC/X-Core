@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.modules.xphone;
 
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.ItemStore;
@@ -20,7 +21,7 @@ import java.util.Objects;
  * X Phoneを受け取るコマンド
  * @author Xeltica
  */
-public class CommandXPhone extends CommandPlayerOnlyBase {
+public class XphoneCommand extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
         final var item = ItemStore.getInstance().getItem("xphone");

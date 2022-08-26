@@ -2,6 +2,7 @@ package work.xeltica.craft.core.commands
 
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
+import work.xeltica.craft.core.api.commands.CommandBase
 import work.xeltica.craft.core.stores.StampRallyStore
 
 class CommandStamp: CommandBase() {
