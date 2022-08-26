@@ -11,7 +11,7 @@ import org.json.simple.parser.JSONParser
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.models.Notification
 import work.xeltica.craft.core.utils.Config
-import work.xeltica.craft.core.xphone.XphoneOs
+import work.xeltica.craft.core.modules.xphone.XphoneModule
 import java.io.File
 import java.io.FileReader
 import java.util.UUID
@@ -93,7 +93,7 @@ class NotificationStore {
             player.sendMessage("${ChatColor.GREEN}・${ChatColor.RESET}${it.title}")
         }
         player.sendMessage("${ChatColor.LIGHT_PURPLE}X Phoneの「通知アプリ」から確認できます。")
-        XphoneOs.playTritone(player)
+        XphoneModule.playTritone(player)
     }
 
     /**

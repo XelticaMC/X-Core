@@ -1,24 +1,25 @@
-package work.xeltica.craft.core.xphone
+package work.xeltica.craft.core.modules.xphone
 
+import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.geysermc.floodgate.api.FloodgateApi
+import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.SoundPitch
 import work.xeltica.craft.core.stores.ItemStore
 import work.xeltica.craft.core.xphone.apps.*
 import java.lang.IllegalStateException
-import java.time.LocalDate
 
 /**
  * X Phone の基幹となるシステムです。
  */
-object XphoneOs {
+object XphoneModule : ModuleBase() {
     /**
      * X-Core が有効になったときに呼ばれます。
      */
-    fun onEnabled() {
+    override fun onEnable() {
         apps.addAll(listOf(
             EventRespawnApp(),
             EventReturnWorldApp(),
@@ -44,13 +45,26 @@ object XphoneOs {
             PunishApp(),
             StampRallyApp(),
         ))
+
+        registerCommand("xphone", XphoneCommand())
+        registerHandler(XphoneHandler())
     }
 
     /**
      * X-Core が無効になったときに呼ばれます。
      */
-    fun onDisabled() {
+    override fun onDisable() {
         apps.clear()
+    }
+
+    /**
+     * X Phone にアプリを登録します。
+     */
+    fun registerApp(app: AppBase) {
+        if (apps.contains(app)) {
+            Bukkit.getLogger().warning("X Phoneアプリ「${app.javaClass.name}」は既に登録されているため、無視します。")
+        }
+        apps.add(app)
     }
 
     /**
@@ -93,7 +107,7 @@ object XphoneOs {
         ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.D2, 4)
     }
 
-    const val name = "X Phone OS 2.2"
+    const val name = "X Phone OS 3.0"
 
     private val apps = mutableListOf<AppBase>()
 }

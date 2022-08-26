@@ -3,6 +3,7 @@ package work.xeltica.craft.core.commands;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.gui.Gui;
 
 /**

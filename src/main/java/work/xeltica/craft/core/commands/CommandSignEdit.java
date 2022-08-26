@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 
 /**
  * 看板を編集するコマンド

@@ -14,8 +14,8 @@ import org.bukkit.entity.Firework
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
-import java.util.Locale
-import java.util.HashMap
+import work.xeltica.craft.core.api.ModuleBase
+import work.xeltica.craft.core.api.commands.CommandRegistry
 
 import work.xeltica.craft.core.plugins.VaultPlugin
 import work.xeltica.craft.core.utils.Ticks
@@ -24,7 +24,7 @@ import work.xeltica.craft.core.stores.*
 import work.xeltica.craft.core.handlers.*
 import work.xeltica.craft.core.runnables.*
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.xphone.XphoneOs
+import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.utils.EventUtility
@@ -35,6 +35,7 @@ import java.util.Random
  * @author Xeltica
  */
 class XCorePlugin : JavaPlugin() {
+
     override fun onEnable() {
         instance = this
         loadPlugins()
@@ -42,7 +43,7 @@ class XCorePlugin : JavaPlugin() {
         loadCommands()
         loadHandlers()
         DiscordService()
-        XphoneOs.onEnabled()
+        loadModules()
         DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15.0).toLong())
         FlyingObserver().runTaskTimer(this, 0, 4)
@@ -151,11 +152,11 @@ class XCorePlugin : JavaPlugin() {
     }
 
     override fun onDisable() {
-        commands.clear()
+        CommandRegistry.clearMap()
         Gui.resetInstance()
         unloadPlugins()
         NbsStore.getInstance().stopAll()
-        XphoneOs.onDisabled()
+        unloadModules()
         val provider = Bukkit.getServicesManager().getRegistration(
             LuckPerms::class.java
         )
@@ -166,9 +167,7 @@ class XCorePlugin : JavaPlugin() {
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
-        val name = command.name.lowercase(Locale.getDefault())
-        val com = commands[name] ?: return false
-        return com.execute(sender, command, label, args)
+        return CommandRegistry.onCommand(sender, command, label, args)
     }
 
     private fun loadStores() {
@@ -195,36 +194,37 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private fun loadCommands() {
-        commands.clear()
-        addCommand("omikuji", CommandOmikuji())
-        addCommand("respawn", CommandRespawn())
-        addCommand("pvp", CommandPvp())
-        addCommand("signedit", CommandSignEdit())
-        addCommand("givecustomitem", CommandGiveCustomItem())
-        addCommand("givemobball", CommandGiveMobBall())
-        addCommand("report", CommandReport())
-        addCommand("localtime", CommandLocalTime())
-        addCommand("boat", CommandBoat())
-        addCommand("cart", CommandCart())
-        addCommand("promo", CommandPromo())
-        addCommand("cat", CommandCat())
-        addCommand("hub", CommandHub())
-        addCommand("xtp", CommandXtp())
-        addCommand("epshop", CommandEpShop())
-        addCommand("hint", CommandHint())
-        addCommand("__core_gui_event__", CommandXCoreGuiEvent())
-        addCommand("xphone", CommandXPhone())
-        addCommand("live", CommandLive())
-        addCommand("nick", CommandNickName())
-        addCommand("counter", CommandCounter())
-        addCommand("ranking", CommandRanking())
-        addCommand("countdown", CommandCountdown())
-        addCommand("qchat", CommandQuickChat())
-        addCommand("epeffectshop", CommandEpEffectShop())
-        addCommand("xreload", CommandXReload())
-        addCommand("xtpreset", CommandXtpReset())
-        addCommand("xdebug", CommandXDebug())
-        addCommand("stamp", CommandStamp())
+        CommandRegistry.clearMap()
+
+        CommandRegistry.register("omikuji", CommandOmikuji())
+        CommandRegistry.register("respawn", CommandRespawn())
+        CommandRegistry.register("pvp", CommandPvp())
+        CommandRegistry.register("signedit", CommandSignEdit())
+        CommandRegistry.register("givecustomitem", CommandGiveCustomItem())
+        CommandRegistry.register("givemobball", CommandGiveMobBall())
+        CommandRegistry.register("report", CommandReport())
+        CommandRegistry.register("localtime", CommandLocalTime())
+        CommandRegistry.register("boat", CommandBoat())
+        CommandRegistry.register("cart", CommandCart())
+        CommandRegistry.register("promo", CommandPromo())
+        CommandRegistry.register("cat", CommandCat())
+        CommandRegistry.register("hub", CommandHub())
+        CommandRegistry.register("xtp", CommandXtp())
+        CommandRegistry.register("epshop", CommandEpShop())
+        CommandRegistry.register("hint", CommandHint())
+        CommandRegistry.register("__core_gui_event__", CommandXCoreGuiEvent())
+        CommandRegistry.register("live", CommandLive())
+        CommandRegistry.register("nick", CommandNickName())
+        CommandRegistry.register("counter", CommandCounter())
+        CommandRegistry.register("ranking", CommandRanking())
+        CommandRegistry.register("countdown", CommandCountdown())
+        CommandRegistry.register("qchat", CommandQuickChat())
+        CommandRegistry.register("epeffectshop", CommandEpEffectShop())
+        CommandRegistry.register("xreload", CommandXReload())
+        CommandRegistry.register("xtpreset", CommandXtpReset())
+        CommandRegistry.register("xdebug", CommandXDebug())
+        CommandRegistry.register("stamp", CommandStamp())
+
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
     }
 
@@ -244,8 +244,6 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded WorldHandler")
         pm.registerEvents(NightmareHandler(), this)
         logger.info("Loaded NightmareHandler")
-        pm.registerEvents(XphoneHandler(), this)
-        logger.info("Loaded XphoneHandler")
         pm.registerEvents(EbiPowerHandler(), this)
         logger.info("Loaded EbiPowerHandler")
         pm.registerEvents(LiveModeHandler(), this)
@@ -280,23 +278,46 @@ class XCorePlugin : JavaPlugin() {
         VaultPlugin.getInstance().onDisable(this)
     }
 
-    /**
-     * コマンドをコアシステムに登録します。
-     * @param commandName コマンド名
-     * @param command コマンドのインスタンス
-     */
-    private fun addCommand(commandName: String, command: CommandBase) {
-        commands[commandName] = command
-        val cmd = getCommand(commandName)
-        if (cmd == null) {
-            logger.warning("Command $commandName is not defined at the plugin.yml")
-            return
+    private fun loadModules() {
+        // モジュールの有効化フック
+        modules.forEach {
+            try {
+                it.onEnable()
+                logger.info("Successfully enabled ${it.javaClass.name}!")
+            } catch (e: Exception) {
+                logger.severe("Failed to enable '${it.javaClass.name}'")
+                e.printStackTrace()
+            }
         }
-        cmd.tabCompleter = command
-        logger.info("Command $commandName is registered")
+        // モジュールの有効化後処理フック（各モジュールの連携とか）
+        modules.forEach {
+            try {
+                it.onPostEnable()
+                logger.info("Successfully post-enabled ${it.javaClass.name}!")
+            } catch (e: Exception) {
+                logger.severe("Failed to post-enable '${it.javaClass.name}'")
+                e.printStackTrace()
+            }
+        }
     }
 
-    private val commands = HashMap<String, CommandBase>()
+    private fun unloadModules() {
+        // モジュールの無効化フック
+        modules.forEach {
+            try {
+                it.onDisable()
+                logger.info("Successfully disabled ${it.javaClass.name}!")
+            } catch (e: Exception) {
+                logger.severe("Failed to disable '${it.javaClass.name}'")
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private val modules: Array<ModuleBase> = arrayOf(
+        XphoneModule,
+    )
+
     private lateinit var calculator: CitizenTimerCalculator
     private val random = Random()
 

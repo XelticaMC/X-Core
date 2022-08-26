@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import work.xeltica.craft.core.api.commands.CommandBase;
 import work.xeltica.craft.core.stores.QuickChatStore;
 
 import java.util.ArrayList;

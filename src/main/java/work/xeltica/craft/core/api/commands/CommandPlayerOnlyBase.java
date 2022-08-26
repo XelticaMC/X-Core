@@ -1,9 +1,10 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.api.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import work.xeltica.craft.core.api.commands.CommandBase;
 
 /**
  * プレイヤー限定のコマンドの基底クラス

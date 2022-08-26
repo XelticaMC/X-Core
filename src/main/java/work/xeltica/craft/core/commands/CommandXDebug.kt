@@ -2,7 +2,7 @@ package work.xeltica.craft.core.commands
 
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.commands.CommandBase
 import work.xeltica.craft.core.utils.EventUtility
 import java.time.LocalDate
 

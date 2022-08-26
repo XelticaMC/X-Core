@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil
-import work.xeltica.craft.core.xphone.XphoneOs
+import work.xeltica.craft.core.modules.xphone.XphoneModule
 
 /**
  * 統合版ユーザー向けツールを揃えたアプリ。
@@ -24,5 +24,5 @@ class BedrockToolsApp : AppBase() {
         ))
     }
 
-    override fun isVisible(player: Player) = XphoneOs.isBedrockPlayer(player)
+    override fun isVisible(player: Player) = XphoneModule.isBedrockPlayer(player)
 }
