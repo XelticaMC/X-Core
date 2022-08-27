@@ -14,6 +14,7 @@ object QuickChatModule: ModuleBase() {
 
     override fun onEnable() {
         registerCommand("qchat", QuickChatCommand())
+        registerHandler(QuickChatHandler())
     }
 
     fun getAllPrefix(): Set<String> {
