@@ -20,28 +20,22 @@ import org.bukkit.SoundCategory;
 import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.GlowItemFrame;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.event.world.ChunkPopulateEvent;
-
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.title.Title;
 import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.material.Directional;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.title.Title;
+
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.CraftRecipe;
 import work.xeltica.craft.core.models.Hint;
@@ -61,6 +55,9 @@ public class WorldHandler implements Listener {
     }
 
     @EventHandler
+    /**
+     * 進捗を達成できるワールドを限定させるハンドラー
+     */
     public void onAdvancementDone(PlayerAdvancementDoneEvent e) {
         final var p = e.getPlayer();
         if (!advancementWhitelist.contains(p.getWorld().getName())) {
@@ -73,6 +70,9 @@ public class WorldHandler implements Listener {
     }
 
     @EventHandler
+    /**
+     * サンドボックスでのエンダーチェスト設置を防止する
+     */
     public void onBlockPlace(BlockPlaceEvent e) {
         final var p = e.getPlayer();
         if (p.getWorld().getName().equals("sandbox")) {
@@ -85,6 +85,10 @@ public class WorldHandler implements Listener {
     }
 
     @EventHandler
+    /**
+     * テレポート時のいろいろなガード機能など
+     * TODO: 分割する
+     */
     public void onPlayerTeleportGuard(PlayerTeleportEvent e) {
         final var p = e.getPlayer();
         final var world = e.getTo().getWorld();
@@ -169,34 +173,18 @@ public class WorldHandler implements Listener {
     }
 
     @EventHandler
+    /**
+     * ワールドを移動した時に、ワールド名を表示する機能
+     */
     public void onPlayerMoveWorld(PlayerChangedWorldEvent e) {
         final var name = WorldStore.getInstance().getWorldDisplayName(e.getPlayer().getWorld());
         e.getPlayer().showTitle(Title.title(Component.text(name).color(TextColor.color(0xFFB300)), Component.empty()));
     }
 
-//    @EventHandler()
-//    public void onChunkPopulateEvent(ChunkPopulateEvent e) {
-//        // TODO ハードコードをやめる
-//        if (!e.getWorld().getName().equals("main")) return;
-//        final var c = e.getChunk();
-//
-//        final var min = e.getWorld().getMinHeight();
-//
-//        for (var z = 0; z < 16; z++) {
-//            for (var x = 0; x < 16; x++) {
-//                final var yMax = c.getWorld().getHighestBlockYAt(c.getX() + x, c.getZ() + z);
-//                for (int y = min + 1; y <= yMax; y++) {
-//                    final var block = c.getBlock(x, y, z);
-//                    final var replacer = replace(block.getType());
-//                    if (replacer != null) {
-//                        block.setType(replacer, false);
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     @EventHandler
+    /**
+     * 自動クラフト機能
+     */
     public void onDispenser(BlockPreDispenseEvent event) {
         final var block = event.getBlock();
         if (block.getBlockData().getMaterial() != Material.DISPENSER) return;
@@ -278,29 +266,6 @@ public class WorldHandler implements Listener {
                 }
             }
         }
-
-    }
-
-    private Material replace(Material mat) {
-        return switch (mat) {
-            case COAL_ORE -> Material.STONE;
-            case IRON_ORE -> Material.STONE;
-            case GOLD_ORE -> Material.STONE;
-            case DIAMOND_ORE -> Material.STONE;
-            case LAPIS_ORE -> Material.STONE;
-            case REDSTONE_ORE -> Material.STONE;
-            case EMERALD_ORE -> Material.STONE;
-            case COPPER_ORE -> Material.STONE;
-            case DEEPSLATE_COAL_ORE -> Material.DEEPSLATE;
-            case DEEPSLATE_IRON_ORE -> Material.DEEPSLATE;
-            case DEEPSLATE_GOLD_ORE -> Material.DEEPSLATE;
-            case DEEPSLATE_DIAMOND_ORE -> Material.DEEPSLATE;
-            case DEEPSLATE_LAPIS_ORE -> Material.DEEPSLATE;
-            case DEEPSLATE_REDSTONE_ORE -> Material.DEEPSLATE;
-            case DEEPSLATE_EMERALD_ORE -> Material.DEEPSLATE;
-            case DEEPSLATE_COPPER_ORE -> Material.DEEPSLATE;
-            default -> null;
-        };
     }
 
     private final Set<String> advancementWhitelist = new HashSet<>(List.of(
