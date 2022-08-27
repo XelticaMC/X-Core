@@ -49,7 +49,6 @@ import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
-import work.xeltica.craft.core.stores.QuickChatStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 
 /**
@@ -185,23 +184,6 @@ public class PlayerHandler implements Listener {
         mes = mes.replace("MORNING", "MORNYAN");
         mes = mes.replace("NA", "NYA");
         return mes;
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerQuickChat(AsyncPlayerChatEvent e) {
-        var msg = e.getMessage();
-        final var store = QuickChatStore.getInstance();
-        final var player = e.getPlayer();
-        if (!msg.startsWith(".")) return;
-        msg = msg.substring(1);
-        if (store.getAllPrefix().contains(msg)) {
-            var quickMsg = store.getMessage(msg);
-            if (quickMsg != null) {
-                quickMsg = store.chatFormat(quickMsg, player);
-                e.setMessage(quickMsg);
-                HintStore.getInstance().achieve(player, Hint.QUICKCHAT);
-            }
-        }
     }
 
     @EventHandler
