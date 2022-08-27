@@ -272,6 +272,9 @@ public class WorldHandler implements Listener {
         "wildarea2",
         "wildarea2_nether",
         "wildarea2_the_end",
+        "wildareab",
+        "shigen_nether",
+        "shigen_end",
         "main",
         "nightmare2"
     ));
