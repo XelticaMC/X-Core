@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.xphone.apps
+package work.xeltica.craft.core.modules.notification
 
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Material
@@ -9,7 +9,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.Notification
 import work.xeltica.craft.core.stores.EbiPowerStore
-import work.xeltica.craft.core.modules.notification.NotificationModule
+import work.xeltica.craft.core.xphone.apps.AppBase
 
 class NotificationApp: AppBase() {
     override fun getName(player: Player): String {

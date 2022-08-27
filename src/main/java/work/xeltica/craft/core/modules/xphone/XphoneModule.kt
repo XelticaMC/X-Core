@@ -8,6 +8,8 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.SoundPitch
+import work.xeltica.craft.core.modules.notification.NotificationApp
+import work.xeltica.craft.core.modules.quickchat.QuickChatApp
 import work.xeltica.craft.core.stores.ItemStore
 import work.xeltica.craft.core.xphone.apps.*
 import java.lang.IllegalStateException

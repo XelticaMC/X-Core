@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.xphone.apps
+package work.xeltica.craft.core.modules.quickchat
 
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -7,8 +7,8 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.SoundPitch
-import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.stores.HintStore
+import work.xeltica.craft.core.xphone.apps.AppBase
 
 /**
  * クイックチャットアプリ
