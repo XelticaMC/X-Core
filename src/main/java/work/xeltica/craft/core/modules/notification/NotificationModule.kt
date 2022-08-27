@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.stores
+package work.xeltica.craft.core.modules.notification
 
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -9,6 +9,7 @@ import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.models.Notification
 import work.xeltica.craft.core.utils.Config
 import work.xeltica.craft.core.modules.xphone.XphoneModule
@@ -16,31 +17,29 @@ import java.io.File
 import java.io.FileReader
 import java.util.UUID
 
-class NotificationStore {
-    companion object {
-        private lateinit var instance: NotificationStore
+object NotificationModule: ModuleBase() {
+    lateinit var instance: NotificationModule
+    private set
 
-        fun getInstance(): NotificationStore = instance
+    private lateinit var confirmed: Config
 
-        private const val FILE_NAME = "notification.json"
+    private const val FILE_NAME = "notification.json"
+    private const val NOTIFICATION_ID = "notificationID"
+    private const val TITLE = "title"
+    private const val MESSAGE = "message"
+    private const val GIFTS = "gifts"
+    private const val EP = "ep"
 
-        private const val NOTIFICATION_ID = "notificationID"
-        private const val TITLE = "title"
-        private const val MESSAGE = "message"
-        private const val GIFTS = "gifts"
-        private const val EP = "ep"
-        private const val RECEIVER = "receiver"
-
-        private const val GIFT_MATERIAL_NAME = "materialName"
-        private const val GIFT_COUNT = "count"
-    }
+    private const val RECEIVER = "receiver"
+    private const val GIFT_MATERIAL_NAME = "materialName"
+    private const val GIFT_COUNT = "count"
 
     private val notifications: MutableList<Notification> = mutableListOf()
 
-    private val confirmed = Config("confirmed")
-
-    init {
+    override fun onEnable() {
         instance = this
+        confirmed = Config("confirmed")
+        registerHandler(NotificationHandler())
         reload()
     }
 

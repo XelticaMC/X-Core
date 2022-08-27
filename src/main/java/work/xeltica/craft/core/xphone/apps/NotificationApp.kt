@@ -9,22 +9,22 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.Notification
 import work.xeltica.craft.core.stores.EbiPowerStore
-import work.xeltica.craft.core.stores.NotificationStore
+import work.xeltica.craft.core.modules.notification.NotificationModule
 
 class NotificationApp: AppBase() {
     override fun getName(player: Player): String {
-        val count = NotificationStore.getInstance().getUnreadNotification(player).count()
+        val count = NotificationModule.getUnreadNotification(player).count()
         return if (count > 0) "通知（${count}）" else "通知"
     }
 
     override fun getIcon(player: Player): Material = Material.REDSTONE
 
-    override fun isShiny(player: Player): Boolean = NotificationStore.getInstance().getUnreadNotification(player).isNotEmpty()
+    override fun isShiny(player: Player): Boolean = NotificationModule.getUnreadNotification(player).isNotEmpty()
 
     override fun onLaunch(player: Player) {
         val ui = Gui.getInstance()
         val list = mutableListOf<MenuItem>()
-        val notifications = NotificationStore.getInstance().getUnreadNotification(player)
+        val notifications = NotificationModule.getUnreadNotification(player)
         if (notifications.isEmpty()) {
             ui.error(player, "新しい通知はありません。")
             return
@@ -57,7 +57,7 @@ class NotificationApp: AppBase() {
             player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
             player.sendMessage("${notification.ep} EPを受け取りました。")
         }
-        NotificationStore.getInstance().readNotification(player, notification)
+        NotificationModule.readNotification(player, notification)
     }
 
     private val giftAllowedWorlds = arrayOf(

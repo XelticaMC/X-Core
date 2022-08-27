@@ -25,9 +25,10 @@ import work.xeltica.craft.core.handlers.*
 import work.xeltica.craft.core.runnables.*
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.xphone.XphoneModule
-import work.xeltica.craft.core.utils.DiscordService
-import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.modules.quickchat.QuickChatModule
+import work.xeltica.craft.core.modules.notification.NotificationModule
+import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.utils.EventUtility
 import java.util.Random
 
@@ -189,7 +190,6 @@ class XCorePlugin : JavaPlugin() {
         NbsStore()
         MobEPStore()
         MobBallStore()
-        NotificationStore()
         StampRallyStore()
     }
 
@@ -261,8 +261,6 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded TicketWildareaBHandler")
         pm.registerEvents(MobBallHandler(), this)
         logger.info("Loaded MobBallHandler")
-        pm.registerEvents(NotificationHandler(), this)
-        logger.info("Loaded NotificationHandler")
         pm.registerEvents(StampRallyHandler(), this)
         logger.info("Loaded StampRallyHandler")
         pm.registerEvents(Gui.getInstance(), this)
@@ -314,7 +312,9 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private val modules: Array<ModuleBase> = arrayOf(
-        XphoneModule, QuickChatModule
+        XphoneModule,
+        QuickChatModule,
+        NotificationModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator
