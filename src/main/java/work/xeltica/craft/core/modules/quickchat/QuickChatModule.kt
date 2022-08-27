@@ -9,7 +9,7 @@ import java.io.IOException
 /**
  * @author raink1208
  */
-object QuickChatStore: ModuleBase() {
+object QuickChatModule: ModuleBase() {
     private val config: Config = Config("quickChats")
 
     fun getAllPrefix(): Set<String> {
