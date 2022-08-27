@@ -27,6 +27,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.utils.EventUtility
 import java.util.Random
 
@@ -313,7 +314,7 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private val modules: Array<ModuleBase> = arrayOf(
-        XphoneModule,
+        XphoneModule, QuickChatModule
     )
 
     private lateinit var calculator: CitizenTimerCalculator
