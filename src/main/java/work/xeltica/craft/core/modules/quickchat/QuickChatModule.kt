@@ -10,9 +10,10 @@ import java.io.IOException
  * @author raink1208
  */
 object QuickChatModule: ModuleBase() {
-    private val config: Config = Config("quickChats")
+    lateinit var config: Config
 
     override fun onEnable() {
+        config = Config("quickChats")
         registerCommand("qchat", QuickChatCommand())
         registerHandler(QuickChatHandler())
     }
