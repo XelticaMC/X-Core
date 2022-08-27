@@ -12,6 +12,10 @@ import java.io.IOException
 object QuickChatModule: ModuleBase() {
     private val config: Config = Config("quickChats")
 
+    override fun onEnable() {
+        registerCommand("qchat", QuickChatCommand())
+    }
+
     fun getAllPrefix(): Set<String> {
         return config.conf.getKeys(false)
     }
