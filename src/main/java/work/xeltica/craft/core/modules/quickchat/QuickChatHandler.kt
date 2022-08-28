@@ -1,6 +1,6 @@
 package work.xeltica.craft.core.modules.quickchat
 
-import io.papermc.paper.event.player.AsyncChatEvent
+import io.papermc.paper.event.player.ChatEvent
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import org.bukkit.event.EventHandler
@@ -11,7 +11,7 @@ import work.xeltica.craft.core.stores.HintStore
 
 class QuickChatHandler: Listener {
     @EventHandler(priority = EventPriority.LOWEST)
-    fun onPlayerQuickChat(e: AsyncChatEvent) {
+    fun onPlayerQuickChat(e: ChatEvent) {
         val component = e.message() as? TextComponent ?: return
         var msg = component.content()
         val player = e.player
