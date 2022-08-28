@@ -3,6 +3,7 @@ package work.xeltica.craft.core.modules.fireworkFestival
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Location
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Firework
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason
@@ -31,30 +32,31 @@ object FireworkFestivalModule : ModuleBase() {
 
         center = config.conf.getLocation(CONFIG_KEY_CENTER_LOCATION)
 
-        var scripts = config.conf.getConfigurationSection(CONFIG_KEY_SCRIPTS)
-        if (scripts == null) {
+        var scriptsSection = config.conf.getConfigurationSection(CONFIG_KEY_SCRIPTS)
+        if (scriptsSection == null) {
             XCorePlugin.instance.saveResource("${CONFIG_NAME}.yml", false)
             config.reload()
-            scripts = config.conf.getConfigurationSection(CONFIG_KEY_SCRIPTS) ?: return
+            scriptsSection = config.conf.getConfigurationSection(CONFIG_KEY_SCRIPTS) ?: return
         }
-        val scriptNames = scripts.getKeys(false)
+        val scriptNames = scriptsSection.getKeys(false)
         val map = mutableMapOf<String, List<FireworkCommandBase>>()
         scriptNames.forEach { name ->
-            val commandMaps = scripts.getMapList(name)
+            val commandMaps = scriptsSection.getMapList(name)
             val commands = commandMaps.map {
                 when (val commandType = it["command"]) {
                     "fire" -> {
                         assertProperty(it, "type", "fire")
                         val typeString = it["type"] as String
-                        val colors = it["colors"] as List<String>
                         val type = FireworkEffect.Type.valueOf(typeString)
-                        val flicker = it["flicker"] as Boolean
-                        val trail = it["trail"] as Boolean
-                        val loc = it["loc"] as List<Double>
-                        val random = it["random"] as Int
-                        val clone = it["clone"] as Int
-                        val cloneTick = it["cloneTick"] as Int
-                        FireFireworkCommand(type, colors, flicker, trail, loc, random, clone, cloneTick)
+                        val colors = tryCast(it["colors"], listOf("RANDOM"))
+                        val fades = tryCast(it["fades"], listOf<String>())
+                        val flicker = tryCast(it["flicker"], false)
+                        val trail = tryCast(it["trail"], false)
+                        val loc = tryCast(it["loc"], listOf(0.0, 0.0, 0.0))
+                        val random = tryCast(it["random"], 0)
+                        val clone = tryCast(it["clone"], 0)
+                        val power = tryCast(it["power"], 1)
+                        FireFireworkCommand(type, colors, fades, flicker, trail, loc, random, clone, power)
                     }
                     "wait" -> {
                         assertProperty(it, "time", "wait")
@@ -70,14 +72,24 @@ object FireworkFestivalModule : ModuleBase() {
             }
             map[name] = commands
         }
+        scripts = map
     }
 
-    fun runScript(script: List<FireworkCommandBase>) {
+    fun runScript(script: List<FireworkCommandBase>, sender: CommandSender? = null) {
+        fun log(text: String) {
+            sender?.sendMessage(text)
+        }
         val c = center?.clone() ?: return
         object : BukkitRunnable() {
             // スクリプトの現在位置
             var index = 0
+            var waitTimer = 0
+
             override fun run() {
+                if (waitTimer > 0) {
+                    waitTimer--
+                    return
+                }
                 while (index < script.size) {
                     val command = script[index]
                     when (command) {
@@ -88,48 +100,70 @@ object FireworkFestivalModule : ModuleBase() {
                                     .add(random.nextDouble(-1.0, 1.0) * command.random, 0.0, random.nextDouble(-1.0, 1.0) * command.random)
                                 val color = command.colors.map {
                                     if (it == "RANDOM") {
-                                        colorsMap.values.random()
+                                        val colorNames = colorsMap.values.toList()
+                                        colorNames[random.nextInt(colorNames.size)]
                                     } else {
                                         colorsMap[it] ?: Color.RED
                                     }
                                 }
+                                val fades = command.fades.map {
+                                    if (it == "RANDOM") {
+                                        val colorNames = colorsMap.values.toList()
+                                        colorNames[random.nextInt(colorNames.size)]
+                                    } else {
+                                        colorsMap[it] ?: Color.RED
+                                    }
+                                }
+                                log("* Creating ${command.type} firework at ${fireLoc.x}, ${fireLoc.y}, ${fireLoc.z}.")
+                                log("* * Color: [${command.colors.joinToString(", ")}]")
+                                log("* * Fade: [${command.fades.joinToString(", ")}]")
+                                log("* * Flicker: ${command.flicker}")
+                                log("* * Trail: ${command.trail}")
+                                log("* * Power: ${command.power}")
                                 val firework = FireworkEffect.builder()
                                     .with(command.type)
                                     .withColor(color)
                                     .flicker(command.flicker)
                                     .trail(command.trail)
-                                    .build()
+                                if (fades.isNotEmpty()) {
+                                    firework.withFade(fades)
+                                }
+
                                 fireLoc.world.spawnEntity(fireLoc, EntityType.FIREWORK, SpawnReason.CUSTOM) {
                                     it as Firework
                                     val meta = it.fireworkMeta
-                                    meta.power = 2
-                                    meta.addEffect(firework)
+                                    meta.power = command.power
+                                    meta.addEffect(firework.build())
+                                    it.fireworkMeta = meta
                                 }
                             }
                         }
                         is WaitFireworkCommand -> {
-                            runTaskLater(XCorePlugin.instance, Ticks.from(command.time).toLong())
+                            log("* Waiting for ${command.time}s.")
                             index++
-                            break
+                            waitTimer = Ticks.from(command.time)
+                            return
                         }
                         is ExplodeFireworkCommand -> {
                             repeat(command.clone + 1) {
                                 val fireLoc = c.clone()
                                     .add(command.loc[0], command.loc[1], command.loc[2])
                                     .add(random.nextDouble(-1.0, 1.0) * command.random, 0.0, random.nextDouble(-1.0, 1.0) * command.random)
+                                log("* Creating explosion at ${fireLoc.x}, ${fireLoc.y}, ${fireLoc.z}.")
                                 fireLoc.world.createExplosion(fireLoc, 0f, false, false)
                             }
                         }
                     }
                     index++
                 }
+                this.cancel()
             }
-        }.runTask(XCorePlugin.instance)
+        }.runTaskTimer(XCorePlugin.instance, 0L, 1L)
     }
 
     fun setCenterLocation(centerLocation: Location) {
         center = centerLocation
-        config.conf.set(CONFIG_KEY_CENTER_LOCATION, center)
+        config.conf.set(CONFIG_KEY_CENTER_LOCATION, centerLocation)
         config.save()
     }
 
@@ -137,6 +171,10 @@ object FireworkFestivalModule : ModuleBase() {
         if (!map.containsKey(prop)) {
             throw IllegalStateException("property '$prop' is required for '$command' command.")
         }
+    }
+
+    private inline fun <reified T>tryCast(value: Any?, defaultValue: T): T {
+        return if (value == null) defaultValue else if (value is T) value as T else throw IllegalStateException("The value type is invalid.")
     }
 
     private lateinit var config: Config

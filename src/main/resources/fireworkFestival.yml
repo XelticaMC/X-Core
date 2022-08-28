@@ -1,7 +1,7 @@
 scripts:
   sample:
     - command: fire
-      type: SMALL
+      type: BALL
       flicker: true
       trail: true
       loc: [0, 0, 0]

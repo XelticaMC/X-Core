@@ -10,15 +10,15 @@ import java.util.*
 
 class FireworkCommand : CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if (args.size != 2) return false
         when (args[0]) {
             "run" -> {
+                if (args.size != 2) return false
                 val script = FireworkFestivalModule.scripts[args[1]]
                 if (script == null) {
                     sender.sendMessage("${ChatColor.RED}No such script named '${args[0]}'.")
                     return true
                 }
-                FireworkFestivalModule.runScript(script)
+                FireworkFestivalModule.runScript(script, sender)
             }
             "center" -> {
                 if (sender !is Player) {
@@ -34,7 +34,6 @@ class FireworkCommand : CommandBase() {
 
     override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String> {
         if (args.isEmpty()) return COMPLETE_LIST_EMPTY
-        val subCmd = args[0].lowercase(Locale.getDefault())
         if (args.size == 1) {
             val commands = listOf("run", "center")
             val completions = ArrayList<String>()
