@@ -28,6 +28,7 @@ import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
 import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.utils.EventUtility
 import java.util.Random
@@ -315,6 +316,7 @@ class XCorePlugin : JavaPlugin() {
         XphoneModule,
         QuickChatModule,
         NotificationModule,
+        FireworkFestivalModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator

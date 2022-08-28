@@ -1,0 +1,8 @@
+scripts:
+  sample:
+    - command: fire
+      type: SMALL
+      flicker: true
+      trail: true
+      loc: [0, 0, 0]
+      random: 16
