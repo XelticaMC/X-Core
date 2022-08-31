@@ -22,7 +22,7 @@ import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
+import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
 import work.xeltica.craft.core.utils.DiscordService
 import java.util.Random
@@ -123,7 +123,6 @@ class XCorePlugin : JavaPlugin() {
         EbiPowerStore()
         HintStore()
         MetaStore()
-        BossBarStore()
         NickNameStore()
         CounterStore()
         RankingStore()
@@ -256,6 +255,7 @@ class XCorePlugin : JavaPlugin() {
         QuickChatModule,
         NotificationModule,
         FireworkFestivalModule,
+        BossBarModule,
         FarmFestivalModule,
     )
 

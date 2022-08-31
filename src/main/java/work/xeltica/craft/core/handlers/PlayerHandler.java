@@ -42,7 +42,7 @@ import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.stores.BossBarStore;
+import work.xeltica.craft.core.modules.bossbar.BossBarModule;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
@@ -114,7 +114,7 @@ public class PlayerHandler implements Listener {
 
         HintStore.getInstance().achieve(p, Hint.WELCOME);
 
-        BossBarStore.getInstance().applyAll(p);
+        BossBarModule.INSTANCE.applyAll(p);
 
         if (PlayerStore.getInstance().isCitizen(p)) {
             HintStore.getInstance().achieve(p, Hint.BE_CITIZEN);
