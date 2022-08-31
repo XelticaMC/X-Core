@@ -2,7 +2,7 @@ package work.xeltica.craft.core.models;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
-import work.xeltica.craft.core.stores.CloverStore;
+import work.xeltica.craft.core.modules.clover.CloverModule;
 import work.xeltica.craft.core.stores.EbiPowerStore;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.PlayerStore;
@@ -109,7 +109,7 @@ public class TransferPlayerData {
     }
 
     private void transferClover() {
-        final var cloverStore = CloverStore.getInstance();
+        final var cloverStore = CloverModule.INSTANCE;
         final var hasClover = cloverStore.getCloverOf(from);
         cloverStore.set(to, hasClover);
         cloverStore.delete(from);
