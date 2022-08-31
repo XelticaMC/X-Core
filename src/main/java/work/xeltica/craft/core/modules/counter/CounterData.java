@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.models;
+package work.xeltica.craft.core.modules.counter;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;

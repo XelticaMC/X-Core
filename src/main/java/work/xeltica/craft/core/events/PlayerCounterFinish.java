@@ -5,7 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-import work.xeltica.craft.core.models.CounterData;
+import work.xeltica.craft.core.modules.counter.CounterData;
 
 /**
  * プレイヤーが時間計測を停止したイベント

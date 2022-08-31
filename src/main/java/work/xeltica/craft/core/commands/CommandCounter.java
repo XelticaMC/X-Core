@@ -16,10 +16,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.models.CounterData;
+import work.xeltica.craft.core.modules.counter.CounterData;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.Ranking;
-import work.xeltica.craft.core.stores.CounterStore;
+import work.xeltica.craft.core.modules.counter.CounterModule;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.stores.RankingStore;
 
@@ -32,7 +32,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
     public boolean execute(Player player, Command command, String label, String[] args) {
         if (args.length == 0) return false;
         final var subCommand = args[0].toLowerCase();
-        final var store = CounterStore.getInstance();
+        final var store = CounterModule.INSTANCE;
         final var pstore = PlayerStore.getInstance();
         final var record = pstore.open(player);
         final var ui = Gui.getInstance();
@@ -204,7 +204,7 @@ public class CommandCounter extends CommandPlayerOnlyBase {
         } else if (args.length == 2) {
             switch (subcommand) {
                 case "unregister", "info", "bind", "unbind" -> {
-                    final var store = CounterStore.getInstance();
+                    final var store = CounterModule.INSTANCE;
                     return store.getCounters().stream().map(CounterData::getName).toList();
                 }
             }
