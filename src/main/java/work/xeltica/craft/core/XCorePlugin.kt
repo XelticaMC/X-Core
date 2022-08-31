@@ -70,61 +70,6 @@ class XCorePlugin : JavaPlugin() {
             }
         }.runTaskTimer(this, 0, tick.toLong())
 
-        if (EventUtility.isEventNow()) {
-            object : BukkitRunnable() {
-                private val colors = arrayOf(
-                    Color.AQUA,
-                    Color.BLUE,
-                    Color.FUCHSIA,
-                    Color.GREEN,
-                    Color.LIME,
-                    Color.MAROON,
-                    Color.NAVY,
-                    Color.OLIVE,
-                    Color.ORANGE,
-                    Color.PURPLE,
-                    Color.RED,
-                    Color.SILVER,
-                    Color.TEAL,
-                    Color.WHITE,
-                    Color.YELLOW
-                )
-
-                private val types = arrayOf(
-                    FireworkEffect.Type.BALL,
-                    FireworkEffect.Type.STAR,
-                    FireworkEffect.Type.BURST,
-                    FireworkEffect.Type.BALL_LARGE,
-                )
-
-                override fun run() {
-                    Bukkit.getOnlinePlayers()
-                        .forEach {
-                            if (it.world.name != "main" || it.gameMode == GameMode.SPECTATOR) return@forEach
-
-                            for (i in 1..random.nextInt(5)) {
-                                val sky = it.location.clone()
-                                sky.y += random.nextDouble(10.0, 30.0)
-                                sky.x += random.nextDouble(-48.0, 48.0)
-                                sky.z += random.nextDouble(-48.0, 48.0)
-                                val effect = FireworkEffect.builder()
-                                    .with(types[random.nextInt(types.size)])
-                                    .withColor(colors[random.nextInt(colors.size)])
-                                    .build()
-                                sky.world.spawnEntity(sky, EntityType.FIREWORK, SpawnReason.CUSTOM) { theEntity ->
-                                    if (theEntity is Firework) {
-                                        val meta = theEntity.fireworkMeta
-                                        // すぐに爆発させる
-                                        meta.power = 0
-                                        meta.addEffect(effect)
-                                        theEntity.fireworkMeta = meta
-                                    }
-                                }
-                            }
-                        }
-                }
-            }.runTaskTimer(this, Ticks.from(3.0).toLong(), Ticks.from(5.0).toLong())
-        }
         calculator = CitizenTimerCalculator()
         val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
         if (luckPerms == null) {
