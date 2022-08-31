@@ -4,14 +4,8 @@ import net.kyori.adventure.text.Component
 import work.xeltica.craft.core.plugins.CitizenTimerCalculator
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
-import org.bukkit.Color
-import org.bukkit.FireworkEffect
-import org.bukkit.GameMode
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.EntityType
-import org.bukkit.entity.Firework
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.api.ModuleBase
@@ -30,7 +24,6 @@ import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
 import work.xeltica.craft.core.utils.DiscordService
-import work.xeltica.craft.core.utils.EventUtility
 import java.util.Random
 
 /**
