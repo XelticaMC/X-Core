@@ -69,8 +69,7 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "花火大会用機能に潜む不具合を修正しました。",
-            "クイックチャット機能が動作しない問題を修正しました。",
+            "花火がめっちゃ上がる機能を提供停止しました。"
     };
 
     private static MetaStore instance;
