@@ -26,6 +26,7 @@ object CounterModule: ModuleBase() {
         ConfigurationSerialization.registerClass(CounterData::class.java, "CounterData")
         config = Config("counters")
         loadAll()
+        registerCommand("counter", CounterCommand())
     }
 
     /**

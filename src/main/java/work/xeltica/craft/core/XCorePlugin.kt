@@ -154,7 +154,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("__core_gui_event__", CommandXCoreGuiEvent())
         CommandRegistry.register("live", CommandLive())
         CommandRegistry.register("nick", CommandNickName())
-        CommandRegistry.register("counter", CommandCounter())
         CommandRegistry.register("ranking", CommandRanking())
         CommandRegistry.register("countdown", CommandCountdown())
         CommandRegistry.register("epeffectshop", CommandEpEffectShop())
