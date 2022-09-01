@@ -25,6 +25,7 @@ import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.clover.CloverModule
 import work.xeltica.craft.core.modules.counter.CounterModule
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
 import work.xeltica.craft.core.utils.DiscordService
 import java.util.Random
@@ -121,7 +122,6 @@ class XCorePlugin : JavaPlugin() {
         HubStore()
         WorldStore()
         ItemStore()
-        EbiPowerStore()
         HintStore()
         MetaStore()
         NickNameStore()
@@ -256,6 +256,7 @@ class XCorePlugin : JavaPlugin() {
         FarmFestivalModule,
         CloverModule,
         CounterModule,
+        EbiPowerModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator

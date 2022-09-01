@@ -3,7 +3,7 @@ package work.xeltica.craft.core.models;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import work.xeltica.craft.core.modules.clover.CloverModule;
-import work.xeltica.craft.core.stores.EbiPowerStore;
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule;
 import work.xeltica.craft.core.stores.HintStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 
@@ -74,10 +74,10 @@ public class TransferPlayerData {
     }
 
     private void transferEbiPower() {
-        final var ebiPowerStore = EbiPowerStore.getInstance();
-        final var hasMoney = ebiPowerStore.get(from);
-        ebiPowerStore.tryTake(from, hasMoney);
-        ebiPowerStore.tryGive(to, hasMoney);
+        final var ebiPowerModule = EbiPowerModule.INSTANCE;
+        final var hasMoney = ebiPowerModule.get(from);
+        ebiPowerModule.tryTake(from, hasMoney);
+        ebiPowerModule.tryGive(to, hasMoney);
     }
 
     private void transferHint() {

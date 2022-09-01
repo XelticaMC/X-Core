@@ -6,8 +6,8 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.Sound
 import org.bukkit.configuration.MemorySection
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.models.Stamp
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.utils.Config
 import java.util.UUID
 
@@ -61,7 +61,7 @@ class StampRallyStore {
 
         if (isStampAchieved(player)) {
             player.sendMessage("ラリー達成おめでとうございます！5000EPを贈呈します")
-            EbiPowerStore.getInstance().tryGive(player, 5000)
+            EbiPowerModule.tryGive(player, 5000)
         }
     }
 

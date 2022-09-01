@@ -12,6 +12,7 @@ import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.models.Hint
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import java.io.IOException
 import work.xeltica.craft.core.utils.DiscordService
 import java.util.UUID
@@ -62,7 +63,7 @@ class HintStore {
         list.add(hint.name)
         hints.conf[p.uniqueId.toString()] = list
         if (hint.power > 0) {
-            EbiPowerStore.getInstance().tryGive(p, hint.power)
+            EbiPowerModule.tryGive(p, hint.power)
         }
         p.playSound(p.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1.4f)
         val component = p.displayName().color(TextColor.color(0x4CAF50))

@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.events.RealTimeNewDayEvent;
 import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.stores.EbiPowerStore;
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.Ticks;
 
@@ -52,7 +52,7 @@ public class LoginBonusHandler implements Listener {
         if (!record.getBoolean(PlayerDataKey.RECEIVED_LOGIN_BONUS)) {
             Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
                 if (!p.isOnline()) return;
-                EbiPowerStore.getInstance().tryGive(p, LOGIN_BONUS_EBIPOWER);
+                EbiPowerModule.INSTANCE.tryGive(p, LOGIN_BONUS_EBIPOWER);
                 p.sendMessage("§a§lログインボーナス達成！§6" + LOGIN_BONUS_EBIPOWER + "EP§fを手に入れた！");
                 p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 2);
                 pstore.open(p).set(PlayerDataKey.RECEIVED_LOGIN_BONUS, true);

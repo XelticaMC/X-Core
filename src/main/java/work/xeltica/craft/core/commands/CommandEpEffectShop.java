@@ -26,7 +26,7 @@ import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.models.EbiPowerEffect;
 import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.stores.EbiPowerStore;
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule;
 import work.xeltica.craft.core.stores.HintStore;
 
 /**
@@ -38,7 +38,7 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
         final var subCommand = args.length > 0 ? args[0] : null;
-        final var store = EbiPowerStore.getInstance();
+        final var module = EbiPowerModule.INSTANCE;
 
         // サブコマンドがなければお店UIを開く
         if (subCommand == null || !player.hasPermission("otanoshimi.command.epeffectshop." + subCommand.toLowerCase())) {
@@ -64,13 +64,13 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
                 final var time = Integer.parseInt(args[3]);
                 final var cost = Integer.parseInt(args[4]);
 
-                store.addItem(new EbiPowerEffect(type, power, time, cost));
+                module.addEffectItem(new EbiPowerEffect(type, power, time, cost));
                 player.sendMessage("追加しました。");
             }
 
             // エビパワーストアから商品を削除
             case "delete" -> openShopMenu(player, "削除するアイテムを選んでください", (item) -> {
-                store.deleteItem(item);
+                module.deleteEffectItem(item);
                 player.sendMessage("削除しました。");
             });
         }
@@ -83,7 +83,7 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
      */
     private void openShop(Player player) {
         openShopMenu(player, "購入するステータス効果を選んでください", (item) -> {
-            final var result = EbiPowerStore.getInstance().tryBuyItem(player, item);
+            final var result = EbiPowerModule.INSTANCE.tryBuyEffectItem(player, item);
 
             switch (result) {
                 case NO_ENOUGH_POWER -> {
@@ -117,8 +117,8 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
      */
     private void openShopMenu(Player player, String title, Consumer<EbiPowerEffect> onChosen) {
         final var ui = Gui.getInstance();
-        final var store = EbiPowerStore.getInstance();
-        final var items = store.getEffectShopItems()
+        final var module = EbiPowerModule.INSTANCE;
+        final var items = module.getEffectShopItems()
                 .stream()
                 .map(m -> {
                     final var stack = new ItemStack(Material.POTION);

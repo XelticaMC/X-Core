@@ -6,7 +6,7 @@ import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.stores.EbiPowerStore
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.stores.PlayerStore
 import work.xeltica.craft.core.utils.EventUtility
 
@@ -30,7 +30,7 @@ class FireworkApp : AppBase() {
         val bonusReceived = isBonusReceived(player)
         val verb = if (bonusReceived) "購入" else "入手"
         val ui = Gui.getInstance()
-        if (bonusReceived && !EbiPowerStore.getInstance().tryTake(player, 80)) {
+        if (bonusReceived && !EbiPowerModule.tryTake(player, 80)) {
             ui.error(player, "アイテムを${verb}できませんでした。エビパワーが足りません。")
             return
         }
@@ -43,7 +43,7 @@ class FireworkApp : AppBase() {
                 stackToRemove.amount = size - fireworkCount
                 player.inventory.remove(stackToRemove)
             }
-            EbiPowerStore.getInstance().tryGive(player, fireworkCost)
+            EbiPowerModule.tryGive(player, fireworkCost)
         } else {
             player.sendMessage("花火を${verb}しました！")
             player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 2f)
