@@ -2,6 +2,7 @@ package work.xeltica.craft.core.modules.counter
 
 import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerializable
+import work.xeltica.craft.core.utils.CastHelper
 
 class CounterData(
     val name: String, val location1: Location, val location2: Location, val isDaily: Boolean,
@@ -29,8 +30,8 @@ class CounterData(
             assertKey(args, "isDaily")
 
             val name = args["name"] as String
-            val location1 = Location.deserialize(checkMap<String, Any>(args["location1"] as Map<*, *>))
-            val location2 = Location.deserialize(checkMap<String, Any>(args["location2"] as Map<*, *>))
+            val location1 = Location.deserialize(CastHelper.checkMap<String, Any>(args["location1"] as Map<*, *>))
+            val location2 = Location.deserialize(CastHelper.checkMap<String, Any>(args["location2"] as Map<*, *>))
             val isDaily = args["isDaily"] as Boolean
 
             val javaRankingId = args["javaRankingId"] as? String?
@@ -43,14 +44,6 @@ class CounterData(
 
         fun assertKey(args: Map<String, Any>, key: String) {
             require(args.containsKey(key)) { "$key is null" }
-        }
-
-        private inline fun <reified T1, reified T2> checkMap(map: Map<*, *>): Map<T1, T2> {
-            val copy = mutableMapOf<T1, T2>()
-            for ((key, element) in map) {
-                copy[key as T1] = element as T2
-            }
-            return copy
         }
     }
 }
