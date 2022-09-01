@@ -185,8 +185,6 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded EbiPowerHandler")
         pm.registerEvents(LiveModeHandler(), this)
         logger.info("Loaded LiveModeHandler")
-        pm.registerEvents(CounterHandler(), this)
-        logger.info("Loaded CounterHandler")
         pm.registerEvents(NbsHandler(), this)
         logger.info("Loaded NbsHandler")
         pm.registerEvents(PlayerTntHandler(), this)

@@ -27,6 +27,7 @@ object CounterModule: ModuleBase() {
         config = Config("counters")
         loadAll()
         registerCommand("counter", CounterCommand())
+        registerHandler(CounterHandler())
     }
 
     /**

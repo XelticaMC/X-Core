@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.handlers
+package work.xeltica.craft.core.modules.counter
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
@@ -21,10 +21,6 @@ import java.io.IOException
 import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import org.geysermc.floodgate.api.FloodgateApi
 import org.geysermc.floodgate.util.DeviceOs
-import work.xeltica.craft.core.modules.counter.CounterData
-import work.xeltica.craft.core.modules.counter.CounterModule
-import work.xeltica.craft.core.modules.counter.PlayerCounterFinish
-import work.xeltica.craft.core.modules.counter.PlayerCounterStart
 import work.xeltica.craft.core.stores.RankingStore
 import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.utils.Time
