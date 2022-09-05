@@ -155,7 +155,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("nick", CommandNickName())
         CommandRegistry.register("ranking", CommandRanking())
         CommandRegistry.register("countdown", CommandCountdown())
-        CommandRegistry.register("epeffectshop", CommandEpEffectShop())
         CommandRegistry.register("xreload", CommandXReload())
         CommandRegistry.register("xtpreset", CommandXtpReset())
         CommandRegistry.register("xdebug", CommandXDebug())

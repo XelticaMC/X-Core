@@ -27,6 +27,7 @@ object EbiPowerModule: ModuleBase() {
             effectShopItems = CastHelper.checkList<EbiPowerEffect>(c.getList(CONFIG_KEY_EFFECT_SHOP_ITEMS) as List<*>) as ArrayList<EbiPowerEffect>
         }
         registerCommand("epshop", EpShopCommand())
+        registerCommand("epeffectshop", EpEffectShopCommand())
     }
 
     fun addItem(item: EbiPowerItem) {
