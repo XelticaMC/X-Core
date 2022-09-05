@@ -149,7 +149,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("cat", CommandCat())
         CommandRegistry.register("hub", CommandHub())
         CommandRegistry.register("xtp", CommandXtp())
-        CommandRegistry.register("epshop", CommandEpShop())
         CommandRegistry.register("hint", CommandHint())
         CommandRegistry.register("__core_gui_event__", CommandXCoreGuiEvent())
         CommandRegistry.register("live", CommandLive())
