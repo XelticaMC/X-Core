@@ -3,8 +3,6 @@ package work.xeltica.craft.core.modules.ebipower
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.models.EbiPowerEffect
-import work.xeltica.craft.core.models.EbiPowerItem
 import work.xeltica.craft.core.plugins.VaultPlugin
 import work.xeltica.craft.core.utils.CastHelper
 import work.xeltica.craft.core.utils.Config
@@ -71,18 +69,18 @@ object EbiPowerModule: ModuleBase() {
     }
 
     fun tryBuyItem(p: Player, item: EbiPowerItem): Result {
-        val isFree = item.cost() == 0
-        if (!isFree && !tryTake(p, item.cost())) {
+        val isFree = item.cost == 0
+        if (!isFree && !tryTake(p, item.cost)) {
             return Result.NO_ENOUGH_POWER
         }
-        val res = p.inventory.addItem(item.item().clone())
+        val res = p.inventory.addItem(item.item.clone())
         return if (res.size != 0) {
             // 購入失敗なので返金
-            if (!isFree) tryGive(p, item.cost())
-            val partiallyAddedItemsCount = item.item().amount - res[0]!!.amount
+            if (!isFree) tryGive(p, item.cost)
+            val partiallyAddedItemsCount = item.item.amount - res[0]!!.amount
             if (partiallyAddedItemsCount > 0) {
                 // 部分的に追加されてしまったアイテムを剥奪
-                val partial = item.item().clone()
+                val partial = item.item.clone()
                 partial.amount = partiallyAddedItemsCount
                 p.inventory.removeItemAnySlot(partial)
             }
@@ -93,8 +91,8 @@ object EbiPowerModule: ModuleBase() {
     }
 
     fun tryBuyEffectItem(p: Player, item: EbiPowerEffect): Result {
-        val isFree = item.cost() == 0
-        if (!isFree && !tryTake(p, item.cost())) {
+        val isFree = item.cost == 0
+        if (!isFree && !tryTake(p, item.cost)) {
             return Result.NO_ENOUGH_POWER
         }
         p.addPotionEffect(item.toPotionEffect())
