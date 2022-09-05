@@ -21,6 +21,7 @@ data class EbiPowerEffect(val effectType: PotionEffectType, val level: Int, val 
     }
 
     companion object {
+        @JvmStatic
         fun deserialize(args: Map<String, Any>): EbiPowerEffect {
             val effectType = PotionEffectType.getByName(args["effectType"].toString())
 
