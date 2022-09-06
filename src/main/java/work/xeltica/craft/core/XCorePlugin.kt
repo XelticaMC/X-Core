@@ -179,8 +179,6 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded WorldHandler")
         pm.registerEvents(NightmareHandler(), this)
         logger.info("Loaded NightmareHandler")
-        pm.registerEvents(EbiPowerHandler(), this)
-        logger.info("Loaded EbiPowerHandler")
         pm.registerEvents(LiveModeHandler(), this)
         logger.info("Loaded LiveModeHandler")
         pm.registerEvents(NbsHandler(), this)

@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.handlers
+package work.xeltica.craft.core.modules.ebipower
 
 import com.destroystokyo.paper.MaterialTags
 import net.kyori.adventure.text.Component
@@ -19,7 +19,6 @@ import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.models.PlayerRecord
-import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.stores.HintStore
 import work.xeltica.craft.core.stores.MobEPStore
 import work.xeltica.craft.core.stores.PlayerStore

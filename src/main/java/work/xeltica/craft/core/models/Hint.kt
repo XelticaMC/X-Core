@@ -1,6 +1,6 @@
 package work.xeltica.craft.core.models
 
-import work.xeltica.craft.core.handlers.EbiPowerHandler
+import work.xeltica.craft.core.modules.ebipower.EbiPowerHandler
 
 /**
  * ヒントを定義しています。

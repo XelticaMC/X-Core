@@ -28,6 +28,7 @@ object EbiPowerModule: ModuleBase() {
         }
         registerCommand("epshop", EpShopCommand())
         registerCommand("epeffectshop", EpEffectShopCommand())
+        registerHandler(EbiPowerHandler())
     }
 
     fun addItem(item: EbiPowerItem) {
