@@ -1,19 +1,20 @@
-package work.xeltica.craft.core.xphone.apps
+package work.xeltica.craft.core.modules.ebipower
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.xphone.apps.AppBase
 
 /**
- * エビパワードラッグストアアプリ。
+ * エビパワーストアアプリ。
  * @author Ebise Lutica
  */
-class EbipowerDrugStoreApp : AppBase() {
-    override fun getName(player: Player): String = "エビパワードラッグストア"
+class EbipowerStoreApp : AppBase() {
+    override fun getName(player: Player) = "エビパワーストア"
 
-    override fun getIcon(player: Player): Material = Material.BREWING_STAND
+    override fun getIcon(player: Player) = Material.HEART_OF_THE_SEA
 
     override fun onLaunch(player: Player) {
-        player.performCommand("epeffectshop")
+        player.performCommand("epshop")
     }
 
     override fun isVisible(player: Player) = listOf(
