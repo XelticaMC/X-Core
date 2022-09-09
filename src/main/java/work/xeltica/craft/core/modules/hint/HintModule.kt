@@ -81,18 +81,16 @@ object HintModule: ModuleBase() {
             .append(Component.text("」を達成しました！"))
             .asComponent()
         DiscordService.getInstance().broadcast(PlainTextComponentSerializer.plainText().serialize(component))
-        Bukkit.getServer().audiences().forEach { a: Audience? ->
-            a!!.sendMessage(component)
-            if (hint.type === Hint.HintType.CHALLENGE) {
-                a.playSound(
-                    net.kyori.adventure.sound.Sound.sound(
-                        Key.key("ui.toast.challenge_complete"),
-                        net.kyori.adventure.sound.Sound.Source.PLAYER,
-                        1f,
-                        1f
-                    )
+        Bukkit.getServer().sendMessage(component)
+        if (hint.type === Hint.HintType.CHALLENGE) {
+            Bukkit.getServer().playSound(
+                net.kyori.adventure.sound.Sound.sound(
+                    Key.key("ui.toast.challenge_complete"),
+                    net.kyori.adventure.sound.Sound.Source.PLAYER,
+                    1f,
+                    1f
                 )
-            }
+            )
         }
         try {
             save()
