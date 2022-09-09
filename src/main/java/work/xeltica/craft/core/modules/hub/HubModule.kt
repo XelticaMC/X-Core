@@ -21,6 +21,10 @@ object HubModule: ModuleBase() {
 
     private val isWarpingMap = HashMap<UUID, Boolean>()
 
+    override fun onEnable() {
+        registerCommand("hub", HubCommand())
+    }
+
     fun teleport(player: Player, type: HubType) {
         teleport(player, type, false)
     }
