@@ -5,7 +5,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.models.HubType
 import work.xeltica.craft.core.stores.WorldStore
 import java.util.*
 
@@ -53,7 +52,7 @@ object HubModule: ModuleBase() {
 
         Bukkit.getScheduler().runTaskLater(XCorePlugin.instance, Runnable {
             if (hub.location != null) {
-                player.teleportAsync(hub.spigotLocation, PlayerTeleportEvent.TeleportCause.PLUGIN)
+                player.teleportAsync(hub.getSpigotLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN)
             } else {
                 WorldStore.getInstance().teleport(player, hub.worldName)
             }

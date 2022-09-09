@@ -4,8 +4,8 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import work.xeltica.craft.core.models.HubType
 import work.xeltica.craft.core.modules.hub.HubModule
+import work.xeltica.craft.core.modules.hub.HubType
 
 /**
  * ロビーへ移動するコマンド
