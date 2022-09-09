@@ -26,6 +26,8 @@ object HintModule: ModuleBase() {
 
     override fun onEnable() {
         hints = Config("hints")
+
+        registerCommand("hint", HintCommand())
     }
 
     fun getArchived(p: Player): List<String> {

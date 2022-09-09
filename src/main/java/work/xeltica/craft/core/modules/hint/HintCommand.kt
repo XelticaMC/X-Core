@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.commands
+package work.xeltica.craft.core.modules.hint
 
 import org.bukkit.Material
 import org.bukkit.command.Command
@@ -7,9 +7,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.Hint.HintType
-import work.xeltica.craft.core.modules.hint.HintModule
 import java.util.function.Consumer
 import java.util.stream.Stream
 
@@ -17,7 +15,7 @@ import java.util.stream.Stream
  * ヒントアプリを開くコマンド
  * @author Xeltica
  */
-class CommandHint : CommandPlayerOnlyBase() {
+class HintCommand : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<String>): Boolean {
         val subCommand = if (args.isNotEmpty()) args[0] else null
         val module = HintModule
