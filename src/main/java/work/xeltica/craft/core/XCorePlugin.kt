@@ -28,6 +28,7 @@ import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
 import work.xeltica.craft.core.modules.hint.HintModule
+import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.utils.DiscordService
 import java.util.Random
 
@@ -249,6 +250,7 @@ class XCorePlugin : JavaPlugin() {
         CounterModule,
         EbiPowerModule,
         HintModule,
+        HubModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator
