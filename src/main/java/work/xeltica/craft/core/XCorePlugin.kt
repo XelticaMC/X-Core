@@ -170,8 +170,6 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded VehicleHandler")
         pm.registerEvents(WakabaHandler(), this)
         logger.info("Loaded WakabaHandler")
-        pm.registerEvents(HubHandler(), this)
-        logger.info("Loaded HubHandler")
         pm.registerEvents(WorldHandler(), this)
         logger.info("Loaded WorldHandler")
         pm.registerEvents(NightmareHandler(), this)

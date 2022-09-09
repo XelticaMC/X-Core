@@ -23,6 +23,7 @@ object HubModule: ModuleBase() {
 
     override fun onEnable() {
         registerCommand("hub", HubCommand())
+        registerHandler(HubHandler())
     }
 
     fun teleport(player: Player, type: HubType) {
