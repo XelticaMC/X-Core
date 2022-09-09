@@ -81,16 +81,16 @@ public class TransferPlayerData {
     }
 
     private void transferHint() {
-        final var hintStore = HintModule.INSTANCE;
-        for (String hintName: hintStore.getArchived(from)) {
+        final var hintModule = HintModule.INSTANCE;
+        for (String hintName: hintModule.getArchived(from)) {
             for (Hint hint: Hint.values()) {
                 if (hint.getHintName().equals(hintName)) {
-                    hintStore.achieve(to, hint, false);
+                    hintModule.achieve(to, hint, false);
                     break;
                 }
             }
         }
-        hintStore.deleteArchiveData(from);
+        hintModule.deleteArchiveData(from);
     }
 
     private void transferPlayerStoreData() {
