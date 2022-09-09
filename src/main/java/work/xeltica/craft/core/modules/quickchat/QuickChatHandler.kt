@@ -6,7 +6,7 @@ import net.kyori.adventure.text.TextComponent
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
-import work.xeltica.craft.core.models.Hint
+import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 
 class QuickChatHandler: Listener {

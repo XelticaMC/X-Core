@@ -10,7 +10,7 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
-import work.xeltica.craft.core.models.Hint;
+import work.xeltica.craft.core.modules.hint.Hint;
 import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.stores.ItemStore;
 

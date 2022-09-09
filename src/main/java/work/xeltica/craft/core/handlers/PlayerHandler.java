@@ -38,7 +38,7 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.types.InheritanceNode;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.models.Hint;
+import work.xeltica.craft.core.modules.hint.Hint;
 import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.models.PlayerDataKey;

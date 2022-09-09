@@ -18,7 +18,7 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.models.Hint
+import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.stores.MobBallStore

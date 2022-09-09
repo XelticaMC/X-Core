@@ -15,7 +15,7 @@ import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.models.Hint
+import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import java.util.*
 import java.util.function.Consumer

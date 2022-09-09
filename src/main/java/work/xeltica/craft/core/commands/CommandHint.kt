@@ -7,8 +7,8 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.models.Hint
-import work.xeltica.craft.core.models.Hint.HintType
+import work.xeltica.craft.core.modules.hint.Hint
+import work.xeltica.craft.core.modules.hint.Hint.HintType
 import work.xeltica.craft.core.modules.hint.HintModule
 import java.util.function.Consumer
 import java.util.stream.Stream

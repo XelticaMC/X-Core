@@ -3,7 +3,7 @@ package work.xeltica.craft.core.runnables
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
-import work.xeltica.craft.core.models.Hint
+import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.modules.hint.HintModule
 

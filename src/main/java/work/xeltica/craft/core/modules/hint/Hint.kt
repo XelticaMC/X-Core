@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.models
+package work.xeltica.craft.core.modules.hint
 
 import work.xeltica.craft.core.modules.ebipower.EbiPowerHandler
 

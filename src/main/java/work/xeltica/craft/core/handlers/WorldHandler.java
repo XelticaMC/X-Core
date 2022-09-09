@@ -38,7 +38,7 @@ import net.kyori.adventure.title.Title;
 
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.models.CraftRecipe;
-import work.xeltica.craft.core.models.Hint;
+import work.xeltica.craft.core.modules.hint.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.stores.PlayerStore;

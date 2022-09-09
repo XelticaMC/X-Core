@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import work.xeltica.craft.core.modules.clover.CloverModule;
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule;
+import work.xeltica.craft.core.modules.hint.Hint;
 import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.stores.PlayerStore;
 
