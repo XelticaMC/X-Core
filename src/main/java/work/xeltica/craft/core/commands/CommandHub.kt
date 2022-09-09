@@ -4,8 +4,8 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import work.xeltica.craft.core.stores.HubStore
 import work.xeltica.craft.core.models.HubType
+import work.xeltica.craft.core.modules.hub.HubModule
 
 /**
  * ロビーへ移動するコマンド
@@ -13,8 +13,7 @@ import work.xeltica.craft.core.models.HubType
  */
 class CommandHub : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<String>): Boolean {
-        val store = HubStore.getInstance()
-        store.teleport(player, HubType.Main)
+        HubModule.teleport(player, HubType.Main)
         return true
     }
 

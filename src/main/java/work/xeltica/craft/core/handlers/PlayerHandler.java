@@ -44,7 +44,7 @@ import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.modules.bossbar.BossBarModule;
 import work.xeltica.craft.core.modules.hint.HintModule;
-import work.xeltica.craft.core.stores.HubStore;
+import work.xeltica.craft.core.modules.hub.HubModule;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
@@ -103,7 +103,7 @@ public class PlayerHandler implements Listener {
         if (!p.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
             pstore.open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
-            HubStore.getInstance().teleport(p, HubType.NewComer, true);
+            HubModule.INSTANCE.teleport(p, HubType.NewComer, true);
         }
         final var record = pstore.open(p);
 

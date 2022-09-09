@@ -24,7 +24,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.kyori.adventure.text.Component;
-import work.xeltica.craft.core.stores.HubStore;
+import work.xeltica.craft.core.modules.hub.HubModule;
 import work.xeltica.craft.core.stores.WorldStore;
 
 /**
@@ -58,7 +58,7 @@ public class HubHandler implements Listener {
         return p.getWorld().getName().equalsIgnoreCase("hub2");
     }
 
-    private HubStore store() {
-        return HubStore.getInstance();
+    private HubModule store() {
+        return HubModule.INSTANCE;
     }
 }

@@ -120,7 +120,6 @@ class XCorePlugin : JavaPlugin() {
         OmikujiStore()
         VehicleStore()
         PlayerStore()
-        HubStore()
         WorldStore()
         ItemStore()
         MetaStore()
