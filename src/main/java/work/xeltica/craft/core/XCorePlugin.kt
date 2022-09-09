@@ -252,6 +252,7 @@ class XCorePlugin : JavaPlugin() {
         CloverModule,
         CounterModule,
         EbiPowerModule,
+        HintModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator
