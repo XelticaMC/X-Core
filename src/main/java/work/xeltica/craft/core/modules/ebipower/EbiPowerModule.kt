@@ -25,11 +25,15 @@ object EbiPowerModule: ModuleBase() {
             val c = conf.conf
             val items = c.getList(CONFIG_KEY_SHOP_ITEMS)
             val effects = c.getList(CONFIG_KEY_EFFECT_SHOP_ITEMS)
-            if (items != null) {
-                shopItems = CastHelper.checkList<EbiPowerItem>(items) as ArrayList<EbiPowerItem>
+            shopItems = if (items != null) {
+                CastHelper.checkList<EbiPowerItem>(items) as ArrayList<EbiPowerItem>
+            } else {
+                ArrayList()
             }
-            if (effects != null) {
-                effectShopItems = CastHelper.checkList<EbiPowerEffect>(effects) as ArrayList<EbiPowerEffect>
+            effectShopItems = if (effects != null) {
+                CastHelper.checkList<EbiPowerEffect>(effects) as ArrayList<EbiPowerEffect>
+            } else {
+                ArrayList()
             }
         }
         registerCommand("epshop", EpShopCommand())
