@@ -16,7 +16,7 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
 import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.stores.VehicleStore;
 import work.xeltica.craft.core.stores.WorldStore;
 
@@ -71,7 +71,7 @@ public class VehicleHandler implements Listener {
             loc.getWorld().spawnParticle(Particle.ASH, loc, 8, 1, 1, 1);
             loc.getWorld().playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1, 1);
             final var isCart = e.getMaterial() == Material.MINECART;
-            if (!HintStore.getInstance().hasAchieved(e.getPlayer(), isCart ? Hint.MINECART : Hint.BOAT)) {
+            if (!HintModule.INSTANCE.hasAchieved(e.getPlayer(), isCart ? Hint.MINECART : Hint.BOAT)) {
                 e.getPlayer().sendMessage("§a" + (isCart ? "トロッコ" : "ボート") + "§rは§bX Phone§rを用いてどこでも召喚できます。X Phoneをお持ちでなければ§a/phone§rコマンドで入手できます。");
             }
             e.setCancelled(true);

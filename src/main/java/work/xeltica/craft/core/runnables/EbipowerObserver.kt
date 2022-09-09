@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
-import work.xeltica.craft.core.stores.HintStore
+import work.xeltica.craft.core.modules.hint.HintModule
 
 /**
  * エビパワーに関するオブザーバー。
@@ -25,13 +25,13 @@ class EbipowerObserver : BukkitRunnable() {
 
         val ebipower = module.get(player)
         if (ebipower >= 1000000) {
-            HintStore.instance.achieve(player, Hint.EBIPOWER_1000000)
+            HintModule.achieve(player, Hint.EBIPOWER_1000000)
         }
         if (ebipower >= 5000000) {
-            HintStore.instance.achieve(player, Hint.EBIPOWER_5000000)
+            HintModule.achieve(player, Hint.EBIPOWER_5000000)
         }
         if (ebipower >= 10000000) {
-            HintStore.instance.achieve(player, Hint.EBIPOWER_10000000)
+            HintModule.achieve(player, Hint.EBIPOWER_10000000)
         }
 
         index++

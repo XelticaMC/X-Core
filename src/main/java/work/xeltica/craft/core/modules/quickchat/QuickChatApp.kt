@@ -7,7 +7,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.SoundPitch
-import work.xeltica.craft.core.stores.HintStore
+import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.xphone.apps.AppBase
 
 /**
@@ -29,7 +29,7 @@ class QuickChatApp : AppBase() {
             list.add(
                 MenuItem(String.format("%s §7(.%s)", msg, chat), {
                     player.chat(msg)
-                    HintStore.instance.achieve(player, Hint.QUICKCHAT_APP)
+                    HintModule.achieve(player, Hint.QUICKCHAT_APP)
                 }, Material.PAPER)
             )
         }

@@ -16,7 +16,7 @@ import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.plugins.VaultPlugin;
-import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.utils.Ticks;
 
@@ -77,7 +77,7 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
                         player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, Ticks.from(10), 2));
                         player.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, Ticks.from(20, 0), 1));
                         player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 1, 0.5f);
-                        HintStore.getInstance().achieve(player, Hint.OMIKUJI_DAIKYOU);
+                        HintModule.INSTANCE.achieve(player, Hint.OMIKUJI_DAIKYOU);
                     }
                     case Kyou -> {
                         // 凶。不運が20分、吐き気が5秒つく
@@ -89,7 +89,7 @@ public class CommandOmikuji extends CommandPlayerOnlyBase {
                         // 特大吉。幸運が20分つく
                         player.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 60 * 20 * 20, 1));
                         player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1, 1.4f);
-                        HintStore.getInstance().achieve(player, Hint.OMIKUJI_TOKUDAIKICHI);
+                        HintModule.INSTANCE.achieve(player, Hint.OMIKUJI_TOKUDAIKICHI);
                     }
                     default ->
                             // その他。特に何もなし

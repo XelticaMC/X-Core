@@ -13,7 +13,7 @@ import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.Hint;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.models.SoundPitch;
-import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.stores.PlayerStore;
 
 /**
@@ -43,7 +43,7 @@ public class CommandCat extends CommandPlayerOnlyBase {
                 Gui.getInstance().playSound(sender, Sound.ENTITY_CAT_AMBIENT, 2, SoundPitch.F_2);
                 sender.sendMessage("CATモードを§aオン§rにしました。");
 
-                HintStore.getInstance().achieve(sender, Hint.CAT_MODE);
+                HintModule.INSTANCE.achieve(sender, Hint.CAT_MODE);
             }
             case "off" -> {
                 record.set(PlayerDataKey.CAT_MODE, false);

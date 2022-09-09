@@ -43,7 +43,7 @@ import work.xeltica.craft.core.models.HubType;
 import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.modules.bossbar.BossBarModule;
-import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.stores.HubStore;
 import work.xeltica.craft.core.stores.ItemStore;
 import work.xeltica.craft.core.stores.NickNameStore;
@@ -112,12 +112,12 @@ public class PlayerHandler implements Listener {
             record.set(PlayerDataKey.GIVEN_PHONE, true);
         }
 
-        HintStore.getInstance().achieve(p, Hint.WELCOME);
+        HintModule.INSTANCE.achieve(p, Hint.WELCOME);
 
         BossBarModule.INSTANCE.applyAll(p);
 
         if (PlayerStore.getInstance().isCitizen(p)) {
-            HintStore.getInstance().achieve(p, Hint.BE_CITIZEN);
+            HintModule.INSTANCE.achieve(p, Hint.BE_CITIZEN);
         }
 
         if (!record.getBoolean(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER)) {
@@ -235,7 +235,7 @@ public class PlayerHandler implements Listener {
             if (player == null) return;
 
             if (node instanceof InheritanceNode in && "citizen".equals(in.getGroupName())) {
-                HintStore.getInstance().achieve(player, Hint.BE_CITIZEN);
+                HintModule.INSTANCE.achieve(player, Hint.BE_CITIZEN);
             }
         });
     }
@@ -257,7 +257,7 @@ public class PlayerHandler implements Listener {
                         block.applyBoneMeal(BlockFace.UP);
                     }
                     last草edTimeMap.put(id, nowTime);
-                    HintStore.getInstance().achieve(player, Hint.KUSA);
+                    HintModule.INSTANCE.achieve(player, Hint.KUSA);
                 }
             }.runTask(plugin);
         }

@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import work.xeltica.craft.core.modules.clover.CloverModule;
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule;
-import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.stores.PlayerStore;
 
 import java.io.IOException;
@@ -81,7 +81,7 @@ public class TransferPlayerData {
     }
 
     private void transferHint() {
-        final var hintStore = HintStore.getInstance();
+        final var hintStore = HintModule.INSTANCE;
         for (String hintName: hintStore.getArchived(from)) {
             for (Hint hint: Hint.values()) {
                 if (hint.getHintName().equals(hintName)) {

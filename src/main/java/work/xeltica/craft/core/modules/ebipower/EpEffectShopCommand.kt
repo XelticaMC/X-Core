@@ -16,7 +16,7 @@ import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.Hint
-import work.xeltica.craft.core.stores.HintStore
+import work.xeltica.craft.core.modules.hint.HintModule
 import java.util.*
 import java.util.function.Consumer
 
@@ -72,7 +72,7 @@ class EpEffectShopCommand: CommandPlayerOnlyBase() {
                         )
                     )
                     player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
-                    HintStore.instance.achieve(player, Hint.EPEFFECTSHOP)
+                    HintModule.achieve(player, Hint.EPEFFECTSHOP)
                 }
                 else -> {
                     player.sendMessage("不明なエラーが発生しました。")

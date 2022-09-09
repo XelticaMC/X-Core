@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import work.xeltica.craft.core.models.Hint
-import work.xeltica.craft.core.stores.HintStore
+import work.xeltica.craft.core.modules.hint.HintModule
 
 class QuickChatHandler: Listener {
     @EventHandler(priority = EventPriority.LOWEST)
@@ -21,7 +21,7 @@ class QuickChatHandler: Listener {
             var quickMsg = QuickChatModule.getMessage(msg)
             quickMsg = QuickChatModule.chatFormat(quickMsg, player)
             e.message(Component.text(quickMsg))
-            HintStore.instance.achieve(player, Hint.QUICKCHAT)
+            HintModule.achieve(player, Hint.QUICKCHAT)
         }
     }
 }

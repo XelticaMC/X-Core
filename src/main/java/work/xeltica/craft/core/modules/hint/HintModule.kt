@@ -1,6 +1,5 @@
-package work.xeltica.craft.core.stores
+package work.xeltica.craft.core.modules.hint
 
-import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
@@ -11,19 +10,25 @@ import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
-import java.io.IOException
-import work.xeltica.craft.core.utils.DiscordService
-import java.util.UUID
-import kotlin.Throws
 import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.utils.DiscordService
+import java.io.IOException
+import java.util.*
 
 /**
  * プレイヤーのヒントを達成する処理や、ヒントを達成しているかどうかの取得などを行います。
  * @author Xeltica
  */
-class HintStore {
+object HintModule: ModuleBase() {
+    private lateinit var hints: Config
+
+    override fun onEnable() {
+        hints = Config("hints")
+    }
+
     fun getArchived(p: Player): List<String> {
         return open(p)
     }
@@ -107,18 +112,5 @@ class HintStore {
     @Throws(IOException::class)
     fun save() {
         hints.save()
-    }
-
-    private val hints: Config
-
-    init {
-        instance = this
-        hints = Config("hints")
-    }
-
-    companion object {
-        @JvmStatic
-        lateinit var instance: HintStore
-            private set
     }
 }

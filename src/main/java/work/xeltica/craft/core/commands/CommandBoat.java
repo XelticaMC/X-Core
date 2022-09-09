@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.stores.HintStore;
+import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.stores.WorldStore;
 
 /**
@@ -63,7 +63,7 @@ public class CommandBoat extends CommandPlayerOnlyBase {
         player.sendMessage("ボートを足元に召喚した。");
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 2);
 
-        HintStore.getInstance().achieve(player, Hint.BOAT);
+        HintModule.INSTANCE.achieve(player, Hint.BOAT);
         return true;
     }
 

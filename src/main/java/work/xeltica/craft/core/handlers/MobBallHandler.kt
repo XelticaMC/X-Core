@@ -20,7 +20,7 @@ import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.stores.HintStore
+import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.stores.MobBallStore
 import work.xeltica.craft.core.stores.PlayerStore
 import work.xeltica.craft.core.utils.CitizensApiProvider.Companion.isCitizensNpc
@@ -99,7 +99,7 @@ class MobBallHandler : Listener {
                         player.sendMessage("§a§lおめでとう！§r${eggNbt.getString("mobCase")}を捕まえた！")
                         showSuccessParticle(eggEntity.location)
                         eggEntity.setCanPlayerPickup(true)
-                        HintStore.instance.achieve(player, Hint.SUCCEEDED_TO_CATCH_MOB)
+                        HintModule.achieve(player, Hint.SUCCEEDED_TO_CATCH_MOB)
                         val dex = PlayerStore.getInstance().open(player.uniqueId).getStringList(PlayerDataKey.MOB_DEX)
                         val type = target.type.toString()
                         if (!dex.contains(type)) {
@@ -118,7 +118,7 @@ class MobBallHandler : Listener {
                             player.sendMessage("残念！ボールから出てきてしまった…。")
                             eggEntity.remove()
                         }
-                        HintStore.instance.achieve(player, Hint.FAILED_TO_CATCH_MOB)
+                        HintModule.achieve(player, Hint.FAILED_TO_CATCH_MOB)
                     }
                 }
             }
@@ -196,7 +196,7 @@ class MobBallHandler : Listener {
         if (player !is Player) return
         val item = e.item.itemStack
         if (MobBallStore.getInstance().isMobBall(item)) {
-            HintStore.instance.achieve(player, Hint.GET_BALL)
+            HintModule.achieve(player, Hint.GET_BALL)
         }
     }
 

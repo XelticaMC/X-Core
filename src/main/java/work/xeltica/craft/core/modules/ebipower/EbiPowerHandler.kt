@@ -19,7 +19,7 @@ import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.models.PlayerRecord
-import work.xeltica.craft.core.stores.HintStore
+import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.stores.MobEPStore
 import work.xeltica.craft.core.stores.PlayerStore
 import java.util.*
@@ -102,17 +102,17 @@ class EbiPowerHandler: Listener {
             epModule.tryTake(killer, 100)
             notification(killer, "可愛い可愛いネコちゃんを殴るなんて！100EPを失った。")
             killer.playSound(killer.location, Sound.ENTITY_ZOMBIE_VILLAGER_AMBIENT, 0.7f, 0.5f)
-            HintStore.instance.achieve(killer, Hint.VIOLENCE_CAT)
+            HintModule.achieve(killer, Hint.VIOLENCE_CAT)
         } else if (victim is Tameable && victim.isTamed && victim !is SkeletonHorse) {
             epModule.tryTake(killer, 10)
             notification(killer, "ペットを殴るなんて！10EPを失った。")
             killer.playSound(killer.location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f)
-            HintStore.instance.achieve(killer, Hint.VIOLENCE_PET)
+            HintModule.achieve(killer, Hint.VIOLENCE_PET)
         } else if (victim is Ageable && victim !is Monster && victim !is Hoglin && !victim.isAdult) {
             epModule.tryTake(killer, 10)
             notification(killer, "子供を殴るなんて！10EPを失った。")
             killer.playSound(killer.location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f)
-            HintStore.instance.achieve(killer, Hint.VIOLENCE_CHILD)
+            HintModule.achieve(killer, Hint.VIOLENCE_CHILD)
         }
     }
 
@@ -136,7 +136,7 @@ class EbiPowerHandler: Listener {
         ep += if (buff > 0) random.nextInt(buff) else 0
         if (ep > 0) {
             EbiPowerModule.tryGive(killer, ep)
-            HintStore.instance.achieve(killer, Hint.KILL_MOB_AND_EARN_MONEY)
+            HintModule.achieve(killer, Hint.KILL_MOB_AND_EARN_MONEY)
         }
     }
 
@@ -179,7 +179,7 @@ class EbiPowerHandler: Listener {
         val breeder = e.breeder as? Player ?: return
         if (playerIsInBlacklisted(breeder)) return
         EbiPowerModule.tryGive(breeder, 2)
-        HintStore.instance.achieve(breeder, Hint.BREED_AND_EARN_MONEY)
+        HintModule.achieve(breeder, Hint.BREED_AND_EARN_MONEY)
     }
 
     @EventHandler
@@ -194,7 +194,7 @@ class EbiPowerHandler: Listener {
         record.set(PlayerDataKey.BROKEN_BLOCKS_COUNT, brokenBlocksCount + 1)
 
         if (brokenBlocksCount + 1 == BREAK_BLOCK_BONUS_LIMIT) {
-            HintStore.instance.achieve(e.player, Hint.MINERS_DREAM)
+            HintModule.achieve(e.player, Hint.MINERS_DREAM)
         }
 
         var ep = 1
@@ -228,7 +228,7 @@ class EbiPowerHandler: Listener {
         }
 
         EbiPowerModule.tryGive(e.player, ep)
-        HintStore.instance.achieve(e.player, Hint.MINERS_NEWBIE)
+        HintModule.achieve(e.player, Hint.MINERS_NEWBIE)
     }
 
     @EventHandler
