@@ -234,6 +234,11 @@ bukkit {
             usage = "/firework <run|center> <scriptName>"
             permission = "otanoshimi.command.firework"
         }
+        register("farmfest") {
+            description = "秋農業祭り用コマンド"
+            usage = "/farmfest <clearFarm|add|init|start|stop>"
+            permission = "otanoshimi.command.farmfest"
+        }
         register("__core_gui_event__") {
             description = "?"
             usage = "?"
@@ -362,6 +367,9 @@ bukkit {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.firework") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.farmfest") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.stamp.create") {
