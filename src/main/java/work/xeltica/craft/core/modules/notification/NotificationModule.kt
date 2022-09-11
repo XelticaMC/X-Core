@@ -1,8 +1,11 @@
 package work.xeltica.craft.core.modules.notification
 
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.json.simple.JSONArray
@@ -32,7 +35,12 @@ object NotificationModule: ModuleBase() {
 
     private const val RECEIVER = "receiver"
     private const val GIFT_MATERIAL_NAME = "materialName"
+    private const val GIFT_CUSTOM_NAME = "customName"
     private const val GIFT_COUNT = "count"
+    private const val GIFT_ENCHANTS = "enchants"
+    private const val GIFT_LORE = "lore"
+    private const val GIFT_ENCHANT_NAME = "name"
+    private const val GIFT_ENCHANT_LEVEL = "level"
 
     private val notifications: MutableList<Notification> = mutableListOf()
 
@@ -136,13 +144,32 @@ object NotificationModule: ModuleBase() {
         for (gift in obj) {
             if (gift !is JSONObject) continue
             val name = gift[GIFT_MATERIAL_NAME] as? String ?: continue
-            val count = (gift[GIFT_COUNT] as? Long ?: continue).toInt()
+            val customName = gift[GIFT_CUSTOM_NAME] as? String
+            val count = (gift[GIFT_COUNT] as? Long ?: 1L).toInt()
+            val lore = (gift[GIFT_LORE] as? JSONArray)?.map {
+                Component.text(it?.toString() ?: "")
+            }
+
             val material = Material.getMaterial(name)
             if (material == null) {
                 XCorePlugin.instance.logger.warning(name + "が読み込めませんでした")
                 continue
             }
-            gifts.add(ItemStack(material, count))
+            val item = ItemStack(material, count)
+            item.editMeta {
+                it.lore(lore)
+                if (customName !== null) {
+                    it.displayName(Component.text(customName))
+                }
+                (gift[GIFT_ENCHANTS] as? JSONArray)?.forEach { enchant ->
+                    if (enchant !is JSONObject) return@forEach
+                    val name = enchant[GIFT_ENCHANT_NAME] as? String ?: return@forEach
+                    val level = (enchant[GIFT_ENCHANT_LEVEL] as? Long ?: return@forEach).toInt()
+                    val type = Enchantment.getByKey(NamespacedKey.minecraft(name)) ?: return@forEach
+                    it.addEnchant(type, level, true)
+                }
+            }
+            gifts.add(item)
         }
         return gifts
     }
@@ -152,8 +179,8 @@ object NotificationModule: ModuleBase() {
         val receiver = mutableListOf<UUID>()
         for (name in obj) {
             if (name !is String) continue
-            val player = XCorePlugin.instance.server.getPlayer(name) ?: continue
-            receiver.add(player.uniqueId)
+            val player = XCorePlugin.instance.server.getPlayerUniqueId(name) ?: continue
+            receiver.add(player)
         }
         return receiver
     }
