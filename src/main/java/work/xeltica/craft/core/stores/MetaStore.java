@@ -69,7 +69,8 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "花火がめっちゃ上がる機能を提供停止しました。"
+            "テレポートアプリの拡張",
+            "EbiPayアプリを追加"
     };
 
     private static MetaStore instance;
