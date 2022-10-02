@@ -45,7 +45,7 @@ class TeleportApp : AppBase() {
         val list = ArrayList<MenuItem>()
         val worldName = player.world.name
 
-        list.add(MenuItem("戻る…", { showMainMenu(player) }, XphoneModule.backButtonItemStack))
+        list.add(MenuItem("戻る…", { showMainMenu(player) }, Material.REDSTONE_TORCH))
 
         list.add(MenuItem("ロビー", { player.performCommand("hub") }, Material.NETHERITE_BLOCK))
         list.add(MenuItem("メインワールド", { WorldStore.getInstance().teleportToSavedLocation(player, "main") }, Material.CRAFTING_TABLE))
@@ -81,7 +81,7 @@ class TeleportApp : AppBase() {
 
     private fun showSharedWorldsMenu(player: Player) {
         Gui.getInstance().openMenu(player, "共有ワールド…", listOf(
-            MenuItem("戻る…", { showWorldsMenu(player) }, XphoneModule.backButtonItemStack),
+            MenuItem("戻る…", { showWorldsMenu(player) }, Material.REDSTONE_TORCH),
 
             MenuItem("共有ワールド", {
                 WorldStore.getInstance().teleportToSavedLocation(player, "wildarea2")
@@ -99,7 +99,7 @@ class TeleportApp : AppBase() {
 
     private fun showShigenWorldsMenu(player: Player) {
         Gui.getInstance().openMenu(player, "資源ワールド…", listOf(
-            MenuItem("戻る…", { showWorldsMenu(player) }, XphoneModule.backButtonItemStack),
+            MenuItem("戻る…", { showWorldsMenu(player) }, Material.REDSTONE_TORCH),
             MenuItem("資源ワールド", {
                 val loc: Location = player.location
                 val x = loc.blockX * 16
