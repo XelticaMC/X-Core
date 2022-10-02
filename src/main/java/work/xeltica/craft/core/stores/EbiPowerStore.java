@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 
@@ -117,12 +119,14 @@ public class EbiPowerStore {
     public boolean tryGive(Player p, int amount) {
         if (amount <= 0) throw new IllegalArgumentException("amountを0以下の数にはできない");
         final var vault = VaultPlugin.getInstance();
+        Bukkit.getLogger().info(ChatColor.GREEN + p.getName() + "へ" + amount + "EPを付与しました");
         return vault.tryDepositPlayer(p, amount);
     }
 
     public boolean tryTake(Player p, int amount) {
         if (amount <= 0) throw new IllegalArgumentException("amountを0以下の数にはできない");
         final var vault = VaultPlugin.getInstance();
+        Bukkit.getLogger().info(ChatColor.GREEN + p.getName() + "から" + amount + "EPを剥奪しました");
         return vault.tryWithdrawPlayer(p, amount);
     }
 

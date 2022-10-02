@@ -24,6 +24,7 @@ import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
+import work.xeltica.craft.core.modules.payments.PaymentsModule
 import work.xeltica.craft.core.utils.DiscordService
 import java.util.Random
 
@@ -257,6 +258,7 @@ class XCorePlugin : JavaPlugin() {
         NotificationModule,
         FireworkFestivalModule,
         FarmFestivalModule,
+        PaymentsModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator

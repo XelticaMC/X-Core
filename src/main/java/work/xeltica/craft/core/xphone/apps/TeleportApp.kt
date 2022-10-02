@@ -6,6 +6,8 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
+import work.xeltica.craft.core.modules.xphone.XphoneModule
+import work.xeltica.craft.core.stores.ItemStore
 import work.xeltica.craft.core.stores.WorldStore
 import java.util.Calendar
 
@@ -14,25 +16,91 @@ import java.util.Calendar
  * @author Ebise Lutica
  */
 class TeleportApp : AppBase() {
-    override fun getName(player: Player): String = "テレポート"
+    override fun getName(player: Player): String = if (isShigen(player)) "メインワールドに帰る" else "テレポート"
 
-    override fun getIcon(player: Player): Material = Material.COMPASS
+    override fun getIcon(player: Player): Material = if (isShigen(player)) Material.CREEPER_HEAD else Material.COMPASS
 
     override fun onLaunch(player: Player) {
+        if (isShigen(player)) {
+            WorldStore.getInstance().teleportToSavedLocation(player, "main")
+            return
+        }
+
+        showMainMenu(player)
+    }
+
+    override fun isVisible(player: Player): Boolean {
+        return !worldsBlackList.contains(player.world.name)
+    }
+
+    private fun showMainMenu(player: Player) {
+        Gui.getInstance().openMenu(player, "テレポート", listOf(
+            MenuItem("ワールド…", { showWorldsMenu(player) }, Material.GRASS_BLOCK),
+            MenuItem("初期スポーン", { player.performCommand("respawn") }, Material.FIREWORK_ROCKET),
+            MenuItem("ベッド", { player.performCommand("respawn bed") }, Material.RED_BED),
+        ))
+    }
+
+    private fun showWorldsMenu(player: Player) {
         val list = ArrayList<MenuItem>()
-        val currentWorldName: String = player.world.name
+        val worldName = player.world.name
 
-        if (currentWorldName != "hub2") {
-            list.add(MenuItem("ロビー", { player.performCommand("hub") }, Material.NETHERITE_BLOCK))
+        list.add(MenuItem("戻る…", { showMainMenu(player) }, XphoneModule.backButtonItemStack))
+
+        list.add(MenuItem("ロビー", { player.performCommand("hub") }, Material.NETHERITE_BLOCK))
+        list.add(MenuItem("メインワールド", { WorldStore.getInstance().teleportToSavedLocation(player, "main") }, Material.CRAFTING_TABLE))
+        list.add(MenuItem("共有ワールド…", { showSharedWorldsMenu(player) }, Material.CHEST))
+        if (player.hasPermission("hub.teleport.sandbox2")) {
+            list.add(MenuItem("サンドボックス", { WorldStore.getInstance().teleportToSavedLocation(player, "sandbox2") }, Material.RED_CONCRETE))
+        }
+        if (player.hasPermission("hub.teleport.art")) {
+            list.add(MenuItem("アートワールド", { WorldStore.getInstance().teleportToSavedLocation(player, "art") }, Material.PAINTING))
         }
 
-        if (WorldStore.getInstance().getRespawnWorld(currentWorldName) != null) {
-            list.add(MenuItem("初期スポーン", { player.performCommand("respawn") }, Material.FIREWORK_ROCKET))
-            list.add(MenuItem("ベッド", { player.performCommand("respawn bed") }, Material.RED_BED))
+        if (worldName == "main") {
+            list.add(MenuItem("資源ワールド…", { showShigenWorldsMenu(player) }, Material.DIAMOND_PICKAXE))
+
+            val calendar = Calendar.getInstance()
+            val month = calendar.get(Calendar.MONTH) + 1
+            if ((month == 8) || player.isOp) {
+                list.add(
+                    MenuItem("イベント", {
+                        val eventWorldLocation = Bukkit.getWorld("event")?.spawnLocation
+                        if (eventWorldLocation == null) {
+                            player.sendMessage("")
+                            return@MenuItem
+                        }
+                        player.teleportAsync(eventWorldLocation)
+                    }, Material.TROPICAL_FISH)
+                )
+            }
         }
 
-        if ("main" == currentWorldName) {
-            list.add(MenuItem("資源ワールドへ行く", { i: MenuItem? ->
+        Gui.getInstance().openMenu(player, "テレポート", list)
+    }
+
+    private fun showSharedWorldsMenu(player: Player) {
+        Gui.getInstance().openMenu(player, "共有ワールド…", listOf(
+            MenuItem("戻る…", { showWorldsMenu(player) }, XphoneModule.backButtonItemStack),
+
+            MenuItem("共有ワールド", {
+                WorldStore.getInstance().teleportToSavedLocation(player, "wildarea2")
+            }, Material.GRASS_BLOCK),
+
+            MenuItem("共有ネザー", {
+                WorldStore.getInstance().teleportToSavedLocation(player, "wildarea2_nether")
+            }, Material.NETHERRACK),
+
+            MenuItem("共有エンド", {
+                WorldStore.getInstance().teleportToSavedLocation(player, "wildarea2_the_end")
+            }, Material.END_STONE)
+        ))
+    }
+
+    private fun showShigenWorldsMenu(player: Player) {
+        Gui.getInstance().openMenu(player, "資源ワールド…", listOf(
+            MenuItem("戻る…", { showWorldsMenu(player) }, XphoneModule.backButtonItemStack),
+            MenuItem("資源ワールド", {
                 val loc: Location = player.location
                 val x = loc.blockX * 16
                 val z = loc.blockZ * 16
@@ -52,44 +120,28 @@ class TeleportApp : AppBase() {
                         }
                         player.teleportAsync(Location(wildareab, x.toDouble(), y.toDouble(), z.toDouble()))
                     }
-            }, Material.GRASS_BLOCK))
+            }, Material.GRASS_BLOCK),
 
-            list.add(MenuItem("資源ネザー", {
+            MenuItem("資源ネザー", {
                 WorldStore.getInstance().teleportToSavedLocation(player, "shigen_nether")
-            }, Material.NETHERRACK))
+            }, Material.NETHERRACK),
 
-            list.add(MenuItem("資源エンド", {
+            MenuItem("資源エンド", {
                 WorldStore.getInstance().teleportToSavedLocation(player, "shigen_end")
-            }, Material.END_STONE))
-
-            val calendar = Calendar.getInstance()
-            val month = calendar.get(Calendar.MONTH) + 1
-            if ((month == 8) || player.isOp) {
-                list.add(
-                    MenuItem("イベント", {
-                        val eventWorldLocation = Bukkit.getWorld("event")?.spawnLocation
-                        if (eventWorldLocation == null) {
-                            player.sendMessage("")
-                            return@MenuItem
-                        }
-                        player.teleportAsync(eventWorldLocation)
-                    }, Material.TROPICAL_FISH)
-                )
-            }
-        } else if (shigenWorldsList.contains(currentWorldName)) {
-            list.add(MenuItem("メインワールドに帰る", { WorldStore.getInstance().teleportToSavedLocation(player, "main") }, Material.CREEPER_HEAD))
-        }
-
-        Gui.getInstance().openMenu(player, "テレポート", list)
+            }, Material.END_STONE)
+        ))
     }
 
-    override fun isVisible(player: Player): Boolean {
-        return player.world.name != "event"
-    }
+    private fun isShigen(player: Player) = shigenWorldsList.contains(player.world.name)
 
     private val shigenWorldsList = listOf(
         "wildareab",
         "shigen_nether",
         "shigen_end",
+    )
+
+    private val worldsBlackList = listOf(
+        "hub2",
+        "event",
     )
 }

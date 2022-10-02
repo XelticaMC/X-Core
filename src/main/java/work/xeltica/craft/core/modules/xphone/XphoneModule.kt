@@ -3,12 +3,14 @@ package work.xeltica.craft.core.modules.xphone
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.SoundPitch
 import work.xeltica.craft.core.modules.notification.NotificationApp
+import work.xeltica.craft.core.modules.payments.PaymentsApp
 import work.xeltica.craft.core.modules.quickchat.QuickChatApp
 import work.xeltica.craft.core.stores.ItemStore
 import work.xeltica.craft.core.xphone.apps.*
@@ -22,6 +24,7 @@ object XphoneModule : ModuleBase() {
      * X-Core が有効になったときに呼ばれます。
      */
     override fun onEnable() {
+        backButtonItemStack = ItemStore.getInstance().getPlayerHead(Bukkit.getPlayer("MHF_ArrowLeft"))
         apps.addAll(listOf(
             EventRespawnApp(),
             EventReturnWorldApp(),
@@ -44,6 +47,7 @@ object XphoneModule : ModuleBase() {
             QuickChatApp(),
             TransferPlayerDataApp(),
             VoteApp(),
+            PaymentsApp(),
             PunishApp(),
             StampRallyApp(),
         ))
@@ -108,6 +112,9 @@ object XphoneModule : ModuleBase() {
         ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.A1, 2)
         ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.D2, 4)
     }
+
+    lateinit var backButtonItemStack: ItemStack
+        private set
 
     const val name = "X Phone OS 3.0"
 
