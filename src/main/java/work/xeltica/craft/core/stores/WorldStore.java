@@ -13,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.Nullable;
+import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.utils.Config;
 
 /**
@@ -108,6 +109,10 @@ public class WorldStore {
     }
 
     public void teleportToSavedLocation(Player player, String worldName) {
+        if (player.getWorld().getName().equals(worldName)) {
+            Gui.getInstance().error(player, "既に" + WorldStore.getInstance().getWorldDisplayName(worldName) + "にいます。");
+            return;
+        }
         final var loc = getLocation(player, worldName);
         if (loc == null) {
             // 保存されていなければ普通にTP

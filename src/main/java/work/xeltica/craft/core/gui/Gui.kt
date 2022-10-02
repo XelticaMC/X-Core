@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.gui
 
+import io.papermc.paper.event.player.AsyncChatEvent
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.Style
@@ -11,6 +12,7 @@ import org.bukkit.*
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
@@ -18,6 +20,7 @@ import org.bukkit.event.player.PlayerEditBookEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
+import org.bukkit.scheduler.BukkitRunnable
 import org.geysermc.cumulus.CustomForm
 import org.geysermc.cumulus.SimpleForm
 import org.geysermc.floodgate.api.FloodgateApi
@@ -57,6 +60,7 @@ class Gui: Listener {
     private val invMap: HashMap<Inventory, List<MenuItem>> = HashMap()
     private val bookHandlersMap: HashMap<String, HandlerTuple> = HashMap()
     private val bookSet: HashSet<BookMeta> = HashSet()
+    private val chatHandlersMap: HashMap<Player, Consumer<String>> = HashMap()
 
     /**
      * メニューを開きます。
@@ -167,7 +171,7 @@ class Gui: Listener {
         if (isBedrock(player)) {
             openTextInputBedrockImpl(player, title, responseHandler)
         } else {
-            openTextInputJavaImpl(player, title, responseHandler)
+            openTextInputJavaImplChat(player, title, responseHandler)
         }
     }
 
@@ -297,6 +301,19 @@ class Gui: Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.LOWEST)
+    fun onPlayerChat(e: AsyncChatEvent) {
+        if (chatHandlersMap.containsKey(e.player)) {
+            e.isCancelled = true
+            val handler = chatHandlersMap[e.player] ?: return
+            chatHandlersMap.remove(e.player)
+            val text = PlainTextComponentSerializer.plainText().serialize(e.message())
+            object : BukkitRunnable() {
+                override fun run() = handler.accept(text)
+            }.runTask(XCorePlugin.instance)
+        }
+    }
+
     private fun openMenuJavaImpl(player: Player, title: String, items: List<MenuItem>) {
         val inv = Bukkit.createInventory(null, (1 + items.size / 9) * 9, Component.text(title))
 
@@ -398,6 +415,14 @@ class Gui: Listener {
             responseHandler?.accept(text)
             return@onComplete AnvilGUI.Response.close()
         }.itemLeft(ItemStack(Material.GRAY_STAINED_GLASS_PANE)).plugin(XCorePlugin.instance).open(player)
+    }
+
+    private fun openTextInputJavaImplChat(player: Player, title: String, responseHandler: Consumer<String>?) {
+        player.sendMessage(ChatColor.BOLD.toString() + title)
+        player.sendMessage(ChatColor.GRAY.toString() + "チャット欄に値を入力してください:")
+        playSoundLocally(player, Sound.BLOCK_NOTE_BLOCK_BELL, 1f, SoundPitch.F_1)
+        playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_BELL, 1f, SoundPitch.D_2, 8)
+        chatHandlersMap[player] = responseHandler ?: Consumer<String> {}
     }
 
     private fun openTextInputBedrockImpl(player: Player, title: String, responseHandler: Consumer<String>?) {

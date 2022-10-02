@@ -6,6 +6,8 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
+import work.xeltica.craft.core.modules.xphone.XphoneModule
+import work.xeltica.craft.core.stores.ItemStore
 import work.xeltica.craft.core.stores.WorldStore
 import java.util.Calendar
 
@@ -24,6 +26,14 @@ class TeleportApp : AppBase() {
             return
         }
 
+        showMainMenu(player)
+    }
+
+    override fun isVisible(player: Player): Boolean {
+        return !worldsBlackList.contains(player.world.name)
+    }
+
+    private fun showMainMenu(player: Player) {
         Gui.getInstance().openMenu(player, "テレポート", listOf(
             MenuItem("ワールド…", { showWorldsMenu(player) }, Material.GRASS_BLOCK),
             MenuItem("初期スポーン", { player.performCommand("respawn") }, Material.FIREWORK_ROCKET),
@@ -31,13 +41,11 @@ class TeleportApp : AppBase() {
         ))
     }
 
-    override fun isVisible(player: Player): Boolean {
-        return !worldsBlackList.contains(player.world.name)
-    }
-
     private fun showWorldsMenu(player: Player) {
         val list = ArrayList<MenuItem>()
         val worldName = player.world.name
+
+        list.add(MenuItem("戻る…", { showMainMenu(player) }, XphoneModule.backButtonItemStack))
 
         list.add(MenuItem("ロビー", { player.performCommand("hub") }, Material.NETHERITE_BLOCK))
         list.add(MenuItem("メインワールド", { WorldStore.getInstance().teleportToSavedLocation(player, "main") }, Material.CRAFTING_TABLE))
@@ -73,6 +81,8 @@ class TeleportApp : AppBase() {
 
     private fun showSharedWorldsMenu(player: Player) {
         Gui.getInstance().openMenu(player, "共有ワールド…", listOf(
+            MenuItem("戻る…", { showWorldsMenu(player) }, XphoneModule.backButtonItemStack),
+
             MenuItem("共有ワールド", {
                 WorldStore.getInstance().teleportToSavedLocation(player, "wildarea2")
             }, Material.GRASS_BLOCK),
@@ -89,6 +99,7 @@ class TeleportApp : AppBase() {
 
     private fun showShigenWorldsMenu(player: Player) {
         Gui.getInstance().openMenu(player, "資源ワールド…", listOf(
+            MenuItem("戻る…", { showWorldsMenu(player) }, XphoneModule.backButtonItemStack),
             MenuItem("資源ワールド", {
                 val loc: Location = player.location
                 val x = loc.blockX * 16
