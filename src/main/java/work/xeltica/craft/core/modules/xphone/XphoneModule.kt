@@ -24,7 +24,6 @@ object XphoneModule : ModuleBase() {
      * X-Core が有効になったときに呼ばれます。
      */
     override fun onEnable() {
-        backButtonItemStack = ItemStore.getInstance().getPlayerHead(Bukkit.getPlayer("MHF_ArrowLeft"))
         apps.addAll(listOf(
             EventRespawnApp(),
             EventReturnWorldApp(),
