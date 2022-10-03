@@ -69,8 +69,9 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "テレポートアプリの拡張",
-            "EbiPayアプリを追加"
+            "エビパワードラッグストア：ポーション効果のレベルがおかしい問題を修正",
+            "エビパワードラッグストア：ポーション効果「暗闇」を販売すると、表示が不具合を起こす問題を修正",
+            "その他、内部的な修正"
     };
 
     private static MetaStore instance;
