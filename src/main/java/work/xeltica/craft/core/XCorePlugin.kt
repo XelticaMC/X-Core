@@ -26,7 +26,6 @@ import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
 import work.xeltica.craft.core.utils.DiscordService
-import java.util.Random
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
@@ -155,7 +154,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("hint", CommandHint())
         CommandRegistry.register("__core_gui_event__", CommandXCoreGuiEvent())
         CommandRegistry.register("live", CommandLive())
-        CommandRegistry.register("nick", CommandNickName())
         CommandRegistry.register("counter", CommandCounter())
         CommandRegistry.register("ranking", CommandRanking())
         CommandRegistry.register("countdown", CommandCountdown())
