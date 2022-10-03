@@ -128,10 +128,11 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
                             potion.setColor(m.effectType().getColor());
                         }
                     });
+                    final var level = m.level() + 1;
                     final var displayName = String.format(
                             "%s%s %d秒 (%dEP)",
                             toJapanese(m.effectType()),
-                            m.level() > 1 ? Integer.toString(m.level()) : "",
+                            level > 1 ? Integer.toString(level) : "",
                             m.time(),
                             m.cost()
                     );
@@ -181,7 +182,8 @@ public class CommandEpEffectShop extends CommandPlayerOnlyBase {
             case "DOLPHINS_GRACE" -> "イルカの好意";
             case "BAD_OMEN" -> "不吉な予感";
             case "HERO_OF_THE_VILLAGE" -> "村の英雄";
-            default -> "不明";
+            case "DARKNESS" -> "暗闇";
+            default -> type.getName();
         };
     }
 
