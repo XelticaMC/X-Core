@@ -1,6 +1,5 @@
 package work.xeltica.craft.core.gui
 
-import io.papermc.paper.event.player.AsyncChatEvent
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.Style
@@ -16,6 +15,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerEditBookEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
@@ -302,14 +302,13 @@ class Gui: Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    fun onPlayerChat(e: AsyncChatEvent) {
+    fun onPlayerChat(e: AsyncPlayerChatEvent) {
         if (chatHandlersMap.containsKey(e.player)) {
             e.isCancelled = true
             val handler = chatHandlersMap[e.player] ?: return
             chatHandlersMap.remove(e.player)
-            val text = PlainTextComponentSerializer.plainText().serialize(e.message())
             object : BukkitRunnable() {
-                override fun run() = handler.accept(text)
+                override fun run() = handler.accept(e.message)
             }.runTask(XCorePlugin.instance)
         }
     }
