@@ -147,9 +147,9 @@ class Gui: Listener {
     /**
      * 現在参加中のプレイヤーを選択するメニューを開きます。
      * @param player メニューを開くプレイヤー
-     * @param onSelect 選択肢に入るプレイヤーを指定
-     * @param title メニューのタイトルを指定
-     * @param filter プレイヤーのフィルターを指定
+     * @param title メニューのタイトル
+     * @param onSelect プレイヤーを選択した後に呼び出されるコールバック
+     * @param filter 表示するプレイヤーを選択するフィルター関数
      */
     fun openPlayersMenu(player: Player, title: String, onSelect: Consumer<Player>?, filter: Predicate<Player>?) {
         var stream = Bukkit.getOnlinePlayers().stream()
