@@ -131,6 +131,8 @@ class EbiPowerHandler: Listener {
         if (victim is Ageable && victim !is Monster && victim !is Hoglin && !victim.isAdult) return
         // ignore creatures from spawner
         if (victim.fromMobSpawner()) return
+        // マグマキューブおよびスライムは大きい個体以外対象外
+        if (victim is Slime && victim.size != 4) return
 
         var ep = if ("nightmare2" == killer.world.name) MobEPStore.getInstance().getMobDropEP(victim, e) else 6
         val buff = getMobDropBonus(killer.inventory.itemInMainHand) * 4
