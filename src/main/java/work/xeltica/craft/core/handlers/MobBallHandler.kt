@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.events.EntityMobBallHitEvent
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.models.Hint
 import work.xeltica.craft.core.models.PlayerDataKey
@@ -65,6 +66,13 @@ class MobBallHandler : Listener {
 
         if (target.persistentDataContainer.has(NamespacedKey(XCorePlugin.instance, "isCaptured"), PersistentDataType.INTEGER)) {
             dropEgg(egg, player, "そのモブは既に捕獲されています。")
+            return
+        }
+
+        val event = EntityMobBallHitEvent(target, egg)
+        Bukkit.getPluginManager().callEvent(event)
+        if (event.isCancelled) {
+            dropEgg(egg, player)
             return
         }
 

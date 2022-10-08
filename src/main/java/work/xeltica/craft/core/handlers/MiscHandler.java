@@ -67,14 +67,15 @@ public class MiscHandler implements Listener {
      */
     @EventHandler
     public void onHurtInEventMap(EntityDamageEvent e) {
-        if (!(e.getEntity() instanceof final Player player)) return;
-        if ("event".equals(player.getWorld().getName())) {
-            e.setCancelled(true);
-            if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                final var loc = player.getWorld().getSpawnLocation();
-                player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
-            }
-        }
+        // TODO: コンフィグで有効/無効を変更できるようにする
+        // if (!(e.getEntity() instanceof final Player player)) return;
+        // if ("event".equals(player.getWorld().getName())) {
+        //     e.setCancelled(true);
+        //     if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
+        //         final var loc = player.getWorld().getSpawnLocation();
+        //         player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        //     }
+        // }
     }
 
     /**

@@ -181,6 +181,7 @@ public class WorldStore {
         worldNameMap.put("shigen_end", "資源エンド");
         worldNameMap.put("hub2", "ロビー");
         worldNameMap.put("event", "イベントワールド");
+        worldNameMap.put("event2", "イベントワールド");
     }
 
     private void loadWorldDescription() {
