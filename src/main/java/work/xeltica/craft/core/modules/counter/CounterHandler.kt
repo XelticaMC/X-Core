@@ -175,7 +175,7 @@ class CounterHandler : Listener {
     }
 
     @EventHandler
-    fun onDailyReset(e: RealTimeNewDayEvent?) {
+    fun onDailyReset(e: RealTimeNewDayEvent) {
         try {
             CounterModule.resetAllPlayersPlayedLog()
             Bukkit.getLogger().info("タイムアタックのプレイ済み履歴をリセットしました。")
