@@ -1,28 +1,38 @@
 package work.xeltica.craft.core.modules.halloween
 
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Tag
 import org.bukkit.block.Biome
+import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.enchantments.Enchantment
-import org.bukkit.entity.Entity
-import org.bukkit.entity.EntityType
-import org.bukkit.entity.Monster
-import org.bukkit.entity.PigZombie
-import org.bukkit.entity.Player
+import org.bukkit.entity.*
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
+import work.xeltica.craft.core.models.CandyStoreItem
+import work.xeltica.craft.core.utils.Config
 import work.xeltica.craft.core.utils.Ticks
+import java.io.IOException
 import java.util.*
 
 object HalloweenModule : ModuleBase() {
     override fun onEnable() {
+        ConfigurationSerialization.registerClass(CandyStoreItem::class.java, "CandyStoreItem")
         registerHandler(HalloweenHandler())
+        items.clear()
+
+        // アメストアの賞品を読み込む
+        candyStoreConfig = Config("ep") {
+            items.addAll(it.conf.getList("item", ArrayList<CandyStoreItem>()) as MutableList<CandyStoreItem>)
+        }
+
+        registerCommand("candystore", CandyStoreCommand())
     }
 
     /**
@@ -93,6 +103,35 @@ object HalloweenModule : ModuleBase() {
         }
     }
 
+    fun addItem(item: CandyStoreItem) {
+        items.add(item)
+        candyStoreConfig.conf["items"] = items
+        try {
+            candyStoreConfig.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun deleteItem(item: CandyStoreItem) {
+        items.remove(item)
+        candyStoreConfig.conf["items"] = items
+        try {
+            candyStoreConfig.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun openCandyStore(player: Player) {
+        val menuItems = items.map {
+            val name = it.item.displayName()
+                .style(Style.empty())
+                .append(Component.text(" (${it.cost}アメ)"))
+            // MenuItem(name, {  }, it.item)
+        }
+    }
+
     /**
      * イベントモブかどうかを検証します
      */
@@ -141,4 +180,7 @@ object HalloweenModule : ModuleBase() {
     private val random = Random()
     private val eventMobMetaDataKey = "halloween${GregorianCalendar().get(Calendar.YEAR)}"
     private val loreString = "XelticaMC${GregorianCalendar().get(Calendar.YEAR)}ハロウィン"
+
+    private val items = mutableListOf<CandyStoreItem>()
+    private lateinit var candyStoreConfig: Config
 }

@@ -239,6 +239,11 @@ bukkit {
             usage = "/farmfest <clearFarm|add|init|start|stop>"
             permission = "otanoshimi.command.farmfest"
         }
+        register("candystore") {
+            description = "アメストアを開きます。"
+            usage = "/candystore"
+            permission = "otanoshimi.command.candystore"
+        }
         register("__core_gui_event__") {
             description = "?"
             usage = "?"
@@ -370,6 +375,15 @@ bukkit {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.command.farmfest") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.candystore") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
+        }
+        register("otanoshimi.command.candystore.add") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.candystore.delete") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.stamp.create") {
