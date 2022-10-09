@@ -32,10 +32,10 @@ class FarmFestivalHandler : Listener {
             Material.WHEAT -> {
                 val minus = max(((board[e.player] ?: 0) * 0.05f).toInt(), 5)
                 board[e.player] = (board[e.player] ?: 0) - minus
-                e.player.sendTitle("${ChatColor.RED}小麦を取ってしまった！", "${minus}ポイント減点。")
+                e.player.sendTitle("${ChatColor.RED}小麦を取ってしまった！", "${minus}ポイント減点。", 0, 80, 0)
                 e.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, Ticks.from(3.0), 3, false, false, false))
                 e.player.world.playSound(e.player.location, Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1f, 1f)
-                e.player.world.createExplosion(e.player.location, 64f, false, false)
+                // e.player.world.createExplosion(e.player.location, 64f, false, false)
                 FarmFestivalModule.showStatus(e.player)
             }
             else -> {

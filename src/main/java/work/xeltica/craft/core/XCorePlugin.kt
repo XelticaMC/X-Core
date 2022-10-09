@@ -28,10 +28,10 @@ import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
+import work.xeltica.craft.core.modules.payments.PaymentsModule
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.utils.DiscordService
-import java.util.Random
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
@@ -252,6 +252,7 @@ class XCorePlugin : JavaPlugin() {
         EbiPowerModule,
         HintModule,
         HubModule,
+        PaymentsModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator

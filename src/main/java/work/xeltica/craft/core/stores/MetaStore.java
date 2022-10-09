@@ -69,7 +69,8 @@ public class MetaStore {
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "花火がめっちゃ上がる機能を提供停止しました。"
+            "大きなサイズのスライムのみ、エビパワー獲得の対象とするよう変更",
+            "EbiPay™：自分に対してエビパワーを送信できる不具合を修正",
     };
 
     private static MetaStore instance;

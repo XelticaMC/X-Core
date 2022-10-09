@@ -44,6 +44,7 @@ object FarmFestivalModule : ModuleBase() {
             throw XCoreException("${player.name} を追加しようとしましたが、定員オーバーです。")
         }
         board[player] = 0
+        player.sendMessage("祭りの参加メンバーに追加されました。開始まで、今しばらくお待ちください。")
     }
 
     fun clearFarm() {
@@ -80,24 +81,25 @@ object FarmFestivalModule : ModuleBase() {
         }
         object : BukkitRunnable() {
             override fun run() {
+                val eventPlayers = getEventPlayers()
                 countdown--
                 if (countdown == 0) {
                     this.cancel()
-                    board.keys.forEach {
-                        it.sendTitle("${ChatColor.GREEN}始めッ！", "", 0, 20, 0)
+                    eventPlayers.forEach {
+                        it.sendTitle("${ChatColor.GREEN}始めッ！", "", 0, 80, 0)
                         it.playSound(it.location, Sound.ITEM_GOAT_HORN_SOUND_2, SoundCategory.PLAYERS, 1f, 1f)
                     }
                     object : BukkitRunnable() {
                         override fun run() {
                             if (!isPlaying) return
-                            board.keys.forEach {
-                                // TODO: 本番までにBGMをさしかえる
-                                NbsStore.getInstance().playRadio(it, "fb", NbsModel.PlaybackMode.LOOP)
+                            eventPlayers.forEach {
+                                NbsStore.getInstance().playRadio(it, "farmfest22", NbsModel.PlaybackMode.LOOP)
                             }
+                            radioPlayers = eventPlayers
                         }
                     }.runTaskLater(XCorePlugin.instance, Ticks.from(5.0).toLong())
                 } else {
-                    board.keys.forEach {
+                    eventPlayers.forEach {
                         it.sendTitle(countdown.toString(), "", 0, 20, 0)
                         it.playSound(it.location, Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 1f, 0.6f)
                     }
@@ -110,10 +112,32 @@ object FarmFestivalModule : ModuleBase() {
                     this.cancel()
                     return
                 }
-                time--
+                val eventPlayers = getEventPlayers()
                 board.keys.forEach(FarmFestivalModule::showStatus)
+                if (countdown > 0) return
+                time--
+                if (time == 60) {
+                    eventPlayers.forEach {
+                        it.sendTitle("あと60秒！", "", 0, 80, 0)
+                        it.sendMessage("あと60秒！")
+                        it.playSound(it.location, Sound.BLOCK_NOTE_BLOCK_HAT, SoundCategory.PLAYERS, 1f, 1f)
+                    }
+                }
+                if (time == 30) {
+                    eventPlayers.forEach {
+                        it.sendTitle("あと30秒！", "", 0, 80, 0)
+                        it.sendMessage("あと30秒！")
+                        it.playSound(it.location, Sound.BLOCK_NOTE_BLOCK_HAT, SoundCategory.PLAYERS, 1f, 1f)
+                    }
+                }
                 if (time <= 0) {
                     stop()
+                } else if (time <= 10) {
+                    eventPlayers.forEach {
+                        it.sendTitle(time.toString(), "", 0, 20, 0)
+                        it.sendMessage(time.toString())
+                        it.playSound(it.location, Sound.BLOCK_NOTE_BLOCK_HAT, SoundCategory.PLAYERS, 1f, 1f)
+                    }
                 }
             }
         }.runTaskTimer(XCorePlugin.instance, 0, Ticks.from(1.0).toLong())
@@ -121,13 +145,17 @@ object FarmFestivalModule : ModuleBase() {
 
     fun stop() {
         isPlaying = false
-        board.keys.forEach {
-            it.sendTitle("${ChatColor.RED}終わりッ！", "", 0, 20, 0)
+        getEventPlayers().forEach {
+            it.sendTitle("${ChatColor.RED}終わりッ！", "", 0, 80, 0)
             it.playSound(it.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 1f)
-
+        }
+        board.keys.forEach {
             it.gameMode = GameMode.ADVENTURE
-            NbsStore.getInstance().stopRadio(it)
             it.removePotionEffect(PotionEffectType.SPEED)
+            Bukkit.getLogger().info("${it.name}: ${board[it]}ポイント")
+        }
+        radioPlayers.forEach {
+            NbsStore.getInstance().stopRadio(it)
         }
     }
 
@@ -135,6 +163,10 @@ object FarmFestivalModule : ModuleBase() {
         val m = time / 60
         val s = time % 60
         player.sendActionBar(Component.text("残り${if (m > 0) "${m}分" else ""}${s}秒 ${ChatColor.BOLD}現在の得点：${ChatColor.RESET}${board[player]}点"))
+    }
+
+    fun getEventPlayers() = Bukkit.getOnlinePlayers().filter {
+        it.world.name == "event"
     }
 
     var isPlaying = false
@@ -147,6 +179,8 @@ object FarmFestivalModule : ModuleBase() {
         private set
 
     val board = mutableMapOf<Player, Int>()
+
+    var radioPlayers = listOf<Player>()
 
     private val random = Random()
 
