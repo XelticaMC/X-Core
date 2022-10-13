@@ -27,8 +27,8 @@ object HalloweenModule : ModuleBase() {
         ConfigurationSerialization.registerClass(CandyStoreItem::class.java, "CandyStoreItem")
         items.clear()
         // アメストアの賞品を読み込む
-        candyStoreConfig = Config("candyStore") {
-            items.addAll(it.conf.getList("items", ArrayList<CandyStoreItem>()) as MutableList<CandyStoreItem>)
+        candyStoreConfig = Config(CONFIG_NAME) {
+            items.addAll(it.conf.getList(CONFIG_KEY_ITEMS, ArrayList<CandyStoreItem>()) as MutableList<CandyStoreItem>)
         }
 
         registerHandler(HalloweenHandler())
@@ -80,7 +80,7 @@ object HalloweenModule : ModuleBase() {
                     setItemInOffHand(null)
                 }
                 it.canPickupItems = false
-                it.setMetadata(eventMobMetaDataKey, FixedMetadataValue(XCorePlugin.instance, true))
+                it.setMetadata(METADATA_KEY_EVENT_MOB, FixedMetadataValue(XCorePlugin.instance, true))
             }
         }
     }
@@ -105,7 +105,7 @@ object HalloweenModule : ModuleBase() {
 
     fun addItem(item: CandyStoreItem) {
         items.add(item)
-        candyStoreConfig.conf["items"] = items
+        candyStoreConfig.conf[CONFIG_KEY_ITEMS] = items
         try {
             candyStoreConfig.save()
         } catch (e: IOException) {
@@ -115,7 +115,7 @@ object HalloweenModule : ModuleBase() {
 
     fun deleteItem(item: CandyStoreItem) {
         items.remove(item)
-        candyStoreConfig.conf["items"] = items
+        candyStoreConfig.conf[CONFIG_KEY_ITEMS] = items
         try {
             candyStoreConfig.save()
         } catch (e: IOException) {
@@ -158,14 +158,14 @@ object HalloweenModule : ModuleBase() {
     /**
      * イベントモブかどうかを検証します
      */
-    fun Entity.isEventMob() = hasMetadata(eventMobMetaDataKey)
+    fun Entity.isEventMob() = hasMetadata(METADATA_KEY_EVENT_MOB)
 
     /**
      * アイテムがアメかどうかを検証します
      */
     fun ItemStack.isCandy(): Boolean {
         val lore = itemMeta.lore()
-        return lore != null && PlainTextComponentSerializer.plainText().serialize(lore[0]) == loreString
+        return lore != null && PlainTextComponentSerializer.plainText().serialize(lore[0]) == ITEM_LORE_STRING
     }
 
     /**
@@ -176,7 +176,7 @@ object HalloweenModule : ModuleBase() {
         itemStack.editMeta {
             it.displayName(Component.text("アメ"))
             it.lore(listOf(
-                Component.text(loreString)
+                Component.text(ITEM_LORE_STRING)
             ))
         }
         return itemStack
@@ -223,6 +223,12 @@ object HalloweenModule : ModuleBase() {
         EntityType.ZOMBIFIED_PIGLIN,
         EntityType.WITHER_SKELETON,
     )
+
+    private val METADATA_KEY_EVENT_MOB = "halloween${GregorianCalendar().get(Calendar.YEAR)}"
+    private val ITEM_LORE_STRING = "XelticaMC${GregorianCalendar().get(Calendar.YEAR)}ハロウィン"
+    private val CONFIG_NAME = "candyStore"
+    private val CONFIG_KEY_ITEMS = "items"
+    private val CONFIG_KEY_EVENT_MODE = "eventMode"
 
     private val random = Random()
     private val eventMobMetaDataKey = "halloween${GregorianCalendar().get(Calendar.YEAR)}"
