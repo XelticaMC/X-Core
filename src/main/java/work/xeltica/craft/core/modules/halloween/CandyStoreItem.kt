@@ -1,7 +1,8 @@
-package work.xeltica.craft.core.models
+package work.xeltica.craft.core.modules.halloween
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import org.bukkit.inventory.ItemStack
+import work.xeltica.craft.core.models.EbiPowerItem
 
 /**
  * アメストアで取り扱う商品を表すモデルです。
@@ -16,10 +17,10 @@ data class CandyStoreItem(val item: ItemStack, val cost: Int) : Cloneable, Confi
 
     companion object {
         @JvmStatic
-        fun deserialize(args: Map<String?, Any?>): EbiPowerItem {
+        fun deserialize(args: Map<String?, Any?>): CandyStoreItem {
             val item = ItemStack.deserialize((args["item"] as Map<String?, Any?>?)!!)
             val cost = args["cost"] as Int
-            return EbiPowerItem(item, cost)
+            return CandyStoreItem(item, cost)
         }
     }
 }

@@ -1,11 +1,8 @@
 package work.xeltica.craft.core.modules.halloween
 
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.Tag
+import org.bukkit.*
 import org.bukkit.block.Biome
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.enchantments.Enchantment
@@ -13,25 +10,28 @@ import org.bukkit.entity.*
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
+import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.models.CandyStoreItem
+import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.utils.Config
 import work.xeltica.craft.core.utils.Ticks
 import java.io.IOException
+import java.lang.IllegalArgumentException
 import java.util.*
+import java.util.function.Consumer
 
 object HalloweenModule : ModuleBase() {
     override fun onEnable() {
         ConfigurationSerialization.registerClass(CandyStoreItem::class.java, "CandyStoreItem")
-        registerHandler(HalloweenHandler())
         items.clear()
-
         // アメストアの賞品を読み込む
-        candyStoreConfig = Config("ep") {
-            items.addAll(it.conf.getList("item", ArrayList<CandyStoreItem>()) as MutableList<CandyStoreItem>)
+        candyStoreConfig = Config("candyStore") {
+            items.addAll(it.conf.getList("items", ArrayList<CandyStoreItem>()) as MutableList<CandyStoreItem>)
         }
 
+        registerHandler(HalloweenHandler())
         registerCommand("candystore", CandyStoreCommand())
     }
 
@@ -124,12 +124,35 @@ object HalloweenModule : ModuleBase() {
     }
 
     fun openCandyStore(player: Player) {
-        val menuItems = items.map {
-            val name = it.item.displayName()
-                .style(Style.empty())
-                .append(Component.text(" (${it.cost}アメ)"))
-            // MenuItem(name, {  }, it.item)
+        openCandyStoreUI(player, "アメストア") {
+            if (it.cost > 0 && !tryTakeCandy(player, it.cost)) {
+                // アメの徴収に失敗した
+                Gui.getInstance().error(player, "アメが足りません。")
+            } else {
+                // アイテムを渡す
+                player.world.dropItem(player.location, it.item.clone())
+                player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 2f)
+                player.sendMessage("${ChatColor.AQUA}引き換えました！")
+            }
+
+            object : BukkitRunnable() {
+                override fun run() {
+                    openCandyStore(player)
+                }
+            }.runTask(XCorePlugin.instance)
         }
+    }
+
+    fun openCandyStoreUI(player: Player, title: String, onChosen: Consumer<CandyStoreItem>) {
+        val menuItems = items.map {
+            val item: ItemStack = it.item
+            val name: String = getItemName(item) ?: ""
+            val displayName = name + "×" + item.amount + " (" + it.cost + "アメ)"
+            MenuItem(displayName, {_ ->
+                onChosen.accept(it)
+            }, it.item.clone())
+        }
+        Gui.getInstance().openMenu(player, title, menuItems)
     }
 
     /**
@@ -157,6 +180,30 @@ object HalloweenModule : ModuleBase() {
             ))
         }
         return itemStack
+    }
+
+    fun tryTakeCandy(player: Player, amount: Int): Boolean {
+        if (amount == 0) return true
+        if (amount < 0) throw IllegalArgumentException()
+        val balance = player.inventory
+            .filter { it !== null && it.isCandy() }
+            .sumOf { it.amount }
+        if (balance < amount) {
+            return false
+        }
+        val candy = generateCandy(amount)
+        player.inventory.removeItemAnySlot(candy)
+        return true
+    }
+
+    /**
+     * 指定したアイテムスタックから名前を取得します。
+     * @param item 取得するアイテム
+     * @return アイテムのdisplayName
+     */
+    private fun getItemName(item: ItemStack): String? {
+        val dn = item.itemMeta.displayName()
+        return if (dn != null) PlainTextComponentSerializer.plainText().serialize(dn) else item.i18NDisplayName
     }
 
     // TODO: ハードコーディングしなくても良いよう、ハスクとストレイが湧くバイオームが取れないだろうか…
