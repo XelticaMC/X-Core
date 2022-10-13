@@ -87,6 +87,9 @@ object HalloweenModule : ModuleBase() {
         }
     }
 
+    /**
+     * ドロップアイテムを置き換える
+     */
     fun replaceDrops(drops: MutableList<ItemStack>, killer: Player) {
         val amount = 1 + random.nextInt(killer.equipment.itemInMainHand.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) + 1)
         drops.clear()
@@ -105,6 +108,9 @@ object HalloweenModule : ModuleBase() {
         }
     }
 
+    /**
+     * アメストアに商品を追加する
+     */
     fun addItem(item: CandyStoreItem) {
         items.add(item)
         candyStoreConfig.conf[CONFIG_KEY_ITEMS] = items
@@ -115,6 +121,9 @@ object HalloweenModule : ModuleBase() {
         }
     }
 
+    /**
+     * アメストアから商品を削除する
+     */
     fun deleteItem(item: CandyStoreItem) {
         items.remove(item)
         candyStoreConfig.conf[CONFIG_KEY_ITEMS] = items
@@ -125,6 +134,9 @@ object HalloweenModule : ModuleBase() {
         }
     }
 
+    /**
+     * アメストアを開く
+     */
     fun openCandyStore(player: Player) {
         openCandyStoreUI(player, "アメストア") {
             if (it.cost > 0 && !tryTakeCandy(player, it.cost)) {
@@ -152,6 +164,9 @@ object HalloweenModule : ModuleBase() {
         }
     }
 
+    /**
+     * アメストアUIを開く
+     */
     fun openCandyStoreUI(player: Player, title: String, onChosen: Consumer<ICandyStoreItem>) {
         val menuItems = items.map {
             val item: ItemStack = it.item
@@ -193,6 +208,10 @@ object HalloweenModule : ModuleBase() {
         return itemStack
     }
 
+    /**
+     * プレイヤーからアメの徴収を試みます。
+     * @return アメの徴収がうまくいったらtrue、そうでなければfalse。
+     */
     fun tryTakeCandy(player: Player, amount: Int): Boolean {
         if (amount == 0) return true
         if (amount < 0) throw IllegalArgumentException()
@@ -207,6 +226,9 @@ object HalloweenModule : ModuleBase() {
         return true
     }
 
+    /**
+     * イベントモードかどうか
+     */
     var isEventMode
         get() = _isEventMode
         set(value) {

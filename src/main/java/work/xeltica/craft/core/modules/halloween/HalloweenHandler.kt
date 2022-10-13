@@ -14,8 +14,11 @@ import work.xeltica.craft.core.events.EntityMobBallHitEvent
 import work.xeltica.craft.core.modules.halloween.HalloweenModule.isEventMob
 
 class HalloweenHandler : Listener {
+    /**
+     * モブがワールドに湧いた
+     */
     @EventHandler
-    fun onMobSpawnInMainWorld(e: EntitySpawnEvent) {
+    fun onMobSpawnInWorld(e: EntitySpawnEvent) {
         val entity = e.entity
         if (entity !is Monster) return
         val world = entity.world
@@ -26,6 +29,9 @@ class HalloweenHandler : Listener {
         HalloweenModule.replaceMob(entity)
     }
 
+    /**
+     * イベントモブがダメージを食らった
+     */
     @EventHandler
     fun onEventMobDamaged(e: EntityDamageEvent) {
         // イベントモブでなければ対象外
@@ -41,6 +47,9 @@ class HalloweenHandler : Listener {
         }
     }
 
+    /**
+     * イベントモブがくたばった
+     */
     @EventHandler
     fun onEventMobDeath(e: EntityDeathEvent) {
         // イベントモブでなければ対象外
@@ -56,6 +65,10 @@ class HalloweenHandler : Listener {
         HalloweenModule.replaceDrops(e.drops, killer)
     }
 
+    /**
+     * イベントモブにモブボールを当てようとした
+     * （モブボールは動作をおかしくしないために当てれないようにしてる）
+     */
     @EventHandler
     fun onEventMobHitMobBall(e: EntityMobBallHitEvent) {
         if (e.target.isEventMob()) {
