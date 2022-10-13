@@ -35,7 +35,10 @@ class HalloweenHandler : Listener {
             e.damage = 99999.0
             return
         }
-        e.isCancelled = true
+        // 奈落は普通に通す
+        if (e.cause !== EntityDamageEvent.DamageCause.VOID) {
+            e.isCancelled = true
+        }
     }
 
     @EventHandler
@@ -44,8 +47,10 @@ class HalloweenHandler : Listener {
         if (!e.entity.isEventMob()) return
         val killer = e.entity.killer
         if (killer == null) {
-            Bukkit.getLogger()
-                .warning("Event Mob must be killed by player to death, but it died by ${e.entity.lastDamageCause?.cause ?: "(unknown)"}")
+            if (e.entity.lastDamageCause?.cause != EntityDamageEvent.DamageCause.VOID) {
+                Bukkit.getLogger()
+                    .warning("イベントモブはプレイヤーキルか奈落によって死ぬべきだが、 ${e.entity.lastDamageCause?.cause ?: "(unknown)"}を要因として死んだ。これは意図しない挙動なので、見つけ次第バグ報告をお願いします。")
+            }
             return
         }
         HalloweenModule.replaceDrops(e.drops, killer)
