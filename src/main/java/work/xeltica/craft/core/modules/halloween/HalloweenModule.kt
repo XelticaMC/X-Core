@@ -15,6 +15,7 @@ import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
+import work.xeltica.craft.core.stores.EbiPowerStore
 import work.xeltica.craft.core.utils.Config
 import work.xeltica.craft.core.utils.Ticks
 import java.io.IOException
@@ -130,7 +131,14 @@ object HalloweenModule : ModuleBase() {
                 Gui.getInstance().error(player, "アメが足りません。")
             } else {
                 // アイテムを渡す
-                player.world.dropItem(player.location, it.item.clone())
+                when (it) {
+                    is CandyStoreItem -> {
+                        player.world.dropItem(player.location, it.item.clone())
+                    }
+                    is CandyStoreEPItem -> {
+                        EbiPowerStore.getInstance().tryGive(player, it.ep)
+                    }
+                }
                 player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 2f)
                 player.sendMessage("${ChatColor.AQUA}引き換えました！")
             }
@@ -143,7 +151,7 @@ object HalloweenModule : ModuleBase() {
         }
     }
 
-    fun openCandyStoreUI(player: Player, title: String, onChosen: Consumer<CandyStoreItem>) {
+    fun openCandyStoreUI(player: Player, title: String, onChosen: Consumer<ICandyStoreItem>) {
         val menuItems = items.map {
             val item: ItemStack = it.item
             val name: String = getItemName(item) ?: ""
@@ -151,8 +159,10 @@ object HalloweenModule : ModuleBase() {
             MenuItem(displayName, {_ ->
                 onChosen.accept(it)
             }, it.item.clone())
-        }
-        Gui.getInstance().openMenu(player, title, menuItems)
+        }.toTypedArray()
+        Gui.getInstance().openMenu(player, title, listOf(*menuItems, MenuItem("2エビパワー (1アメ)", {
+            onChosen.accept(CandyStoreEPItem(2, 1))
+        }, Material.EMERALD, null, true)))
     }
 
     /**

@@ -35,7 +35,9 @@ class CandyStoreCommand : CommandPlayerOnlyBase() {
             }
 
             "delete" -> HalloweenModule.openCandyStoreUI(player, "削除するアイテムを選んでください") {
-                HalloweenModule.deleteItem(it)
+                if (it is CandyStoreItem) {
+                    HalloweenModule.deleteItem(it)
+                }
                 player.sendMessage("削除しました。")
             }
 

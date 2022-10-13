@@ -7,7 +7,7 @@ import work.xeltica.craft.core.models.EbiPowerItem
 /**
  * アメストアで取り扱う商品を表すモデルです。
  */
-data class CandyStoreItem(val item: ItemStack, val cost: Int) : Cloneable, ConfigurationSerializable {
+data class CandyStoreItem(val item: ItemStack, override val cost: Int) : Cloneable, ConfigurationSerializable, ICandyStoreItem {
     override fun serialize(): Map<String, Any> {
         val result = LinkedHashMap<String, Any>()
         result["item"] = item.serialize()
