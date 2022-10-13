@@ -48,6 +48,14 @@ class CandyStoreCommand : CommandPlayerOnlyBase() {
                 player.sendMessage("${amount}アメを渡しました。")
                 player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
             }
+
+            "event" -> {
+                when (args[1].lowercase()) {
+                    "on" -> HalloweenModule.isEventMode = true
+                    "off" -> HalloweenModule.isEventMode = false
+                    else -> return false
+                }
+            }
         }
         return true
     }

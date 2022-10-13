@@ -6,8 +6,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.modules.xphone.XphoneModule
-import work.xeltica.craft.core.stores.ItemStore
+import work.xeltica.craft.core.modules.halloween.HalloweenModule
 import work.xeltica.craft.core.stores.WorldStore
 import java.util.Calendar
 
@@ -62,12 +61,31 @@ class TeleportApp : AppBase() {
 
             val calendar = Calendar.getInstance()
             val month = calendar.get(Calendar.MONTH) + 1
+            // 夏イベント用テレポート。
+            // TODO イベント機能をどっかにうつす
             if ((month == 8) || player.isOp) {
                 list.add(
                     MenuItem("イベント", {
                         val eventWorldLocation = Bukkit.getWorld("event")?.spawnLocation
                         if (eventWorldLocation == null) {
-                            player.sendMessage("")
+                            player.sendMessage("No such world")
+                            return@MenuItem
+                        }
+                        player.teleportAsync(eventWorldLocation)
+                    }, Material.TROPICAL_FISH)
+                )
+            }
+            // TODO イベント機能をどっかにうつす
+            if (HalloweenModule.isEventMode || player.isOp) {
+                list.add(
+                    MenuItem("イベントワールドへ（4アメが必要）", {
+                        val eventWorldLocation = Bukkit.getWorld("event2")?.spawnLocation
+                        if (eventWorldLocation == null) {
+                            player.sendMessage("No such world")
+                            return@MenuItem
+                        }
+                        if (!HalloweenModule.tryTakeCandy(player, 4)) {
+                            Gui.getInstance().error(player, "アメが足りません！イベントワールドへの移動にはアメを4つ消費します…。")
                             return@MenuItem
                         }
                         player.teleportAsync(eventWorldLocation)

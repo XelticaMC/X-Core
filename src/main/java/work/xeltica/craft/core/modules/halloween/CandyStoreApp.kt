@@ -15,9 +15,7 @@ class CandyStoreApp : AppBase() {
 
     override fun isVisible(player: Player): Boolean {
         if (player.world.name == "event2") return true
-        // TODO イベント開始フラグなどを反映する
-
-        return false
+        return HalloweenModule.isEventMode
     }
 
     override fun isShiny(player: Player): Boolean = true

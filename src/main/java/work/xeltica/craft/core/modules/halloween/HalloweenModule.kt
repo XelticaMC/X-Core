@@ -30,6 +30,7 @@ object HalloweenModule : ModuleBase() {
         // アメストアの賞品を読み込む
         candyStoreConfig = Config(CONFIG_NAME) {
             items.addAll(it.conf.getList(CONFIG_KEY_ITEMS, ArrayList<CandyStoreItem>()) as MutableList<CandyStoreItem>)
+            _isEventMode = it.conf.getBoolean(CONFIG_KEY_EVENT_MODE)
         }
 
         registerHandler(HalloweenHandler())
@@ -206,6 +207,19 @@ object HalloweenModule : ModuleBase() {
         return true
     }
 
+    var isEventMode
+        get() = _isEventMode
+        set(value) {
+            _isEventMode = value
+
+            candyStoreConfig.conf["eventMode"] = value
+            try {
+                candyStoreConfig.save()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+
     /**
      * 指定したアイテムスタックから名前を取得します。
      * @param item 取得するアイテム
@@ -241,9 +255,8 @@ object HalloweenModule : ModuleBase() {
     private val CONFIG_KEY_EVENT_MODE = "eventMode"
 
     private val random = Random()
-    private val eventMobMetaDataKey = "halloween${GregorianCalendar().get(Calendar.YEAR)}"
-    private val loreString = "XelticaMC${GregorianCalendar().get(Calendar.YEAR)}ハロウィン"
 
     private val items = mutableListOf<CandyStoreItem>()
+    private var _isEventMode = false
     private lateinit var candyStoreConfig: Config
 }
