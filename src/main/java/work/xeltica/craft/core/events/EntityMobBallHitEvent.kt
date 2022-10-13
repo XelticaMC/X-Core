@@ -10,7 +10,6 @@ class EntityMobBallHitEvent(
     val target: LivingEntity,
     val thrownBall: Projectile
 ): Event(), Cancellable {
-    val HANDLERS_LIST = HandlerList()
 
     override fun getHandlers(): HandlerList {
         return HANDLERS_LIST
@@ -20,6 +19,16 @@ class EntityMobBallHitEvent(
 
     override fun setCancelled(cancel: Boolean) {
         _isCancelled = cancel
+    }
+
+    companion object {
+        @JvmStatic
+        fun getHandlerList(): HandlerList {
+            return HANDLERS_LIST
+        }
+
+        @JvmStatic
+        private val HANDLERS_LIST = HandlerList()
     }
 
     private var _isCancelled = false
