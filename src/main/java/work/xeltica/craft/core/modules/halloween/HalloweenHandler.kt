@@ -21,11 +21,12 @@ class HalloweenHandler : Listener {
         val entity = e.entity
         if (entity !is Monster) return
         val world = entity.world
-        // イベントワールドでない、あるいはメインワールドだがイベントモードでないなら除外
-        if (world.name != "event2" || (world.name == "main" && !HalloweenModule.isEventMode)) return
         // NOTE: プラグインで湧いたモブは除外（じゃないとreplaceMobメソッドが無限にこのイベントを呼ぶ）
         if (entity.entitySpawnReason == CreatureSpawnEvent.SpawnReason.CUSTOM) return
-        HalloweenModule.replaceMob(entity)
+        // イベントワールドであり、メインワールドかつイベントモードの場合
+        if (world.name == "event2" || (world.name == "main" && HalloweenModule.isEventMode)) {
+            HalloweenModule.replaceMob(entity)
+        }
     }
 
     /**
