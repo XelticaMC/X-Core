@@ -78,18 +78,16 @@ class XCorePlugin : JavaPlugin() {
             var prev = meta.previousVersion
             if (prev == null) prev = "unknown"
             val current = meta.currentVersion
-            val text = String.format("§aコアシステムを更新しました。%s -> %s", prev, current)
+            val text = String.format("§aX-Coreを%s -> %sへ更新しました。", prev, current)
             if (meta.postToDiscord) {
                 DiscordService.getInstance().postChangelog(current, meta.changeLog)
             }
-            Bukkit.getServer()
-                .audiences()
-                .forEach {
-                    it!!.sendMessage(Component.text(text))
-                    for (log in meta.changeLog) {
-                        it.sendMessage(Component.text("・$log"))
-                    }
+            with(Bukkit.getServer()) {
+                sendMessage(Component.text(text))
+                for (log in meta.changeLog) {
+                    sendMessage(Component.text("・$log"))
                 }
+            }
         }
         logger.info("Booted XelticaMC Core System.")
     }

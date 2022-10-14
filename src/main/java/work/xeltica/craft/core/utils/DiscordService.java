@@ -3,10 +3,8 @@ package work.xeltica.craft.core.utils;
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
-import github.scarsz.discordsrv.util.DiscordUtil;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.stream.Stream;
@@ -82,8 +80,7 @@ public class DiscordService {
         final var channel = guild.getGuildChannelById(changelogChannelId);
         if (channel instanceof TextChannel textChannel) {
             final var builder = new StringBuilder();
-            builder.append("**コアシステム更新**\n");
-            builder.append("ver").append(version).append('\n');
+            builder.append("**X-Core** ").append(version).append('\n');
             Stream.of(changeLog).forEach(l -> builder.append('・').append(l).append('\n'));
             textChannel.sendMessage(builder.toString()).queue();
         }
