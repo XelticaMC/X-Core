@@ -26,7 +26,6 @@ import java.util.function.Consumer
 object HalloweenModule : ModuleBase() {
     override fun onEnable() {
         ConfigurationSerialization.registerClass(CandyStoreItem::class.java, "CandyStoreItem")
-        items.clear()
         // アメストアの賞品を読み込む
         candyStoreConfig = Config(CONFIG_NAME) {
             items.clear()
@@ -177,9 +176,15 @@ object HalloweenModule : ModuleBase() {
                 onChosen.accept(it)
             }, it.item.clone())
         }.toTypedArray()
-        Gui.getInstance().openMenu(player, title, listOf(*menuItems, MenuItem("2エビパワー (1アメ)", {
+        Gui.getInstance().openMenu(player, title, listOf(
+            *menuItems,
+            MenuItem("2エビパワー (1アメ)", {
             onChosen.accept(CandyStoreEPItem(2, 1))
-        }, Material.EMERALD, null, true)))
+        }, Material.EMERALD, null, true),
+            MenuItem("128エビパワー (64アメ)", {
+                onChosen.accept(CandyStoreEPItem(128, 64))
+            }, Material.EMERALD_BLOCK, null, true),
+        ))
     }
 
     /**
