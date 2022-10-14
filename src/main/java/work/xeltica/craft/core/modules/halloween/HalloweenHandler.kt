@@ -1,15 +1,14 @@
 package work.xeltica.craft.core.modules.halloween
 
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Monster
+import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.CreatureSpawnEvent
-import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDamageEvent
-import org.bukkit.event.entity.EntityDeathEvent
-import org.bukkit.event.entity.EntitySpawnEvent
+import org.bukkit.event.entity.*
+import org.bukkit.event.player.PlayerBedEnterEvent
 import work.xeltica.craft.core.events.EntityMobBallHitEvent
 import work.xeltica.craft.core.modules.halloween.HalloweenModule.isEventMob
 
@@ -73,6 +72,17 @@ class HalloweenHandler : Listener {
     fun onEventMobHitMobBall(e: EntityMobBallHitEvent) {
         if (e.target.isEventMob()) {
             e.isCancelled = true
+        }
+    }
+
+    /**
+     * イベント期間中は眠れないように
+     */
+    @EventHandler
+    fun onPlayerBed(e: PlayerBedEnterEvent) {
+        if (HalloweenModule.isEventMode && e.player.world.name == "main") {
+            e.setUseBed(Event.Result.DENY)
+            e.player.sendActionBar(Component.text("外はハロウィンのムードに包まれている。こんなテンションじゃ寝られない！"))
         }
     }
 }
