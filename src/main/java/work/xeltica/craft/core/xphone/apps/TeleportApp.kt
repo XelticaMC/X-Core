@@ -63,7 +63,7 @@ class TeleportApp : AppBase() {
             val month = calendar.get(Calendar.MONTH) + 1
             // 夏イベント用テレポート。
             // TODO イベント機能をどっかにうつす
-            if ((month == 8) || player.isOp) {
+            if (month == 8 || player.isOp) {
                 list.add(
                     MenuItem("イベント", {
                         val eventWorldLocation = Bukkit.getWorld("event")?.spawnLocation
@@ -89,7 +89,7 @@ class TeleportApp : AppBase() {
                             return@MenuItem
                         }
                         player.teleportAsync(eventWorldLocation)
-                    }, Material.TROPICAL_FISH)
+                    }, Material.JACK_O_LANTERN)
                 )
             }
         }
