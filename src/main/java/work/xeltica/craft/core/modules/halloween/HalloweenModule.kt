@@ -29,6 +29,7 @@ object HalloweenModule : ModuleBase() {
         items.clear()
         // アメストアの賞品を読み込む
         candyStoreConfig = Config(CONFIG_NAME) {
+            items.clear()
             items.addAll(it.conf.getList(CONFIG_KEY_ITEMS, ArrayList<CandyStoreItem>()) as MutableList<CandyStoreItem>)
             _isEventMode = it.conf.getBoolean(CONFIG_KEY_EVENT_MODE)
         }
