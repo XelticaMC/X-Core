@@ -29,7 +29,7 @@ public class MetaStore {
     }
 
     public boolean isUpdated() {
-        return isUpdated;
+        return updated;
     }
 
     public boolean getPostToDiscord() {
@@ -52,7 +52,7 @@ public class MetaStore {
             conf.set("version", getCurrentVersion());
             conf.set("previousVersion", currentVersion);
             previousVersion = currentVersion;
-            isUpdated = true;
+            updated = true;
             try {
                 meta.save();
             } catch (IOException e) {
@@ -63,14 +63,13 @@ public class MetaStore {
 
     private final Config meta;
     private String previousVersion;
-    private boolean isUpdated;
+    private boolean updated;
     private boolean postToDiscord;
 
     // TODO: チェンジログをここではなく別ファイルに書いてそれを参照する。
     // やり方を調べる必要がある
     private final String[] changeLog = {
-            "大きなサイズのスライムのみ、エビパワー獲得の対象とするよう変更",
-            "EbiPay™：自分に対してエビパワーを送信できる不具合を修正",
+            "ハロウィンイベント向け機能追加",
     };
 
     private static MetaStore instance;
