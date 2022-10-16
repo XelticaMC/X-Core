@@ -57,9 +57,14 @@ class CandyStoreCommand : CommandPlayerOnlyBase() {
                 }
             }
 
-            "spawnratio" -> {
+            "spawnratiomain" -> {
                 val ratio = args[1].toIntOrNull() ?: return false
-                HalloweenModule.spawnRatio = ratio
+                HalloweenModule.spawnRatioInMainWorld = ratio
+            }
+
+            "spawnratioevent" -> {
+                val ratio = args[1].toIntOrNull() ?: return false
+                HalloweenModule.spawnRatioInEventWorld = ratio
             }
         }
         return true

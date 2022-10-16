@@ -17,7 +17,6 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.stores.EbiPowerStore
 import work.xeltica.craft.core.utils.Config
-import work.xeltica.craft.core.utils.Ticks
 import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -31,7 +30,8 @@ object HalloweenModule : ModuleBase() {
             items.clear()
             items.addAll(it.conf.getList(CONFIG_KEY_ITEMS, ArrayList<CandyStoreItem>()) as MutableList<CandyStoreItem>)
             _isEventMode = it.conf.getBoolean(CONFIG_KEY_EVENT_MODE)
-            _spawnRatio = it.conf.getInt(CONFIG_KEY_SPAWN_RATIO, 100)
+            _spawnRatioMainWorld = it.conf.getInt(CONFIG_KEY_SPAWN_RATIO_MAIN_WORLD, 100)
+            _spawnRatioEventWorld = it.conf.getInt(CONFIG_KEY_SPAWN_RATIO_EVENT_WORLD, 100)
         }
 
         registerHandler(HalloweenHandler())
@@ -51,8 +51,9 @@ object HalloweenModule : ModuleBase() {
         if (entityType == EntityType.SKELETON && isStrayBiome) entityType = EntityType.STRAY
         val location = entity.location
         entity.remove()
+        val ratio = if (world.name == "main") spawnRatioInMainWorld else spawnRatioInEventWorld
         // 抽選に外れたらスポーンなし
-        if (random.nextInt(100) < spawnRatio) {
+        if (random.nextInt(100) < ratio) {
             return
         }
         // Y64以下ではスポーンなし
@@ -72,10 +73,6 @@ object HalloweenModule : ModuleBase() {
             }
         }
         world.spawnEntity(location, entityType, CreatureSpawnEvent.SpawnReason.CUSTOM) {
-            if (it is PigZombie) {
-                // ゾンビピグリンの場合は中立だと面白くないので怒らせる
-                it.anger = Ticks.from(15, 0.0)
-            }
             if (it is Monster) {
                 with(it.equipment) {
                     helmet = ItemStack(if (random.nextInt(100) < 10) org.bukkit.Material.JACK_O_LANTERN else org.bukkit.Material.CARVED_PUMPKIN)
@@ -256,12 +253,23 @@ object HalloweenModule : ModuleBase() {
     /**
      * スポーン確率
      */
-    var spawnRatio
-        get() = _spawnRatio
+    var spawnRatioInMainWorld
+        get() = _spawnRatioMainWorld
         set(value) {
-            _spawnRatio = value
+            _spawnRatioMainWorld = value
 
-            candyStoreConfig.conf[CONFIG_KEY_SPAWN_RATIO] = value
+            candyStoreConfig.conf[CONFIG_KEY_SPAWN_RATIO_MAIN_WORLD] = value
+        }
+
+    /**
+     * スポーン確率
+     */
+    var spawnRatioInEventWorld
+        get() = _spawnRatioEventWorld
+        set(value) {
+            _spawnRatioEventWorld = value
+
+            candyStoreConfig.conf[CONFIG_KEY_SPAWN_RATIO_EVENT_WORLD] = value
         }
 
     /**
@@ -297,12 +305,14 @@ object HalloweenModule : ModuleBase() {
     private val CONFIG_NAME = "candyStore"
     private val CONFIG_KEY_ITEMS = "items"
     private val CONFIG_KEY_EVENT_MODE = "eventMode"
-    private val CONFIG_KEY_SPAWN_RATIO = "spawnRatio"
+    private val CONFIG_KEY_SPAWN_RATIO_MAIN_WORLD = "spawnRatioMainWorld"
+    private val CONFIG_KEY_SPAWN_RATIO_EVENT_WORLD = "spawnRatioEventWorld"
 
     private val random = Random()
 
     private val items = mutableListOf<CandyStoreItem>()
     private var _isEventMode = false
-    private var _spawnRatio = 100
+    private var _spawnRatioMainWorld = 100
+    private var _spawnRatioEventWorld = 100
     private lateinit var candyStoreConfig: Config
 }
