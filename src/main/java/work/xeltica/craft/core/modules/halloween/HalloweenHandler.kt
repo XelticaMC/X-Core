@@ -2,12 +2,14 @@ package work.xeltica.craft.core.modules.halloween
 
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
-import org.bukkit.entity.EntityType
 import org.bukkit.entity.Monster
+import org.bukkit.entity.Player
+import org.bukkit.entity.Projectile
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.*
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause
 import org.bukkit.event.player.PlayerBedEnterEvent
 import work.xeltica.craft.core.events.EntityMobBallHitEvent
 import work.xeltica.craft.core.modules.halloween.HalloweenModule.isEventMob
@@ -36,13 +38,15 @@ class HalloweenHandler : Listener {
     fun onEventMobDamaged(e: EntityDamageEvent) {
         // イベントモブでなければ対象外
         if (!e.entity.isEventMob()) return
-        // プレイヤーに傷つけられた場合は即死
-        if (e.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK && e is EntityDamageByEntityEvent && e.damager.type == EntityType.PLAYER) {
-            e.damage = 99999.0
-            return
+        if (DAMAGE_CAUSE_LIST_PLAYER_KILLED.contains(e.cause) && e is EntityDamageByEntityEvent) {
+            val damager = e.damager
+            // プレイヤーが傷つけたか、プレイヤーが投じた発射物が傷つけた場合、即死
+            if (damager is Player || (damager is Projectile && damager.shooter is Player)) {
+                e.damage = 99999.0
+            }
         }
         // 奈落は普通に通す
-        if (e.cause !== EntityDamageEvent.DamageCause.VOID) {
+        if (e.cause !== DamageCause.VOID) {
             e.isCancelled = true
         }
     }
@@ -56,9 +60,10 @@ class HalloweenHandler : Listener {
         if (!e.entity.isEventMob()) return
         val killer = e.entity.killer
         if (killer == null) {
-            if (e.entity.lastDamageCause?.cause != EntityDamageEvent.DamageCause.VOID) {
+            val cause = e.entity.lastDamageCause?.cause
+            if (!DAMAGE_CAUSE_LIST_PLAYER_KILLED.contains(cause) && cause != DamageCause.VOID) {
                 Bukkit.getLogger()
-                    .warning("イベントモブはプレイヤーキルか奈落によって死ぬべきだが、 ${e.entity.lastDamageCause?.cause ?: "(unknown)"}を要因として死んだ。これは意図しない挙動なので、見つけ次第バグ報告をお願いします。")
+                    .warning("イベントモブはプレイヤーキルか奈落によって死ぬべきだが、 ${cause ?: "(不明)"}を要因として死んだ。これは意図しない挙動なので、見つけ次第バグ報告をお願いします。")
             }
             return
         }
@@ -86,4 +91,10 @@ class HalloweenHandler : Listener {
             e.player.sendActionBar(Component.text("外はハロウィンのムードに包まれている。こんなテンションじゃ寝られない！"))
         }
     }
+
+    private val DAMAGE_CAUSE_LIST_PLAYER_KILLED = listOf(
+        DamageCause.ENTITY_ATTACK,
+        DamageCause.ENTITY_SWEEP_ATTACK,
+        DamageCause.SONIC_BOOM
+    )
 }
