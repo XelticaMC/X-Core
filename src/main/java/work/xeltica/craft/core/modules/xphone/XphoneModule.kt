@@ -3,7 +3,6 @@ package work.xeltica.craft.core.modules.xphone
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
 import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
@@ -69,9 +68,11 @@ object XphoneModule : ModuleBase() {
      */
     fun registerApp(app: AppBase) {
         if (apps.contains(app)) {
-            Bukkit.getLogger().warning("X Phoneアプリ「${app.javaClass.name}」は既に登録されているため、無視します。")
+            Bukkit.getLogger().warning("X Phoneアプリ「${app.javaClass.typeName}」は既に登録されているため、無視します。")
+            return
         }
         apps.add(app)
+        Bukkit.getLogger().warning("X Phoneアプリ「${app.javaClass.typeName}」を登録しました。")
     }
 
     /**
@@ -93,7 +94,7 @@ object XphoneModule : ModuleBase() {
         return FloodgateApi.getInstance().isFloodgatePlayer(player.uniqueId)
     }
 
-    fun ui() = Gui.getInstance() ?: throw IllegalStateException("Try to call ui() in X Phone OS, but X-Core is not fully initialized.")
+    fun ui() = Gui.getInstance()
     fun store() = ItemStore.getInstance() ?: throw IllegalStateException("Try to call store() in X Phone OS, but X-Core is not fully initialized.")
 
     /**
