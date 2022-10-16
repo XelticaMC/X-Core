@@ -31,6 +31,7 @@ object HalloweenModule : ModuleBase() {
             items.clear()
             items.addAll(it.conf.getList(CONFIG_KEY_ITEMS, ArrayList<CandyStoreItem>()) as MutableList<CandyStoreItem>)
             _isEventMode = it.conf.getBoolean(CONFIG_KEY_EVENT_MODE)
+            _spawnRatio = it.conf.getInt(CONFIG_KEY_SPAWN_RATIO, 100)
         }
 
         registerHandler(HalloweenHandler())
@@ -50,6 +51,10 @@ object HalloweenModule : ModuleBase() {
         if (entityType == EntityType.SKELETON && isStrayBiome) entityType = EntityType.STRAY
         val location = entity.location
         entity.remove()
+        // 抽選に外れたらスポーンなし
+        if (random.nextInt(100) < spawnRatio) {
+            return
+        }
         // Y64以下ではスポーンなし
         if (location.y <= 64) {
             return
@@ -240,12 +245,23 @@ object HalloweenModule : ModuleBase() {
         set(value) {
             _isEventMode = value
 
-            candyStoreConfig.conf["eventMode"] = value
+            candyStoreConfig.conf[CONFIG_KEY_EVENT_MODE] = value
             try {
                 candyStoreConfig.save()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
+        }
+
+    /**
+     * スポーン確率
+     */
+    var spawnRatio
+        get() = _spawnRatio
+        set(value) {
+            _spawnRatio = value
+
+            candyStoreConfig.conf[CONFIG_KEY_SPAWN_RATIO] = value
         }
 
     /**
@@ -281,10 +297,12 @@ object HalloweenModule : ModuleBase() {
     private val CONFIG_NAME = "candyStore"
     private val CONFIG_KEY_ITEMS = "items"
     private val CONFIG_KEY_EVENT_MODE = "eventMode"
+    private val CONFIG_KEY_SPAWN_RATIO = "spawnRatio"
 
     private val random = Random()
 
     private val items = mutableListOf<CandyStoreItem>()
     private var _isEventMode = false
+    private var _spawnRatio = 100
     private lateinit var candyStoreConfig: Config
 }
