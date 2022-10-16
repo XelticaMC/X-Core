@@ -296,8 +296,6 @@ object HalloweenModule : ModuleBase() {
     private val entityTypes = listOf(
         EntityType.ZOMBIE,
         EntityType.SKELETON,
-        EntityType.ZOMBIFIED_PIGLIN,
-        EntityType.WITHER_SKELETON,
     )
 
     private val METADATA_KEY_EVENT_MOB = "halloween${GregorianCalendar().get(Calendar.YEAR)}"
