@@ -15,7 +15,8 @@ import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.stores.EbiPowerStore
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
+import work.xeltica.craft.core.utils.CastHelper
 import work.xeltica.craft.core.utils.Config
 import java.io.IOException
 import java.lang.IllegalArgumentException
@@ -28,7 +29,7 @@ object HalloweenModule : ModuleBase() {
         // アメストアの賞品を読み込む
         candyStoreConfig = Config(CONFIG_NAME) {
             items.clear()
-            items.addAll(it.conf.getList(CONFIG_KEY_ITEMS, ArrayList<CandyStoreItem>()) as MutableList<CandyStoreItem>)
+            items.addAll(CastHelper.checkList(it.conf.getList(CONFIG_KEY_ITEMS, ArrayList<CandyStoreItem>()) as List<*>))
             _isEventMode = it.conf.getBoolean(CONFIG_KEY_EVENT_MODE)
             _spawnRatioMainWorld = it.conf.getInt(CONFIG_KEY_SPAWN_RATIO_MAIN_WORLD, 100)
             _spawnRatioEventWorld = it.conf.getInt(CONFIG_KEY_SPAWN_RATIO_EVENT_WORLD, 100)
@@ -75,7 +76,7 @@ object HalloweenModule : ModuleBase() {
         world.spawnEntity(location, entityType, CreatureSpawnEvent.SpawnReason.CUSTOM) {
             if (it is Monster) {
                 with(it.equipment) {
-                    helmet = ItemStack(if (random.nextInt(100) < 10) org.bukkit.Material.JACK_O_LANTERN else org.bukkit.Material.CARVED_PUMPKIN)
+                    helmet = ItemStack(if (random.nextInt(100) < 10) Material.JACK_O_LANTERN else Material.CARVED_PUMPKIN)
                     helmetDropChance = 0f
                     chestplate = null
                     leggings = null
@@ -151,7 +152,7 @@ object HalloweenModule : ModuleBase() {
                         player.world.dropItem(player.location, it.item.clone())
                     }
                     is CandyStoreEPItem -> {
-                        EbiPowerStore.getInstance().tryGive(player, it.ep)
+                        EbiPowerModule.tryGive(player, it.ep)
                     }
                 }
                 player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 2f)
