@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.entity.EntityBreedEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDeathEvent
@@ -132,6 +133,8 @@ class EbiPowerHandler: Listener {
         if (victim.fromMobSpawner()) return
         // マグマキューブおよびスライムは大きい個体以外対象外
         if (victim is Slime && victim.size != 4) return
+        // ReasonがCUSTOMかCOMMANDであれば対象外とする。他モジュール向け機能
+        if (victim.entitySpawnReason == CreatureSpawnEvent.SpawnReason.CUSTOM || victim.entitySpawnReason == CreatureSpawnEvent.SpawnReason.COMMAND) return
 
         var ep = if ("nightmare2" == killer.world.name) MobEPStore.getInstance().getMobDropEP(victim, e) else 6
         val buff = getMobDropBonus(killer.inventory.itemInMainHand) * 4

@@ -204,10 +204,12 @@ public class PlayerHandler implements Listener {
         final var isSneaking = p.isSneaking();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             final var worldName = p.getWorld().getName();
+            // TODO WorldStoreで管理する
             final var isBedDisabledWorld = worldName.equals("hub2")
                 || worldName.equals("sandbox")
                 || worldName.equals("wildareab")
                 || worldName.equals("event")
+                || worldName.equals("event2")
                 ;
             if (isBedDisabledWorld && Tag.BEDS.isTagged(Objects.requireNonNull(e.getClickedBlock()).getType())) {
                 Gui.getInstance().error(p, "ベッドはこの世界では使えない…");

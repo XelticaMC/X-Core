@@ -28,6 +28,7 @@ import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
+import work.xeltica.craft.core.modules.halloween.HalloweenModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
@@ -83,18 +84,16 @@ class XCorePlugin : JavaPlugin() {
             var prev = meta.previousVersion
             if (prev == null) prev = "unknown"
             val current = meta.currentVersion
-            val text = String.format("§aコアシステムを更新しました。%s -> %s", prev, current)
+            val text = String.format("§aX-Coreを%s -> %sへ更新しました。", prev, current)
             if (meta.postToDiscord) {
                 DiscordService.getInstance().postChangelog(current, meta.changeLog)
             }
-            Bukkit.getServer()
-                .audiences()
-                .forEach {
-                    it!!.sendMessage(Component.text(text))
-                    for (log in meta.changeLog) {
-                        it.sendMessage(Component.text("・$log"))
-                    }
+            with(Bukkit.getServer()) {
+                sendMessage(Component.text(text))
+                for (log in meta.changeLog) {
+                    sendMessage(Component.text("・$log"))
                 }
+            }
         }
         logger.info("Booted XelticaMC Core System.")
     }
@@ -253,6 +252,7 @@ class XCorePlugin : JavaPlugin() {
         HintModule,
         HubModule,
         PaymentsModule,
+        HalloweenModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator

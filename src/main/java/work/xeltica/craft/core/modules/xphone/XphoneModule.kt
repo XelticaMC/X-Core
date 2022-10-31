@@ -9,6 +9,7 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.SoundPitch
+import work.xeltica.craft.core.modules.halloween.CandyStoreApp
 import work.xeltica.craft.core.modules.ebipower.EbipowerDrugStoreApp
 import work.xeltica.craft.core.modules.ebipower.EbipowerStoreApp
 import work.xeltica.craft.core.modules.hint.HintApp
@@ -52,6 +53,7 @@ object XphoneModule : ModuleBase() {
             PaymentsApp(),
             PunishApp(),
             StampRallyApp(),
+            CandyStoreApp(),
         ))
 
         registerCommand("xphone", XphoneCommand())
@@ -114,9 +116,6 @@ object XphoneModule : ModuleBase() {
         ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.A1, 2)
         ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.D2, 4)
     }
-
-    lateinit var backButtonItemStack: ItemStack
-        private set
 
     const val name = "X Phone OS 3.0"
 
