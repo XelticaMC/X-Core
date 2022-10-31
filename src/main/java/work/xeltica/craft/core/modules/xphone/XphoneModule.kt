@@ -17,7 +17,6 @@ import work.xeltica.craft.core.modules.notification.NotificationApp
 import work.xeltica.craft.core.modules.payments.PaymentsApp
 import work.xeltica.craft.core.modules.quickchat.QuickChatApp
 import work.xeltica.craft.core.xphone.apps.*
-import java.lang.IllegalStateException
 
 /**
  * X Phone の基幹となるシステムです。
@@ -95,8 +94,8 @@ object XphoneModule : ModuleBase() {
         return FloodgateApi.getInstance().isFloodgatePlayer(player.uniqueId)
     }
 
-    fun ui() = Gui.getInstance() ?: throw IllegalStateException("Try to call ui() in X Phone OS, but X-Core is not fully initialized.")
-    fun store() = ItemModule ?: throw IllegalStateException("Try to call store() in X Phone OS, but X-Core is not fully initialized.")
+    fun ui() = Gui.getInstance()
+    fun store() = ItemModule
 
     /**
      * 起動音を再生します。

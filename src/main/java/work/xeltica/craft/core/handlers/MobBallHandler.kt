@@ -276,7 +276,7 @@ class MobBallHandler : Listener {
         }
         if (entity is Mob) {
             // 全ての標準装備
-            entity.equipment?.clear()
+            entity.equipment.clear()
         }
     }
 

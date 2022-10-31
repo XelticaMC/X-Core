@@ -45,7 +45,7 @@ import work.xeltica.craft.core.modules.bossbar.BossBarModule;
 import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.modules.hub.HubModule;
 import work.xeltica.craft.core.modules.hub.HubType;
-import work.xeltica.craft.core.stores.ItemStore;
+import work.xeltica.craft.core.modules.item.ItemModule;
 import work.xeltica.craft.core.stores.NickNameStore;
 import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
@@ -108,7 +108,7 @@ public class PlayerHandler implements Listener {
         final var record = pstore.open(p);
 
         if (!record.getBoolean(PlayerDataKey.GIVEN_PHONE)) {
-            p.getInventory().addItem(ItemStore.getInstance().getItem(ItemStore.ITEM_NAME_XPHONE));
+            p.getInventory().addItem(ItemModule.INSTANCE.getItem(ItemModule.ITEM_NAME_XPHONE));
             record.set(PlayerDataKey.GIVEN_PHONE, true);
         }
 

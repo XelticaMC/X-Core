@@ -19,7 +19,7 @@ import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.models.NbsModel;
 import work.xeltica.craft.core.modules.counter.PlayerCounterFinish;
 import work.xeltica.craft.core.modules.counter.PlayerCounterStart;
-import work.xeltica.craft.core.stores.ItemStore;
+import work.xeltica.craft.core.modules.item.ItemModule;
 import work.xeltica.craft.core.stores.NbsStore;
 import work.xeltica.craft.core.utils.EventUtility;
 import work.xeltica.craft.core.utils.Ticks;
@@ -125,7 +125,7 @@ public class MiscHandler implements Listener {
         // イベント発生後はまだテレポートが終わっていなかったりするので、5tickほど遅延させる
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
             if (!"event".equals(player.getWorld().getName())) return;
-            ItemStore.getInstance().givePhoneIfNeeded(player);
+            ItemModule.INSTANCE.givePhoneIfNeeded(player);
         }, 5);
     }
 }
