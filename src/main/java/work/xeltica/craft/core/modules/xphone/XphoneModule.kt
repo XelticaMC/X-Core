@@ -3,7 +3,6 @@ package work.xeltica.craft.core.modules.xphone
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
 import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
@@ -13,10 +12,10 @@ import work.xeltica.craft.core.modules.halloween.CandyStoreApp
 import work.xeltica.craft.core.modules.ebipower.EbipowerDrugStoreApp
 import work.xeltica.craft.core.modules.ebipower.EbipowerStoreApp
 import work.xeltica.craft.core.modules.hint.HintApp
+import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.notification.NotificationApp
 import work.xeltica.craft.core.modules.payments.PaymentsApp
 import work.xeltica.craft.core.modules.quickchat.QuickChatApp
-import work.xeltica.craft.core.stores.ItemStore
 import work.xeltica.craft.core.xphone.apps.*
 import java.lang.IllegalStateException
 
@@ -97,7 +96,7 @@ object XphoneModule : ModuleBase() {
     }
 
     fun ui() = Gui.getInstance() ?: throw IllegalStateException("Try to call ui() in X Phone OS, but X-Core is not fully initialized.")
-    fun store() = ItemStore.getInstance() ?: throw IllegalStateException("Try to call store() in X Phone OS, but X-Core is not fully initialized.")
+    fun store() = ItemModule ?: throw IllegalStateException("Try to call store() in X Phone OS, but X-Core is not fully initialized.")
 
     /**
      * 起動音を再生します。

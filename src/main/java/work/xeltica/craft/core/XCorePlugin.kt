@@ -122,7 +122,6 @@ class XCorePlugin : JavaPlugin() {
         VehicleStore()
         PlayerStore()
         WorldStore()
-        ItemStore()
         MetaStore()
         NickNameStore()
         RankingStore()
