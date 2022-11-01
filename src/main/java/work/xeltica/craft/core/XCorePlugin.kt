@@ -32,6 +32,8 @@ import work.xeltica.craft.core.modules.halloween.HalloweenModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
+import work.xeltica.craft.core.modules.item.ItemModule
+import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.utils.DiscordService
 
 /**
@@ -79,7 +81,7 @@ class XCorePlugin : JavaPlugin() {
             return
         }
         luckPerms.contextManager.registerCalculator(calculator)
-        val meta = MetaStore.getInstance()
+        val meta = MetaModule
         if (meta.isUpdated) {
             var prev = meta.previousVersion
             if (prev == null) prev = "unknown"
@@ -122,7 +124,6 @@ class XCorePlugin : JavaPlugin() {
         VehicleStore()
         PlayerStore()
         WorldStore()
-        MetaStore()
         NickNameStore()
         RankingStore()
         NbsStore()
@@ -252,6 +253,8 @@ class XCorePlugin : JavaPlugin() {
         HubModule,
         PaymentsModule,
         HalloweenModule,
+        ItemModule,
+        MetaModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator
