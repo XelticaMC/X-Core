@@ -34,6 +34,7 @@ import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.meta.MetaModule
+import work.xeltica.craft.core.modules.mobball.MobBallHandler
 import work.xeltica.craft.core.utils.DiscordService
 
 /**
@@ -128,7 +129,6 @@ class XCorePlugin : JavaPlugin() {
         RankingStore()
         NbsStore()
         MobEPStore()
-        MobBallStore()
         StampRallyStore()
     }
 
@@ -140,7 +140,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("pvp", CommandPvp())
         CommandRegistry.register("signedit", CommandSignEdit())
         CommandRegistry.register("givecustomitem", CommandGiveCustomItem())
-        CommandRegistry.register("givemobball", CommandGiveMobBall())
         CommandRegistry.register("report", CommandReport())
         CommandRegistry.register("localtime", CommandLocalTime())
         CommandRegistry.register("boat", CommandBoat())

@@ -15,7 +15,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
-import work.xeltica.craft.core.stores.MobBallStore
+import work.xeltica.craft.core.modules.mobball.MobBallModule
 import java.util.function.Consumer
 
 class EpShopCommand: CommandPlayerOnlyBase() {
@@ -69,7 +69,7 @@ class EpShopCommand: CommandPlayerOnlyBase() {
                     player.sendMessage(Component.text("§a" + getItemName(item.item) + "§rを購入しました！"))
                     player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
                     HintModule.achieve(player, Hint.EPSHOP)
-                    if (MobBallStore.getInstance().isMobBall(item.item)) {
+                    if (MobBallModule.isMobBall(item.item)) {
                         HintModule.achieve(player, Hint.GET_BALL)
                     }
                 }

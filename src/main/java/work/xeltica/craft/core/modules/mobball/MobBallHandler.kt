@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.handlers
+package work.xeltica.craft.core.modules.mobball
 
 import de.tr7zw.nbtapi.NBTEntity
 import de.tr7zw.nbtapi.NBTItem
@@ -22,7 +22,6 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.modules.hint.HintModule
-import work.xeltica.craft.core.stores.MobBallStore
 import work.xeltica.craft.core.stores.PlayerStore
 import work.xeltica.craft.core.utils.CitizensApiProvider.Companion.isCitizensNpc
 import java.util.*
@@ -30,7 +29,7 @@ import java.util.*
 class MobBallHandler : Listener {
     @EventHandler
     fun onPlayerThrowMobBall(e: PlayerEggThrowEvent) {
-        if (!MobBallStore.getInstance().isMobBall(e.egg.item)) return
+        if (!MobBallModule.isMobBall(e.egg.item)) return
 
         e.isHatching = false
     }
@@ -39,7 +38,7 @@ class MobBallHandler : Listener {
     fun onMobBallHitEntity(e: ProjectileHitEvent) {
         val egg = e.entity as? Egg ?: return
         val player = egg.shooter as? Player ?: return
-        if (!MobBallStore.getInstance().isMobBall(egg.item)) return
+        if (!MobBallModule.isMobBall(egg.item)) return
 
         egg.remove()
         e.isCancelled = true
@@ -83,7 +82,7 @@ class MobBallHandler : Listener {
         val eggNbt = restoreMob(target, spawnEgg)
         val eggEntity = egg.world.dropItem(egg.location, spawnEgg)
         // 自分のペットであれば100%捕獲に成功する
-        val difficulty = if (isTamedByMe) 100 else MobBallStore.getInstance().calculate(target)
+        val difficulty = if (isTamedByMe) 100 else MobBallModule.calculate(target)
         var isGotcha = false
 
         eggEntity.setCanMobPickup(false)
@@ -164,7 +163,7 @@ class MobBallHandler : Listener {
         }
         nbt.setBoolean("isActive", false)
         nbt.applyNBT(item)
-        MobBallStore.getInstance().setMobCaseMeta(item)
+        MobBallModule.setMobCaseMeta(item)
         e.isCancelled = true
     }
 
@@ -203,7 +202,7 @@ class MobBallHandler : Listener {
         val player = e.entity
         if (player !is Player) return
         val item = e.item.itemStack
-        if (MobBallStore.getInstance().isMobBall(item)) {
+        if (MobBallModule.isMobBall(item)) {
             HintModule.achieve(player, Hint.GET_BALL)
         }
     }
@@ -219,7 +218,7 @@ class MobBallHandler : Listener {
         eggNbt.setString("mobType", target.type.name)
         eggNbt.setString("mobCase", target.customName ?: target.name)
         eggNbt.applyNBT(spawnEgg)
-        MobBallStore.getInstance().setMobCaseMeta(spawnEgg)
+        MobBallModule.setMobCaseMeta(spawnEgg)
         target.remove()
         target.world.playSound(target.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
         showTeleportParticle(target.location)
