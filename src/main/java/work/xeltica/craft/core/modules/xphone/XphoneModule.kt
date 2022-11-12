@@ -16,6 +16,7 @@ import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.notification.NotificationApp
 import work.xeltica.craft.core.modules.payments.PaymentsApp
 import work.xeltica.craft.core.modules.quickchat.QuickChatApp
+import work.xeltica.craft.core.modules.stamprally.StampRallyApp
 import work.xeltica.craft.core.xphone.apps.*
 
 /**

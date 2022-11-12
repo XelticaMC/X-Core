@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.handlers
+package work.xeltica.craft.core.modules.stamprally
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
@@ -11,17 +11,15 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.SignChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
-import work.xeltica.craft.core.stores.StampRallyStore
 
 class StampRallyHandler: Listener {
     @EventHandler
     fun createStamp(event: SignChangeEvent) {
-        val stampRallyStore = StampRallyStore.getInstance()
         val player = event.player
 
         val line0 = event.line(0) as? TextComponent
         if (line0?.content()!! != "[stamp]") return
-        if (!player.hasPermission(StampRallyStore.CREATE_PERMISSION)) {
+        if (!player.hasPermission(StampRallyModule.CREATE_PERMISSION)) {
             player.sendMessage("スタンプを作成する権限がありません")
             return
         }
@@ -32,7 +30,7 @@ class StampRallyHandler: Listener {
                 player.sendMessage("スタンプ名が入力されていません")
                 return
             }
-            if (stampRallyStore.contains(name)) {
+            if (StampRallyModule.contains(name)) {
                 player.sendMessage("スタンプ名が既に存在します")
                 return
             }
@@ -40,14 +38,14 @@ class StampRallyHandler: Listener {
             event.line(0, Component.text("［§aスタンプ§r］"))
             event.line(1, Component.text("§b"+line1.content()))
 
-            stampRallyStore.create(name, event.block.location)
+            StampRallyModule.create(name, event.block.location)
             player.sendMessage("スタンプ: " + name + "を作成しました")
         }
     }
 
     @EventHandler
     fun destroyStamp(event: BlockBreakEvent) {
-        val stampRallyStore = StampRallyStore.getInstance()
+        val stampRallyStore = StampRallyModule
         val player = event.player
         val state = event.block.state
         if (state !is Sign) return
@@ -60,7 +58,7 @@ class StampRallyHandler: Listener {
             val name = line1.content()
             val stampName = name.removePrefix("§b")
             if (!stampRallyStore.contains(stampName)) return
-            if (!player.hasPermission(StampRallyStore.DESTROY_PERMISSION)) {
+            if (!player.hasPermission(StampRallyModule.DESTROY_PERMISSION)) {
                 player.sendMessage("スタンプを破壊する権限がありません")
                 event.isCancelled = true
                 return
@@ -88,7 +86,7 @@ class StampRallyHandler: Listener {
                 val sign = getNearStampSign(location) ?: return
                 val line1 = sign.line(1) as? TextComponent ?: return
                 val stampName = line1.content().removePrefix("§b")
-                StampRallyStore.getInstance().activate(event.player, stampName)
+                StampRallyModule.activate(event.player, stampName)
             }
         }
     }

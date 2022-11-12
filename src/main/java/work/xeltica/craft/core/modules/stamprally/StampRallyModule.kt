@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.stores
+package work.xeltica.craft.core.modules.stamprally
 
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -6,27 +6,24 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.Sound
 import org.bukkit.configuration.MemorySection
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.models.Stamp
+import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.utils.Config
-import java.util.UUID
+import java.util.*
+import kotlin.collections.HashSet
 
-class StampRallyStore {
-    companion object {
-        private lateinit var instance: StampRallyStore
-        fun getInstance(): StampRallyStore = instance
+object StampRallyModule: ModuleBase() {
+    const val CREATE_PERMISSION = "otanoshimi.stamp.create"
+    const val DESTROY_PERMISSION = "otanoshimi.stamp.destroy"
 
-        const val CREATE_PERMISSION = "otanoshimi.stamp.create"
-        const val DESTROY_PERMISSION = "otanoshimi.stamp.destroy"
-    }
+    private lateinit var stampList: Config
+    private lateinit var activatedStamp: Config
 
-    private val stampList: Config
-    private val activatedStamp: Config
-
-    init {
-        instance = this
+    override fun onEnable() {
         stampList = Config("stampList")
         activatedStamp = Config("activatedStamp")
+
+        registerHandler(StampRallyHandler())
     }
 
     fun getDonePlayerList(): List<OfflinePlayer> {

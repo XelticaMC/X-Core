@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.models
+package work.xeltica.craft.core.modules.stamprally
 
 import org.bukkit.Bukkit
 import org.bukkit.Location

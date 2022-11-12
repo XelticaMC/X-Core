@@ -34,7 +34,8 @@ import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.meta.MetaModule
-import work.xeltica.craft.core.modules.mobball.MobBallHandler
+import work.xeltica.craft.core.modules.mobball.MobBallModule
+import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.utils.DiscordService
 
 /**
@@ -129,7 +130,6 @@ class XCorePlugin : JavaPlugin() {
         RankingStore()
         NbsStore()
         MobEPStore()
-        StampRallyStore()
     }
 
     private fun loadCommands() {
@@ -186,10 +186,6 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded LoginBonusHandler")
         pm.registerEvents(TicketWildareaBHandler(), this)
         logger.info("Loaded TicketWildareaBHandler")
-        pm.registerEvents(MobBallHandler(), this)
-        logger.info("Loaded MobBallHandler")
-        pm.registerEvents(StampRallyHandler(), this)
-        logger.info("Loaded StampRallyHandler")
         pm.registerEvents(Gui.getInstance(), this)
         logger.info("Loaded Gui")
     }
@@ -254,6 +250,8 @@ class XCorePlugin : JavaPlugin() {
         HalloweenModule,
         ItemModule,
         MetaModule,
+        MobBallModule,
+        StampRallyModule
     )
 
     private lateinit var calculator: CitizenTimerCalculator
