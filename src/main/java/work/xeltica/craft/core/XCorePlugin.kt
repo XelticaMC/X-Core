@@ -130,7 +130,6 @@ class XCorePlugin : JavaPlugin() {
         NickNameStore()
         RankingStore()
         NbsStore()
-        MobEPStore()
     }
 
     private fun loadCommands() {
