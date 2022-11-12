@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.models
+package work.xeltica.craft.core.modules.notification
 
 import org.bukkit.inventory.ItemStack
 import java.util.UUID

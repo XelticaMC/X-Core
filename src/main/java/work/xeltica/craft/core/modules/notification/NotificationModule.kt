@@ -13,7 +13,6 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.models.Notification
 import work.xeltica.craft.core.utils.Config
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import java.io.File
