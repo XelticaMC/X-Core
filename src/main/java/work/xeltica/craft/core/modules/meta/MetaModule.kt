@@ -10,13 +10,14 @@ object MetaModule: ModuleBase() {
     val changeLog = listOf("モジュール化").toTypedArray()
 
     lateinit var meta: Config
-    val currentVersion = XCorePlugin.instance.description.version
+    var currentVersion: String? = null; private set
     var previousVersion: String? = null; private set
     var isUpdated = false; private set
     var postToDiscord = false; private set
 
     override fun onEnable() {
         meta = Config("meta")
+        currentVersion = XCorePlugin.instance.description.version
         checkUpdate()
     }
 
