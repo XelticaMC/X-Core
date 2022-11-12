@@ -26,6 +26,7 @@ import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.clover.CloverModule
 import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
+import work.xeltica.craft.core.modules.ebipower.EbipowerObserver
 import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
 import work.xeltica.craft.core.modules.halloween.HalloweenModule

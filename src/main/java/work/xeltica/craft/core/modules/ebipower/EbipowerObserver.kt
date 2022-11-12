@@ -1,10 +1,9 @@
-package work.xeltica.craft.core.runnables
+package work.xeltica.craft.core.modules.ebipower
 
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.modules.hint.Hint
-import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.modules.hint.HintModule
 
 /**
