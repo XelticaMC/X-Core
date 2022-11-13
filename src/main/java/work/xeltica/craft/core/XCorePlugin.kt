@@ -128,7 +128,6 @@ class XCorePlugin : JavaPlugin() {
         PlayerStore()
         WorldStore()
         NickNameStore()
-        RankingStore()
         NbsStore()
     }
 
