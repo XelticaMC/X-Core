@@ -108,7 +108,7 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.clearMap()
         Gui.resetInstance()
         unloadPlugins()
-        NbsStore.getInstance().stopAll()
+        NbsModule.stopAll()
         unloadModules()
         val provider = Bukkit.getServicesManager().getRegistration(
             LuckPerms::class.java
@@ -175,8 +175,6 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded NightmareHandler")
         pm.registerEvents(LiveModeHandler(), this)
         logger.info("Loaded LiveModeHandler")
-        pm.registerEvents(NbsHandler(), this)
-        logger.info("Loaded NbsHandler")
         pm.registerEvents(PlayerTntHandler(), this)
         logger.info("Loaded PlayTntHandler")
         pm.registerEvents(MiscHandler(), this)
