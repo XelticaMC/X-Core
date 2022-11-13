@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.github.ucchyocean.lc3.bukkit.event.LunaChatBukkitChannelMessageEvent;
 import com.github.ucchyocean.lc3.member.ChannelMemberPlayer;
+import io.papermc.paper.event.player.ChatEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -152,6 +153,15 @@ public class PlayerHandler implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerChatForCat(ChatEvent e) {
+        // ネコであれば文章をいじる
+        if (PlayerStore.getInstance().open(e.getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
+            final var message = PlainTextComponentSerializer.plainText().serialize(e.message());
+            e.message(Component.text(nyaize(message)));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChatForCatOnChannel(LunaChatBukkitChannelMessageEvent e) {
         // ネコであれば文章をいじる
         final var member = e.getMember();
@@ -164,6 +174,12 @@ public class PlayerHandler implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayer草ed(AsyncPlayerChatEvent e) {
         handle草(e.getMessage(), e.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayer草ed(ChatEvent e) {
+        final var message = PlainTextComponentSerializer.plainText().serialize(e.message());
+        handle草(message, e.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

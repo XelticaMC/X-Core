@@ -4,6 +4,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
+import work.xeltica.craft.core.stores.WorldStore
 import work.xeltica.craft.core.utils.EventUtility
 import work.xeltica.craft.core.xphone.apps.AppBase
 import java.util.function.Consumer
@@ -27,11 +28,16 @@ class StampRallyApp: AppBase() {
 
         val onClick = Consumer<MenuItem> {
             val stampInfo = StampRallyModule.getStampInfo(it.name)
+
             val sb = StringBuilder()
-            sb.append("world: " + stampInfo.loc.world.name + "\n")
-            sb.append("x: " + stampInfo.loc.blockX + "\n")
-            sb.append("y: " + stampInfo.loc.blockY + "\n")
-            sb.append("z: " + stampInfo.loc.blockZ + "\n")
+            sb.appendLine("ワールド：" + WorldStore.getInstance().getWorldDisplayName(stampInfo.loc.world.name))
+            sb.append("座標：(")
+            sb.append(stampInfo.loc.blockX)
+            sb.append(", ")
+            sb.append(stampInfo.loc.blockY)
+            sb.append(", ")
+            sb.append(stampInfo.loc.blockZ)
+            sb.appendLine(")")
             ui.openDialog(player, stampInfo.name, sb.toString())
         }
 
