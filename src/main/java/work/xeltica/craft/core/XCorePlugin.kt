@@ -38,6 +38,7 @@ import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.modules.stamprally.StampRallyModule
+import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.utils.DiscordService
 
 /**
@@ -129,7 +130,6 @@ class XCorePlugin : JavaPlugin() {
         PlayerStore()
         WorldStore()
         NickNameStore()
-        NbsStore()
     }
 
     private fun loadCommands() {
@@ -249,7 +249,8 @@ class XCorePlugin : JavaPlugin() {
         MetaModule,
         MobBallModule,
         StampRallyModule,
-        RankingModule
+        RankingModule,
+        NbsModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator
