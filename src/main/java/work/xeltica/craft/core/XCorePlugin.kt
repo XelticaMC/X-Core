@@ -36,6 +36,7 @@ import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
+import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.utils.DiscordService
 
@@ -149,7 +150,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("__core_gui_event__", CommandXCoreGuiEvent())
         CommandRegistry.register("live", CommandLive())
         CommandRegistry.register("nick", CommandNickName())
-        CommandRegistry.register("ranking", CommandRanking())
         CommandRegistry.register("countdown", CommandCountdown())
         CommandRegistry.register("xreload", CommandXReload())
         CommandRegistry.register("xtpreset", CommandXtpReset())
@@ -250,7 +250,8 @@ class XCorePlugin : JavaPlugin() {
         ItemModule,
         MetaModule,
         MobBallModule,
-        StampRallyModule
+        StampRallyModule,
+        RankingModule
     )
 
     private lateinit var calculator: CitizenTimerCalculator

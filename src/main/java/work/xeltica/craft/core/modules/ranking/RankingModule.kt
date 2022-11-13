@@ -11,7 +11,7 @@ object RankingModule: ModuleBase() {
 
     override fun onEnable() {
         config = Config("ranking")
-
+        registerCommand("ranking", RankingCommand())
     }
 
     @Throws(IOException::class)
