@@ -60,7 +60,7 @@ class Ranking(val name: String, private val conf: Config) {
         return thisSection.getBoolean("hologramHidden")
     }
 
-    fun setHologram(location: Location, isHidden: Boolean) {
+    fun setHologram(location: Location?, isHidden: Boolean) {
         set("hologramLocation", location, false)
         set("hologramHidden", isHidden, false)
         save()
@@ -143,11 +143,11 @@ class Ranking(val name: String, private val conf: Config) {
         RankingModule.renderAll()
     }
 
-    private fun set(key: String, value: Any) {
+    private fun set(key: String, value: Any?) {
         set(key, value, true)
     }
 
-    private fun set(key: String, value: Any, save: Boolean) {
+    private fun set(key: String, value: Any?, save: Boolean) {
         thisSection.set(key, value)
         if (save) conf.save()
     }
