@@ -8,9 +8,9 @@ import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.models.Ranking
+import work.xeltica.craft.core.modules.ranking.Ranking
+import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.stores.PlayerStore
-import work.xeltica.craft.core.stores.RankingStore
 import java.io.IOException
 import java.util.*
 import java.util.function.Consumer
@@ -177,8 +177,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
             }
         } else if (args.size == 4) {
             if ("bind" == subcommand) {
-                val store = RankingStore.getInstance()
-                val rankings = store.all.stream().map { obj: Ranking -> obj.name }.toList()
+                val rankings = RankingModule.getAll().stream().map { obj: Ranking -> obj.name }.toList()
                 val completions = ArrayList<String>()
                 StringUtil.copyPartialMatches(args[3], rankings, completions)
                 completions.sort()

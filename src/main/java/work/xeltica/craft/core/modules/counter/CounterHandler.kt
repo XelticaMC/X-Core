@@ -21,7 +21,7 @@ import java.io.IOException
 import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import org.geysermc.floodgate.api.FloodgateApi
 import org.geysermc.floodgate.util.DeviceOs
-import work.xeltica.craft.core.stores.RankingStore
+import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.utils.Time
 
@@ -201,7 +201,7 @@ class CounterHandler : Listener {
     }
 
     private fun addRanking(id: String?, player: Player, diff: Int) {
-        val rankingApi = RankingStore.getInstance()
+        val rankingApi = RankingModule
         if (id != null && rankingApi.has(id)) {
             val ranking = rankingApi[id]
             val prev = ranking!![player.uniqueId.toString()]

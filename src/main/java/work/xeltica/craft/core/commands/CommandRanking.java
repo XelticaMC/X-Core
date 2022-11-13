@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -14,8 +15,8 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.api.commands.CommandBase;
-import work.xeltica.craft.core.models.Ranking;
-import work.xeltica.craft.core.stores.RankingStore;
+import work.xeltica.craft.core.modules.ranking.Ranking;
+import work.xeltica.craft.core.modules.ranking.RankingModule;
 
 /**
  * ランキングを操作するコマンド
@@ -27,7 +28,7 @@ public class CommandRanking extends CommandBase {
         if (args.length < 1) return false;
 
         final var subCommand = args[0].toLowerCase();
-        final var api = RankingStore.getInstance();
+        final var api = RankingModule.INSTANCE;
         final var id = sender instanceof Player p ? p.getUniqueId().toString() : null;
         
         try {
@@ -72,10 +73,10 @@ public class CommandRanking extends CommandBase {
                         sender.sendMessage("存在しません。");
                         return true;
                     }
-                    final var ranking = api.get(name).queryRanking();
-                    for (var i = 0; i < ranking.length; i++) {
-                        final var record = ranking[i];
-                        sender.sendMessage(String.format("§6%d位:§a%s §b%s", i + 1, record.id(), record.score()));
+                    final var ranking = Objects.requireNonNull(api.get(name)).queryRanking();
+                    for (var i = 0; i < ranking.size(); i++) {
+                        final var record = ranking.get(i);
+                        sender.sendMessage(String.format("§6%d位:§a%s §b%s", i + 1, record.getId(), record.getScore()));
                     }
                 }
                 case "list" -> {
@@ -200,7 +201,7 @@ public class CommandRanking extends CommandBase {
             return completions;
         } else if (args.length == 2) {
             if (!Arrays.asList("delete", "query", "set", "unset", "hologram", "mode").contains(args[0])) return COMPLETE_LIST_EMPTY;
-            final var store = RankingStore.getInstance();
+            final var store = RankingModule.INSTANCE;
             final var rankings = store.getAll().stream().map(Ranking::getName).toList();
             final var completions = new ArrayList<String>();
             StringUtil.copyPartialMatches(args[1], rankings, completions);
