@@ -4,7 +4,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.models.PlayerRecord
-import work.xeltica.craft.core.stores.NbsStore
+import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.stores.PlayerStore
 
 /**
@@ -25,7 +25,7 @@ class EventCancelApp : AppBase() {
 
         player.sendMessage("カウントダウンをリタイアしました。本日は${if (count == 0) "あと1回再チャレンジできます。" else "もう再チャレンジできません。"}")
         player.performCommand("respawn")
-        NbsStore.getInstance().stopRadio(player)
+        NbsModule.stopRadio(player)
     }
 
     override fun isVisible(player: Player): Boolean {

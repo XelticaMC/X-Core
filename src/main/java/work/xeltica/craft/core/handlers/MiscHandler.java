@@ -16,11 +16,11 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.models.NbsModel;
 import work.xeltica.craft.core.modules.counter.PlayerCounterFinish;
 import work.xeltica.craft.core.modules.counter.PlayerCounterStart;
 import work.xeltica.craft.core.modules.item.ItemModule;
-import work.xeltica.craft.core.stores.NbsStore;
+import work.xeltica.craft.core.modules.nbs.NbsModel;
+import work.xeltica.craft.core.modules.nbs.NbsModule;
 import work.xeltica.craft.core.utils.EventUtility;
 import work.xeltica.craft.core.utils.Ticks;
 
@@ -97,7 +97,7 @@ public class MiscHandler implements Listener {
         final var player = e.getPlayer();
         if (!"event".equals(player.getWorld().getName())) return;
 
-        NbsStore.getInstance().playRadio(player, "submerged3", NbsModel.PlaybackMode.LOOP);
+        NbsModule.INSTANCE.playRadio(player, "submerged3", NbsModel.PlaybackMode.LOOP);
     }
 
     /**
@@ -108,7 +108,7 @@ public class MiscHandler implements Listener {
         final var player = e.getPlayer();
         if (!"event".equals(player.getWorld().getName())) return;
 
-        NbsStore.getInstance().stopRadio(player);
+        NbsModule.INSTANCE.stopRadio(player);
 
         Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
             player.sendMessage(ChatColor.AQUA + "メインワールドに戻る場合は、X Phoneをお使いください。");

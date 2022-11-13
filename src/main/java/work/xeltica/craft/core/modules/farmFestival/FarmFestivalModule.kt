@@ -11,8 +11,8 @@ import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.XCoreException
-import work.xeltica.craft.core.models.NbsModel
-import work.xeltica.craft.core.stores.NbsStore
+import work.xeltica.craft.core.modules.nbs.NbsModel
+import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.utils.Ticks
 import java.util.*
 
@@ -93,7 +93,7 @@ object FarmFestivalModule : ModuleBase() {
                         override fun run() {
                             if (!isPlaying) return
                             eventPlayers.forEach {
-                                NbsStore.getInstance().playRadio(it, "farmfest22", NbsModel.PlaybackMode.LOOP)
+                                NbsModule.playRadio(it, "farmfest22", NbsModel.PlaybackMode.LOOP)
                             }
                             radioPlayers = eventPlayers
                         }
@@ -155,7 +155,7 @@ object FarmFestivalModule : ModuleBase() {
             Bukkit.getLogger().info("${it.name}: ${board[it]}ポイント")
         }
         radioPlayers.forEach {
-            NbsStore.getInstance().stopRadio(it)
+            NbsModule.stopRadio(it)
         }
     }
 
