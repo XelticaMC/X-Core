@@ -39,6 +39,7 @@ import work.xeltica.craft.core.modules.mobball.MobBallModule
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.modules.nbs.NbsModule
+import work.xeltica.craft.core.modules.omikuji.OmikujiModule
 import work.xeltica.craft.core.utils.DiscordService
 
 /**
@@ -125,7 +126,6 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private fun loadStores() {
-        OmikujiStore()
         VehicleStore()
         PlayerStore()
         WorldStore()
@@ -135,7 +135,6 @@ class XCorePlugin : JavaPlugin() {
     private fun loadCommands() {
         CommandRegistry.clearMap()
 
-        CommandRegistry.register("omikuji", CommandOmikuji())
         CommandRegistry.register("respawn", CommandRespawn())
         CommandRegistry.register("pvp", CommandPvp())
         CommandRegistry.register("signedit", CommandSignEdit())
@@ -251,6 +250,7 @@ class XCorePlugin : JavaPlugin() {
         StampRallyModule,
         RankingModule,
         NbsModule,
+        OmikujiModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator

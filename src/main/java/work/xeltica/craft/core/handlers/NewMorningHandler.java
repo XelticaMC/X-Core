@@ -4,7 +4,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import work.xeltica.craft.core.events.NewMorningEvent;
-import work.xeltica.craft.core.stores.OmikujiStore;
+import work.xeltica.craft.core.modules.omikuji.OmikujiModule;
 
 /**
  * 日付が変わった際のイベントハンドラーをまとめています。
@@ -13,6 +13,6 @@ import work.xeltica.craft.core.stores.OmikujiStore;
 public class NewMorningHandler implements Listener {
     @EventHandler
     public void onNewMorning(NewMorningEvent e) {
-        OmikujiStore.getInstance().reset();
+        OmikujiModule.INSTANCE.reset();
     }
 }

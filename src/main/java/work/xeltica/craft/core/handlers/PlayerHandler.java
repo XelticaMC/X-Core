@@ -40,14 +40,14 @@ import net.luckperms.api.node.types.InheritanceNode;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.modules.hint.Hint;
-import work.xeltica.craft.core.models.OmikujiScore;
 import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.modules.hub.HubModule;
 import work.xeltica.craft.core.modules.hub.HubType;
 import work.xeltica.craft.core.modules.item.ItemModule;
+import work.xeltica.craft.core.modules.omikuji.OmikujiModule;
+import work.xeltica.craft.core.modules.omikuji.OmikujiScore;
 import work.xeltica.craft.core.stores.NickNameStore;
-import work.xeltica.craft.core.stores.OmikujiStore;
 import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 
@@ -72,10 +72,10 @@ public class PlayerHandler implements Listener {
         if (p.getHealth() - e.getFinalDamage() > 0)
             return;
 
-        final var score = OmikujiStore.getInstance().get(p);
+        final var score = OmikujiModule.INSTANCE.get(p);
         final var th =
-            score == OmikujiScore.Tokudaikichi ? 5 :
-            score == OmikujiScore.Daikichi ? 1 : 0;
+            score == OmikujiScore.TOKUDAIKICHI ? 5 :
+            score == OmikujiScore.DAIKICHI ? 1 : 0;
 
         if ((int)(Math.random() * 100) >= th) return;
 
