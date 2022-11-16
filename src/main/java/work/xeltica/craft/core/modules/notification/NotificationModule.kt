@@ -20,9 +20,6 @@ import java.io.FileReader
 import java.util.UUID
 
 object NotificationModule: ModuleBase() {
-    lateinit var instance: NotificationModule
-    private set
-
     private lateinit var confirmed: Config
 
     private const val FILE_NAME = "notification.json"
@@ -44,7 +41,6 @@ object NotificationModule: ModuleBase() {
     private val notifications: MutableList<Notification> = mutableListOf()
 
     override fun onEnable() {
-        instance = this
         confirmed = Config("confirmed")
         registerHandler(NotificationHandler())
         reload()
