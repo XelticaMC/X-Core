@@ -66,32 +66,6 @@ public class PlayerHandler implements Listener {
     }
 
     @EventHandler
-    public void onPlayerDeath(EntityDamageEvent e) {
-        if (!(e.getEntity() instanceof final Player p))
-            return;
-        if (p.getHealth() - e.getFinalDamage() > 0)
-            return;
-
-        final var score = OmikujiModule.INSTANCE.get(p);
-        final var th =
-            score == OmikujiScore.TOKUDAIKICHI ? 5 :
-            score == OmikujiScore.DAIKICHI ? 1 : 0;
-
-        if ((int)(Math.random() * 100) >= th) return;
-
-        final var i = p.getInventory();
-        final var heldItem = i.getItemInMainHand();
-        i.remove(heldItem);
-        i.setItemInMainHand(new ItemStack(Material.TOTEM_OF_UNDYING));
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                i.setItemInMainHand(heldItem);
-            }
-        }.runTaskLater(this.plugin, 1);
-    }
-
-    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         final var p = e.getPlayer();
 

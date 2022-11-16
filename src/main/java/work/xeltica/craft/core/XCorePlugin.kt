@@ -160,8 +160,6 @@ class XCorePlugin : JavaPlugin() {
 
     private fun loadHandlers() {
         val pm = server.pluginManager
-        pm.registerEvents(NewMorningHandler(), this)
-        logger.info("Loaded NewMorningHandler")
         pm.registerEvents(PlayerHandler(this), this)
         logger.info("Loaded PlayerHandler")
         pm.registerEvents(VehicleHandler(), this)

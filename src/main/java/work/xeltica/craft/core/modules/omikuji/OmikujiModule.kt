@@ -12,6 +12,7 @@ object OmikujiModule: ModuleBase() {
 
     override fun onEnable() {
         config = Config("omikujistore")
+        registerHandler(OmikujiHandler())
         registerCommand("omikuji", OmikujiCommand())
     }
 
