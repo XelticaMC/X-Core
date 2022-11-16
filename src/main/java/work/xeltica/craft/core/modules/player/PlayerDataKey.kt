@@ -1,11 +1,11 @@
-package work.xeltica.craft.core.models;
+package work.xeltica.craft.core.modules.player
 
 /**
  * プレイヤーごとに保存するデータのキーを定義しています。
  * PlayerStore で使用します。
  * @author Xeltica
  */
-public enum PlayerDataKey {
+enum class PlayerDataKey(val physicalKey: String) {
     CAT_MODE("cat"),
     NEWCOMER_TIME("newcomer_time"),
     BEDROCK_ACCEPT_DISCLAIMER("accept_disclaimer"),
@@ -22,17 +22,7 @@ public enum PlayerDataKey {
     RECEIVED_LOGIN_BONUS("login_bonus"),
     RECEIVED_LOGIN_BONUS_SUMMER("login_bonus_summer"),
     BROKEN_BLOCKS_COUNT("broken_blocks_count"),
-    MOB_DEX("mob_dex"),
+    MOB_DEX("mob_dex")
 
     ;
-
-    PlayerDataKey(String physicalKey) {
-        this.physicalKey = physicalKey;
-    }
-
-    private final String physicalKey;
-
-    public String getPhysicalKey() {
-        return this.physicalKey;
-    }
 }
