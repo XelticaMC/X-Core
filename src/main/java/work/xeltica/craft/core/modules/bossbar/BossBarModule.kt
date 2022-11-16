@@ -8,6 +8,10 @@ import work.xeltica.craft.core.api.ModuleBase
 object BossBarModule: ModuleBase() {
     private val bossBars: ArrayList<BossBar> = ArrayList()
 
+    override fun onEnable() {
+        registerHandler(BossBarHandler())
+    }
+
     fun add(bar: BossBar) {
         bossBars.add(bar)
         Bukkit.getServer().showBossBar(bar)
