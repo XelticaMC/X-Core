@@ -8,12 +8,12 @@ import java.io.IOException
 import java.util.UUID
 
 class PlayerRecord(private val config: Config, private val section: ConfigurationSection, val playerId: UUID) {
-    fun set(key: PlayerDataKey, value: Any?) {
+    operator fun set(key: PlayerDataKey, value: Any?) {
         if (value == get(key)) return
         section.set(key.physicalKey, value)
     }
 
-    fun get(key: PlayerDataKey, defaultValue: Any? = null): Any? {
+    operator fun get(key: PlayerDataKey, defaultValue: Any? = null): Any? {
         return section.get(key.physicalKey, defaultValue)
     }
 
