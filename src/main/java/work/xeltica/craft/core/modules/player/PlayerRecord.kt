@@ -17,6 +17,10 @@ class PlayerRecord(private val config: Config, private val section: Configuratio
         return section.get(key.physicalKey, defaultValue)
     }
 
+    fun has(key: PlayerDataKey): Boolean {
+        return section.contains(key.physicalKey)
+    }
+
     fun getString(key: PlayerDataKey, defaultValue: String? = null): String? {
         return section.getString(key.physicalKey, defaultValue)
     }
