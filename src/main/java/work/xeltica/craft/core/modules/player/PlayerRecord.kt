@@ -73,7 +73,7 @@ class PlayerRecord(private val config: Config, private val section: Configuratio
         return section.isVector(key.physicalKey)
     }
 
-    fun getLocation(key: PlayerDataKey, defaultValue: Location): Location? {
+    fun getLocation(key: PlayerDataKey, defaultValue: Location? = null): Location? {
         return section.getLocation(key.physicalKey, defaultValue)
     }
 
