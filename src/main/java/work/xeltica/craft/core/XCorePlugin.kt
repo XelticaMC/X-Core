@@ -21,7 +21,6 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.modules.notification.NotificationModule
-import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.clover.CloverModule
 import work.xeltica.craft.core.modules.counter.CounterModule
@@ -40,6 +39,8 @@ import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.modules.omikuji.OmikujiModule
+import work.xeltica.craft.core.modules.player.PlayerDataKey
+import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.utils.DiscordService
 
 /**
@@ -67,7 +68,7 @@ class XCorePlugin : JavaPlugin() {
             override fun run() {
                 VehicleStore.getInstance().tick(tick)
                 Bukkit.getOnlinePlayers().forEach {
-                    val record = PlayerStore.getInstance().open(it)
+                    val record = PlayerModule.open(it)
                     var time = record.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
                     time -= tick
                     if (time <= 0) {
@@ -127,7 +128,6 @@ class XCorePlugin : JavaPlugin() {
 
     private fun loadStores() {
         VehicleStore()
-        PlayerStore()
         WorldStore()
         NickNameStore()
     }
@@ -249,6 +249,7 @@ class XCorePlugin : JavaPlugin() {
         RankingModule,
         NbsModule,
         OmikujiModule,
+        PlayerModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator
