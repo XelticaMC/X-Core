@@ -21,6 +21,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
     private val gui by lazy { Gui.getInstance() }
 
     override fun onEnable() {
+        // TODO むかつく
         Bukkit.getLogger().info("モジュールをボンジュール～")
     }
 
@@ -101,12 +102,48 @@ object CoreProtectGuiTestModule : ModuleBase() {
     }
 
     /**
-     * ワールドの範囲を選択するメニューリストを返す
+     * time の値を入力する
      *
      * @param player メニューを開くプレイヤー
      */
-    fun getRadiusList(player: Player): List<MenuItem> {
-        return listOf(
+    fun inputTime(player: Player) {
+        gui.openTextInput(player, "時間の数値(整数)を入力してください。") { inputString ->
+            val value = inputString.toIntOrNull()
+            value?.let {
+                if (it <= 0) {
+                    Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
+                    return@openTextInput
+                }
+
+                showMenu(player, "時間の単位を選択してください", getTimeUnitList(value, player))
+            } ?: run {
+                Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
+                return@openTextInput
+            }
+        }
+    }
+
+}
+
+/**
+ * メニューのアイテムをまとめたクラス
+ *
+ * @param player メニューを開くプレイヤー
+ */
+class GetMenuItemList(player: Player) {
+    private val app by lazy { CoreProtectGuiTestApp() }
+
+    /**
+     * NOTE: [optionMenuList] のみ、 [actionMenuList] で選択したアイテムによって処理を分岐させているため、メンバー変数として持っておく
+     * …が正直もうちょっといいやり方ないかな？ってとこ
+     */
+    private lateinit var action: String
+
+    /**
+     * ワールドの範囲を選択するメニューリストを返す
+     */
+    val radiusList by lazy {
+        listOf(
                 MenuItem("すべてのワールド", { app.onRadiusWorldMenuClick("#global", player) }, Material.DIRT),
                 MenuItem("メインワールド", { app.onRadiusWorldMenuClick("#main", player) }, Material.CRAFTING_TABLE),
                 MenuItem("共有ワールド", { app.onRadiusWorldMenuClick("#wildarea2", player) }, Material.GRASS_BLOCK),
@@ -118,11 +155,9 @@ object CoreProtectGuiTestModule : ModuleBase() {
 
     /**
      * ～前までの取得か期間での取得かを選択するメニューリストを返す
-     *
-     * @param player メニューを開くプレイヤー
      */
-    fun getDuringModeList(player: Player): List<MenuItem> {
-        return listOf(
+    val duringModeList by lazy {
+        listOf(
                 MenuItem("とある日時まで遡る", { app.onSelectDuringMode(false, player) }, Material.CLOCK),
                 MenuItem("期間を指定して取得する", { app.onSelectDuringMode(true, player) }, Material.CLOCK),
                 MenuItem("キャンセル", { app.onCancel(player) }, Material.REDSTONE_TORCH),
@@ -131,11 +166,9 @@ object CoreProtectGuiTestModule : ModuleBase() {
 
     /**
      * アクションを選択するメニューリストを返す
-     *
-     * @param player メニューを開くプレイヤー
      */
-    fun getActionList(player: Player): List<MenuItem> {
-        return listOf(
+    val actionMenuList by lazy {
+        listOf(
                 MenuItem("チェスト", { app.onActionMenuClick("container", player) }, Material.CHEST_MINECART),
                 MenuItem("ブロック", { app.onActionMenuClick("block", player) }, Material.GRASS_BLOCK),
                 MenuItem("キャンセル", { app.onCancel(player) }, Material.REDSTONE_TORCH),
@@ -144,12 +177,9 @@ object CoreProtectGuiTestModule : ModuleBase() {
 
     /**
      * アクションのオプションを選択するメニューリストを返す
-     *
-     * @param action 最終的にコマンドに付与するアクションの形
-     * @param player メニューを開いたプレイヤー
      */
-    fun getOptionList(action: String, player: Player): List<MenuItem> {
-        return when (action) {
+    val optionMenuList by lazy {
+        when (action) {
             "container" -> {
                 listOf(
                         MenuItem("アイテムを入れた", { app.onOptionMenuClick("+$action", player) }, Material.REDSTONE),
@@ -180,25 +210,12 @@ object CoreProtectGuiTestModule : ModuleBase() {
     }
 
     /**
-     * time を設定するメニュー画面を設定する
+     * 選択した [action] をメンバー変数に格納するだめだけに作ったやつ
      *
-     * @param player メニューを開くプレイヤー
+     * NOTE: いい方法ないかな2
      */
-    fun inputTime(player: Player) {
-        gui.openTextInput(player, "時間の数値(整数)を入力してください。") { inputString ->
-            val value = inputString.toIntOrNull()
-            value?.let {
-                if (it <= 0) {
-                    Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
-                    return@openTextInput
-                }
-
-                showMenu(player, "時間の単位を選択してください", getTimeUnitList(value, player))
-            } ?: run {
-                Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
-                return@openTextInput
-            }
-        }
+    fun setAction(action: String){
+        this.action = action
     }
 
 }
