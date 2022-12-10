@@ -367,7 +367,7 @@ class TransferGuideSession(val player: Player) {
     }
 
     private fun showAbout() {
-        player.sendMessage("Knit乗換案内\n製作者:Knit\nデータベース更新日:${data.update}\nまともにデバッグしていない為、ヤバいバグが発生する場合があります。ご了承下さい。")
+        player.sendMessage("Knit乗換案内\n製作者:Knit\nデータベース更新日:${data.update}\n未対応路線:新山吹村営鉄道(本線の薫風緑苑までのみ対応)\n仮の数値を使用している部分:新鮫、塩川、新スポーン地点-もさんな間の快速線\nまともにデバッグしていない為、ヤバいバグが発生する場合があります。ご了承下さい。")
     }
 
     private fun getKeyFromStationsMap(map: MutableMap<KStation, Double>, value: Double): KStation? {
