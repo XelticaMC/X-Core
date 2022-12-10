@@ -8,6 +8,7 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.SoundPitch
+import work.xeltica.craft.core.modules.coreProtectGuiTest.CoreProtectGuiTestApp
 import work.xeltica.craft.core.modules.halloween.CandyStoreApp
 import work.xeltica.craft.core.modules.notification.NotificationApp
 import work.xeltica.craft.core.modules.payments.PaymentsApp
@@ -50,6 +51,7 @@ object XphoneModule : ModuleBase() {
             PunishApp(),
             StampRallyApp(),
             CandyStoreApp(),
+            CoreProtectGuiTestApp(),
         ))
 
         registerCommand("xphone", XphoneCommand())
