@@ -25,7 +25,7 @@ object PaymentsModule : ModuleBase() {
         val toPlayer = to.player
         if (toPlayer != null) {
             toPlayer.playSound(from.location, Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.PLAYERS, 1f, 2f)
-            toPlayer.sendMessage("${ChatColor.GREEN}${to.name}さんから${amount}${economy.currencyNameSingular()}を受け取りました。")
+            toPlayer.sendMessage("${ChatColor.GREEN}${from.name}さんから${amount}${economy.currencyNameSingular()}を受け取りました。")
         }
 
         logger.info("${ChatColor.GREEN}${from.name}→${to.name}: ${amount}${economy.currencyNameSingular()}の支払い")
