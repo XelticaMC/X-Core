@@ -6,8 +6,8 @@ import org.geysermc.floodgate.api.FloodgateApi;
 
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.models.PlayerDataKey;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.player.PlayerDataKey;
+import work.xeltica.craft.core.modules.player.PlayerModule;
 
 /**
  * 統合版プレイヤー向けに免責事項を表示するためのメソッドを持ちます。
@@ -36,7 +36,7 @@ public class BedrockDisclaimerUtil {
 
     public static void showDisclaimer(Player p) {
         Gui.getInstance().openDialog(p, BEDROCK_DISCLAIMER_TITLE, BEDROCK_DISCLAIMER_MESSAGE, (a) -> {
-            final var record = PlayerStore.getInstance().open(p);
+            final var record = PlayerModule.INSTANCE.open(p);
             record.set(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER, true);
         }, "わかりました");
     }

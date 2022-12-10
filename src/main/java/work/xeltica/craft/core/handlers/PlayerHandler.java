@@ -19,14 +19,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -40,15 +38,13 @@ import net.luckperms.api.node.types.InheritanceNode;
 import work.xeltica.craft.core.XCorePlugin;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.modules.hint.Hint;
-import work.xeltica.craft.core.models.PlayerDataKey;
 import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.modules.hub.HubModule;
 import work.xeltica.craft.core.modules.hub.HubType;
 import work.xeltica.craft.core.modules.item.ItemModule;
-import work.xeltica.craft.core.modules.omikuji.OmikujiModule;
-import work.xeltica.craft.core.modules.omikuji.OmikujiScore;
+import work.xeltica.craft.core.modules.player.PlayerDataKey;
+import work.xeltica.craft.core.modules.player.PlayerModule;
 import work.xeltica.craft.core.stores.NickNameStore;
-import work.xeltica.craft.core.stores.PlayerStore;
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil;
 
 /**
@@ -72,14 +68,14 @@ public class PlayerHandler implements Listener {
         NickNameStore.getInstance().setNickName(p);
 
         final var name = PlainTextComponentSerializer.plainText().serialize(p.displayName());
-        final var pstore = PlayerStore.getInstance();
+        final var playerModule = PlayerModule.INSTANCE;
         e.joinMessage(Component.text("§a" + name + "§b" + "さんがやってきました"));
         if (!p.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a" + name + "§b" + "が§6§l初参加§rです"));
-            pstore.open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
+            playerModule.open(p).set(PlayerDataKey.NEWCOMER_TIME, DEFAULT_NEW_COMER_TIME);
             HubModule.INSTANCE.teleport(p, HubType.NewComer, true);
         }
-        final var record = pstore.open(p);
+        final var record = playerModule.open(p);
 
         if (!record.getBoolean(PlayerDataKey.GIVEN_PHONE)) {
             p.getInventory().addItem(ItemModule.INSTANCE.getItem(ItemModule.ITEM_NAME_XPHONE));
@@ -88,7 +84,7 @@ public class PlayerHandler implements Listener {
 
         HintModule.INSTANCE.achieve(p, Hint.WELCOME);
 
-        if (PlayerStore.getInstance().isCitizen(p)) {
+        if (PlayerModule.INSTANCE.isCitizen(p)) {
             HintModule.INSTANCE.achieve(p, Hint.BE_CITIZEN);
         }
 
@@ -101,8 +97,8 @@ public class PlayerHandler implements Listener {
             Component.text("§f詳しくは §b§nhttps://craft.xeltica.work§fを見てね！")
         ));
 
-        if (!pstore.isCitizen(p)) {
-            if (!pstore.open(p).has(PlayerDataKey.NEWCOMER_TIME)) {
+        if (!playerModule.isCitizen(p)) {
+            if (!playerModule.open(p).has(PlayerDataKey.NEWCOMER_TIME)) {
                 p.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！");
                 p.sendMessage("詳しくは §b/promo§rコマンドを実行してください。");
             }
@@ -118,7 +114,7 @@ public class PlayerHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChatForCat(AsyncPlayerChatEvent e) {
         // ネコであれば文章をいじる
-        if (PlayerStore.getInstance().open(e.getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
+        if (PlayerModule.INSTANCE.open(e.getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
             e.setMessage(nyaize(e.getMessage()));
         }
     }
@@ -126,7 +122,7 @@ public class PlayerHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChatForCat(ChatEvent e) {
         // ネコであれば文章をいじる
-        if (PlayerStore.getInstance().open(e.getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
+        if (PlayerModule.INSTANCE.open(e.getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
             final var message = PlainTextComponentSerializer.plainText().serialize(e.message());
             e.message(Component.text(nyaize(message)));
         }
@@ -137,7 +133,7 @@ public class PlayerHandler implements Listener {
         // ネコであれば文章をいじる
         final var member = e.getMember();
         if (!(member instanceof ChannelMemberPlayer)) return;
-        if (PlayerStore.getInstance().open(((ChannelMemberPlayer) member).getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
+        if (PlayerModule.INSTANCE.open(((ChannelMemberPlayer) member).getPlayer()).getBoolean(PlayerDataKey.CAT_MODE)) {
             e.setMessage(nyaize(e.getMessage()));
         }
     }

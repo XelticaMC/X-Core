@@ -7,10 +7,10 @@ import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.gui.Gui.Companion.getInstance
-import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.modules.player.PlayerDataKey
+import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.modules.ranking.Ranking
 import work.xeltica.craft.core.modules.ranking.RankingModule
-import work.xeltica.craft.core.stores.PlayerStore
 import java.io.IOException
 import java.util.*
 import java.util.function.Consumer
@@ -20,8 +20,8 @@ class CounterCommand: CommandPlayerOnlyBase() {
         if (args.isEmpty()) return false
         val subCommand = args[0].lowercase(Locale.getDefault())
         val module = CounterModule
-        val pstore = PlayerStore.getInstance()
-        val record = pstore.open(player)
+        val pmodule = PlayerModule
+        val record = pmodule.open(player)
         val ui = getInstance()
 
         try {
@@ -33,7 +33,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     record[PlayerDataKey.COUNTER_REGISTER_MODE] = true
                     record[PlayerDataKey.COUNTER_REGISTER_NAME] = name
                     record[PlayerDataKey.COUNTER_REGISTER_IS_DAILY] = isDaily
-                    pstore.save()
+                    pmodule.save()
                     player.sendMessage("カウンター登録モードは有効。カウンターの始点にする感圧板をクリックかタップしてください。")
                     player.sendMessage("キャンセルする際には、 /counter cancel を実行します。")
                 }
@@ -42,7 +42,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     record.delete(PlayerDataKey.COUNTER_REGISTER_NAME)
                     record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY)
                     record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION)
-                    pstore.save()
+                    pmodule.save()
                     player.sendMessage("カウンター登録モードを無効化し、キャンセルしました。")
                 }
                 "unregister" -> {
@@ -112,7 +112,8 @@ class CounterCommand: CommandPlayerOnlyBase() {
                         player.sendMessage("全プレイヤーのプレイ済み履歴を削除しました。")
                     } else {
                         val name = args[1]
-                        pstore.open(Bukkit.getPlayerUniqueId(name)).delete(PlayerDataKey.PLAYED_COUNTER_COUNT)
+                        val p = Bukkit.getPlayerUniqueId(name)
+                        pmodule.open(p).delete(PlayerDataKey.PLAYED_COUNTER_COUNT)
                         player.sendMessage("そのプレイヤーのプレイ済み履歴を削除しました。")
                     }
                 }

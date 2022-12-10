@@ -13,6 +13,7 @@ class PlayerRecord(private val config: Config, private val section: Configuratio
         section.set(key.physicalKey, value)
     }
 
+    @JvmOverloads
     operator fun get(key: PlayerDataKey, defaultValue: Any? = null): Any? {
         return section.get(key.physicalKey, defaultValue)
     }
@@ -21,6 +22,7 @@ class PlayerRecord(private val config: Config, private val section: Configuratio
         return section.contains(key.physicalKey)
     }
 
+    @JvmOverloads
     fun getString(key: PlayerDataKey, defaultValue: String? = null): String? {
         return section.getString(key.physicalKey, defaultValue)
     }
@@ -29,7 +31,7 @@ class PlayerRecord(private val config: Config, private val section: Configuratio
         return section.isString(key.physicalKey)
     }
 
-    fun getStringList(key: PlayerDataKey): List<String> {
+    fun getStringList(key: PlayerDataKey): MutableList<String> {
         return section.getStringList(key.physicalKey)
     }
 
@@ -37,6 +39,7 @@ class PlayerRecord(private val config: Config, private val section: Configuratio
         return section.isList(key.physicalKey)
     }
 
+    @JvmOverloads
     fun getInt(key: PlayerDataKey, defaultValue: Int = 0): Int {
         return section.getInt(key.physicalKey, defaultValue)
     }
@@ -45,6 +48,7 @@ class PlayerRecord(private val config: Config, private val section: Configuratio
         return section.isInt(key.physicalKey)
     }
 
+    @JvmOverloads
     fun getBoolean(key: PlayerDataKey, defaultValue: Boolean = false): Boolean {
         return section.getBoolean(key.physicalKey, defaultValue)
     }
@@ -53,6 +57,7 @@ class PlayerRecord(private val config: Config, private val section: Configuratio
         return section.isBoolean(key.physicalKey)
     }
 
+    @JvmOverloads
     fun getDouble(key: PlayerDataKey, defaultValue: Double = 0.0): Double {
         return section.getDouble(key.physicalKey, defaultValue)
     }
@@ -61,6 +66,7 @@ class PlayerRecord(private val config: Config, private val section: Configuratio
         return section.isDouble(key.physicalKey)
     }
 
+    @JvmOverloads
     fun getLong(key: PlayerDataKey, defaultValue: Long = 1): Long {
         return section.getLong(key.physicalKey, defaultValue)
     }
@@ -69,6 +75,7 @@ class PlayerRecord(private val config: Config, private val section: Configuratio
         return section.isLong(key.physicalKey)
     }
 
+    @JvmOverloads
     fun getVector(key: PlayerDataKey, defaultValue: Vector? = null): Vector? {
         return section.getVector(key.physicalKey, defaultValue)
     }
@@ -77,6 +84,7 @@ class PlayerRecord(private val config: Config, private val section: Configuratio
         return section.isVector(key.physicalKey)
     }
 
+    @JvmOverloads
     fun getLocation(key: PlayerDataKey, defaultValue: Location? = null): Location? {
         return section.getLocation(key.physicalKey, defaultValue)
     }

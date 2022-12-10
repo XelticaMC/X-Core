@@ -17,6 +17,7 @@ import work.xeltica.craft.core.utils.Config
 import work.xeltica.craft.core.utils.Ticks
 import java.io.IOException
 import java.util.*
+import kotlin.collections.HashMap
 
 object PlayerModule: ModuleBase() {
     private lateinit var config: Config
@@ -46,12 +47,20 @@ object PlayerModule: ModuleBase() {
         return open(player.uniqueId)
     }
 
-    fun open(uuid: UUID): PlayerRecord {
+    fun open(uuid: UUID?): PlayerRecord {
+        if (uuid == null) throw IllegalArgumentException()
         var section = config.conf.getConfigurationSection(uuid.toString())
         if (section == null) {
             section = config.conf.createSection(uuid.toString())
         }
         return PlayerRecord(config, section, uuid)
+    }
+
+    fun openAll(): List<PlayerRecord> {
+        return config.conf
+            .getKeys(false)
+            .map { open(UUID.fromString(it)) }
+            .toList()
     }
 
     fun getRandomFireworkByUUID(uuid: UUID, amount: Int): ItemStack {

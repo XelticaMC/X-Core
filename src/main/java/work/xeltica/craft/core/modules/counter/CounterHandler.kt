@@ -14,13 +14,13 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.geysermc.connector.common.ChatColor
-import work.xeltica.craft.core.stores.PlayerStore
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.models.PlayerDataKey
 import java.io.IOException
 import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import org.geysermc.floodgate.api.FloodgateApi
 import org.geysermc.floodgate.util.DeviceOs
+import work.xeltica.craft.core.modules.player.PlayerDataKey
+import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.utils.Time
@@ -41,12 +41,13 @@ class CounterHandler : Listener {
 
         // ブロッククリックでなければ無視
         if (!isBlockClick) return
-        val pstore = PlayerStore.getInstance()
+        val pmodule = PlayerModule
+
         val store = CounterModule
         val ui = Gui.getInstance()
         val player = e.player
         val block = e.clickedBlock
-        val record = pstore.open(player)
+        val record = pmodule.open(player)
         val isCounterRegisterMode = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_MODE)
         val isPlate = Tag.PRESSURE_PLATES.isTagged(block!!.type)
 
@@ -68,7 +69,7 @@ class CounterHandler : Listener {
             } else {
                 store.add(
                     CounterData(
-                        name,
+                        name.toString(),
                         loc,
                         block.location,
                         daily,
@@ -84,7 +85,7 @@ class CounterHandler : Listener {
                 record.delete(PlayerDataKey.COUNTER_REGISTER_NAME)
                 record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION)
                 record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY)
-                pstore.save()
+                pmodule.save()
             }
         } catch (ex: IOException) {
             ex.printStackTrace()
@@ -99,8 +100,8 @@ class CounterHandler : Listener {
     fun onUsePlate(e: PlayerInteractEvent) {
         // 踏んだわけじゃないのなら無視
         if (e.action != Action.PHYSICAL) return
-        val pstore = PlayerStore.getInstance()
-        val store = CounterModule
+        val playerModule = PlayerModule
+        val counterModule = CounterModule
         val ui = Gui.getInstance()
         val player = e.player
         val block = e.clickedBlock ?: return
@@ -109,12 +110,12 @@ class CounterHandler : Listener {
 
         // 感圧板でなければ無視
         if (!Tag.PRESSURE_PLATES.isTagged(block.type)) return
-        val first = store.getByLocation1(block.location)
-        val last = store.getByLocation2(block.location)
-        val record = pstore.open(player)
+        val first = counterModule.getByLocation1(block.location)
+        val last = counterModule.getByLocation2(block.location)
+        val record = playerModule.open(player)
         val counterId = record.getString(PlayerDataKey.PLAYING_COUNTER_ID)
-        val startedAt = record.getString(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, "0").toLong()
-        val counter = if (counterId == null) null else store[counterId]
+        val startedAt = record.getString(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, "0")!!.toLong()
+        val counter = if (counterId == null) null else counterModule[counterId]
         val isUsingCounter = counter != null
 
         // カウンター開始する

@@ -18,11 +18,11 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.modules.hint.Hint
-import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.models.PlayerRecord
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.mobep.MobEPModule
-import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.modules.player.PlayerDataKey
+import work.xeltica.craft.core.modules.player.PlayerModule
+import work.xeltica.craft.core.modules.player.PlayerRecord
 import java.util.*
 import java.util.function.Consumer
 
@@ -148,8 +148,8 @@ class EbiPowerHandler: Listener {
     @EventHandler
     fun onPlayerLoggedIn(e: PlayerJoinEvent) {
         val now = Date()
-        val ps = PlayerStore.getInstance()
-        val record = ps.open(e.player)
+        val playerModule = PlayerModule
+        val record = playerModule.open(e.player)
         val prev = Date(record.getLong(PlayerDataKey.LAST_JOINED, now.time))
         if (prev.year != now.year && prev.month != now.month && prev.date != now.date) {
             EbiPowerModule.tryGive(e.player, LOGIN_BONUS_POWER)
@@ -191,7 +191,7 @@ class EbiPowerHandler: Listener {
     fun onMineBlocks(e: BlockBreakEvent) {
         if (!breakBonusList.contains(e.block.type)) return
         if (playerIsInBlacklisted(e.player)) return
-        val record = PlayerStore.getInstance().open(e.player)
+        val record = PlayerModule.open(e.player)
         val brokenBlocksCount = record.getInt(PlayerDataKey.BROKEN_BLOCKS_COUNT)
 
         if (!e.isDropItems) return
@@ -238,7 +238,7 @@ class EbiPowerHandler: Listener {
 
     @EventHandler
     fun onNewDayToResetBrokenBlocksCount(e: RealTimeNewDayEvent) {
-        PlayerStore.getInstance().openAll().forEach(Consumer { record: PlayerRecord ->
+        PlayerModule.openAll().forEach(Consumer { record: PlayerRecord ->
             record[PlayerDataKey.BROKEN_BLOCKS_COUNT] = 0
         })
     }

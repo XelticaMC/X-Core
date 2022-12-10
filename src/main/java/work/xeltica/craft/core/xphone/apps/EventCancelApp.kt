@@ -2,10 +2,10 @@ package work.xeltica.craft.core.xphone.apps
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.models.PlayerRecord
 import work.xeltica.craft.core.modules.nbs.NbsModule
-import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.modules.player.PlayerDataKey
+import work.xeltica.craft.core.modules.player.PlayerModule
+import work.xeltica.craft.core.modules.player.PlayerRecord
 
 /**
  * イベント用：タイムアタックを中止するアプリ
@@ -33,6 +33,6 @@ class EventCancelApp : AppBase() {
     }
 
     private fun getRecord(player: Player): PlayerRecord {
-        return PlayerStore.getInstance().open(player)
+        return PlayerModule.open(player)
     }
 }

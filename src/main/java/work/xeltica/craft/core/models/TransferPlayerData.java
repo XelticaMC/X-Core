@@ -6,7 +6,8 @@ import work.xeltica.craft.core.modules.clover.CloverModule;
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule;
 import work.xeltica.craft.core.modules.hint.Hint;
 import work.xeltica.craft.core.modules.hint.HintModule;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.player.PlayerDataKey;
+import work.xeltica.craft.core.modules.player.PlayerModule;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -95,18 +96,14 @@ public class TransferPlayerData {
     }
 
     private void transferPlayerStoreData() {
-        final var playerStore = PlayerStore.getInstance();
-        final var fromPlayerRecord = playerStore.open(from.getUniqueId());
-        final var toPlayerRecord = playerStore.open(to.getUniqueId());
+        final var playerModule = PlayerModule.INSTANCE;
+        final var fromPlayerRecord = playerModule.open(from.getUniqueId());
+        final var toPlayerRecord = playerModule.open(to.getUniqueId());
         for (PlayerDataKey key: PlayerDataKey.values()) {
             toPlayerRecord.set(key,fromPlayerRecord.get(key));
             fromPlayerRecord.delete(key);
         }
-        try {
-            playerStore.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        playerModule.save();
     }
 
     private void transferClover() {
