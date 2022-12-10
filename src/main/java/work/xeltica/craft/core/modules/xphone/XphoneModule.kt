@@ -12,6 +12,7 @@ import work.xeltica.craft.core.modules.halloween.CandyStoreApp
 import work.xeltica.craft.core.modules.notification.NotificationApp
 import work.xeltica.craft.core.modules.payments.PaymentsApp
 import work.xeltica.craft.core.modules.quickchat.QuickChatApp
+import work.xeltica.craft.core.modules.setMarker.SetMarkerApp
 import work.xeltica.craft.core.stores.ItemStore
 import work.xeltica.craft.core.xphone.apps.*
 import java.lang.IllegalStateException
@@ -50,6 +51,7 @@ object XphoneModule : ModuleBase() {
             PunishApp(),
             StampRallyApp(),
             CandyStoreApp(),
+            SetMarkerApp(),
         ))
 
         registerCommand("xphone", XphoneCommand())
