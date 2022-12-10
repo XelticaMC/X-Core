@@ -10,6 +10,6 @@ class PlayerExplodeApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.FIREWORK_STAR
 
     override fun onLaunch(player: Player) {
-        // TODO("Not yet implemented")
+        player.world.createExplosion(player.location, 5f)
     }
 }
