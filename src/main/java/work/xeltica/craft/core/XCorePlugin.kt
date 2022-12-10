@@ -22,9 +22,11 @@ import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.modules.ChangeGameMode.ChangeGameModeModule
 import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
 import work.xeltica.craft.core.modules.halloween.HalloweenModule
+import work.xeltica.craft.core.modules.massiveZombies.MassiveZombiesModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
 import work.xeltica.craft.core.utils.DiscordService
 
@@ -257,6 +259,8 @@ class XCorePlugin : JavaPlugin() {
         FarmFestivalModule,
         PaymentsModule,
         HalloweenModule,
+        MassiveZombiesModule,
+        ChangeGameModeModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator
