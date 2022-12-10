@@ -24,14 +24,12 @@ object MassiveZombiesModule :ModuleBase(){
             override fun run() {
                     player.sendMessage("強力なゾンビが目覚めた！")
                     zombie = player.world.spawnEntity(dest, EntityType.ZOMBIE)
-                zombie.
 
                 }
         }.runTaskLater(instance, Ticks.from(10.0).toLong())
     }
 @EventHandler
     fun onMobDeath(e: EntityDeathEvent){
-        if(e.entityType == zombie){
 
         }
     }
