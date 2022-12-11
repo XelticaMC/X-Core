@@ -22,6 +22,12 @@ class CoreProtectGuiTestApp : AppBase() {
      */
     private val module by lazy { CoreProtectGuiTestModule }
 
+    /**
+     * 範囲を指定するときにつかう
+     */
+    private lateinit var firstDateTime: Pair<Int, String>
+    private lateinit var secondDateTime: Pair<Int, String>
+
     override fun getName(player: Player): String {
         return "CoreProtectGUIテストアプリ"
     }
@@ -32,6 +38,68 @@ class CoreProtectGuiTestApp : AppBase() {
 
     override fun onLaunch(player: Player) {
         module.start(player)
+    }
+
+    /**
+     * 1度目に取得した日時と2度目に取得した日時を比較して
+     * [CoreProtectCommand.date]に格納する文字列を決定するやつ
+     */
+    private fun checkDuringTime() {
+        val firstDate = firstDateTime.first.toLong() * convertUnit(firstDateTime.second)
+        val lastDate = secondDateTime.first.toLong() * convertUnit(secondDateTime.second)
+
+        if (firstDate < lastDate) {
+            coreProtectCommand.date =
+                    (firstDateTime.first.toString() + firstDateTime.second) + "-" +
+                            (secondDateTime.first.toString() + secondDateTime.second)
+            Bukkit.getLogger().info("FirstDate more than")
+        } else if (firstDate > lastDate) {
+            coreProtectCommand.date =
+                    (secondDateTime.first.toString() + secondDateTime.second) + "-" +
+                            (firstDateTime.first.toString() + firstDateTime.second)
+            Bukkit.getLogger().info("LastDate more than")
+        } else {
+            // ここに到達する場合は同値である場合なので、onTimeUnitMenuClick と同じ経路になるような形で
+            // コマンドの文字列を確定させる
+            coreProtectCommand.date = firstDateTime.first.toString() + firstDateTime.second
+        }
+        Bukkit.getLogger().info(coreProtectCommand.date)
+    }
+
+    /**
+     * 単位を秒数に変換する
+     *
+     * @param unit 単位
+     * @return 単位を秒数に変換した数値。値がでかくなるので[Long]で変換
+     *
+     * NOTE: 合理的な処理が思いつかなかった
+     */
+    private fun convertUnit(unit: String): Long {
+        return when (unit) {
+            "s" -> {
+                1
+            }
+
+            "m" -> {
+                60
+            }
+
+            "h" -> {
+                3600
+            }
+
+            "d" -> {
+                86400
+            }
+
+            "w" -> {
+                604800
+            }
+
+            else -> {
+                0
+            }
+        }
     }
 
     /**
@@ -82,7 +150,8 @@ class CoreProtectGuiTestApp : AppBase() {
     fun onRadiusWorldMenuClick(radius: String, player: Player) {
         coreProtectCommand.radius = radius
 
-        module.inputTime(player)
+        val duringModeList = module.getDuringModeList(player)
+        module.showMenu(player, "時間の指定方法を選択してください", duringModeList)
     }
 
     /**
@@ -92,7 +161,30 @@ class CoreProtectGuiTestApp : AppBase() {
      * @param player メニューを開いたプレイヤー
      */
     fun onSelectDuringMode(duringModeFlag: Boolean, player: Player) {
-        // TODO 期間指定の場合、1度目に選択した値を保持する必要がありそうなのでどうやって管理させるか思考中
+        if (duringModeFlag) {
+            module.getTimeValueAndUnit(player, true)
+        } else {
+            module.inputTime(player)
+        }
+    }
+
+    /**
+     * 時間の単位を選択したら呼ばれる(伝播されてくる)
+     *
+     *  @param dateTime 時間と単位をPairでまとめたやつ
+     * @param flag 1個目の日時選択の場合はtrue
+     * @param player メニューを開いたプレイヤー
+     */
+    fun onDuringTimeUnit(player: Player, dateTime: Pair<Int, String>, flag: Boolean) {
+        if (flag) {
+            firstDateTime = dateTime
+            module.getTimeValueAndUnit(player, false)
+        } else {
+            secondDateTime = dateTime
+            checkDuringTime()
+            val actionMenuList = module.getActionMenuList(player)
+            module.showMenu(player, "アクションの種類を選択してください", actionMenuList)
+        }
     }
 
     /**

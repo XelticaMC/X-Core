@@ -67,6 +67,30 @@ object CoreProtectGuiTestModule : ModuleBase() {
     }
 
     /**
+     * time の値を入力する(範囲選択用)
+     *
+     * @param player 入力をするプレイヤー
+     * @param flag 1個目の日時選択の場合はtrue
+     */
+    private fun inputDuringTime(flag: Boolean, player: Player){
+        gui.openTextInput(player, "時間の数値(整数)を入力してください。") { inputString ->
+            val value = inputString.toIntOrNull()
+            value?.let {
+                if (it <= 0) {
+                    Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
+                    return@openTextInput
+                }
+
+                val duringUnitList = getDuringUnitList(value, flag, player)
+                showMenu(player, "時間の単位を選択してください", duringUnitList)
+            } ?: run {
+                Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
+                return@openTextInput
+            }
+        }
+    }
+
+    /**
      * ログを取得する単位を選択するメニューリストを返す
      *
      * @param value 単位の前の数値
@@ -81,6 +105,47 @@ object CoreProtectGuiTestModule : ModuleBase() {
                 MenuItem("秒", { app.onTimeUnitMenuClick(value, "s", player) }, Material.CLOCK),
                 MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER ),
         )
+    }
+
+    /**
+     * ログを取得する単位を選択するメニューリストを返す(範囲選択用)
+     *
+     * @param value 単位の前の数値
+     * @param flag 1個目の日時選択の場合はtrue
+     * @param player メニューを開いたプレイヤー
+     */
+    private fun getDuringUnitList(value: Int, flag: Boolean, player: Player): List<MenuItem> {
+        return listOf(
+                MenuItem("週", { onDuringMenuClick(value, "w", flag, player) }, Material.CLOCK),
+                MenuItem("日", { onDuringMenuClick(value, "d", flag, player) }, Material.CLOCK),
+                MenuItem("時", { onDuringMenuClick(value, "h", flag, player) }, Material.CLOCK),
+                MenuItem("分", { onDuringMenuClick(value, "m", flag, player) }, Material.CLOCK),
+                MenuItem("秒", { onDuringMenuClick(value, "s", flag, player) }, Material.CLOCK),
+                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER ),
+        )
+    }
+
+    /**
+     * 時間の単位を選択したら呼ばれる(範囲選択用)
+     *
+     * @param value 単位の前の数値
+     * @param unit  メニューで選択した時間の単位
+     * @param flag 1個目の日時選択の場合はtrue
+     * @param player プレイヤー
+     */
+    private fun onDuringMenuClick(value:Int, unit:String,flag: Boolean, player: Player ) {
+        app.onDuringTimeUnit(player, Pair(value, unit), flag)
+    }
+
+
+    /**
+     * 範囲選択で日時を取得する場合に呼ばれる
+     *
+     * @param player 入力をするプレイヤー
+     * @param flag 1個目の日時選択の場合はtrue
+     */
+    fun getTimeValueAndUnit(player: Player, flag: Boolean) {
+        inputDuringTime(flag, player)
     }
 
     /**
