@@ -36,7 +36,6 @@ class CoreProtectGuiTestApp : AppBase() {
     }
 
     override fun onLaunch(player: Player) {
-        getMenuItemList = GetMenuItemList(player)
         module.start(player)
     }
 
@@ -74,7 +73,7 @@ class CoreProtectGuiTestApp : AppBase() {
      */
     fun onInputPlayerName(userName: String, player: Player) {
         coreProtectCommand.user = userName
-        val radiusWorldList = getMenuItemList.radiusList
+        val radiusWorldList = module.getRadiusList(player)
 
         module.showMenu(player, "ワールドの範囲を指定してください", radiusWorldList)
     }
@@ -110,8 +109,8 @@ class CoreProtectGuiTestApp : AppBase() {
      * @param player メニューを開いたプレイヤー
      */
     fun onTimeUnitMenuClick(value: Int, unit: String, player: Player) {
-        coreProtectCommand.date = coreProtectCommand.date + value.toString() + unit
-        val actionMenuList = getMenuItemList.actionMenuList
+        coreProtectCommand.date = value.toString() + unit
+        val actionMenuList = module.getActionMenuList(player)
         module.showMenu(player, "アクションの種類を選択してください", actionMenuList)
     }
 
@@ -123,8 +122,7 @@ class CoreProtectGuiTestApp : AppBase() {
      */
     fun onActionMenuClick(action: String, player: Player) {
         Bukkit.getLogger().info(action)
-        getMenuItemList.setAction(action)
-        val optionMenuList = getMenuItemList.optionMenuList
+        val optionMenuList = module.getOptionMenuList(player, action)
 
         module.showMenu(player, "オプションを選択してください", optionMenuList)
     }
