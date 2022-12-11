@@ -1,15 +1,26 @@
-# XelticaMC Core System
+<div align="center">
 
-XelticaMC の中枢を為すプラグイン。
+# X-Core
 
-## 機能
+_**A Core System Plugin for XelticaMC.**_
 
-TBD
+</div>
 
-## Build
+XelticaMCの基幹となる、コアシステム プラグイン「X-Core」の開発プロジェクトです。
 
-`mvn clean package`
+## 📖 開発ドキュメント
 
-## LICENSE
+[X-Core Developer's Documentation](docs/README.md)
 
-AGPL
+## 🔧 ビルド方法
+
+1. IntelliJ IDEAでプロジェクトを開く
+2. Gradleの `build` タスクを実行する
+
+## コントリビューション
+
+X-Core はオープンソース プロジェクトですが、開発はXelticaMCスタッフチーム 開発グループのメンバーが担当しており、本メンバー以外のプルリクエストは受け付けません。
+
+## 💳 ライセンス
+
+[AGPL 3.0](LICENSE)
