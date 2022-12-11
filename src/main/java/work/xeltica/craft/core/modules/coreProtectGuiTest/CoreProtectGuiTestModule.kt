@@ -123,27 +123,13 @@ object CoreProtectGuiTestModule : ModuleBase() {
         }
     }
 
-}
-
-/**
- * メニューのアイテムをまとめたクラス
- *
- * @param player メニューを開くプレイヤー
- */
-class GetMenuItemList(player: Player) {
-    private val app by lazy { CoreProtectGuiTestApp() }
-
-    /**
-     * NOTE: [optionMenuList] のみ、 [actionMenuList] で選択したアイテムによって処理を分岐させているため、メンバー変数として持っておく
-     * …が正直もうちょっといいやり方ないかな？ってとこ
-     */
-    private lateinit var action: String
-
     /**
      * ワールドの範囲を選択するメニューリストを返す
+     *
+     * @param player メニューを開くプレイヤー
      */
-    val radiusList by lazy {
-        listOf(
+    fun getRadiusList(player: Player): List<MenuItem> {
+        return listOf(
                 MenuItem("すべてのワールド", { app.onRadiusWorldMenuClick("#global", player) }, Material.DIRT),
                 MenuItem("メインワールド", { app.onRadiusWorldMenuClick("#main", player) }, Material.CRAFTING_TABLE),
                 MenuItem("共有ワールド", { app.onRadiusWorldMenuClick("#wildarea2", player) }, Material.GRASS_BLOCK),
@@ -155,9 +141,11 @@ class GetMenuItemList(player: Player) {
 
     /**
      * ～前までの取得か期間での取得かを選択するメニューリストを返す
+     *
+     * @param player メニューを開くプレイヤー
      */
-    val duringModeList by lazy {
-        listOf(
+    fun getDuringModeList(player: Player): List<MenuItem> {
+        return listOf(
                 MenuItem("とある日時まで遡る", { app.onSelectDuringMode(false, player) }, Material.CLOCK),
                 MenuItem("期間を指定して取得する", { app.onSelectDuringMode(true, player) }, Material.CLOCK),
                 MenuItem("キャンセル", { app.onCancel(player) }, Material.REDSTONE_TORCH),
@@ -166,9 +154,11 @@ class GetMenuItemList(player: Player) {
 
     /**
      * アクションを選択するメニューリストを返す
+     *
+     * @param player メニューを開くプレイヤー
      */
-    val actionMenuList by lazy {
-        listOf(
+    fun getActionMenuList(player: Player): List<MenuItem> {
+        return listOf(
                 MenuItem("チェスト", { app.onActionMenuClick("container", player) }, Material.CHEST_MINECART),
                 MenuItem("ブロック", { app.onActionMenuClick("block", player) }, Material.GRASS_BLOCK),
                 MenuItem("キャンセル", { app.onCancel(player) }, Material.REDSTONE_TORCH),
@@ -177,9 +167,12 @@ class GetMenuItemList(player: Player) {
 
     /**
      * アクションのオプションを選択するメニューリストを返す
+     *
+     * @param player メニューを開くプレイヤー
+     * @param action 選択したアクションの文字列
      */
-    val optionMenuList by lazy {
-        when (action) {
+    fun getOptionMenuList(player: Player, action: String): List<MenuItem> {
+        return when (action) {
             "container" -> {
                 listOf(
                         MenuItem("アイテムを入れた", { app.onOptionMenuClick("+$action", player) }, Material.REDSTONE),
@@ -207,15 +200,6 @@ class GetMenuItemList(player: Player) {
                 )
             }
         }
-    }
-
-    /**
-     * 選択した [action] をメンバー変数に格納するだめだけに作ったやつ
-     *
-     * NOTE: いい方法ないかな2
-     */
-    fun setAction(action: String){
-        this.action = action
     }
 
 }
