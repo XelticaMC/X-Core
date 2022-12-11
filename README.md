@@ -2,11 +2,11 @@
 
 # X-Core
 
-_**A Monolithic Core System Plugin for XelticaMC.**_
+_**A Core System Plugin for XelticaMC.**_
 
 </div>
 
-XelticaMC の独自機能を提供し、システムを管理する、モノリシック プラグイン「X-Core」の開発プロジェクトです。
+XelticaMCの基幹となる、コアシステム プラグイン「X-Core」の開発プロジェクトです。
 
 ## 📖 開発ドキュメント
 
