@@ -21,7 +21,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
     private val gui by lazy { Gui.getInstance() }
 
     override fun onEnable() {
-        // TODO むかつく
+        // むかつくので消さない
         Bukkit.getLogger().info("モジュールをボンジュール～")
     }
 
@@ -62,6 +62,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
         return listOf(
                 MenuItem("コマンドで取得する", { getInputTextByConsole(player) }, Material.WRITABLE_BOOK),
                 MenuItem("現在いるプレイヤーから取得する", { getChooseByPlayerMenu(player) }, Material.BOOK),
+                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER ),
         )
     }
 
@@ -78,6 +79,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
                 MenuItem("日", { app.onTimeUnitMenuClick(value, "d", player) }, Material.CLOCK),
                 MenuItem("分", { app.onTimeUnitMenuClick(value, "m", player) }, Material.CLOCK),
                 MenuItem("秒", { app.onTimeUnitMenuClick(value, "s", player) }, Material.CLOCK),
+                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER ),
         )
     }
 
@@ -135,7 +137,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
                 MenuItem("共有ワールド", { app.onRadiusWorldMenuClick("#wildarea2", player) }, Material.GRASS_BLOCK),
                 MenuItem("共有ネザー", { app.onRadiusWorldMenuClick("#wildarea2_nether", player) }, Material.NETHERRACK),
                 MenuItem("共有エンド", { app.onRadiusWorldMenuClick("#wildarea2_the_end", player) }, Material.END_STONE),
-                MenuItem("キャンセル", { app.onCancel(player) }, Material.REDSTONE_TORCH),
+                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
         )
     }
 
@@ -148,7 +150,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
         return listOf(
                 MenuItem("とある日時まで遡る", { app.onSelectDuringMode(false, player) }, Material.CLOCK),
                 MenuItem("期間を指定して取得する", { app.onSelectDuringMode(true, player) }, Material.CLOCK),
-                MenuItem("キャンセル", { app.onCancel(player) }, Material.REDSTONE_TORCH),
+                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
         )
     }
 
@@ -161,7 +163,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
         return listOf(
                 MenuItem("チェスト", { app.onActionMenuClick("container", player) }, Material.CHEST_MINECART),
                 MenuItem("ブロック", { app.onActionMenuClick("block", player) }, Material.GRASS_BLOCK),
-                MenuItem("キャンセル", { app.onCancel(player) }, Material.REDSTONE_TORCH),
+                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
         )
     }
 
@@ -178,7 +180,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
                         MenuItem("アイテムを入れた", { app.onOptionMenuClick("+$action", player) }, Material.REDSTONE),
                         MenuItem("アイテムをとった", { app.onOptionMenuClick("-$action", player) }, Material.REDSTONE_TORCH),
                         MenuItem("指定しない", { app.onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
-                        MenuItem("キャンセル", { app.onCancel(player) }, Material.REDSTONE_TORCH),
+                        MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
                 )
 
             }
@@ -188,7 +190,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
                         MenuItem("ブロックを設置した", { app.onOptionMenuClick("+$action", player) }, Material.REDSTONE),
                         MenuItem("ブロックを破壊した", { app.onOptionMenuClick("-$action", player) }, Material.REDSTONE_TORCH),
                         MenuItem("指定しない", { app.onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
-                        MenuItem("キャンセル", { app.onCancel(player) }, Material.REDSTONE_TORCH),
+                        MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
                 )
 
             }
@@ -196,7 +198,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
             else -> {
                 listOf(
                         MenuItem("指定しない", { app.onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
-                        MenuItem("キャンセル", { app.onCancel(player) }, Material.REDSTONE_TORCH),
+                        MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
                 )
             }
         }
