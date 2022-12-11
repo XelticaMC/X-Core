@@ -75,8 +75,8 @@ object CoreProtectGuiTestModule : ModuleBase() {
     private fun getTimeUnitList(value: Int, player: Player): List<MenuItem> {
         return listOf(
                 MenuItem("週", { app.onTimeUnitMenuClick(value, "w", player) }, Material.CLOCK),
-                MenuItem("時", { app.onTimeUnitMenuClick(value, "h", player) }, Material.CLOCK),
                 MenuItem("日", { app.onTimeUnitMenuClick(value, "d", player) }, Material.CLOCK),
+                MenuItem("時", { app.onTimeUnitMenuClick(value, "h", player) }, Material.CLOCK),
                 MenuItem("分", { app.onTimeUnitMenuClick(value, "m", player) }, Material.CLOCK),
                 MenuItem("秒", { app.onTimeUnitMenuClick(value, "s", player) }, Material.CLOCK),
                 MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER ),
