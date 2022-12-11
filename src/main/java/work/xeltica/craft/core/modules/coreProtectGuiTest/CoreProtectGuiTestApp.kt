@@ -4,7 +4,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.xphone.apps.AppBase
-import java.lang.StringBuilder
 
 /**
  * CoreProtectのコマンドを良い感じにXPhoneから叩くようにするアプリ
@@ -13,12 +12,8 @@ class CoreProtectGuiTestApp : AppBase() {
 
     /**
      * コマンドの値として入れる値
-     *
-     * NOTE: 本当はby lazy 使いたい
      */
-    private val coreProtectCommand = CoreProtectCommand()
-
-    private lateinit var getMenuItemList: GetMenuItemList
+    private val coreProtectCommand by lazy { CoreProtectCommand() }
 
     /**
      * [CoreProtectGuiTestModule]
@@ -46,7 +41,7 @@ class CoreProtectGuiTestApp : AppBase() {
      */
     private fun commandSend(player: Player) {
         val sendCommand = StringBuilder()
-        sendCommand.append("/co l ")
+        sendCommand.append("coreprotect:co lookup ")
 
         // あくまで空文字だったらコマンドのパラメーターから除外するって処理なので、ここら辺はうまい具合にできそうかも
         if (coreProtectCommand.user.isNotBlank()) {
@@ -86,7 +81,6 @@ class CoreProtectGuiTestApp : AppBase() {
      */
     fun onRadiusWorldMenuClick(radius: String, player: Player) {
         coreProtectCommand.radius = radius
-        coreProtectCommand.date = ""
 
         module.inputTime(player)
     }
@@ -138,21 +132,20 @@ class CoreProtectGuiTestApp : AppBase() {
         commandSend(player)
     }
 
-    fun onCancel(player: Player){
+    fun onCancel(player: Player) {
         player.sendMessage("処理をキャンセルします")
     }
 
     /**
      * メニューで選択した値やコンソールから入力された送られた値をまとめたクラス
      *
-     * NOTE: lateinit var じゃなくてもいいかもしれない
-     * (by lazyを使いたかったけどうまい具合に値をセットできなさそうだから一旦lateinit varで運用)
+     * NOTE: 初期化のためにlateinit を外したが、ちょっといい感じにできるかもしれない
      */
     private class CoreProtectCommand {
-        lateinit var user: String
-        lateinit var radius: String
-        lateinit var date: String
-        lateinit var action: String
+        var user: String = ""
+        var radius: String = ""
+        var date: String = ""
+        var action: String = ""
     }
 
 }
