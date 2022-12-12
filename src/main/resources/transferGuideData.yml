@@ -117,7 +117,7 @@ stations:
     world: main
     location: [ 233.5, -206.5 ]
     municipality: [ kaisen_kingdom ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_8, line: mutsuki_shinso_rapid, direction: west, time: 41 }
       1: { to: mutsuki_shinso_12, line: mutsuki_shinso_rapid, direction: east, time: 88 }
       2: { to: mutsuki_shinso_8, line: mutsuki_shinso_local, direction: west, time: 41 }
@@ -131,7 +131,7 @@ stations:
     world: main
     location: [ 233.5, -106.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_9, line: mutsuki_shinso_local, direction: west, time: 48 }
       1: { to: mutsuki_shinso_11, line: mutsuki_shinso_local, direction: east, time: 40 }
   mutsuki_shinso_11:
@@ -143,7 +143,7 @@ stations:
     world: main
     location: [ 471.5, 234.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_10, line: mutsuki_shinso_local, direction: west, time: 40 }
       1: { to: mutsuki_shinso_12, line: mutsuki_shinso_local, direction: east, time: 41 }
   mutsuki_shinso_12:
@@ -155,7 +155,7 @@ stations:
     world: main
     location: [ 780.5, 230.5 ]
     municipality: [ dolphin_resort ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_9, line: mutsuki_shinso_rapid, direction: west, time: 88 }
       1: { to: mutsuki_shinso_16, line: mutsuki_shinso_rapid, direction: east, time: 99 }
       2: { to: mutsuki_shinso_11, line: mutsuki_shinso_local, direction: west, time: 41 }
@@ -170,7 +170,7 @@ stations:
     world: main
     location: [ 1040.5, 234.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_12, line: mutsuki_shinso_local, direction: west, time: 34 }
       1: { to: mutsuki_shinso_14, line: mutsuki_shinso_local, direction: east, time: 49 }
   mutsuki_shinso_14:
@@ -182,7 +182,7 @@ stations:
     world: main
     location: [ 1420.5, 234.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_13, line: mutsuki_shinso_local, direction: west, time: 49 }
       1: { to: mutsuki_shinso_15, line: mutsuki_shinso_local, direction: east, time: 34 }
   mutsuki_shinso_15:
@@ -194,7 +194,7 @@ stations:
     world: main
     location: [ 1517.5, 74.5 ]
     municipality: [ new_yamabuki ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_14, line: mutsuki_shinso_local, direction: west, time: 34 }
       1: { to: mutsuki_shinso_16, line: mutsuki_shinso_local, direction: east, time: 40 }
       2: { to: nyv_main_3, line: walk, direction: westwalk, time: 32 }
@@ -207,7 +207,7 @@ stations:
     world: main
     location: [ 1555.5, -188.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_12, line: mutsuki_shinso_rapid, direction: west, time: 99 }
       1: { to: mutsuki_shinso_19, line: mutsuki_shinso_rapid, direction: east, time: 110 }
       2: { to: mutsuki_shinso_15, line: mutsuki_shinso_local, direction: west, time: 40 }
@@ -222,7 +222,7 @@ stations:
     world: main
     location: [ 1791.5, -187.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_16, line: mutsuki_shinso_local, direction: west, time: 31 }
       1: { to: mutsuki_shinso_18, line: mutsuki_shinso_local, direction: east, time: 37 }
   mutsuki_shinso_18:
@@ -234,7 +234,7 @@ stations:
     world: main
     location: [ 2071.5, -187.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_17, line: mutsuki_shinso_local, direction: west, time: 37 }
       1: { to: mutsuki_shinso_19, line: mutsuki_shinso_local, direction: east, time: 46 }
   mutsuki_shinso_19:
@@ -246,7 +246,7 @@ stations:
     world: main
     location: [ 2423.5, -187.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_16, line: mutsuki_shinso_rapid, direction: west, time: 110 }
       1: { to: mutsuki_shinso_R20, line: mutsuki_shinso_rapid, direction: east, time: 62 }
       2: { to: mutsuki_shinso_18, line: mutsuki_shinso_local, direction: west, time: 46 }
@@ -260,7 +260,7 @@ stations:
     world: main
     location: [ 2907.5, -189.5 ]
     municipality: [ hamazato ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_19, line: mutsuki_shinso_rapid, direction: west, time: 62 }
       1: { to: hamazato_1, line: walk, direction: southwalk, time: 13 }
   mutsuki_shinso_R21:
@@ -272,7 +272,7 @@ stations:
     world: main
     location: [ 3212.5, -189.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_R20, line: mutsuki_shinso_rapid, direction: west, time: 40 }
       1: { to: mutsuki_shinso_R22, line: mutsuki_shinso_rapid, direction: east, time: 63 }
   mutsuki_shinso_R22:
@@ -284,7 +284,7 @@ stations:
     world: main
     location: [ 3704.5, -76.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_R21, line: mutsuki_shinso_rapid, direction: west, time: 63 }
       1: { to: mutsuki_shinso_34, line: mutsuki_shinso_rapid, direction: east, time: 67 }
   mutsuki_shinso_L23:
@@ -296,7 +296,7 @@ stations:
     world: main
     location: [ 2584.5, 42.5 ]
     municipality: [ hamazato ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_19, line: mutsuki_shinso_local, direction: west, time: 45 }
       1: { to: mutsuki_shinso_L24, line: mutsuki_shinso_local, direction: east, time: 31 }
       2: { to: hamazato_9, line: walk, direction: eastwalk, time: 12 }
@@ -309,7 +309,7 @@ stations:
     world: main
     location: [ 2584.5, 274.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_L23, line: mutsuki_shinso_local, direction: west, time: 31 }
       1: { to: mutsuki_shinso_L25, line: mutsuki_shinso_local, direction: east, time: 31 }
       2: { to: nyv_main_11, line: walk, direction: westwalk, time: 34 }
@@ -322,7 +322,7 @@ stations:
     world: main
     location: [ 2584.5, 505.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_L24, line: mutsuki_shinso_local, direction: west, time: 31 }
       1: { to: mutsuki_shinso_L26, line: mutsuki_shinso_local, direction: east, time: 31 }
       2: { to: nyv_main_13, line: walk, direction: westwalk, time: 23 }
@@ -335,7 +335,7 @@ stations:
     world: main
     location: [ 2639.5, 688.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_L25, line: mutsuki_shinso_local, direction: west, time: 31 }
       1: { to: mutsuki_shinso_L27, line: mutsuki_shinso_local, direction: east, time: 39 }
   mutsuki_shinso_L27:
@@ -347,7 +347,7 @@ stations:
     world: main
     location: [ 2811.5, 826.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_L26, line: mutsuki_shinso_local, direction: west, time: 39 }
       1: { to: mutsuki_shinso_L28, line: mutsuki_shinso_local, direction: east, time: 36 }
   mutsuki_shinso_L28:
@@ -359,7 +359,7 @@ stations:
     world: main
     location: [ 3083.5, 826.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_L27, line: mutsuki_shinso_local, direction: west, time: 36 }
       1: { to: mutsuki_shinso_L29, line: mutsuki_shinso_local, direction: east, time: 38 }
   mutsuki_shinso_L29:
@@ -371,7 +371,7 @@ stations:
     world: main
     location: [ 3375.5, 826.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_L28, line: mutsuki_shinso_local, direction: west, time: 38 }
       1: { to: mutsuki_shinso_L30, line: mutsuki_shinso_local, direction: east, time: 55 }
   mutsuki_shinso_L30:
@@ -383,7 +383,7 @@ stations:
     world: main
     location: [ 3546.5, 559.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_L29, line: mutsuki_shinso_local, direction: west, time: 55 }
       1: { to: mutsuki_shinso_L31, line: mutsuki_shinso_local, direction: east, time: 34 }
   mutsuki_shinso_L31:
@@ -395,7 +395,7 @@ stations:
     world: main
     location: [ 3777.5, 535.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_L30, line: mutsuki_shinso_local, direction: west, time: 34 }
       1: { to: mutsuki_shinso_L32, line: mutsuki_shinso_local, direction: east, time: 43 }
   mutsuki_shinso_L32:
@@ -407,7 +407,7 @@ stations:
     world: main
     location: [ 3867.5, 272.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_L31, line: mutsuki_shinso_local, direction: west, time: 43 }
       1: { to: mutsuki_shinso_L33, line: mutsuki_shinso_local, direction: east, time: 40 }
   mutsuki_shinso_L33:
@@ -419,7 +419,7 @@ stations:
     world: main
     location: [ 3867.5, -29.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_L32, line: mutsuki_shinso_local, direction: west, time: 40 }
       1: { to: mutsuki_shinso_34, line: mutsuki_shinso_local, direction: east, time: 50 }
   mutsuki_shinso_34:
@@ -431,7 +431,7 @@ stations:
     world: main
     location: [ 4056.5, -243.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_R22, line: mutsuki_shinso_rapid, direction: west, time: 67 }
       1: { to: mutsuki_shinso_L33, line: mutsuki_shinso_local, direction: west, time: 50 }
   mutsuki_kohoku_2:
@@ -443,7 +443,7 @@ stations:
     world: main
     location: [ 1465.5, -446.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_16, line: mutsuki_kohoku, direction: east, time: 43 }
       1: { to: mutsuki_kohoku_3, line: mutsuki_kohoku, direction: west, time: 39 }
   mutsuki_kohoku_3:
@@ -455,7 +455,7 @@ stations:
     world: main
     location: [ 1428.5, -710.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_2, line: mutsuki_kohoku, direction: east, time: 39 }
       1: { to: mutsuki_kohoku_4, line: mutsuki_kohoku, direction: west, time: 26 }
   mutsuki_kohoku_4:
@@ -467,7 +467,7 @@ stations:
     world: main
     location: [ 1428.5, -908.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_3, line: mutsuki_kohoku, direction: east, time: 26 }
       1: { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: west, time: 30 }
   mutsuki_kohoku_5:
@@ -479,7 +479,7 @@ stations:
     world: main
     location: [ 1250, -1000 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_4, line: mutsuki_kohoku, direction: east, time: 30 }
       1: { to: mutsuki_kohoku_6, line: mutsuki_kohoku, direction: west, time: 30 }
   mutsuki_kohoku_6:
@@ -491,7 +491,7 @@ stations:
     world: main
     location: [ 1177.5, -1016.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: east, time: 30 }
       1: { to: mutsuki_kohoku_7, line: mutsuki_kohoku, direction: west, time: 38 }
   mutsuki_kohoku_7:
@@ -503,7 +503,7 @@ stations:
     world: main
     location: [ 887.5, -1048.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_6, line: mutsuki_kohoku, direction: east, time: 38 }
       1: { to: mutsuki_kohoku_8, line: mutsuki_kohoku, direction: west, time: 34 }
   mutsuki_kohoku_8:
@@ -515,7 +515,7 @@ stations:
     world: main
     location: [ 629.5, -1048.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_7, line: mutsuki_kohoku, direction: east, time: 34 }
       1: { to: mutsuki_kohoku_9, line: mutsuki_kohoku, direction: west, time: 32 }
   mutsuki_kohoku_9:
@@ -527,7 +527,7 @@ stations:
     world: main
     location: [ 600.5, -1263.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_8, line: mutsuki_kohoku, direction: east, time: 32 }
       1: { to: mutsuki_kohoku_10, line: mutsuki_kohoku, direction: west, time: 24 }
   mutsuki_kohoku_10:
@@ -539,7 +539,7 @@ stations:
     world: main
     location: [ 443.5, -1291.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_9, line: mutsuki_kohoku, direction: east, time: 24 }
       1: { to: mutsuki_kohoku_11, line: mutsuki_kohoku, direction: west, time: 25 }
   mutsuki_kohoku_11:
@@ -551,7 +551,7 @@ stations:
     world: main
     location: [ 252.5, -1291.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_10, line: mutsuki_kohoku, direction: east, time: 25 }
       1: { to: mutsuki_kohoku_12, line: mutsuki_kohoku, direction: west, time: 28 }
   mutsuki_kohoku_12:
@@ -563,7 +563,7 @@ stations:
     world: main
     location: [ 80.5, -1332.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_11, line: mutsuki_kohoku, direction: east, time: 28 }
       1: { to: mutsuki_shinso_8, line: mutsuki_adachi, direction: south, time: 100 }
       2: { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_rapid, direction: north, time: 63 }
@@ -577,7 +577,7 @@ stations:
     world: main
     location: [ 0, -600 ]
     municipality: [ niizame ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_8, line: mutsuki_niizamenamboku_south, direction: south, time: 100 }
   mutsuki_niizamenamboku_S3:
     name: 自然王国西
@@ -588,7 +588,7 @@ stations:
     world: main
     location: [ -77.5, -1.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_shinso_8, line: mutsuki_niizamenamboku_south, direction: north, time: 42 }
       1: { to: mutsuki_niizamenamboku_S4, line: mutsuki_niizamenamboku_south, direction: south, time: 33 }
   mutsuki_niizamenamboku_S4:
@@ -600,7 +600,7 @@ stations:
     world: main
     location: [ -77.5, 239.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_niizamenamboku_S3, line: mutsuki_niizamenamboku_south, direction: north, time: 33 }
       1: { to: mutsuki_niizamenamboku_S5, line: mutsuki_niizamenamboku_south, direction: south, time: 34 }
   mutsuki_niizamenamboku_S5:
@@ -612,7 +612,7 @@ stations:
     world: main
     location: [ -77.5, 499.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_niizamenamboku_S4, line: mutsuki_niizamenamboku_south, direction: north, time: 34 }
       1: { to: yamuwakka, line: mutsuki_niizamenamboku_south, direction: south, time: 178 }
   yamuwakka:
@@ -624,7 +624,7 @@ stations:
     world: main
     location: [ -269.5, 1730.0 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_niizamenamboku_S5, line: mutsuki_niizamenamboku_south, direction: north, time: 178 }
       1: { to: scr_12, line: scr_nansho, direction: north, time: 68 }
   mutsuki_niizamenamboku_N2:
@@ -636,7 +636,7 @@ stations:
     world: main
     location: [ 80.5, -1491.0 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_12, line: mutsuki_niizamenamboku_north_local, direction: south, time: 22 }
       1: { to: mutsuki_niizamenamboku_N3, line: mutsuki_niizamenamboku_north_local, direction: north, time: 20 }
   mutsuki_niizamenamboku_N3:
@@ -648,7 +648,7 @@ stations:
     world: main
     location: [ 80.5, -1643.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_niizamenamboku_N2, line: mutsuki_niizamenamboku_north_local, direction: south, time: 20 }
       1: { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_local, direction: north, time: 25 }
   mutsuki_niizamenamboku_N4:
@@ -660,7 +660,7 @@ stations:
     world: main
     location: [ 80.5, -1823.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_kohoku_12, line: mutsuki_niizamenamboku_rapid, direction: south, time: 63 }
       1: { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_rapid, direction: north, time: 77 }
       2: { to: mutsuki_niizamenamboku_N3, line: mutsuki_niizamenamboku_local, direction: south, time: 25 }
@@ -674,7 +674,7 @@ stations:
     world: main
     location: [ 80.5, -2016.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_local, direction: south, time: 26 }
       1: { to: mutsuki_niizamenamboku_N6, line: mutsuki_niizamenamboku_local, direction: north, time: 22 }
   mutsuki_niizamenamboku_N6:
@@ -686,7 +686,7 @@ stations:
     world: main
     location: [ 80.5, -2182.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_niizamenamboku_N5, line: mutsuki_niizamenamboku_local, direction: south, time: 22 }
       1: { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_local, direction: north, time: 33 }
   mutsuki_niizamenamboku_N7:
@@ -698,7 +698,7 @@ stations:
     world: main
     location: [ 244.5, -2279.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_rapid, direction: south, time: 77 }
       1: { to: mutsuki_niizamenamboku_N6, line: mutsuki_niizamenamboku_local, direction: south, time: 33 }
   enr_2_3:
@@ -710,7 +710,7 @@ stations:
     world: main
     location: [ -1249.5, 106.5 ]
     municipality: [ egl2 ]
-    path:
+    paths:
       0: { to: enr_2_4, line: enr_nakatsumichi_rapid, direction: north, time: 20 }
       1: { to: enr_2_4, line: enr_nakatsumichi_local, direction: north, time: 20 }
   enr_2_4:
@@ -722,7 +722,7 @@ stations:
     world: main
     location: [ -1249.5, -44.5 ]
     municipality: [ egl2 ]
-    path:
+    paths:
       0: { to: enr_2_3, line: enr_nakatsumichi_rapid, direction: south, time: 20 }
       1: { to: enr_2_7, line: enr_nakatsumichi_rapid, direction: north, time: 70 }
       2: { to: enr_2_3, line: enr_nakatsumichi_local, direction: south, time: 20 }
@@ -737,7 +737,7 @@ stations:
     world: main
     location: [ -1241.5, -218.5 ]
     municipality: [ egl2 ]
-    path:
+    paths:
       0: { to: enr_2_4, line: enr_nakatsumichi_local, direction: south, time: 24 }
       1: { to: enr_2_6, line: enr_nakatsumichi_local, direction: north, time: 25 }
   enr_2_6:
@@ -749,7 +749,7 @@ stations:
     world: main
     location: [ -1184.5, -351.5 ]
     municipality: [ egl2 ]
-    path:
+    paths:
       0: { to: enr_2_5, line: enr_nakatsumichi_local, direction: south, time: 25 }
       1: { to: enr_2_7, line: enr_nakatsumichi_local, direction: north, time: 24 }
   enr_2_7:
@@ -761,7 +761,7 @@ stations:
     world: main
     location: [ -1137.5, -491.5 ]
     municipality: [ egl2 ]
-    path:
+    paths:
       0: { to: enr_2_4, line: enr_nakatsumichi_rapid, direction: south, time: 70 }
       1: { to: enr_2_9, line: enr_nakatsumichi_rapid, direction: north, time: 40 }
       2: { to: enr_2_6, line: enr_nakatsumichi_local, direction: south, time: 24 }
@@ -775,7 +775,7 @@ stations:
     world: main
     location: [ -1024.5, -557.5 ]
     municipality: [ egl2 ]
-    path:
+    paths:
       0: { to: enr_2_7, line: enr_nakatsumichi_local, direction: south, time: 22 }
       1: { to: enr_2_9, line: enr_nakatsumichi_local, direction: north, time: 19 }
   enr_2_9:
@@ -787,7 +787,7 @@ stations:
     world: main
     location: [ -886.5, -557.5 ]
     municipality: [ egl2 ]
-    path:
+    paths:
       0: { to: enr_2_7, line: enr_nakatsumichi_rapid, direction: south, time: 40 }
       1: { to: enr_2_8, line: enr_nakatsumichi_local, direction: south, time: 19 }
   yaga_yaga_1:
@@ -799,7 +799,7 @@ stations:
     world: main
     location: [ -1999.5, -45.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: yaga_yaga_2, line: yaga_yaga, direction: north, time: 52 }
       1: { to: mutsuki_shinso_1, line: walk, direction: southwalk, time: 30 }
   yaga_yaga_2:
@@ -811,7 +811,7 @@ stations:
     world: main
     location: [ -2123.5, -442.0 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: yaga_yaga_1, line: yaga_yaga, direction: south, time: 52 }
       1: { to: yaga_yaga_3, line: yaga_yaga, direction: north, time: 60 }
   yaga_yaga_3:
@@ -823,7 +823,7 @@ stations:
     world: main
     location: [ -2452.5, -855.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: yaga_yaga_2, line: yaga_yaga, direction: south, time: 60 }
       1: { to: yaga_yaga_4, line: yaga_yaga, direction: north, time: 40 }
   yaga_yaga_4:
@@ -835,7 +835,7 @@ stations:
     world: main
     location: [ -2540.5, -1072.0 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: yaga_yaga_3, line: yaga_yaga, direction: south, time: 40 }
   yaga_mizue_1:
     name: 江橋
@@ -846,7 +846,7 @@ stations:
     world: main
     location: [ 797.5, 268.0 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: yaga_mizue_2, line: yaga_mizue_minasato, direction: west, time: 40 }
       1: { to: yaga_mizue_3, line: yaga_mizue_tool, direction: south, time: 123 }
       2: { to: mutsuki_shinso_12, line: walk, direction: northwalk, time: 20 }
@@ -859,7 +859,7 @@ stations:
     world: main
     location: [ 715.0, 499.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: yaga_mizue_1, line: yaga_mizue_minasato, direction: east, time: 40 }
   yaga_mizue_3:
     name: 通留町
@@ -870,7 +870,7 @@ stations:
     world: main
     location: [ 654.5, 1084.0 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: yaga_mizue_1, line: yaga_mizue_tool, direction: north, time: 123 }
   hamazato_1:
     name: 浜里
@@ -881,7 +881,7 @@ stations:
     world: main
     location: [ 2890.5, -165.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: hamazato_2, line: hamazato_hamazato, direction: south, time: 12 }
       1: { to: mutsuki_shinso_R20, line: walk, direction: northwalk, time: 13 }
   hamazato_2:
@@ -893,7 +893,7 @@ stations:
     world: main
     location: [ 2857.5, -135.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: hamazato_1, line: hamazato_hamazato, direction: north, time: 12 }
       1: { to: hamazato_3, line: hamazato_hamazato, direction: south, time: 12 }
   hamazato_3:
@@ -905,7 +905,7 @@ stations:
     world: main
     location: [ 2770.0, -135.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: hamazato_2, line: hamazato_hamazato, direction: north, time: 12 }
       1: { to: hamazato_4, line: hamazato_hamazato, direction: south, time: 8 }
   hamazato_4:
@@ -917,7 +917,7 @@ stations:
     world: main
     location: [ 2727.5, -124.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: hamazato_3, line: hamazato_hamazato, direction: north, time: 8 }
       1: { to: hamazato_5, line: hamazato_hamazato, direction: south, time: 16 }
   hamazato_5:
@@ -929,7 +929,7 @@ stations:
     world: main
     location: [ 2621.5, -121.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: hamazato_4, line: hamazato_hamazato, direction: north, time: 18 }
       1: { to: hamazato_6, line: hamazato_hamazato, direction: south, time: 12 }
   hamazato_6:
@@ -941,7 +941,7 @@ stations:
     world: main
     location: [ 2575.5, -103.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: hamazato_5, line: hamazato_hamazato, direction: north, time: 12 }
       1: { to: hamazato_7, line: hamazato_hamazato, direction: south, time: 8 }
   hamazato_7:
@@ -953,7 +953,7 @@ stations:
     world: main
     location: [ 2578.5, -60.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: hamazato_6, line: hamazato_hamazato, direction: north, time: 8 }
       1: { to: hamazato_8, line: hamazato_hamazato, direction: south, time: 8 }
   hamazato_8:
@@ -965,7 +965,7 @@ stations:
     world: main
     location: [ 2577.5, -20.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: hamazato_7, line: hamazato_hamazato, direction: north, time: 8 }
       1: { to: hamazato_9, line: hamazato_hamazato, direction: south, time: 9 }
   hamazato_9:
@@ -977,7 +977,7 @@ stations:
     world: main
     location: [ 2577.5, 31.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: hamazato_8, line: hamazato_hamazato, direction: north, time: 9 }
       1: { to: mutsuki_shinso_L23, line: walk, direction: westwalk, time: 12 }
   scr_01:
@@ -989,7 +989,7 @@ stations:
     world: main
     location: [ -565.0, -261.0 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_02, line: scr_hakusa, direction: west, time: 20 }
       1: { to: mutsuki_shinso_6, line: walk, direction: southwalk, time: 15 }
   scr_02:
@@ -1001,7 +1001,7 @@ stations:
     world: main
     location: [ -494.5, -218.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_01, line: scr_hakusa, direction: east, time: 20 }
       1: { to: scr_03, line: scr_hakusa, direction: west, time: 31 }
   scr_03:
@@ -1013,7 +1013,7 @@ stations:
     world: main
     location: [ -492.0, 0.0 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_02, line: scr_hakusa, direction: east, time: 31 }
       1: { to: scr_04, line: scr_hakusa, direction: west, time: 22 }
       2: { to: scr_07, line: scr_nansho, direction: north, time: 41 }
@@ -1027,7 +1027,7 @@ stations:
     world: main
     location: [ -527.5, 137.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_03, line: scr_hakusa, direction: east, time: 22 }
       1: { to: scr_05, line: scr_hakusa, direction: west, time: 18 }
   scr_05:
@@ -1039,7 +1039,7 @@ stations:
     world: main
     location: [ -623.5, 146.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_04, line: scr_hakusa, direction: east, time: 16 }
       1: { to: scr_06, line: scr_hakusa, direction: west, time: 31 }
   scr_06:
@@ -1051,7 +1051,7 @@ stations:
     world: main
     location: [ -822.5, 102.0 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_05, line: scr_hakusa, direction: east, time: 31 }
       1: { to: mutsuki_shinso_4, line: walk, direction: northwalk, time: 67 }
   scr_07:
@@ -1063,7 +1063,7 @@ stations:
     world: main
     location: [ -494.5, -314.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_03, line: scr_nansho, direction: south, time: 41 }
       1: { to: scr_13, line: scr_nansho, direction: north, time: 15 }
       2: { to: mutsuki_shinso_6, line: walk, direction: southwalk, time: 64 }
@@ -1076,7 +1076,7 @@ stations:
     world: main
     location: [ -471.0, 434.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_03, line: scr_nansho, direction: north, time: 60 }
       1: { to: scr_09, line: scr_nansho, direction: south, time: 50 }
       2: { to: scr_13, line: scr_kazetsuyu, direction: west, time: 42 }
@@ -1089,7 +1089,7 @@ stations:
     world: main
     location: [ -251.5, 602.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_08, line: scr_nansho, direction: north, time: 50 }
       1: { to: scr_10, line: scr_nansho, direction: south, time: 24 }
   scr_10:
@@ -1101,7 +1101,7 @@ stations:
     world: main
     location: [ -185.5, 677.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_09, line: scr_nansho, direction: north, time: 24 }
       1: { to: scr_11, line: scr_nansho, direction: south, time: 28 }
   scr_11:
@@ -1113,7 +1113,7 @@ stations:
     world: main
     location: [ -154.5, 865.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_09, line: scr_nansho, direction: north, time: 24 }
       1: { to: scr_11, line: scr_nansho, direction: south, time: 56 }
   scr_12:
@@ -1125,7 +1125,7 @@ stations:
     world: main
     location: [ -193.5, 1284.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_11, line: scr_nansho, direction: north, time: 56 }
       1: { to: yamuwakka, line: scr_nansho, direction: north, time: 68 }
   scr_13:
@@ -1137,7 +1137,7 @@ stations:
     world: main
     location: [ -608.5, 660.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_08, line: scr_kazetsuyu, direction: east, time: 42 }
       1: { to: scr_14, line: scr_kazetsuyu, direction: west, time: 23 }
   scr_14:
@@ -1149,7 +1149,7 @@ stations:
     world: main
     location: [ -662.5, 778.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_13, line: scr_kazetsuyu, direction: east, time: 23 }
       1: { to: scr_15, line: scr_kazetsuyu, direction: west, time: 30 }
   scr_15:
@@ -1161,7 +1161,7 @@ stations:
     world: main
     location: [ -844.5, 819.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_14, line: scr_kazetsuyu, direction: east, time: 30 }
       1: { to: scr_16, line: scr_kazetsuyu, direction: west, time: 34 }
   scr_16:
@@ -1173,7 +1173,7 @@ stations:
     world: main
     location: [ -1013, 948.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_15, line: scr_kazetsuyu, direction: east, time: 34 }
   scr_17:
     name: 海老川渡
@@ -1184,7 +1184,7 @@ stations:
     world: main
     location: [ -518.5, -422.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: scr_07, line: scr_nansho, direction: south, time: 15 }
   niizame_ebikawa_1:
     name: 海老川南
@@ -1195,7 +1195,7 @@ stations:
     world: main
     location: [ -263.5, -379.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: niizame_ebikawa_2, line: niizame_ebikawa, direction: north, time: 36 }
       1: { to: mutsuki_shinso_7, line: walk, direction: southwalk, time: 60 }
   niizame_ebikawa_2:
@@ -1207,7 +1207,7 @@ stations:
     world: main
     location: [ -329.5, -583.0 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: niizame_ebikawa_1, line: niizame_ebikawa, direction: south, time: 36 }
   nyv_main_1:
     name: 知羽岬
@@ -1218,7 +1218,7 @@ stations:
     world: main
     location: [ 1274.0, 66.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_2, line: nyv_main, direction: south, time: 30 }
   nyv_main_2:
     name: 中倉
@@ -1229,7 +1229,7 @@ stations:
     world: main
     location: [ 1427.5, 144.0 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_1, line: nyv_main, direction: north, time: 30 }
       1: { to: nyv_main_3, line: nyv_main, direction: south, time: 18 }
   nyv_main_3:
@@ -1241,7 +1241,7 @@ stations:
     world: main
     location: [ 1501.5, 102.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_2, line: nyv_main, direction: north, time: 18 }
       1: { to: nyv_main_4, line: nyv_main, direction: south, time: 18 }
   nyv_main_4:
@@ -1253,7 +1253,7 @@ stations:
     world: main
     location: [ 1630.5, 102.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_3, line: nyv_main, direction: north, time: 18 }
       1: { to: nyv_main_5, line: nyv_main, direction: south, time: 19 }
   nyv_main_5:
@@ -1265,7 +1265,7 @@ stations:
     world: main
     location: [ 1769.5, 102.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_4, line: nyv_main, direction: north, time: 19 }
       1: { to: nyv_main_6, line: nyv_main, direction: south, time: 28 }
   nyv_main_6:
@@ -1277,7 +1277,7 @@ stations:
     world: main
     location: [ 1980.5, 102.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_5, line: nyv_main, direction: north, time: 28 }
       1: { to: nyv_main_7, line: nyv_main, direction: south, time: 19 }
   nyv_main_7:
@@ -1289,7 +1289,7 @@ stations:
     world: main
     location: [ 2121.5, 102.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_6, line: nyv_main, direction: north, time: 19 }
       1: { to: nyv_main_8, line: nyv_main, direction: south, time: 16 }
   nyv_main_8:
@@ -1301,7 +1301,7 @@ stations:
     world: main
     location: [ 2234.5, 94.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_7, line: nyv_main, direction: north, time: 16 }
       1: { to: nyv_main_9, line: nyv_main, direction: south, time: 19 }
   nyv_main_9:
@@ -1313,7 +1313,7 @@ stations:
     world: main
     location: [ 2365.5, 92.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_8, line: nyv_main, direction: north, time: 19 }
       1: { to: nyv_main_10, line: nyv_main, direction: south, time: 25 }
   nyv_main_10:
@@ -1325,7 +1325,7 @@ stations:
     world: main
     location: [ 2493.5, 148.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_9, line: nyv_main, direction: north, time: 25 }
       1: { to: nyv_main_10a, line: nyv_main, direction: south, time: 16 }
   #todo: 乗降不可なのに選択できてしまうのはマズいかも？
@@ -1338,7 +1338,7 @@ stations:
     world: main
     location: [ 2482.5, 232.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_10, line: nyv_main, direction: north, time: 16 }
       1: { to: nyv_main_11, line: nyv_main, direction: south, time: 10 }
   nyv_main_11:
@@ -1350,7 +1350,7 @@ stations:
     world: main
     location: [ 2522.5, 261.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_10a, line: nyv_main, direction: north, time: 10 }
       1: { to: nyv_main_12, line: nyv_main, direction: south, time: 19 }
       2: { to: mutsuki_shinso_L24, line: walk, direction: eastwalk, time: 34 }
@@ -1363,7 +1363,7 @@ stations:
     world: main
     location: [ 2490.5, 365.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_11, line: nyv_main, direction: north, time: 19 }
       1: { to: nyv_main_13, line: nyv_main, direction: south, time: 20 }
   nyv_main_13:
@@ -1375,7 +1375,7 @@ stations:
     world: main
     location: [ 2545.5, 457.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_12, line: nyv_main, direction: north, time: 20 }
       1: { to: nyv_main_14, line: nyv_main, direction: south, time: 19 }
       2: { to: mutsuki_shinso_L25, line: walk, direction: eastwalk, time: 23 }
@@ -1388,7 +1388,7 @@ stations:
     world: main
     location: [ 2543.5, 597.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_13, line: nyv_main, direction: north, time: 19 }
       1: { to: nyv_main_15, line: nyv_main, direction: south, time: 23 }
   nyv_main_15:
@@ -1400,7 +1400,7 @@ stations:
     world: main
     location: [ 2515.5, 687.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_14, line: nyv_main, direction: north, time: 23 }
       1: { to: nyv_main_16, line: nyv_main, direction: south, time: 22 }
   nyv_main_16:
@@ -1412,7 +1412,7 @@ stations:
     world: main
     location: [ 2360.5, 698.5 ]
     municipality: [ ]
-    path:
+    paths:
       0: { to: nyv_main_15, line: nyv_main, direction: north, time: 22 }
 
 lines:
