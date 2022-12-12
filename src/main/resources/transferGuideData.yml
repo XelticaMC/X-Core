@@ -1695,4 +1695,7 @@ municipalities:
 
 loopMax: 210
 
-update: "2022-12-11"
+#コンソールが滅茶滅茶になるので、本番環境ではfalseにすることを強めに推奨
+consoleDebug: false
+
+update: "2022-12-12"

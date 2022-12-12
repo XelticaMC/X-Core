@@ -274,72 +274,96 @@ class TransferGuideSession(val player: Player) {
         /*
             アルゴリズムの大まかなイメージ
             A*のつもりだけどちゃんと実装できているかは不明
-            1. 全ての駅を表すカードが裏返しで置いてあると想定する。
-            2. 出発地点の駅のカードを開ける。(openedへ追加)
+            1. 全ての駅を表すカードが裏返しで置いてあると想定する。(unsearched)
+            2. 出発地点の駅のカードを開ける。(unsearchedから削除、openedへ追加)
             3. 既に開いているカードの内、最も到着地点の駅への直線距離が短い駅(minStation)の隣の駅を全て開け(openedへ追加)、
                その駅に印をつける(closedに追加しopenedから削除)。
             4. 開いたカードに到着地点の駅が含まれていなければ3. へ戻る。
             5. 印をつけた駅を結んで、おわり。
         */
+        val unsearched = data.stations.toMutableMap()
         val opened: MutableMap<KStation, Double> = mutableMapOf()
         val closed: MutableSet<KStation> = mutableSetOf()
         opened[start] = getDistance(start.location, end.location)
-        var countA = 0
-        while (countA < data.loopMax) {
-            val minScore = opened.minOf { it.value }
-            val minStation = getKeyFromStationsMap(opened, minScore)
-            if (minStation == null) {
-                //最小値を見つけた後、最小値から駅名に辿り着けないとこの分岐に入るけど、途中で路線データの変更が入らない限りそうはならないはず、知らんけど。
-                gui.error(player, "流石にこのエラーは発生しないはず...")
-                logger.warning("[TransferGuideData] 最小値から駅名に辿り着けませんでした。(${startId}->${endId})")
+        unsearched.remove(startId)
+        var i = 0
+        knitA@ while (i < data.loopMax) {
+            if (data.consoleDebug) {
+                logger.info(
+                    "[TransferGuide] step: A${i}\nunsearched: ${
+                        unsearched.toList().joinToString { it.first }
+                    }\nopened: ${opened.toList().joinToString { it.first.id }}\nclosed: ${
+                        closed.joinToString { it.id }
+                    }"
+                )
+            }
+            val minStationEntry = opened.minByOrNull { it.value }
+            if (minStationEntry == null) {
+                gui.error(player, "最小値からの駅探索Aに失敗しました。")
+                logger.warning(
+                    "[TransferGuide] 最小値からの駅探索失敗A(${startId}->${endId}, unsearched: ${
+                        unsearched.toList().joinToString { it.first }
+                    }, opened: ${opened.toList().joinToString { it.first.id }}, closed: ${
+                        closed.joinToString { it.id }
+                    })"
+                )
                 return
             }
-            for (path in minStation.paths) {
-                val destStation = data.getStation(path.to)
-                if (destStation == null) {
-                    gui.error(player, "データ内に存在しない駅が存在しています。")
-                    logger.warning("[TransferGuideData] 存在しない駅:${path.to}(${minStation.name}内)")
-                    return
+            closed.add(minStationEntry.key)
+            opened.remove(minStationEntry.key)
+            for (path in minStationEntry.key.paths) {
+                val pathToInUnsearched = unsearched[path.to] ?: continue
+                opened[pathToInUnsearched] = getDistance(end.location, pathToInUnsearched.location)
+                unsearched.remove(pathToInUnsearched.id)
+                if (endId == pathToInUnsearched.id) {
+                    closed.add(pathToInUnsearched)
+                    logger.info(
+                        "[TransferGuide] step: A_END,unsearched: ${
+                            unsearched.toList().joinToString { it.first }
+                        }, opened: ${opened.toList().joinToString { it.first.id }}, closed: ${
+                            closed.joinToString { it.id }
+                        }"
+                    )
+
+                    break@knitA
                 }
-                val distance = getDistance(minStation.location, destStation.location)
-                opened[destStation] = distance
             }
-            closed.add(minStation)
-            opened.remove(minStation)
-            if (closed.contains(end)) break
-            if (opened.isEmpty()) {
-                gui.error(player, "目的地に辿り着くことができませんでした。")
-                logger.warning("[TransferGuideData] 検索失敗(${startId}->${endId})")
-                return
-            }
-            countA++
+            i++
         }
         val routeArrayList = ArrayList<KStation>()
         routeArrayList.add(end)
-        var countB = 0
-        while (countB < data.loopMax) {
+        closed.removeIf { it.id == endId }
+        var j = 0
+        knitB@ while (j < data.loopMax) {
+            if (data.consoleDebug) {
+                logger.info("[TransferGuide] step: B${j}\nclosed: ${closed.joinToString { it.id }}\nrouteArrayList: ${routeArrayList.joinToString { it.id }}")
+            }
             val lastStationPath = routeArrayList.last().paths
-            var candidate: KStation? = null
+            val candidates: MutableMap<KStation, Double> = mutableMapOf()
             for (path in lastStationPath) {
                 val pathTo = data.getStation(path.to)
-                if (closed.contains(pathTo) && pathTo != null) {
-                    if (candidate == null || (getDistance(
-                            start.location,
-                            candidate.location
-                        ) > getDistance(start.location, pathTo.location))
-                    ) {
-                        candidate = pathTo
-                    }
+                if (closed.any { it.id == path.to } && pathTo != null) {
+                    candidates[pathTo] = getDistance(end.location, pathTo.location)
                 }
             }
-            if (candidate == null) {
-                gui.error(player, "逆算中エラー")
-                logger.warning("[TransferGuideData] 逆算中エラー(${startId}->${endId})")
+            if(candidates.isEmpty()){
+                gui.error(player,"逆算中に経路が途切れました。")
+                logger.warning("[TransferGuideData] 候補経路先無し(${startId}->${endId}, closed: ${closed.joinToString{it.id}}, routeArrayList: ${routeArrayList.joinToString{it.id}}, candidates: ${candidates.toList().joinToString{it.first.id}})")
                 return
             }
-            routeArrayList.add(candidate)
-            if (routeArrayList.contains(start)) break
-            countB++
+            val min = candidates.minByOrNull { it.value }
+            if (min == null) {
+                gui.error(player, "最小値からの駅探索Bに失敗しました。")
+                logger.warning("[TransferGuideData] 最小値からの駅探索失敗B(${startId}->${endId}, closed: ${closed.joinToString{it.id}}, routeArrayList: ${routeArrayList.joinToString { it.id }}, candidates: ${candidates.toList().joinToString { it.first.id }})")
+                return
+            }
+            routeArrayList.add(min.key)
+            closed.remove(min.key)
+            if (min.key.id == startId) {
+                logger.info("[TransferGuide] step: B_END, routeArrayList: ${routeArrayList.joinToString { it.id }}")
+                break@knitB
+            }
+            j++
         }
         routeArrayList.reverse()
         val routeArray = routeArrayList.toTypedArray()
@@ -390,6 +414,7 @@ private class TransferGuideData {
     val municipalities: Map<String, String>
     val loopMax: Int
     val update: String
+    val consoleDebug: Boolean
 
     init {
         val conf = Config("transferGuideData").conf
@@ -400,6 +425,7 @@ private class TransferGuideData {
         municipalities = pairStringConfigToMap(conf.getConfigurationSection("municipalities"))
         loopMax = conf.getInt("loopMax")
         update = conf.getString("update") ?: "不明"
+        consoleDebug = conf.getBoolean("consoleDebug", true)
     }
 
     fun getStation(id: String?): KStation? {
@@ -621,7 +647,7 @@ private class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                 } else {
                     30
                 }
-                sb.append(" | ${data.lines[route.routePath.line]}${data.directions[route.routePath.direction]} 約${route.routePath.time}秒\n")
+                sb.append(" | ${data.lines[route.routePath.line]?.name ?: route.routePath.line}${data.directions[route.routePath.direction]} 約${route.routePath.time}秒\n")
             }
         }
         sb.append("所要時間:約${appendTime}秒\n")
