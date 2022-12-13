@@ -42,9 +42,9 @@ class TransferGuideSession(val player: Player) {
         gui.openMenu(
             player, "駅選択", listOf(
                 MenuItem("近い順", { chooseStationNear(stationChoiceTarget) }, Material.DIAMOND_HORSE_ARMOR),
-                MenuItem("五十音別", { chooseStationAiueo(stationChoiceTarget) }, Material.BOOK),
+                MenuItem("五十音順", { chooseStationAiueo(stationChoiceTarget) }, Material.BOOK),
                 MenuItem("会社・路線別", { chooseStationLine(stationChoiceTarget) }, Material.SPRUCE_DOOR),
-                MenuItem("近隣自治体別", { chooseStationMuni(stationChoiceTarget) }, Material.FILLED_MAP),
+                MenuItem("最寄自治体別", { chooseStationMuni(stationChoiceTarget) }, Material.FILLED_MAP),
                 MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH),
             )
         )
@@ -58,7 +58,7 @@ class TransferGuideSession(val player: Player) {
             )
         }
         items.add(MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH))
-        gui.openMenu(player, "五十音別", items)
+        gui.openMenu(player, "五十音順", items)
     }
 
     private fun chooseStationAiueo(stationChoiceTarget: StationChoiceTarget, column: JapaneseColumns) {
@@ -154,37 +154,30 @@ class TransferGuideSession(val player: Player) {
     private fun chooseStationMuni(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
         data.municipalities.forEach { muni ->
-            items.add(MenuItem(muni.value, { chooseStationMuni(stationChoiceTarget, muni.key) }, Material.FILLED_MAP))
+            if (muni.value.world == player.world.name) items.add(
+                MenuItem(muni.value.name, { chooseStationMuni(stationChoiceTarget, muni.value) }, Material.FILLED_MAP)
+            )
         }
         items.add(MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "自治体選択", items)
     }
 
-    private fun chooseStationMuni(stationChoiceTarget: StationChoiceTarget, muniId: String) {
+    private fun chooseStationMuni(stationChoiceTarget: StationChoiceTarget, muni: KMuni) {
         val items = ArrayList<MenuItem>()
-        data.stations.values.forEach { station ->
-            if (station.world == player.world.name && station.municipality.contains(muniId)) {
-                when (stationChoiceTarget) {
-                    StationChoiceTarget.START -> items.add(
-                        MenuItem(
-                            station.name,
-                            { startId = station.id },
-                            Material.MINECART
-                        )
-                    )
+        muni.stations.forEach { stationId ->
+            when (stationChoiceTarget) {
+                StationChoiceTarget.START -> items.add(
+                    MenuItem(data.getStation(stationId)?.name, { startId = stationId }, Material.MINECART)
+                )
 
-                    StationChoiceTarget.END -> items.add(
-                        MenuItem(
-                            station.name,
-                            { endId = station.id },
-                            Material.MINECART
-                        )
-                    )
-                }
+                StationChoiceTarget.END -> items.add(
+                    MenuItem(data.getStation(stationId)?.name, { endId = stationId }, Material.MINECART)
+                )
             }
+
         }
         items.add(MenuItem("戻る", { chooseStationMuni(stationChoiceTarget) }, Material.REDSTONE_TORCH))
-        gui.openMenu(player, "${data.municipalities[muniId]}", items)
+        gui.openMenu(player, "${data.municipalities[muni.id]?.name}", items)
     }
 
     private fun chooseStationNear(stationChoiceTarget: StationChoiceTarget) {
@@ -399,7 +392,7 @@ private class TransferGuideData {
     val lines: Map<String, KLine>
     val directions: Map<String, String>
     val companies: Map<String, KCompany>
-    val municipalities: Map<String, String>
+    val municipalities: Map<String, KMuni>
     val loopMax: Int
     val update: String
     val consoleDebug: Boolean
@@ -410,7 +403,7 @@ private class TransferGuideData {
         lines = linesConfigToKLines(conf.getConfigurationSection("lines"))
         directions = pairStringConfigToMap(conf.getConfigurationSection("directions"))
         companies = companiesConfigToKCompanies(conf.getConfigurationSection("companies"))
-        municipalities = pairStringConfigToMap(conf.getConfigurationSection("municipalities"))
+        municipalities = munisConfigToKMunis(conf.getConfigurationSection("municipalities"))
         loopMax = conf.getInt("loopMax")
         update = conf.getString("update") ?: "不明"
         consoleDebug = conf.getBoolean("consoleDebug", false)
@@ -453,6 +446,20 @@ private class TransferGuideData {
         return map
     }
 
+    private fun munisConfigToKMunis(conf: ConfigurationSection?): MutableMap<String, KMuni> {
+        val map = mutableMapOf<String, KMuni>()
+        conf ?: return map
+        val keys = conf.getKeys(false)
+        for (key in keys) {
+            val section = conf.getConfigurationSection(key)
+            if (section != null) {
+                val c = conf.getConfigurationSection(key)
+                if (c != null) map[key] = KMuni(c, key)
+            }
+        }
+        return map
+    }
+
     private fun pairStringConfigToMap(conf: ConfigurationSection?): Map<String, String> {
         val map = mutableMapOf<String, String>()
         conf ?: return map
@@ -471,7 +478,6 @@ private class KStation(conf: ConfigurationSection, val id: String) {
     val number = conf.getString("number") ?: "null"
     val world = conf.getString("world") ?: "null"
     val location = conf.getDoubleList("location").toDoubleArray()
-    val municipality: List<String> = conf.getStringList("municipality")
     val paths = pathsConfigToKPaths(conf.getConfigurationSection("paths"))
     private fun pathsConfigToKPaths(conf: ConfigurationSection?): MutableSet<KPath> {
         val set = mutableSetOf<KPath>()
@@ -486,6 +492,12 @@ private class KStation(conf: ConfigurationSection, val id: String) {
         }
         return set
     }
+}
+
+private class KMuni(conf: ConfigurationSection, val id: String) {
+    val name = conf.getString("name")
+    val world = conf.getString("world")
+    val stations: List<String> = conf.getStringList("stations")
 }
 
 private class KPath(conf: ConfigurationSection) {
