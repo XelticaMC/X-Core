@@ -215,7 +215,7 @@ class Gui: Listener {
      * @param pitch ピッチ
      */
     fun playSound(player: Player, sound: Sound, volume: Float, pitch: SoundPitch) {
-        if (player.gameMode == GameMode.SPECTATOR){
+        if (player.gameMode == GameMode.SPECTATOR) {
             return
         }
 
@@ -298,15 +298,6 @@ class Gui: Listener {
 
         // GC
         invMap.remove(inv)
-    }
-
-    @EventHandler
-    fun onPlayerEditBook(e: PlayerEditBookEvent) {
-        if (bookSet.contains(e.previousBookMeta)) {
-            e.isCancelled = true
-            e.player.sendMessage("てすてすてすとですとよ")
-            Bukkit.getLogger().info("テスト")
-        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
