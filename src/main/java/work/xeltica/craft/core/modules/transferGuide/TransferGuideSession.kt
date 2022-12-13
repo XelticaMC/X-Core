@@ -16,198 +16,203 @@ class TransferGuideSession(val player: Player) {
     private val gui = Gui.getInstance()
     private val logger = Bukkit.getLogger()
     private var startId: String? = null
+        set(value) {
+            field = value
+            openMainMenu()
+        }
     private var endId: String? = null
+        set(value) {
+            field = value
+            openMainMenu()
+        }
 
     fun start() {
         openMainMenu()
     }
 
-    private fun chooseStation(startOrEnd: StartOrEnd) {
+    private fun chooseStation(stationChoiceTarget: StationChoiceTarget) {
         when (player.world.name) {
-            "main" -> chooseStationMain(startOrEnd)
-            "wildarea2", "wildarea2_nether" -> chooseStationWild(startOrEnd)
+            "main" -> chooseStationMain(stationChoiceTarget)
+            "wildarea2", "wildarea2_nether" -> chooseStationWild(stationChoiceTarget)
             else -> gui.error(player, "今いるワールドには鉄道は登録されていません！")
         }
     }
 
-    private fun chooseStationMain(startOrEnd: StartOrEnd) {
+    private fun chooseStationMain(stationChoiceTarget: StationChoiceTarget) {
         gui.openMenu(
             player, "駅選択", listOf(
-                MenuItem("近い順", { chooseStationNear(startOrEnd) }, Material.DIAMOND_HORSE_ARMOR),
-                MenuItem("五十音別", { chooseStationAiueo(startOrEnd) }, Material.BOOK),
-                MenuItem("会社・路線別", { chooseStationLine(startOrEnd) }, Material.SPRUCE_DOOR),
-                MenuItem("近隣自治体別", { chooseStationMuni(startOrEnd) }, Material.FILLED_MAP),
+                MenuItem("近い順", { chooseStationNear(stationChoiceTarget) }, Material.DIAMOND_HORSE_ARMOR),
+                MenuItem("五十音別", { chooseStationAiueo(stationChoiceTarget) }, Material.BOOK),
+                MenuItem("会社・路線別", { chooseStationLine(stationChoiceTarget) }, Material.SPRUCE_DOOR),
+                MenuItem("近隣自治体別", { chooseStationMuni(stationChoiceTarget) }, Material.FILLED_MAP),
+                MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH),
             )
         )
     }
 
-    private fun chooseStationAiueo(startOrEnd: StartOrEnd) {
+    private fun chooseStationAiueo(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
-        for (column in JapaneseColumns.values()) {
-            items.add(MenuItem("${column.firstChar}行", { chooseStationAiueo(startOrEnd, column) }, Material.BOOK))
+        JapaneseColumns.values().forEach { column ->
+            items.add(
+                MenuItem("${column.firstChar}行", { chooseStationAiueo(stationChoiceTarget, column) }, Material.BOOK)
+            )
         }
-        items.add(MenuItem("戻る", { chooseStation(startOrEnd) }, Material.REDSTONE_TORCH))
+        items.add(MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "五十音別", items)
     }
 
-    private fun chooseStationAiueo(startOrEnd: StartOrEnd, column: JapaneseColumns) {
+    private fun chooseStationAiueo(stationChoiceTarget: StationChoiceTarget, column: JapaneseColumns) {
         val items = ArrayList<MenuItem>()
-        for (char in column.chars) {
-            items.add(MenuItem(char, { chooseStationAiueo(startOrEnd, column, char) }, Material.BOOK))
+        column.chars.forEach { char ->
+            items.add(
+                MenuItem(char, { chooseStationAiueo(stationChoiceTarget, column, char) }, Material.BOOK)
+            )
         }
-        items.add(MenuItem("戻る", { chooseStationAiueo(startOrEnd) }, Material.REDSTONE_TORCH))
+        items.add(MenuItem("戻る", { chooseStationAiueo(stationChoiceTarget) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "${column.firstChar}行", items)
     }
 
-    private fun chooseStationAiueo(startOrEnd: StartOrEnd, column: JapaneseColumns, char: String) {
+    private fun chooseStationAiueo(stationChoiceTarget: StationChoiceTarget, column: JapaneseColumns, char: String) {
         val stations = ArrayList<KStation>()
-        for (station in data.stations.values) {
-            if (station.world == player.world.name && station.yomi.first().toString() == char) stations.add(station)
+        data.stations.values.forEach {
+            if (it.world == player.world.name && it.yomi.first().toString() == char) stations.add(it)
         }
         stations.sortBy { it.yomi }
         val items = ArrayList<MenuItem>()
-        for (station in stations) {
-            when (startOrEnd) {
-                StartOrEnd.START -> items.add(
-                    MenuItem(
-                        station.name,
-                        { startId = station.id;openMainMenu() },
-                        Material.MINECART
-                    )
+        stations.forEach { station ->
+            when (stationChoiceTarget) {
+                StationChoiceTarget.START -> items.add(
+                    MenuItem(station.name, { startId = station.id }, Material.MINECART)
                 )
 
-                StartOrEnd.END -> items.add(
-                    MenuItem(
-                        station.name,
-                        { endId = station.id;openMainMenu() },
-                        Material.MINECART
-                    )
+                StationChoiceTarget.END -> items.add(
+                    MenuItem(station.name, { endId = station.id }, Material.MINECART)
                 )
             }
         }
-        items.add(MenuItem("戻る", { chooseStationAiueo(startOrEnd, column) }, Material.REDSTONE_TORCH))
+        items.add(MenuItem("戻る", { chooseStationAiueo(stationChoiceTarget, column) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "${char}から始まる駅一覧", items)
     }
 
-    private fun chooseStationLine(startOrEnd: StartOrEnd) {
+    private fun chooseStationLine(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
-        for (company in data.companies.values) {
-            items.add(MenuItem(company.name, { chooseStationLine(startOrEnd, company) }, Material.SPRUCE_DOOR))
+        data.companies.values.forEach { company ->
+            items.add(MenuItem(company.name, { chooseStationLine(stationChoiceTarget, company) }, Material.SPRUCE_DOOR))
         }
-        items.add(MenuItem("戻る", { chooseStation(startOrEnd) }, Material.REDSTONE_TORCH))
+        items.add(MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "会社選択", items)
     }
 
-    private fun chooseStationLine(startOrEnd: StartOrEnd, company: KCompany) {
+    private fun chooseStationLine(stationChoiceTarget: StationChoiceTarget, company: KCompany) {
         val items = ArrayList<MenuItem>()
-        for (line in company.lines) {
+        company.lines.forEach { line ->
             items.add(
                 MenuItem(
                     data.lines[line]?.name ?: line,
-                    { chooseStationLine(startOrEnd, company, data.lines[line]) },
+                    { chooseStationLine(stationChoiceTarget, company, data.lines[line]) },
                     Material.RAIL
                 )
             )
         }
-        items.add(MenuItem("戻る", { chooseStationLine(startOrEnd) }, Material.REDSTONE_TORCH))
+        items.add(MenuItem("戻る", { chooseStationLine(stationChoiceTarget) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, company.name ?: "路線選択", items)
     }
 
-    private fun chooseStationLine(startOrEnd: StartOrEnd, company: KCompany, line: KLine?) {
+    private fun chooseStationLine(stationChoiceTarget: StationChoiceTarget, company: KCompany, line: KLine?) {
         if (line == null) {
             gui.error(player, "存在しない路線がデータ内に存在します。")
             logger.warning("[TransferGuide] 存在しない路線データ(${company.name}内)")
             return
         }
         val items = ArrayList<MenuItem>()
-        for (stationId in line.stations) {
-            val station = data.getStation(stationId)
+        line.stations.forEach {
+            val station = data.getStation(it)
             if (station?.world == player.world.name) {
-                when (startOrEnd) {
-                    StartOrEnd.START -> items.add(
+                when (stationChoiceTarget) {
+                    StationChoiceTarget.START -> items.add(
                         MenuItem(
                             station.name,
-                            { startId = station.id;openMainMenu() },
+                            { startId = station.id },
                             Material.MINECART
                         )
                     )
 
-                    StartOrEnd.END -> items.add(
+                    StationChoiceTarget.END -> items.add(
                         MenuItem(
                             station.name,
-                            { endId = station.id;openMainMenu() },
+                            { endId = station.id },
                             Material.MINECART
                         )
                     )
                 }
             }
         }
-        items.add(MenuItem("戻る", { chooseStationLine(startOrEnd, company) }, Material.REDSTONE_TORCH))
+        items.add(MenuItem("戻る", { chooseStationLine(stationChoiceTarget, company) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, line.name ?: "駅選択", items)
     }
 
-    private fun chooseStationMuni(startOrEnd: StartOrEnd) {
+    private fun chooseStationMuni(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
-        for (muni in data.municipalities) {
-            items.add(MenuItem(muni.value, { chooseStationMuni(startOrEnd, muni.key) }, Material.FILLED_MAP))
+        data.municipalities.forEach { muni ->
+            items.add(MenuItem(muni.value, { chooseStationMuni(stationChoiceTarget, muni.key) }, Material.FILLED_MAP))
         }
-        items.add(MenuItem("戻る", { chooseStation(startOrEnd) }, Material.REDSTONE_TORCH))
+        items.add(MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "自治体選択", items)
     }
 
-    private fun chooseStationMuni(startOrEnd: StartOrEnd, muniId: String) {
+    private fun chooseStationMuni(stationChoiceTarget: StationChoiceTarget, muniId: String) {
         val items = ArrayList<MenuItem>()
-        for (station in data.stations.values) {
+        data.stations.values.forEach { station ->
             if (station.world == player.world.name && station.municipality.contains(muniId)) {
-                when (startOrEnd) {
-                    StartOrEnd.START -> items.add(
+                when (stationChoiceTarget) {
+                    StationChoiceTarget.START -> items.add(
                         MenuItem(
                             station.name,
-                            { startId = station.id;openMainMenu() },
+                            { startId = station.id },
                             Material.MINECART
                         )
                     )
 
-                    StartOrEnd.END -> items.add(
+                    StationChoiceTarget.END -> items.add(
                         MenuItem(
                             station.name,
-                            { endId = station.id;openMainMenu() },
+                            { endId = station.id },
                             Material.MINECART
                         )
                     )
                 }
             }
         }
-        items.add(MenuItem("戻る", { chooseStationMuni(startOrEnd) }, Material.REDSTONE_TORCH))
+        items.add(MenuItem("戻る", { chooseStationMuni(stationChoiceTarget) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "${data.municipalities[muniId]}", items)
     }
 
-    private fun chooseStationNear(startOrEnd: StartOrEnd) {
+    private fun chooseStationNear(stationChoiceTarget: StationChoiceTarget) {
         val stations: MutableMap<Double, KStation> = mutableMapOf()
-        for (station in data.stations.values) {
-            if (station.world == player.world.name) {
-                val distance = getDistance(doubleArrayOf(player.location.x, player.location.z), station.location)
-                stations[distance] = station
+        data.stations.values.forEach {
+            if (it.world == player.world.name) {
+                val distance = getDistance(doubleArrayOf(player.location.x, player.location.z), it.location)
+                stations[distance] = it
             }
         }
         val distances = stations.keys.sorted()
         val items = ArrayList<MenuItem>()
-        for (i in 0..11) {
+        for (i in 0..15) {
             try {
                 val station = stations.getValue(distances[i])
-                when (startOrEnd) {
-                    StartOrEnd.START -> items.add(
+                when (stationChoiceTarget) {
+                    StationChoiceTarget.START -> items.add(
                         MenuItem(
                             "${station.name}(約${distances[i].toInt()}m)",
-                            { startId = station.id;openMainMenu() },
+                            { startId = station.id },
                             Material.MINECART
                         )
                     )
 
-                    StartOrEnd.END -> items.add(
+                    StationChoiceTarget.END -> items.add(
                         MenuItem(
                             "${station.name}(約${distances[i].toInt()}m)",
-                            { endId = station.id;openMainMenu() },
+                            { endId = station.id },
                             Material.MINECART
                         )
                     )
@@ -215,27 +220,27 @@ class TransferGuideSession(val player: Player) {
             } catch (_: Exception) {
             }
         }
-        items.add(MenuItem("戻る", { chooseStation(startOrEnd) }, Material.REDSTONE_TORCH))
+        items.add(MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "近い順", items)
     }
 
-    private fun chooseStationWild(startOrEnd: StartOrEnd) {
+    private fun chooseStationWild(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
-        for (station in data.stations.values) {
+        data.stations.values.forEach { station ->
             if (station.world == player.world.name) {
-                when (startOrEnd) {
-                    StartOrEnd.START -> items.add(
+                when (stationChoiceTarget) {
+                    StationChoiceTarget.START -> items.add(
                         MenuItem(
                             station.name,
-                            { startId = station.id;openMainMenu() },
+                            { startId = station.id },
                             Material.MINECART
                         )
                     )
 
-                    StartOrEnd.END -> items.add(
+                    StationChoiceTarget.END -> items.add(
                         MenuItem(
                             station.name,
-                            { endId = station.id;openMainMenu() },
+                            { endId = station.id },
                             Material.MINECART
                         )
                     )
@@ -287,26 +292,19 @@ class TransferGuideSession(val player: Player) {
         opened[start] = getDistance(start.location, end.location)
         unsearched.remove(startId)
         var i = 0
+        fun loopADebugString(): String {
+            return "step=A${i}\n" +
+                    "route=${startId}->${endId}\n" +
+                    "unsearched=${unsearched.toList().joinToString { it.first }}\n" +
+                    "opened=${opened.toList().joinToString { it.first.id }}\n" +
+                    "closed=${closed.joinToString { it.id }}"
+        }
         knitA@ while (i < data.loopMax) {
-            if (data.consoleDebug) {
-                logger.info(
-                    "[TransferGuide] step: A${i}\nunsearched: ${
-                        unsearched.toList().joinToString { it.first }
-                    }\nopened: ${opened.toList().joinToString { it.first.id }}\nclosed: ${
-                        closed.joinToString { it.id }
-                    }"
-                )
-            }
+            if (data.consoleDebug) logger.info("[TransferGuide(debug)] ${loopADebugString()}")
             val minStationEntry = opened.minByOrNull { it.value }
             if (minStationEntry == null) {
                 gui.error(player, "最小値からの駅探索Aに失敗しました。")
-                logger.warning(
-                    "[TransferGuide] 最小値からの駅探索失敗A(${startId}->${endId}, unsearched: ${
-                        unsearched.toList().joinToString { it.first }
-                    }, opened: ${opened.toList().joinToString { it.first.id }}, closed: ${
-                        closed.joinToString { it.id }
-                    })"
-                )
+                logger.warning("[TransferGuide] 最小値からの駅探索失敗A\n${loopADebugString()}")
                 return
             }
             closed.add(minStationEntry.key)
@@ -317,14 +315,7 @@ class TransferGuideSession(val player: Player) {
                 unsearched.remove(pathToInUnsearched.id)
                 if (endId == pathToInUnsearched.id) {
                     closed.add(pathToInUnsearched)
-                    logger.info(
-                        "[TransferGuide] step: A_END,unsearched: ${
-                            unsearched.toList().joinToString { it.first }
-                        }, opened: ${opened.toList().joinToString { it.first.id }}, closed: ${
-                            closed.joinToString { it.id }
-                        }"
-                    )
-
+                    if (data.consoleDebug) logger.info("[TransferGuide(debug)] A_END\n${loopADebugString()}")
                     break@knitA
                 }
             }
@@ -334,10 +325,14 @@ class TransferGuideSession(val player: Player) {
         routeArrayList.add(end)
         closed.removeIf { it.id == endId }
         var j = 0
+        fun loopBDebugString(): String {
+            return "step=B${j}\n" +
+                    "route=${startId}->${endId}\n" +
+                    "closed=${closed.joinToString { it.id }}\n" +
+                    "routeArrayList=${routeArrayList.joinToString { it.id }}"
+        }
         knitB@ while (j < data.loopMax) {
-            if (data.consoleDebug) {
-                logger.info("[TransferGuide] step: B${j}\nclosed: ${closed.joinToString { it.id }}\nrouteArrayList: ${routeArrayList.joinToString { it.id }}")
-            }
+            if (data.consoleDebug) logger.info("[TransferGuideData(debug)] ${loopBDebugString()}")
             val lastStationPath = routeArrayList.last().paths
             val candidates: MutableMap<KStation, Double> = mutableMapOf()
             for (path in lastStationPath) {
@@ -346,21 +341,21 @@ class TransferGuideSession(val player: Player) {
                     candidates[pathTo] = getDistance(end.location, pathTo.location)
                 }
             }
-            if(candidates.isEmpty()){
-                gui.error(player,"逆算中に経路が途切れました。")
-                logger.warning("[TransferGuideData] 候補経路先無し(${startId}->${endId}, closed: ${closed.joinToString{it.id}}, routeArrayList: ${routeArrayList.joinToString{it.id}}, candidates: ${candidates.toList().joinToString{it.first.id}})")
+            if (candidates.isEmpty()) {
+                gui.error(player, "逆算中に経路が途切れました。")
+                logger.warning("[TransferGuideData] 候補経路先無しB\n${loopBDebugString()}")
                 return
             }
             val min = candidates.minByOrNull { it.value }
             if (min == null) {
                 gui.error(player, "最小値からの駅探索Bに失敗しました。")
-                logger.warning("[TransferGuideData] 最小値からの駅探索失敗B(${startId}->${endId}, closed: ${closed.joinToString{it.id}}, routeArrayList: ${routeArrayList.joinToString { it.id }}, candidates: ${candidates.toList().joinToString { it.first.id }})")
+                logger.warning("[TransferGuideData] 最小値からの駅探索失敗B\n${loopBDebugString()}")
                 return
             }
             routeArrayList.add(min.key)
             closed.remove(min.key)
             if (min.key.id == startId) {
-                logger.info("[TransferGuide] step: B_END, routeArrayList: ${routeArrayList.joinToString { it.id }}")
+                if (data.consoleDebug) logger.info("[TransferGuide] step: B_END\n${loopBDebugString()}")
                 break@knitB
             }
             j++
@@ -375,12 +370,12 @@ class TransferGuideSession(val player: Player) {
             player, "地点選択", listOf(
                 MenuItem(
                     "出発地点:${data.getStation(startId)?.name ?: "未設定"}",
-                    { chooseStation(StartOrEnd.START) },
+                    { chooseStation(StationChoiceTarget.START) },
                     Material.LIME_BANNER
                 ),
                 MenuItem(
                     "到着地点:${data.getStation(endId)?.name ?: "未設定"}",
-                    { chooseStation(StartOrEnd.END) },
+                    { chooseStation(StationChoiceTarget.END) },
                     Material.RED_BANNER
                 ),
                 MenuItem("計算開始", { calcRoute() }, Material.COMMAND_BLOCK_MINECART),
@@ -392,13 +387,6 @@ class TransferGuideSession(val player: Player) {
 
     private fun showAbout() {
         player.sendMessage("Knit乗換案内\n製作者:Knit\nデータベース更新日:${data.update}\n未対応路線:新山吹村営鉄道(本線の薫風緑苑までのみ対応)\n仮の数値を使用している部分:新鮫、塩川、新スポーン地点-もさんな間の快速線\nまともにデバッグしていない為、ヤバいバグが発生する場合があります。ご了承下さい。")
-    }
-
-    private fun getKeyFromStationsMap(map: MutableMap<KStation, Double>, value: Double): KStation? {
-        for (i in map) {
-            if (i.value == value) return i.key
-        }
-        return null
     }
 
     private fun getDistance(start: DoubleArray, end: DoubleArray): Double {
@@ -425,7 +413,7 @@ private class TransferGuideData {
         municipalities = pairStringConfigToMap(conf.getConfigurationSection("municipalities"))
         loopMax = conf.getInt("loopMax")
         update = conf.getString("update") ?: "不明"
-        consoleDebug = conf.getBoolean("consoleDebug", true)
+        consoleDebug = conf.getBoolean("consoleDebug", false)
     }
 
     fun getStation(id: String?): KStation? {
@@ -546,58 +534,44 @@ private class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
         for (i in pathsCandidates.indices) {
             if (pathsCandidates.size <= 1) break
             if (pathsCandidates[i].size <= 1) continue
+            fun isBeforeDecided(): Boolean {
+                val beforeDecided = pathsCandidates[i - 1].size == 1
+                if (beforeDecided) {//前の路線が確定しているならば
+                    for (now in pathsCandidates[i]) {
+                        val before = pathsCandidates[i - 1][0]
+                        if (now is KRoutePathReal && before is KRoutePathReal && now.line == before.line && now.direction == before.direction) {//前の路線と同じものを検索
+                            pathsCandidates[i] = arrayListOf(now)
+                            break
+                        }
+                    }
+                }
+                //見つからなければ適当に
+                if (pathsCandidates[i].size >= 2) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
+                return beforeDecided
+            }
+
+            fun isNextDecided(): Boolean {
+                val nextDecided = pathsCandidates[i + 1].size == 1
+                if (nextDecided) {//次の路線が確定しているならば
+                    for (now in pathsCandidates[i]) {
+                        val next = pathsCandidates[i + 1][0]
+                        if (now is KRoutePathReal && next is KRoutePathReal && now.line == next.line && now.direction == next.direction) {//次の路線と同じものを検索
+                            pathsCandidates[i] = arrayListOf(now)
+                            break
+                        }
+                    }
+                }
+                //見つからなければ適当に
+                if (pathsCandidates[i].size >= 2) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
+                return nextDecided
+            }
             if (i == 0) {//先頭の場合
-                if (pathsCandidates[i + 1].size == 1) {//次の路線が確定しているならば
-                    for (now in pathsCandidates[i]) {
-                        val next = pathsCandidates[i + 1][0]
-                        if (now is KRoutePathReal && next is KRoutePathReal && now.line == next.line && now.direction == next.direction) {//次の路線と同じものを検索
-                            pathsCandidates[i] = arrayListOf(now)
-                            break
-                        }
-                    }
-                    //見つからなければ適当に
-                    if (pathsCandidates[i].size >= 2) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
-                } else {//次の路線が確定していない場合も適当
-                    pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
-                }
+                if (!isNextDecided()) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])//次の路線が確定していなければ適当に
             } else if (i == pathsCandidates.lastIndex) {//終端の場合
-                if (pathsCandidates[i - 1].size == 1) {//前の路線が確定しているならば
-                    for (now in pathsCandidates[i]) {
-                        val before = pathsCandidates[i - 1][0]
-                        if (now is KRoutePathReal && before is KRoutePathReal && now.line == before.line && now.direction == before.direction) {//前の路線と同じものを検索
-                            pathsCandidates[i] = arrayListOf(now)
-                            break
-                        }
-                    }
-                    //見つからなければ適当に
-                    if (pathsCandidates[i].size >= 2) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
-                } else {//前の路線が確定していない場合も適当
-                    pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
-                }
+                if (!isBeforeDecided()) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])//前の路線が確定していなければ適当に
             } else {//中間部の場合
-                if (pathsCandidates[i + 1].size == 1) {//次の路線が確定しているならば
-                    for (now in pathsCandidates[i]) {
-                        val next = pathsCandidates[i + 1][0]
-                        if (now is KRoutePathReal && next is KRoutePathReal && now.line == next.line && now.direction == next.direction) {//次の路線と同じものを検索
-                            pathsCandidates[i] = arrayListOf(now)
-                            break
-                        }
-                    }
-                    //見つからなければ適当に
-                    if (pathsCandidates[i].size >= 2) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
-                } else if (pathsCandidates[i - 1].size == 1) {//前の路線が確定しているならば
-                    for (now in pathsCandidates[i]) {
-                        val before = pathsCandidates[i - 1][0]
-                        if (now is KRoutePathReal && before is KRoutePathReal && now.line == before.line && now.direction == before.direction) {//前の路線と同じものを検索
-                            pathsCandidates[i] = arrayListOf(now)
-                            break
-                        }
-                    }
-                    //見つからなければ適当に
-                    if (pathsCandidates[i].size >= 2) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
-                } else {//前後の路線が確定していない場合も適当
-                    pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
-                }
+                if (!(isNextDecided() && isBeforeDecided())) pathsCandidates[i] =
+                    arrayListOf(pathsCandidates[i][0])//前後の路線が確定していない場合は適当に
             }
         }
         //駅と路線を纒める
@@ -631,23 +605,16 @@ private class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
         val sb = StringBuilder()
         var appendTime = 0
         sb.append("===== 結果 =====\n")
-        for (route in routes) {
-            sb.append(
-                "${route.station.name}(${route.station.yomi}${
-                    if (route.station.number != "null") {
-                        "/${route.station.number}"
-                    } else {
-                        ""
-                    }
-                }/X:${route.station.location[0]},Z:${route.station.location[1]})\n"
-            )
-            if (route.routePath is KRoutePathReal) {
-                appendTime += route.routePath.time + if (route.routePath.line == "walk") {
-                    10
-                } else {
-                    30
-                }
-                sb.append(" | ${data.lines[route.routePath.line]?.name ?: route.routePath.line}${data.directions[route.routePath.direction]} 約${route.routePath.time}秒\n")
+        routes.forEach {
+            sb.append("${it.station.name}(${it.station.yomi}")
+            if (it.station.number != "null") sb.append("/${it.station.number}")
+            sb.append("/X:${it.station.location[0]},Z:${it.station.location[1]})\n")
+            if (it.routePath is KRoutePathReal) {
+                appendTime += it.routePath.time
+                appendTime += if (it.routePath.line == "walk") 10 else 30
+                sb.append(" | ")
+                if (it.routePath.line == "walk") sb.append("${data.directions[it.routePath.direction]}歩く\n")
+                else sb.append("${data.lines[it.routePath.line]?.name ?: it.routePath.line}(${data.directions[it.routePath.direction]}) 約${it.routePath.time}秒\n")
             }
         }
         sb.append("所要時間:約${appendTime}秒\n")
@@ -670,7 +637,7 @@ private class KRoutePathReal(
 
 private open class KRoutePathEnd : KRoutePath()
 
-private enum class StartOrEnd {
+private enum class StationChoiceTarget {
     START, END
 }
 
