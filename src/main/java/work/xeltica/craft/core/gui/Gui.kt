@@ -215,6 +215,10 @@ class Gui: Listener {
      * @param pitch ピッチ
      */
     fun playSound(player: Player, sound: Sound, volume: Float, pitch: SoundPitch) {
+        if (player.gameMode == GameMode.SPECTATOR){
+            return
+        }
+
         player.world.playSound(player.location, sound, SoundCategory.PLAYERS, volume, pitch.pitch)
     }
 
@@ -238,6 +242,10 @@ class Gui: Listener {
      * @param delay Tick
      */
     fun playSoundAfter(player: Player, sound: Sound, volume: Float, pitch: SoundPitch, delay: Int) {
+        if (player.gameMode == GameMode.SPECTATOR) {
+            return
+        }
+
         Bukkit.getScheduler().runTaskLater(XCorePlugin.instance,
             Runnable { playSound(player, sound, volume, pitch) }, delay.toLong()
         )
