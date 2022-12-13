@@ -57,12 +57,13 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * プレイヤーネームの取得方法を選択するメニューアイテムのリストを返す
      *
      * @param [player] メニューを開くプレイヤー
+     * @return メニューアイテムのリスト
      */
     private fun chooseHowToGetPlayerName(player: Player): List<MenuItem> {
         return listOf(
                 MenuItem("コマンドで取得する", { getInputTextByConsole(player) }, Material.WRITABLE_BOOK),
                 MenuItem("現在いるプレイヤーから取得する", { getChooseByPlayerMenu(player) }, Material.BOOK),
-                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER ),
+                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
         )
     }
 
@@ -72,7 +73,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * @param player 入力をするプレイヤー
      * @param flag 1個目の日時選択の場合はtrue
      */
-    private fun inputDuringTime(flag: Boolean, player: Player){
+    private fun inputDuringTime(flag: Boolean, player: Player) {
         gui.openTextInput(player, "時間の数値(整数)を入力してください。") { inputString ->
             val value = inputString.toIntOrNull()
             value?.let {
@@ -95,6 +96,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      *
      * @param value 単位の前の数値
      * @param player メニューを開くプレイヤー
+     * @return メニューアイテムのリスト
      */
     private fun getTimeUnitList(value: Int, player: Player): List<MenuItem> {
         return listOf(
@@ -103,7 +105,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
                 MenuItem("時", { app.onTimeUnitMenuClick(value, "h", player) }, Material.CLOCK),
                 MenuItem("分", { app.onTimeUnitMenuClick(value, "m", player) }, Material.CLOCK),
                 MenuItem("秒", { app.onTimeUnitMenuClick(value, "s", player) }, Material.CLOCK),
-                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER ),
+                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
         )
     }
 
@@ -113,6 +115,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * @param value 単位の前の数値
      * @param flag 1個目の日時選択の場合はtrue
      * @param player メニューを開いたプレイヤー
+     * @return メニューアイテムのリスト
      */
     private fun getDuringUnitList(value: Int, flag: Boolean, player: Player): List<MenuItem> {
         return listOf(
@@ -121,7 +124,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
                 MenuItem("時", { onDuringMenuClick(value, "h", flag, player) }, Material.CLOCK),
                 MenuItem("分", { onDuringMenuClick(value, "m", flag, player) }, Material.CLOCK),
                 MenuItem("秒", { onDuringMenuClick(value, "s", flag, player) }, Material.CLOCK),
-                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER ),
+                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
         )
     }
 
@@ -133,7 +136,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * @param flag 1個目の日時選択の場合はtrue
      * @param player プレイヤー
      */
-    private fun onDuringMenuClick(value:Int, unit:String,flag: Boolean, player: Player ) {
+    private fun onDuringMenuClick(value: Int, unit: String, flag: Boolean, player: Player) {
         app.onDuringTimeUnit(player, Pair(value, unit), flag)
     }
 
@@ -163,6 +166,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * @param player メニューを開くプレイヤー
      * @param title 開くメニューのタイトル
      * @param items 開くメニューのアイテム一覧
+     * @return メニューアイテムのリスト
      */
     fun showMenu(player: Player, title: String, items: List<MenuItem>) {
         gui.openMenu(player, title, items)
@@ -194,6 +198,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * ワールドの範囲を選択するメニューリストを返す
      *
      * @param player メニューを開くプレイヤー
+     * @return メニューアイテムのリスト
      */
     fun getRadiusList(player: Player): List<MenuItem> {
         return listOf(
@@ -210,6 +215,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * ～前までの取得か期間での取得かを選択するメニューリストを返す
      *
      * @param player メニューを開くプレイヤー
+     * @return メニューアイテムのリスト
      */
     fun getDuringModeList(player: Player): List<MenuItem> {
         return listOf(
@@ -223,6 +229,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * アクションを選択するメニューリストを返す
      *
      * @param player メニューを開くプレイヤー
+     * @return メニューアイテムのリスト
      */
     fun getActionMenuList(player: Player): List<MenuItem> {
         return listOf(
@@ -237,6 +244,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      *
      * @param player メニューを開くプレイヤー
      * @param action 選択したアクションの文字列
+     * @return メニューアイテムのリスト
      */
     fun getOptionMenuList(player: Player, action: String): List<MenuItem> {
         return when (action) {

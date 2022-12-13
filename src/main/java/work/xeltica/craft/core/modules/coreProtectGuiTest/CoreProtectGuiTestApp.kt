@@ -132,6 +132,7 @@ class CoreProtectGuiTestApp : AppBase() {
     /**
      * プレイヤー名を入力したら呼ばれる
      *
+     * @param userName 入力したプレイヤー名
      * @param player メニューを開いたプレイヤー
      */
     fun onInputPlayerName(userName: String, player: Player) {
@@ -171,7 +172,7 @@ class CoreProtectGuiTestApp : AppBase() {
     /**
      * 時間の単位を選択したら呼ばれる(伝播されてくる)
      *
-     *  @param dateTime 時間と単位をPairでまとめたやつ
+     * @param dateTime 時間と単位をPairでまとめたやつ
      * @param flag 1個目の日時選択の場合はtrue
      * @param player メニューを開いたプレイヤー
      */
@@ -224,6 +225,11 @@ class CoreProtectGuiTestApp : AppBase() {
         commandSend(player)
     }
 
+    /**
+     * 処理を中断するために作ったやつ
+     *
+     * @param player メニューを開いたプレイヤー
+     */
     fun onCancel(player: Player) {
         player.sendMessage("処理をキャンセルします")
     }
