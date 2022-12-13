@@ -469,8 +469,6 @@ private class KStation(conf: ConfigurationSection, val id: String) {
     val name = conf.getString("name") ?: "null"
     val yomi = conf.getString("yomi") ?: "null"
     val number = conf.getString("number") ?: "null"
-    val company: List<String> = conf.getStringList("company")
-    val line: List<String> = conf.getStringList("line")
     val world = conf.getString("world") ?: "null"
     val location = conf.getDoubleList("location").toDoubleArray()
     val municipality: List<String> = conf.getStringList("municipality")
