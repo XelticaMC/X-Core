@@ -194,85 +194,87 @@ object CoreProtectGuiTestModule : ModuleBase() {
         }
     }
 
-    /**
-     * ワールドの範囲を選択するメニューリストを返す
-     *
-     * @param player メニューを開くプレイヤー
-     * @return メニューアイテムのリスト
-     */
-    fun getRadiusList(player: Player): List<MenuItem> {
-        return listOf(
-                MenuItem("すべてのワールド", { app.onRadiusWorldMenuClick("#global", player) }, Material.DIRT),
-                MenuItem("メインワールド", { app.onRadiusWorldMenuClick("#main", player) }, Material.CRAFTING_TABLE),
-                MenuItem("共有ワールド", { app.onRadiusWorldMenuClick("#wildarea2", player) }, Material.GRASS_BLOCK),
-                MenuItem("共有ネザー", { app.onRadiusWorldMenuClick("#wildarea2_nether", player) }, Material.NETHERRACK),
-                MenuItem("共有エンド", { app.onRadiusWorldMenuClick("#wildarea2_the_end", player) }, Material.END_STONE),
-                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
-        )
-    }
+    class GetMenuList {
+        /**
+         * ワールドの範囲を選択するメニューリストを返す
+         *
+         * @param player メニューを開くプレイヤー
+         * @return メニューアイテムのリスト
+         */
+        fun getRadiusList(player: Player): List<MenuItem> {
+            return listOf(
+                    MenuItem("すべてのワールド", { app.onRadiusWorldMenuClick("#global", player) }, Material.DIRT),
+                    MenuItem("メインワールド", { app.onRadiusWorldMenuClick("#main", player) }, Material.CRAFTING_TABLE),
+                    MenuItem("共有ワールド", { app.onRadiusWorldMenuClick("#wildarea2", player) }, Material.GRASS_BLOCK),
+                    MenuItem("共有ネザー", { app.onRadiusWorldMenuClick("#wildarea2_nether", player) }, Material.NETHERRACK),
+                    MenuItem("共有エンド", { app.onRadiusWorldMenuClick("#wildarea2_the_end", player) }, Material.END_STONE),
+                    MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
+            )
+        }
 
-    /**
-     * ～前までの取得か期間での取得かを選択するメニューリストを返す
-     *
-     * @param player メニューを開くプレイヤー
-     * @return メニューアイテムのリスト
-     */
-    fun getDuringModeList(player: Player): List<MenuItem> {
-        return listOf(
-                MenuItem("とある日時まで遡る", { app.onSelectDuringMode(false, player) }, Material.CLOCK),
-                MenuItem("期間を指定して取得する", { app.onSelectDuringMode(true, player) }, Material.CLOCK),
-                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
-        )
-    }
+        /**
+         * ～前までの取得か期間での取得かを選択するメニューリストを返す
+         *
+         * @param player メニューを開くプレイヤー
+         * @return メニューアイテムのリスト
+         */
+        fun getDuringModeList(player: Player): List<MenuItem> {
+            return listOf(
+                    MenuItem("とある日時まで遡る", { app.onSelectDuringMode(false, player) }, Material.CLOCK),
+                    MenuItem("期間を指定して取得する", { app.onSelectDuringMode(true, player) }, Material.CLOCK),
+                    MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
+            )
+        }
 
-    /**
-     * アクションを選択するメニューリストを返す
-     *
-     * @param player メニューを開くプレイヤー
-     * @return メニューアイテムのリスト
-     */
-    fun getActionMenuList(player: Player): List<MenuItem> {
-        return listOf(
-                MenuItem("チェスト", { app.onActionMenuClick("container", player) }, Material.CHEST_MINECART),
-                MenuItem("ブロック", { app.onActionMenuClick("block", player) }, Material.GRASS_BLOCK),
-                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
-        )
-    }
+        /**
+         * アクションを選択するメニューリストを返す
+         *
+         * @param player メニューを開くプレイヤー
+         * @return メニューアイテムのリスト
+         */
+        fun getActionMenuList(player: Player): List<MenuItem> {
+            return listOf(
+                    MenuItem("チェスト", { app.onActionMenuClick("container", player) }, Material.CHEST_MINECART),
+                    MenuItem("ブロック", { app.onActionMenuClick("block", player) }, Material.GRASS_BLOCK),
+                    MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
+            )
+        }
 
-    /**
-     * アクションのオプションを選択するメニューリストを返す
-     *
-     * @param player メニューを開くプレイヤー
-     * @param action 選択したアクションの文字列
-     * @return メニューアイテムのリスト
-     */
-    fun getOptionMenuList(player: Player, action: String): List<MenuItem> {
-        return when (action) {
-            "container" -> {
-                listOf(
-                        MenuItem("アイテムを入れた", { app.onOptionMenuClick("+$action", player) }, Material.REDSTONE),
-                        MenuItem("アイテムをとった", { app.onOptionMenuClick("-$action", player) }, Material.REDSTONE_TORCH),
-                        MenuItem("指定しない", { app.onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
-                        MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
-                )
+        /**
+         * アクションのオプションを選択するメニューリストを返す
+         *
+         * @param player メニューを開くプレイヤー
+         * @param action 選択したアクションの文字列
+         * @return メニューアイテムのリスト
+         */
+        fun getOptionMenuList(player: Player, action: String): List<MenuItem> {
+            return when (action) {
+                "container" -> {
+                    listOf(
+                            MenuItem("アイテムを入れた", { app.onOptionMenuClick("+$action", player) }, Material.REDSTONE),
+                            MenuItem("アイテムをとった", { app.onOptionMenuClick("-$action", player) }, Material.REDSTONE_TORCH),
+                            MenuItem("指定しない", { app.onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
+                            MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
+                    )
 
-            }
+                }
 
-            "block" -> {
-                listOf(
-                        MenuItem("ブロックを設置した", { app.onOptionMenuClick("+$action", player) }, Material.REDSTONE),
-                        MenuItem("ブロックを破壊した", { app.onOptionMenuClick("-$action", player) }, Material.REDSTONE_TORCH),
-                        MenuItem("指定しない", { app.onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
-                        MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
-                )
+                "block" -> {
+                    listOf(
+                            MenuItem("ブロックを設置した", { app.onOptionMenuClick("+$action", player) }, Material.REDSTONE),
+                            MenuItem("ブロックを破壊した", { app.onOptionMenuClick("-$action", player) }, Material.REDSTONE_TORCH),
+                            MenuItem("指定しない", { app.onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
+                            MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
+                    )
 
-            }
-            // ここに来る想定はないが、現状ここでescapeで戻ることしかできないため、仮の値を作っておく
-            else -> {
-                listOf(
-                        MenuItem("指定しない", { app.onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
-                        MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
-                )
+                }
+                // ここに来る想定はないが、現状ここでescapeで戻ることしかできないため、仮の値を作っておく
+                else -> {
+                    listOf(
+                            MenuItem("指定しない", { app.onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
+                            MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
+                    )
+                }
             }
         }
     }

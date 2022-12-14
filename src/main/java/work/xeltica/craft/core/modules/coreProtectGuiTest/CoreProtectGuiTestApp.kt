@@ -21,6 +21,7 @@ class CoreProtectGuiTestApp : AppBase() {
      * NOTE: アプリとモジュールでのやりとりがかなり多いのでインスタンス生成処理の削減のためにメンバ変数として宣言する
      */
     private val module by lazy { CoreProtectGuiTestModule }
+    private val menuList by lazy { CoreProtectGuiTestModule.GetMenuList() }
 
     /**
      * 範囲を指定するときにつかう
@@ -137,7 +138,7 @@ class CoreProtectGuiTestApp : AppBase() {
      */
     fun onInputPlayerName(userName: String, player: Player) {
         coreProtectCommand.user = userName
-        val radiusWorldList = module.getRadiusList(player)
+        val radiusWorldList = menuList.getRadiusList(player)
 
         module.showMenu(player, "ワールドの範囲を指定してください", radiusWorldList)
     }
@@ -151,7 +152,7 @@ class CoreProtectGuiTestApp : AppBase() {
     fun onRadiusWorldMenuClick(radius: String, player: Player) {
         coreProtectCommand.radius = radius
 
-        val duringModeList = module.getDuringModeList(player)
+        val duringModeList = menuList.getDuringModeList(player)
         module.showMenu(player, "時間の指定方法を選択してください", duringModeList)
     }
 
@@ -183,7 +184,7 @@ class CoreProtectGuiTestApp : AppBase() {
         } else {
             secondDateTime = dateTime
             checkDuringTime()
-            val actionMenuList = module.getActionMenuList(player)
+            val actionMenuList = menuList.getActionMenuList(player)
             module.showMenu(player, "アクションの種類を選択してください", actionMenuList)
         }
     }
@@ -197,7 +198,7 @@ class CoreProtectGuiTestApp : AppBase() {
      */
     fun onTimeUnitMenuClick(value: Int, unit: String, player: Player) {
         coreProtectCommand.date = value.toString() + unit
-        val actionMenuList = module.getActionMenuList(player)
+        val actionMenuList = menuList.getActionMenuList(player)
         module.showMenu(player, "アクションの種類を選択してください", actionMenuList)
     }
 
@@ -209,7 +210,7 @@ class CoreProtectGuiTestApp : AppBase() {
      */
     fun onActionMenuClick(action: String, player: Player) {
         Bukkit.getLogger().info(action)
-        val optionMenuList = module.getOptionMenuList(player, action)
+        val optionMenuList = menuList.getOptionMenuList(player, action)
 
         module.showMenu(player, "オプションを選択してください", optionMenuList)
     }
