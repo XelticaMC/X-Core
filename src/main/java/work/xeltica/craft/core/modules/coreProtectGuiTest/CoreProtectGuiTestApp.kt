@@ -130,6 +130,10 @@ class CoreProtectGuiTestApp : AppBase() {
         player.performCommand(sendCommand.toString())
     }
 
+    fun commandSend(value: Int, player: Player) {
+        player.performCommand("coreprotect:co lookup $value")
+    }
+
     /**
      * プレイヤー名を入力したら呼ばれる
      *

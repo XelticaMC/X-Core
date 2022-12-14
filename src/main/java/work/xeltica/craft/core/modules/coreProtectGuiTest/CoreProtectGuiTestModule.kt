@@ -54,6 +54,51 @@ object CoreProtectGuiTestModule : ModuleBase() {
     }
 
     /**
+     * coreProtectの処理で何かをするときに呼ばれる
+     *
+     * @param player 何かを開始するプレイヤー
+     * @return メニューアイテムのリスト
+     */
+    private fun coreProtectModeList(player: Player): List<MenuItem> {
+        return listOf(
+                MenuItem("ログを検索する", { lookupModeStart(player) }, Material.WRITABLE_BOOK),
+                MenuItem("ページを取得する", { inputLookUpPage(player) }, Material.BOOK),
+                MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
+        )
+    }
+
+    /**
+     * ログを検索する
+     *
+     * @param player ログを取りにいくプレイヤー
+     */
+    private fun lookupModeStart(player: Player) {
+        showMenu(player, "ログを取るプレイヤーを指定", chooseHowToGetPlayerName(player))
+    }
+
+    /**
+     * ページ番号を入力させる
+     *
+     * @param player コマンドを打ちたいプレイヤー
+     */
+    private fun inputLookUpPage(player: Player) {
+        gui.openTextInput(player, "閲覧するページを選択してください") { inputString ->
+            val value = inputString.toIntOrNull()
+            value?.let {
+                if (it <= 0) {
+                    Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
+                    return@openTextInput
+                }
+
+                app.commandSend(value, player)
+            } ?: run {
+                Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
+                return@openTextInput
+            }
+        }
+    }
+
+    /**
      * プレイヤーネームの取得方法を選択するメニューアイテムのリストを返す
      *
      * @param [player] メニューを開くプレイヤー
@@ -157,7 +202,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * @param player コマンドを打つプレイヤー
      */
     fun start(player: Player) {
-        showMenu(player, "ログを取るプレイヤーを指定", chooseHowToGetPlayerName(player))
+        showMenu(player, "選択する方法を選択してください", coreProtectModeList(player))
     }
 
     /**
