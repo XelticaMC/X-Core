@@ -16,15 +16,14 @@ class TransferGuideSession(val player: Player) {
     private val gui = Gui.getInstance()
     private val logger = Bukkit.getLogger()
     private var startId: String? = null
-        set(value) {
-            field = value
-            openMainMenu()
-        }
     private var endId: String? = null
-        set(value) {
-            field = value
-            openMainMenu()
+    private fun setStationIdAndOpenMenu(newId: String, stationChoiceTarget: StationChoiceTarget) {
+        when (stationChoiceTarget) {
+            StationChoiceTarget.START -> startId = newId
+            StationChoiceTarget.END -> endId = newId
         }
+        openMainMenu()
+    }
 
     fun start() {
         openMainMenu()
@@ -74,22 +73,21 @@ class TransferGuideSession(val player: Player) {
 
     private fun chooseStationAiueo(stationChoiceTarget: StationChoiceTarget, column: JapaneseColumns, char: String) {
         val stations = ArrayList<KStation>()
-        data.stations.values.forEach {
-            if (it.world == player.world.name && it.yomi.first().toString() == char) stations.add(it)
-        }
-        stations.sortBy { it.yomi }
+        data.stations.values
+            .filter { it.world == player.world.name && it.yomi.first().toString() == char }
+            .forEach { stations.add(it) }
         val items = ArrayList<MenuItem>()
-        stations.forEach { station ->
-            when (stationChoiceTarget) {
-                StationChoiceTarget.START -> items.add(
-                    MenuItem(station.name, { startId = station.id }, Material.MINECART)
-                )
-
-                StationChoiceTarget.END -> items.add(
-                    MenuItem(station.name, { endId = station.id }, Material.MINECART)
+        stations
+            .sortedBy { it.yomi }
+            .forEach { station ->
+                items.add(
+                    MenuItem(
+                        station.name,
+                        { setStationIdAndOpenMenu(station.id, stationChoiceTarget) },
+                        Material.MINECART
+                    )
                 )
             }
-        }
         items.add(MenuItem("戻る", { chooseStationAiueo(stationChoiceTarget, column) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "${char}から始まる駅一覧", items)
     }
@@ -105,11 +103,16 @@ class TransferGuideSession(val player: Player) {
 
     private fun chooseStationLine(stationChoiceTarget: StationChoiceTarget, company: KCompany) {
         val items = ArrayList<MenuItem>()
-        company.lines.forEach { line ->
+        company.lines.forEach { lineId ->
+            val line = data.lines[lineId]
+            line ?: run {
+                logger.warning("[TransferGuideData] 存在しない路線ID(${company.name}内)")
+                return
+            }
             items.add(
                 MenuItem(
-                    data.lines[line]?.name ?: line,
-                    { chooseStationLine(stationChoiceTarget, company, data.lines[line]) },
+                    line.name,
+                    { chooseStationLine(stationChoiceTarget, company, line) },
                     Material.RAIL
                 )
             )
@@ -118,34 +121,20 @@ class TransferGuideSession(val player: Player) {
         gui.openMenu(player, company.name ?: "路線選択", items)
     }
 
-    private fun chooseStationLine(stationChoiceTarget: StationChoiceTarget, company: KCompany, line: KLine?) {
-        if (line == null) {
-            gui.error(player, "存在しない路線がデータ内に存在します。")
-            logger.warning("[TransferGuide] 存在しない路線データ(${company.name}内)")
-            return
-        }
+    private fun chooseStationLine(stationChoiceTarget: StationChoiceTarget, company: KCompany, line: KLine) {
         val items = ArrayList<MenuItem>()
         line.stations.forEach {
-            val station = data.getStation(it)
-            if (station?.world == player.world.name) {
-                when (stationChoiceTarget) {
-                    StationChoiceTarget.START -> items.add(
-                        MenuItem(
-                            station.name,
-                            { startId = station.id },
-                            Material.MINECART
-                        )
-                    )
-
-                    StationChoiceTarget.END -> items.add(
-                        MenuItem(
-                            station.name,
-                            { endId = station.id },
-                            Material.MINECART
-                        )
-                    )
-                }
+            val station = data.stations[it] ?: run {
+                logger.warning("[TransferGuideData] 存在しない駅ID(${line.name}内)")
+                return
             }
+            if (station.world == player.world.name) items.add(
+                MenuItem(
+                    station.name,
+                    { setStationIdAndOpenMenu(station.id, stationChoiceTarget) },
+                    Material.MINECART
+                )
+            )
         }
         items.add(MenuItem("戻る", { chooseStationLine(stationChoiceTarget, company) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, line.name ?: "駅選択", items)
@@ -153,11 +142,13 @@ class TransferGuideSession(val player: Player) {
 
     private fun chooseStationMuni(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
-        data.municipalities.forEach { muni ->
-            if (muni.value.world == player.world.name) items.add(
-                MenuItem(muni.value.name, { chooseStationMuni(stationChoiceTarget, muni.value) }, Material.FILLED_MAP)
-            )
-        }
+        data.municipalities.values
+            .filter { it.world == player.world.name }
+            .forEach { muni ->
+                items.add(
+                    MenuItem(muni.name, { chooseStationMuni(stationChoiceTarget, muni) }, Material.FILLED_MAP)
+                )
+            }
         items.add(MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "自治体選択", items)
     }
@@ -165,16 +156,14 @@ class TransferGuideSession(val player: Player) {
     private fun chooseStationMuni(stationChoiceTarget: StationChoiceTarget, muni: KMuni) {
         val items = ArrayList<MenuItem>()
         muni.stations.forEach { stationId ->
-            when (stationChoiceTarget) {
-                StationChoiceTarget.START -> items.add(
-                    MenuItem(data.getStation(stationId)?.name, { startId = stationId }, Material.MINECART)
-                )
-
-                StationChoiceTarget.END -> items.add(
-                    MenuItem(data.getStation(stationId)?.name, { endId = stationId }, Material.MINECART)
-                )
+            val station = data.stations[stationId]
+            station ?: run {
+                logger.warning("[TransferGuideData] 存在しない駅ID(${muni.id}内)")
+                return
             }
-
+            items.add(
+                MenuItem(station.name, { setStationIdAndOpenMenu(stationId, stationChoiceTarget) }, Material.MINECART)
+            )
         }
         items.add(MenuItem("戻る", { chooseStationMuni(stationChoiceTarget) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "${data.municipalities[muni.id]?.name}", items)
@@ -182,34 +171,25 @@ class TransferGuideSession(val player: Player) {
 
     private fun chooseStationNear(stationChoiceTarget: StationChoiceTarget) {
         val stations: MutableMap<Double, KStation> = mutableMapOf()
-        data.stations.values.forEach {
-            if (it.world == player.world.name) {
+        data.stations.values
+            .filter { it.world == player.world.name }
+            .forEach {
                 val distance = getDistance(doubleArrayOf(player.location.x, player.location.z), it.location)
                 stations[distance] = it
             }
-        }
+
         val distances = stations.keys.sorted()
         val items = ArrayList<MenuItem>()
         for (i in 0..15) {
             try {
                 val station = stations.getValue(distances[i])
-                when (stationChoiceTarget) {
-                    StationChoiceTarget.START -> items.add(
-                        MenuItem(
-                            "${station.name}(約${distances[i].toInt()}m)",
-                            { startId = station.id },
-                            Material.MINECART
-                        )
+                items.add(
+                    MenuItem(
+                        "${station.name}(約${distances[i].toInt()}m",
+                        { setStationIdAndOpenMenu(station.id, stationChoiceTarget) },
+                        Material.MINECART
                     )
-
-                    StationChoiceTarget.END -> items.add(
-                        MenuItem(
-                            "${station.name}(約${distances[i].toInt()}m)",
-                            { endId = station.id },
-                            Material.MINECART
-                        )
-                    )
-                }
+                )
             } catch (_: Exception) {
             }
         }
@@ -219,27 +199,17 @@ class TransferGuideSession(val player: Player) {
 
     private fun chooseStationWild(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
-        data.stations.values.forEach { station ->
-            if (station.world == player.world.name) {
-                when (stationChoiceTarget) {
-                    StationChoiceTarget.START -> items.add(
-                        MenuItem(
-                            station.name,
-                            { startId = station.id },
-                            Material.MINECART
-                        )
+        data.stations.values
+            .filter { it.world == player.world.name }
+            .forEach { station ->
+                items.add(
+                    MenuItem(
+                        station.name,
+                        { setStationIdAndOpenMenu(station.id, stationChoiceTarget) },
+                        Material.MINECART
                     )
-
-                    StationChoiceTarget.END -> items.add(
-                        MenuItem(
-                            station.name,
-                            { endId = station.id },
-                            Material.MINECART
-                        )
-                    )
-                }
+                )
             }
-        }
         gui.openMenu(player, "駅一覧", items)
     }
 
@@ -257,16 +227,14 @@ class TransferGuideSession(val player: Player) {
             gui.error(player, "到着地点が設定されていません！")
             return
         }
-        val start = data.getStation(startId)
-        if (start == null) {
+        val start = data.stations[startId] ?: run {
             gui.error(player, "出発地点に存在しない駅が指定されました。")
-            logger.warning("[TransferGuideData] 存在しない駅:${startId}")
+            logger.warning("[TransferGuideData] 存在しない駅ID:${startId}")
             return
         }
-        val end = data.getStation(endId)
-        if (end == null) {
+        val end = data.stations[endId] ?: run {
             gui.error(player, "到着地点に存在しない駅が指定されました。")
-            logger.warning("[TransferGuideData] 存在しない駅:${endId}")
+            logger.warning("[TransferGuideData] 存在しない駅ID:${endId}")
             return
         }
         /*
@@ -295,7 +263,7 @@ class TransferGuideSession(val player: Player) {
         knitA@ while (i < data.loopMax) {
             if (data.consoleDebug) logger.info("[TransferGuide(debug)] ${loopADebugString()}")
             val minStationEntry = opened.minByOrNull { it.value }
-            if (minStationEntry == null) {
+            minStationEntry ?: run {
                 gui.error(player, "最小値からの駅探索Aに失敗しました。")
                 logger.warning("[TransferGuide] 最小値からの駅探索失敗A\n${loopADebugString()}")
                 return
@@ -328,19 +296,19 @@ class TransferGuideSession(val player: Player) {
             if (data.consoleDebug) logger.info("[TransferGuideData(debug)] ${loopBDebugString()}")
             val lastStationPath = routeArrayList.last().paths
             val candidates: MutableMap<KStation, Double> = mutableMapOf()
-            for (path in lastStationPath) {
-                val pathTo = data.getStation(path.to)
-                if (closed.any { it.id == path.to } && pathTo != null) {
-                    candidates[pathTo] = getDistance(end.location, pathTo.location)
+            lastStationPath.forEach { path ->
+                val pathTo = data.stations[path.to] ?: run {
+                    gui.error(player, "[TransferGuideData] 存在しない駅ID(${path.to})")
+                    return@forEach
                 }
+                if (closed.any { it.id == path.to }) candidates[pathTo] = getDistance(end.location, pathTo.location)
             }
             if (candidates.isEmpty()) {
                 gui.error(player, "逆算中に経路が途切れました。")
                 logger.warning("[TransferGuideData] 候補経路先無しB\n${loopBDebugString()}")
                 return
             }
-            val min = candidates.minByOrNull { it.value }
-            if (min == null) {
+            val min = candidates.minByOrNull { it.value } ?: run {
                 gui.error(player, "最小値からの駅探索Bに失敗しました。")
                 logger.warning("[TransferGuideData] 最小値からの駅探索失敗B\n${loopBDebugString()}")
                 return
@@ -362,12 +330,12 @@ class TransferGuideSession(val player: Player) {
         gui.openMenu(
             player, "地点選択", listOf(
                 MenuItem(
-                    "出発地点:${data.getStation(startId)?.name ?: "未設定"}",
+                    "出発地点:${data.stations[startId]?.name ?: "未設定"}",
                     { chooseStation(StationChoiceTarget.START) },
                     Material.LIME_BANNER
                 ),
                 MenuItem(
-                    "到着地点:${data.getStation(endId)?.name ?: "未設定"}",
+                    "到着地点:${data.stations[endId]?.name ?: "未設定"}",
                     { chooseStation(StationChoiceTarget.END) },
                     Material.RED_BANNER
                 ),
@@ -409,28 +377,20 @@ private class TransferGuideData {
         consoleDebug = conf.getBoolean("consoleDebug", false)
     }
 
-    fun getStation(id: String?): KStation? {
-        return stations.getValue(id ?: return null)
-    }
-
     private fun stationsConfigToKStations(conf: ConfigurationSection?): Map<String, KStation> {
         val map = mutableMapOf<String, KStation>()
         conf ?: return map
-        val keys = conf.getKeys(false)
-        for (key in keys) {
-            val stationConfig = conf.getConfigurationSection(key)
-            if (stationConfig != null) map[key] = KStation(stationConfig, key)
+        conf.getKeys(false).forEach { key ->
+            conf.getConfigurationSection(key)?.run { map[key] = KStation(this, key) }
         }
-        return map
+        return map.toMap()
     }
 
     private fun linesConfigToKLines(conf: ConfigurationSection?): Map<String, KLine> {
         val map = mutableMapOf<String, KLine>()
         conf ?: return map
-        val keys = conf.getKeys(false)
-        for (key in keys) {
-            val lineConfig = conf.getConfigurationSection(key)
-            if (lineConfig != null) map[key] = KLine(lineConfig)
+        conf.getKeys(false).forEach { key ->
+            conf.getConfigurationSection(key)?.run { map[key] = KLine(this) }
         }
         return map
     }
@@ -438,37 +398,28 @@ private class TransferGuideData {
     private fun companiesConfigToKCompanies(conf: ConfigurationSection?): Map<String, KCompany> {
         val map = mutableMapOf<String, KCompany>()
         conf ?: return map
-        val keys = conf.getKeys(false)
-        for (key in keys) {
-            val section = conf.getConfigurationSection(key)
-            if (section != null) map[key] = KCompany(section)
+        conf.getKeys(false).forEach { key ->
+            conf.getConfigurationSection(key)?.run { map[key] = KCompany(this) }
         }
-        return map
+        return map.toMap()
     }
 
-    private fun munisConfigToKMunis(conf: ConfigurationSection?): MutableMap<String, KMuni> {
+    private fun munisConfigToKMunis(conf: ConfigurationSection?): Map<String, KMuni> {
         val map = mutableMapOf<String, KMuni>()
         conf ?: return map
-        val keys = conf.getKeys(false)
-        for (key in keys) {
-            val section = conf.getConfigurationSection(key)
-            if (section != null) {
-                val c = conf.getConfigurationSection(key)
-                if (c != null) map[key] = KMuni(c, key)
-            }
+        conf.getKeys(false).forEach { key ->
+            conf.getConfigurationSection(key)?.run { map[key] = KMuni(this, key) }
         }
-        return map
+        return map.toMap()
     }
 
     private fun pairStringConfigToMap(conf: ConfigurationSection?): Map<String, String> {
         val map = mutableMapOf<String, String>()
         conf ?: return map
-        val keys = conf.getKeys(false)
-        for (key in keys) {
-            val str = conf.getString(key)
-            if (str != null) map[key] = str
+        conf.getKeys(false).forEach {
+            conf.getString(it)?.run { map[it] = this }
         }
-        return map
+        return map.toMap()
     }
 }
 
@@ -482,13 +433,8 @@ private class KStation(conf: ConfigurationSection, val id: String) {
     private fun pathsConfigToKPaths(conf: ConfigurationSection?): MutableSet<KPath> {
         val set = mutableSetOf<KPath>()
         conf ?: return set
-        val keys = conf.getKeys(false)
-        for (key in keys) {
-            val section = conf.getConfigurationSection(key)
-            if (section != null) {
-                val c = conf.getConfigurationSection(key)
-                if (c != null) set.add(KPath(c))
-            }
+        conf.getKeys(false).forEach { key ->
+            conf.getConfigurationSection(key)?.run { set.add(KPath(this)) }
         }
         return set
     }
