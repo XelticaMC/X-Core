@@ -19,17 +19,25 @@ class TransferGuideSession(val player: Player) {
     private val logger = Bukkit.getLogger()
     private var startId: String? = null
     private var endId: String? = null
+    private var infoId: String? = null
 
     init {
         val userData = Config("transferGuideUserData").conf.getConfigurationSection(player.uniqueId.toString())
         userData?.getString("start")?.run { startId = this }
         userData?.getString("end")?.run { endId = this }
+        userData?.getString("info")?.run { infoId = this }
     }
 
     private fun setStationIdAndOpenMenu(newId: String, stationChoiceTarget: StationChoiceTarget) {
         when (stationChoiceTarget) {
             StationChoiceTarget.START -> startId = newId
             StationChoiceTarget.END -> endId = newId
+            StationChoiceTarget.INFO -> {
+                infoId = newId
+                saveUserData()
+                showStationData()
+                return
+            }
         }
         saveUserData()
         openMainMenu()
@@ -41,6 +49,7 @@ class TransferGuideSession(val player: Player) {
             val uuid = player.uniqueId.toString()
             userData.conf.set("${uuid}.start", startId)
             userData.conf.set("${uuid}.end", endId)
+            userData.conf.set("${uuid}.info", infoId)
             userData.save()
         } catch (e: IOException) {
             e.printStackTrace()
@@ -60,15 +69,22 @@ class TransferGuideSession(val player: Player) {
     }
 
     private fun chooseStationMain(stationChoiceTarget: StationChoiceTarget) {
-        gui.openMenu(
-            player, "駅選択", listOf(
-                MenuItem("近い順", { chooseStationNear(stationChoiceTarget) }, Material.DIAMOND_HORSE_ARMOR),
-                MenuItem("五十音順", { chooseStationAiueo(stationChoiceTarget) }, Material.BOOK),
-                MenuItem("会社・路線別", { chooseStationLine(stationChoiceTarget) }, Material.SPRUCE_DOOR),
-                MenuItem("最寄自治体別", { chooseStationMuni(stationChoiceTarget) }, Material.FILLED_MAP),
-                MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH),
-            )
+        val items = arrayListOf(
+            MenuItem("近い順", { chooseStationNear(stationChoiceTarget) }, Material.DIAMOND_HORSE_ARMOR),
+            MenuItem("五十音順", { chooseStationAiueo(stationChoiceTarget) }, Material.BOOK),
+            MenuItem("会社・路線別", { chooseStationLine(stationChoiceTarget) }, Material.SPRUCE_DOOR),
+            MenuItem("最寄自治体別", { chooseStationMuni(stationChoiceTarget) }, Material.FILLED_MAP),
         )
+        when (stationChoiceTarget) {
+            StationChoiceTarget.START, StationChoiceTarget.END -> items.add(
+                MenuItem("戻る", { openMainMenu() }, Material.REDSTONE_TORCH)
+            )
+
+            StationChoiceTarget.INFO -> items.add(
+                MenuItem("戻る", { openStationInfoMenu() }, Material.REDSTONE_TORCH)
+            )
+        }
+        gui.openMenu(player, "駅選択", items)
     }
 
     private fun chooseStationAiueo(stationChoiceTarget: StationChoiceTarget) {
@@ -140,7 +156,7 @@ class TransferGuideSession(val player: Player) {
             )
         }
         items.add(MenuItem("戻る", { chooseStationLine(stationChoiceTarget) }, Material.REDSTONE_TORCH))
-        gui.openMenu(player, company.name ?: "路線選択", items)
+        gui.openMenu(player, company.name, items)
     }
 
     private fun chooseStationLine(stationChoiceTarget: StationChoiceTarget, company: KCompany, line: KLine) {
@@ -159,7 +175,7 @@ class TransferGuideSession(val player: Player) {
             )
         }
         items.add(MenuItem("戻る", { chooseStationLine(stationChoiceTarget, company) }, Material.REDSTONE_TORCH))
-        gui.openMenu(player, line.name ?: "駅選択", items)
+        gui.openMenu(player, line.name, items)
     }
 
     private fun chooseStationMuni(stationChoiceTarget: StationChoiceTarget) {
@@ -207,7 +223,7 @@ class TransferGuideSession(val player: Player) {
                 val station = stations.getValue(distances[i])
                 items.add(
                     MenuItem(
-                        "${station.name}(約${distances[i].toInt()}m",
+                        "${station.name}(約${distances[i].toInt()}m)",
                         { setStationIdAndOpenMenu(station.id, stationChoiceTarget) },
                         Material.MINECART
                     )
@@ -348,6 +364,22 @@ class TransferGuideSession(val player: Player) {
         player.sendMessage(KRoute(data, routeArray).toString())
     }
 
+    private fun openStationInfoMenu() {
+        val items = ArrayList<MenuItem>()
+        infoId?.run {
+            items.add(
+                MenuItem(
+                    "前回見た駅:${data.stations[infoId]?.name}",
+                    { showStationData() },
+                    Material.CLOCK
+                )
+            )
+        }
+        items.add(MenuItem("駅選択", { chooseStation(StationChoiceTarget.INFO) }, Material.COMPASS))
+        items.add(MenuItem("戻る", { openMainMenu() }, Material.REDSTONE_TORCH))
+        gui.openMenu(player, "駅情報", items)
+    }
+
     private fun openMainMenu() {
         gui.openMenu(
             player, "地点選択", listOf(
@@ -361,6 +393,7 @@ class TransferGuideSession(val player: Player) {
                     { chooseStation(StationChoiceTarget.END) },
                     Material.RED_BANNER
                 ),
+                MenuItem("駅情報", { openStationInfoMenu() }, Material.CHEST_MINECART),
                 MenuItem("計算開始", { calcRoute() }, Material.COMMAND_BLOCK_MINECART),
                 MenuItem("このアプリについて", { showAbout() }, Material.ENCHANTED_BOOK),
                 MenuItem("終了", null, Material.BARRIER)
@@ -370,6 +403,54 @@ class TransferGuideSession(val player: Player) {
 
     private fun showAbout() {
         player.sendMessage("Knit乗換案内\n製作者:Knit\nデータベース更新日:${data.update}\n未対応路線:新山吹村営鉄道(本線の薫風緑苑までのみ対応)\n仮の数値を使用している部分:新鮫、塩川、新スポーン地点-もさんな間の快速線\nまともにデバッグしていない為、ヤバいバグが発生する場合があります。ご了承下さい。")
+    }
+
+    private fun showStationData() {
+        val sb = StringBuilder()
+        val station = data.stations[infoId] ?: run {
+            gui.error(player, "存在しない駅が指定されました。")
+            logger.warning("[TransferGuideData] 存在しない駅ID(${infoId})")
+            return
+        }
+        val lines = ArrayList<Map.Entry<String, KLine>>()
+        data.lines
+            .filter { it.value.stations.contains(infoId) }
+            .forEach {
+                lines.add(it)
+            }
+        val companies = ArrayList<KCompany>()
+        data.companies.values
+            .forEach { company ->
+                lines.forEach {
+                    if (!(companies.contains(company)) && company.lines.contains(it.key)) companies.add(company)
+                }
+            }
+        val municipalities = data.municipalities.values.filter { it.stations.contains(infoId) }
+        sb.append("===== ${station.name}駅 =====\n")
+        sb.append("読み:${station.yomi}\n")
+        sb.append("駅番号:")
+        if (station.number == null) sb.append("無し\n")
+        else sb.append("${station.number}\n")
+        sb.append(
+            "座標:[X:${station.location[0]},Z:${station.location[1]}]付近(ここから約${
+                getDistance(
+                    doubleArrayOf(
+                        player.location.x,
+                        player.location.z
+                    ), station.location
+                ).toInt()
+            }m)\n"
+        )
+        sb.append("会社:${companies.joinToString(separator = "、", transform = { it.name })}\n")
+        sb.append("路線:${lines.joinToString(separator = "、", transform = { it.value.name })}\n")
+        sb.append("近隣自治体:${municipalities.joinToString(separator = "、", transform = { it.name })}\n")
+        sb.append("隣の駅:\n")
+        station.paths.forEach {
+            if (it.line == "walk") sb.append(" ${data.stations[it.to]?.name}:${data.directions[it.direction]}約${it.time}秒歩く\n")
+            else sb.append(" ${data.stations[it.to]?.name}:${data.lines[it.line]?.name}(${data.directions[it.direction]})約${it.time}秒\n")
+        }
+        sb.append("================")
+        player.sendMessage(sb.toString())
     }
 
     private fun getDistance(start: DoubleArray, end: DoubleArray): Double {
@@ -448,7 +529,7 @@ private class TransferGuideData {
 private class KStation(conf: ConfigurationSection, val id: String) {
     val name = conf.getString("name") ?: "null"
     val yomi = conf.getString("yomi") ?: "null"
-    val number = conf.getString("number") ?: "null"
+    val number = conf.getString("number")
     val world = conf.getString("world") ?: "null"
     val location = conf.getDoubleList("location").toDoubleArray()
     val paths = pathsConfigToKPaths(conf.getConfigurationSection("paths"))
@@ -463,7 +544,7 @@ private class KStation(conf: ConfigurationSection, val id: String) {
 }
 
 private class KMuni(conf: ConfigurationSection, val id: String) {
-    val name = conf.getString("name")
+    val name = conf.getString("name") ?: "null"
     val world = conf.getString("world")
     val stations: List<String> = conf.getStringList("stations")
 }
@@ -476,12 +557,12 @@ private class KPath(conf: ConfigurationSection) {
 }
 
 private class KCompany(conf: ConfigurationSection) {
-    val name = conf.getString("name")
+    val name = conf.getString("name") ?: "null"
     val lines: List<String> = conf.getStringList("lines")
 }
 
 private class KLine(conf: ConfigurationSection) {
-    val name = conf.getString("name")
+    val name = conf.getString("name") ?: "null"
     val stations: List<String> = conf.getStringList("stations")
 }
 
@@ -585,13 +666,13 @@ private class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
         sb.append("===== 結果 =====\n")
         routes.forEach {
             sb.append("${it.station.name}(${it.station.yomi}")
-            if (it.station.number != "null") sb.append("/${it.station.number}")
+            it.station.number?.run { sb.append("/${it.station.number}") }
             sb.append("/X:${it.station.location[0]},Z:${it.station.location[1]})\n")
             if (it.routePath is KRoutePathReal) {
                 appendTime += it.routePath.time
                 appendTime += if (it.routePath.line == "walk") 10 else 30
                 sb.append(" | ")
-                if (it.routePath.line == "walk") sb.append("${data.directions[it.routePath.direction]}歩く\n")
+                if (it.routePath.line == "walk") sb.append("${data.directions[it.routePath.direction]}約${it.routePath.time}秒歩く\n")
                 else sb.append("${data.lines[it.routePath.line]?.name ?: it.routePath.line}(${data.directions[it.routePath.direction]}) 約${it.routePath.time}秒\n")
             }
         }
@@ -616,7 +697,7 @@ private class KRoutePathReal(
 private open class KRoutePathEnd : KRoutePath()
 
 private enum class StationChoiceTarget {
-    START, END
+    START, END, INFO
 }
 
 private enum class JapaneseColumns(val firstChar: String, val chars: Array<String>) {
