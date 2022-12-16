@@ -7,6 +7,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.utils.Config
+import java.io.IOException
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -17,12 +18,32 @@ class TransferGuideSession(val player: Player) {
     private val logger = Bukkit.getLogger()
     private var startId: String? = null
     private var endId: String? = null
+
+    init {
+        val userData = Config("transferGuideUserData").conf.getConfigurationSection(player.uniqueId.toString())
+        userData?.getString("start")?.run { startId = this }
+        userData?.getString("end")?.run { endId = this }
+    }
+
     private fun setStationIdAndOpenMenu(newId: String, stationChoiceTarget: StationChoiceTarget) {
         when (stationChoiceTarget) {
             StationChoiceTarget.START -> startId = newId
             StationChoiceTarget.END -> endId = newId
         }
+        saveUserData()
         openMainMenu()
+    }
+
+    private fun saveUserData() {
+        try {
+            val userData = Config("transferGuideUserData")
+            val uuid = player.uniqueId.toString()
+            userData.conf.set("${uuid}.start", startId)
+            userData.conf.set("${uuid}.end", endId)
+            userData.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 
     fun start() {
@@ -486,7 +507,7 @@ private class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                 pathsCandidates.add(candidates)
             }
         }
-        //使用可能な移動経路群から使用する経路を選択(todo:コピペ部分多し、要改善)
+        //使用可能な移動経路群から使用する経路を選択
         for (i in pathsCandidates.indices) {
             if (pathsCandidates.size <= 1) break
             if (pathsCandidates[i].size <= 1) continue
