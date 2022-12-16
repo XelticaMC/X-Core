@@ -8,6 +8,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.utils.Config
 import java.io.IOException
+import java.time.LocalDateTime
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -383,7 +384,7 @@ private class TransferGuideData {
     val companies: Map<String, KCompany>
     val municipalities: Map<String, KMuni>
     val loopMax: Int
-    val update: String
+    val update: LocalDateTime
     val consoleDebug: Boolean
 
     init {
@@ -394,7 +395,7 @@ private class TransferGuideData {
         companies = companiesConfigToKCompanies(conf.getConfigurationSection("companies"))
         municipalities = munisConfigToKMunis(conf.getConfigurationSection("municipalities"))
         loopMax = conf.getInt("loopMax")
-        update = conf.getString("update") ?: "不明"
+        update = LocalDateTime.parse(conf.getString("update"))
         consoleDebug = conf.getBoolean("consoleDebug", false)
     }
 

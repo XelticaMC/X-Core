@@ -1,3 +1,6 @@
+#更新時はここも忘れず変更！！！！！！！！！！
+update: "2022-12-13T00:00"
+
 stations:
   mutsuki_shinso_1:
     name: 草の島
@@ -1438,5 +1441,3 @@ loopMax: 210
 
 #コンソールが滅茶滅茶になるので、本番環境ではfalseにすることを強めに推奨
 consoleDebug: false
-
-update: "2022-12-12"
