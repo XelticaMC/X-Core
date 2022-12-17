@@ -281,6 +281,10 @@ object CoreProtectGuiTestModule : ModuleBase() {
             return listOf(
                     MenuItem("チェスト", { app.onActionMenuClick("container", player) }, Material.CHEST_MINECART),
                     MenuItem("ブロック", { app.onActionMenuClick("block", player) }, Material.GRASS_BLOCK),
+                    MenuItem("アイテム", { app.onActionMenuClick("item", player) }, Material.WHEAT_SEEDS),
+                    MenuItem("クリック", { app.onActionMenuClick("click", player) }, Material.BOOK),
+                    MenuItem("コマンド", { app.onActionMenuClick("command", player) }, Material.PLAYER_HEAD),
+                    MenuItem("キル", { app.onActionMenuClick("kill", player) }, Material.ZOMBIE_HEAD),
                     MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
             )
         }
@@ -309,6 +313,26 @@ object CoreProtectGuiTestModule : ModuleBase() {
                             MenuItem("ブロックを設置した", { app.onOptionMenuClick("+$action", player) }, Material.REDSTONE),
                             MenuItem("ブロックを破壊した", { app.onOptionMenuClick("-$action", player) }, Material.REDSTONE_TORCH),
                             MenuItem("指定しない", { app.onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
+                            MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
+                    )
+
+                }
+
+                "item" -> {
+                    listOf(
+                            MenuItem("アイテムの拾得", { app.onOptionMenuClick("+$action", player) }, Material.REDSTONE),
+                            MenuItem("アイテムのドロップ", { app.onOptionMenuClick("-$action", player) }, Material.REDSTONE_TORCH),
+                            MenuItem("指定しない", { app.onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
+                            MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
+                    )
+
+                }
+
+                "click",
+                "command",
+                "kill" -> {
+                    listOf(
+                            MenuItem("実行", { app.onOptionMenuClick(action, player) }, Material.REDSTONE),
                             MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
                     )
 
