@@ -260,7 +260,8 @@ class TransferGuideSession(val player: Player) {
         data.stations.values
             .filter { it.world == player.world.name }
             .forEach {
-                val distance = getDistance(doubleArrayOf(player.location.x, player.location.z), it.location)
+                val distance =
+                    TransferGuideUtil.calcDistance(doubleArrayOf(player.location.x, player.location.z), it.location)
                 stations[distance] = it
             }
 
@@ -271,7 +272,7 @@ class TransferGuideSession(val player: Player) {
                 val station = stations.getValue(distances[i])
                 items.add(
                     MenuItem(
-                        "${station.name}(約${distances[i].toInt()}m)",
+                        "${station.name}(約${TransferGuideUtil.metersToString(distances[i])})",
                         { setStationIdAndOpenMenu(station.id, stationChoiceTarget) },
                         Material.MINECART
                     )
@@ -336,7 +337,7 @@ class TransferGuideSession(val player: Player) {
         val unsearched = data.stations.toMutableMap()
         val opened: MutableMap<KStation, Double> = mutableMapOf()
         val closed: MutableSet<KStation> = mutableSetOf()
-        opened[start] = getDistance(start.location, end.location)
+        opened[start] = TransferGuideUtil.calcDistance(start.location, end.location)
         unsearched.remove(startId)
         var i = 0
         fun loopADebugString(): String {
@@ -358,7 +359,7 @@ class TransferGuideSession(val player: Player) {
             opened.remove(minStationEntry.key)
             for (path in minStationEntry.key.paths) {
                 val pathToInUnsearched = unsearched[path.to] ?: continue
-                opened[pathToInUnsearched] = getDistance(end.location, pathToInUnsearched.location)
+                opened[pathToInUnsearched] = TransferGuideUtil.calcDistance(end.location, pathToInUnsearched.location)
                 unsearched.remove(pathToInUnsearched.id)
                 if (endId == pathToInUnsearched.id) {
                     closed.add(pathToInUnsearched)
@@ -387,7 +388,8 @@ class TransferGuideSession(val player: Player) {
                     gui.error(player, "[TransferGuideData] 存在しない駅ID(${path.to})")
                     return@forEach
                 }
-                if (closed.any { it.id == path.to }) candidates[pathTo] = getDistance(end.location, pathTo.location)
+                if (closed.any { it.id == path.to }) candidates[pathTo] =
+                    TransferGuideUtil.calcDistance(end.location, pathTo.location)
             }
             if (candidates.isEmpty()) {
                 gui.error(player, "逆算中に経路が途切れました。")
@@ -481,13 +483,15 @@ class TransferGuideSession(val player: Player) {
         else sb.append("${station.number}\n")
         sb.append(
             "座標:[X:${station.location[0]},Z:${station.location[1]}]付近(ここから約${
-                getDistance(
-                    doubleArrayOf(
-                        player.location.x,
-                        player.location.z
-                    ), station.location
-                ).toInt()
-            }m)\n"
+                TransferGuideUtil.metersToString(
+                    TransferGuideUtil.calcDistance(
+                        doubleArrayOf(
+                            player.location.x,
+                            player.location.z
+                        ), station.location
+                    )
+                )
+            })\n"
         )
         sb.append("会社:${companies.joinToString(separator = "、", transform = { it.name })}\n")
         sb.append("路線:${lines.joinToString(separator = "、", transform = { it.value.name })}\n")
@@ -499,10 +503,6 @@ class TransferGuideSession(val player: Player) {
         }
         sb.append("================")
         player.sendMessage(sb.toString())
-    }
-
-    private fun getDistance(start: DoubleArray, end: DoubleArray): Double {
-        return abs(sqrt((start[0] - end[0]).pow(2.0) + (start[1] - end[1]).pow(2.0)))
     }
 }
 
@@ -724,7 +724,7 @@ private class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                 else sb.append("${data.lines[it.routePath.line]?.name ?: it.routePath.line}(${data.directions[it.routePath.direction]}) 約${it.routePath.time}秒\n")
             }
         }
-        sb.append("所要時間:約${appendTime}秒\n")
+        sb.append("所要時間:約${TransferGuideUtil.secondsToString(appendTime)}\n")
         sb.append("================")
         return sb.toString()
     }
@@ -759,4 +759,24 @@ private enum class JapaneseColumns(val firstChar: String, val chars: Array<Strin
     YA("や", arrayOf("や", "ゆ", "よ")),
     RA("ら", arrayOf("ら", "り", "る", "れ", "ろ")),
     WA("わ", arrayOf("わ", "ゐ", "ゑ", "を", "ん")),
+}
+
+private object TransferGuideUtil {
+    @JvmStatic
+    fun calcDistance(start: DoubleArray, end: DoubleArray): Double {
+        return abs(sqrt((start[0] - end[0]).pow(2.0) + (start[1] - end[1]).pow(2.0)))
+    }
+
+    @JvmStatic
+    fun metersToString(meter: Double): String {
+        return if (meter >= 1000) "%.1fキロメートル".format(meter / 1000)
+        else "%.1fメートル".format(meter)
+    }
+
+    @JvmStatic
+    fun secondsToString(seconds: Int): String {
+        return if (seconds >= 60 && seconds % 60 == 0) "${seconds / 60}分"
+        else if (seconds >= 60) "${seconds / 60}分${seconds % 60}秒"
+        else "${seconds}秒"
+    }
 }
