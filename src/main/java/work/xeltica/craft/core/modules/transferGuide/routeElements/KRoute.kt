@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.transferGuide.routeElements
 
+import org.bukkit.ChatColor
 import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
 import work.xeltica.craft.core.modules.transferGuide.dataElements.TransferGuideData
 import work.xeltica.craft.core.modules.transferGuide.dataElements.KStation
@@ -101,20 +102,22 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
     fun toStringForGuide(): String {
         val sb = StringBuilder()
         var appendTime = 0
-        sb.append("===== 結果 =====\n")
+        val gray = ChatColor.GRAY
+        val white = ChatColor.WHITE
+        sb.append("${gray}===== ${white}結果 ${gray}=====\n")
         routes.forEach {
-            sb.append("${it.station.name}(${it.station.yomi}")
+            sb.append("${white}${it.station.name}${gray}(${it.station.yomi}")
             it.station.number?.run { sb.append("/${it.station.number}") }
             sb.append("/X:${it.station.location[0]},Z:${it.station.location[1]})\n")
             if (it.routePath is KRoutePathReal) {
                 appendTime += it.routePath.time
                 appendTime += if (it.routePath.line == "walk") 10 else 30
-                sb.append(" | ")
+                sb.append("${white} | ")
                 sb.append("${it.routePath.toStringForGuide(data)}\n")
             }
         }
-        sb.append("所要時間:約${TransferGuideUtil.secondsToString(appendTime)}\n")
-        sb.append("================")
+        sb.append("${gray}所要時間:${white}約${TransferGuideUtil.secondsToString(appendTime)}\n")
+        sb.append("${white}=".repeat(20))
         return sb.toString()
     }
 }

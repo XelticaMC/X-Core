@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.transferGuide.dataElements
 
+import org.bukkit.ChatColor
 import org.bukkit.configuration.ConfigurationSection
 import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
 
@@ -9,12 +10,14 @@ class KPath(conf: ConfigurationSection) {
     val direction = conf.getString("direction") ?: "null"
     val time = conf.getInt("time")
     fun toStringForGuide(data: TransferGuideData): String {
-        return if (line == "walk") "${data.stations[to]?.name}:${data.directions[direction]}約${
+        val gray = ChatColor.GRAY
+        val white = ChatColor.WHITE
+        return if (line == "walk") "${white}${data.stations[to]?.name}${gray}:${data.directions[direction]}約${
             TransferGuideUtil.secondsToString(
                 time
             )
         }歩く"
-        else "${data.stations[to]?.name}:${data.lines[line]?.name}(${data.directions[direction]}) 約${
+        else "${white}${data.stations[to]?.name}${gray}:${data.lines[line]?.name}(${data.directions[direction]}) 約${
             TransferGuideUtil.secondsToString(
                 time
             )

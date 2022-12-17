@@ -2,6 +2,7 @@ package work.xeltica.craft.core.modules.transferGuide
 
 import java.io.IOException
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
@@ -495,13 +496,19 @@ class TransferGuideSession(val player: Player) {
                 }
             }
         val municipalities = data.municipalities.values.filter { it.stations.contains(infoId) }
-        sb.append("===== ${station.name}駅 =====\n")
-        sb.append("読み:${station.yomi}\n")
-        sb.append("駅番号:")
-        if (station.number == null) sb.append("無し\n")
-        else sb.append("${station.number}\n")
+        val aqua = ChatColor.AQUA
+        val bold = ChatColor.BOLD
+        val darkGray = ChatColor.DARK_GRAY
+        val gray = ChatColor.GRAY
+        val reset = ChatColor.RESET
+        val white = ChatColor.WHITE
+        sb.append("${gray}===== ${aqua}${bold}${station.name}${reset}${white}駅 ${gray}=====\n")
+        sb.append("${gray}読み:${white}${station.yomi}\n")
+        sb.append("${gray}駅番号:")
+        if (station.number == null) sb.append("${darkGray}無し\n")
+        else sb.append("${white}${station.number}\n")
         sb.append(
-            "座標:[X:${station.location[0]},Z:${station.location[1]}]付近(ここから約${
+            "${gray}座標:[X:${white}${station.location[0]}${gray},Z:${white}${station.location[1]}${gray}]付近(ここから約${white}${
                 TransferGuideUtil.metersToString(
                     TransferGuideUtil.calcDistance(
                         doubleArrayOf(
@@ -512,16 +519,16 @@ class TransferGuideSession(val player: Player) {
                 )
             })\n"
         )
-        sb.append("会社:${companies.joinToString(separator = "、", transform = { it.name })}\n")
-        sb.append("路線:${lines.joinToString(separator = "、", transform = { it.value.name })}\n")
-        sb.append("近隣自治体:")
-        if (municipalities.isEmpty()) sb.append("無し\n")
-        else sb.append("近隣自治体:${municipalities.joinToString(separator = "、", transform = { it.name })}\n")
-        sb.append("隣の駅:\n")
+        sb.append("${gray}会社:${white}${companies.joinToString(separator = "、", transform = { it.name })}\n")
+        sb.append("${gray}路線:${white}${lines.joinToString(separator = "、", transform = { it.value.name })}\n")
+        sb.append("${gray}近隣自治体:")
+        if (municipalities.isEmpty()) sb.append("${darkGray}無し\n")
+        else sb.append("${white}${municipalities.joinToString(separator = "、", transform = { it.name })}\n")
+        sb.append("${gray}隣の駅:\n")
         station.paths.forEach {
             sb.append(" ${it.toStringForGuide(data)}\n")
         }
-        sb.append("================")
+        sb.append("=".repeat(20))
         player.sendMessage(sb.toString())
     }
 }
