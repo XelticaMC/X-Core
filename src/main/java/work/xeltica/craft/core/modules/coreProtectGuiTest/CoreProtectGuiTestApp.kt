@@ -210,6 +210,13 @@ class CoreProtectGuiTestApp : AppBase() {
     }
 
     /**
+     * アクションを指定しなかった場合に呼ばれる
+     */
+    fun onNoDesignate(player: Player) {
+        commandSend(player)
+    }
+
+    /**
      * action の種類を選択したら呼ばれる
      *
      * @param action メニューから指定したアクション

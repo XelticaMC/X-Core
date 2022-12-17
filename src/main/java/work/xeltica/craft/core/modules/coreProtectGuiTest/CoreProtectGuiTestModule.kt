@@ -288,6 +288,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
                     MenuItem("コマンド", { app.onActionMenuClick("command", player) }, Material.PLAYER_HEAD),
                     MenuItem("キル", { app.onActionMenuClick("kill", player) }, Material.ZOMBIE_HEAD),
                     MenuItem("ユーザーネーム", { app.onActionMenuClick("username", player) }, Material.WRITABLE_BOOK),
+                    MenuItem("指定しない", { app.onNoDesignate(player) }, Material.REDSTONE_TORCH),
                     MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
             )
         }
