@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2022-12-17T17:30"
+update: "2022-12-17T20:49"
 
 stations:
   mutsuki_shinso_1:
@@ -1076,6 +1076,7 @@ stations:
 lines:
   mutsuki_shinso_local:
     name: 共天睦月電鉄新草線普通
+    world: main
     stations: [
       mutsuki_shinso_1,
       mutsuki_shinso_2,
@@ -1111,6 +1112,7 @@ lines:
     ]
   mutsuki_shinso_rapid:
     name: 共天睦月電鉄新草線快速
+    world: main
     stations: [
       mutsuki_shinso_1,
       mutsuki_shinso_5,
@@ -1126,6 +1128,7 @@ lines:
     ]
   mutsuki_niizamenamboku_south:
     name: 共天睦月電鉄新鮫南北線(南)
+    world: main
     stations: [
       mutsuki_niizamenamboku_S1,
       mutsuki_shinso_8,
@@ -1136,6 +1139,7 @@ lines:
     ]
   mutsuki_kohoku:
     name: 共天睦月電鉄湖北線
+    world: main
     stations: [
       mutsuki_shinso_16,
       mutsuki_kohoku_2,
@@ -1152,12 +1156,14 @@ lines:
     ]
   mutsuki_adachi:
     name: 共天睦月電鉄北方連絡線(足立線)
+    world: main
     stations: [
       mutsuki_shinso_8,
       mutsuki_kohoku_12,
     ]
   mutsuki_niizamenamboku_north_rapid:
     name: 共天睦月電鉄新鮫南北線(北)快速
+    world: main
     stations: [
       mutsuki_kohoku_12,
       mutsuki_niizamenamboku_N4,
@@ -1165,6 +1171,7 @@ lines:
     ]
   mutsuki_niizamenamboku_north_local:
     name: 共天睦月電鉄新鮫南北線(北)普通
+    world: main
     stations: [
       mutsuki_kohoku_12,
       mutsuki_niizamenamboku_N2,
@@ -1176,6 +1183,7 @@ lines:
     ]
   enr_nakatsumichi_rapid:
     name: 大書見台帝国連邦鉄道中都道線快速
+    world: main
     stations: [
       enr_2_3,
       enr_2_4,
@@ -1184,6 +1192,7 @@ lines:
     ]
   enr_nakatsumichi_local:
     name: 大書見台帝国連邦鉄道中都道線普通
+    world: main
     stations: [
       enr_2_3,
       enr_2_4,
@@ -1195,6 +1204,7 @@ lines:
     ]
   yaga_yaga:
     name: 谷峨鉄道谷峨線
+    world: main
     stations: [
       yaga_yaga_1,
       yaga_yaga_2,
@@ -1203,18 +1213,21 @@ lines:
     ]
   yaga_mizue_minasato:
     name: 谷峨鉄道水江線(水郷)
+    world: main
     stations: [
       yaga_mizue_1,
       yaga_mizue_2,
     ]
   yaga_mizue_tool:
     name: 谷峨鉄道水江線(通留)
+    world: main
     stations: [
       yaga_mizue_1,
       yaga_mizue_3,
     ]
   hamazato_hamazato:
     name: はまざと簡易軌道本線
+    world: main
     stations: [
       hamazato_1,
       hamazato_2,
@@ -1228,6 +1241,7 @@ lines:
     ]
   scr_hakusa:
     name: 砂川簡易軌道白砂線
+    world: main
     stations: [
       scr_01,
       scr_02,
@@ -1238,6 +1252,7 @@ lines:
     ]
   scr_nansho:
     name: 砂川簡易軌道南沼線
+    world: main
     stations: [
       scr_17,
       scr_07,
@@ -1251,6 +1266,7 @@ lines:
     ]
   scr_kazetsuyu:
     name: 砂川簡易軌道風露線
+    world: main
     stations: [
       scr_08,
       scr_13,
@@ -1260,12 +1276,14 @@ lines:
     ]
   niizame_ebikawa:
     name: 新鮫市営地下鉄海老川線
+    world: main
     stations: [
       niizame_ebikawa_1,
       niizame_ebikawa_2,
     ]
   nyv_main:
     name: 新山吹村営鉄道本線
+    world: main
     stations: [
       nyv_main_1,
       nyv_main_2,

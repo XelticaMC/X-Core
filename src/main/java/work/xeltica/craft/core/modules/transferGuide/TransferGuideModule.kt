@@ -1,11 +1,11 @@
 package work.xeltica.craft.core.modules.transferGuide
 
+import java.time.LocalDateTime
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.YamlConfiguration
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.utils.Config
-import java.time.LocalDateTime
 
 object TransferGuideModule : ModuleBase() {
     override fun onEnable() {
@@ -15,16 +15,16 @@ object TransferGuideModule : ModuleBase() {
     }
 
     private fun willBeUpdated(): Boolean {
-        val resource = XCorePlugin.instance.getResource("transferGuideData.yml") ?: run { return false }
+        val resource = XCorePlugin.instance.getResource("transferGuideData.yml") ?: return false
         val confFromResourceUpdatedStr =
-            YamlConfiguration.loadConfiguration(resource.reader()).getString("update") ?: run { return false }
-        val confFromResourceUpdated = LocalDateTime.parse(confFromResourceUpdatedStr) ?: run { return false }
-        val confFromPluginFolderUpdatedStr = Config("transferGuideData").conf.getString("update") ?: run { return true }
-        val confFromPluginFolderUpdated = LocalDateTime.parse(confFromPluginFolderUpdatedStr) ?: run { return false }
+            YamlConfiguration.loadConfiguration(resource.reader()).getString("update") ?: return false
+        val confFromResourceUpdated = LocalDateTime.parse(confFromResourceUpdatedStr) ?: return false
+        val confFromPluginFolderUpdatedStr = Config("transferGuideData").conf.getString("update") ?: return true
+        val confFromPluginFolderUpdated = LocalDateTime.parse(confFromPluginFolderUpdatedStr) ?: return false
         return confFromResourceUpdated.isAfter(confFromPluginFolderUpdated)
     }
 
-    fun updateData(): Boolean {
+    private fun updateData(): Boolean {
         val willBeUpdated = willBeUpdated()
         if (willBeUpdated) {
             XCorePlugin.instance.saveResource("transferGuideData.yml", true)
