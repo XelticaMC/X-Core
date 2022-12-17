@@ -282,10 +282,11 @@ object CoreProtectGuiTestModule : ModuleBase() {
                     MenuItem("チェスト", { app.onActionMenuClick("container", player) }, Material.CHEST_MINECART),
                     MenuItem("ブロック", { app.onActionMenuClick("block", player) }, Material.GRASS_BLOCK),
                     MenuItem("アイテム", { app.onActionMenuClick("item", player) }, Material.WHEAT_SEEDS),
+                    MenuItem("チャット", { app.onActionMenuClick("chat", player) }, Material.JUKEBOX),
                     MenuItem("クリック", { app.onActionMenuClick("click", player) }, Material.BOOK),
                     MenuItem("コマンド", { app.onActionMenuClick("command", player) }, Material.PLAYER_HEAD),
                     MenuItem("キル", { app.onActionMenuClick("kill", player) }, Material.ZOMBIE_HEAD),
-                    MenuItem("ユーザーネーム", { app.onActionMenuClick("kill", player) }, Material.WRITABLE_BOOK),
+                    MenuItem("ユーザーネーム", { app.onActionMenuClick("username", player) }, Material.WRITABLE_BOOK),
                     MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
             )
         }
@@ -329,6 +330,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
 
                 }
 
+                "chat",
                 "click",
                 "command",
                 "kill",
