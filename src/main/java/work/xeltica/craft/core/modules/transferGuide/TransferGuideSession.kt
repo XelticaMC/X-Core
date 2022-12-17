@@ -411,7 +411,7 @@ class TransferGuideSession(val player: Player) {
         }
         routeArrayList.reverse()
         val routeArray = routeArrayList.toTypedArray()
-        player.sendMessage(KRoute(data, routeArray).toString())
+        player.sendMessage(KRoute(data, routeArray).toStringForGuide())
     }
 
     private fun openStationInfoMenu() {
@@ -495,11 +495,12 @@ class TransferGuideSession(val player: Player) {
         )
         sb.append("会社:${companies.joinToString(separator = "、", transform = { it.name })}\n")
         sb.append("路線:${lines.joinToString(separator = "、", transform = { it.value.name })}\n")
-        sb.append("近隣自治体:${municipalities.joinToString(separator = "、", transform = { it.name })}\n")
+        sb.append("近隣自治体:")
+        if (municipalities.isEmpty()) sb.append("無し\n")
+        else sb.append("近隣自治体:${municipalities.joinToString(separator = "、", transform = { it.name })}\n")
         sb.append("隣の駅:\n")
         station.paths.forEach {
-            if (it.line == "walk") sb.append(" ${data.stations[it.to]?.name}:${data.directions[it.direction]}約${it.time}秒歩く\n")
-            else sb.append(" ${data.stations[it.to]?.name}:${data.lines[it.line]?.name}(${data.directions[it.direction]})約${it.time}秒\n")
+            sb.append(" ${it.toStringForGuide(data)}\n")
         }
         sb.append("================")
         player.sendMessage(sb.toString())
@@ -602,6 +603,18 @@ private class KPath(conf: ConfigurationSection) {
     val line = conf.getString("line") ?: "null"
     val direction = conf.getString("direction") ?: "null"
     val time = conf.getInt("time")
+    fun toStringForGuide(data: TransferGuideData): String {
+        return if (line == "walk") "${data.stations[to]?.name}:${data.directions[direction]}約${
+            TransferGuideUtil.secondsToString(
+                time
+            )
+        }歩く"
+        else "${data.stations[to]?.name}:${data.lines[line]?.name}(${data.directions[direction]}) 約${
+            TransferGuideUtil.secondsToString(
+                time
+            )
+        }"
+    }
 }
 
 private class KCompany(conf: ConfigurationSection) {
@@ -708,7 +721,7 @@ private class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
         routes = routesList.toTypedArray()
     }
 
-    override fun toString(): String {
+    fun toStringForGuide(): String {
         val sb = StringBuilder()
         var appendTime = 0
         sb.append("===== 結果 =====\n")
@@ -720,8 +733,7 @@ private class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                 appendTime += it.routePath.time
                 appendTime += if (it.routePath.line == "walk") 10 else 30
                 sb.append(" | ")
-                if (it.routePath.line == "walk") sb.append("${data.directions[it.routePath.direction]}約${it.routePath.time}秒歩く\n")
-                else sb.append("${data.lines[it.routePath.line]?.name ?: it.routePath.line}(${data.directions[it.routePath.direction]}) 約${it.routePath.time}秒\n")
+                sb.append("${it.routePath.toStringForGuide(data)}\n")
             }
         }
         sb.append("所要時間:約${TransferGuideUtil.secondsToString(appendTime)}\n")
@@ -740,7 +752,13 @@ private class KRoutePathReal(
     val line: String,
     val direction: String,
     var time: Int,
-) : KRoutePath()
+) : KRoutePath() {
+
+    fun toStringForGuide(data: TransferGuideData): String {
+        return if (line == "walk") "${data.directions[direction]}約${TransferGuideUtil.secondsToString(time)}歩く"
+        else "${data.lines[line]?.name}(${data.directions[direction]}) 約${TransferGuideUtil.secondsToString(time)}"
+    }
+}
 
 private open class KRoutePathEnd : KRoutePath()
 
