@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.transferGuide
 
+import work.xeltica.craft.core.modules.transferGuide.dataElements.KPath
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -8,6 +9,16 @@ object TransferGuideUtil {
     @JvmStatic
     fun calcDistance(start: DoubleArray, end: DoubleArray): Double {
         return abs(sqrt((start[0] - end[0]).pow(2.0) + (start[1] - end[1]).pow(2.0)))
+    }
+
+    @JvmStatic
+    fun containsSamePath(pathsA: Collection<KPath>, pathsB: Collection<KPath>): Boolean {
+        pathsA.forEach { pathA ->
+            pathsB.forEach { pathB ->
+                if (pathA.line == pathB.line && pathA.direction == pathB.direction) return true
+            }
+        }
+        return false
     }
 
     @JvmStatic

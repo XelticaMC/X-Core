@@ -345,13 +345,13 @@ class TransferGuideSession(val player: Player) {
         }
         /*
             アルゴリズムの大まかなイメージ
-            A*のつもりだけどちゃんと実装できているかは不明
+            A*っぽいもののつもりだけどちゃんと実装できているかは不明
             1. 全ての駅を表すカードが裏返しで置いてあると想定する。(unsearched)
             2. 出発地点の駅のカードを開ける。(unsearchedから削除、openedへ追加)
             3. 既に開いているカードの内、最も到着地点の駅への直線距離が短い駅(minStation)の隣の駅を全て開け(openedへ追加)、
                その駅に印をつける(closedに追加しopenedから削除)。
-            4. 開いたカードに到着地点の駅が含まれていなければ3. へ戻る。
-            5. 印をつけた駅を結んで、おわり。
+            4. 開いたカードに到着地点の駅が含まれていなければ3. へ戻る。(Aループ)
+            5. 印をつけた駅を結んで、おわり。(Bループ)
         */
         val unsearched = data.stations.toMutableMap()
         val opened: MutableMap<KStation, Double> = mutableMapOf()
@@ -367,6 +367,15 @@ class TransferGuideSession(val player: Player) {
                     "closed=${closed.joinToString { it.id }}"
         }
         knitA@ while (i < data.loopMax) {
+            opened.forEach { openedEntry ->
+                var distance = TransferGuideUtil.calcDistance(end.location, openedEntry.key.location)
+                if (closed.isNotEmpty()) distance -= TransferGuideUtil.calcDistance(
+                    closed.last().location,
+                    openedEntry.key.location
+                )
+                if (TransferGuideUtil.containsSamePath(openedEntry.key.paths, end.paths)) distance /= 2
+                opened[openedEntry.key] = distance
+            }
             if (data.consoleDebug) logger.info("[TransferGuide(debug)] ${loopADebugString()}")
             val minStationEntry = opened.minByOrNull { it.value }
             if (minStationEntry == null) {
@@ -411,11 +420,18 @@ class TransferGuideSession(val player: Player) {
                     TransferGuideUtil.calcDistance(end.location, pathTo.location)
             }
             if (candidates.isEmpty()) {
-                gui.error(player, "逆算中に経路が途切れました。")
-                logger.warning("[TransferGuideData] 候補経路先無しB\n${loopBDebugString()}")
-                return
+                var k = 0
+                while (k < data.loopMax) {
+                    if (data.consoleDebug) logger.info("[TransferGuideData(debug)] step=Ba${k}\n${loopBDebugString()}")
+                    for (path in routeArrayList.last().paths) {
+                        if (closed.any { it.id == path.to }) continue@knitB
+                    }
+                    routeArrayList.removeLast()
+                    k++
+                }
             }
-            val min = candidates.minByOrNull { it.value } ?: run {
+            val min = candidates.minByOrNull { it.value }
+            if (min == null) {
                 gui.error(player, "最小値からの駅探索Bに失敗しました。")
                 logger.warning("[TransferGuideData] 最小値からの駅探索失敗B\n${loopBDebugString()}")
                 return
