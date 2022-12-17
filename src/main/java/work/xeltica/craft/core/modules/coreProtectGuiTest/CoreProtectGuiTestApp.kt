@@ -50,14 +50,10 @@ class CoreProtectGuiTestApp : AppBase() {
         val lastDate = secondDateTime.first.toLong() * convertUnit(secondDateTime.second)
 
         if (firstDate < lastDate) {
-            coreProtectCommand.date =
-                    (firstDateTime.first.toString() + firstDateTime.second) + "-" +
-                            (secondDateTime.first.toString() + secondDateTime.second)
+            coreProtectCommand.date = (firstDateTime.first.toString() + firstDateTime.second) + "-" + (secondDateTime.first.toString() + secondDateTime.second)
             Bukkit.getLogger().info("FirstDate more than")
         } else if (firstDate > lastDate) {
-            coreProtectCommand.date =
-                    (secondDateTime.first.toString() + secondDateTime.second) + "-" +
-                            (firstDateTime.first.toString() + firstDateTime.second)
+            coreProtectCommand.date = (secondDateTime.first.toString() + secondDateTime.second) + "-" + (firstDateTime.first.toString() + firstDateTime.second)
             Bukkit.getLogger().info("LastDate more than")
         } else {
             // ここに到達する場合は同値である場合なので、onTimeUnitMenuClick と同じ経路になるような形で

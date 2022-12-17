@@ -285,6 +285,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
                     MenuItem("クリック", { app.onActionMenuClick("click", player) }, Material.BOOK),
                     MenuItem("コマンド", { app.onActionMenuClick("command", player) }, Material.PLAYER_HEAD),
                     MenuItem("キル", { app.onActionMenuClick("kill", player) }, Material.ZOMBIE_HEAD),
+                    MenuItem("ユーザーネーム", { app.onActionMenuClick("kill", player) }, Material.WRITABLE_BOOK),
                     MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
             )
         }
@@ -330,7 +331,8 @@ object CoreProtectGuiTestModule : ModuleBase() {
 
                 "click",
                 "command",
-                "kill" -> {
+                "kill",
+                "username" -> {
                     listOf(
                             MenuItem("実行", { app.onOptionMenuClick(action, player) }, Material.REDSTONE),
                             MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
