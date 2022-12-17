@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2022-12-13T00:00"
+update: "2022-12-17T11:55"
 
 stations:
   mutsuki_shinso_1:
@@ -11,7 +11,7 @@ stations:
     paths:
       0: { to: mutsuki_shinso_5, line: mutsuki_shinso_rapid, direction: east, time: 179 }
       1: { to: mutsuki_shinso_2, line: mutsuki_shinso_local, direction: east, time: 51 }
-      2: { to: yaga_yaga_1, line: walk, direction: northwalk, time:30 }
+      2: { to: yaga_yaga_1, line: walk, direction: northwalk, time: 30 }
   mutsuki_shinso_2:
     name: 渓谷前
     yomi: けいこくまえ
@@ -1351,7 +1351,7 @@ municipalities:
   kazatsuyu:
     name: N-BSW地域 風露村
     world: main
-    stations: [ src_16 ]
+    stations: [ scr_16 ]
   kusashima:
     name: 草島村
     world: main
@@ -1383,7 +1383,7 @@ municipalities:
   sunakawa:
     name: 砂川町
     world: main
-    stations: [ mutsuki_shinso_6,src_01,scr_07,scr_17 ]
+    stations: [ mutsuki_shinso_6,scr_01,scr_07,scr_17 ]
   setsuka:
     name: 雪花町
     world: main
@@ -1407,7 +1407,7 @@ municipalities:
   niizame:
     name: 新鮫市
     world: main
-    stations: [ niizame,mutsuki_shinso_7,niizame_ebikawa_1,niizame_ebikawa_2 ]
+    stations: [ mutsuki_niizamenamboku_S1,mutsuki_shinso_7,niizame_ebikawa_1,niizame_ebikawa_2 ]
   hamazato:
     name: 浜里町
     world: main
