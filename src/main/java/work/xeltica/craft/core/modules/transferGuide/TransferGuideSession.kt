@@ -21,6 +21,54 @@ class TransferGuideSession(val player: Player) {
     private var endId: String? = null
     private var infoId: String? = null
 
+    companion object {
+        @JvmStatic
+        fun verifyData(): Boolean {
+            val data = TransferGuideData()
+            val logger = Bukkit.getLogger()
+            var count = 0
+            data.stations.forEach { station ->
+                station.value.paths.forEach { path ->
+                    data.stations[path.to] ?: run {
+                        logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${path.to}(stations.${station.key})")
+                        count++
+                    }
+                    if (path.time <= 0) {
+                        logger.warning("[TransferGuideData(verifyData)] 無効な所要時間:${path.time}(stations.${station.key})")
+                        count++
+                    }
+                }
+            }
+            data.lines.forEach { line ->
+                line.value.stations.forEach { station ->
+                    data.stations[station] ?: run {
+                        logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${station}(lines.${line.key}.stations)")
+                        count++
+                    }
+                }
+            }
+            data.companies.forEach { company ->
+                company.value.lines.forEach { line ->
+                    data.lines[line] ?: run {
+                        logger.warning("[TransferGuideData(verifyData)] 存在しない路線ID:${line}(companies.${company.key}.lines)")
+                        count++
+                    }
+                }
+            }
+            data.municipalities.forEach { municipality ->
+                municipality.value.stations.forEach { station ->
+                    data.stations[station] ?: run {
+                        logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${station}(municipalities.${municipality.key}.stations)")
+                        count++
+                    }
+                }
+            }
+            if (count > 0) logger.warning("[TransferGuideData(verifyData)] ${count}個のデータ誤りが見つかりました。")
+            else logger.info("[TransferGuideData(verifyData)] データに誤りは見つかりませんでした。")
+            return count == 0
+        }
+    }
+
     init {
         val userData = Config("transferGuideUserData").conf.getConfigurationSection(player.uniqueId.toString())
         userData?.getString("start")?.run { startId = this }
@@ -144,7 +192,7 @@ class TransferGuideSession(val player: Player) {
         company.lines.forEach { lineId ->
             val line = data.lines[lineId]
             line ?: run {
-                logger.warning("[TransferGuideData] 存在しない路線ID(${company.name}内)")
+                logger.warning("[TransferGuideData] 存在しない路線ID:${lineId}(${company.name}内)")
                 return
             }
             items.add(
@@ -163,7 +211,7 @@ class TransferGuideSession(val player: Player) {
         val items = ArrayList<MenuItem>()
         line.stations.forEach {
             val station = data.stations[it] ?: run {
-                logger.warning("[TransferGuideData] 存在しない駅ID(${line.name}内)")
+                logger.warning("[TransferGuideData] 存在しない駅ID:${it}(${line.name}内)")
                 return
             }
             if (station.world == player.world.name) items.add(
@@ -196,7 +244,7 @@ class TransferGuideSession(val player: Player) {
         muni.stations.forEach { stationId ->
             val station = data.stations[stationId]
             station ?: run {
-                logger.warning("[TransferGuideData] 存在しない駅ID(${muni.id}内)")
+                logger.warning("[TransferGuideData] 存在しない駅ID:${stationId}(${muni.id}内)")
                 return
             }
             items.add(
@@ -409,7 +457,7 @@ class TransferGuideSession(val player: Player) {
         val sb = StringBuilder()
         val station = data.stations[infoId] ?: run {
             gui.error(player, "存在しない駅が指定されました。")
-            logger.warning("[TransferGuideData] 存在しない駅ID(${infoId})")
+            logger.warning("[TransferGuideData] 存在しない駅ID:${infoId}")
             return
         }
         val lines = ArrayList<Map.Entry<String, KLine>>()

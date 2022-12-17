@@ -10,14 +10,14 @@ import java.time.LocalDateTime
 object TransferGuideModule : ModuleBase() {
     override fun onEnable() {
         updateData()
+        TransferGuideSession.verifyData()
         Bukkit.getLogger().info("[TransferGuide] Knit乗換案内を読み込みまいた。")
     }
 
     private fun willBeUpdated(): Boolean {
         val resource = XCorePlugin.instance.getResource("transferGuideData.yml") ?: run { return false }
         val confFromResourceUpdatedStr =
-            resource.reader().let { YamlConfiguration.loadConfiguration(it).getString("update") }
-                ?: run { return false }
+            YamlConfiguration.loadConfiguration(resource.reader()).getString("update") ?: run { return false }
         val confFromResourceUpdated = LocalDateTime.parse(confFromResourceUpdatedStr) ?: run { return false }
         val confFromPluginFolderUpdatedStr = Config("transferGuideData").conf.getString("update") ?: run { return true }
         val confFromPluginFolderUpdated = LocalDateTime.parse(confFromPluginFolderUpdatedStr) ?: run { return false }
