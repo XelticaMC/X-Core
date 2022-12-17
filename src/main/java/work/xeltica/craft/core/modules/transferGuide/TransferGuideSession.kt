@@ -33,6 +33,13 @@ class TransferGuideSession(val player: Player) {
                         logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${path.to}(stations.${station.key})")
                         count++
                     }
+                    if (path.line != "walk" && data.lines[path.line] == null) {
+                        logger.warning("[TransferGuideData(verifyData)] 存在しない路線ID:${path.line}(stations.${station.key})")
+                        count++
+                    }
+                    data.directions[path.direction] ?: run {
+                        logger.warning("[TransferGuideData(verifyData)] 存在しない方向ID:${path.line}(stations.${station.key})")
+                    }
                     if (path.time <= 0) {
                         logger.warning("[TransferGuideData(verifyData)] 無効な所要時間:${path.time}(stations.${station.key})")
                         count++
