@@ -78,9 +78,15 @@ class TransferGuideSession(val player: Player) {
 
     init {
         val userData = Config("transferGuideUserData").conf.getConfigurationSection(player.uniqueId.toString())
-        userData?.getString("start")?.run { startId = this }
-        userData?.getString("end")?.run { endId = this }
-        userData?.getString("info")?.run { infoId = this }
+        userData?.getString("start")?.run {
+            if (data.stations[startId] != null && data.stations[startId]?.world == player.world.name) startId = this
+        }
+        userData?.getString("end")?.run {
+            if (data.stations[endId] != null && data.stations[endId]?.world == player.world.name) endId = this
+        }
+        userData?.getString("info")?.run {
+            if (data.stations[infoId] != null && data.stations[infoId]?.world == player.world.name) infoId = this
+        }
     }
 
     private fun setStationIdAndOpenMenu(newId: String, stationChoiceTarget: StationChoiceTarget) {
