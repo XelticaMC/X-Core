@@ -131,6 +131,13 @@ class CoreProtectGuiTestApp : AppBase() {
     }
 
     /**
+     * インスペクトモードの切り替えが選択されたら呼ばれる
+     */
+    fun onInspectMode(player: Player) {
+        player.performCommand("co i")
+    }
+
+    /**
      * プレイヤー名を入力したら呼ばれる
      *
      * @param userName 入力したプレイヤー名

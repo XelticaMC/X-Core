@@ -63,6 +63,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
         return listOf(
                 MenuItem("ログを検索する", { lookupModeStart(player) }, Material.WRITABLE_BOOK),
                 MenuItem("ページを取得する", { inputLookUpPage(player) }, Material.BOOK),
+                MenuItem("インスペクトモード切り替え", { app.onInspectMode(player) }, Material.ENDER_EYE),
                 MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
         )
     }
