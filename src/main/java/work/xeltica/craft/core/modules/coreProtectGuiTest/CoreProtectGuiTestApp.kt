@@ -132,6 +132,8 @@ class CoreProtectGuiTestApp : AppBase() {
 
     /**
      * インスペクトモードの切り替えが選択されたら呼ばれる
+     *
+     * @param player メニューを選択したプレイヤー
      */
     fun onInspectMode(player: Player) {
         player.performCommand("co i")
@@ -211,6 +213,8 @@ class CoreProtectGuiTestApp : AppBase() {
 
     /**
      * アクションを指定しなかった場合に呼ばれる
+     *
+     * @param player メニューを選択したプレイヤー
      */
     fun onNoDesignate(player: Player) {
         commandSend(player)

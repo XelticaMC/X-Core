@@ -109,6 +109,8 @@ object CoreProtectGuiTestModule : ModuleBase() {
         return listOf(
                 MenuItem("コマンドで取得する", { getInputTextByConsole(player) }, Material.WRITABLE_BOOK),
                 MenuItem("現在いるプレイヤーから取得する", { getChooseByPlayerMenu(player) }, Material.BOOK),
+                MenuItem("クリーパー", { app.onInputPlayerName("#creeper", player) }, Material.CREEPER_HEAD),
+                MenuItem("TNT", { app.onInputPlayerName("#tnt", player) }, Material.TNT),
                 MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
         )
     }
