@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2022-12-17T11:55"
+update: "2022-12-17T17:30"
 
 stations:
   mutsuki_shinso_1:
@@ -85,7 +85,7 @@ stations:
       2: { to: mutsuki_shinso_7, line: mutsuki_shinso_local, direction: west, time: 47 }
       3: { to: mutsuki_shinso_9, line: mutsuki_shinso_local, direction: east, time: 41 }
       4: { to: mutsuki_niizamenamboku_S1, line: mutsuki_niizamenamboku_south, direction: north, time: 100 }
-      5: { to: mutsuki_niizamenamboku_S3, line: mutsuki_niizamenamboku_north, direction: south, time: 42 }
+      5: { to: mutsuki_niizamenamboku_S3, line: mutsuki_niizamenamboku_south, direction: south, time: 42 }
       6: { to: mutsuki_kohoku_12, line: mutsuki_adachi, direction: north, time: 100 }
   mutsuki_shinso_9:
     name: 海鮮王国東
@@ -505,10 +505,10 @@ stations:
     world: main
     location: [ 80.5, -1823.5 ]
     paths:
-      0: { to: mutsuki_kohoku_12, line: mutsuki_niizamenamboku_rapid, direction: south, time: 63 }
-      1: { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_rapid, direction: north, time: 77 }
-      2: { to: mutsuki_niizamenamboku_N3, line: mutsuki_niizamenamboku_local, direction: south, time: 25 }
-      3: { to: mutsuki_niizamenamboku_N5, line: mutsuki_niizamenamboku_local, direction: north, time: 26 }
+      0: { to: mutsuki_kohoku_12, line: mutsuki_niizamenamboku_north_rapid, direction: south, time: 63 }
+      1: { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_north_rapid, direction: north, time: 77 }
+      2: { to: mutsuki_niizamenamboku_N3, line: mutsuki_niizamenamboku_north_local, direction: south, time: 25 }
+      3: { to: mutsuki_niizamenamboku_N5, line: mutsuki_niizamenamboku_north_local, direction: north, time: 26 }
   mutsuki_niizamenamboku_N5:
     name: 鱧が谷
     yomi: はもがや
@@ -516,8 +516,8 @@ stations:
     world: main
     location: [ 80.5, -2016.5 ]
     paths:
-      0: { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_local, direction: south, time: 26 }
-      1: { to: mutsuki_niizamenamboku_N6, line: mutsuki_niizamenamboku_local, direction: north, time: 22 }
+      0: { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_local, direction: south, time: 26 }
+      1: { to: mutsuki_niizamenamboku_N6, line: mutsuki_niizamenamboku_north_local, direction: north, time: 22 }
   mutsuki_niizamenamboku_N6:
     name: 鮪前平
     yomi: ゆうまえだいら
@@ -525,8 +525,8 @@ stations:
     world: main
     location: [ 80.5, -2182.5 ]
     paths:
-      0: { to: mutsuki_niizamenamboku_N5, line: mutsuki_niizamenamboku_local, direction: south, time: 22 }
-      1: { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_local, direction: north, time: 33 }
+      0: { to: mutsuki_niizamenamboku_N5, line: mutsuki_niizamenamboku_north_local, direction: south, time: 22 }
+      1: { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_north_local, direction: north, time: 33 }
   mutsuki_niizamenamboku_N7:
     name: 鮪沼
     yomi: しびぬま
@@ -534,8 +534,8 @@ stations:
     world: main
     location: [ 244.5, -2279.5 ]
     paths:
-      0: { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_rapid, direction: south, time: 77 }
-      1: { to: mutsuki_niizamenamboku_N6, line: mutsuki_niizamenamboku_local, direction: south, time: 33 }
+      0: { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_rapid, direction: south, time: 77 }
+      1: { to: mutsuki_niizamenamboku_N6, line: mutsuki_niizamenamboku_north_local, direction: south, time: 33 }
   enr_2_3:
     name: 南都南
     yomi: みなみつみなみ
