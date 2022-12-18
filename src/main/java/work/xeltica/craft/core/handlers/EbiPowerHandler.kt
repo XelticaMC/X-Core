@@ -24,6 +24,7 @@ import work.xeltica.craft.core.stores.EbiPowerStore
 import work.xeltica.craft.core.stores.HintStore
 import work.xeltica.craft.core.stores.MobEPStore
 import work.xeltica.craft.core.stores.PlayerStore
+import work.xeltica.craft.core.utils.CitizensApiProvider.Companion.isCitizensNpc
 import java.util.*
 import java.util.function.Consumer
 
@@ -98,6 +99,7 @@ class EbiPowerHandler: Listener {
         val victim = e.entity as? LivingEntity ?: return
 
         if (victim.fromMobSpawner()) return
+        if (victim.isCitizensNpc()) return
 
         val epStore = EbiPowerStore.getInstance()
         if (victim is Cat || victim is Ocelot) {
