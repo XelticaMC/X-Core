@@ -31,7 +31,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * @param player コマンドを打つプレイヤー
      */
     private fun getInputTextByConsole(player: Player) {
-        gui.openTextInput(player, "ログを取るプレイヤーを指定してください") { userName ->
+        gui.openTextInput(player, "プレイヤーのIDを指定してください") { userName ->
             userName.let {
                 app.onInputPlayerName(it, player)
             }
@@ -45,7 +45,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * @param player コマンドを打つプレイヤー
      */
     private fun getChooseByPlayerMenu(player: Player) {
-        gui.openPlayersMenu(player, "ログを取るプレイヤーを指定してください", { playerName ->
+        gui.openPlayersMenu(player, "プレイヤーを指定してください", { playerName ->
             playerName.player?.name?.let {
                 app.onInputPlayerName(it, player)
             }
@@ -62,6 +62,7 @@ object CoreProtectGuiTestModule : ModuleBase() {
     private fun coreProtectModeList(player: Player): List<MenuItem> {
         return listOf(
                 MenuItem("ログを検索する", { lookupModeStart(player) }, Material.WRITABLE_BOOK),
+                MenuItem("ロールバック", { rollbackModeStart(player) }, Material.ENDER_CHEST),
                 MenuItem("ページを取得する", { inputLookUpPage(player) }, Material.BOOK),
                 MenuItem("インスペクトモード切り替え", { app.onInspectMode(player) }, Material.ENDER_EYE),
                 MenuItem("キャンセル", { app.onCancel(player) }, Material.BARRIER),
@@ -74,7 +75,18 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * @param player ログを取りにいくプレイヤー
      */
     private fun lookupModeStart(player: Player) {
+        app.commandFirst = "co lookup "
         showMenu(player, "ログを取るプレイヤーを指定", chooseHowToGetPlayerName(player))
+    }
+
+    /**
+     * ロールバックを実行する
+     *
+     * @param player ロールバックを実行するプレイヤー
+     */
+    private fun rollbackModeStart(player: Player) {
+        app.commandFirst = "co rollback "
+        showMenu(player, "どのプレイヤーの行動をロールバックするのかを指定", chooseHowToGetPlayerName(player))
     }
 
     /**

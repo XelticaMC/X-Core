@@ -29,6 +29,8 @@ class CoreProtectGuiTestApp : AppBase() {
     private lateinit var firstDateTime: Pair<Int, String>
     private lateinit var secondDateTime: Pair<Int, String>
 
+    var commandFirst: String = "co"
+
     override fun getName(player: Player): String {
         return "CoreProtectGUIテストアプリ"
     }
@@ -106,7 +108,7 @@ class CoreProtectGuiTestApp : AppBase() {
      */
     private fun commandSend(player: Player) {
         val sendCommand = StringBuilder()
-        sendCommand.append("coreprotect:co lookup ")
+        sendCommand.append(commandFirst)
 
         // あくまで空文字だったらコマンドのパラメーターから除外するって処理なので、ここら辺はうまい具合にできそうかも
         if (coreProtectCommand.user.isNotBlank()) {
