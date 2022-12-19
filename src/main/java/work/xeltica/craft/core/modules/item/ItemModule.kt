@@ -21,6 +21,8 @@ object ItemModule: ModuleBase() {
     override fun onEnable() {
         registerItems()
         Bukkit.getOnlinePlayers().forEach(this::givePhoneIfNeeded)
+
+        registerCommand("givecustomitem" ,GiveCustomItemCommand())
     }
 
     fun getItem(key: String): ItemStack {

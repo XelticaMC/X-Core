@@ -138,7 +138,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("respawn", CommandRespawn())
         CommandRegistry.register("pvp", CommandPvp())
         CommandRegistry.register("signedit", CommandSignEdit())
-        CommandRegistry.register("givecustomitem", CommandGiveCustomItem())
         CommandRegistry.register("report", CommandReport())
         CommandRegistry.register("localtime", CommandLocalTime())
         CommandRegistry.register("boat", CommandBoat())
@@ -160,8 +159,6 @@ class XCorePlugin : JavaPlugin() {
 
     private fun loadHandlers() {
         val pm = server.pluginManager
-        pm.registerEvents(VehicleHandler(), this)
-        logger.info("Loaded VehicleHandler")
         pm.registerEvents(WakabaHandler(), this)
         logger.info("Loaded WakabaHandler")
         pm.registerEvents(WorldHandler(), this)
