@@ -1,11 +1,10 @@
-package work.xeltica.craft.core.commands
+package work.xeltica.craft.core.modules.stamprally
 
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import work.xeltica.craft.core.api.commands.CommandBase
-import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 
-class CommandStamp: CommandBase() {
+class StampCommand: CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) return false
         if (args[0] == "listDonePlayers") {

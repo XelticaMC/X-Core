@@ -24,6 +24,7 @@ object StampRallyModule: ModuleBase() {
         activatedStamp = Config("activatedStamp")
 
         registerHandler(StampRallyHandler())
+        registerCommand("stamp", StampCommand())
     }
 
     fun getDonePlayerList(): List<OfflinePlayer> {

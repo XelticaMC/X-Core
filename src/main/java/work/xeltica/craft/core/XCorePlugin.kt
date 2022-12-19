@@ -152,7 +152,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("xreload", CommandXReload())
         CommandRegistry.register("xtpreset", CommandXtpReset())
         CommandRegistry.register("xdebug", CommandXDebug())
-        CommandRegistry.register("stamp", CommandStamp())
 
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
     }
