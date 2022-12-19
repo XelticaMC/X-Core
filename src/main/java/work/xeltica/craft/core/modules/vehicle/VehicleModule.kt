@@ -15,6 +15,8 @@ object VehicleModule: ModuleBase() {
 
     override fun onEnable() {
         config = Config("vehicles")
+
+        registerHandler(VehicleHandler())
     }
 
     // TODO("ワーカーとして書き直す")
