@@ -71,9 +71,11 @@ object XphoneModule : ModuleBase() {
      */
     fun registerApp(app: AppBase) {
         if (apps.contains(app)) {
-            Bukkit.getLogger().warning("X Phoneアプリ「${app.javaClass.name}」は既に登録されているため、無視します。")
+            Bukkit.getLogger().warning("X Phoneアプリ「${app.javaClass.typeName}」は既に登録されているため、無視します。")
+            return
         }
         apps.add(app)
+        Bukkit.getLogger().warning("X Phoneアプリ「${app.javaClass.typeName}」を登録しました。")
     }
 
     /**

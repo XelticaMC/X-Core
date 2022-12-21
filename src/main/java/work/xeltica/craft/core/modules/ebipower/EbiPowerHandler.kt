@@ -23,6 +23,7 @@ import work.xeltica.craft.core.modules.mobep.MobEPModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.modules.player.PlayerRecord
+import work.xeltica.craft.core.utils.CitizensApiProvider.Companion.isCitizensNpc
 import java.util.*
 import java.util.function.Consumer
 
@@ -97,6 +98,7 @@ class EbiPowerHandler: Listener {
         val victim = e.entity as? LivingEntity ?: return
 
         if (victim.fromMobSpawner()) return
+        if (victim.isCitizensNpc()) return
 
         val epModule = EbiPowerModule
         if (victim is Cat || victim is Ocelot) {

@@ -25,14 +25,20 @@ import java.util.function.Consumer
 
 object HalloweenModule : ModuleBase() {
     override fun onEnable() {
+        val logger = Bukkit.getLogger()
         ConfigurationSerialization.registerClass(CandyStoreItem::class.java, "CandyStoreItem")
         // アメストアの賞品を読み込む
         candyStoreConfig = Config(CONFIG_NAME) {
             items.clear()
+            items.addAll(it.conf.getList(CONFIG_KEY_ITEMS, ArrayList<CandyStoreItem>()) as MutableList<CandyStoreItem>)
+            logger.info("[HalloweenModule] アメストアの商品 ${items.size} つを読み込みました。")
             items.addAll(CastHelper.checkList(it.conf.getList(CONFIG_KEY_ITEMS, ArrayList<CandyStoreItem>()) as List<*>))
             _isEventMode = it.conf.getBoolean(CONFIG_KEY_EVENT_MODE)
+            logger.info("[HalloweenModule] イベントモード: ${if (_isEventMode) "はい" else "いいえ"}")
             _spawnRatioMainWorld = it.conf.getInt(CONFIG_KEY_SPAWN_RATIO_MAIN_WORLD, 100)
+            logger.info("[HalloweenModule] スポーン確率（main）: $_spawnRatioMainWorld")
             _spawnRatioEventWorld = it.conf.getInt(CONFIG_KEY_SPAWN_RATIO_EVENT_WORLD, 100)
+            logger.info("[HalloweenModule] スポーン確率（event2）: $_spawnRatioEventWorld")
         }
 
         registerHandler(HalloweenHandler())
@@ -54,7 +60,7 @@ object HalloweenModule : ModuleBase() {
         entity.remove()
         val ratio = if (world.name == "main") spawnRatioInMainWorld else spawnRatioInEventWorld
         // 抽選に外れたらスポーンなし
-        if (random.nextInt(100) < ratio) {
+        if (random.nextInt(100) >= ratio) {
             return
         }
         // Y64以下ではスポーンなし

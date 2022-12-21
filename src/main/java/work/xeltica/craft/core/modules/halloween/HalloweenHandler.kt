@@ -44,6 +44,7 @@ class HalloweenHandler : Listener {
             if (damager is Player || (damager is Projectile && damager.shooter is Player)) {
                 e.damage = 99999.0
             }
+            return
         }
         // 奈落は普通に通す
         if (e.cause !== DamageCause.VOID) {
@@ -61,7 +62,7 @@ class HalloweenHandler : Listener {
         val killer = e.entity.killer
         if (killer == null) {
             val cause = e.entity.lastDamageCause?.cause
-            if (!DAMAGE_CAUSE_LIST_PLAYER_KILLED.contains(cause) && cause != DamageCause.VOID) {
+            if (cause != DamageCause.VOID) {
                 Bukkit.getLogger()
                     .warning("イベントモブはプレイヤーキルか奈落によって死ぬべきだが、 ${cause ?: "(不明)"}を要因として死んだ。これは意図しない挙動なので、見つけ次第バグ報告をお願いします。")
             }
@@ -95,6 +96,7 @@ class HalloweenHandler : Listener {
     private val DAMAGE_CAUSE_LIST_PLAYER_KILLED = listOf(
         DamageCause.ENTITY_ATTACK,
         DamageCause.ENTITY_SWEEP_ATTACK,
-        DamageCause.SONIC_BOOM
+        DamageCause.SONIC_BOOM,
+        DamageCause.PROJECTILE,
     )
 }
