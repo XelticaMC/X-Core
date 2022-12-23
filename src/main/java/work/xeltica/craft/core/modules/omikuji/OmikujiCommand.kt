@@ -75,7 +75,7 @@ class OmikujiCommand: CommandPlayerOnlyBase() {
                     }
                 }
             }
-        }.runTaskLater(XCorePlugin.instance, Ticks.from(3, 0.0).toLong())
+        }.runTaskLater(XCorePlugin.instance, Ticks.from(3.0).toLong())
         return true
     }
 
