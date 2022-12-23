@@ -8,5 +8,11 @@ enum class OmikujiScore(val displayName: String) {
     SHOKICHI("小吉"),
     KYOU("凶"),
     DAIKYOU("大凶"),
-    NONE("無し")
+    NONE("無し");
+
+    companion object {
+        fun getByDisplayName(name: String): OmikujiScore {
+            return values().firstOrNull { it.displayName == name } ?: throw IllegalArgumentException()
+        }
+    }
 }

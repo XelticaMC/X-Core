@@ -30,7 +30,7 @@ object OmikujiModule: ModuleBase() {
 
     fun get(player: Player): OmikujiScore {
         val str = config.conf.getString(player.uniqueId.toString()) ?: OmikujiScore.NONE.displayName
-        return OmikujiScore.valueOf(str)
+        return OmikujiScore.getByDisplayName(str)
     }
 
     fun set(player: Player, score: OmikujiScore) {
