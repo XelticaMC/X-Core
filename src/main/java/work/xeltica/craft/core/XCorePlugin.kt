@@ -35,6 +35,7 @@ import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
+import work.xeltica.craft.core.modules.mobep.MobEPModule
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.modules.nbs.NbsModule
@@ -223,28 +224,29 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private val modules: Array<ModuleBase> = arrayOf(
-        XphoneModule,
-        QuickChatModule,
-        NotificationModule,
-        FireworkFestivalModule,
         BossBarModule,
-        FarmFestivalModule,
         CloverModule,
         CounterModule,
         EbiPowerModule,
+        FarmFestivalModule,
+        FireworkFestivalModule,
+        HalloweenModule,
         HintModule,
         HubModule,
-        PaymentsModule,
-        HalloweenModule,
         ItemModule,
         MetaModule,
         MobBallModule,
-        StampRallyModule,
-        RankingModule,
+        MobEPModule,
         NbsModule,
+        NotificationModule,
         OmikujiModule,
+        PaymentsModule,
         PlayerModule,
+        QuickChatModule,
+        RankingModule,
+        StampRallyModule,
         VehicleModule,
+        XphoneModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator
