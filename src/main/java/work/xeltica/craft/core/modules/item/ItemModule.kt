@@ -26,7 +26,7 @@ object ItemModule: ModuleBase() {
     }
 
     fun getItem(key: String): ItemStack {
-        if (customItems.contains(key)) throw IllegalArgumentException()
+        if (!customItems.contains(key)) throw IllegalArgumentException()
         return customItems[key]!!.clone()
     }
 

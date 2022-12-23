@@ -24,7 +24,7 @@ import java.util.Objects;
 public class XphoneCommand extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        final var item = ItemModule.INSTANCE.getItem("xphone");
+        final var item = ItemModule.INSTANCE.getItem(ItemModule.ITEM_NAME_XPHONE);
         player.getInventory().addItem(item);
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);
         player.sendMessage(Objects.requireNonNull(item.getItemMeta().displayName()).append(Component.text("を付与しました")));
