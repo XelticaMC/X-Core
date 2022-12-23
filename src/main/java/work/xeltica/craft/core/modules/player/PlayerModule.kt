@@ -92,6 +92,11 @@ object PlayerModule: ModuleBase() {
 
             liveBarMap[player.uniqueId] = bar
             BossBarModule.add(bar)
+        } else {
+            val bar = liveBarMap[player.uniqueId] ?: return
+
+            liveBarMap.remove(player.uniqueId)
+            BossBarModule.remove(bar)
         }
     }
 
