@@ -10,10 +10,10 @@ import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 
 class QuickChatHandler: Listener {
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerQuickChat(e: ChatEvent) {
         val component = e.message() as? TextComponent ?: return
-        var msg = component.content()
+        var msg = component.content().trim()
         val player = e.player
         if (!msg.startsWith(".")) return
         msg = msg.substring(1)
