@@ -41,6 +41,8 @@ object PlayerModule: ModuleBase() {
     override fun onEnable() {
         config = Config("playerStores")
         Bukkit.getScheduler().runTaskTimer(XCorePlugin.instance, this::save, 0, Ticks.from(10.0).toLong())
+
+        registerHandler(PlayerHandler())
     }
 
     fun open(player: OfflinePlayer): PlayerRecord {
