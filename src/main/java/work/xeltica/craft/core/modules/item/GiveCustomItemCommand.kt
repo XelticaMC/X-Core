@@ -11,7 +11,7 @@ import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 
 class GiveCustomItemCommand: CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
-        if (args.size < 2) return true
+        if (args.size < 2) return false
         val p = Bukkit.getPlayer(args[0])
         if (p == null) {
             player.sendMessage(Component.text(ChatColor.RED.toString() + "そのようなプレイヤーはいません"))
