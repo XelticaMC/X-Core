@@ -40,6 +40,7 @@ object WorldModule: ModuleBase() {
     }
 
     fun getWorldDisplayName(name: String): String {
+        if (!worldNameMap.containsKey(name)) return name
         return worldNameMap[name]!!
     }
 
