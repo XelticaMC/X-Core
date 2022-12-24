@@ -129,7 +129,6 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private fun loadStores() {
-        WorldStore()
         NickNameStore()
     }
 
