@@ -17,7 +17,7 @@ import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.modules.hint.Hint;
 import work.xeltica.craft.core.modules.hint.HintModule;
-import work.xeltica.craft.core.stores.WorldStore;
+import work.xeltica.craft.core.modules.world.WorldModule;
 
 /**
  * トロッコを出現させるコマンド
@@ -26,7 +26,7 @@ import work.xeltica.craft.core.stores.WorldStore;
 public class CommandCart extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        if (!WorldStore.getInstance().canSummonVehicles(player.getWorld())) {
+        if (!WorldModule.INSTANCE.canSummonVehicles(player.getWorld())) {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。");
         }
 

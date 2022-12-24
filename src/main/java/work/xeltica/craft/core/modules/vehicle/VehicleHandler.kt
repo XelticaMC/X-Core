@@ -16,7 +16,7 @@ import org.bukkit.event.vehicle.VehicleEnterEvent
 import org.bukkit.event.vehicle.VehicleExitEvent
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule.hasAchieved
-import work.xeltica.craft.core.stores.WorldStore
+import work.xeltica.craft.core.modules.world.WorldModule
 
 class VehicleHandler: Listener {
     private val vehicleItems = listOf(
@@ -63,7 +63,7 @@ class VehicleHandler: Listener {
 
     @EventHandler
     fun onPlayerSpawnVehicle(e: PlayerInteractEvent) {
-        if (WorldStore.getInstance().isCreativeWorld(e.player.world)) return
+        if (WorldModule.isCreativeWorld(e.player.world)) return
 
         val block = e.clickedBlock ?: return
         if (vehicleItems.contains(e.material) && e.blockFace == BlockFace.UP) {

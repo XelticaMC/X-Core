@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerTeleportEvent
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.stores.WorldStore
+import work.xeltica.craft.core.modules.world.WorldModule
 import java.util.*
 
 object HubModule: ModuleBase() {
@@ -59,7 +59,7 @@ object HubModule: ModuleBase() {
             if (hub.location != null) {
                 player.teleportAsync(hub.getSpigotLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN)
             } else {
-                WorldStore.getInstance().teleport(player, hub.worldName)
+                WorldModule.teleport(player, hub.worldName)
             }
             isWarpingMap.remove(player.uniqueId)
         }, if (requireCooldown) 1 else 20*5)

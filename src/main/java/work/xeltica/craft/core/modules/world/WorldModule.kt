@@ -43,12 +43,13 @@ object WorldModule: ModuleBase() {
         return worldNameMap[name]!!
     }
 
-    fun getWorldDescription(world: World): String {
+    fun getWorldDescription(world: World): String? {
         return getWorldDescription(world.name)
     }
 
-    fun getWorldDescription(name: String): String {
-        return worldDescMap[name]!!
+    fun getWorldDescription(name: String): String? {
+        if (!worldDescMap.containsKey(name)) return null
+        return worldDescMap[name]
     }
 
     fun isCreativeWorld(world: World): Boolean {
@@ -76,7 +77,7 @@ object WorldModule: ModuleBase() {
     }
 
     fun saveCurrentLocation(player: Player) {
-        val conf: YamlConfiguration = locationConfig.getConf()
+        val conf: YamlConfiguration = locationConfig.conf
         val pid = player.uniqueId.toString()
         var playerSection = conf.getConfigurationSection(pid)
         if (playerSection == null) {

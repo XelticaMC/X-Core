@@ -42,7 +42,7 @@ import work.xeltica.craft.core.modules.hint.Hint;
 import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.modules.player.PlayerDataKey;
 import work.xeltica.craft.core.modules.player.PlayerModule;
-import work.xeltica.craft.core.stores.WorldStore;
+import work.xeltica.craft.core.modules.world.WorldModule;
 import work.xeltica.craft.core.utils.DiscordService;
 
 /**
@@ -93,12 +93,12 @@ public class WorldHandler implements Listener {
         final var p = e.getPlayer();
         final var world = e.getTo().getWorld();
         final var name = world.getName();
-        final var store = WorldStore.getInstance();
+        final var worldModule = WorldModule.INSTANCE;
 
-        final var isLockedWorld = store.isLockedWorld(name);
-        final var isCreativeWorld = store.isCreativeWorld(name);
-        final var displayName = store.getWorldDisplayName(name);
-        final var desc = store.getWorldDescription(name);
+        final var isLockedWorld = worldModule.isLockedWorld(name);
+        final var isCreativeWorld = worldModule.isCreativeWorld(name);
+        final var displayName = worldModule.getWorldDisplayName(name);
+        final var desc = worldModule.getWorldDescription(name);
 
         final var from = e.getFrom().getWorld();
         final var to = e.getTo().getWorld();
@@ -115,7 +115,7 @@ public class WorldHandler implements Listener {
             return;
         }
 
-        WorldStore.getInstance().saveCurrentLocation(p);
+        worldModule.saveCurrentLocation(p);
 
         final var hint = switch (to.getName()) {
             case "main" -> Hint.GOTO_MAIN;
@@ -167,9 +167,11 @@ public class WorldHandler implements Listener {
             p.sendMessage(desc);
         }
 
-        Bukkit.getScheduler().runTaskLater(XCorePlugin.getInstance(), () -> {
-            PlayerModule.INSTANCE.open(p).set(PlayerDataKey.FIRST_SPAWN, true);
-        }, 20 * 5);
+        Bukkit.getScheduler().runTaskLater(
+                XCorePlugin.getInstance(),
+                () -> PlayerModule.INSTANCE.open(p).set(PlayerDataKey.FIRST_SPAWN, true),
+                20 * 5
+        );
     }
 
     @EventHandler
@@ -177,7 +179,7 @@ public class WorldHandler implements Listener {
      * ワールドを移動した時に、ワールド名を表示する機能
      */
     public void onPlayerMoveWorld(PlayerChangedWorldEvent e) {
-        final var name = WorldStore.getInstance().getWorldDisplayName(e.getPlayer().getWorld());
+        final var name = WorldModule.INSTANCE.getWorldDisplayName(e.getPlayer().getWorld());
         e.getPlayer().showTitle(Title.title(Component.text(name).color(TextColor.color(0xFFB300)), Component.empty()));
     }
 
@@ -249,7 +251,7 @@ public class WorldHandler implements Listener {
                         inventory.addItem(itemStack);
                     }
 
-                    if (event.getBlock().getState().getData() instanceof Directional directional) {
+                    if (event.getBlock().getBlockData() instanceof Directional directional) {
                         final var location = block.getLocation().toBlockLocation().add(directional.getFacing().getDirection());
                         if (location.getBlock().getState() instanceof BlockInventoryHolder inventoryHolder) {
                             final var result = inventoryHolder.getInventory().addItem(recipe.result());

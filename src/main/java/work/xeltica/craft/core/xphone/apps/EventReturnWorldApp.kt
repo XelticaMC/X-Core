@@ -2,7 +2,7 @@ package work.xeltica.craft.core.xphone.apps
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.stores.WorldStore
+import work.xeltica.craft.core.modules.world.WorldModule
 
 /**
  * イベント用：メインワールドに戻るアプリ
@@ -13,7 +13,7 @@ class EventReturnWorldApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.GRASS_BLOCK
 
     override fun onLaunch(player: Player) {
-        WorldStore.getInstance().teleportToSavedLocation(player, "main")
+        WorldModule.teleportToSavedLocation(player, "main")
     }
 
     override fun isVisible(player: Player): Boolean {
