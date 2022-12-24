@@ -43,6 +43,7 @@ import work.xeltica.craft.core.modules.omikuji.OmikujiModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.modules.vehicle.VehicleModule
+import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.utils.DiscordService
 
 /**
@@ -245,6 +246,7 @@ class XCorePlugin : JavaPlugin() {
         RankingModule,
         StampRallyModule,
         VehicleModule,
+        WorldModule,
         XphoneModule,
     )
 
