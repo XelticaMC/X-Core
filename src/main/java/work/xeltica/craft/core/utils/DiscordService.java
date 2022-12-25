@@ -21,12 +21,17 @@ public class DiscordService {
         return instance;
     }
 
+    public boolean isDisabled() {
+        return !Bukkit.getPluginManager().isPluginEnabled("DiscordSRV");
+    }
+
     /**
      * プレイヤーに紐づくDiscordユーザーを取得します。
      * @param player プレイヤー
      * @return 指定したプレイヤーに紐づく、Discordユーザー。未連携であれば null。
      */
     public Member getMember(Player player) {
+        if (isDisabled()) return null;
         if (!linkedToDiscord(player)) return null;
 
         final String discordId = DiscordSRV.getPlugin().getAccountLinkManager().getDiscordId(player.getUniqueId());
@@ -41,6 +46,7 @@ public class DiscordService {
      * @param command 処罰内容
      */
     public void reportDiscord(String badPlayerName, String abuses, String time, String command) {
+        if (isDisabled()) return;
         final var guild = DiscordSRV.getPlugin().getMainGuild();
         final var channel = guild.getGuildChannelById(reportChannelID);
         if (channel instanceof TextChannel textChannel) {
@@ -53,6 +59,7 @@ public class DiscordService {
      * @param newcomer 新規さん
      */
     public void alertNewcomer(Player newcomer) {
+        if (isDisabled()) return;
         final var guild = DiscordSRV.getPlugin().getMainGuild();
         final var channel = guild.getGuildChannelById(guideChannelId);
         if (channel instanceof TextChannel textChannel) {
@@ -66,6 +73,7 @@ public class DiscordService {
      * @param text 送信する内容
      */
     public void broadcast(String text) {
+        if (isDisabled()) return;
         final var discord = DiscordSRV.getPlugin();
         discord.getOptionalTextChannel("global").sendMessage(text).queue();
     }
@@ -76,6 +84,7 @@ public class DiscordService {
      * @param changeLog 変更内容
      */
     public void postChangelog(String version, String[] changeLog) {
+        if (isDisabled()) return;
         final var guild = DiscordSRV.getPlugin().getMainGuild();
         final var channel = guild.getGuildChannelById(changelogChannelId);
         if (channel instanceof TextChannel textChannel) {

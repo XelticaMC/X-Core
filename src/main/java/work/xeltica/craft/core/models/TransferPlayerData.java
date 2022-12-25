@@ -2,10 +2,12 @@ package work.xeltica.craft.core.models;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
-import work.xeltica.craft.core.stores.CloverStore;
-import work.xeltica.craft.core.stores.EbiPowerStore;
-import work.xeltica.craft.core.stores.HintStore;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.clover.CloverModule;
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule;
+import work.xeltica.craft.core.modules.hint.Hint;
+import work.xeltica.craft.core.modules.hint.HintModule;
+import work.xeltica.craft.core.modules.player.PlayerDataKey;
+import work.xeltica.craft.core.modules.player.PlayerModule;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -74,42 +76,38 @@ public class TransferPlayerData {
     }
 
     private void transferEbiPower() {
-        final var ebiPowerStore = EbiPowerStore.getInstance();
-        final var hasMoney = ebiPowerStore.get(from);
-        ebiPowerStore.tryTake(from, hasMoney);
-        ebiPowerStore.tryGive(to, hasMoney);
+        final var ebiPowerModule = EbiPowerModule.INSTANCE;
+        final var hasMoney = ebiPowerModule.get(from);
+        ebiPowerModule.tryTake(from, hasMoney);
+        ebiPowerModule.tryGive(to, hasMoney);
     }
 
     private void transferHint() {
-        final var hintStore = HintStore.getInstance();
-        for (String hintName: hintStore.getArchived(from)) {
+        final var hintModule = HintModule.INSTANCE;
+        for (String hintName: hintModule.getArchived(from)) {
             for (Hint hint: Hint.values()) {
                 if (hint.getHintName().equals(hintName)) {
-                    hintStore.achieve(to, hint, false);
+                    hintModule.achieve(to, hint, false);
                     break;
                 }
             }
         }
-        hintStore.deleteArchiveData(from);
+        hintModule.deleteArchiveData(from);
     }
 
     private void transferPlayerStoreData() {
-        final var playerStore = PlayerStore.getInstance();
-        final var fromPlayerRecord = playerStore.open(from.getUniqueId());
-        final var toPlayerRecord = playerStore.open(to.getUniqueId());
+        final var playerModule = PlayerModule.INSTANCE;
+        final var fromPlayerRecord = playerModule.open(from.getUniqueId());
+        final var toPlayerRecord = playerModule.open(to.getUniqueId());
         for (PlayerDataKey key: PlayerDataKey.values()) {
             toPlayerRecord.set(key,fromPlayerRecord.get(key));
             fromPlayerRecord.delete(key);
         }
-        try {
-            playerStore.save();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        playerModule.save();
     }
 
     private void transferClover() {
-        final var cloverStore = CloverStore.getInstance();
+        final var cloverStore = CloverModule.INSTANCE;
         final var hasClover = cloverStore.getCloverOf(from);
         cloverStore.set(to, hasClover);
         cloverStore.delete(from);

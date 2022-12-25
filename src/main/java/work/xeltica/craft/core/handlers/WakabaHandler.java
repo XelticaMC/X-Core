@@ -16,8 +16,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import work.xeltica.craft.core.modules.player.PlayerModule;
 
-import work.xeltica.craft.core.stores.PlayerStore;
 
 /**
  * わかばロール向けの機能制限に関するハンドラーをまとめています。
@@ -116,8 +116,8 @@ public class WakabaHandler implements Listener {
         return deniedItemTags.stream().anyMatch(t -> t.isTagged(mat));
     }
 
-    private PlayerStore flags() {
-        return PlayerStore.getInstance();
+    private PlayerModule flags() {
+        return PlayerModule.INSTANCE;
     }
 
     private final Set<Material> deniedBlocks = new HashSet<>();

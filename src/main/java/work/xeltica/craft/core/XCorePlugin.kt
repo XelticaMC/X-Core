@@ -21,11 +21,29 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.modules.notification.NotificationModule
-import work.xeltica.craft.core.models.PlayerDataKey
+import work.xeltica.craft.core.modules.bossbar.BossBarModule
+import work.xeltica.craft.core.modules.clover.CloverModule
+import work.xeltica.craft.core.modules.counter.CounterModule
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
+import work.xeltica.craft.core.modules.ebipower.EbipowerObserver
 import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
 import work.xeltica.craft.core.modules.halloween.HalloweenModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
+import work.xeltica.craft.core.modules.hint.HintModule
+import work.xeltica.craft.core.modules.hub.HubModule
+import work.xeltica.craft.core.modules.item.ItemModule
+import work.xeltica.craft.core.modules.meta.MetaModule
+import work.xeltica.craft.core.modules.mobball.MobBallModule
+import work.xeltica.craft.core.modules.mobep.MobEPModule
+import work.xeltica.craft.core.modules.ranking.RankingModule
+import work.xeltica.craft.core.modules.stamprally.StampRallyModule
+import work.xeltica.craft.core.modules.nbs.NbsModule
+import work.xeltica.craft.core.modules.omikuji.OmikujiModule
+import work.xeltica.craft.core.modules.player.PlayerDataKey
+import work.xeltica.craft.core.modules.player.PlayerModule
+import work.xeltica.craft.core.modules.vehicle.VehicleModule
+import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.utils.DiscordService
 
 /**
@@ -51,9 +69,9 @@ class XCorePlugin : JavaPlugin() {
         val tick = Ticks.from(1.0)
         object : BukkitRunnable() {
             override fun run() {
-                VehicleStore.getInstance().tick(tick)
+                VehicleModule.tick(tick)
                 Bukkit.getOnlinePlayers().forEach {
-                    val record = PlayerStore.getInstance().open(it)
+                    val record = PlayerModule.open(it)
                     var time = record.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
                     time -= tick
                     if (time <= 0) {
@@ -73,7 +91,7 @@ class XCorePlugin : JavaPlugin() {
             return
         }
         luckPerms.contextManager.registerCalculator(calculator)
-        val meta = MetaStore.getInstance()
+        val meta = MetaModule
         if (meta.isUpdated) {
             var prev = meta.previousVersion
             if (prev == null) prev = "unknown"
@@ -96,7 +114,7 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.clearMap()
         Gui.resetInstance()
         unloadPlugins()
-        NbsStore.getInstance().stopAll()
+        NbsModule.stopAll()
         unloadModules()
         val provider = Bukkit.getServicesManager().getRegistration(
             LuckPerms::class.java
@@ -112,83 +130,43 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private fun loadStores() {
-        OmikujiStore()
-        VehicleStore()
-        PlayerStore()
-        HubStore()
-        WorldStore()
-        ItemStore()
-        CloverStore()
-        EbiPowerStore()
-        HintStore()
-        MetaStore()
-        BossBarStore()
         NickNameStore()
-        CounterStore()
-        RankingStore()
-        NbsStore()
-        MobEPStore()
-        MobBallStore()
-        StampRallyStore()
     }
 
     private fun loadCommands() {
         CommandRegistry.clearMap()
 
-        CommandRegistry.register("omikuji", CommandOmikuji())
         CommandRegistry.register("respawn", CommandRespawn())
         CommandRegistry.register("pvp", CommandPvp())
         CommandRegistry.register("signedit", CommandSignEdit())
-        CommandRegistry.register("givecustomitem", CommandGiveCustomItem())
-        CommandRegistry.register("givemobball", CommandGiveMobBall())
         CommandRegistry.register("report", CommandReport())
         CommandRegistry.register("localtime", CommandLocalTime())
         CommandRegistry.register("boat", CommandBoat())
         CommandRegistry.register("cart", CommandCart())
         CommandRegistry.register("promo", CommandPromo())
         CommandRegistry.register("cat", CommandCat())
-        CommandRegistry.register("hub", CommandHub())
         CommandRegistry.register("xtp", CommandXtp())
-        CommandRegistry.register("epshop", CommandEpShop())
-        CommandRegistry.register("hint", CommandHint())
         CommandRegistry.register("__core_gui_event__", CommandXCoreGuiEvent())
         CommandRegistry.register("live", CommandLive())
-        CommandRegistry.register("counter", CommandCounter())
-        CommandRegistry.register("ranking", CommandRanking())
+        CommandRegistry.register("nick", CommandNickName())
         CommandRegistry.register("countdown", CommandCountdown())
-        CommandRegistry.register("epeffectshop", CommandEpEffectShop())
         CommandRegistry.register("xreload", CommandXReload())
         CommandRegistry.register("xtpreset", CommandXtpReset())
         CommandRegistry.register("xdebug", CommandXDebug())
-        CommandRegistry.register("stamp", CommandStamp())
 
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
     }
 
     private fun loadHandlers() {
         val pm = server.pluginManager
-        pm.registerEvents(NewMorningHandler(), this)
-        logger.info("Loaded NewMorningHandler")
-        pm.registerEvents(PlayerHandler(this), this)
-        logger.info("Loaded PlayerHandler")
-        pm.registerEvents(VehicleHandler(), this)
-        logger.info("Loaded VehicleHandler")
         pm.registerEvents(WakabaHandler(), this)
         logger.info("Loaded WakabaHandler")
-        pm.registerEvents(HubHandler(), this)
-        logger.info("Loaded HubHandler")
         pm.registerEvents(WorldHandler(), this)
         logger.info("Loaded WorldHandler")
         pm.registerEvents(NightmareHandler(), this)
         logger.info("Loaded NightmareHandler")
-        pm.registerEvents(EbiPowerHandler(), this)
-        logger.info("Loaded EbiPowerHandler")
         pm.registerEvents(LiveModeHandler(), this)
         logger.info("Loaded LiveModeHandler")
-        pm.registerEvents(CounterHandler(), this)
-        logger.info("Loaded CounterHandler")
-        pm.registerEvents(NbsHandler(), this)
-        logger.info("Loaded NbsHandler")
         pm.registerEvents(PlayerTntHandler(), this)
         logger.info("Loaded PlayTntHandler")
         pm.registerEvents(MiscHandler(), this)
@@ -197,10 +175,6 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded LoginBonusHandler")
         pm.registerEvents(TicketWildareaBHandler(), this)
         logger.info("Loaded TicketWildareaBHandler")
-        pm.registerEvents(MobBallHandler(), this)
-        logger.info("Loaded MobBallHandler")
-        pm.registerEvents(StampRallyHandler(), this)
-        logger.info("Loaded StampRallyHandler")
         pm.registerEvents(Gui.getInstance(), this)
         logger.info("Loaded Gui")
     }
@@ -250,13 +224,30 @@ class XCorePlugin : JavaPlugin() {
     }
 
     private val modules: Array<ModuleBase> = arrayOf(
-        XphoneModule,
-        QuickChatModule,
-        NotificationModule,
-        FireworkFestivalModule,
+        BossBarModule,
+        CloverModule,
+        CounterModule,
+        EbiPowerModule,
         FarmFestivalModule,
-        PaymentsModule,
+        FireworkFestivalModule,
         HalloweenModule,
+        HintModule,
+        HubModule,
+        ItemModule,
+        MetaModule,
+        MobBallModule,
+        MobEPModule,
+        NbsModule,
+        NotificationModule,
+        OmikujiModule,
+        PaymentsModule,
+        PlayerModule,
+        QuickChatModule,
+        RankingModule,
+        StampRallyModule,
+        VehicleModule,
+        WorldModule,
+        XphoneModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator

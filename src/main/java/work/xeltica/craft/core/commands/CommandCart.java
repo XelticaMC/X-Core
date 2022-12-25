@@ -15,9 +15,9 @@ import org.jetbrains.annotations.NotNull;
 
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.stores.HintStore;
-import work.xeltica.craft.core.stores.WorldStore;
+import work.xeltica.craft.core.modules.hint.Hint;
+import work.xeltica.craft.core.modules.hint.HintModule;
+import work.xeltica.craft.core.modules.world.WorldModule;
 
 /**
  * トロッコを出現させるコマンド
@@ -26,7 +26,7 @@ import work.xeltica.craft.core.stores.WorldStore;
 public class CommandCart extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        if (!WorldStore.getInstance().canSummonVehicles(player.getWorld())) {
+        if (!WorldModule.INSTANCE.canSummonVehicles(player.getWorld())) {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。");
         }
 
@@ -40,7 +40,7 @@ public class CommandCart extends CommandPlayerOnlyBase {
             player.sendMessage("トロッコを召喚した。");
             player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 2);
 
-            HintStore.getInstance().achieve(player, Hint.MINECART);
+            HintModule.INSTANCE.achieve(player, Hint.MINECART);
         } else {
             return Gui.getInstance().error(player,"ここには召喚できない");
         }

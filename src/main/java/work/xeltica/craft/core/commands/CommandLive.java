@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.player.PlayerModule;
 
 /**
  * 配信モードを切り替えるコマンド
@@ -23,13 +23,13 @@ public class CommandLive extends CommandPlayerOnlyBase {
         if (args.length == 0 || (!args[0].equals("on") && !args[0].equals("off"))) return false;
 
         final var isLiveMode = args[0].equals("on");
-        final var store = PlayerStore.getInstance();
+        final var playerModule = PlayerModule.INSTANCE;
 
-        if (store.isLiveMode(player) == isLiveMode) {
+        if (playerModule.isLiveMode(player) == isLiveMode) {
             return Gui.getInstance().error(player, "既に" + (isLiveMode ? "オン" : "オフ") + "です");
         }
 
-        store.setLiveMode(player, isLiveMode);
+        playerModule.setLiveMode(player, isLiveMode);
         return true;
     }
 

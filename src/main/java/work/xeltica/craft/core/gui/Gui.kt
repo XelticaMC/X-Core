@@ -26,7 +26,7 @@ import org.geysermc.cumulus.SimpleForm
 import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.models.SoundPitch
-import work.xeltica.craft.core.stores.ItemStore
+import work.xeltica.craft.core.modules.item.ItemModule
 import java.util.ArrayDeque
 import java.util.UUID
 import java.util.function.Consumer
@@ -157,7 +157,7 @@ class Gui: Listener {
             stream = stream.filter(filter)
         }
         val list = stream.map { p ->
-            val head = ItemStore.getInstance().getPlayerHead(p)
+            val head = ItemModule.getPlayerHead(p)
             val name = PlainTextComponentSerializer.plainText().serialize(p.displayName())
             return@map MenuItem(name, {
                 onSelect?.accept(p)

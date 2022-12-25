@@ -7,7 +7,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
-import work.xeltica.craft.core.stores.ItemStore
+import work.xeltica.craft.core.modules.item.ItemModule
 
 /**
  * X Phoneに関する機能をまとめています。
@@ -21,7 +21,7 @@ class XphoneHandler : Listener {
         if (itemMeta?.displayName() == null) return
         val player = e.player
 
-        val phone = store().getItem(ItemStore.ITEM_NAME_XPHONE)
+        val phone = store().getItem(ItemModule.ITEM_NAME_XPHONE)
         if (!store().compareCustomItem(item, phone)) return
 
         // 右クリック以外はガード
@@ -34,7 +34,7 @@ class XphoneHandler : Listener {
     @EventHandler(priority = EventPriority.HIGH)
     fun onOffhandUse(e: PlayerInteractEvent) {
         if (e.hand != EquipmentSlot.OFF_HAND) return
-        val phone = store().getItem(ItemStore.ITEM_NAME_XPHONE)
+        val phone = store().getItem(ItemModule.ITEM_NAME_XPHONE)
         val item = e.player.inventory.itemInMainHand
 
         // 右クリック以外はガード
@@ -46,7 +46,7 @@ class XphoneHandler : Listener {
         }
     }
 
-    private fun store(): ItemStore {
-        return ItemStore.getInstance()
+    private fun store(): ItemModule {
+        return ItemModule
     }
 }
