@@ -1,20 +1,14 @@
-package work.xeltica.craft.core.api.commands;
+package work.xeltica.craft.core.api.commands
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.command.TabCompleter
 
 /**
  * X-Core コマンドの基底クラス。
  * @author Xeltica
  */
-public abstract class CommandBase implements TabCompleter {
+abstract class CommandBase : TabCompleter {
     /**
      * コマンドが呼び出されたときに動く関数
      * @param sender コマンドを実行したプレイヤーかコンソールの情報が入っている
@@ -23,7 +17,7 @@ public abstract class CommandBase implements TabCompleter {
      * @param args 引数
      * @return 正常に実行された場合はtrue、そうでない場合はfalse
      */
-    public abstract boolean execute(CommandSender sender, Command command, String label, String[] args);
+    abstract fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean
 
     /**
      * プレイヤーがコマンドを入力している途中で表示する入力候補を決定する関数
@@ -33,10 +27,14 @@ public abstract class CommandBase implements TabCompleter {
      * @param args 引数
      * @return 表示する入力候補のリスト。デフォルト値を表示する場合はnull。
      */
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        return null;
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String>? {
+        return null
     }
 
-    protected static final List<String> COMPLETE_LIST_EMPTY = new ArrayList<>();
-    protected static final List<String> COMPLETE_LIST_ONOFF = List.of("on", "off");
+    companion object {
+        @JvmField
+        protected val COMPLETE_LIST_EMPTY: List<String> = ArrayList()
+        @JvmField
+        protected val COMPLETE_LIST_ONOFF = listOf("on", "off")
+    }
 }
