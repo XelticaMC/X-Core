@@ -18,7 +18,7 @@ import java.util.HashMap
  * @author Xeltica
  */
 class CommandRespawn : CommandPlayerOnlyBase() {
-    override fun execute(player: Player, command: Command, label: String, args: Array<String>): Boolean {
+    override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         // テレポート中であれば弾く
         val isWarping = isWarpingMap[player.uniqueId]
         if (isWarping != null && isWarping) {

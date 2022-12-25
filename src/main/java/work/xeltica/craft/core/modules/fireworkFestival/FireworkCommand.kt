@@ -32,7 +32,7 @@ class FireworkCommand : CommandBase() {
         return true
     }
 
-    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String> {
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String> {
         if (args.isEmpty()) return COMPLETE_LIST_EMPTY
         if (args.size == 1) {
             val commands = listOf("run", "center")

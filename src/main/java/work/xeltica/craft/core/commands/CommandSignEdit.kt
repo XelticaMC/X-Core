@@ -1,85 +1,81 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.commands
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Tag;
-import org.bukkit.block.Sign;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.SignChangeEvent;
-import org.jetbrains.annotations.NotNull;
-
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.Tag
+import org.bukkit.block.Block
+import org.bukkit.block.Sign
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import org.bukkit.event.block.SignChangeEvent
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
+import java.util.*
 
 /**
  * 看板を編集するコマンド
  * @author Xeltica
  */
-public class CommandSignEdit extends CommandPlayerOnlyBase {
-
-    @Override
-    public boolean execute(Player player, Command command, String label, String[] args) {
-        if (args.length < 1) {
-            return false;
+class CommandSignEdit : CommandPlayerOnlyBase() {
+    override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
+        if (args.isEmpty()) {
+            return false
         }
-        final var block = player.getTargetBlock(null, 5);
-        if (!Tag.SIGNS.isTagged(block.getType())) {
-            player.sendMessage(ChatColor.RED + "変更する対象の看板を見てください");
-            return true;
+        val block = player.getTargetBlock(null, 5)
+        if (!Tag.SIGNS.isTagged(block.type)) {
+            player.sendMessage(ChatColor.RED.toString() + "変更する対象の看板を見てください")
+            return true
         }
-        final var state = (Sign)block.getState();
+        val state = block.state as Sign
         try {
-            final var index = Integer.parseInt(args[0]);
+            val index = args[0].toInt()
             if (index < 0 || index > 3) {
-                player.sendMessage(ChatColor.RED + "行番号には0,1,2,3を指定してください");
-                return true;
+                player.sendMessage(ChatColor.RED.toString() + "行番号には0,1,2,3を指定してください")
+                return true
             }
-            final var l = new LinkedList<>(Arrays.asList(args));
-            l.remove(0);
-            final var line = String.join(" ", l);
-            state.line(index, Component.text(line));
+            val l = LinkedList(Arrays.asList(*args))
+            l.removeAt(0)
+            val line = java.lang.String.join(" ", l)
+            state.line(index, Component.text(line))
             // Spigot イベントを発行し、他のプラグインにキャンセルされたらやめる
-            final var e = new SignChangeEvent(block, player, state.lines());
-            Bukkit.getPluginManager().callEvent(e);
-            if (!e.isCancelled()) {
-                state.update();
-                player.sendMessage("看板の" + index + "行目を「" + line + "」と書き換えました");
+            val e = SignChangeEvent(block, player, state.lines())
+            Bukkit.getPluginManager().callEvent(e)
+            if (!e.isCancelled) {
+                state.update()
+                player.sendMessage("看板の" + index + "行目を「" + line + "」と書き換えました")
             } else {
-                player.sendMessage("何らかの理由でこの看板は編集できません");
+                player.sendMessage("何らかの理由でこの看板は編集できません")
             }
-        } catch (NumberFormatException e) {
-            return false;
+        } catch (e: NumberFormatException) {
+            return false
         }
-        return true;
+        return true
     }
 
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label,
-                                      String[] args) {
-        final var errorNonSign = List.of("変更する対象の看板を見てください");
-        final var errorOutOfBounds = List.of("第一引数は0,1,2,3のいずれかにしてください");
-
-        if (args.length < 2) return COMMANDS;
-
-        if (commandSender instanceof Player player) {
-            final var block = player.getTargetBlock(null, 5);
-            if (!Tag.SIGNS.isTagged(block.getType())) return errorNonSign;
-            if (!List.of("0", "1", "2", "3").contains(args[0])) return errorOutOfBounds;
-            final var n = Integer.parseInt(args[0]);
-            
-            final var state = (Sign)block.getState();
-            return List.of(PlainTextComponentSerializer.plainText().serialize(state.line(n)));
+    override fun onTabComplete(
+        commandSender: CommandSender,
+        command: Command,
+        label: String,
+        args: Array<String>
+    ): List<String>? {
+        val errorNonSign = listOf("変更する対象の看板を見てください")
+        val errorOutOfBounds = listOf("第一引数は0,1,2,3のいずれかにしてください")
+        if (args.size < 2) return COMMANDS
+        return if (commandSender is Player) {
+            val block: Block = commandSender.getTargetBlock(null, 5)
+            if (!Tag.SIGNS.isTagged(block.type)) return errorNonSign
+            if (!listOf("0", "1", "2", "3").contains(args[0])) return errorOutOfBounds
+            val n = args[0].toInt()
+            val state = block.state as Sign
+            listOf(PlainTextComponentSerializer.plainText().serialize(state.line(n)))
         } else {
-            return COMPLETE_LIST_EMPTY;
+            COMPLETE_LIST_EMPTY
         }
     }
 
-    private static final List<String> COMMANDS = List.of("0", "1", "2", "3");
+    companion object {
+        private val COMMANDS = listOf("0", "1", "2", "3")
+    }
 }

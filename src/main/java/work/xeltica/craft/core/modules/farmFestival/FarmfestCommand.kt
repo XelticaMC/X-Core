@@ -71,7 +71,7 @@ class FarmfestCommand : CommandBase() {
         return true
     }
 
-    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String>? {
         if (args.isEmpty()) return COMPLETE_LIST_EMPTY
         val subCommand = args[0]
         if (args.size == 1) {

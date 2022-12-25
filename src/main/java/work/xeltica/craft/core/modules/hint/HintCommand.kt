@@ -16,7 +16,7 @@ import java.util.stream.Stream
  * @author Xeltica
  */
 class HintCommand : CommandPlayerOnlyBase() {
-    override fun execute(player: Player, command: Command, label: String, args: Array<String>): Boolean {
+    override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         val subCommand = if (args.isNotEmpty()) args[0] else null
         val module = HintModule
         val hints = Stream.of(*Hint.values())
@@ -69,10 +69,7 @@ class HintCommand : CommandPlayerOnlyBase() {
         }
     }
 
-    override fun onTabComplete(
-        commandSender: CommandSender, command: Command, label: String,
-        args: Array<String>
-    ): List<String>? {
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String>? {
         return Stream.of(*Hint.values()).map { obj: Hint -> obj.toString() }
             .toList()
     }

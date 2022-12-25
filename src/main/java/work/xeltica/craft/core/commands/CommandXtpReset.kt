@@ -1,7 +1,6 @@
 package work.xeltica.craft.core.commands
 
 import org.bukkit.Bukkit
-import org.bukkit.World
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
@@ -15,7 +14,7 @@ import java.util.*
  * @author Xeltica
  */
 class CommandXtpReset : CommandBase() {
-    override fun execute(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
+    override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         val worldModule = WorldModule
         if (args.size != 1 && args.size != 2) return false
         val worldName = args[0]
@@ -38,8 +37,9 @@ class CommandXtpReset : CommandBase() {
         args: Array<String>
     ): List<String>? {
         if (args.size == 1) {
-            val worlds = XCorePlugin.instance.server.worlds.stream().map { obj: World -> obj.name }
-                .toList()
+            // toListしてる
+            val worlds = XCorePlugin.instance.server.worlds.map { it.name }.toList()
+            // arrayList
             val completions = ArrayList<String>()
             StringUtil.copyPartialMatches(args[0], worlds, completions)
             completions.sort()

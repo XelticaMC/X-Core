@@ -32,9 +32,10 @@ abstract class CommandBase : TabCompleter {
     }
 
     companion object {
-        @JvmField
+        @JvmStatic
         protected val COMPLETE_LIST_EMPTY: List<String> = ArrayList()
-        @JvmField
+
+        @JvmStatic
         protected val COMPLETE_LIST_ONOFF = listOf("on", "off")
     }
 }

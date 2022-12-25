@@ -173,40 +173,39 @@ class RankingCommand: CommandBase() {
         return true
     }
 
-    override fun onTabComplete(
-        commandSender: CommandSender,
-        command: Command,
-        label: String,
-        args: Array<out String>
-    ): List<String> {
-        if (args.size == 1) {
-            val commands = listOf("create", "delete", "query", "list", "set", "unset", "hologram", "mode")
-            val completions = ArrayList<String>()
-            StringUtil.copyPartialMatches(args[0], commands, completions)
-            completions.sort()
-            return completions
-        } else if (args.size == 2) {
-            if (listOf("delete", "query", "set", "unset", "hologram", "mode").contains(args[0])) return COMPLETE_LIST_EMPTY
-            val rankings = RankingModule.getAll().map(Ranking::name).toList()
-            val completions = ArrayList<String>()
-            StringUtil.copyPartialMatches(args[1], rankings, completions)
-            completions.sort()
-            return rankings
-        } else if (args.size == 3) {
-            when (args[0]) {
-                "mode" -> {
-                    val modes = listOf("normal", "time", "point")
-                    val completions = ArrayList<String>()
-                    StringUtil.copyPartialMatches(args[2], modes, completions)
-                    completions.sort()
-                    return completions
-                }
-                "hologram" -> {
-                    val subCommands = listOf("spawn", "despawn", "obfuscate", "deobfuscate")
-                    val completions = ArrayList<String>()
-                    StringUtil.copyPartialMatches(args[2], subCommands, completions)
-                    completions.sort()
-                    return completions
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String> {
+        when (args.size) {
+            1 -> {
+                val commands = listOf("create", "delete", "query", "list", "set", "unset", "hologram", "mode")
+                val completions = ArrayList<String>()
+                StringUtil.copyPartialMatches(args[0], commands, completions)
+                completions.sort()
+                return completions
+            }
+            2 -> {
+                if (listOf("delete", "query", "set", "unset", "hologram", "mode").contains(args[0])) return COMPLETE_LIST_EMPTY
+                val rankings = RankingModule.getAll().map(Ranking::name).toList()
+                val completions = ArrayList<String>()
+                StringUtil.copyPartialMatches(args[1], rankings, completions)
+                completions.sort()
+                return rankings
+            }
+            3 -> {
+                when (args[0]) {
+                    "mode" -> {
+                        val modes = listOf("normal", "time", "point")
+                        val completions = ArrayList<String>()
+                        StringUtil.copyPartialMatches(args[2], modes, completions)
+                        completions.sort()
+                        return completions
+                    }
+                    "hologram" -> {
+                        val subCommands = listOf("spawn", "despawn", "obfuscate", "deobfuscate")
+                        val completions = ArrayList<String>()
+                        StringUtil.copyPartialMatches(args[2], subCommands, completions)
+                        completions.sort()
+                        return completions
+                    }
                 }
             }
         }

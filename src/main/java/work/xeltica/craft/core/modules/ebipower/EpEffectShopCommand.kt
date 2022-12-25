@@ -143,12 +143,7 @@ class EpEffectShopCommand: CommandPlayerOnlyBase() {
         }
     }
 
-    override fun onTabComplete(
-        commandSender: CommandSender,
-        command: Command,
-        label: String,
-        args: Array<String>
-    ): List<String> {
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String> {
         if (args.size == 1) {
             val commands = listOf("add", "delete")
             val completions = ArrayList<String>()

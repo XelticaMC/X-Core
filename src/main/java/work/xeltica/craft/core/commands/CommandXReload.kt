@@ -16,12 +16,7 @@ class CommandXReload : CommandBase() {
         return true
     }
 
-    override fun onTabComplete(
-        commandSender: CommandSender,
-        command: Command,
-        label: String,
-        args: Array<out String>
-    ): MutableList<String> {
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): MutableList<String> {
         return if (args.size == 1) mutableListOf("all", "mobball", "notification", "firework") else mutableListOf()
     }
 }

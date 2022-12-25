@@ -1,27 +1,31 @@
-package work.xeltica.craft.core.utils;
+package work.xeltica.craft.core.utils
 
 /**
  * 時間をMinecraft Tickに変換するのと、その逆をする機能を持つ
  * @author Xeltica
  */
-public class Ticks {
-    /** 秒をTickに変換 */
-    public static int from(double second) {
-        return (int)(second * 20);
+object Ticks {
+    /** 秒をTickに変換  */
+    @JvmStatic
+    fun from(second: Double): Int {
+        return (second * 20).toInt()
     }
 
-    /** 分、秒をTickに変換 */
-    public static int from(int minute, double second) {
-        return from(minute * 60) + from(second);
+    /** 分、秒をTickに変換  */
+    @JvmStatic
+    fun from(minute: Int, second: Double): Int {
+        return from((minute * 60).toDouble()) + from(second)
     }
 
-    /** 時間、分、秒をTickに変換 */
-    public static int from(int hour, int minute, double second) {
-        return from(hour * 3600) + from(minute * 60) + from(second);
+    /** 時間、分、秒をTickに変換  */
+    @JvmStatic
+    fun from(hour: Int, minute: Int, second: Double): Int {
+        return from((hour * 3600).toDouble()) + from((minute * 60).toDouble()) + from(second)
     }
 
-    /** Tickを秒に変換 */
-    public static double toTime(int tick) {
-        return tick / 20.0;
+    /** Tickを秒に変換  */
+    @JvmStatic
+    fun toTime(tick: Int): Double {
+        return tick / 20.0
     }
 }

@@ -1,10 +1,9 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.commands
 
-import org.bukkit.command.Command;
-import org.bukkit.entity.Player;
-
-import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
-import work.xeltica.craft.core.gui.Gui;
+import org.bukkit.command.Command
+import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
+import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 
 /**
  * Java版で看板を使用したダイアログのボタンを
@@ -12,13 +11,10 @@ import work.xeltica.craft.core.gui.Gui;
  * プレイヤーが使用することは想定していない
  * @author Xeltica
  */
-public class CommandXCoreGuiEvent extends CommandPlayerOnlyBase {
-
-    @Override
-    public boolean execute(Player player, Command command, String label, String[] args) {
-        if (args.length != 1) return false;
-        Gui.getInstance().handleCommand(args[0]);
-        return true;
+class CommandXCoreGuiEvent : CommandPlayerOnlyBase() {
+    override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
+        if (args.size != 1) return false
+        getInstance().handleCommand(args[0])
+        return true
     }
-    
 }

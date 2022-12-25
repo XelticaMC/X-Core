@@ -1,78 +1,57 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.commands
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
+import org.bukkit.ChatColor
+import org.bukkit.command.Command
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import org.bukkit.util.StringUtil
+import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
+import java.util.*
 
 /**
  * 現在いるワールドのみの時間を操作するコマンド
  * @author Xeltica
  */
-public class CommandLocalTime extends CommandPlayerOnlyBase {
-    /**
-     * 組込み名前付き時間を追加
-     * 統合版のほうが充実しているので統合版から拝借してます
-     */
-    public CommandLocalTime() {
-        builtinTimeMap.put("day", 1000);
-        builtinTimeMap.put("night", 13000);
-        builtinTimeMap.put("noon", 6000);
-        builtinTimeMap.put("midnight", 18000);
-        builtinTimeMap.put("sunrise", 23000);
-        builtinTimeMap.put("sunset", 12000);
-    }
-
-    @Override
-    public boolean execute(Player player, Command command, String label, String[] args) {
-        if (args.length < 1) return false;
-
-        final var world = player.getWorld();
-        final var subCommand = args[0].toLowerCase();
-
-        switch (subCommand) {
-            case "set" -> {
-                if (args.length != 2) return false;
-                final var timeString = args[1];
+class CommandLocalTime : CommandPlayerOnlyBase() {
+    override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
+        if (args.isEmpty()) return false
+        val world = player.world
+        val subCommand = args[0].lowercase(Locale.getDefault())
+        when (subCommand) {
+            "set" -> {
+                if (args.size != 2) return false
+                val timeString = args[1]
                 try {
-                    final var time = toTime(timeString);
-                    world.setTime(time);
-                    player.sendMessage(ChatColor.RED + "時刻を " + time + "に設定しました");
-                } catch (NumberFormatException e) {
-                    player.sendMessage(ChatColor.RED + "時間指定が異常です");
+                    val time = toTime(timeString)
+                    world.time = time.toLong()
+                    player.sendMessage(ChatColor.RED.toString() + "時刻を${time}に設定しました")
+                } catch (e: NumberFormatException) {
+                    player.sendMessage(ChatColor.RED.toString() + "時間指定が異常です")
                 }
             }
-            case "add" -> {
-                if (args.length != 2) return false;
-                final var timeString = args[1];
+
+            "add" -> {
+                if (args.size != 2) return false
+                val timeString = args[1]
                 try {
-                    final var time = toTime(timeString);
-                    world.setTime(world.getTime() + time);
-                    player.sendMessage(ChatColor.RED + "時刻を " + world.getTime() + "に設定しました");
-                } catch (NumberFormatException e) {
-                    player.sendMessage(ChatColor.RED + "時間指定が異常です");
+                    val time = toTime(timeString)
+                    world.time = world.time + time
+                    player.sendMessage(ChatColor.RED.toString() + "時刻を${world.time}に設定しました")
+                } catch (e: NumberFormatException) {
+                    player.sendMessage(ChatColor.RED.toString() + "時間指定が異常です")
                 }
             }
-            case "query" -> {
-                if (args.length != 1) return false;
-                player.sendMessage(Long.toString(world.getTime()));
+
+            "query" -> {
+                if (args.size != 1) return false
+                player.sendMessage(world.time.toString())
             }
-            default -> {
-                return false;
+
+            else -> {
+                return false
             }
         }
-
-        return true;
+        return true
     }
 
     /**
@@ -80,38 +59,53 @@ public class CommandLocalTime extends CommandPlayerOnlyBase {
      * @param timeString builtinTimeMapにある対応する文字列
      * @return 時間の数値
      */
-    private int toTime(String timeString) {
-        if (builtinTimeMap.containsKey(timeString)) {
-            return builtinTimeMap.get(timeString);
-        }
-        return Integer.parseInt(timeString);
+    private fun toTime(timeString: String): Int {
+        return if (builtinTimeMap.containsKey(timeString)) {
+            builtinTimeMap[timeString]!!
+        } else timeString.toInt()
     }
 
-    @Nullable
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (args.length == 1) {
-            final var commands = Arrays.asList("set", "add", "query");
-            final var completions = new ArrayList<String>();
-            StringUtil.copyPartialMatches(args[0], commands, completions);
-            Collections.sort(completions);
-            return completions;
-        } else if (args.length == 2) {
-            if (args[1].equals("set")) {
-                final var times = Arrays.asList("day", "night", "noon", "midnight", "sunrise", "sunset");
-                final var completions = new ArrayList<String>();
-                StringUtil.copyPartialMatches(args[1], times, completions);
-                Collections.sort(completions);
-                return completions;
+    override fun onTabComplete(
+        commandSender: CommandSender,
+        command: Command,
+        label: String,
+        args: Array<String>
+    ): List<String> {
+        if (args.size == 1) {
+            val commands: List<String> = mutableListOf("set", "add", "query")
+            val completions = ArrayList<String>()
+            StringUtil.copyPartialMatches(args[0], commands, completions)
+            Collections.sort(completions)
+            return completions
+        } else if (args.size == 2) {
+            if (args[1] == "set") {
+                val times: List<String> = mutableListOf("day", "night", "noon", "midnight", "sunrise", "sunset")
+                val completions = ArrayList<String>()
+                StringUtil.copyPartialMatches(args[1], times, completions)
+                Collections.sort(completions)
+                return completions
             }
         }
-        return COMPLETE_LIST_EMPTY;
+        return COMPLETE_LIST_EMPTY
     }
 
     /**
-     * 時間の数値とそれに対応するmidnightなどの文字列が格納されている
+     * 組込み名前付き時間を追加
+     * 統合版のほうが充実しているので統合版から拝借してます
      */
-    private static final HashMap<String, Integer> builtinTimeMap = new HashMap<>();
+    init {
+        builtinTimeMap["day"] = 1000
+        builtinTimeMap["night"] = 13000
+        builtinTimeMap["noon"] = 6000
+        builtinTimeMap["midnight"] = 18000
+        builtinTimeMap["sunrise"] = 23000
+        builtinTimeMap["sunset"] = 12000
+    }
 
+    companion object {
+        /**
+         * 時間の数値とそれに対応するmidnightなどの文字列が格納されている
+         */
+        private val builtinTimeMap = HashMap<String, Int>()
+    }
 }
-

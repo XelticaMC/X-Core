@@ -1,8 +1,7 @@
-package work.xeltica.craft.core.plugins;
+package work.xeltica.craft.core.plugins
 
-import org.bukkit.Bukkit;
-
-import work.xeltica.craft.core.XCorePlugin;
+import org.bukkit.Bukkit
+import work.xeltica.craft.core.XCorePlugin
 
 /**
  * X-Core プラグインの基底クラスです。
@@ -11,12 +10,12 @@ import work.xeltica.craft.core.XCorePlugin;
  * あまり使わず直書きしてしまっています…。
  * @author Xeltica
  */
-public abstract class PluginBase {
-    public void onEnable(XCorePlugin plugin) {
-        Bukkit.getLogger().info("Enabling sub-plugin " + this.getClass().getName() + "...");
+abstract class PluginBase {
+    open fun onEnable(plugin: XCorePlugin?) {
+        Bukkit.getLogger().info("Enabling sub-plugin ${this.javaClass.name}...")
     }
 
-    public void onDisable(XCorePlugin plugin) {
-        Bukkit.getLogger().info("Disabling sub-plugin " + this.getClass().getName() + "...");
+    open fun onDisable(plugin: XCorePlugin?) {
+        Bukkit.getLogger().info("Disabling sub-plugin ${this.javaClass.name}...")
     }
 }

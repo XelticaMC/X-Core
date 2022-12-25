@@ -79,12 +79,7 @@ class OmikujiCommand: CommandPlayerOnlyBase() {
         return true
     }
 
-    override fun onTabComplete(
-        commandSender: CommandSender,
-        command: Command,
-        label: String,
-        args: Array<out String>
-    ): MutableList<String>? {
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String> {
         return COMPLETE_LIST_EMPTY
     }
 }

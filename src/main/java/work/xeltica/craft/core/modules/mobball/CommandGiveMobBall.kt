@@ -4,7 +4,6 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.command.Command
-import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 
@@ -24,15 +23,6 @@ class CommandGiveMobBall : CommandPlayerOnlyBase() {
         p.sendMessage("${p.name}にモブボールを${amount}個付与しました。")
         p.playSound(p.location, Sound.ENTITY_ITEM_PICKUP, 1f, 1f)
         return true
-    }
-
-    override fun onTabComplete(
-        commandSender: CommandSender,
-        command: Command,
-        label: String,
-        args: Array<out String>
-    ): MutableList<String>? {
-        return super.onTabComplete(commandSender, command, label, args)
     }
 
 }
