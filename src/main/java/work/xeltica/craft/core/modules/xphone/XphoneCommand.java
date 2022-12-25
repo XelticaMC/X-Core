@@ -10,9 +10,9 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
-import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.stores.HintStore;
-import work.xeltica.craft.core.stores.ItemStore;
+import work.xeltica.craft.core.modules.hint.Hint;
+import work.xeltica.craft.core.modules.hint.HintModule;
+import work.xeltica.craft.core.modules.item.ItemModule;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,13 +24,11 @@ import java.util.Objects;
 public class XphoneCommand extends CommandPlayerOnlyBase {
     @Override
     public boolean execute(Player player, Command command, String label, String[] args) {
-        final var item = ItemStore.getInstance().getItem("xphone");
-        if (item != null) {
-            player.getInventory().addItem(item);
-            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);
-            player.sendMessage(Objects.requireNonNull(item.getItemMeta().displayName()).append(Component.text("を付与しました")));
-            HintStore.getInstance().achieve(player, Hint.TWIN_XPHONE);
-        }
+        final var item = ItemModule.INSTANCE.getItem(ItemModule.ITEM_NAME_XPHONE);
+        player.getInventory().addItem(item);
+        player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1, 1);
+        player.sendMessage(Objects.requireNonNull(item.getItemMeta().displayName()).append(Component.text("を付与しました")));
+        HintModule.INSTANCE.achieve(player, Hint.TWIN_XPHONE);
         return true;
     }
 

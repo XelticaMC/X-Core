@@ -9,12 +9,15 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.SoundPitch
 import work.xeltica.craft.core.modules.halloween.CandyStoreApp
+import work.xeltica.craft.core.modules.ebipower.EbipowerDrugStoreApp
+import work.xeltica.craft.core.modules.ebipower.EbipowerStoreApp
+import work.xeltica.craft.core.modules.hint.HintApp
+import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.notification.NotificationApp
 import work.xeltica.craft.core.modules.payments.PaymentsApp
 import work.xeltica.craft.core.modules.quickchat.QuickChatApp
-import work.xeltica.craft.core.stores.ItemStore
+import work.xeltica.craft.core.modules.stamprally.StampRallyApp
 import work.xeltica.craft.core.xphone.apps.*
-import java.lang.IllegalStateException
 
 /**
  * X Phone の基幹となるシステムです。
@@ -95,7 +98,7 @@ object XphoneModule : ModuleBase() {
     }
 
     fun ui() = Gui.getInstance()
-    fun store() = ItemStore.getInstance() ?: throw IllegalStateException("Try to call store() in X Phone OS, but X-Core is not fully initialized.")
+    fun store() = ItemModule
 
     /**
      * 起動音を再生します。

@@ -26,7 +26,7 @@ class CandyStoreCommand : CommandPlayerOnlyBase() {
                 }
                 val cost = args[1].toInt()
                 val handheld = player.inventory.itemInMainHand
-                if (handheld == null || handheld.type == Material.AIR) {
+                if (handheld.type == Material.AIR) {
                     player.sendMessage("アイテムを手に持っていないため追加できません。")
                     return true
                 }

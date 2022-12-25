@@ -10,11 +10,11 @@ import org.jetbrains.annotations.NotNull;
 
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.gui.Gui;
-import work.xeltica.craft.core.models.Hint;
-import work.xeltica.craft.core.models.PlayerDataKey;
+import work.xeltica.craft.core.modules.hint.Hint;
 import work.xeltica.craft.core.models.SoundPitch;
-import work.xeltica.craft.core.stores.HintStore;
-import work.xeltica.craft.core.stores.PlayerStore;
+import work.xeltica.craft.core.modules.hint.HintModule;
+import work.xeltica.craft.core.modules.player.PlayerDataKey;
+import work.xeltica.craft.core.modules.player.PlayerModule;
 
 /**
  * 猫モードを切り替えるコマンド
@@ -24,7 +24,7 @@ public class CommandCat extends CommandPlayerOnlyBase {
 
     @Override
     public boolean execute(Player sender, Command command, String label, String[] args) {
-        final var record = PlayerStore.getInstance().open(sender);
+        final var record = PlayerModule.INSTANCE.open(sender);
         // 引数がない場合は現在のモードを表示
         if (args.length == 0) {
             final var mes = record.getBoolean(PlayerDataKey.CAT_MODE)
@@ -43,7 +43,7 @@ public class CommandCat extends CommandPlayerOnlyBase {
                 Gui.getInstance().playSound(sender, Sound.ENTITY_CAT_AMBIENT, 2, SoundPitch.F_2);
                 sender.sendMessage("CATモードを§aオン§rにしました。");
 
-                HintStore.getInstance().achieve(sender, Hint.CAT_MODE);
+                HintModule.INSTANCE.achieve(sender, Hint.CAT_MODE);
             }
             case "off" -> {
                 record.set(PlayerDataKey.CAT_MODE, false);

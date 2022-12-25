@@ -2,7 +2,7 @@ package work.xeltica.craft.core.modules.quickchat
 
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.stores.WorldStore
+import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.utils.Config
 import java.io.IOException
 
@@ -29,7 +29,7 @@ object QuickChatModule: ModuleBase() {
     fun chatFormat(msg: String, player: Player): String {
         var text = msg
 
-        text = text.replace("{world}", WorldStore.getInstance().getWorldDisplayName(player.world))
+        text = text.replace("{world}", WorldModule.getWorldDisplayName(player.world))
         text = text.replace("{x}", player.location.blockX.toString())
         text = text.replace("{y}", player.location.blockY.toString())
         text = text.replace("{z}", player.location.blockZ.toString())

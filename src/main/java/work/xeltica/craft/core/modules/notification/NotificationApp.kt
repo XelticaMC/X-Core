@@ -7,8 +7,7 @@ import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.models.Notification
-import work.xeltica.craft.core.stores.EbiPowerStore
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.xphone.apps.AppBase
 
 class NotificationApp: AppBase() {
@@ -53,7 +52,7 @@ class NotificationApp: AppBase() {
             }
         }
         if (notification.ep != null) {
-            EbiPowerStore.getInstance().tryGive(player, notification.ep)
+            EbiPowerModule.tryGive(player, notification.ep)
             player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
             player.sendMessage("${notification.ep} EPを受け取りました。")
         }

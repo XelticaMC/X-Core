@@ -7,7 +7,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.halloween.HalloweenModule
-import work.xeltica.craft.core.stores.WorldStore
+import work.xeltica.craft.core.modules.world.WorldModule
 import java.util.Calendar
 
 /**
@@ -21,7 +21,7 @@ class TeleportApp : AppBase() {
 
     override fun onLaunch(player: Player) {
         if (isShigen(player)) {
-            WorldStore.getInstance().teleportToSavedLocation(player, "main")
+            WorldModule.teleportToSavedLocation(player, "main")
             return
         }
 
@@ -47,13 +47,13 @@ class TeleportApp : AppBase() {
         list.add(MenuItem("戻る…", { showMainMenu(player) }, Material.REDSTONE_TORCH))
 
         list.add(MenuItem("ロビー", { player.performCommand("hub") }, Material.NETHERITE_BLOCK))
-        list.add(MenuItem("メインワールド", { WorldStore.getInstance().teleportToSavedLocation(player, "main") }, Material.CRAFTING_TABLE))
+        list.add(MenuItem("メインワールド", { WorldModule.teleportToSavedLocation(player, "main") }, Material.CRAFTING_TABLE))
         list.add(MenuItem("共有ワールド…", { showSharedWorldsMenu(player) }, Material.CHEST))
         if (player.hasPermission("hub.teleport.sandbox2")) {
-            list.add(MenuItem("サンドボックス", { WorldStore.getInstance().teleportToSavedLocation(player, "sandbox2") }, Material.RED_CONCRETE))
+            list.add(MenuItem("サンドボックス", { WorldModule.teleportToSavedLocation(player, "sandbox2") }, Material.RED_CONCRETE))
         }
         if (player.hasPermission("hub.teleport.art")) {
-            list.add(MenuItem("アートワールド", { WorldStore.getInstance().teleportToSavedLocation(player, "art") }, Material.PAINTING))
+            list.add(MenuItem("アートワールド", { WorldModule.teleportToSavedLocation(player, "art") }, Material.PAINTING))
         }
 
         if (worldName == "main") {
@@ -102,15 +102,15 @@ class TeleportApp : AppBase() {
             MenuItem("戻る…", { showWorldsMenu(player) }, Material.REDSTONE_TORCH),
 
             MenuItem("共有ワールド", {
-                WorldStore.getInstance().teleportToSavedLocation(player, "wildarea2")
+                WorldModule.teleportToSavedLocation(player, "wildarea2")
             }, Material.GRASS_BLOCK),
 
             MenuItem("共有ネザー", {
-                WorldStore.getInstance().teleportToSavedLocation(player, "wildarea2_nether")
+                WorldModule.teleportToSavedLocation(player, "wildarea2_nether")
             }, Material.NETHERRACK),
 
             MenuItem("共有エンド", {
-                WorldStore.getInstance().teleportToSavedLocation(player, "wildarea2_the_end")
+                WorldModule.teleportToSavedLocation(player, "wildarea2_the_end")
             }, Material.END_STONE)
         ))
     }
@@ -141,11 +141,11 @@ class TeleportApp : AppBase() {
             }, Material.GRASS_BLOCK),
 
             MenuItem("資源ネザー", {
-                WorldStore.getInstance().teleportToSavedLocation(player, "shigen_nether")
+                WorldModule.teleportToSavedLocation(player, "shigen_nether")
             }, Material.NETHERRACK),
 
             MenuItem("資源エンド", {
-                WorldStore.getInstance().teleportToSavedLocation(player, "shigen_end")
+                WorldModule.teleportToSavedLocation(player, "shigen_end")
             }, Material.END_STONE)
         ))
     }
