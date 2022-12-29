@@ -6,8 +6,8 @@ import org.bukkit.ChatColor
 import org.bukkit.configuration.file.YamlConfiguration
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
+import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.utils.Config
-import work.xeltica.craft.core.utils.DiscordService
 import java.io.IOException
 
 object MetaModule: ModuleBase() {
@@ -26,10 +26,10 @@ object MetaModule: ModuleBase() {
 
         if (isUpdated) {
             val prev = previousVersion ?: "unknown"
-            val current = currentVersion
+            val current = currentVersion!!
             val text = "${ChatColor.GREEN}X-Coreを${prev}から${current}へ更新しました。"
             if (postToDiscord) {
-                DiscordService.getInstance().postChangelog(current, changeLog)
+                DiscordHook.postChangelog(current, changeLog)
             }
             with(Bukkit.getServer()) {
                 sendMessage(Component.text(text))

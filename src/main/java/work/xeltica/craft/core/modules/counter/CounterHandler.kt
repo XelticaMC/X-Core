@@ -14,16 +14,16 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.geysermc.connector.common.ChatColor
-import work.xeltica.craft.core.gui.Gui
-import java.io.IOException
-import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import org.geysermc.floodgate.api.FloodgateApi
 import org.geysermc.floodgate.util.DeviceOs
 import work.xeltica.craft.core.api.playerStore.PlayerStore
+import work.xeltica.craft.core.events.RealTimeNewDayEvent
+import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.modules.ranking.RankingModule
-import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.utils.Time
+import java.io.IOException
 
 /**
  * Counter API処理用ハンドラー
@@ -159,7 +159,7 @@ class CounterHandler : Listener {
                     .forEach {
                         it.sendMessage("${ChatColor.GREEN}${playerName}さん${ChatColor.RESET}がタイムアタックで${ChatColor.AQUA}${timeString}${ChatColor.RESET}を達成しました！")
                     }
-                DiscordService.getInstance().broadcast("${playerName}さんがタイムアタックで${timeString}を達成しました！")
+                DiscordHook.broadcast("${playerName}さんがタイムアタックで${timeString}を達成しました！")
                 handleRanking(player, last, diff)
                 val message = if (count == 0) "あと1回チャレンジできます！" else "本日はもうチャレンジできません。"
                 player.sendMessage(ChatColor.GREEN + message)

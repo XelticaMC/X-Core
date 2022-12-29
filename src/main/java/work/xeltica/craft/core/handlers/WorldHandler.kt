@@ -13,10 +13,13 @@ import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerTeleportEvent
-import org.bukkit.inventory.*
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.ShapedRecipe
+import org.bukkit.inventory.ShapelessRecipe
 import org.bukkit.material.Directional
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.api.playerStore.PlayerStore
+import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.models.CraftRecipe
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule.achieve
@@ -24,8 +27,6 @@ import work.xeltica.craft.core.modules.hint.HintModule.hasAchieved
 import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.modules.world.WorldModule.getWorldDisplayName
-import work.xeltica.craft.core.utils.DiscordService
-import java.util.*
 
 /**
  * ワールド制御に関するハンドラーをまとめています。
@@ -105,10 +106,10 @@ class WorldHandler : Listener {
 
         // 以前サーバーに来ている or FIRST_SPAWN フラグが立っている
         val isNotFirstTeleport = p.hasPlayedBefore() || PlayerStore.open(p).getBoolean(PlayerDataKey.FIRST_SPAWN)
-        if (to.name == "main" && isNotFirstTeleport && !hasAchieved(p, Hint.GOTO_MAIN)) {
+        if (to.name == "main" && !hasAchieved(p, Hint.GOTO_MAIN)) {
             // はじめてメインワールドに入った場合、対象のスタッフに通知する
             try {
-                DiscordService.getInstance().alertNewcomer(p)
+                DiscordHook.alertNewcomer(p)
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }

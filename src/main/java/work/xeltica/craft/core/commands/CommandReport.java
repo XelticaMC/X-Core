@@ -20,7 +20,7 @@ import net.kyori.adventure.title.Title;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
-import work.xeltica.craft.core.utils.DiscordService;
+import work.xeltica.craft.core.hooks.DiscordHook;
 
 /**
  * 処罰コマンド
@@ -124,12 +124,12 @@ public class CommandReport extends CommandPlayerOnlyBase {
             return;
         } else if (command.equals("ban")) {
             message = String.format(punishLogTemplate, abuses);
-            DiscordService.getInstance().reportDiscord(badPlayerName, abuses, timeString, command);
+            DiscordHook.reportDiscord(badPlayerName, abuses, timeString, command);
         } else if (command.equals("kick")) {
             message = String.format(punishLogTemplate, abuses);
         } else if (command.equals("mute")) {
             message = String.format(punishLogTemplate, abuses);
-            DiscordService.getInstance().reportDiscord(badPlayerName, abuses, timeString, command);
+            DiscordHook.reportDiscord(badPlayerName, abuses, timeString, command);
         } else {
             moderator.sendMessage(ChatColor.RED + "無効なコマンド: " + command);
             return;

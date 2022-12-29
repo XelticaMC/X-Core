@@ -11,9 +11,9 @@ import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
+import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.utils.Config
-import work.xeltica.craft.core.utils.DiscordService
 import java.io.IOException
 import java.util.*
 
@@ -81,7 +81,7 @@ object HintModule: ModuleBase() {
                 .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/hint " + hint.name)))
             .append(Component.text("」を達成しました！"))
             .asComponent()
-        DiscordService.getInstance().broadcast(PlainTextComponentSerializer.plainText().serialize(component))
+        DiscordHook.broadcast(PlainTextComponentSerializer.plainText().serialize(component))
         Bukkit.getServer().sendMessage(component)
         if (hint.type === Hint.HintType.CHALLENGE) {
             Bukkit.getServer().playSound(

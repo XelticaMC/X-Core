@@ -12,6 +12,7 @@ import work.xeltica.craft.core.commands.*
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.handlers.*
 import work.xeltica.craft.core.hooks.CitizensHook
+import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.modules.bedrock.BedrockModule
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.clover.CloverModule
@@ -42,7 +43,6 @@ import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.plugins.VaultPlugin
 import work.xeltica.craft.core.runnables.*
 import work.xeltica.craft.core.stores.NickNameStore
-import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.utils.Ticks
 
 /**
@@ -55,7 +55,6 @@ class XCorePlugin : JavaPlugin() {
         instance = this
         PlayerStore.onEnable()
         Gui.onEnable()
-        DiscordService()
         loadHooks()
         loadModules()
 
@@ -200,6 +199,7 @@ class XCorePlugin : JavaPlugin() {
 
     private val hooks: Array<HookBase> = arrayOf(
         CitizensHook,
+        DiscordHook,
     )
 
     private val modules: Array<ModuleBase> = arrayOf(

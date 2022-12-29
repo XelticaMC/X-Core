@@ -20,10 +20,10 @@ import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.events.EntityMobBallHitEvent
 import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.hooks.CitizensHook.isCitizensNpc
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.utils.CitizensApiProvider.Companion.isCitizensNpc
 import java.util.*
 
 class MobBallHandler : Listener {
