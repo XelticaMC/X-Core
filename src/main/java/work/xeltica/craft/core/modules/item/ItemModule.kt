@@ -23,6 +23,7 @@ object ItemModule: ModuleBase() {
         Bukkit.getOnlinePlayers().forEach(this::givePhoneIfNeeded)
 
         registerCommand("givecustomitem" ,GiveCustomItemCommand())
+        registerHandler(ItemHandler())
     }
 
     fun getItem(key: String): ItemStack {
