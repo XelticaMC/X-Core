@@ -1,9 +1,13 @@
 package work.xeltica.craft.core.modules.meta
 
+import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.configuration.file.YamlConfiguration
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.utils.DiscordService
 import java.io.IOException
 
 object MetaModule: ModuleBase() {
@@ -19,6 +23,21 @@ object MetaModule: ModuleBase() {
         meta = Config("meta")
         currentVersion = XCorePlugin.instance.description.version
         checkUpdate()
+
+        if (isUpdated) {
+            val prev = previousVersion ?: "unknown"
+            val current = currentVersion
+            val text = "${ChatColor.GREEN}X-Coreを${prev}から${current}へ更新しました。"
+            if (postToDiscord) {
+                DiscordService.getInstance().postChangelog(current, changeLog)
+            }
+            with(Bukkit.getServer()) {
+                sendMessage(Component.text(text))
+                changeLog.forEach {
+                    sendMessage(Component.text("・$it"))
+                }
+            }
+        }
     }
 
     private fun checkUpdate() {

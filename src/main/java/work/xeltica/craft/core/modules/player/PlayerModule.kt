@@ -10,12 +10,9 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.FireworkMeta
-import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.utils.Config
-import work.xeltica.craft.core.utils.Ticks
-import java.io.IOException
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -40,7 +37,7 @@ object PlayerModule: ModuleBase() {
 
     override fun onEnable() {
         config = Config("playerStores")
-        Bukkit.getScheduler().runTaskTimer(XCorePlugin.instance, this::save, 0, Ticks.from(10.0).toLong())
+        config.useAutoSave = true
 
         registerHandler(PlayerHandler())
     }
@@ -112,13 +109,5 @@ object PlayerModule: ModuleBase() {
 
     fun isOnline(uuid: UUID): Boolean {
         return Bukkit.getOnlinePlayers().any { it.uniqueId == uuid }
-    }
-
-    fun save() {
-        try {
-            config.save()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
     }
 }

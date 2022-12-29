@@ -1,6 +1,5 @@
 package work.xeltica.craft.core
 
-import net.kyori.adventure.text.Component
 import work.xeltica.craft.core.plugins.CitizenTimerCalculator
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
@@ -8,9 +7,9 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
+
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.commands.CommandRegistry
-
 import work.xeltica.craft.core.plugins.VaultPlugin
 import work.xeltica.craft.core.utils.Ticks
 import work.xeltica.craft.core.commands.*
@@ -54,18 +53,20 @@ class XCorePlugin : JavaPlugin() {
 
     override fun onEnable() {
         instance = this
+        DiscordService()
+        loadModules()
+
+        // TODO 廃止
         loadPlugins()
         loadStores()
         loadCommands()
         loadHandlers()
-        DiscordService()
-        loadModules()
-        DaylightObserver(this).runTaskTimer(this, 0, Ticks.from(1.0).toLong())
-        NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15.0).toLong())
+        DaylightObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         FlyingObserver().runTaskTimer(this, 0, 4)
+        NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15.0).toLong())
         RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
-        EbipowerObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
         TimeAttackObserver().runTaskTimer(this, 0, 5)
+
         val tick = Ticks.from(1.0)
         object : BukkitRunnable() {
             override fun run() {
@@ -83,39 +84,14 @@ class XCorePlugin : JavaPlugin() {
             }
         }.runTaskTimer(this, 0, tick.toLong())
 
-        calculator = CitizenTimerCalculator()
-        val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
-        if (luckPerms == null) {
-            logger.severe("X-CoreはLuckPermsを必要とします。X-Coreを終了します。")
-            Bukkit.getPluginManager().disablePlugin(this)
-            return
-        }
-        luckPerms.contextManager.registerCalculator(calculator)
-        val meta = MetaModule
-        if (meta.isUpdated) {
-            var prev = meta.previousVersion
-            if (prev == null) prev = "unknown"
-            val current = meta.currentVersion
-            val text = String.format("§aX-Coreを%s -> %sへ更新しました。", prev, current)
-            if (meta.postToDiscord) {
-                DiscordService.getInstance().postChangelog(current, meta.changeLog)
-            }
-            with(Bukkit.getServer()) {
-                sendMessage(Component.text(text))
-                for (log in meta.changeLog) {
-                    sendMessage(Component.text("・$log"))
-                }
-            }
-        }
         logger.info("Booted XelticaMC Core System.")
     }
 
     override fun onDisable() {
         CommandRegistry.clearMap()
         Gui.resetInstance()
-        unloadPlugins()
-        NbsModule.stopAll()
         unloadModules()
+        unloadPlugins()
         val provider = Bukkit.getServicesManager().getRegistration(
             LuckPerms::class.java
         )
@@ -127,6 +103,42 @@ class XCorePlugin : JavaPlugin() {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         return CommandRegistry.onCommand(sender, command, label, args)
+    }
+
+    private fun loadModules() {
+        // モジュールの有効化フック
+        modules.forEach {
+            try {
+                it.onEnable()
+                logger.info("Successfully enabled ${it.javaClass.name}!")
+            } catch (e: Exception) {
+                logger.severe("Failed to enable '${it.javaClass.name}'")
+                e.printStackTrace()
+            }
+        }
+        // モジュールの有効化後処理フック（各モジュールの連携とか）
+        modules.forEach {
+            try {
+                it.onPostEnable()
+                logger.info("Successfully post-enabled ${it.javaClass.name}!")
+            } catch (e: Exception) {
+                logger.severe("Failed to post-enable '${it.javaClass.name}'")
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun unloadModules() {
+        // モジュールの無効化フック
+        modules.forEach {
+            try {
+                it.onDisable()
+                logger.info("Successfully disabled ${it.javaClass.name}!")
+            } catch (e: Exception) {
+                logger.severe("Failed to disable '${it.javaClass.name}'")
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun loadStores() {
@@ -141,8 +153,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("signedit", CommandSignEdit())
         CommandRegistry.register("report", CommandReport())
         CommandRegistry.register("localtime", CommandLocalTime())
-        CommandRegistry.register("boat", CommandBoat())
-        CommandRegistry.register("cart", CommandCart())
         CommandRegistry.register("promo", CommandPromo())
         CommandRegistry.register("cat", CommandCat())
         CommandRegistry.register("xtp", CommandXtp())
@@ -185,42 +195,6 @@ class XCorePlugin : JavaPlugin() {
 
     private fun unloadPlugins() {
         VaultPlugin.getInstance().onDisable(this)
-    }
-
-    private fun loadModules() {
-        // モジュールの有効化フック
-        modules.forEach {
-            try {
-                it.onEnable()
-                logger.info("Successfully enabled ${it.javaClass.name}!")
-            } catch (e: Exception) {
-                logger.severe("Failed to enable '${it.javaClass.name}'")
-                e.printStackTrace()
-            }
-        }
-        // モジュールの有効化後処理フック（各モジュールの連携とか）
-        modules.forEach {
-            try {
-                it.onPostEnable()
-                logger.info("Successfully post-enabled ${it.javaClass.name}!")
-            } catch (e: Exception) {
-                logger.severe("Failed to post-enable '${it.javaClass.name}'")
-                e.printStackTrace()
-            }
-        }
-    }
-
-    private fun unloadModules() {
-        // モジュールの無効化フック
-        modules.forEach {
-            try {
-                it.onDisable()
-                logger.info("Successfully disabled ${it.javaClass.name}!")
-            } catch (e: Exception) {
-                logger.severe("Failed to disable '${it.javaClass.name}'")
-                e.printStackTrace()
-            }
-        }
     }
 
     private val modules: Array<ModuleBase> = arrayOf(

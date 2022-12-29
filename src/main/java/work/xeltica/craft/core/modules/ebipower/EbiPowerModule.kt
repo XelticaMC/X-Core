@@ -2,10 +2,12 @@ package work.xeltica.craft.core.modules.ebipower
 
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.plugins.VaultPlugin
 import work.xeltica.craft.core.utils.CastHelper
 import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.utils.Ticks
 import java.io.IOException
 
 object EbiPowerModule: ModuleBase() {
@@ -39,6 +41,7 @@ object EbiPowerModule: ModuleBase() {
         registerCommand("epshop", EpShopCommand())
         registerCommand("epeffectshop", EpEffectShopCommand())
         registerHandler(EbiPowerHandler())
+        EbipowerObserver().runTaskTimer(XCorePlugin.instance, 0, Ticks.from(1.0).toLong())
     }
 
     fun addItem(item: EbiPowerItem) {

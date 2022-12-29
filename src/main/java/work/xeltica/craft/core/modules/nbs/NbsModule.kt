@@ -33,6 +33,10 @@ object NbsModule: ModuleBase() {
         registerHandler(NbsHandler())
     }
 
+    override fun onDisable() {
+        stopAll()
+    }
+
     /**
      * 保存されたNBSモデルを元に再生を開始します。
      */
