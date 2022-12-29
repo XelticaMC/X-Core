@@ -12,14 +12,6 @@ import work.xeltica.craft.core.api.HookBase
 object DiscordHook : HookBase() {
     override val isEnabled = Bukkit.getPluginManager().getPlugin("DiscordSRV") != null
 
-    override fun onEnable() {
-
-    }
-
-    override fun onDisable() {
-
-    }
-
     /**
      * プレイヤーに紐づくDiscordユーザーを取得します。
      * @param player プレイヤー
