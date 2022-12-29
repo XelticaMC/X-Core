@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.xphone.apps
+package work.xeltica.craft.core.modules.eventSummer
 
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -8,7 +8,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.modules.player.PlayerModule
-import work.xeltica.craft.core.utils.EventUtility
+import work.xeltica.craft.core.xphone.apps.AppBase
 
 /**
  * 祭り用花火購入・入手アプリ
@@ -56,7 +56,7 @@ class FireworkApp : AppBase() {
     override fun isShiny(player: Player): Boolean = !isBonusReceived(player)
 
     override fun isVisible(player: Player): Boolean {
-        return EventUtility.isEventNow() && player.world.name == "main"
+        return EventSummerModule.isEventNow() && player.world.name == "main"
     }
 
     private fun isBonusReceived(player: Player) = PlayerModule

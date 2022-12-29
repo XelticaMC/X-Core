@@ -1,8 +1,13 @@
-package work.xeltica.craft.core.utils
+package work.xeltica.craft.core.modules.eventSummer
 
+import work.xeltica.craft.core.api.ModuleBase
 import java.time.LocalDate
 
-object EventUtility {
+object EventSummerModule : ModuleBase() {
+    override fun onEnable() {
+        registerHandler(EventSummerHandler())
+    }
+
     @JvmStatic
     fun isEventNow(): Boolean {
         val today = LocalDate.now()

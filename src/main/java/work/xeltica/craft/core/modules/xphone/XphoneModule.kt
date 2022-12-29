@@ -11,9 +11,12 @@ import work.xeltica.craft.core.gui.SoundPitch
 import work.xeltica.craft.core.modules.halloween.CandyStoreApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerDrugStoreApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerStoreApp
+import work.xeltica.craft.core.modules.eventSummer.FireworkApp
 import work.xeltica.craft.core.modules.hint.HintApp
 import work.xeltica.craft.core.modules.notification.NotificationApp
+import work.xeltica.craft.core.modules.omikuji.OmikujiApp
 import work.xeltica.craft.core.modules.payments.PaymentsApp
+import work.xeltica.craft.core.modules.promotion.PromoApp
 import work.xeltica.craft.core.modules.quickchat.QuickChatApp
 import work.xeltica.craft.core.modules.stamprally.StampRallyApp
 import work.xeltica.craft.core.modules.vehicle.BoatApp

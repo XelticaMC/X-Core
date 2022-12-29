@@ -2,6 +2,10 @@ package work.xeltica.craft.core.modules.player
 
 import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
+import net.luckperms.api.LuckPermsProvider
+import net.luckperms.api.event.node.NodeAddEvent
+import net.luckperms.api.model.user.User
+import net.luckperms.api.node.types.InheritanceNode
 import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -10,8 +14,11 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.FireworkMeta
+import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
+import work.xeltica.craft.core.modules.hint.Hint
+import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.utils.Config
 import java.util.*
 import kotlin.collections.HashMap
@@ -40,6 +47,7 @@ object PlayerModule: ModuleBase() {
         config.useAutoSave = true
 
         registerHandler(PlayerHandler())
+        LuckPermsProvider.get().eventBus.subscribe(XCorePlugin.instance, NodeAddEvent::class.java, this::onPlayerGotCitizen)
     }
 
     fun open(player: OfflinePlayer): PlayerRecord {
@@ -105,5 +113,22 @@ object PlayerModule: ModuleBase() {
 
     fun isOnline(uuid: UUID): Boolean {
         return Bukkit.getOnlinePlayers().any { it.uniqueId == uuid }
+    }
+
+    private fun onPlayerGotCitizen(e: NodeAddEvent) {
+        if (!e.isUser) return
+        val target = e.target as User
+        val node = e.node
+
+        val task = object: Runnable {
+            override fun run() {
+                val player = Bukkit.getPlayer(target.uniqueId) ?: return
+                if (node is InheritanceNode && "citizen" == node.groupName) {
+                    HintModule.achieve(player, Hint.BE_CITIZEN)
+                }
+            }
+        }
+
+        Bukkit.getScheduler().runTask(XCorePlugin.instance, task)
     }
 }

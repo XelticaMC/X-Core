@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.world.WorldModule
-import work.xeltica.craft.core.utils.EventUtility
+import work.xeltica.craft.core.modules.eventSummer.EventSummerModule
 import work.xeltica.craft.core.xphone.apps.AppBase
 import java.util.function.Consumer
 
@@ -50,6 +50,7 @@ class StampRallyApp: AppBase() {
     }
 
     override fun isVisible(player: Player): Boolean {
-        return EventUtility.isEventNow() || player.isOp
+        // TODO: EventSummerModuleを判定に使わない
+        return EventSummerModule.isEventNow() || player.isOp
     }
 }
