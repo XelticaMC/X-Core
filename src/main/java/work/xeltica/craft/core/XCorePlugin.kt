@@ -24,7 +24,6 @@ import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.clover.CloverModule
 import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
-import work.xeltica.craft.core.modules.ebipower.EbipowerObserver
 import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
 import work.xeltica.craft.core.modules.halloween.HalloweenModule
@@ -70,7 +69,6 @@ class XCorePlugin : JavaPlugin() {
         val tick = Ticks.from(1.0)
         object : BukkitRunnable() {
             override fun run() {
-                VehicleModule.tick(tick)
                 Bukkit.getOnlinePlayers().forEach {
                     val record = PlayerModule.open(it)
                     var time = record.getInt(PlayerDataKey.NEWCOMER_TIME, 0)

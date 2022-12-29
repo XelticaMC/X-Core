@@ -1,8 +1,9 @@
-package work.xeltica.craft.core.xphone.apps
+package work.xeltica.craft.core.modules.vehicle
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.modules.world.WorldModule
+import work.xeltica.craft.core.xphone.apps.AppBase
 
 /**
  * ボートを射出するアプリ。
@@ -14,7 +15,7 @@ class BoatApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.OAK_BOAT
 
     override fun onLaunch(player: Player) {
-        player.performCommand("boat")
+        VehicleModule.trySummonBoat(player)
     }
 
     override fun isVisible(player: Player) = WorldModule.canSummonVehicles(player.world)
