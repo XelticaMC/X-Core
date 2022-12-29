@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.plugins;
+package work.xeltica.craft.core.modules.promotion;
 
 import org.bukkit.entity.Player;
 
@@ -24,7 +24,7 @@ public class CitizenTimerCalculator implements ContextCalculator<Player> {
     }
 
     @Override
-    public ContextSet estimatePotentialContexts() {
+    public @NotNull ContextSet estimatePotentialContexts() {
         final ImmutableContextSet.Builder builder = ImmutableContextSet.builder();
         builder.add(KEY, "false");
         builder.add(KEY, "true");

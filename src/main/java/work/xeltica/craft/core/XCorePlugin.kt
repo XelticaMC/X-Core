@@ -1,7 +1,5 @@
 package work.xeltica.craft.core
 
-import work.xeltica.craft.core.plugins.CitizenTimerCalculator
-import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -40,6 +38,8 @@ import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.modules.omikuji.OmikujiModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.modules.player.PlayerModule
+import work.xeltica.craft.core.modules.promotion.CommandPromo
+import work.xeltica.craft.core.modules.promotion.PromotionModule
 import work.xeltica.craft.core.modules.vehicle.VehicleModule
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.utils.DiscordService
@@ -88,15 +88,8 @@ class XCorePlugin : JavaPlugin() {
     override fun onDisable() {
         CommandRegistry.clearMap()
         Gui.resetInstance()
-        unloadModules()
         unloadPlugins()
-        val provider = Bukkit.getServicesManager().getRegistration(
-            LuckPerms::class.java
-        )
-        if (provider != null) {
-            val luckPerms = provider.provider
-            luckPerms.contextManager.unregisterCalculator(calculator)
-        }
+        unloadModules()
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
@@ -167,8 +160,6 @@ class XCorePlugin : JavaPlugin() {
 
     private fun loadHandlers() {
         val pm = server.pluginManager
-        pm.registerEvents(WakabaHandler(), this)
-        logger.info("Loaded WakabaHandler")
         pm.registerEvents(WorldHandler(), this)
         logger.info("Loaded WorldHandler")
         pm.registerEvents(NightmareHandler(), this)
@@ -220,9 +211,8 @@ class XCorePlugin : JavaPlugin() {
         VehicleModule,
         WorldModule,
         XphoneModule,
+        PromotionModule,
     )
-
-    private lateinit var calculator: CitizenTimerCalculator
 
     companion object {
         @JvmStatic

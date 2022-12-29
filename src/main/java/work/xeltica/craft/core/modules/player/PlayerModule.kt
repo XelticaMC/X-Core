@@ -79,10 +79,6 @@ object PlayerModule: ModuleBase() {
         return item
     }
 
-    fun isCitizen(player: Player): Boolean {
-        return player.hasPermission("otanoshimi.citizen")
-    }
-
     fun setLiveMode(player: Player, isLive: Boolean) {
         if (isLive == isLiveMode(player)) return
         if (isLive) {

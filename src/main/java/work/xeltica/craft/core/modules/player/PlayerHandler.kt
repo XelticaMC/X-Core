@@ -30,6 +30,7 @@ import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.hub.HubType
 import work.xeltica.craft.core.modules.item.ItemModule
+import work.xeltica.craft.core.modules.promotion.PromotionModule
 import work.xeltica.craft.core.utils.BedrockDisclaimerUtil
 import java.util.*
 
@@ -62,7 +63,7 @@ class PlayerHandler: Listener {
 
         HintModule.achieve(p, Hint.WELCOME)
 
-        if (playerModule.isCitizen(p)) {
+        if (PromotionModule.isCitizen(p)) {
             HintModule.achieve(p, Hint.BE_CITIZEN)
         }
 
@@ -75,7 +76,7 @@ class PlayerHandler: Listener {
             Component.text("§f詳しくは §b§nhttps://craft.xeltica.work§fを見てね！")
         ))
 
-        if (playerModule.isCitizen(p)) return
+        if (PromotionModule.isCitizen(p)) return
         if (!record.has(PlayerDataKey.NEWCOMER_TIME)) {
             p.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！")
             p.sendMessage("詳しくは §b/promo§rコマンドを実行してください。")
