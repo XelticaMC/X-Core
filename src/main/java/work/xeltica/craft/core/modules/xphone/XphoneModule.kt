@@ -7,7 +7,7 @@ import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.models.SoundPitch
+import work.xeltica.craft.core.gui.SoundPitch
 import work.xeltica.craft.core.modules.halloween.CandyStoreApp
 import work.xeltica.craft.core.modules.ebipower.EbipowerDrugStoreApp
 import work.xeltica.craft.core.modules.ebipower.EbipowerStoreApp

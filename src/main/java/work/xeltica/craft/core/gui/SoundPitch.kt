@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.models
+package work.xeltica.craft.core.gui
 
 enum class SoundPitch(val pitch: Float) {
     F_0(0.5f),

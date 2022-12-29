@@ -6,7 +6,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.hint.Hint
-import work.xeltica.craft.core.models.SoundPitch
+import work.xeltica.craft.core.gui.SoundPitch
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.xphone.apps.AppBase
 
