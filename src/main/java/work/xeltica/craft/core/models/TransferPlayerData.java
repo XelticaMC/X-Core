@@ -9,7 +9,6 @@ import work.xeltica.craft.core.modules.hint.HintModule;
 import work.xeltica.craft.core.modules.player.PlayerDataKey;
 import work.xeltica.craft.core.modules.player.PlayerModule;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -103,7 +102,6 @@ public class TransferPlayerData {
             toPlayerRecord.set(key,fromPlayerRecord.get(key));
             fromPlayerRecord.delete(key);
         }
-        playerModule.save();
     }
 
     private void transferClover() {

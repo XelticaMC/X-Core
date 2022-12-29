@@ -14,8 +14,6 @@ import work.xeltica.craft.core.modules.player.PlayerDataKey;
 import work.xeltica.craft.core.modules.player.PlayerModule;
 import work.xeltica.craft.core.utils.Ticks;
 
-import java.io.IOException;
-
 public class LoginBonusHandler implements Listener {
     @EventHandler
     public void onLoginBonus(RealTimeNewDayEvent e) {
@@ -28,13 +26,11 @@ public class LoginBonusHandler implements Listener {
 
         // いる人にログボ
         Bukkit.getOnlinePlayers().forEach(this::giveLoginBonus);
-        playerModule.save();
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         giveLoginBonus(e.getPlayer());
-        PlayerModule.INSTANCE.save();
     }
 
     private void giveLoginBonus(Player p) {

@@ -119,7 +119,6 @@ object CounterModule: ModuleBase() {
                     PlayerDataKey.PLAYED_COUNTER_COUNT
                 )
             }
-        playerModule.save()
     }
 
     /**

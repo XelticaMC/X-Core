@@ -85,7 +85,6 @@ class CounterHandler : Listener {
                 record.delete(PlayerDataKey.COUNTER_REGISTER_NAME)
                 record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION)
                 record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY)
-                pmodule.save()
             }
         } catch (ex: IOException) {
             ex.printStackTrace()

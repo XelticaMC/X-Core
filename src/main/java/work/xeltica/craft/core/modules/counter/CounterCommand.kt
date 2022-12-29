@@ -33,7 +33,6 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     record[PlayerDataKey.COUNTER_REGISTER_MODE] = true
                     record[PlayerDataKey.COUNTER_REGISTER_NAME] = name
                     record[PlayerDataKey.COUNTER_REGISTER_IS_DAILY] = isDaily
-                    pmodule.save()
                     player.sendMessage("カウンター登録モードは有効。カウンターの始点にする感圧板をクリックかタップしてください。")
                     player.sendMessage("キャンセルする際には、 /counter cancel を実行します。")
                 }
@@ -42,7 +41,6 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     record.delete(PlayerDataKey.COUNTER_REGISTER_NAME)
                     record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY)
                     record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION)
-                    pmodule.save()
                     player.sendMessage("カウンター登録モードを無効化し、キャンセルしました。")
                 }
                 "unregister" -> {
