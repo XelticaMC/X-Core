@@ -1,10 +1,17 @@
 package work.xeltica.craft.core.modules.promotion
 
 import net.luckperms.api.LuckPerms
+import net.luckperms.api.LuckPermsProvider
+import net.luckperms.api.event.node.NodeAddEvent
+import net.luckperms.api.model.user.User
+import net.luckperms.api.node.types.InheritanceNode
 import net.luckperms.api.query.QueryOptions
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
+import work.xeltica.craft.core.modules.hint.Hint
+import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.utils.Ticks
@@ -20,6 +27,7 @@ object PromotionModule : ModuleBase() {
         calculator = CitizenTimerCalculator()
         luckPerms.contextManager.registerCalculator(calculator)
         registerHandler(WakabaLimitHandler())
+        LuckPermsProvider.get().eventBus.subscribe(XCorePlugin.instance, NodeAddEvent::class.java, this::onPlayerGotCitizen)
     }
 
     override fun onDisable() {
@@ -79,5 +87,22 @@ object PromotionModule : ModuleBase() {
             "${elapsedTimeMinutes}分${elapsedTimeSeconds}秒" + elapsedTimeSeconds + "秒"
         else
             "${elapsedTimeSeconds}秒"
+    }
+
+    private fun onPlayerGotCitizen(e: NodeAddEvent) {
+        if (!e.isUser) return
+        val target = e.target as User
+        val node = e.node
+
+        val task = object: Runnable {
+            override fun run() {
+                val player = Bukkit.getPlayer(target.uniqueId) ?: return
+                if (node is InheritanceNode && "citizen" == node.groupName) {
+                    HintModule.achieve(player, Hint.BE_CITIZEN)
+                }
+            }
+        }
+
+        Bukkit.getScheduler().runTask(XCorePlugin.instance, task)
     }
 }
