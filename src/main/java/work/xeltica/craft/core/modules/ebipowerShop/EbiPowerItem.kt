@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.ebipower
+package work.xeltica.craft.core.modules.ebipowerShop
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import org.bukkit.inventory.ItemStack

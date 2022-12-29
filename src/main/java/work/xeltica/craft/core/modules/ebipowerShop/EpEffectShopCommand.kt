@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.ebipower
+package work.xeltica.craft.core.modules.ebipowerShop
 
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -23,7 +23,6 @@ import java.util.function.Consumer
 class EpEffectShopCommand: CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         val subCommand = if (args.isNotEmpty()) args[0] else null
-        val module = EbiPowerModule
 
         if (subCommand == null || !player.hasPermission("otanoshimi.command.epeffectshop." + subCommand.lowercase())) {
             openShop(player)
@@ -43,11 +42,11 @@ class EpEffectShopCommand: CommandPlayerOnlyBase() {
                 val power = args[2].toInt()
                 val time = args[3].toInt()
                 val cost = args[4].toInt()
-                module.addEffectItem(EbiPowerEffect(type, power, time, cost))
+                EbiPowerShopModule.addEffectItem(EbiPowerEffect(type, power, time, cost))
                 player.sendMessage("追加しました。")
             }
             "delete" -> openShopMenu(player, "削除するアイテムを選んでください") { item ->
-                module.deleteEffectItem(item)
+                EbiPowerShopModule.deleteEffectItem(item)
                 player.sendMessage("削除しました。")
             }
         }
@@ -57,12 +56,12 @@ class EpEffectShopCommand: CommandPlayerOnlyBase() {
     private fun openShop(player: Player) {
         openShopMenu(player, "購入するステータス効果を選んでください") { item ->
 
-            when (EbiPowerModule.tryBuyEffectItem(player, item)) {
-                EbiPowerModule.Result.NO_ENOUGH_POWER -> {
+            when (EbiPowerShopModule.tryBuyEffectItem(player, item)) {
+                EbiPowerShopModule.Result.NO_ENOUGH_POWER -> {
                     player.sendMessage("エビパワー不足のため、購入に失敗しました。")
                     player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 0.5f)
                 }
-                EbiPowerModule.Result.SUCCESS -> {
+                EbiPowerShopModule.Result.SUCCESS -> {
                     player.sendMessage(
                         String.format(
                             "§b%s%s§rを§6%d秒間§r付与しました。",
@@ -85,8 +84,7 @@ class EpEffectShopCommand: CommandPlayerOnlyBase() {
 
     private fun openShopMenu(player: Player, title: String, onChosen: Consumer<EbiPowerEffect>?) {
         val ui = Gui.getInstance()
-        val module = EbiPowerModule
-        val items = module.effectShopItems.map { m ->
+        val items = EbiPowerShopModule.effectShopItems.map { m ->
             val stack = ItemStack(Material.POTION)
             stack.editMeta { meta ->
                 if (meta is PotionMeta) {

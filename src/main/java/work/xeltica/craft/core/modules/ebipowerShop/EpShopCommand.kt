@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.ebipower
+package work.xeltica.craft.core.modules.ebipowerShop
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
@@ -21,7 +21,6 @@ import java.util.function.Consumer
 class EpShopCommand: CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         val subCommand = if (args.isNotEmpty()) args[0] else null
-        val module = EbiPowerModule
 
         if (subCommand == null || !player.hasPermission("otanoshimi.command.epshop." + subCommand.lowercase())) {
             openShop(player)
@@ -40,12 +39,12 @@ class EpShopCommand: CommandPlayerOnlyBase() {
                     player.sendMessage("アイテムを手に持っていないため追加できません。")
                     return true
                 }
-                module.addItem(EbiPowerItem(handheld, cost))
+                EbiPowerShopModule.addItem(EbiPowerItem(handheld, cost))
                 player.sendMessage("追加しました")
             }
             "delete" -> {
                 openShopMenu(player, "削除するアイテムを選んでください") { item ->
-                    module.deleteItem(item)
+                    EbiPowerShopModule.deleteItem(item)
                     player.sendMessage("削除しました")
                 }
             }
@@ -56,16 +55,16 @@ class EpShopCommand: CommandPlayerOnlyBase() {
     private fun openShop(player: Player) {
         openShopMenu(player, "購入するアイテムを選んでください") { item ->
 
-            when (EbiPowerModule.tryBuyItem(player, item)) {
-                EbiPowerModule.Result.NO_ENOUGH_INVENTORY -> {
+            when (EbiPowerShopModule.tryBuyItem(player, item)) {
+                EbiPowerShopModule.Result.NO_ENOUGH_INVENTORY -> {
                     player.sendMessage("インベントリがいっぱいなため、購入に失敗しました。")
                     player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 0.5f)
                 }
-                EbiPowerModule.Result.NO_ENOUGH_POWER -> {
+                EbiPowerShopModule.Result.NO_ENOUGH_POWER -> {
                     player.sendMessage("エビパワー不足のため、購入に失敗しました。")
                     player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 0.5f)
                 }
-                EbiPowerModule.Result.SUCCESS -> {
+                EbiPowerShopModule.Result.SUCCESS -> {
                     player.sendMessage(Component.text("§a" + getItemName(item.item) + "§rを購入しました！"))
                     player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
                     HintModule.achieve(player, Hint.EPSHOP)
@@ -79,8 +78,7 @@ class EpShopCommand: CommandPlayerOnlyBase() {
 
     private fun openShopMenu(player: Player, title: String, onChosen: Consumer<EbiPowerItem>?) {
         val ui = Gui.getInstance()
-        val module = EbiPowerModule
-        val items = module.shopItems.map { m ->
+        val items = EbiPowerShopModule.shopItems.map { m ->
             val item = m.item
             val name = getItemName(item)
             val displayName = name + "x" + item.amount + "(" + m.cost + "EP)"
