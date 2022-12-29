@@ -4,12 +4,14 @@ import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
+import work.xeltica.craft.core.api.HookBase
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.commands.*
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.handlers.*
+import work.xeltica.craft.core.hooks.CitizensHook
 import work.xeltica.craft.core.modules.bedrock.BedrockModule
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.clover.CloverModule
@@ -54,6 +56,7 @@ class XCorePlugin : JavaPlugin() {
         PlayerStore.onEnable()
         Gui.onEnable()
         DiscordService()
+        loadHooks()
         loadModules()
 
         // TODO 廃止
@@ -69,11 +72,38 @@ class XCorePlugin : JavaPlugin() {
     override fun onDisable() {
         CommandRegistry.clearMap()
         unloadPlugins()
+        unloadHooks()
         unloadModules()
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
         return CommandRegistry.onCommand(sender, command, label, args)
+    }
+
+    private fun loadHooks() {
+        // 連携フックの有効化
+        hooks.forEach {
+            try {
+                it.onEnable()
+                logger.info("Successfully enabled ${it.javaClass.name}!")
+            } catch (e: Exception) {
+                logger.severe("Failed to enable '${it.javaClass.name}'")
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun unloadHooks() {
+        // 連携フックの有効化
+        hooks.forEach {
+            try {
+                it.onDisable()
+                logger.info("Successfully disabled ${it.javaClass.name}!")
+            } catch (e: Exception) {
+                logger.severe("Failed to disable '${it.javaClass.name}'")
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun loadModules() {
@@ -167,6 +197,10 @@ class XCorePlugin : JavaPlugin() {
     private fun unloadPlugins() {
         VaultPlugin.getInstance().onDisable(this)
     }
+
+    private val hooks: Array<HookBase> = arrayOf(
+        CitizensHook,
+    )
 
     private val modules: Array<ModuleBase> = arrayOf(
         BedrockModule,
