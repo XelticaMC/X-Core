@@ -10,10 +10,10 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
+import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.utils.Ticks
 
 object PromotionModule : ModuleBase() {
@@ -44,7 +44,7 @@ object PromotionModule : ModuleBase() {
         val builder = StringBuilder()
         val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider ?: throw Exception()
         val lpUser = luckPerms.getPlayerAdapter(Player::class.java).getUser(player)
-        val record = PlayerModule.open(player)
+        val record = PlayerStore.open(player)
         val isManualCitizen = lpUser.getInheritedGroups(QueryOptions.defaultContextualOptions()).any { it.name == "citizen" }
         if (!isCitizen(player)) {
             builder.appendLine("本サーバーでは、プレイヤーさんを§aわかば§r、§b市民§rという大きく2つのロールに分類しています。")

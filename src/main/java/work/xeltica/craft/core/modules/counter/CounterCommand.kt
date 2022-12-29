@@ -6,9 +6,9 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
+import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.modules.ranking.Ranking
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import java.io.IOException
@@ -19,9 +19,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) return false
         val subCommand = args[0].lowercase(Locale.getDefault())
-        val module = CounterModule
-        val pmodule = PlayerModule
-        val record = pmodule.open(player)
+        val record = PlayerStore.open(player)
         val ui = getInstance()
 
         try {
@@ -46,8 +44,8 @@ class CounterCommand: CommandPlayerOnlyBase() {
                 "unregister" -> {
                     if (args.size != 2) return ui.error(player, "/counter unregister <name>")
                     val name = args[1]
-                    val data = module[name] ?: return ui.error(player, name + "という名前のカウンターは存在しません。")
-                    module.remove(data)
+                    val data = CounterModule[name] ?: return ui.error(player, name + "という名前のカウンターは存在しません。")
+                    CounterModule.remove(data)
                     player.sendMessage(name + "を登録解除しました。")
                 }
                 "bind" -> {
@@ -58,7 +56,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     val name = args[1].lowercase(Locale.getDefault())
                     val playerType = args[2].lowercase(Locale.getDefault())
                     val rankingName = args[3]
-                    val data = module[name] ?: return ui.error(player, name + "という名前のカウンターは存在しません。")
+                    val data = CounterModule[name] ?: return ui.error(player, name + "という名前のカウンターは存在しません。")
                     when (playerType) {
                         "all" -> {
                             data.javaRankingId = rankingName
@@ -69,14 +67,14 @@ class CounterCommand: CommandPlayerOnlyBase() {
                         "uwp" -> data.uwpRankingId = rankingName
                         "phone" -> data.phoneRankingId = rankingName
                     }
-                    module.update(data)
+                    CounterModule.update(data)
                     player.sendMessage("カウンターをランキングに紐付けました。")
                 }
                 "unbind" -> {
                     if (args.size != 3) return ui.error(player, "/counter unbind <name> <all/java/bedrock/uwp/phone>")
                     val name = args[1].lowercase(Locale.getDefault())
                     val playerType = args[2].lowercase(Locale.getDefault())
-                    val data = module[name] ?: return ui.error(player, name + "という名前のカウンターは存在しません。")
+                    val data = CounterModule[name] ?: return ui.error(player, name + "という名前のカウンターは存在しません。")
                     when (playerType) {
                         "all" -> {
                             data.javaRankingId = null
@@ -87,13 +85,13 @@ class CounterCommand: CommandPlayerOnlyBase() {
                         "uwp" -> data.uwpRankingId = null
                         "phone" -> data.phoneRankingId = null
                     }
-                    module.update(data)
+                    CounterModule.update(data)
                     player.sendMessage("カウンターをランキングから解除ました。")
                 }
                 "info" -> {
                     if (args.size != 2) return ui.error(player, "/counter info <name>")
                     val name = args[1]
-                    val data = module[name] ?: return true
+                    val data = CounterModule[name] ?: return true
                     player.sendMessage("名前: $name")
                     player.sendMessage("始点: " + data.location1.toString())
                     player.sendMessage("終点: " + data.location2.toString())
@@ -106,17 +104,17 @@ class CounterCommand: CommandPlayerOnlyBase() {
                 }
                 "resetdaily" -> {
                     if (args.size != 2) {
-                        module.resetAllPlayersPlayedLog()
+                        CounterModule.resetAllPlayersPlayedLog()
                         player.sendMessage("全プレイヤーのプレイ済み履歴を削除しました。")
                     } else {
                         val name = args[1]
                         val p = Bukkit.getPlayerUniqueId(name)
-                        pmodule.open(p).delete(PlayerDataKey.PLAYED_COUNTER_COUNT)
+                        PlayerStore.open(p).delete(PlayerDataKey.PLAYED_COUNTER_COUNT)
                         player.sendMessage("そのプレイヤーのプレイ済み履歴を削除しました。")
                     }
                 }
                 "list" -> {
-                    val list = module.getCounters()
+                    val list = CounterModule.getCounters()
                     if (list.isEmpty()) {
                         ui.error(player, "カウンターはまだ作成されていません。")
                     } else {
@@ -154,8 +152,8 @@ class CounterCommand: CommandPlayerOnlyBase() {
         } else if (args.size == 2) {
             when(subcommand) {
                 "unregister", "info", "bind", "unbind" -> {
-                    val module = CounterModule
-                    return module.getCounters().stream().map(CounterData::name).toList()
+                    val CounterModule = CounterModule
+                    return CounterModule.getCounters().stream().map(CounterData::name).toList()
                 }
             }
         } else if (args.size == 3) {

@@ -17,12 +17,12 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.events.EntityMobBallHitEvent
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.utils.CitizensApiProvider.Companion.isCitizensNpc
 import java.util.*
 
@@ -107,7 +107,7 @@ class MobBallHandler : Listener {
                         showSuccessParticle(eggEntity.location)
                         eggEntity.setCanPlayerPickup(true)
                         HintModule.achieve(player, Hint.SUCCEEDED_TO_CATCH_MOB)
-                        val dex = PlayerModule.open(player.uniqueId).getStringList(PlayerDataKey.MOB_DEX)
+                        val dex = PlayerStore.open(player.uniqueId).getStringList(PlayerDataKey.MOB_DEX)
                         val type = target.type.toString()
                         if (!dex.contains(type)) {
                             dex.add(target.type.toString())

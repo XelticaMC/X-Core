@@ -19,8 +19,8 @@ import java.io.IOException
 import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import org.geysermc.floodgate.api.FloodgateApi
 import org.geysermc.floodgate.util.DeviceOs
+import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.utils.DiscordService
 import work.xeltica.craft.core.utils.Time
@@ -41,13 +41,10 @@ class CounterHandler : Listener {
 
         // ブロッククリックでなければ無視
         if (!isBlockClick) return
-        val pmodule = PlayerModule
-
-        val store = CounterModule
         val ui = Gui.getInstance()
         val player = e.player
         val block = e.clickedBlock
-        val record = pmodule.open(player)
+        val record = PlayerStore.open(player)
         val isCounterRegisterMode = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_MODE)
         val isPlate = Tag.PRESSURE_PLATES.isTagged(block!!.type)
 
@@ -67,7 +64,7 @@ class CounterHandler : Listener {
                 player.sendMessage("始点を登録しました。続いて終点を登録します。")
                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
             } else {
-                store.add(
+                CounterModule.add(
                     CounterData(
                         name.toString(),
                         loc,
@@ -99,8 +96,6 @@ class CounterHandler : Listener {
     fun onUsePlate(e: PlayerInteractEvent) {
         // 踏んだわけじゃないのなら無視
         if (e.action != Action.PHYSICAL) return
-        val playerModule = PlayerModule
-        val counterModule = CounterModule
         val ui = Gui.getInstance()
         val player = e.player
         val block = e.clickedBlock ?: return
@@ -109,12 +104,12 @@ class CounterHandler : Listener {
 
         // 感圧板でなければ無視
         if (!Tag.PRESSURE_PLATES.isTagged(block.type)) return
-        val first = counterModule.getByLocation1(block.location)
-        val last = counterModule.getByLocation2(block.location)
-        val record = playerModule.open(player)
+        val first = CounterModule.getByLocation1(block.location)
+        val last = CounterModule.getByLocation2(block.location)
+        val record = PlayerStore.open(player)
         val counterId = record.getString(PlayerDataKey.PLAYING_COUNTER_ID)
         val startedAt = record.getString(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, "0")!!.toLong()
-        val counter = if (counterId == null) null else counterModule[counterId]
+        val counter = if (counterId == null) null else CounterModule[counterId]
         val isUsingCounter = counter != null
 
         // カウンター開始する

@@ -4,8 +4,8 @@ import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.modules.player.PlayerModule
-import work.xeltica.craft.core.modules.player.PlayerRecord
+import work.xeltica.craft.core.api.playerStore.PlayerRecord
+import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.utils.Config
 import java.io.IOException
 
@@ -112,8 +112,7 @@ object CounterModule: ModuleBase() {
      */
     @Throws(IOException::class)
     fun resetAllPlayersPlayedLog() {
-        val playerModule = PlayerModule
-        playerModule.openAll()
+        PlayerStore.openAll()
             .forEach{ record: PlayerRecord ->
                 record.delete(
                     PlayerDataKey.PLAYED_COUNTER_COUNT

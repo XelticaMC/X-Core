@@ -4,9 +4,9 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
+import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.modules.player.PlayerModule.open
 
 /**
  * 統合版プレイヤー向けに免責事項を表示するためのメソッドを持ちます。
@@ -33,7 +33,7 @@ object BedrockDisclaimerUtil {
 
     fun showDisclaimer(p: Player) {
         getInstance().openDialog(p, BEDROCK_DISCLAIMER_TITLE, BEDROCK_DISCLAIMER_MESSAGE, {
-            val record = open(p)
+            val record = PlayerStore.open(p)
             record[PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER] = true
         }, "わかりました")
     }

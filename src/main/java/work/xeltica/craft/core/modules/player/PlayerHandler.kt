@@ -19,6 +19,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.*
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
@@ -39,11 +40,11 @@ class PlayerHandler: Listener {
         e.joinMessage(Component.text("§a$name§bさんがやってきました"))
         if (!p.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a$name§bが§6§l初参加§rです"))
-            PlayerModule.open(p)[PlayerDataKey.NEWCOMER_TIME] = DEFAULT_NEW_COMER_TIME
+            PlayerStore.open(p)[PlayerDataKey.NEWCOMER_TIME] = DEFAULT_NEW_COMER_TIME
             HubModule.teleport(p, HubType.NewComer, true)
         }
 
-        val record = PlayerModule.open(p)
+        val record = PlayerStore.open(p)
         if (!record.getBoolean(PlayerDataKey.GIVEN_PHONE)) {
             p.inventory.addItem(ItemModule.getItem(ItemModule.ITEM_NAME_XPHONE))
             record[PlayerDataKey.GIVEN_PHONE] = true
@@ -79,7 +80,7 @@ class PlayerHandler: Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerChatForCat(e: ChatEvent) {
-        if (PlayerModule.open(e.player).getBoolean(PlayerDataKey.CAT_MODE)) {
+        if (PlayerStore.open(e.player).getBoolean(PlayerDataKey.CAT_MODE)) {
             val text = e.message() as TextComponent
             e.message(Component.text(nyaize(text.content())))
         }
@@ -89,7 +90,7 @@ class PlayerHandler: Listener {
     fun onPlayerChatForCat(e: LunaChatBukkitChannelMessageEvent) {
         val member = e.member
         if (member !is ChannelMemberPlayer) return
-        if (PlayerModule.open(member.player).getBoolean(PlayerDataKey.CAT_MODE))
+        if (PlayerStore.open(member.player).getBoolean(PlayerDataKey.CAT_MODE))
             e.message = nyaize(e.message)
     }
 
@@ -156,12 +157,10 @@ class PlayerHandler: Listener {
     @EventHandler
     fun onPlayerTryBed(e: PlayerInteractEvent) {
         val p = e.player
-        val isSneaking = p.isSneaking
         if (e.action == Action.RIGHT_CLICK_BLOCK) {
             val worldName = p.world.name
             // TODO WorldStoreで管理する
-            val isBedDisabledWorld =
-                worldName == "hub2" || worldName == "sandbox" || worldName == "wildareab" || worldName == "event" || worldName == "event2"
+            val isBedDisabledWorld = worldName == "hub2" || worldName == "sandbox" || worldName == "wildareab" || worldName == "event" || worldName == "event2"
             if (isBedDisabledWorld && Tag.BEDS.isTagged(e.clickedBlock?.type!!)) {
                 getInstance().error(p, "ベッドはこの世界では使えない…")
                 e.isCancelled = true

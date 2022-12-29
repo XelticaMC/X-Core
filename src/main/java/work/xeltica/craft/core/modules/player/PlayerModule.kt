@@ -6,18 +6,15 @@ import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
 import org.bukkit.Material
-import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.FireworkMeta
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
-import work.xeltica.craft.core.utils.Config
 import java.util.*
 import kotlin.collections.HashMap
 
 object PlayerModule: ModuleBase() {
-    private lateinit var config: Config
     val liveBarMap = HashMap<UUID, BossBar>()
 
     private val colors = listOf(
@@ -36,30 +33,8 @@ object PlayerModule: ModuleBase() {
     )
 
     override fun onEnable() {
-        config = Config("playerStores")
-        config.useAutoSave = true
 
         registerHandler(PlayerHandler())
-    }
-
-    fun open(player: OfflinePlayer): PlayerRecord {
-        return open(player.uniqueId)
-    }
-
-    fun open(uuid: UUID?): PlayerRecord {
-        if (uuid == null) throw IllegalArgumentException()
-        var section = config.conf.getConfigurationSection(uuid.toString())
-        if (section == null) {
-            section = config.conf.createSection(uuid.toString())
-        }
-        return PlayerRecord(config, section, uuid)
-    }
-
-    fun openAll(): List<PlayerRecord> {
-        return config.conf
-            .getKeys(false)
-            .map { open(UUID.fromString(it)) }
-            .toList()
     }
 
     fun getRandomFireworkByUUID(uuid: UUID, amount: Int): ItemStack {

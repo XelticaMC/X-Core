@@ -8,6 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable
 
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.commands.CommandRegistry
+import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.plugins.VaultPlugin
 import work.xeltica.craft.core.utils.Ticks
 import work.xeltica.craft.core.commands.*
@@ -70,7 +71,7 @@ class XCorePlugin : JavaPlugin() {
         object : BukkitRunnable() {
             override fun run() {
                 Bukkit.getOnlinePlayers().forEach {
-                    val record = PlayerModule.open(it)
+                    val record = PlayerStore.open(it)
                     var time = record.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
                     time -= tick
                     if (time <= 0) {

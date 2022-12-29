@@ -21,8 +21,8 @@ import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.mobep.MobEPModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.modules.player.PlayerModule
-import work.xeltica.craft.core.modules.player.PlayerRecord
+import work.xeltica.craft.core.api.playerStore.PlayerRecord
+import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.utils.CitizensApiProvider.Companion.isCitizensNpc
 import java.util.*
 import java.util.function.Consumer
@@ -150,8 +150,7 @@ class EbiPowerHandler: Listener {
     @EventHandler
     fun onPlayerLoggedIn(e: PlayerJoinEvent) {
         val now = Date()
-        val playerModule = PlayerModule
-        val record = playerModule.open(e.player)
+        val record = PlayerStore.open(e.player)
         val prev = Date(record.getLong(PlayerDataKey.LAST_JOINED, now.time))
         if (prev.year != now.year && prev.month != now.month && prev.date != now.date) {
             EbiPowerModule.tryGive(e.player, LOGIN_BONUS_POWER)
@@ -193,7 +192,7 @@ class EbiPowerHandler: Listener {
     fun onMineBlocks(e: BlockBreakEvent) {
         if (!breakBonusList.contains(e.block.type)) return
         if (playerIsInBlacklisted(e.player)) return
-        val record = PlayerModule.open(e.player)
+        val record = PlayerStore.open(e.player)
         val brokenBlocksCount = record.getInt(PlayerDataKey.BROKEN_BLOCKS_COUNT)
 
         if (!e.isDropItems) return
@@ -240,7 +239,7 @@ class EbiPowerHandler: Listener {
 
     @EventHandler
     fun onNewDayToResetBrokenBlocksCount(e: RealTimeNewDayEvent) {
-        PlayerModule.openAll().forEach(Consumer { record: PlayerRecord ->
+        PlayerStore.openAll().forEach(Consumer { record: PlayerRecord ->
             record[PlayerDataKey.BROKEN_BLOCKS_COUNT] = 0
         })
     }
