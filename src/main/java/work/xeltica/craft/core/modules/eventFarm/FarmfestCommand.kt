@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.farmFestival
+package work.xeltica.craft.core.modules.eventFarm
 
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -17,10 +17,10 @@ class FarmfestCommand : CommandBase() {
         if (args.isEmpty()) return false
         when (args[0]) {
             "init" -> {
-                FarmFestivalModule.init()
+                EventFarmModule.init()
             }
             "clearFarm" -> {
-                FarmFestivalModule.clearFarm()
+                EventFarmModule.clearFarm()
                 sender.sendMessage("畑を初期化しました。")
             }
             "add" -> {
@@ -31,7 +31,7 @@ class FarmfestCommand : CommandBase() {
                         continue
                     }
                     try {
-                        FarmFestivalModule.addPlayerToBoard(p)
+                        EventFarmModule.addPlayerToBoard(p)
                         sender.sendMessage("$name を追加しました。")
                     } catch (e: XCoreException) {
                         sender.sendMessage(ChatColor.RED.toString() + e.message)
@@ -42,12 +42,12 @@ class FarmfestCommand : CommandBase() {
                 }
             }
             "start" -> {
-                if (FarmFestivalModule.isPlaying) {
+                if (EventFarmModule.isPlaying) {
                     sender.sendMessage("${ChatColor.RED}もう始まっている！")
                     return true
                 }
                 try {
-                    FarmFestivalModule.start()
+                    EventFarmModule.start()
                     sender.sendMessage("開始しました。")
                 } catch (e: XCoreException) {
                     sender.sendMessage(ChatColor.RED.toString() + e.message)
@@ -57,12 +57,12 @@ class FarmfestCommand : CommandBase() {
                 }
             }
             "stop" -> {
-                if (!FarmFestivalModule.isPlaying) {
+                if (!EventFarmModule.isPlaying) {
                     sender.sendMessage("${ChatColor.RED}もう終わっている！")
                     return true
                 }
-                FarmFestivalModule.stop()
-                FarmFestivalModule.board.forEach {
+                EventFarmModule.stop()
+                EventFarmModule.board.forEach {
                     sender.sendMessage("${it.key.name}: ${it.value}ポイント")
                 }
             }

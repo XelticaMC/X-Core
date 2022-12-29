@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.fireworkFestival
+package work.xeltica.craft.core.modules.eventFirework
 
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
@@ -13,19 +13,19 @@ class FireworkCommand : CommandBase() {
         when (args[0]) {
             "run" -> {
                 if (args.size != 2) return false
-                val script = FireworkFestivalModule.scripts[args[1]]
+                val script = EventFireworkModule.scripts[args[1]]
                 if (script == null) {
                     sender.sendMessage("${ChatColor.RED}No such script named '${args[0]}'.")
                     return true
                 }
-                FireworkFestivalModule.runScript(script, sender)
+                EventFireworkModule.runScript(script, sender)
             }
             "center" -> {
                 if (sender !is Player) {
                     sender.sendMessage("プレイヤーが実行しなさい")
                     return true
                 }
-                FireworkFestivalModule.setCenterLocation(sender.location)
+                EventFireworkModule.setCenterLocation(sender.location)
             }
             else -> return false
         }
@@ -43,7 +43,7 @@ class FireworkCommand : CommandBase() {
         } else if (args.size == 2) {
             if (args[0] != "run") return COMPLETE_LIST_EMPTY
             val completions = ArrayList<String>()
-            val names = FireworkFestivalModule.scripts.keys
+            val names = EventFireworkModule.scripts.keys
             StringUtil.copyPartialMatches(args[1], names, completions)
             completions.sort()
             return completions

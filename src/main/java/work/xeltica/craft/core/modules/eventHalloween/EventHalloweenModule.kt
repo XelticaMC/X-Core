@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.halloween
+package work.xeltica.craft.core.modules.eventHalloween
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
@@ -23,7 +23,7 @@ import java.lang.IllegalArgumentException
 import java.util.*
 import java.util.function.Consumer
 
-object HalloweenModule : ModuleBase() {
+object EventHalloweenModule : ModuleBase() {
     override fun onEnable() {
         val logger = Bukkit.getLogger()
         ConfigurationSerialization.registerClass(CandyStoreItem::class.java, "CandyStoreItem")
@@ -41,7 +41,7 @@ object HalloweenModule : ModuleBase() {
             logger.info("[HalloweenModule] スポーン確率（event2）: $_spawnRatioEventWorld")
         }
 
-        registerHandler(HalloweenHandler())
+        registerHandler(EventHalloweenHandler())
         registerCommand("candystore", CandyStoreCommand())
     }
 

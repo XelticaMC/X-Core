@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.halloween
+package work.xeltica.craft.core.modules.eventHalloween
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import org.bukkit.inventory.ItemStack

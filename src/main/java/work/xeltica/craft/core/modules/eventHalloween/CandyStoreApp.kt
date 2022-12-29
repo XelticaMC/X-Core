@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.halloween
+package work.xeltica.craft.core.modules.eventHalloween
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -10,12 +10,12 @@ class CandyStoreApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.HEART_OF_THE_SEA
 
     override fun onLaunch(player: Player) {
-        HalloweenModule.openCandyStore(player)
+        EventHalloweenModule.openCandyStore(player)
     }
 
     override fun isVisible(player: Player): Boolean {
         if (player.world.name == "event2") return true
-        return player.world.name == "event2" || HalloweenModule.isEventMode || player.isOp
+        return player.world.name == "event2" || EventHalloweenModule.isEventMode || player.isOp
     }
 
     override fun isShiny(player: Player): Boolean = true

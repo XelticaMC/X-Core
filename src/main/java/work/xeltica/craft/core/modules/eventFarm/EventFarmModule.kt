@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.farmFestival
+package work.xeltica.craft.core.modules.eventFarm
 
 import net.kyori.adventure.text.Component
 import org.bukkit.*
@@ -16,11 +16,11 @@ import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.utils.Ticks
 import java.util.*
 
-object FarmFestivalModule : ModuleBase() {
+object EventFarmModule : ModuleBase() {
     override fun onEnable() {
         init()
         registerCommand("farmfest", FarmfestCommand())
-        registerHandler(FarmFestivalHandler())
+        registerHandler(EventFarmHandler())
 
         val world = Bukkit.getWorld("event")
         locations = listOf(
@@ -113,7 +113,7 @@ object FarmFestivalModule : ModuleBase() {
                     return
                 }
                 val eventPlayers = getEventPlayers()
-                board.keys.forEach(FarmFestivalModule::showStatus)
+                board.keys.forEach(EventFarmModule::showStatus)
                 if (countdown > 0) return
                 time--
                 if (time == 60) {

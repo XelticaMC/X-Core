@@ -6,7 +6,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.modules.halloween.HalloweenModule
+import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule
 import work.xeltica.craft.core.modules.world.WorldModule
 import java.util.Calendar
 
@@ -76,7 +76,7 @@ class TeleportApp : AppBase() {
                 )
             }
             // TODO イベント機能をどっかにうつす
-            if (HalloweenModule.isEventMode || player.isOp) {
+            if (EventHalloweenModule.isEventMode || player.isOp) {
                 list.add(
                     MenuItem("イベントワールドへ（4アメが必要）", {
                         val eventWorldLocation = Bukkit.getWorld("event2")?.spawnLocation
@@ -84,7 +84,7 @@ class TeleportApp : AppBase() {
                             player.sendMessage("No such world")
                             return@MenuItem
                         }
-                        if (!HalloweenModule.tryTakeCandy(player, 4)) {
+                        if (!EventHalloweenModule.tryTakeCandy(player, 4)) {
                             Gui.getInstance().error(player, "アメが足りません！イベントワールドへの移動にはアメを4つ消費します…。")
                             return@MenuItem
                         }

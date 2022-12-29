@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.farmFestival
+package work.xeltica.craft.core.modules.eventFarm
 
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -14,20 +14,20 @@ import org.bukkit.potion.PotionEffectType
 import work.xeltica.craft.core.utils.Ticks
 import kotlin.math.max
 
-class FarmFestivalHandler : Listener {
+class EventFarmHandler : Listener {
     @EventHandler
     fun onBreakCrops(e: BlockBreakEvent) {
         if (!isPlaying()) return
         if (!isGamePlayer(e.player)) return
-        if (FarmFestivalModule.countdown > 0) {
+        if (EventFarmModule.countdown > 0) {
             e.isCancelled = true
             return
         }
-        val board = FarmFestivalModule.board
+        val board = EventFarmModule.board
         when (e.block.type) {
             Material.POTATOES -> {
                 board[e.player] = (board[e.player] ?: 0) + 1
-                FarmFestivalModule.showStatus(e.player)
+                EventFarmModule.showStatus(e.player)
             }
             Material.WHEAT -> {
                 val minus = max(((board[e.player] ?: 0) * 0.05f).toInt(), 5)
@@ -36,7 +36,7 @@ class FarmFestivalHandler : Listener {
                 e.player.addPotionEffect(PotionEffect(PotionEffectType.SLOW, Ticks.from(3.0), 3, false, false, false))
                 e.player.world.playSound(e.player.location, Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1f, 1f)
                 // e.player.world.createExplosion(e.player.location, 64f, false, false)
-                FarmFestivalModule.showStatus(e.player)
+                EventFarmModule.showStatus(e.player)
             }
             else -> {
                 e.isCancelled = true
@@ -50,12 +50,12 @@ class FarmFestivalHandler : Listener {
         if (!isPlaying()) return
         if (!isGamePlayer(e.player)) return
         if (!e.hasChangedPosition()) return
-        if (FarmFestivalModule.countdown > 0) {
+        if (EventFarmModule.countdown > 0) {
             e.isCancelled = true
         }
     }
 
-    fun isPlaying() = FarmFestivalModule.isPlaying
+    fun isPlaying() = EventFarmModule.isPlaying
 
-    fun isGamePlayer(p: Player) = FarmFestivalModule.board.containsKey(p)
+    fun isGamePlayer(p: Player) = EventFarmModule.board.containsKey(p)
 }

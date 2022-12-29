@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.halloween
+package work.xeltica.craft.core.modules.eventHalloween
 
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -14,7 +14,7 @@ class CandyStoreCommand : CommandPlayerOnlyBase() {
 
         // サブコマンドがなければお店UIを開く
         if (subCommand == null || !player.hasPermission("otanoshimi.command.candystore." + subCommand.lowercase(Locale.getDefault()))) {
-            HalloweenModule.openCandyStore(player)
+            EventHalloweenModule.openCandyStore(player)
             return true
         }
 
@@ -30,20 +30,20 @@ class CandyStoreCommand : CommandPlayerOnlyBase() {
                     player.sendMessage("アイテムを手に持っていないため追加できません。")
                     return true
                 }
-                HalloweenModule.addItem(CandyStoreItem(handheld, cost))
+                EventHalloweenModule.addItem(CandyStoreItem(handheld, cost))
                 player.sendMessage("追加しました。")
             }
 
-            "delete" -> HalloweenModule.openCandyStoreUI(player, "削除するアイテムを選んでください") {
+            "delete" -> EventHalloweenModule.openCandyStoreUI(player, "削除するアイテムを選んでください") {
                 if (it is CandyStoreItem) {
-                    HalloweenModule.deleteItem(it)
+                    EventHalloweenModule.deleteItem(it)
                 }
                 player.sendMessage("削除しました。")
             }
 
             "getcandy" -> {
                 val amount = args[1].toIntOrNull() ?: return false
-                val candy = HalloweenModule.generateCandy(amount)
+                val candy = EventHalloweenModule.generateCandy(amount)
                 player.inventory.addItem(candy)
                 player.sendMessage("${amount}アメを渡しました。")
                 player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
@@ -51,20 +51,20 @@ class CandyStoreCommand : CommandPlayerOnlyBase() {
 
             "event" -> {
                 when (args[1].lowercase()) {
-                    "on" -> HalloweenModule.isEventMode = true
-                    "off" -> HalloweenModule.isEventMode = false
+                    "on" -> EventHalloweenModule.isEventMode = true
+                    "off" -> EventHalloweenModule.isEventMode = false
                     else -> return false
                 }
             }
 
             "spawnratiomain" -> {
                 val ratio = args[1].toIntOrNull() ?: return false
-                HalloweenModule.spawnRatioInMainWorld = ratio
+                EventHalloweenModule.spawnRatioInMainWorld = ratio
             }
 
             "spawnratioevent" -> {
                 val ratio = args[1].toIntOrNull() ?: return false
-                HalloweenModule.spawnRatioInEventWorld = ratio
+                EventHalloweenModule.spawnRatioInEventWorld = ratio
             }
         }
         return true

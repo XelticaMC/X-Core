@@ -1,16 +1,16 @@
-package work.xeltica.craft.core.modules.fireworkFestival
+package work.xeltica.craft.core.modules.eventFirework
 
-data class ExplodeFireworkCommand (
+data class ExplodeOperation (
     val loc: Array<Double> = arrayOf(0.0, 0.0, 0.0),
     val random: Int = 0,
     val clone: Int = 0,
     val cloneTick: Int = 0,
-) : FireworkCommandBase() {
+) : OperationBase() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ExplodeFireworkCommand
+        other as ExplodeOperation
 
         if (!loc.contentEquals(other.loc)) return false
         if (random != other.random) return false

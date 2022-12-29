@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.halloween
+package work.xeltica.craft.core.modules.eventHalloween
 
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
@@ -12,9 +12,9 @@ import org.bukkit.event.entity.*
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
 import org.bukkit.event.player.PlayerBedEnterEvent
 import work.xeltica.craft.core.events.EntityMobBallHitEvent
-import work.xeltica.craft.core.modules.halloween.HalloweenModule.isEventMob
+import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule.isEventMob
 
-class HalloweenHandler : Listener {
+class EventHalloweenHandler : Listener {
     /**
      * モブがワールドに湧いた
      */
@@ -26,8 +26,8 @@ class HalloweenHandler : Listener {
         // NOTE: プラグインで湧いたモブは除外（じゃないとreplaceMobメソッドが無限にこのイベントを呼ぶ）
         if (entity.entitySpawnReason == CreatureSpawnEvent.SpawnReason.CUSTOM) return
         // イベントワールドであり、メインワールドかつイベントモードの場合
-        if (world.name == "event2" || (world.name == "main" && HalloweenModule.isEventMode)) {
-            HalloweenModule.replaceMob(entity)
+        if (world.name == "event2" || (world.name == "main" && EventHalloweenModule.isEventMode)) {
+            EventHalloweenModule.replaceMob(entity)
         }
     }
 
@@ -68,7 +68,7 @@ class HalloweenHandler : Listener {
             }
             return
         }
-        HalloweenModule.replaceDrops(e.drops, killer)
+        EventHalloweenModule.replaceDrops(e.drops, killer)
     }
 
     /**
@@ -87,7 +87,7 @@ class HalloweenHandler : Listener {
      */
     @EventHandler
     fun onPlayerBed(e: PlayerBedEnterEvent) {
-        if (HalloweenModule.isEventMode && e.player.world.name == "main") {
+        if (EventHalloweenModule.isEventMode && e.player.world.name == "main") {
             e.setUseBed(Event.Result.DENY)
             e.player.sendActionBar(Component.text("外はハロウィンのムードに包まれている。こんなテンションじゃ寝られない！"))
         }

@@ -1,8 +1,8 @@
-package work.xeltica.craft.core.modules.fireworkFestival
+package work.xeltica.craft.core.modules.eventFirework
 
 import org.bukkit.FireworkEffect
 
-data class FireFireworkCommand(
+data class FireOperation(
     val type: FireworkEffect.Type,
     val colors: List<String> = listOf("RANDOM"),
     val fades: List<String> = listOf(),
@@ -12,4 +12,4 @@ data class FireFireworkCommand(
     val random: Int = 0,
     val clone: Int = 0,
     val power: Int = 1,
-) : FireworkCommandBase()
+) : OperationBase()

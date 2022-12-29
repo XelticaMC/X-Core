@@ -22,9 +22,9 @@ import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.clover.CloverModule
 import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
-import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
-import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
-import work.xeltica.craft.core.modules.halloween.HalloweenModule
+import work.xeltica.craft.core.modules.eventFarm.EventFarmModule
+import work.xeltica.craft.core.modules.eventFirework.EventFireworkModule
+import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
@@ -191,9 +191,9 @@ class XCorePlugin : JavaPlugin() {
         CloverModule,
         CounterModule,
         EbiPowerModule,
-        FarmFestivalModule,
-        FireworkFestivalModule,
-        HalloweenModule,
+        EventFarmModule,
+        EventFireworkModule,
+        EventHalloweenModule,
         HintModule,
         HubModule,
         ItemModule,

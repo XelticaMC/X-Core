@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.modules.fireworkFestival
+package work.xeltica.craft.core.modules.eventFirework
 
 import org.bukkit.Color
 import org.bukkit.FireworkEffect
@@ -15,8 +15,8 @@ import work.xeltica.craft.core.utils.Config
 import work.xeltica.craft.core.utils.Ticks
 import java.util.Random
 
-object FireworkFestivalModule : ModuleBase() {
-    lateinit var scripts: Map<String, List<FireworkCommandBase>>
+object EventFireworkModule : ModuleBase() {
+    lateinit var scripts: Map<String, List<OperationBase>>
         private set
 
     var center: Location? = null
@@ -39,7 +39,7 @@ object FireworkFestivalModule : ModuleBase() {
             scriptsSection = config.conf.getConfigurationSection(CONFIG_KEY_SCRIPTS) ?: return
         }
         val scriptNames = scriptsSection.getKeys(false)
-        val map = mutableMapOf<String, List<FireworkCommandBase>>()
+        val map = mutableMapOf<String, List<OperationBase>>()
         scriptNames.forEach { name ->
             val commandMaps = scriptsSection.getMapList(name)
             val commands = commandMaps.map {
@@ -56,14 +56,14 @@ object FireworkFestivalModule : ModuleBase() {
                         val random = tryCast(it["random"], 0)
                         val clone = tryCast(it["clone"], 0)
                         val power = tryCast(it["power"], 1)
-                        FireFireworkCommand(type, colors, fades, flicker, trail, loc, random, clone, power)
+                        FireOperation(type, colors, fades, flicker, trail, loc, random, clone, power)
                     }
                     "wait" -> {
                         assertProperty(it, "time", "wait")
-                        WaitFireworkCommand(it["time"] as Double)
+                        WaitOperation(it["time"] as Double)
                     }
                     "explode" -> {
-                        ExplodeFireworkCommand()
+                        ExplodeOperation()
                     }
                     else -> {
                         throw IllegalStateException("$commandType is not a valid command type.")
@@ -75,7 +75,7 @@ object FireworkFestivalModule : ModuleBase() {
         scripts = map
     }
 
-    fun runScript(script: List<FireworkCommandBase>, sender: CommandSender? = null) {
+    fun runScript(script: List<OperationBase>, sender: CommandSender? = null) {
         fun log(text: String) {
             sender?.sendMessage(text)
         }
@@ -93,7 +93,7 @@ object FireworkFestivalModule : ModuleBase() {
                 while (index < script.size) {
                     val command = script[index]
                     when (command) {
-                        is FireFireworkCommand -> {
+                        is FireOperation -> {
                             repeat(command.clone + 1) {
                                 val fireLoc = c.clone()
                                     .add(command.loc[0], command.loc[1], command.loc[2])
@@ -138,13 +138,13 @@ object FireworkFestivalModule : ModuleBase() {
                                 }
                             }
                         }
-                        is WaitFireworkCommand -> {
+                        is WaitOperation -> {
                             log("* Waiting for ${command.time}s.")
                             index++
                             waitTimer = Ticks.from(command.time)
                             return
                         }
-                        is ExplodeFireworkCommand -> {
+                        is ExplodeOperation -> {
                             repeat(command.clone + 1) {
                                 val fireLoc = c.clone()
                                     .add(command.loc[0], command.loc[1], command.loc[2])
@@ -174,7 +174,7 @@ object FireworkFestivalModule : ModuleBase() {
     }
 
     private inline fun <reified T>tryCast(value: Any?, defaultValue: T): T {
-        return if (value == null) defaultValue else if (value is T) value as T else throw IllegalStateException("The value type is invalid.")
+        return if (value == null) defaultValue else if (value is T) value else throw IllegalStateException("The value type is invalid.")
     }
 
     private lateinit var config: Config
