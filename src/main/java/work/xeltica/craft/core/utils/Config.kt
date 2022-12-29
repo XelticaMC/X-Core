@@ -1,7 +1,8 @@
 package work.xeltica.craft.core.utils
 
 import org.bukkit.configuration.file.YamlConfiguration
-import work.xeltica.craft.core.XCorePlugin.Companion.instance
+import org.bukkit.scheduler.BukkitRunnable
+import work.xeltica.craft.core.XCorePlugin
 import java.io.File
 import java.io.IOException
 import java.util.function.Consumer
@@ -11,6 +12,33 @@ import java.util.function.Consumer
  * @author Xeltica
  */
 class Config @JvmOverloads constructor(val configName: String, private val onReloaded: Consumer<Config>? = null) {
+    private var autoSaveWorker: BukkitRunnable? = null
+
+    lateinit var conf: YamlConfiguration
+        private set
+
+    /**
+     * trueにすると、5秒に1度自動保存します。
+     */
+    var useAutoSave = false
+        set(value) {
+            if (field == value) return
+            field = value
+            if (field) {
+                object : BukkitRunnable() {
+                    override fun run() {
+                        save()
+                    }
+                }.run {
+                    runTaskTimer(XCorePlugin.instance, 0L, Ticks.from(5.0).toLong())
+                    autoSaveWorker = this
+                }
+            } else {
+                autoSaveWorker?.cancel()
+                autoSaveWorker = null
+            }
+        }
+
     fun reload() {
         conf = YamlConfiguration.loadConfiguration(openFile())
         onReloaded?.accept(this)
@@ -19,13 +47,6 @@ class Config @JvmOverloads constructor(val configName: String, private val onRel
     @Throws(IOException::class)
     fun save() {
         conf.save(openFile())
-        reload()
-    }
-
-    lateinit var conf: YamlConfiguration
-        private set
-
-    init {
         reload()
     }
 
@@ -43,8 +64,12 @@ class Config @JvmOverloads constructor(val configName: String, private val onRel
         }
 
         private fun openFile(configName: String): File {
-            val folder = instance.dataFolder
+            val folder = XCorePlugin.instance.dataFolder
             return File(folder, "$configName.yml")
         }
+    }
+
+    init {
+        reload()
     }
 }
