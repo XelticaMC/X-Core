@@ -24,27 +24,25 @@ import org.geysermc.cumulus.CustomForm
 import org.geysermc.cumulus.SimpleForm
 import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.modules.item.ItemModule
-import java.util.ArrayDeque
-import java.util.UUID
+import java.util.*
 import java.util.function.Consumer
 import java.util.function.Predicate
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 
 class Gui: Listener {
     companion object {
-        private var instance: Gui? = null
+        private lateinit var instance: Gui
         @JvmStatic
         fun getInstance(): Gui {
-            val i = instance ?: Gui()
-            instance = i
-            return i
+            return instance
         }
 
         @JvmStatic
-        fun resetInstance() {
-            instance = null
+        fun onEnable() {
+            instance = Gui()
+            CommandRegistry.register("__core_gui_event__", CommandXCoreGuiEvent())
+            Bukkit.getPluginManager().registerEvents(instance, XCorePlugin.instance)
         }
 
         @JvmStatic

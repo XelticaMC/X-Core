@@ -8,11 +8,13 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.gui.SoundPitch
+import work.xeltica.craft.core.modules.bedrock.BedrockToolsApp
 import work.xeltica.craft.core.modules.eventHalloween.CandyStoreApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerDrugStoreApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerStoreApp
 import work.xeltica.craft.core.modules.eventSummer.FireworkApp
 import work.xeltica.craft.core.modules.hint.HintApp
+import work.xeltica.craft.core.modules.livemode.LiveModeApp
 import work.xeltica.craft.core.modules.notification.NotificationApp
 import work.xeltica.craft.core.modules.omikuji.OmikujiApp
 import work.xeltica.craft.core.modules.payments.PaymentsApp

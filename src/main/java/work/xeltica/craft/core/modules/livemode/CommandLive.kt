@@ -1,11 +1,10 @@
-package work.xeltica.craft.core.commands
+package work.xeltica.craft.core.modules.livemode
 
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.gui.Gui.Companion.getInstance
-import work.xeltica.craft.core.modules.player.PlayerModule
 
 /**
  * 配信モードを切り替えるコマンド
@@ -15,10 +14,10 @@ class CommandLive : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty() || args[0] !in COMPLETE_LIST_ONOFF) return false
         val isLiveMode = args[0] == "on"
-        if (PlayerModule.isLiveMode(player) == isLiveMode) {
+        if (LiveModeModule.isLiveMode(player) == isLiveMode) {
             return getInstance().error(player, "既に" + (if (isLiveMode) "オン" else "オフ") + "です")
         }
-        PlayerModule.setLiveMode(player, isLiveMode)
+        LiveModeModule.setLiveMode(player, isLiveMode)
         return true
     }
 

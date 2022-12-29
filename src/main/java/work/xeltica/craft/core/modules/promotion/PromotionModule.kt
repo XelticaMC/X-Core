@@ -8,6 +8,7 @@ import net.luckperms.api.node.types.InheritanceNode
 import net.luckperms.api.query.QueryOptions
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.playerStore.PlayerStore
@@ -18,16 +19,13 @@ import work.xeltica.craft.core.utils.Ticks
 
 object PromotionModule : ModuleBase() {
     private lateinit var calculator: CitizenTimerCalculator
+
     override fun onEnable() {
-        val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
-        if (luckPerms == null) {
-            Bukkit.getLogger().severe("LuckPermsが見つかりません。")
-            return
-        }
-        calculator = CitizenTimerCalculator()
-        luckPerms.contextManager.registerCalculator(calculator)
-        registerHandler(WakabaLimitHandler())
-        LuckPermsProvider.get().eventBus.subscribe(XCorePlugin.instance, NodeAddEvent::class.java, this::onPlayerGotCitizen)
+        hookLuckPerms()
+        registerNewcomerTimer()
+
+        registerHandler(PromotionHandler())
+        registerCommand("promo", CommandPromo())
     }
 
     override fun onDisable() {
@@ -73,6 +71,35 @@ object PromotionModule : ModuleBase() {
         builder.appendLine("詳しくは https://wiki.craft.xeltica.work/citizen を確認してください！")
 
         return builder.toString()
+    }
+
+    private fun hookLuckPerms() {
+        val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider
+        if (luckPerms == null) {
+            Bukkit.getLogger().severe("LuckPermsが見つかりません。")
+            return
+        }
+        calculator = CitizenTimerCalculator()
+        luckPerms.contextManager.registerCalculator(calculator)
+        LuckPermsProvider.get().eventBus.subscribe(XCorePlugin.instance, NodeAddEvent::class.java, this::onPlayerGotCitizen)
+    }
+
+    private fun registerNewcomerTimer() {
+        val tick = Ticks.from(1.0)
+        object : BukkitRunnable() {
+            override fun run() {
+                Bukkit.getOnlinePlayers().forEach {
+                    val record = PlayerStore.open(it)
+                    var time = record.getInt(PlayerDataKey.NEWCOMER_TIME, 0)
+                    time -= tick
+                    if (time <= 0) {
+                        record.delete(PlayerDataKey.NEWCOMER_TIME)
+                    } else {
+                        record[PlayerDataKey.NEWCOMER_TIME] = time
+                    }
+                }
+            }
+        }.runTaskTimer(XCorePlugin.instance, 0, tick.toLong())
     }
 
     private fun getSuccessListItem(label: String, isSuccess: Boolean): String {

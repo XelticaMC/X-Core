@@ -8,7 +8,6 @@ import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.xphone.apps.AppBase
 
 /**
@@ -35,7 +34,7 @@ class FireworkApp : AppBase() {
             ui.error(player, "アイテムを${verb}できませんでした。エビパワーが足りません。")
             return
         }
-        val stack = PlayerModule.getRandomFireworkByUUID(player.uniqueId, fireworkCount)
+        val stack = EventSummerModule.getRandomFireworkByUUID(player.uniqueId, fireworkCount)
         val size = player.inventory.addItem(stack).size
         if (size > 0) {
             ui.error(player, "アイテムを${verb}できませんでした。持ち物がいっぱいです。整理してからもう一度お試し下さい。")

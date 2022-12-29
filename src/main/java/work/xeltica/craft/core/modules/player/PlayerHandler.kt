@@ -16,7 +16,10 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
-import org.bukkit.event.player.*
+import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.playerStore.PlayerStore
@@ -25,9 +28,6 @@ import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.hub.HubType
-import work.xeltica.craft.core.modules.item.ItemModule
-import work.xeltica.craft.core.modules.promotion.PromotionModule
-import work.xeltica.craft.core.utils.BedrockDisclaimerUtil
 import java.util.*
 
 class PlayerHandler: Listener {
@@ -35,41 +35,20 @@ class PlayerHandler: Listener {
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent) {
         val p = e.player
-
         val name = PlainTextComponentSerializer.plainText().serialize(p.displayName())
+
         e.joinMessage(Component.text("§a$name§bさんがやってきました"))
         if (!p.hasPlayedBefore()) {
-            e.joinMessage(Component.text("§a$name§bが§6§l初参加§rです"))
+            e.joinMessage(Component.text("§a$name§bさんが§6§l初参加§rです"))
             PlayerStore.open(p)[PlayerDataKey.NEWCOMER_TIME] = DEFAULT_NEW_COMER_TIME
             HubModule.teleport(p, HubType.NewComer, true)
-        }
-
-        val record = PlayerStore.open(p)
-        if (!record.getBoolean(PlayerDataKey.GIVEN_PHONE)) {
-            p.inventory.addItem(ItemModule.getItem(ItemModule.ITEM_NAME_XPHONE))
-            record[PlayerDataKey.GIVEN_PHONE] = true
-        }
-
-        HintModule.achieve(p, Hint.WELCOME)
-
-        if (PromotionModule.isCitizen(p)) {
-            HintModule.achieve(p, Hint.BE_CITIZEN)
-        }
-
-        if (!record.getBoolean(PlayerDataKey.BEDROCK_ACCEPT_DISCLAIMER)) {
-            BedrockDisclaimerUtil.showDisclaimerAsync(p)
         }
 
         p.showTitle(Title.title(
             Component.text("§aXelticaMCへ§6ようこそ！"),
             Component.text("§f詳しくは §b§nhttps://craft.xeltica.work§fを見てね！")
         ))
-
-        if (PromotionModule.isCitizen(p)) return
-        if (!record.has(PlayerDataKey.NEWCOMER_TIME)) {
-            p.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！")
-            p.sendMessage("詳しくは §b/promo§rコマンドを実行してください。")
-        }
+        HintModule.achieve(p, Hint.WELCOME)
     }
 
     @EventHandler

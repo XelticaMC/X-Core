@@ -1,13 +1,18 @@
 package work.xeltica.craft.core.modules.xphone
 
+import org.bukkit.Bukkit
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.inventory.EquipmentSlot
+import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.modules.item.ItemModule
+import work.xeltica.craft.core.modules.player.PlayerDataKey
 
 /**
  * X Phoneに関する機能をまとめています。
@@ -44,6 +49,19 @@ class XphoneHandler : Listener {
         if (store().compareCustomItem(item, phone)) {
             e.setUseItemInHand(Event.Result.DENY)
         }
+    }
+
+    @EventHandler
+    fun onPlayerFirstXphone(e: PlayerTeleportEvent) {
+        // ロビーから他ワールドに移動した時にX Phoneを渡す
+        if (e.to.world.name == "hub2") return
+        Bukkit.getScheduler().runTaskLater(XCorePlugin.instance, Runnable {
+            val record = PlayerStore.open(e.player)
+            if (record.getBoolean(PlayerDataKey.GIVEN_PHONE)) return@Runnable
+
+            e.player.inventory.addItem(ItemModule.getItem(ItemModule.ITEM_NAME_XPHONE))
+            record[PlayerDataKey.GIVEN_PHONE] = true
+        }, 1L)
     }
 
     private fun store(): ItemModule {

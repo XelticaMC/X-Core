@@ -19,7 +19,6 @@ import org.bukkit.inventory.meta.Damageable
 import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
-import work.xeltica.craft.core.modules.mobep.MobEPModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.api.playerStore.PlayerRecord
 import work.xeltica.craft.core.api.playerStore.PlayerStore
@@ -138,7 +137,7 @@ class EbiPowerHandler: Listener {
         // ReasonがCUSTOMかCOMMANDであれば対象外とする。他モジュール向け機能
         if (victim.entitySpawnReason == CreatureSpawnEvent.SpawnReason.CUSTOM || victim.entitySpawnReason == CreatureSpawnEvent.SpawnReason.COMMAND) return
 
-        var ep = if ("nightmare2" == killer.world.name) MobEPModule.getMobDropEP(victim, e) else 6
+        var ep = if ("nightmare2" == killer.world.name) EbiPowerModule.getMobDropEP(victim, e) else 6
         val buff = getMobDropBonus(killer.inventory.itemInMainHand) * 4
         ep += if (buff > 0) random.nextInt(buff) else 0
         if (ep > 0) {

@@ -13,12 +13,17 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerJoinEvent
+import work.xeltica.craft.core.api.playerStore.PlayerStore
+import work.xeltica.craft.core.modules.hint.Hint
+import work.xeltica.craft.core.modules.hint.HintModule
+import work.xeltica.craft.core.modules.player.PlayerDataKey
 
 /**
  * わかばロール向けの機能制限に関するハンドラーをまとめています。
  * @author Xeltica
  */
-class WakabaLimitHandler : Listener {
+class PromotionHandler : Listener {
     private val deniedBlocks: MutableSet<Material> = HashSet()
     private val deniedItems: MutableSet<Material> = HashSet()
     private val deniedTags: Set<Tag<Material>> = HashSet()
@@ -48,6 +53,17 @@ class WakabaLimitHandler : Listener {
         deniedBlocks.add(Material.WITHER_SKELETON_SKULL)
         deniedItems.add(Material.TNT_MINECART)
         deniedItems.add(Material.END_CRYSTAL)
+    }
+
+    @EventHandler
+    fun onPlayerJoin(e: PlayerJoinEvent) {
+        val record = PlayerStore.open(e.player)
+        if (PromotionModule.isCitizen(e.player)) {
+            HintModule.achieve(e.player, Hint.BE_CITIZEN)
+        } else if (!record.has(PlayerDataKey.NEWCOMER_TIME)) {
+            e.player.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！")
+            e.player.sendMessage("詳しくは §b/promo§rコマンドを実行してください。")
+        }
     }
 
     @EventHandler
