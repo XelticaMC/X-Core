@@ -27,6 +27,7 @@ import work.xeltica.craft.core.modules.hint.HintModule.hasAchieved
 import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.modules.world.WorldModule.getWorldDisplayName
+import work.xeltica.craft.core.utils.CollectionHelper.sum
 
 /**
  * ワールド制御に関するハンドラーをまとめています。
@@ -190,10 +191,7 @@ class WorldHandler : Listener {
             val contents = inventory.contents.filterNotNull()
 
             for (recipe in recipes) {
-                val fixedInventory = contents
-                    .groupingBy { it.type }
-                    .fold(0) { acc, i -> acc + i.amount }
-                    .toMutableMap()
+                val fixedInventory = contents.groupingBy { it.type }.sum { it.amount }.toMutableMap()
                 var flag = true
                 for (ingredient in recipe.fixedRecipe.keys) {
                     if (fixedInventory.containsKey(ingredient) && fixedInventory[ingredient]!! >= recipe.fixedRecipe[ingredient]!!) {
