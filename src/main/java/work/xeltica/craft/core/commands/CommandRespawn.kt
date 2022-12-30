@@ -10,8 +10,8 @@ import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.modules.world.WorldModule
-import java.util.UUID
-import java.util.HashMap
+import work.xeltica.craft.core.utils.Ticks
+import java.util.*
 
 /**
  * 初期スポーンに転送するコマンド
@@ -40,7 +40,8 @@ class CommandRespawn : CommandPlayerOnlyBase() {
      * @param player リスポーンさせるプレイヤー
      */
     private fun teleportToBedSpawn(player: Player) {
-        if (WorldModule.getRespawnWorld(player.world) == null) {
+        val world = WorldModule.getWorldInfo(player.world)
+        if (!world.canRespawn) {
             player.sendMessage(ChatColor.RED.toString() + "このワールドでは許可されていません")
             return
         }
@@ -54,7 +55,7 @@ class CommandRespawn : CommandPlayerOnlyBase() {
                 player.teleportAsync(loc, PlayerTeleportEvent.TeleportCause.PLUGIN)
                 isWarpingMap[player.uniqueId] = false
             }
-        }.runTaskLater(instance, (20 * 5).toLong())
+        }.runTaskLater(instance, Ticks.from(5.0).toLong())
         player.sendMessage("5秒後にベッドの位置にテレポートします...")
         isWarpingMap[player.uniqueId] = true
     }
@@ -64,15 +65,14 @@ class CommandRespawn : CommandPlayerOnlyBase() {
      * @param player テレポートさせるプレイヤー
      */
     private fun teleportToInitialSpawn(player: Player) {
-        val respawnWorldName = WorldModule.getRespawnWorld(player.world)
-        if (respawnWorldName == null) {
+        val world = WorldModule.getWorldInfo(player.world)
+        if (!world.canSleep) {
             player.sendMessage(ChatColor.RED.toString() + "このワールドでは許可されていません")
             return
         }
-        val respawnWorld = Bukkit.getWorld(respawnWorldName)
+        val respawnWorld = Bukkit.getWorld(world.respawnWorld)
         val respawn = respawnWorld!!.spawnLocation
         val isSameWorld = player.world.uid == respawnWorld.uid
-        val respawnWorldDisplayName = WorldModule.getWorldDisplayName(respawnWorld)
         if (noCooldownWorldNames.contains(respawnWorld.name)) {
             player.teleportAsync(respawn, PlayerTeleportEvent.TeleportCause.PLUGIN)
             return
@@ -82,9 +82,12 @@ class CommandRespawn : CommandPlayerOnlyBase() {
                 player.teleportAsync(respawn, PlayerTeleportEvent.TeleportCause.PLUGIN)
                 isWarpingMap[player.uniqueId] = false
             }
-        }.runTaskLater(instance, (20 * 5).toLong())
+        }.runTaskLater(instance, Ticks.from(5.0).toLong())
         player.sendMessage(
-            if (isSameWorld) "5秒後に初期スポーンに移動します..." else "5秒後に" + respawnWorldDisplayName + "の初期スポーンに移動します..."
+            if (isSameWorld)
+                "5秒後に初期スポーンに移動します..."
+            else
+                "5秒後に${WorldModule.getWorldInfo(world.respawnWorld).displayName}の初期スポーンに移動します..."
         )
         isWarpingMap[player.uniqueId] = true
     }

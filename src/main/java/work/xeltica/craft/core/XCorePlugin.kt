@@ -39,6 +39,7 @@ import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.modules.vehicle.VehicleModule
+import work.xeltica.craft.core.modules.world.WorldHandler
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.runnables.*

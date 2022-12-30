@@ -9,21 +9,17 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.Material
-import org.bukkit.Tag
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
-import org.bukkit.event.block.Action
-import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
@@ -130,20 +126,6 @@ class PlayerHandler: Listener {
                 respawnLocation = Bukkit.getWorld("main")?.spawnLocation!!
             }
             e.respawnLocation = respawnLocation
-        }
-    }
-
-    @EventHandler
-    fun onPlayerTryBed(e: PlayerInteractEvent) {
-        val p = e.player
-        if (e.action == Action.RIGHT_CLICK_BLOCK) {
-            val worldName = p.world.name
-            // TODO WorldStoreで管理する
-            val isBedDisabledWorld = worldName == "hub2" || worldName == "sandbox" || worldName == "wildareab" || worldName == "event" || worldName == "event2"
-            if (isBedDisabledWorld && Tag.BEDS.isTagged(e.clickedBlock?.type!!)) {
-                getInstance().error(p, "ベッドはこの世界では使えない…")
-                e.isCancelled = true
-            }
         }
     }
 

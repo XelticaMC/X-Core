@@ -63,7 +63,7 @@ class VehicleHandler: Listener {
 
     @EventHandler
     fun onPlayerSpawnVehicle(e: PlayerInteractEvent) {
-        if (WorldModule.isCreativeWorld(e.player.world)) return
+        if (WorldModule.getWorldInfo(e.player.world).isCreativeWorld) return
 
         val block = e.clickedBlock ?: return
         if (vehicleItems.contains(e.material) && e.blockFace == BlockFace.UP) {

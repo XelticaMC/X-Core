@@ -99,19 +99,18 @@ class EbiPowerHandler: Listener {
         if (victim.fromMobSpawner()) return
         if (victim.isCitizensNpc()) return
 
-        val epModule = EbiPowerModule
         if (victim is Cat || victim is Ocelot) {
-            epModule.tryTake(killer, 100)
+            EbiPowerModule.tryTake(killer, 100)
             notification(killer, "可愛い可愛いネコちゃんを殴るなんて！100EPを失った。")
             killer.playSound(killer.location, Sound.ENTITY_ZOMBIE_VILLAGER_AMBIENT, 0.7f, 0.5f)
             HintModule.achieve(killer, Hint.VIOLENCE_CAT)
         } else if (victim is Tameable && victim.isTamed && victim !is SkeletonHorse) {
-            epModule.tryTake(killer, 10)
+            EbiPowerModule.tryTake(killer, 10)
             notification(killer, "ペットを殴るなんて！10EPを失った。")
             killer.playSound(killer.location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f)
             HintModule.achieve(killer, Hint.VIOLENCE_PET)
         } else if (victim is Ageable && victim !is Monster && victim !is Hoglin && !victim.isAdult) {
-            epModule.tryTake(killer, 10)
+            EbiPowerModule.tryTake(killer, 10)
             notification(killer, "子供を殴るなんて！10EPを失った。")
             killer.playSound(killer.location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.7f, 0.5f)
             HintModule.achieve(killer, Hint.VIOLENCE_CHILD)

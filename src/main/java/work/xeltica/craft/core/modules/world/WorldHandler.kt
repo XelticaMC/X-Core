@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.handlers
+package work.xeltica.craft.core.modules.world
 
 import io.papermc.paper.event.block.BlockPreDispenseEvent
 import net.kyori.adventure.text.Component
@@ -9,9 +9,11 @@ import org.bukkit.block.Dispenser
 import org.bukkit.entity.GlowItemFrame
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import org.bukkit.event.player.PlayerChangedWorldEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
@@ -19,15 +21,14 @@ import org.bukkit.inventory.ShapelessRecipe
 import org.bukkit.material.Directional
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.api.playerStore.PlayerStore
+import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.models.CraftRecipe
 import work.xeltica.craft.core.modules.hint.Hint
-import work.xeltica.craft.core.modules.hint.HintModule.achieve
-import work.xeltica.craft.core.modules.hint.HintModule.hasAchieved
+import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.modules.world.WorldModule
-import work.xeltica.craft.core.modules.world.WorldModule.getWorldDisplayName
 import work.xeltica.craft.core.utils.CollectionHelper.sum
+import work.xeltica.craft.core.utils.Ticks
 
 /**
  * ワールド制御に関するハンドラーをまとめています。
@@ -40,12 +41,10 @@ class WorldHandler : Listener {
      */
     @EventHandler
     fun onAdvancementDone(e: PlayerAdvancementDoneEvent) {
-        val p = e.player
-        if (!advancementWhitelist.contains(p.world.name)) {
-            val advancement = e.advancement
-            for (criteria in advancement.criteria) {
-                p.getAdvancementProgress(advancement).revokeCriteria(criteria!!)
-            }
+        if (WorldModule.getWorldInfo(e.player.world).allowAdvancements) return
+
+        for (criteria in e.advancement.criteria) {
+            e.player.getAdvancementProgress(e.advancement).revokeCriteria(criteria)
         }
     }
 
@@ -65,32 +64,48 @@ class WorldHandler : Listener {
     }
 
     /*
-     * テレポート時のいろいろなガード機能など
-     * TODO: 分割する
+     * ワールドを移動する前に位置を保存する
      */
     @EventHandler
-    fun onPlayerTeleportGuard(e: PlayerTeleportEvent) {
-        val p = e.player
-        val world = e.to.world
-        val name = world.name
-        val worldModule = WorldModule
-        val isLockedWorld = worldModule.isLockedWorld(name)
-        val isCreativeWorld = worldModule.isCreativeWorld(name)
-        val displayName = worldModule.getWorldDisplayName(name)
-        val desc = worldModule.getWorldDescription(name)
-        val from = e.from.world
-        val to = e.to.world
-        val fromId = from.uid
-        val toId = to.uid
-        if (fromId == toId) return
-        if (isLockedWorld && !p.hasPermission("hub.teleport.$name")) {
-            p.playSound(p.location, Sound.BLOCK_ANVIL_PLACE, 1f, 0.5f)
-            p.sendMessage("§aわかば§rプレイヤーは§6$displayName§rに行くことができません！\n§b/promo§rコマンドを実行して、昇格方法を確認してください！")
-            e.isCancelled = true
-            return
+    fun onPlayerTeleportingWorld(e: PlayerTeleportEvent) {
+        if (e.isCancelled) return
+        if (e.from.world.uid == e.to.world.uid) return
+
+        WorldModule.saveCurrentLocation(e.player)
+    }
+
+    /**
+     * ワールド移動後の処理いろいろ。
+     */
+    @EventHandler
+    fun onPlayerMoveWorld(e: PlayerChangedWorldEvent) {
+        val info = WorldModule.getWorldInfo(e.player.world)
+        val player = e.player
+
+        // ワールド情報の表示
+        e.player.showTitle(Title.title(Component.text(info.displayName).color(TextColor.color(0xFFB300)), Component.empty()))
+        if (info.description.isNotEmpty()) {
+            player.sendMessage(info.description)
         }
-        worldModule.saveCurrentLocation(p)
-        val hint = when (to.name) {
+
+        // ナイトメア効果音再生
+        if (info.name == "nightmare2") {
+            player.playSound(player.location, Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 1f, 0.5f)
+        }
+
+        // 以前サーバーに来ている or FIRST_SPAWN フラグが立っている
+        val isNotFirstTeleport = player.hasPlayedBefore() || PlayerStore.open(player).getBoolean(PlayerDataKey.FIRST_SPAWN)
+        if (info.name == "main" && !HintModule.hasAchieved(player, Hint.GOTO_MAIN) && isNotFirstTeleport) {
+            // はじめてメインワールドに入った場合、対象のスタッフに通知する
+            try {
+                DiscordHook.alertNewcomer(player)
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+
+        // ヒント
+        val hint = when (info.name) {
             "main" -> Hint.GOTO_MAIN
             "hub2" -> Hint.GOTO_LOBBY
             "wildarea2" -> Hint.GOTO_WILDAREA
@@ -104,49 +119,27 @@ class WorldHandler : Listener {
             "shigen_end" -> Hint.GOTO_WILDENDB
             else -> null
         }
-
-        // 以前サーバーに来ている or FIRST_SPAWN フラグが立っている
-        val isNotFirstTeleport = p.hasPlayedBefore() || PlayerStore.open(p).getBoolean(PlayerDataKey.FIRST_SPAWN)
-        if (to.name == "main" && !hasAchieved(p, Hint.GOTO_MAIN)) {
-            // はじめてメインワールドに入った場合、対象のスタッフに通知する
-            try {
-                DiscordHook.alertNewcomer(p)
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-        }
         if (hint != null && isNotFirstTeleport) {
-            achieve(p, hint)
+            HintModule.achieve(player, hint)
         }
-        if (isCreativeWorld) {
-            p.gameMode = GameMode.CREATIVE
-        }
-        if (name == "nightmare2") {
-            world.difficulty = Difficulty.HARD
-            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
-            world.setGameRule(GameRule.DO_WEATHER_CYCLE, false)
-            world.setGameRule(GameRule.MOB_GRIEFING, false)
-            world.time = 18000
-            world.setStorm(true)
-            world.weatherDuration = 20000
-            world.isThundering = true
-            world.thunderDuration = 20000
-            p.playSound(p.location, Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 1f, 0.5f)
-        }
-        if (desc != null) {
-            p.sendMessage(desc)
-        }
-        Bukkit.getScheduler()
-            .runTaskLater(instance, Runnable { PlayerStore.open(p)[PlayerDataKey.FIRST_SPAWN] = true }, 20 * 5)
+
+        // FIRST_SPAWN フラグの設定
+        Bukkit.getScheduler().runTaskLater(instance, Runnable {
+            PlayerStore.open(e.player)[PlayerDataKey.FIRST_SPAWN] = true
+        }, Ticks.from(5.0).toLong())
     }
 
-    /**
-     * ワールドを移動した時に、ワールド名を表示する機能
-     */
     @EventHandler
-    fun onPlayerMoveWorld(e: PlayerChangedWorldEvent) {
-        val name = getWorldDisplayName(e.player.world)
-        e.player.showTitle(Title.title(Component.text(name).color(TextColor.color(0xFFB300)), Component.empty()))
+    fun onPlayerTryBed(e: PlayerInteractEvent) {
+        val p = e.player
+        val block = e.clickedBlock
+        if (e.action != Action.RIGHT_CLICK_BLOCK || block == null) return
+
+        val worldInfo = WorldModule.getWorldInfo(p.world.name)
+        if (!worldInfo.canSleep && Tag.BEDS.isTagged(block.type)) {
+            Gui.getInstance().error(p, "ベッドはこの世界では使えない…")
+            e.isCancelled = true
+        }
     }
 
     /*
@@ -226,15 +219,4 @@ class WorldHandler : Listener {
             }
         }
     }
-
-    private val advancementWhitelist: Set<String> = setOf(
-        "wildarea2",
-        "wildarea2_nether",
-        "wildarea2_the_end",
-        "wildareab",
-        "shigen_nether",
-        "shigen_end",
-        "main",
-        "nightmare2"
-    )
 }

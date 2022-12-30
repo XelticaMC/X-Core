@@ -14,10 +14,12 @@ import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerTeleportEvent
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
+import work.xeltica.craft.core.modules.world.WorldModule
 
 /**
  * わかばロール向けの機能制限に関するハンドラーをまとめています。
@@ -110,6 +112,18 @@ class PromotionHandler : Listener {
         if (PromotionModule.isCitizen(p)) return
         if (e.entityType == EntityType.ENDER_CRYSTAL) {
             prevent(e, p, "エンドクリスタルを破壊できません。")
+        }
+    }
+
+    @EventHandler
+    fun onTeleport(e: PlayerTeleportEvent) {
+        val destInfo = WorldModule.getWorldInfo(e.to.world)
+        val player = e.player
+        if (destInfo.isCitizenOnly && !player.hasPermission("otanoshimi.citizen")) {
+            player.playSound(player.location, Sound.BLOCK_ANVIL_PLACE, 1f, 0.5f)
+            player.sendMessage("§aわかば§rプレイヤーは§6${destInfo.displayName}§rに行くことができません！\n§b/promo§rコマンドを実行して、昇格方法を確認してください！")
+            e.isCancelled = true
+            return
         }
     }
 

@@ -1,10 +1,9 @@
 package work.xeltica.craft.core.modules.world
 
-import org.bukkit.Bukkit
-import org.bukkit.Location
-import org.bukkit.World
+import org.bukkit.*
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 import work.xeltica.craft.core.utils.Config
@@ -13,69 +12,27 @@ import java.util.function.Consumer
 
 object WorldModule: ModuleBase() {
     private lateinit var locationConfig: Config
-    private val worldNameMap = HashMap<String, String>()
-    private val worldDescMap = HashMap<String, String>()
-    private val lockedWorldNames = HashSet<String>()
-    private val creativeWorldNames = HashSet<String>()
-
-    private val summonVehicleWhiteList = listOf(
-        "wildarea2",
-        "wildarea2_nether",
-        "wildarea2_the_end",
-        "main",
-        "nightmare2",
-        "wildareab",
-    )
+    private lateinit var worldsConfig: Config
+    private val worldsMap = HashMap<String, WorldInfo>()
 
     override fun onEnable() {
-        loadWorldName()
-        loadWorldDescription()
-        loadLockedWorldNames()
-        loadCreativeWorldNames()
         locationConfig = Config("location")
+
+        if (!Config.exists("worlds")) {
+            XCorePlugin.instance.saveResource("worlds.yml", false)
+        }
+        worldsConfig = Config("worlds")
+
+        loadWorldInfomations()
+        initializeWorlds()
     }
 
-    fun getWorldDisplayName(world: World): String {
-        return getWorldDisplayName(world.name)
-    }
+    fun getWorldInfo(world: World) = getWorldInfo(world.name)
 
-    fun getWorldDisplayName(name: String): String {
-        if (!worldNameMap.containsKey(name)) return name
-        return worldNameMap[name]!!
-    }
-
-    fun getWorldDescription(world: World): String? {
-        return getWorldDescription(world.name)
-    }
-
-    fun getWorldDescription(name: String): String? {
-        if (!worldDescMap.containsKey(name)) return null
-        return worldDescMap[name]
-    }
-
-    fun isCreativeWorld(world: World): Boolean {
-        return isCreativeWorld(world.name)
-    }
-
-    fun isCreativeWorld(name: String): Boolean {
-        return creativeWorldNames.contains(name)
-    }
-
-    fun isLockedWorld(world: World): Boolean {
-        return isLockedWorld(world.name)
-    }
-
-    fun isLockedWorld(name: String): Boolean {
-        return lockedWorldNames.contains(name)
-    }
-
-    fun canSummonVehicles(world: World): Boolean {
-        return canSummonVehicles(world.name)
-    }
-
-    fun canSummonVehicles(name: String): Boolean {
-        return summonVehicleWhiteList.contains(name)
-    }
+    fun getWorldInfo(worldName: String) = worldsMap[worldName] ?: WorldInfo(
+        worldName,
+        worldName,
+    )
 
     fun saveCurrentLocation(player: Player) {
         val conf: YamlConfiguration = locationConfig.conf
@@ -110,7 +67,7 @@ object WorldModule: ModuleBase() {
 
     fun teleportToSavedLocation(player: Player, worldName: String) {
         if (player.world.name == worldName) {
-            getInstance().error(player, "既に" + getWorldDisplayName(worldName) + "にいます。")
+            getInstance().error(player, "既に" + getWorldInfo(worldName).displayName + "にいます。")
             return
         }
         val loc = getLocation(player, worldName)
@@ -153,69 +110,52 @@ object WorldModule: ModuleBase() {
         }
     }
 
-    fun getRespawnWorld(world: World): String? {
-        return getRespawnWorld(world.name)
-    }
-
-    fun getRespawnWorld(worldName: String): String? {
-        return when (worldName) {
-            "wildarea2_nether", "wildarea2_the_end" -> "wildarea2"
-            "pvp", "wildareab", "hub2" -> null
-            else -> worldName
+    private fun loadWorldInfomations() {
+        worldsMap.clear()
+        worldsConfig.conf.getKeys(false).forEach {
+            val section = worldsConfig.conf.getConfigurationSection(it) ?: return@forEach
+            val displayName = section.getString("displayName", "")!!
+            val isCitizenOnly = section.getBoolean("isCitizenOnly", false)
+            val isStaffOnly = section.getBoolean("isStaffOnly", false)
+            val isCreativeWorld = section.getBoolean("isCreativeWorld", false)
+            val canSleep = section.getBoolean("canSleep", false)
+            val canEarnEbiPower = section.getBoolean("canEarnEbiPower", false)
+            val canRespawn = section.getBoolean("canRespawn", true)
+            val allowVehicleSpawn = section.getBoolean("allowVehicleSpawn", false)
+            val allowAdvancements = section.getBoolean("allowAdvancements", true)
+            val respawnWorld = section.getString("respawnWorld", it)!!
+            val description = section.getString("description", "")!!
+            worldsMap[it] = WorldInfo(
+                it,
+                displayName,
+                isCitizenOnly,
+                isStaffOnly,
+                isCreativeWorld,
+                canSleep,
+                canEarnEbiPower,
+                canRespawn,
+                allowVehicleSpawn,
+                allowAdvancements,
+                respawnWorld,
+                description
+            )
         }
     }
 
-    private fun loadWorldName() {
-        worldNameMap["main"] = "メインワールド"
-        worldNameMap["sandbox2"] = "サンドボックス"
-        worldNameMap["art"] = "アートワールド"
-        worldNameMap["nightmare2"] = "ナイトメア"
-        worldNameMap["pvp"] = "PvPアリーナ"
-        worldNameMap["test"] = "実験ワールド"
-        worldNameMap["wildarea2"] = "共有ワールド"
-        worldNameMap["wildarea2_nether"] = "共有ネザー"
-        worldNameMap["wildarea2_the_end"] = "共有エンド"
-        worldNameMap["wildareab"] = "資源ワールド"
-        worldNameMap["shigen_nether"] = "資源ネザー"
-        worldNameMap["shigen_end"] = "資源エンド"
-        worldNameMap["hub2"] = "ロビー"
-        worldNameMap["event"] = "イベントワールド"
-        worldNameMap["event2"] = "イベントワールド"
-    }
-
-    private fun loadWorldDescription() {
-        worldDescMap["sandbox2"] = """
-            ここは、§bクリエイティブモード§rで好きなだけ遊べる§cサンドボックスワールド§r。
-            元の世界の道具や経験値はお預かりしているので、好きなだけあそんでね！§7(あ、でも他の人の建築物を壊したりしないでね)
-            """.trimIndent()
-        worldDescMap["nightmare2"] = """
-            ここは怖い敵がうじゃうじゃいる§cナイトメアワールド§r。
-            手に入れたアイテムは持ち帰れます。
-            """.trimIndent()
-        worldDescMap["art"] = """
-            ここは、§b地上絵§rに特化した§cアートワールド§r。
-            元の世界の道具や経験値はお預かりしているので、安心して地上絵を作成・観覧できます！
-            §7(他の人の作った地上絵を壊さないようお願いします。)
-            """.trimIndent()
-        worldDescMap["wildarea2"] = """
-            ここは、§c共有ワールド§r。
-            誰かが寄付してくれた資源を共有拠点にしまってあるので、有効にご活用ください。（独り占めはダメです）
-            """.trimIndent()
-        worldDescMap["wildareab"] = """
-            ここは、§c資源ワールド§r。
-            メインワールドで生活するための資源を探そう。
-            """.trimIndent()
-    }
-
-    private fun loadLockedWorldNames() {
-        lockedWorldNames.add("sandbox2")
-        lockedWorldNames.add("art")
-        lockedWorldNames.add("nightmare2")
-    }
-
-    private fun loadCreativeWorldNames() {
-        creativeWorldNames.add("art")
-        creativeWorldNames.add("sandbox2")
-        creativeWorldNames.add("test")
+    private fun initializeWorlds() {
+        getWorldInfo("nightmare2").apply {
+            world.difficulty = Difficulty.HARD
+            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
+            world.setGameRule(GameRule.DO_WEATHER_CYCLE, false)
+            world.setGameRule(GameRule.MOB_GRIEFING, false)
+            world.time = 18000
+            world.setStorm(true)
+            world.weatherDuration = 20000
+            world.isThundering = true
+            world.thunderDuration = 20000
+        }
+        worldsMap.values.forEach {
+            it.world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, it.allowAdvancements)
+        }
     }
 }

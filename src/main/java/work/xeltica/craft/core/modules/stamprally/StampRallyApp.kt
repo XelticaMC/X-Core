@@ -4,8 +4,8 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.modules.eventSummer.EventSummerModule
+import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.xphone.apps.AppBase
 import java.util.function.Consumer
 
@@ -30,7 +30,7 @@ class StampRallyApp: AppBase() {
             val stampInfo = StampRallyModule.getStampInfo(it.name)
 
             val sb = StringBuilder()
-            sb.appendLine("ワールド：" + WorldModule.getWorldDisplayName(stampInfo.loc.world.name))
+            sb.appendLine("ワールド：" + WorldModule.getWorldInfo(stampInfo.loc.world.name).displayName)
             sb.append("座標：(")
             sb.append(stampInfo.loc.blockX)
             sb.append(", ")

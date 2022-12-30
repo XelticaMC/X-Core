@@ -1,7 +1,10 @@
 package work.xeltica.craft.core.modules.vehicle
 
 import com.destroystokyo.paper.block.TargetBlockInfo
-import org.bukkit.*
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Rail
 import org.bukkit.block.data.type.RedstoneRail
@@ -84,7 +87,7 @@ object VehicleModule: ModuleBase() {
     }
 
     fun trySummonCart(player: Player): Boolean {
-        if (!WorldModule.canSummonVehicles(player.world)) {
+        if (!WorldModule.getWorldInfo(player.world).allowVehicleSpawn) {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。")
         }
         val lookBlock = player.getTargetBlock(5) ?: return true
@@ -102,7 +105,7 @@ object VehicleModule: ModuleBase() {
     }
 
     fun trySummonBoat(player: Player): Boolean {
-        if (!WorldModule.canSummonVehicles(player.world)) {
+        if (!WorldModule.getWorldInfo(player.world).allowVehicleSpawn) {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。")
         }
         var spawnLoc = player.location

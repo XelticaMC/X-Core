@@ -29,7 +29,7 @@ object QuickChatModule: ModuleBase() {
     fun chatFormat(msg: String, player: Player): String {
         var text = msg
 
-        text = text.replace("{world}", WorldModule.getWorldDisplayName(player.world))
+        text = text.replace("{world}", WorldModule.getWorldInfo(player.world).displayName)
         text = text.replace("{x}", player.location.blockX.toString())
         text = text.replace("{y}", player.location.blockY.toString())
         text = text.replace("{z}", player.location.blockZ.toString())

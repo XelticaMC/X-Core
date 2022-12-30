@@ -18,6 +18,6 @@ class CartApp : AppBase() {
         VehicleModule.trySummonCart(player)
     }
 
-    override fun isVisible(player: Player) = WorldModule.canSummonVehicles(player.world)
+    override fun isVisible(player: Player) = WorldModule.getWorldInfo(player.world).allowVehicleSpawn
 }
 
