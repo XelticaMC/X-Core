@@ -5,7 +5,7 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.plugins.VaultPlugin
+import work.xeltica.craft.core.hooks.VaultHook
 import work.xeltica.craft.core.utils.Config
 import java.io.IOException
 
@@ -17,12 +17,11 @@ object CloverModule: ModuleBase() {
     }
 
     fun saveAllCloversAccount() {
-        val eco = plugin().economy
         val players = Lists.newArrayList(*Bukkit.getOfflinePlayers())
         val logger = Bukkit.getLogger()
         players.addAll(Bukkit.getOnlinePlayers())
         for (p in players) {
-            val balance = eco.getBalance(p)
+            val balance = VaultHook.getBalance(p)
             if (balance == 0.0) continue
             clovers.conf.set(p.uniqueId.toString(), balance)
             logger.info(String.format("%sさんの残高 %f Clover をデポジット", p.name, balance))
@@ -51,6 +50,4 @@ object CloverModule: ModuleBase() {
     fun save() {
         clovers.save()
     }
-
-    private fun plugin(): VaultPlugin = VaultPlugin.getInstance()
 }

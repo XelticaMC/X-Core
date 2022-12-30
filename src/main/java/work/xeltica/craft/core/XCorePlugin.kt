@@ -13,6 +13,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.handlers.*
 import work.xeltica.craft.core.hooks.CitizensHook
 import work.xeltica.craft.core.hooks.DiscordHook
+import work.xeltica.craft.core.hooks.VaultHook
 import work.xeltica.craft.core.modules.bedrock.BedrockModule
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.clover.CloverModule
@@ -40,7 +41,6 @@ import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.modules.vehicle.VehicleModule
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.modules.xphone.XphoneModule
-import work.xeltica.craft.core.plugins.VaultPlugin
 import work.xeltica.craft.core.runnables.*
 import work.xeltica.craft.core.stores.NickNameStore
 import work.xeltica.craft.core.utils.Ticks
@@ -59,7 +59,6 @@ class XCorePlugin : JavaPlugin() {
         loadModules()
 
         // TODO 廃止
-        loadPlugins()
         loadStores()
         loadCommands()
         loadHandlers()
@@ -70,7 +69,6 @@ class XCorePlugin : JavaPlugin() {
 
     override fun onDisable() {
         CommandRegistry.clearMap()
-        unloadPlugins()
         unloadHooks()
         unloadModules()
     }
@@ -178,7 +176,6 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded LoginBonusHandler")
         pm.registerEvents(TicketWildareaBHandler(), this)
         logger.info("Loaded TicketWildareaBHandler")
-        logger.info("Loaded Gui")
     }
 
     private fun loadRunnables() {
@@ -189,17 +186,10 @@ class XCorePlugin : JavaPlugin() {
         TimeAttackObserver().runTaskTimer(this, 0, 5)
     }
 
-    private fun loadPlugins() {
-        VaultPlugin.getInstance().onEnable(this)
-    }
-
-    private fun unloadPlugins() {
-        VaultPlugin.getInstance().onDisable(this)
-    }
-
     private val hooks: Array<HookBase> = arrayOf(
         CitizensHook,
         DiscordHook,
+        VaultHook,
     )
 
     private val modules: Array<ModuleBase> = arrayOf(

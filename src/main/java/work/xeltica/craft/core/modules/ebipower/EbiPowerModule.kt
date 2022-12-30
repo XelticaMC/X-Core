@@ -6,7 +6,7 @@ import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.inventory.ItemStack
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.plugins.VaultPlugin
+import work.xeltica.craft.core.hooks.VaultHook
 import work.xeltica.craft.core.utils.Config
 import work.xeltica.craft.core.utils.Ticks
 import java.util.*
@@ -22,20 +22,17 @@ object EbiPowerModule: ModuleBase() {
     }
 
     fun get(p: Player): Int {
-        val vault = VaultPlugin.getInstance()
-        return vault.getBalance(p).toInt()
+        return VaultHook.getBalance(p).toInt()
     }
 
     fun tryGive(p: Player, amount: Int): Boolean {
         require(amount > 0) { "amountを0以下の数にはできない" }
-        val vault = VaultPlugin.getInstance()
-        return vault.tryDepositPlayer(p, amount.toDouble())
+        return VaultHook.tryDepositPlayer(p, amount.toDouble())
     }
 
     fun tryTake(p: Player, amount: Int): Boolean {
         require(amount > 0) { "amountを0以下の数にはできない" }
-        val vault = VaultPlugin.getInstance()
-        return vault.tryWithdrawPlayer(p, amount.toDouble())
+        return VaultHook.tryWithdrawPlayer(p, amount.toDouble())
     }
 
     fun getMobDropEP(entity: Entity, event: EntityDeathEvent): Int {
