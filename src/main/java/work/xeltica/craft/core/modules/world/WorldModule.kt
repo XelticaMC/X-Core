@@ -25,6 +25,8 @@ object WorldModule: ModuleBase() {
 
         loadWorldInfomations()
         initializeWorlds()
+
+        registerHandler(WorldHandler())
     }
 
     fun getWorldInfo(world: World) = getWorldInfo(world.name)
