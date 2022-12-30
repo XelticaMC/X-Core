@@ -29,6 +29,7 @@ import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.livemode.LiveModeModule
 import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
+import work.xeltica.craft.core.modules.motd.MotdModule
 import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.modules.omikuji.OmikujiModule
@@ -39,7 +40,6 @@ import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.modules.vehicle.VehicleModule
-import work.xeltica.craft.core.modules.world.WorldHandler
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.runnables.*
@@ -165,8 +165,6 @@ class XCorePlugin : JavaPlugin() {
 
     private fun loadHandlers() {
         val pm = server.pluginManager
-        pm.registerEvents(WorldHandler(), this)
-        logger.info("Loaded WorldHandler")
         pm.registerEvents(NightmareHandler(), this)
         logger.info("Loaded NightmareHandler")
         pm.registerEvents(PlayerTntHandler(), this)
@@ -209,6 +207,7 @@ class XCorePlugin : JavaPlugin() {
         LiveModeModule,
         MetaModule,
         MobBallModule,
+        MotdModule,
         NbsModule,
         NotificationModule,
         OmikujiModule,
