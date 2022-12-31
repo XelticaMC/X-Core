@@ -6,6 +6,7 @@ import com.xxmicloxx.NoteBlockAPI.songplayer.PositionSongPlayer
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer
 import com.xxmicloxx.NoteBlockAPI.songplayer.RangeSongPlayer
 import com.xxmicloxx.NoteBlockAPI.utils.NBSDecoder
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -93,6 +94,10 @@ object NbsModule: ModuleBase() {
         }
         radio.addPlayer(player)
         radio.isPlaying = true
+        if (song.title.isNotEmpty()) {
+            val author = if (song.author.isNotEmpty()) song.author else "不明"
+            player.sendActionBar(Component.text("再生中 ♪ ${song.title.isNotEmpty()} - $author"))
+        }
     }
 
     /**
