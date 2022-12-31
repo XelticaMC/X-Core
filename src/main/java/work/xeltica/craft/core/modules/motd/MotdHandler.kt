@@ -13,6 +13,7 @@ import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.hub.HubType
 import work.xeltica.craft.core.modules.player.PlayerDataKey
+import work.xeltica.craft.core.utils.Ticks
 
 class MotdHandler : Listener {
     @EventHandler
@@ -40,6 +41,7 @@ class MotdHandler : Listener {
         val name = PlainTextComponentSerializer.plainText().serialize(e.player.displayName())
         e.quitMessage(Component.text("§a$name§bさんがかえりました"))
     }
+
     // 30分
-    private val defaultNewComerTime = 20 * 60 * 30
+    private val defaultNewComerTime = Ticks.from(30, 0.0)
 }
