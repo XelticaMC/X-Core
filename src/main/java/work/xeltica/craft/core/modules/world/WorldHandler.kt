@@ -1,33 +1,25 @@
 package work.xeltica.craft.core.modules.world
 
-import io.papermc.paper.event.block.BlockPreDispenseEvent
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.title.Title
 import org.bukkit.*
-import org.bukkit.block.Dispenser
-import org.bukkit.entity.GlowItemFrame
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.block.BlockFormEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerTeleportEvent
-import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.ShapedRecipe
-import org.bukkit.inventory.ShapelessRecipe
-import org.bukkit.material.Directional
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.DiscordHook
-import work.xeltica.craft.core.models.CraftRecipe
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.utils.CollectionHelper.sum
 import work.xeltica.craft.core.utils.Ticks
 
 /**
@@ -142,81 +134,14 @@ class WorldHandler : Listener {
         }
     }
 
-    /*
-     * 自動クラフト機能
+    /**
+     * 焼石製造機を丸石製造機にする
+     * 採掘EPボーナスの自動化対策
      */
     @EventHandler
-    fun onDispenser(event: BlockPreDispenseEvent) {
-        val block = event.block
-        val blockData = block.blockData
-        if (blockData.material != Material.DISPENSER) return
-        val frames = block.location.toCenterLocation().getNearbyEntitiesByType(GlowItemFrame::class.java, 1.0)
-        val itemFrame = frames.firstOrNull {
-            it.location.clone()
-                .add(it.attachedFace.direction).block.location.toBlockLocation() == block.location.toBlockLocation()
-        } ?: return
-
-        event.isCancelled = true
-        val item = itemFrame.item
-
-        val recipes = ArrayList<CraftRecipe>()
-        for (recipe in Bukkit.getServer().getRecipesFor(item)) {
-            if (recipe is ShapedRecipe) {
-                val ingredients = ArrayList<ItemStack>()
-                for (i in recipe.ingredientMap.values) {
-                    if (i == null) continue
-                    ingredients.add(ItemStack(i.type, 1))
-                }
-                recipes.add(CraftRecipe(ingredients, recipe.getResult()))
-            }
-            if (recipe is ShapelessRecipe) {
-                val ingredients = ArrayList<ItemStack>()
-                for (i in recipe.ingredientList) {
-                    if (i == null) continue
-                    ingredients.add(ItemStack(i.type, 1))
-                }
-                recipes.add(CraftRecipe(ingredients, recipe.getResult()))
-            }
-        }
-        val state = block.state
-        if (state is Dispenser) {
-            val inventory = state.inventory
-            val contents = inventory.contents.filterNotNull()
-
-            for (recipe in recipes) {
-                val fixedInventory = contents.groupingBy { it.type }.sum { it.amount }.toMutableMap()
-                var flag = true
-                for (ingredient in recipe.fixedRecipe.keys) {
-                    if (fixedInventory.containsKey(ingredient) && fixedInventory[ingredient]!! >= recipe.fixedRecipe[ingredient]!!) {
-                        fixedInventory.replace(
-                            ingredient,
-                            fixedInventory[ingredient]!! - recipe.fixedRecipe[ingredient]!!
-                        )
-                        continue
-                    }
-                    flag = false
-                }
-                if (flag) {
-                    for (itemStack in contents) {
-                        inventory.remove(itemStack)
-                    }
-                    for ((key, value) in fixedInventory) {
-                        val itemStack = ItemStack(key)
-                        itemStack.amount = value
-                        inventory.addItem(itemStack)
-                    }
-                    if (blockData is Directional) {
-                        val location: Location = block.location.toBlockLocation().add(blockData.facing.direction)
-                        val result: HashMap<Int, ItemStack> = state.inventory.addItem(recipe.result)
-                        if (result.isNotEmpty()) {
-                            for (i in result.values) {
-                                block.world.dropItem(location, i)
-                            }
-                        }
-                        return
-                    }
-                }
-            }
+    fun onGuardCobbleStoneGenerator(e: BlockFormEvent) {
+        if (e.newState.type == Material.STONE) {
+            e.newState.type = Material.COBBLESTONE
         }
     }
 }

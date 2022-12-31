@@ -1,9 +1,7 @@
 package work.xeltica.craft.core.handlers;
 
-import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
@@ -12,16 +10,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
  * @author Xeltica
  */
 public class MiscHandler implements Listener {
-    /**
-     * 焼石製造機を丸石製造機にする
-     * 採掘EPボーナスの自動化対策
-     */
-    @EventHandler
-    public void onGuardCobbleStoneGenerator(BlockFormEvent e) {
-        if (e.getNewState().getType() == Material.STONE) {
-            e.getNewState().setType(Material.COBBLESTONE);
-        }
-    }
 
     /**
      * イベントマップでのダメージおよび死を防ぐ
