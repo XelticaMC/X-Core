@@ -3,11 +3,7 @@ package work.xeltica.craft.core.events
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
-/**
- * 現実時間で次の日になったイベント
- * @author Xeltica
- */
-class RealTimeNewDayEvent : Event() {
+class NewMorningEvent(val time: Long) : Event() {
     override fun getHandlers(): HandlerList {
         return HANDLERS_LIST
     }
