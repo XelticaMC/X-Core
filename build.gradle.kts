@@ -332,9 +332,6 @@ bukkit {
         register("otanoshimi.command.live") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
         }
-        register("otanoshimi.command.nickname") {
-            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
-        }
         register("otanoshimi.command.counter") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
