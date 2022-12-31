@@ -1,9 +1,10 @@
-package work.xeltica.craft.core.xphone.apps
+package work.xeltica.craft.core.modules.cat
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.modules.player.PlayerDataKey
+import work.xeltica.craft.core.modules.cat.CatModule.isCat
+import work.xeltica.craft.core.modules.cat.CatModule.setCat
+import work.xeltica.craft.core.xphone.apps.AppBase
 
 /**
  * ネコモードを切り替えるプラグイン。
@@ -17,10 +18,8 @@ class CatApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.COD
 
     override fun onLaunch(player: Player) {
-        player.performCommand("cat ${if (isCat(player)) "off" else "on"}")
+        setCat(player, !isCat(player))
     }
 
     override fun isShiny(player: Player): Boolean = isCat(player)
-
-    private fun isCat(player: Player) = PlayerStore.open(player).getBoolean(PlayerDataKey.CAT_MODE)
 }

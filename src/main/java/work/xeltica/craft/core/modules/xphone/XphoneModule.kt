@@ -9,6 +9,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.gui.SoundPitch
 import work.xeltica.craft.core.modules.bedrock.BedrockToolsApp
+import work.xeltica.craft.core.modules.cat.CatApp
 import work.xeltica.craft.core.modules.eventHalloween.CandyStoreApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerDrugStoreApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerStoreApp
@@ -23,6 +24,7 @@ import work.xeltica.craft.core.modules.quickchat.QuickChatApp
 import work.xeltica.craft.core.modules.stamprally.StampRallyApp
 import work.xeltica.craft.core.modules.vehicle.BoatApp
 import work.xeltica.craft.core.modules.vehicle.CartApp
+import work.xeltica.craft.core.modules.world.TeleportApp
 import work.xeltica.craft.core.xphone.apps.*
 
 /**

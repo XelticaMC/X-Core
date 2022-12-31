@@ -16,6 +16,7 @@ import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.hooks.VaultHook
 import work.xeltica.craft.core.modules.bedrock.BedrockModule
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
+import work.xeltica.craft.core.modules.cat.CatModule
 import work.xeltica.craft.core.modules.clover.CloverModule
 import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
@@ -26,6 +27,7 @@ import work.xeltica.craft.core.modules.eventSummer.EventSummerModule
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.item.ItemModule
+import work.xeltica.craft.core.modules.kusa.KusaModule
 import work.xeltica.craft.core.modules.livemode.LiveModeModule
 import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
@@ -152,7 +154,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("signedit", CommandSignEdit())
         CommandRegistry.register("report", CommandReport())
         CommandRegistry.register("localtime", CommandLocalTime())
-        CommandRegistry.register("cat", CommandCat())
         CommandRegistry.register("xtp", CommandXtp())
         CommandRegistry.register("nick", CommandNickName())
         CommandRegistry.register("countdown", CommandCountdown())
@@ -194,6 +195,7 @@ class XCorePlugin : JavaPlugin() {
     private val modules: Array<ModuleBase> = arrayOf(
         BedrockModule,
         BossBarModule,
+        CatModule,
         CloverModule,
         CounterModule,
         EbiPowerModule,
@@ -204,6 +206,7 @@ class XCorePlugin : JavaPlugin() {
         HintModule,
         HubModule,
         ItemModule,
+        KusaModule,
         LiveModeModule,
         MetaModule,
         MobBallModule,
