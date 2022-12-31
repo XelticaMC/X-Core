@@ -171,8 +171,6 @@ class XCorePlugin : JavaPlugin() {
         logger.info("Loaded NightmareHandler")
         pm.registerEvents(PlayerTntHandler(), this)
         logger.info("Loaded PlayTntHandler")
-        pm.registerEvents(MiscHandler(), this)
-        logger.info("Loaded MiscHandler")
         pm.registerEvents(LoginBonusHandler(), this)
         logger.info("Loaded LoginBonusHandler")
         pm.registerEvents(TicketWildareaBHandler(), this)
