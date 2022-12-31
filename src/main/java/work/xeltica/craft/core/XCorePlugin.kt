@@ -14,6 +14,7 @@ import work.xeltica.craft.core.handlers.*
 import work.xeltica.craft.core.hooks.CitizensHook
 import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.hooks.VaultHook
+import work.xeltica.craft.core.modules.autoCrafter.AutoCrafterModule
 import work.xeltica.craft.core.modules.bedrock.BedrockModule
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.cat.CatModule
@@ -193,6 +194,7 @@ class XCorePlugin : JavaPlugin() {
     )
 
     private val modules: Array<ModuleBase> = arrayOf(
+        AutoCrafterModule,
         BedrockModule,
         BossBarModule,
         CatModule,
