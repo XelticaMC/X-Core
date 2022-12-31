@@ -10,7 +10,9 @@ import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.commands.*
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.handlers.*
+import work.xeltica.craft.core.handlers.LoginBonusHandler
+import work.xeltica.craft.core.handlers.NightmareHandler
+import work.xeltica.craft.core.handlers.TicketWildareaBHandler
 import work.xeltica.craft.core.hooks.CitizensHook
 import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.hooks.VaultHook
@@ -169,8 +171,6 @@ class XCorePlugin : JavaPlugin() {
         val pm = server.pluginManager
         pm.registerEvents(NightmareHandler(), this)
         logger.info("Loaded NightmareHandler")
-        pm.registerEvents(PlayerTntHandler(), this)
-        logger.info("Loaded PlayTntHandler")
         pm.registerEvents(LoginBonusHandler(), this)
         logger.info("Loaded LoginBonusHandler")
         pm.registerEvents(TicketWildareaBHandler(), this)

@@ -1,5 +1,7 @@
 package work.xeltica.craft.core.modules.promotion
 
+import com.destroystokyo.paper.event.block.TNTPrimeEvent
+import com.destroystokyo.paper.event.block.TNTPrimeEvent.PrimeReason
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.Tag
@@ -124,6 +126,17 @@ class PromotionHandler : Listener {
             player.sendMessage("§aわかば§rプレイヤーは§6${destInfo.displayName}§rに行くことができません！\n§b/promo§rコマンドを実行して、昇格方法を確認してください！")
             e.isCancelled = true
             return
+        }
+    }
+
+    /**
+     * メインワールドにおいて、レッドストーンおよび発射物によるTNT爆破のみを無効化する
+     * これらを塞がないと、わかばロールでTNTを着火できてしまうため。
+     */
+    @EventHandler
+    fun onTNTPrime(e: TNTPrimeEvent) {
+        if (e.block.world.name == "main" && e.reason in listOf(PrimeReason.REDSTONE, PrimeReason.PROJECTILE)) {
+            e.isCancelled = true
         }
     }
 
