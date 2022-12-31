@@ -48,7 +48,6 @@ import work.xeltica.craft.core.modules.vehicle.VehicleModule
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.runnables.*
-import work.xeltica.craft.core.stores.NickNameStore
 import work.xeltica.craft.core.utils.Ticks
 
 /**
@@ -65,7 +64,6 @@ class XCorePlugin : JavaPlugin() {
         loadModules()
 
         // TODO 廃止
-        loadStores()
         loadCommands()
         loadHandlers()
         loadRunnables()
@@ -145,10 +143,6 @@ class XCorePlugin : JavaPlugin() {
         }
     }
 
-    private fun loadStores() {
-        NickNameStore()
-    }
-
     private fun loadCommands() {
         CommandRegistry.clearMap()
 
@@ -158,7 +152,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("report", CommandReport())
         CommandRegistry.register("localtime", CommandLocalTime())
         CommandRegistry.register("xtp", CommandXtp())
-        CommandRegistry.register("nick", CommandNickName())
         CommandRegistry.register("countdown", CommandCountdown())
         CommandRegistry.register("xreload", CommandXReload())
         CommandRegistry.register("xtpreset", CommandXtpReset())
