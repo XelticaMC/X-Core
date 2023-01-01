@@ -49,7 +49,7 @@ stations:
     location: [ -761.5, -194.5 ]
     paths:
       0: { to: mutsuki_shinso_1, line: mutsuki_shinso_rapid, direction: west, time: 179 }
-      1: { to: mutsuki_shinso_8, line: mutsuki_shinso_rapid, direction: east, time: 180 }
+      1: { to: mutsuki_shinso_8, line: mutsuki_shinso_rapid, direction: east, time: 108 }
       2: { to: mutsuki_shinso_4, line: mutsuki_shinso_local, direction: west, time: 51 }
       3: { to: mutsuki_shinso_6, line: mutsuki_shinso_local, direction: east, time: 33 }
   mutsuki_shinso_6:
@@ -80,13 +80,13 @@ stations:
     world: main
     location: [ -69.75, -295.0 ]
     paths:
-      0: { to: mutsuki_shinso_5, line: mutsuki_shinso_rapid, direction: west, time: 180 }
+      0: { to: mutsuki_shinso_5, line: mutsuki_shinso_rapid, direction: west, time: 108 }
       1: { to: mutsuki_shinso_9, line: mutsuki_shinso_rapid, direction: east, time: 41 }
       2: { to: mutsuki_shinso_7, line: mutsuki_shinso_local, direction: west, time: 47 }
       3: { to: mutsuki_shinso_9, line: mutsuki_shinso_local, direction: east, time: 41 }
-      4: { to: mutsuki_niizamenamboku_S1, line: mutsuki_niizamenamboku_south, direction: north, time: 100 }
+      4: { to: mutsuki_niizamenamboku_S1, line: mutsuki_niizamenamboku_south, direction: north, time: 73 }
       5: { to: mutsuki_niizamenamboku_S3, line: mutsuki_niizamenamboku_south, direction: south, time: 42 }
-      6: { to: mutsuki_kohoku_12, line: mutsuki_adachi, direction: north, time: 100 }
+      6: { to: mutsuki_kohoku_12, line: mutsuki_adachi, direction: north, time: 146 }
   mutsuki_shinso_9:
     name: 海鮮王国東
     yomi: かいせんおうこくひがし
@@ -361,7 +361,7 @@ stations:
     location: [ 1428.5, -908.5 ]
     paths:
       0: { to: mutsuki_kohoku_3, line: mutsuki_kohoku, direction: east, time: 26 }
-      1: { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: west, time: 30 }
+      1: { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: west, time: 23 }
   mutsuki_kohoku_5:
     name: 塩川
     yomi: しおかわ
@@ -369,8 +369,8 @@ stations:
     world: main
     location: [ 1250, -1000 ]
     paths:
-      0: { to: mutsuki_kohoku_4, line: mutsuki_kohoku, direction: east, time: 30 }
-      1: { to: mutsuki_kohoku_6, line: mutsuki_kohoku, direction: west, time: 30 }
+      0: { to: mutsuki_kohoku_4, line: mutsuki_kohoku, direction: east, time: 23 }
+      1: { to: mutsuki_kohoku_6, line: mutsuki_kohoku, direction: west, time: 22 }
   mutsuki_kohoku_6:
     name: 九条湖
     yomi: くじょうこ
@@ -378,7 +378,7 @@ stations:
     world: main
     location: [ 1177.5, -1016.5 ]
     paths:
-      0: { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: east, time: 30 }
+      0: { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: east, time: 22 }
       1: { to: mutsuki_kohoku_7, line: mutsuki_kohoku, direction: west, time: 38 }
   mutsuki_kohoku_7:
     name: 小路岸綾
@@ -433,7 +433,7 @@ stations:
     location: [ 80.5, -1332.5 ]
     paths:
       0: { to: mutsuki_kohoku_11, line: mutsuki_kohoku, direction: east, time: 28 }
-      1: { to: mutsuki_shinso_8, line: mutsuki_adachi, direction: south, time: 100 }
+      1: { to: mutsuki_shinso_8, line: mutsuki_adachi, direction: south, time: 146 }
       2: { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_rapid, direction: north, time: 63 }
       3: { to: mutsuki_niizamenamboku_N2, line: mutsuki_niizamenamboku_north_local, direction: north, time: 22 }
   mutsuki_niizamenamboku_S1:
@@ -441,9 +441,9 @@ stations:
     yomi: にいざめ
     number:
     world: main
-    location: [ 0, -600 ]
+    location: [ 92.5, -711.0 ]
     paths:
-      0: { to: mutsuki_shinso_8, line: mutsuki_niizamenamboku_south, direction: south, time: 100 }
+      0: { to: mutsuki_shinso_8, line: mutsuki_niizamenamboku_south, direction: south, time: 73 }
   mutsuki_niizamenamboku_S3:
     name: 自然王国西
     yomi: しぜんおうこくにし
@@ -1453,7 +1453,7 @@ municipalities:
   yukiusagi:
     name: 雪兎町
     world: main
-    stations: [ ]
+    stations: [ mutsuki_kohoku_2 ]
 
 loopMax: 210
 
