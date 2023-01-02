@@ -23,7 +23,7 @@ class MotdHandler : Listener {
         e.joinMessage(Component.text("§a$name§bさんがやってきました"))
         if (!e.player.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a$name§bさんが§6§l初参加§rです"))
-            PlayerStore.open(e.player)[PromotionModule.keyNewcomerTime] = defaultNewComerTime
+            PlayerStore.open(e.player)[PromotionModule.PS_KEY_NEWCOMER_TIME] = defaultNewComerTime
             HubModule.teleport(e.player, HubType.NewComer, true)
         }
 

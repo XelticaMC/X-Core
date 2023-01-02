@@ -10,12 +10,9 @@ import work.xeltica.craft.core.events.RealTimeNewDayEvent
 class LoginBonusHandler : Listener {
     @EventHandler
     fun onLoginBonus(e: RealTimeNewDayEvent) {
-        val records = PlayerStore.openAll()
-
         // ログボ記録を削除
-        records.forEach{
-            it.delete(LoginBonusModule.isReceivedLoginBonus)
-            it.delete(LoginBonusModule.isReceivedSummerLoginBonus)
+        PlayerStore.openAll().forEach{
+            it.delete(LoginBonusModule.PS_KEY_LOGIN_BONUS)
         }
 
         // いる人にログボ

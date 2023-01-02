@@ -9,12 +9,12 @@ import org.bukkit.entity.Axolotl
 import org.bukkit.entity.Mob
 import org.bukkit.inventory.ItemStack
 import work.xeltica.craft.core.XCorePlugin
-import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.Config
+import work.xeltica.craft.core.api.ModuleBase
 import java.util.*
 
 object MobBallModule: ModuleBase() {
-    const val keyMobDex = "mob_dex"
+    const val PS_KEY_DEX = "mob_dex"
 
     lateinit var tierMap: MutableMap<String, Int>
     lateinit var difficulties: Array<Double>

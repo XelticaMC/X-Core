@@ -2,23 +2,22 @@ package work.xeltica.craft.core.modules.counter
 
 import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerialization
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.api.Config
 import java.io.IOException
 import java.util.*
-import kotlin.collections.HashMap
 
 object CounterModule: ModuleBase() {
     lateinit var config: Config
 
-    const val keyIsRegisterMode = "counter_register_mode"
-    const val keyRegisterStateName = "counter_register_name"
-    const val keyRegisterStateIsDaily = "counter_register_is_daily"
-    const val keyRegisterStateLocation = "counter_register_location"
-    const val keyPlayingId = "counter_id"
-    const val keyPlayingTimestamp = "counter_time"
-    const val keyPlayedCount = "counter_count"
+    const val PS_KEY_MODE = "counter_register_mode"
+    const val PS_KEY_NAME = "counter_register_name"
+    const val PS_KEY_IS_DAILY = "counter_register_is_daily"
+    const val PS_KEY_LOCATION = "counter_register_location"
+    const val PS_KEY_ID = "counter_id"
+    const val PS_KEY_TIME = "counter_time"
+    const val PS_KEY_COUNT = "counter_count"
 
     /** カウンターデータのマップ  */
     private val counters: HashMap<String, CounterData> = HashMap()
@@ -120,7 +119,7 @@ object CounterModule: ModuleBase() {
      */
     @Throws(IOException::class)
     fun resetAllPlayersPlayedLog() {
-        PlayerStore.openAll().forEach { it.delete(keyPlayedCount) }
+        PlayerStore.openAll().forEach { it.delete(PS_KEY_COUNT) }
     }
 
     /**

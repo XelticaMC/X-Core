@@ -5,15 +5,15 @@ import org.bukkit.entity.*
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.inventory.ItemStack
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.hooks.VaultHook
-import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.utils.Ticks
 import java.util.*
 
 object EbiPowerModule: ModuleBase() {
-    const val keyLastJoinedAt = "last_joined"
-    const val keyBrokenBlocksCount = "broken_blocks_count"
+    const val PS_KEY_LAST_JOINED = "last_joined"
+    const val PS_KEY_BROKEN_BLOCKS_COUNT = "broken_blocks_count"
 
     private lateinit var config: Config
 

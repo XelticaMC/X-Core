@@ -13,7 +13,7 @@ import work.xeltica.craft.core.api.playerStore.PlayerStore
 class CatHandler : Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerChatForCat(e: ChatEvent) {
-        if (PlayerStore.open(e.player).getBoolean(CatModule.keyIsCat)) {
+        if (PlayerStore.open(e.player).getBoolean(CatModule.PS_KEY_CAT)) {
             val text = e.message() as TextComponent
             e.message(Component.text(CatModule.nyaize(text.content())))
         }
@@ -23,7 +23,7 @@ class CatHandler : Listener {
     fun onPlayerChatForCat(e: LunaChatBukkitChannelMessageEvent) {
         val member = e.member
         if (member !is ChannelMemberPlayer) return
-        if (PlayerStore.open(member.player).getBoolean(CatModule.keyIsCat))
+        if (PlayerStore.open(member.player).getBoolean(CatModule.PS_KEY_CAT))
             e.message = CatModule.nyaize(e.message)
     }
 }

@@ -4,9 +4,9 @@ import org.bukkit.*
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui.Companion.getInstance
-import work.xeltica.craft.core.api.Config
 import java.io.IOException
 import java.util.function.Consumer
 
@@ -18,7 +18,7 @@ object WorldModule: ModuleBase() {
      * テレポートによるヒント解除などのときに、この最初にworldマップに飛ぶ仕様が邪魔をしてしまうため、
      * 最初のスポーンを経験しているかどうかの値を持っておく必要がある
      */
-    const val keyIsFirstSpawn = "first_spawn"
+    const val PS_KEY_FIRST_SPAWN = "first_spawn"
 
     private lateinit var locationConfig: Config
     private lateinit var worldsConfig: Config

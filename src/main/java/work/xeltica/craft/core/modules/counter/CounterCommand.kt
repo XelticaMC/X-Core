@@ -26,17 +26,17 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     if (args.size < 2) return ui.error(player, "/counter register <name> [\"daily\"]")
                     val name = args[1]
                     val isDaily = args.size == 3 && "daily".equals(args[2], ignoreCase = true)
-                    record[CounterModule.keyIsRegisterMode] = true
-                    record[CounterModule.keyRegisterStateName] = name
-                    record[CounterModule.keyRegisterStateIsDaily] = isDaily
+                    record[CounterModule.PS_KEY_MODE] = true
+                    record[CounterModule.PS_KEY_NAME] = name
+                    record[CounterModule.PS_KEY_IS_DAILY] = isDaily
                     player.sendMessage("カウンター登録モードは有効。カウンターの始点にする感圧板をクリックかタップしてください。")
                     player.sendMessage("キャンセルする際には、 /counter cancel を実行します。")
                 }
                 "cancel" -> {
-                    record.delete(CounterModule.keyIsRegisterMode)
-                    record.delete(CounterModule.keyRegisterStateName)
-                    record.delete(CounterModule.keyRegisterStateIsDaily)
-                    record.delete(CounterModule.keyRegisterStateLocation)
+                    record.delete(CounterModule.PS_KEY_MODE)
+                    record.delete(CounterModule.PS_KEY_NAME)
+                    record.delete(CounterModule.PS_KEY_IS_DAILY)
+                    record.delete(CounterModule.PS_KEY_LOCATION)
                     player.sendMessage("カウンター登録モードを無効化し、キャンセルしました。")
                 }
                 "unregister" -> {
@@ -111,7 +111,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                             ui.error(player, "サーバーがUUIDを取得できなかったため、プレイ済み履歴を削除できませんでした。")
                             return true
                         }
-                        PlayerStore.open(p).delete(CounterModule.keyPlayedCount)
+                        PlayerStore.open(p).delete(CounterModule.PS_KEY_COUNT)
                         player.sendMessage("そのプレイヤーのプレイ済み履歴を削除しました。")
                     }
                 }

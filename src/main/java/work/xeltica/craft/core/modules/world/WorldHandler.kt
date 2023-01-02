@@ -85,7 +85,7 @@ class WorldHandler : Listener {
         }
 
         // 以前サーバーに来ている or FIRST_SPAWN フラグが立っている
-        val isNotFirstTeleport = player.hasPlayedBefore() || PlayerStore.open(player).getBoolean(WorldModule.keyIsFirstSpawn)
+        val isNotFirstTeleport = player.hasPlayedBefore() || PlayerStore.open(player).getBoolean(WorldModule.PS_KEY_FIRST_SPAWN)
         if (info.name == "main" && !HintModule.hasAchieved(player, Hint.GOTO_MAIN) && isNotFirstTeleport) {
             // はじめてメインワールドに入った場合、対象のスタッフに通知する
             try {
@@ -116,7 +116,7 @@ class WorldHandler : Listener {
 
         // FIRST_SPAWN フラグの設定
         Bukkit.getScheduler().runTaskLater(instance, Runnable {
-            PlayerStore.open(e.player)[WorldModule.keyIsFirstSpawn] = true
+            PlayerStore.open(e.player)[WorldModule.PS_KEY_FIRST_SPAWN] = true
         }, Ticks.from(5.0).toLong())
     }
 

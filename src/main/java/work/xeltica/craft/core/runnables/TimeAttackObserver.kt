@@ -15,9 +15,9 @@ class TimeAttackObserver : BukkitRunnable() {
         // TODO パフォーマンス改善のため、走者をイベントハンドラーでリスト化し、キャッシュするようにする
         Bukkit.getOnlinePlayers().forEach {
             val record = PlayerStore.open(it)
-            if (!record.has(CounterModule.keyPlayingId)) return@forEach
+            if (!record.has(CounterModule.PS_KEY_ID)) return@forEach
 
-            val ts = record.getString(CounterModule.keyPlayingTimestamp, "0")?.toLong()!!
+            val ts = record.getString(CounterModule.PS_KEY_TIME, "0")?.toLong()!!
             val now = System.currentTimeMillis()
             val timeString = Time.msToString(now - ts)
             it.sendActionBar(Component.text(timeString))

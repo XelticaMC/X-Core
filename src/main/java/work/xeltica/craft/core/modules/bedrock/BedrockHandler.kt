@@ -9,7 +9,7 @@ class BedrockHandler : Listener {
     @EventHandler
     fun onBedrockPlayerJoin(e: PlayerJoinEvent) {
         val record = PlayerStore.open(e.player)
-        if (record.getBoolean(BedrockModule.keyIsAcceptedDisclaimer)) return
+        if (record.getBoolean(BedrockModule.PS_KEY_ACCEPT_DISCLAIMER)) return
 
         BedrockModule.showDisclaimerAsync(e.player)
     }

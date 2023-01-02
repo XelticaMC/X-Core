@@ -49,7 +49,7 @@ class FireworkApp : AppBase() {
             player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 2f)
         }
         if (!bonusReceived) {
-            PlayerStore.open(player)[LoginBonusModule.isReceivedSummerLoginBonus] = true
+            PlayerStore.open(player)[EventSummerModule.PS_KEY_LOGIN_BONUS_SUMMER] = true
         }
     }
 
@@ -59,5 +59,5 @@ class FireworkApp : AppBase() {
         return EventSummerModule.isEventNow() && player.world.name == "main"
     }
 
-    private fun isBonusReceived(player: Player) = PlayerStore.open(player).getBoolean(LoginBonusModule.isReceivedLoginBonus)
+    private fun isBonusReceived(player: Player) = PlayerStore.open(player).getBoolean(LoginBonusModule.PS_KEY_LOGIN_BONUS)
 }

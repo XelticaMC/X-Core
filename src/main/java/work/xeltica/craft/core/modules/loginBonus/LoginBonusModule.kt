@@ -11,9 +11,8 @@ import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.utils.Ticks
 
 object LoginBonusModule : ModuleBase() {
-    const val isReceivedLoginBonus = "login_bonus"
-    const val isReceivedSummerLoginBonus = "login_bonus_summer"
-    private const val loginBonusValue = 250
+    const val PS_KEY_LOGIN_BONUS = "login_bonus"
+    private const val LOGIN_BONUS = 250
 
     override fun onEnable() {
         registerHandler(LoginBonusHandler())
@@ -21,14 +20,14 @@ object LoginBonusModule : ModuleBase() {
 
     fun giveLoginBonus(p: Player) {
         val record = PlayerStore.open(p)
-        if (record.getBoolean(isReceivedLoginBonus)) return
+        if (record.getBoolean(PS_KEY_LOGIN_BONUS)) return
 
         Bukkit.getScheduler().runTaskLater(XCorePlugin.instance, Runnable {
             if (!p.isOnline) return@Runnable
-            EbiPowerModule.tryGive(p, loginBonusValue)
-            p.sendMessage("§a§lログインボーナス達成！§6${loginBonusValue}EP§fを手に入れた！")
+            EbiPowerModule.tryGive(p, LOGIN_BONUS)
+            p.sendMessage("§a§lログインボーナス達成！§6${LOGIN_BONUS}EP§fを手に入れた！")
             p.playSound(p.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 2f)
-            PlayerStore.open(p)[isReceivedLoginBonus] = true
+            PlayerStore.open(p)[PS_KEY_LOGIN_BONUS] = true
         }, Ticks.from(2.0).toLong())
     }
 }

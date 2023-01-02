@@ -63,7 +63,7 @@ class PromotionHandler : Listener {
         val record = PlayerStore.open(e.player)
         if (PromotionModule.isCitizen(e.player)) {
             HintModule.achieve(e.player, Hint.BE_CITIZEN)
-        } else if (!record.has(PromotionModule.keyNewcomerTime)) {
+        } else if (!record.has(PromotionModule.PS_KEY_NEWCOMER_TIME)) {
             e.player.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！")
             e.player.sendMessage("詳しくは §b/promo§rコマンドを実行してください。")
         }

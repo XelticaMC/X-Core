@@ -9,6 +9,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerBedEnterEvent
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
+import work.xeltica.craft.core.api.playerStore.PlayerStore
+import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.modules.counter.PlayerCounterFinish
 import work.xeltica.craft.core.modules.counter.PlayerCounterStart
 import work.xeltica.craft.core.modules.nbs.NbsModel
@@ -17,6 +19,14 @@ import work.xeltica.craft.core.modules.nbs.NbsModule.stopRadio
 import work.xeltica.craft.core.utils.Ticks
 
 class EventSummerHandler : Listener {
+    @EventHandler
+    fun onNewDay(e: RealTimeNewDayEvent) {
+        // ログボ記録を削除
+        PlayerStore.openAll().forEach{
+            it.delete(EventSummerModule.PS_KEY_LOGIN_BONUS_SUMMER)
+        }
+    }
+
     /**
      * タイムアタック開始時に音を鳴らす機能
      */

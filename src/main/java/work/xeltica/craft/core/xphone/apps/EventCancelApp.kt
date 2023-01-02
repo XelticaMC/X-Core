@@ -17,11 +17,11 @@ class EventCancelApp : AppBase() {
 
     override fun onLaunch(player: Player) {
         val record = getRecord(player)
-        val count = record.getInt(CounterModule.keyPlayedCount)
+        val count = record.getInt(CounterModule.PS_KEY_COUNT)
 
-        record.delete(CounterModule.keyPlayingId)
-        record.delete(CounterModule.keyPlayingTimestamp)
-        record[CounterModule.keyPlayedCount] = record.getInt(CounterModule.keyPlayedCount, 0) + 1
+        record.delete(CounterModule.PS_KEY_ID)
+        record.delete(CounterModule.PS_KEY_TIME)
+        record[CounterModule.PS_KEY_COUNT] = record.getInt(CounterModule.PS_KEY_COUNT, 0) + 1
 
         player.sendMessage("カウントダウンをリタイアしました。本日は${if (count == 0) "あと1回再チャレンジできます。" else "もう再チャレンジできません。"}")
         player.performCommand("respawn")
@@ -29,7 +29,7 @@ class EventCancelApp : AppBase() {
     }
 
     override fun isVisible(player: Player): Boolean {
-        return player.world.name == "event" && getRecord(player).getString(CounterModule.keyPlayingId) != null
+        return player.world.name == "event" && getRecord(player).getString(CounterModule.PS_KEY_ID) != null
     }
 
     private fun getRecord(player: Player): PlayerRecord {

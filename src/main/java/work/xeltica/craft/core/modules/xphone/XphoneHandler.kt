@@ -56,10 +56,10 @@ class XphoneHandler : Listener {
         if (e.to.world.name == "hub2") return
         Bukkit.getScheduler().runTaskLater(XCorePlugin.instance, Runnable {
             val record = PlayerStore.open(e.player)
-            if (record.getBoolean(XphoneModule.keyIsGivenPhone)) return@Runnable
+            if (record.getBoolean(XphoneModule.PS_KEY_GIVEN_PHONE)) return@Runnable
 
             e.player.inventory.addItem(ItemModule.getItem(ItemModule.ITEM_NAME_XPHONE))
-            record[XphoneModule.keyIsGivenPhone] = true
+            record[XphoneModule.PS_KEY_GIVEN_PHONE] = true
         }, 1L)
     }
 }

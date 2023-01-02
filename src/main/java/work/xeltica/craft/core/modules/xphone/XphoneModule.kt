@@ -10,9 +10,9 @@ import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.gui.SoundPitch
 import work.xeltica.craft.core.modules.bedrock.BedrockToolsApp
 import work.xeltica.craft.core.modules.cat.CatApp
-import work.xeltica.craft.core.modules.eventHalloween.CandyStoreApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerDrugStoreApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerStoreApp
+import work.xeltica.craft.core.modules.eventHalloween.CandyStoreApp
 import work.xeltica.craft.core.modules.eventSummer.FireworkApp
 import work.xeltica.craft.core.modules.hint.HintApp
 import work.xeltica.craft.core.modules.livemode.LiveModeApp
@@ -31,13 +31,16 @@ import work.xeltica.craft.core.xphone.apps.*
  * X Phone の基幹となるシステムです。
  */
 object XphoneModule : ModuleBase() {
-    const val keyIsGivenPhone = "given_phone"
+    const val PS_KEY_GIVEN_PHONE = "given_phone"
+
+    private const val PHONE_TITLE = "X Phone OS 3.0"
+    private lateinit var apps: MutableList<AppBase>
 
     /**
      * X-Core が有効になったときに呼ばれます。
      */
     override fun onEnable() {
-        apps.addAll(listOf(
+        apps = mutableListOf(
             EventRespawnApp(),
             EventReturnWorldApp(),
             EventCancelApp(),
@@ -63,7 +66,7 @@ object XphoneModule : ModuleBase() {
             PunishApp(),
             StampRallyApp(),
             CandyStoreApp(),
-        ))
+        )
 
         registerCommand("xphone", XphoneCommand())
         registerHandler(XphoneHandler())
@@ -93,7 +96,7 @@ object XphoneModule : ModuleBase() {
      */
     fun openSpringBoard(player: Player) {
         playStartupSound(player)
-        ui().openMenu(player, name, apps.filter {
+        ui().openMenu(player, PHONE_TITLE, apps.filter {
             it.isVisible(player)
         }.map { app ->
             MenuItem(app.getName(player), { app.onLaunch(player) }, app.getIcon(player), null, app.isShiny(player))
@@ -126,8 +129,4 @@ object XphoneModule : ModuleBase() {
         ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.A1, 2)
         ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.D2, 4)
     }
-
-    const val name = "X Phone OS 3.0"
-
-    private val apps = mutableListOf<AppBase>()
 }

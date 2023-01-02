@@ -135,12 +135,12 @@ class EbiPowerHandler: Listener {
     fun onPlayerLoggedIn(e: PlayerJoinEvent) {
         val now = Date()
         val record = PlayerStore.open(e.player)
-        val prev = Date(record.getLong(EbiPowerModule.keyLastJoinedAt, now.time))
+        val prev = Date(record.getLong(EbiPowerModule.PS_KEY_LAST_JOINED, now.time))
         if (prev.year != now.year && prev.month != now.month && prev.date != now.date) {
             EbiPowerModule.tryGive(e.player, LOGIN_BONUS_POWER)
             notification(e.player, "ログボ達成！" + LOGIN_BONUS_POWER.toString() + "EPを獲得。")
         }
-        record[EbiPowerModule.keyLastJoinedAt] = now.time
+        record[EbiPowerModule.PS_KEY_LAST_JOINED] = now.time
     }
 
     @EventHandler
@@ -177,11 +177,11 @@ class EbiPowerHandler: Listener {
         if (!breakBonusList.contains(e.block.type)) return
         if (playerIsInBlacklisted(e.player)) return
         val record = PlayerStore.open(e.player)
-        val brokenBlocksCount = record.getInt(EbiPowerModule.keyBrokenBlocksCount)
+        val brokenBlocksCount = record.getInt(EbiPowerModule.PS_KEY_BROKEN_BLOCKS_COUNT)
 
         if (!e.isDropItems) return
 
-        record[EbiPowerModule.keyBrokenBlocksCount] = brokenBlocksCount + 1
+        record[EbiPowerModule.PS_KEY_BROKEN_BLOCKS_COUNT] = brokenBlocksCount + 1
 
         if (brokenBlocksCount + 1 == BREAK_BLOCK_BONUS_LIMIT) {
             HintModule.achieve(e.player, Hint.MINERS_DREAM)
@@ -224,7 +224,7 @@ class EbiPowerHandler: Listener {
     @EventHandler
     fun onNewDayToResetBrokenBlocksCount(e: RealTimeNewDayEvent) {
         PlayerStore.openAll().forEach {
-            it[EbiPowerModule.keyBrokenBlocksCount] = 0
+            it[EbiPowerModule.PS_KEY_BROKEN_BLOCKS_COUNT] = 0
         }
     }
 

@@ -15,7 +15,7 @@ import work.xeltica.craft.core.api.playerStore.PlayerStore
  */
 class CitizenTimerCalculator : ContextCalculator<Player?> {
     override fun calculate(target: Player, contextConsumer: ContextConsumer) {
-        val value = if (PlayerStore.open(target).has(PromotionModule.keyNewcomerTime)) "false" else "true"
+        val value = if (PlayerStore.open(target).has(PromotionModule.PS_KEY_NEWCOMER_TIME)) "false" else "true"
         contextConsumer.accept(contextKeyCitizenTimerElapsed, value)
     }
 

@@ -9,9 +9,10 @@ import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
 
 object BedrockModule : ModuleBase() {
-    const val keyIsAcceptedDisclaimer = "accept_disclaimer"
-    const val disclaimerTitle = "§l統合版プレイヤーのあなたへ"
-    const val disclaimerMessage =
+    const val PS_KEY_ACCEPT_DISCLAIMER = "accept_disclaimer"
+
+    private const val DISCLAIMER_TITLE = "§l統合版プレイヤーのあなたへ"
+    private const val DISCLAIMER_MESSAGE =
         """本サーバーはJava版と統合版の両方に対応しておりますが、サーバーはJava版となっております。 Java版と統合版は細部の仕様が異なり、それに起因する不具合や差異があります。例えば、
 
 ・看板の文字数が合わない
@@ -33,9 +34,9 @@ object BedrockModule : ModuleBase() {
     }
 
     fun showDisclaimer(p: Player) {
-        Gui.getInstance().openDialog(p, disclaimerTitle, disclaimerMessage, {
+        Gui.getInstance().openDialog(p, DISCLAIMER_TITLE, DISCLAIMER_MESSAGE, {
             val record = PlayerStore.open(p)
-            record[keyIsAcceptedDisclaimer] = true
+            record[PS_KEY_ACCEPT_DISCLAIMER] = true
         }, "わかりました")
     }
 }

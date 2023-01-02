@@ -17,7 +17,8 @@ import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.utils.Ticks
 
 object PromotionModule : ModuleBase() {
-    const val keyNewcomerTime = "newcomer_time"
+    const val PS_KEY_NEWCOMER_TIME = "newcomer_time"
+
     private lateinit var calculator: CitizenTimerCalculator
 
     override fun onEnable() {
@@ -57,7 +58,7 @@ object PromotionModule : ModuleBase() {
             val ctx = luckPerms.contextManager.getContext(player)
             val linked = ctx.contains("discordsrv:linked", "true")
             val crafterRole = ctx.contains("discordsrv:role", "クラフター")
-            val tick = record.getInt(keyNewcomerTime)
+            val tick = record.getInt(PS_KEY_NEWCOMER_TIME)
             builder.appendLine("§b§lクイック認証に必要な条件: ")
             builder.appendLine(getSuccessListItem("Discord 連携済み", linked))
             builder.appendLine(getSuccessListItem("クラフターロール付与済み", crafterRole))
@@ -90,12 +91,12 @@ object PromotionModule : ModuleBase() {
             override fun run() {
                 Bukkit.getOnlinePlayers().forEach {
                     val record = PlayerStore.open(it)
-                    var time = record.getInt(keyNewcomerTime, 0)
+                    var time = record.getInt(PS_KEY_NEWCOMER_TIME, 0)
                     time -= tick
                     if (time <= 0) {
-                        record.delete(keyNewcomerTime)
+                        record.delete(PS_KEY_NEWCOMER_TIME)
                     } else {
-                        record[keyNewcomerTime] = time
+                        record[PS_KEY_NEWCOMER_TIME] = time
                     }
                 }
             }

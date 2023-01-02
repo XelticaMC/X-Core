@@ -10,6 +10,8 @@ import java.time.LocalDate
 import java.util.*
 
 object EventSummerModule : ModuleBase() {
+    const val PS_KEY_LOGIN_BONUS_SUMMER = "login_bonus_summer"
+
     private val colors = listOf(
         Color.fromRGB(0xe23731), // red
         Color.fromRGB(0xeb6101), // vermilion
