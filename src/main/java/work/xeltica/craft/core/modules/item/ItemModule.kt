@@ -32,6 +32,14 @@ object ItemModule : ModuleBase() {
         return customItems[key]!!.clone()
     }
 
+    fun ItemStack.isCustomItem(): Boolean {
+        return this.hasLore()
+    }
+
+    fun ItemStack.hasLore(): Boolean {
+        return this.lore()?.isNotEmpty() ?: false
+    }
+
     fun createCustomItem(name: String, vararg lore: String): ItemStack {
         val st = ItemStack(Material.KNOWLEDGE_BOOK)
 
