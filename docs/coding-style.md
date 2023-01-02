@@ -17,3 +17,50 @@
 
 ## メンバーの命名規則
 
+* Player Storeのキーを表す定数は、「PS_KEY_」からはじめて、大文字のスネークケースで表現してください。
+
+## 制御構文
+
+### 1行でもブロック記法に
+
+1行で終わるifステートメントであっても、基本的に `{}` を挿入してください。後で処理を追加する可能性があるためです。
+
+if以外でも同様です。
+
+ただし、アーリーリターンですぐにreturnなどを返す場合はこの限りではありません。
+
+**○ OK**
+
+```kotlin
+if (player.name == "_knit_") player.banPlayer()
+```
+
+**× NG**
+
+```kotlin
+if (player.name == "_knit_") {
+    player.banPlayer()
+}
+```
+
+## if ステートメント
+
+### アーリーリターンを心掛けて
+
+if ステートメントをアーリーリターン（すぐにreturnを返す）に置き換えられる場合は、なるべくそのように記述してください。
+
+**○ OK**
+
+```kotlin
+if (!isCitizen) return
+
+openSpecialMenu()
+```
+
+**× NG**
+
+```kotlin
+if (isCitizen) {
+    openSpecialMenu()
+}
+```
