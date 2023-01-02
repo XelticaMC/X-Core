@@ -11,12 +11,9 @@ import work.xeltica.craft.core.api.commands.CommandXDebug
 import work.xeltica.craft.core.api.commands.CommandXReload
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.commands.CommandCountdown
-import work.xeltica.craft.core.commands.CommandLocalTime
 import work.xeltica.craft.core.commands.CommandReport
 import work.xeltica.craft.core.commands.CommandRespawn
 import work.xeltica.craft.core.commands.CommandSignEdit
-import work.xeltica.craft.core.commands.CommandXtp
-import work.xeltica.craft.core.commands.CommandXtpReset
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.CitizensHook
 import work.xeltica.craft.core.hooks.DiscordHook
@@ -163,10 +160,7 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("respawn", CommandRespawn())
         CommandRegistry.register("signedit", CommandSignEdit())
         CommandRegistry.register("report", CommandReport())
-        CommandRegistry.register("localtime", CommandLocalTime())
-        CommandRegistry.register("xtp", CommandXtp())
         CommandRegistry.register("countdown", CommandCountdown())
-        CommandRegistry.register("xtpreset", CommandXtpReset())
     }
 
     private val hooks: Array<HookBase> = arrayOf(

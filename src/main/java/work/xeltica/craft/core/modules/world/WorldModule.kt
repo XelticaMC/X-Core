@@ -40,6 +40,9 @@ object WorldModule : ModuleBase() {
 
         registerHandler(WorldHandler())
         registerCommand("pvp", CommandPvp())
+        registerCommand("xtp", CommandXtp())
+        registerCommand("xtpreset", CommandXtpReset())
+        registerCommand("localtime", CommandLocalTime())
     }
 
     fun getWorldInfo(world: World) = getWorldInfo(world.name)

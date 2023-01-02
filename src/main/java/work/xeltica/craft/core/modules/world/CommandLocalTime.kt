@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.commands
+package work.xeltica.craft.core.modules.world
 
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
