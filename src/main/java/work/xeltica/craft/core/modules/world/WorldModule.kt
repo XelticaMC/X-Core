@@ -1,7 +1,6 @@
 package work.xeltica.craft.core.modules.world
 
 import org.bukkit.Bukkit
-import org.bukkit.Difficulty
 import org.bukkit.GameRule
 import org.bukkit.Location
 import org.bukkit.World
@@ -40,6 +39,7 @@ object WorldModule : ModuleBase() {
         initializeWorlds()
 
         registerHandler(WorldHandler())
+        registerCommand("pvp", CommandPvp())
     }
 
     fun getWorldInfo(world: World) = getWorldInfo(world.name)
@@ -158,17 +158,6 @@ object WorldModule : ModuleBase() {
     }
 
     private fun initializeWorlds() {
-        getWorldInfo("nightmare2").apply {
-            world.difficulty = Difficulty.HARD
-            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
-            world.setGameRule(GameRule.DO_WEATHER_CYCLE, false)
-            world.setGameRule(GameRule.MOB_GRIEFING, false)
-            world.time = 18000
-            world.setStorm(true)
-            world.weatherDuration = 20000
-            world.isThundering = true
-            world.thunderDuration = 20000
-        }
         worldsMap.values.forEach {
             it.world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, it.allowAdvancements)
         }

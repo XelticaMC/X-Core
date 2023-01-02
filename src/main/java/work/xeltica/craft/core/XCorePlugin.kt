@@ -10,7 +10,6 @@ import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.commands.CommandCountdown
 import work.xeltica.craft.core.commands.CommandLocalTime
-import work.xeltica.craft.core.commands.CommandPvp
 import work.xeltica.craft.core.commands.CommandReport
 import work.xeltica.craft.core.commands.CommandRespawn
 import work.xeltica.craft.core.commands.CommandSignEdit
@@ -19,7 +18,6 @@ import work.xeltica.craft.core.commands.CommandXReload
 import work.xeltica.craft.core.commands.CommandXtp
 import work.xeltica.craft.core.commands.CommandXtpReset
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.handlers.NightmareHandler
 import work.xeltica.craft.core.hooks.CitizensHook
 import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.hooks.VaultHook
@@ -44,6 +42,7 @@ import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
 import work.xeltica.craft.core.modules.motd.MotdModule
 import work.xeltica.craft.core.modules.nbs.NbsModule
+import work.xeltica.craft.core.modules.nightmare.NightmareModule
 import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.modules.omikuji.OmikujiModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
@@ -56,7 +55,6 @@ import work.xeltica.craft.core.modules.vehicle.VehicleModule
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.runnables.DaylightObserver
-import work.xeltica.craft.core.runnables.NightmareRandomEvent
 import work.xeltica.craft.core.runnables.RealTimeObserver
 import work.xeltica.craft.core.utils.Ticks
 
@@ -75,7 +73,6 @@ class XCorePlugin : JavaPlugin() {
 
         // TODO 廃止
         loadCommands()
-        loadHandlers()
         loadRunnables()
 
         logger.info("Booted XelticaMC Core System.")
@@ -158,7 +155,6 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.clearMap()
 
         CommandRegistry.register("respawn", CommandRespawn())
-        CommandRegistry.register("pvp", CommandPvp())
         CommandRegistry.register("signedit", CommandSignEdit())
         CommandRegistry.register("report", CommandReport())
         CommandRegistry.register("localtime", CommandLocalTime())
@@ -171,15 +167,8 @@ class XCorePlugin : JavaPlugin() {
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
     }
 
-    private fun loadHandlers() {
-        val pm = server.pluginManager
-        pm.registerEvents(NightmareHandler(), this)
-        logger.info("Loaded NightmareHandler")
-    }
-
     private fun loadRunnables() {
         DaylightObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
-        NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15.0).toLong())
         RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
     }
 
@@ -211,6 +200,7 @@ class XCorePlugin : JavaPlugin() {
         MobBallModule,
         MotdModule,
         NbsModule,
+        NightmareModule,
         NotificationModule,
         OmikujiModule,
         PaymentsModule,
