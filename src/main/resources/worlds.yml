@@ -122,9 +122,9 @@ nightmare2:
   isStaffOnly: false
   isCreativeWorld: true
   canSleep: false
-  canEarnEbiPower: false
+  canEarnEbiPower: true
   allowVehicleSpawn: false
-  allowAdvancements: false
+  allowAdvancements: true
   description: |-
     ここは怖い敵がうじゃうじゃいる§cナイトメアワールド§r。
     手に入れたアイテムは持ち帰れます。

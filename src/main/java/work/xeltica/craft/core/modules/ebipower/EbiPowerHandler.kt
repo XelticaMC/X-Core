@@ -21,6 +21,7 @@ import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.hooks.CitizensHook.isCitizensNpc
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
+import work.xeltica.craft.core.modules.world.WorldModule
 import java.util.*
 
 /**
@@ -34,22 +35,10 @@ class EbiPowerHandler: Listener {
         const val BREAK_BLOCK_BONUS_LIMIT = 4000
     }
 
-    private val epBlackList = HashSet<String>()
     private val crops = HashSet<Material>()
     private val breakBonusList = HashSet<Material>()
 
     init {
-        // エビパワーが貯まらないワールドのリストを構築
-        // TODO: 設定ファイルに移す
-        epBlackList.add("hub2")
-        epBlackList.add("art")
-        epBlackList.add("sandbox2")
-        epBlackList.add("pvp")
-        epBlackList.add("hub_dev")
-        epBlackList.add("event")
-        epBlackList.add("event_dev")
-        epBlackList.add("event2")
-
         crops.addAll(Tag.CROPS.values)
 
         breakBonusList.addAll(Tag.BASE_STONE_OVERWORLD.values)
@@ -246,9 +235,7 @@ class EbiPowerHandler: Listener {
 
     private fun playerIsInBlacklisted(p: Player): Boolean {
         // クリエイティブモードであれば、エビパワー取得対象外とする
-        if (p.gameMode == GameMode.CREATIVE) return true
-        val wName = p.world.name
-        return epBlackList.contains(wName)
+        return p.gameMode == GameMode.CREATIVE || !WorldModule.getWorldInfo(p.world).canEarnEbiPower
     }
 
     private fun getMobDropBonus(stack: ItemStack): Int {

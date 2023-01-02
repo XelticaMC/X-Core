@@ -13,7 +13,7 @@ import work.xeltica.craft.core.utils.Ticks
 object LoginBonusModule : ModuleBase() {
     const val isReceivedLoginBonus = "login_bonus"
     const val isReceivedSummerLoginBonus = "login_bonus_summer"
-    const val loginBonusValue = 250
+    private const val loginBonusValue = 250
 
     override fun onEnable() {
         registerHandler(LoginBonusHandler())

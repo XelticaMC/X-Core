@@ -32,7 +32,7 @@ object WorldModule: ModuleBase() {
         }
         worldsConfig = Config("worlds")
 
-        loadWorldInfomations()
+        loadWorlds()
         initializeWorlds()
 
         registerHandler(WorldHandler())
@@ -121,7 +121,7 @@ object WorldModule: ModuleBase() {
         }
     }
 
-    private fun loadWorldInfomations() {
+    private fun loadWorlds() {
         worldsMap.clear()
         worldsConfig.conf.getKeys(false).forEach {
             val section = worldsConfig.conf.getConfigurationSection(it) ?: return@forEach
