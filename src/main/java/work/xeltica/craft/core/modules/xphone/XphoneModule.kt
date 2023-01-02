@@ -31,6 +31,8 @@ import work.xeltica.craft.core.xphone.apps.*
  * X Phone の基幹となるシステムです。
  */
 object XphoneModule : ModuleBase() {
+    const val keyIsGivenPhone = "given_phone"
+
     /**
      * X-Core が有効になったときに呼ばれます。
      */

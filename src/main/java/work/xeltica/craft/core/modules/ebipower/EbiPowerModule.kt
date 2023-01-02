@@ -12,6 +12,9 @@ import work.xeltica.craft.core.utils.Ticks
 import java.util.*
 
 object EbiPowerModule: ModuleBase() {
+    const val keyLastJoinedAt = "last_joined"
+    const val keyBrokenBlocksCount = "broken_blocks_count"
+
     private lateinit var config: Config
 
     override fun onEnable() {

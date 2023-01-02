@@ -14,6 +14,8 @@ import work.xeltica.craft.core.utils.Config
 import java.util.*
 
 object MobBallModule: ModuleBase() {
+    const val keyMobDex = "mob_dex"
+
     lateinit var tierMap: MutableMap<String, Int>
     lateinit var difficulties: Array<Double>
 

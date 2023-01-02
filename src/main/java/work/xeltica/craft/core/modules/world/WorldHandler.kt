@@ -19,7 +19,6 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
-import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.utils.Ticks
 
 /**
@@ -86,7 +85,7 @@ class WorldHandler : Listener {
         }
 
         // 以前サーバーに来ている or FIRST_SPAWN フラグが立っている
-        val isNotFirstTeleport = player.hasPlayedBefore() || PlayerStore.open(player).getBoolean(PlayerDataKey.FIRST_SPAWN)
+        val isNotFirstTeleport = player.hasPlayedBefore() || PlayerStore.open(player).getBoolean(WorldModule.keyIsFirstSpawn)
         if (info.name == "main" && !HintModule.hasAchieved(player, Hint.GOTO_MAIN) && isNotFirstTeleport) {
             // はじめてメインワールドに入った場合、対象のスタッフに通知する
             try {
@@ -117,7 +116,7 @@ class WorldHandler : Listener {
 
         // FIRST_SPAWN フラグの設定
         Bukkit.getScheduler().runTaskLater(instance, Runnable {
-            PlayerStore.open(e.player)[PlayerDataKey.FIRST_SPAWN] = true
+            PlayerStore.open(e.player)[WorldModule.keyIsFirstSpawn] = true
         }, Ticks.from(5.0).toLong())
     }
 

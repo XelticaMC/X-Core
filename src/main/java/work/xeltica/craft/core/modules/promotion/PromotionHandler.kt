@@ -20,7 +20,6 @@ import org.bukkit.event.player.PlayerTeleportEvent
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
-import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.modules.world.WorldModule
 
 /**
@@ -64,7 +63,7 @@ class PromotionHandler : Listener {
         val record = PlayerStore.open(e.player)
         if (PromotionModule.isCitizen(e.player)) {
             HintModule.achieve(e.player, Hint.BE_CITIZEN)
-        } else if (!record.has(PlayerDataKey.NEWCOMER_TIME)) {
+        } else if (!record.has(PromotionModule.keyNewcomerTime)) {
             e.player.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！")
             e.player.sendMessage("詳しくは §b/promo§rコマンドを実行してください。")
         }

@@ -11,6 +11,15 @@ import java.io.IOException
 import java.util.function.Consumer
 
 object WorldModule: ModuleBase() {
+    /**
+     * 一番最初のスポーンをしているかどうか。
+     *
+     * X-Coreでは、worldマップに飛んだ瞬間にすぐにhub2マップに飛ばすようにしている
+     * テレポートによるヒント解除などのときに、この最初にworldマップに飛ぶ仕様が邪魔をしてしまうため、
+     * 最初のスポーンを経験しているかどうかの値を持っておく必要がある
+     */
+    const val keyIsFirstSpawn = "first_spawn"
+
     private lateinit var locationConfig: Config
     private lateinit var worldsConfig: Config
     private val worldsMap = HashMap<String, WorldInfo>()

@@ -17,6 +17,4 @@ class PlayerHandler: Listener {
             e.respawnLocation = respawnLocation
         }
     }
-
-
 }

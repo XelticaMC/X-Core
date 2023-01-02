@@ -6,7 +6,6 @@ import net.luckperms.api.context.ContextSet
 import net.luckperms.api.context.ImmutableContextSet
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.modules.player.PlayerDataKey
 
 /**
  * 市民になるまでの時間を経過しているかどうかの情報を提供するLuckPermsのアドオンクラスです。
@@ -16,7 +15,7 @@ import work.xeltica.craft.core.modules.player.PlayerDataKey
  */
 class CitizenTimerCalculator : ContextCalculator<Player?> {
     override fun calculate(target: Player, contextConsumer: ContextConsumer) {
-        val value = if (PlayerStore.open(target).has(PlayerDataKey.NEWCOMER_TIME)) "false" else "true"
+        val value = if (PlayerStore.open(target).has(PromotionModule.keyNewcomerTime)) "false" else "true"
         contextConsumer.accept(contextKeyCitizenTimerElapsed, value)
     }
 

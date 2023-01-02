@@ -3,14 +3,22 @@ package work.xeltica.craft.core.modules.counter
 import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.modules.player.PlayerDataKey
-import work.xeltica.craft.core.api.playerStore.PlayerRecord
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.utils.Config
 import java.io.IOException
+import java.util.*
+import kotlin.collections.HashMap
 
 object CounterModule: ModuleBase() {
     lateinit var config: Config
+
+    const val keyIsRegisterMode = "counter_register_mode"
+    const val keyRegisterStateName = "counter_register_name"
+    const val keyRegisterStateIsDaily = "counter_register_is_daily"
+    const val keyRegisterStateLocation = "counter_register_location"
+    const val keyPlayingId = "counter_id"
+    const val keyPlayingTimestamp = "counter_time"
+    const val keyPlayedCount = "counter_count"
 
     /** カウンターデータのマップ  */
     private val counters: HashMap<String, CounterData> = HashMap()
@@ -112,12 +120,7 @@ object CounterModule: ModuleBase() {
      */
     @Throws(IOException::class)
     fun resetAllPlayersPlayedLog() {
-        PlayerStore.openAll()
-            .forEach{ record: PlayerRecord ->
-                record.delete(
-                    PlayerDataKey.PLAYED_COUNTER_COUNT
-                )
-            }
+        PlayerStore.openAll().forEach { it.delete(keyPlayedCount) }
     }
 
     /**

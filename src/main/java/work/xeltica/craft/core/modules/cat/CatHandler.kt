@@ -9,12 +9,11 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.modules.player.PlayerDataKey
 
 class CatHandler : Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerChatForCat(e: ChatEvent) {
-        if (PlayerStore.open(e.player).getBoolean(PlayerDataKey.CAT_MODE)) {
+        if (PlayerStore.open(e.player).getBoolean(CatModule.keyIsCat)) {
             val text = e.message() as TextComponent
             e.message(Component.text(CatModule.nyaize(text.content())))
         }
@@ -24,7 +23,7 @@ class CatHandler : Listener {
     fun onPlayerChatForCat(e: LunaChatBukkitChannelMessageEvent) {
         val member = e.member
         if (member !is ChannelMemberPlayer) return
-        if (PlayerStore.open(member.player).getBoolean(PlayerDataKey.CAT_MODE))
+        if (PlayerStore.open(member.player).getBoolean(CatModule.keyIsCat))
             e.message = CatModule.nyaize(e.message)
     }
 }

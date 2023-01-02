@@ -16,15 +16,12 @@ import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
-import work.xeltica.craft.core.api.playerStore.PlayerRecord
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.hooks.CitizensHook.isCitizensNpc
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
-import work.xeltica.craft.core.modules.player.PlayerDataKey
 import java.util.*
-import java.util.function.Consumer
 
 /**
  * エビパワー関連のイベントハンドラをまとめています。
@@ -149,12 +146,12 @@ class EbiPowerHandler: Listener {
     fun onPlayerLoggedIn(e: PlayerJoinEvent) {
         val now = Date()
         val record = PlayerStore.open(e.player)
-        val prev = Date(record.getLong(PlayerDataKey.LAST_JOINED, now.time))
+        val prev = Date(record.getLong(EbiPowerModule.keyLastJoinedAt, now.time))
         if (prev.year != now.year && prev.month != now.month && prev.date != now.date) {
             EbiPowerModule.tryGive(e.player, LOGIN_BONUS_POWER)
             notification(e.player, "ログボ達成！" + LOGIN_BONUS_POWER.toString() + "EPを獲得。")
         }
-        record[PlayerDataKey.LAST_JOINED] = now.time
+        record[EbiPowerModule.keyLastJoinedAt] = now.time
     }
 
     @EventHandler
@@ -191,11 +188,11 @@ class EbiPowerHandler: Listener {
         if (!breakBonusList.contains(e.block.type)) return
         if (playerIsInBlacklisted(e.player)) return
         val record = PlayerStore.open(e.player)
-        val brokenBlocksCount = record.getInt(PlayerDataKey.BROKEN_BLOCKS_COUNT)
+        val brokenBlocksCount = record.getInt(EbiPowerModule.keyBrokenBlocksCount)
 
         if (!e.isDropItems) return
 
-        record.set(PlayerDataKey.BROKEN_BLOCKS_COUNT, brokenBlocksCount + 1)
+        record[EbiPowerModule.keyBrokenBlocksCount] = brokenBlocksCount + 1
 
         if (brokenBlocksCount + 1 == BREAK_BLOCK_BONUS_LIMIT) {
             HintModule.achieve(e.player, Hint.MINERS_DREAM)
@@ -237,9 +234,9 @@ class EbiPowerHandler: Listener {
 
     @EventHandler
     fun onNewDayToResetBrokenBlocksCount(e: RealTimeNewDayEvent) {
-        PlayerStore.openAll().forEach(Consumer { record: PlayerRecord ->
-            record[PlayerDataKey.BROKEN_BLOCKS_COUNT] = 0
-        })
+        PlayerStore.openAll().forEach {
+            it[EbiPowerModule.keyBrokenBlocksCount] = 0
+        }
     }
 
     private fun notification(p: Player, mes: String) {

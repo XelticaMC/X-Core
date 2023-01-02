@@ -10,7 +10,7 @@ import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.commands.*
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.handlers.LoginBonusHandler
+import work.xeltica.craft.core.modules.loginBonus.LoginBonusHandler
 import work.xeltica.craft.core.handlers.NightmareHandler
 import work.xeltica.craft.core.handlers.TicketWildareaBHandler
 import work.xeltica.craft.core.hooks.CitizensHook

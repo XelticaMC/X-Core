@@ -7,7 +7,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
-import work.xeltica.craft.core.modules.player.PlayerDataKey
+import work.xeltica.craft.core.modules.loginBonus.LoginBonusModule
 import work.xeltica.craft.core.xphone.apps.AppBase
 
 /**
@@ -49,7 +49,7 @@ class FireworkApp : AppBase() {
             player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 2f)
         }
         if (!bonusReceived) {
-            PlayerStore.open(player)[PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER] = true
+            PlayerStore.open(player)[LoginBonusModule.isReceivedSummerLoginBonus] = true
         }
     }
 
@@ -59,5 +59,5 @@ class FireworkApp : AppBase() {
         return EventSummerModule.isEventNow() && player.world.name == "main"
     }
 
-    private fun isBonusReceived(player: Player) = PlayerStore.open(player).getBoolean(PlayerDataKey.RECEIVED_LOGIN_BONUS_SUMMER)
+    private fun isBonusReceived(player: Player) = PlayerStore.open(player).getBoolean(LoginBonusModule.isReceivedLoginBonus)
 }

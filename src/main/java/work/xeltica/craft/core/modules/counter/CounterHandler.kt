@@ -20,7 +20,6 @@ import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.DiscordHook
-import work.xeltica.craft.core.modules.player.PlayerDataKey
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.utils.Time
 import java.io.IOException
@@ -45,7 +44,7 @@ class CounterHandler : Listener {
         val player = e.player
         val block = e.clickedBlock
         val record = PlayerStore.open(player)
-        val isCounterRegisterMode = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_MODE)
+        val isCounterRegisterMode = record.getBoolean(CounterModule.keyIsRegisterMode)
         val isPlate = Tag.PRESSURE_PLATES.isTagged(block!!.type)
 
         // カウンター登録モードでなければ無視
@@ -53,14 +52,14 @@ class CounterHandler : Listener {
 
         // 感圧板でなければ無視
         if (!isPlate) return
-        val name = record.getString(PlayerDataKey.COUNTER_REGISTER_NAME)
-        val loc = record.getLocation(PlayerDataKey.COUNTER_REGISTER_LOCATION)
-        val daily = record.getBoolean(PlayerDataKey.COUNTER_REGISTER_IS_DAILY)
+        val name = record.getString(CounterModule.keyRegisterStateName)
+        val loc = record.getLocation(CounterModule.keyRegisterStateLocation)
+        val daily = record.getBoolean(CounterModule.keyRegisterStateIsDaily)
         e.isCancelled = true
         try {
             // 始点登録
             if (loc == null) {
-                record[PlayerDataKey.COUNTER_REGISTER_LOCATION] = block.location
+                record[CounterModule.keyRegisterStateLocation] = block.location
                 player.sendMessage("始点を登録しました。続いて終点を登録します。")
                 player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
             } else {
@@ -78,10 +77,10 @@ class CounterHandler : Listener {
                 )
                 player.sendMessage("カウンター " + name + "を登録しました。")
                 player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1f)
-                record.delete(PlayerDataKey.COUNTER_REGISTER_MODE)
-                record.delete(PlayerDataKey.COUNTER_REGISTER_NAME)
-                record.delete(PlayerDataKey.COUNTER_REGISTER_LOCATION)
-                record.delete(PlayerDataKey.COUNTER_REGISTER_IS_DAILY)
+                record.delete(CounterModule.keyIsRegisterMode)
+                record.delete(CounterModule.keyRegisterStateName)
+                record.delete(CounterModule.keyRegisterStateLocation)
+                record.delete(CounterModule.keyRegisterStateIsDaily)
             }
         } catch (ex: IOException) {
             ex.printStackTrace()
@@ -107,8 +106,8 @@ class CounterHandler : Listener {
         val first = CounterModule.getByLocation1(block.location)
         val last = CounterModule.getByLocation2(block.location)
         val record = PlayerStore.open(player)
-        val counterId = record.getString(PlayerDataKey.PLAYING_COUNTER_ID)
-        val startedAt = record.getString(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP, "0")!!.toLong()
+        val counterId = record.getString(CounterModule.keyPlayingId)
+        val startedAt = record.getString(CounterModule.keyPlayingTimestamp, "0")!!.toLong()
         val counter = if (counterId == null) null else CounterModule[counterId]
         val isUsingCounter = counter != null
 
@@ -119,8 +118,8 @@ class CounterHandler : Listener {
                 return
             }
             val ts = System.currentTimeMillis().toString()
-            record[PlayerDataKey.PLAYING_COUNTER_ID] = first.name
-            record[PlayerDataKey.PLAYING_COUNTER_TIMESTAMP] = ts
+            record[CounterModule.keyPlayingId] = first.name
+            record[CounterModule.keyPlayingTimestamp] = ts
             player.showTitle(Title.title(Component.text("§6スタート！"), Component.empty()))
             player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
             Bukkit.getPluginManager().callEvent(PlayerCounterStart(player, first))
@@ -136,8 +135,8 @@ class CounterHandler : Listener {
                 ui.error(player, "ゴールが異なります。")
                 return
             }
-            record.delete(PlayerDataKey.PLAYING_COUNTER_ID)
-            record.delete(PlayerDataKey.PLAYING_COUNTER_TIMESTAMP)
+            record.delete(CounterModule.keyPlayingId)
+            record.delete(CounterModule.keyPlayingTimestamp)
             val endAt = System.currentTimeMillis()
             val diff = (endAt - startedAt).toInt()
             val timeString = Time.msToString(diff.toLong())
@@ -149,7 +148,7 @@ class CounterHandler : Listener {
                 )
             )
             player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
-            val count = record.getInt(PlayerDataKey.PLAYED_COUNTER_COUNT, 0)
+            val count = record.getInt(CounterModule.keyPlayedCount, 0)
             if (last.isDaily && count >= 2) {
                 player.sendMessage(ChatColor.RED + "既にチャレンジ済みのため、ランキングは更新されません。")
             } else if (last.bedrockRankingId != null || last.javaRankingId != null || last.uwpRankingId != null || last.phoneRankingId != null) {
@@ -164,7 +163,7 @@ class CounterHandler : Listener {
                 val message = if (count == 0) "あと1回チャレンジできます！" else "本日はもうチャレンジできません。"
                 player.sendMessage(ChatColor.GREEN + message)
             }
-            record[PlayerDataKey.PLAYED_COUNTER_COUNT] = count + 1
+            record[CounterModule.keyPlayedCount] = count + 1
             Bukkit.getPluginManager().callEvent(PlayerCounterFinish(player, last, diff.toLong()))
         }
     }

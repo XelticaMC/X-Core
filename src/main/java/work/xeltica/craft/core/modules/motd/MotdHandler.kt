@@ -12,7 +12,7 @@ import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.hub.HubType
-import work.xeltica.craft.core.modules.player.PlayerDataKey
+import work.xeltica.craft.core.modules.promotion.PromotionModule
 import work.xeltica.craft.core.utils.Ticks
 
 class MotdHandler : Listener {
@@ -23,7 +23,7 @@ class MotdHandler : Listener {
         e.joinMessage(Component.text("§a$name§bさんがやってきました"))
         if (!e.player.hasPlayedBefore()) {
             e.joinMessage(Component.text("§a$name§bさんが§6§l初参加§rです"))
-            PlayerStore.open(e.player)[PlayerDataKey.NEWCOMER_TIME] = defaultNewComerTime
+            PlayerStore.open(e.player)[PromotionModule.keyNewcomerTime] = defaultNewComerTime
             HubModule.teleport(e.player, HubType.NewComer, true)
         }
 

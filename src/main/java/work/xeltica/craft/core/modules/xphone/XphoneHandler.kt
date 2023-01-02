@@ -12,7 +12,6 @@ import org.bukkit.inventory.EquipmentSlot
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.modules.item.ItemModule
-import work.xeltica.craft.core.modules.player.PlayerDataKey
 
 /**
  * X Phoneに関する機能をまとめています。
@@ -26,8 +25,8 @@ class XphoneHandler : Listener {
         if (itemMeta?.displayName() == null) return
         val player = e.player
 
-        val phone = store().getItem(ItemModule.ITEM_NAME_XPHONE)
-        if (!store().compareCustomItem(item, phone)) return
+        val phone = ItemModule.getItem(ItemModule.ITEM_NAME_XPHONE)
+        if (!ItemModule.compareCustomItem(item, phone)) return
 
         // 右クリック以外はガード
         if (!listOf(Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK).contains(e.action)) return
@@ -39,14 +38,14 @@ class XphoneHandler : Listener {
     @EventHandler(priority = EventPriority.HIGH)
     fun onOffhandUse(e: PlayerInteractEvent) {
         if (e.hand != EquipmentSlot.OFF_HAND) return
-        val phone = store().getItem(ItemModule.ITEM_NAME_XPHONE)
+        val phone = ItemModule.getItem(ItemModule.ITEM_NAME_XPHONE)
         val item = e.player.inventory.itemInMainHand
 
         // 右クリック以外はガード
         if (!listOf(Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK).contains(e.action)) return
 
         // メインハンドがX Phoneであればオフハンドも使用停止
-        if (store().compareCustomItem(item, phone)) {
+        if (ItemModule.compareCustomItem(item, phone)) {
             e.setUseItemInHand(Event.Result.DENY)
         }
     }
@@ -57,14 +56,10 @@ class XphoneHandler : Listener {
         if (e.to.world.name == "hub2") return
         Bukkit.getScheduler().runTaskLater(XCorePlugin.instance, Runnable {
             val record = PlayerStore.open(e.player)
-            if (record.getBoolean(PlayerDataKey.GIVEN_PHONE)) return@Runnable
+            if (record.getBoolean(XphoneModule.keyIsGivenPhone)) return@Runnable
 
             e.player.inventory.addItem(ItemModule.getItem(ItemModule.ITEM_NAME_XPHONE))
-            record[PlayerDataKey.GIVEN_PHONE] = true
+            record[XphoneModule.keyIsGivenPhone] = true
         }, 1L)
-    }
-
-    private fun store(): ItemModule {
-        return ItemModule
     }
 }

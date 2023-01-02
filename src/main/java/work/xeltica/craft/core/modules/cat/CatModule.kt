@@ -9,9 +9,10 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.SoundPitch
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
-import work.xeltica.craft.core.modules.player.PlayerDataKey
 
 object CatModule : ModuleBase() {
+    const val keyIsCat = "cat"
+
     override fun onEnable() {
         registerHandler(CatHandler())
         registerCommand("cat", CommandCat())
@@ -32,11 +33,11 @@ object CatModule : ModuleBase() {
     }
 
     fun isCat(player: OfflinePlayer): Boolean {
-        return PlayerStore.open(player).getBoolean(PlayerDataKey.CAT_MODE)
+        return PlayerStore.open(player).getBoolean(keyIsCat)
     }
 
     fun setCat(player: Player, value: Boolean) {
-        PlayerStore.open(player)[PlayerDataKey.CAT_MODE] = value
+        PlayerStore.open(player)[keyIsCat] = value
         if (value) {
             Gui.getInstance().playSound(player, Sound.ENTITY_CAT_AMBIENT, 2f, SoundPitch.F_2)
             player.sendMessage("CATモードを§aオン§rにしました。")
