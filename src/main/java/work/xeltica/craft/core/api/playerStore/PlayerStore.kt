@@ -11,6 +11,10 @@ object PlayerStore {
         config.useAutoSave = true
     }
 
+    fun onDisable() {
+        config.save()
+    }
+
     fun open(player: OfflinePlayer): PlayerRecord {
         return open(player.uniqueId)
     }

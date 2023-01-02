@@ -10,7 +10,6 @@ import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.commands.*
 import work.xeltica.craft.core.gui.Gui
-import work.xeltica.craft.core.modules.loginBonus.LoginBonusHandler
 import work.xeltica.craft.core.handlers.NightmareHandler
 import work.xeltica.craft.core.handlers.TicketWildareaBHandler
 import work.xeltica.craft.core.hooks.CitizensHook
@@ -32,6 +31,7 @@ import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.kusa.KusaModule
 import work.xeltica.craft.core.modules.livemode.LiveModeModule
+import work.xeltica.craft.core.modules.loginBonus.LoginBonusHandler
 import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
 import work.xeltica.craft.core.modules.motd.MotdModule
@@ -73,6 +73,7 @@ class XCorePlugin : JavaPlugin() {
 
     override fun onDisable() {
         CommandRegistry.clearMap()
+        PlayerStore.onDisable()
         unloadHooks()
         unloadModules()
     }
