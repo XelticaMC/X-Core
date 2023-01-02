@@ -2,7 +2,7 @@ package work.xeltica.craft.core.modules.hint
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.xphone.apps.AppBase
+import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * ヒントアプリ

@@ -4,7 +4,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.modules.cat.CatModule.isCat
 import work.xeltica.craft.core.modules.cat.CatModule.setCat
-import work.xeltica.craft.core.xphone.apps.AppBase
+import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * ネコモードを切り替えるプラグイン。

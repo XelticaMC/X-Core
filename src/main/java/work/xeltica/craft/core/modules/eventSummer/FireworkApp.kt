@@ -8,7 +8,7 @@ import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.modules.loginBonus.LoginBonusModule
-import work.xeltica.craft.core.xphone.apps.AppBase
+import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * 祭り用花火購入・入手アプリ

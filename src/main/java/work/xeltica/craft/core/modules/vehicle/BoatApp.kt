@@ -3,7 +3,7 @@ package work.xeltica.craft.core.modules.vehicle
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.modules.world.WorldModule
-import work.xeltica.craft.core.xphone.apps.AppBase
+import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * ボートを射出するアプリ。

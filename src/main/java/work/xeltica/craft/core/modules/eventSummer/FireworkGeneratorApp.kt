@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.xphone.apps.AppBase
+import work.xeltica.craft.core.modules.xphone.AppBase
 import javax.annotation.Nonnull
 
 /**

@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.xphone.apps
+package work.xeltica.craft.core.modules.xphone
 
 import org.bukkit.Material
 import org.bukkit.entity.Player

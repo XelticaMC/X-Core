@@ -5,6 +5,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.models.TransferPlayerData
+import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * プレイヤーデータ引っ越しアプリ

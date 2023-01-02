@@ -2,7 +2,7 @@ package work.xeltica.craft.core.modules.livemode
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.xphone.apps.AppBase
+import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * 配信モード切り替えアプリ

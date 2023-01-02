@@ -6,7 +6,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.eventSummer.EventSummerModule
 import work.xeltica.craft.core.modules.world.WorldModule
-import work.xeltica.craft.core.xphone.apps.AppBase
+import work.xeltica.craft.core.modules.xphone.AppBase
 import java.util.function.Consumer
 
 class StampRallyApp : AppBase() {

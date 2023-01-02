@@ -6,7 +6,7 @@ import work.xeltica.craft.core.api.playerStore.PlayerRecord
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.nbs.NbsModule
-import work.xeltica.craft.core.xphone.apps.AppBase
+import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * イベント用：タイムアタックを中止するアプリ

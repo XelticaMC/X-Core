@@ -2,6 +2,7 @@ package work.xeltica.craft.core.xphone.apps
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * 処罰を実行するアプリ
