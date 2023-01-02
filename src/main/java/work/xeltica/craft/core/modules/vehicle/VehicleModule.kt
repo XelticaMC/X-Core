@@ -20,7 +20,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.world.WorldModule
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 
 object VehicleModule: ModuleBase() {
     private lateinit var config: Config

@@ -18,7 +18,6 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.events.EntityMobBallHitEvent
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.CitizensHook.isCitizensNpc
 import work.xeltica.craft.core.modules.hint.Hint

@@ -11,7 +11,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.*
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
 import org.bukkit.event.player.PlayerBedEnterEvent
-import work.xeltica.craft.core.events.EntityMobBallHitEvent
+import work.xeltica.craft.core.modules.mobball.EntityMobBallHitEvent
 import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule.isEventMob
 
 class EventHalloweenHandler : Listener {

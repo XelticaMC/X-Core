@@ -17,7 +17,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.utils.CastHelper
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import java.io.IOException
 import java.lang.IllegalArgumentException
 import java.util.*

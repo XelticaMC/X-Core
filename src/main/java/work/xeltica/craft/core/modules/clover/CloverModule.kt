@@ -6,7 +6,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.hooks.VaultHook
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import java.io.IOException
 
 object CloverModule: ModuleBase() {

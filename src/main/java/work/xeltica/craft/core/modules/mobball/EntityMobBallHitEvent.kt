@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.events
+package work.xeltica.craft.core.modules.mobball
 
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Projectile

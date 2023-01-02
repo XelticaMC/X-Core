@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.hooks.VaultHook
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.utils.Ticks
 import java.util.*
 

@@ -18,7 +18,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.nbs.NbsModel.PlaybackMode
 import work.xeltica.craft.core.utils.CastHelper
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import java.io.File
 import java.io.IOException
 import java.util.*

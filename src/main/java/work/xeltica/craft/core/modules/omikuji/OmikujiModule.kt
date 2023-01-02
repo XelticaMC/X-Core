@@ -2,7 +2,7 @@ package work.xeltica.craft.core.modules.omikuji
 
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import java.io.IOException
 import java.util.*
 

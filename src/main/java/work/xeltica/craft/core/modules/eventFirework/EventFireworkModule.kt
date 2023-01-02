@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.commands.CommandRegistry
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.utils.Ticks
 import java.util.Random
 

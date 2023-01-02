@@ -10,7 +10,7 @@ import org.bukkit.entity.Mob
 import org.bukkit.inventory.ItemStack
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import java.util.*
 
 object MobBallModule: ModuleBase() {

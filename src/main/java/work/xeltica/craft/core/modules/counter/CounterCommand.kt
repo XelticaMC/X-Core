@@ -12,7 +12,6 @@ import work.xeltica.craft.core.modules.ranking.Ranking
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import java.io.IOException
 import java.util.*
-import java.util.function.Consumer
 
 class CounterCommand: CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
@@ -108,6 +107,10 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     } else {
                         val name = args[1]
                         val p = Bukkit.getPlayerUniqueId(name)
+                        if (p == null) {
+                            ui.error(player, "サーバーがUUIDを取得できなかったため、プレイ済み履歴を削除できませんでした。")
+                            return true
+                        }
                         PlayerStore.open(p).delete(CounterModule.keyPlayedCount)
                         player.sendMessage("そのプレイヤーのプレイ済み履歴を削除しました。")
                     }
@@ -118,11 +121,9 @@ class CounterCommand: CommandPlayerOnlyBase() {
                         ui.error(player, "カウンターはまだ作成されていません。")
                     } else {
                         player.sendMessage("合計: " + list.size)
-                        list.forEach(Consumer { c: CounterData ->
-                            player.sendMessage(
-                                "* " + c.name
-                            )
-                        })
+                        list.forEach {
+                            player.sendMessage("* ${it.name}")
+                        }
                     }
                 }
                 "setisdaily" -> {
@@ -151,7 +152,6 @@ class CounterCommand: CommandPlayerOnlyBase() {
         } else if (args.size == 2) {
             when(subcommand) {
                 "unregister", "info", "bind", "unbind" -> {
-                    val CounterModule = CounterModule
                     return CounterModule.getCounters().stream().map(CounterData::name).toList()
                 }
             }

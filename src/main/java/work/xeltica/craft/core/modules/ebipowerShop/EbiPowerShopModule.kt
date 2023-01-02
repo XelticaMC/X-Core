@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.utils.CastHelper
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import java.io.IOException
 
 object EbiPowerShopModule : ModuleBase() {

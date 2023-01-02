@@ -3,7 +3,7 @@ package work.xeltica.craft.core.modules.ranking
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.configuration.ConfigurationSection
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.utils.Time
 import java.io.IOException
 import java.util.*

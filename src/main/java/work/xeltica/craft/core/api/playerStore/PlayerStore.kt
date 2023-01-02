@@ -1,7 +1,7 @@
 package work.xeltica.craft.core.api.playerStore
 
 import org.bukkit.OfflinePlayer
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import java.util.*
 
 object PlayerStore {
@@ -15,8 +15,7 @@ object PlayerStore {
         return open(player.uniqueId)
     }
 
-    fun open(uuid: UUID?): PlayerRecord {
-        if (uuid == null) throw IllegalArgumentException()
+    fun open(uuid: UUID): PlayerRecord {
         var section = config.conf.getConfigurationSection(uuid.toString())
         if (section == null) {
             section = config.conf.createSection(uuid.toString())

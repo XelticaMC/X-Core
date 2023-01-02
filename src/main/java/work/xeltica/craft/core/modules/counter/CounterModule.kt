@@ -4,7 +4,7 @@ import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import java.io.IOException
 import java.util.*
 import kotlin.collections.HashMap

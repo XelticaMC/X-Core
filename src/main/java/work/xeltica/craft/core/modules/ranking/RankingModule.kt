@@ -3,7 +3,7 @@ package work.xeltica.craft.core.modules.ranking
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import java.io.IOException
 
 object RankingModule: ModuleBase() {

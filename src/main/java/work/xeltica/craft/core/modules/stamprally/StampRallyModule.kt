@@ -8,7 +8,7 @@ import org.bukkit.configuration.MemorySection
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import java.util.*
 import kotlin.collections.HashSet
 

@@ -1,8 +1,9 @@
-package work.xeltica.craft.core.utils
+package work.xeltica.craft.core.api
 
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.utils.Ticks
 import java.io.File
 import java.io.IOException
 import java.util.function.Consumer
