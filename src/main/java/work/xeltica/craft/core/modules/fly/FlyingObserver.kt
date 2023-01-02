@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.runnables
+package work.xeltica.craft.core.modules.fly
 
 import org.bukkit.Bukkit
 import org.bukkit.GameMode

@@ -34,6 +34,7 @@ import work.xeltica.craft.core.modules.eventFarm.EventFarmModule
 import work.xeltica.craft.core.modules.eventFirework.EventFireworkModule
 import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule
 import work.xeltica.craft.core.modules.eventSummer.EventSummerModule
+import work.xeltica.craft.core.modules.fly.FlyModule
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.item.ItemModule
@@ -55,7 +56,6 @@ import work.xeltica.craft.core.modules.vehicle.VehicleModule
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.runnables.DaylightObserver
-import work.xeltica.craft.core.runnables.FlyingObserver
 import work.xeltica.craft.core.runnables.NightmareRandomEvent
 import work.xeltica.craft.core.runnables.RealTimeObserver
 import work.xeltica.craft.core.utils.Ticks
@@ -179,7 +179,6 @@ class XCorePlugin : JavaPlugin() {
 
     private fun loadRunnables() {
         DaylightObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
-        FlyingObserver().runTaskTimer(this, 0, 4)
         NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15.0).toLong())
         RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
     }
@@ -202,6 +201,7 @@ class XCorePlugin : JavaPlugin() {
         EventFireworkModule,
         EventHalloweenModule,
         EventSummerModule,
+        FlyModule,
         HintModule,
         HubModule,
         ItemModule,
