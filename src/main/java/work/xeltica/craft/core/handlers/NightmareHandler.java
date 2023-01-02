@@ -1,9 +1,5 @@
 package work.xeltica.craft.core.handlers;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
@@ -17,13 +13,21 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import work.xeltica.craft.core.gui.Gui;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 
 /**
  * ナイトメアワールドに関するハンドラーをまとめています。
+ *
  * @author Xeltica
  */
 public class NightmareHandler implements Listener {
+    private final Random random = new Random();
+    private final HashSet<Material> superRareItems = new HashSet<>();
+    private final float superRareItemsDropRatio = 0.1f;
+
     public NightmareHandler() {
         superRareItems.add(Material.CREEPER_HEAD);
         superRareItems.add(Material.SKELETON_SKULL);
@@ -36,7 +40,7 @@ public class NightmareHandler implements Listener {
 
     /**
      * ベッド爆弾を再現する
-    */
+     */
     @EventHandler
     public void onPlayerUseBed(PlayerInteractEvent e) {
         final var block = e.getClickedBlock();
@@ -83,7 +87,7 @@ public class NightmareHandler implements Listener {
     public void onCreeperPrim(EntityDamageEvent e) {
         if (isNotNightmare(e.getEntity().getWorld())) return;
         if (e.getEntityType() != EntityType.CREEPER) return;
-        final var creeper = (Creeper)e.getEntity();
+        final var creeper = (Creeper) e.getEntity();
 
         if (List.of(
                 EntityDamageEvent.DamageCause.ENTITY_EXPLOSION,
@@ -125,9 +129,4 @@ public class NightmareHandler implements Listener {
         // TODO ハードコーディングをやめる
         return !w.getName().equals("nightmare2");
     }
-
-    private final Random random = new Random();
-    private final HashSet<Material> superRareItems = new HashSet<>();
-
-    private final float superRareItemsDropRatio = 0.1f;
 }

@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.api.commands.CommandBase
-import java.util.*
 
 class FireworkCommand : CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
@@ -20,6 +19,7 @@ class FireworkCommand : CommandBase() {
                 }
                 EventFireworkModule.runScript(script, sender)
             }
+
             "center" -> {
                 if (sender !is Player) {
                     sender.sendMessage("プレイヤーが実行しなさい")
@@ -27,6 +27,7 @@ class FireworkCommand : CommandBase() {
                 }
                 EventFireworkModule.setCenterLocation(sender.location)
             }
+
             else -> return false
         }
         return true

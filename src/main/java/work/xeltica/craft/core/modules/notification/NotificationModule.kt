@@ -17,9 +17,9 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import java.io.File
 import java.io.FileReader
-import java.util.*
+import java.util.UUID
 
-object NotificationModule: ModuleBase() {
+object NotificationModule : ModuleBase() {
     private lateinit var confirmed: Config
 
     private const val FILE_NAME = "notification.json"

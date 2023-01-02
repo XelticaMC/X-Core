@@ -9,9 +9,9 @@ import org.bukkit.entity.Firework
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.commands.CommandRegistry
-import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.utils.Ticks
 import java.util.Random
 
@@ -58,13 +58,16 @@ object EventFireworkModule : ModuleBase() {
                         val power = tryCast(it["power"], 1)
                         FireOperation(type, colors, fades, flicker, trail, loc, random, clone, power)
                     }
+
                     "wait" -> {
                         assertProperty(it, "time", "wait")
                         WaitOperation(it["time"] as Double)
                     }
+
                     "explode" -> {
                         ExplodeOperation()
                     }
+
                     else -> {
                         throw IllegalStateException("$commandType is not a valid command type.")
                     }
@@ -79,6 +82,7 @@ object EventFireworkModule : ModuleBase() {
         fun log(text: String) {
             sender?.sendMessage(text)
         }
+
         val c = center?.clone() ?: return
         object : BukkitRunnable() {
             // スクリプトの現在位置
@@ -138,12 +142,14 @@ object EventFireworkModule : ModuleBase() {
                                 }
                             }
                         }
+
                         is WaitOperation -> {
                             log("* Waiting for ${command.time}s.")
                             index++
                             waitTimer = Ticks.from(command.time)
                             return
                         }
+
                         is ExplodeOperation -> {
                             repeat(command.clone + 1) {
                                 val fireLoc = c.clone()
@@ -173,7 +179,7 @@ object EventFireworkModule : ModuleBase() {
         }
     }
 
-    private inline fun <reified T>tryCast(value: Any?, defaultValue: T): T {
+    private inline fun <reified T> tryCast(value: Any?, defaultValue: T): T {
         return if (value == null) defaultValue else if (value is T) value else throw IllegalStateException("The value type is invalid.")
     }
 

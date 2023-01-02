@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerRespawnEvent
 
-class PlayerHandler: Listener {
+class PlayerHandler : Listener {
     @EventHandler
     fun onPlayerDeath(e: PlayerRespawnEvent) {
         val p = e.player

@@ -1,6 +1,10 @@
 package work.xeltica.craft.core.modules.eventSummer
 
-import org.bukkit.*
+import org.bukkit.Color
+import org.bukkit.FireworkEffect
+import org.bukkit.Material
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Firework
 import org.bukkit.entity.Player
@@ -39,15 +43,19 @@ class FireworkGeneratorApp : AppBase() {
     private fun chooseFireworkColor(player: Player, type: FireworkEffect.Type) {
         val list = FireworkColor.values()
             .map { f ->
-                MenuItem(f.colorName, { chooseFireworkColor2(player, type, f.color) }, f.material)}
+                MenuItem(f.colorName, { chooseFireworkColor2(player, type, f.color) }, f.material)
+            }
             .toList()
         Gui.getInstance().openMenu(player, "花火の色を選んでください", list)
     }
 
     private fun chooseFireworkColor2(player: Player, type: FireworkEffect.Type, color: Color) {
         val list = FireworkColor.values()
-            .map { f -> MenuItem(f.colorName, {
-                chooseFireworkPower(player, type, color, f.color) }, f.material)}
+            .map { f ->
+                MenuItem(f.colorName, {
+                    chooseFireworkPower(player, type, color, f.color)
+                }, f.material)
+            }
             .toList()
         val list2 = ArrayList(list)
         list2.add(0, MenuItem("なし", { chooseFireworkPower(player, type, color, null) }, Material.BARRIER))
@@ -76,7 +84,7 @@ class FireworkGeneratorApp : AppBase() {
         color: Color,
         color2: Color?,
         power: Int,
-        attribute: FireworkAttribute?
+        attribute: FireworkAttribute?,
     ) {
         val attr = attribute ?: FireworkAttribute()
         val ui = Gui.getInstance()
@@ -147,7 +155,7 @@ class FireworkGeneratorApp : AppBase() {
     internal enum class FireworkType(
         val type: FireworkEffect.Type,
         val material: Material,
-        val typeName: String
+        val typeName: String,
     ) {
         SMALL(FireworkEffect.Type.BALL, Material.FIRE_CHARGE, "小さい花火"),
         LARGE(FireworkEffect.Type.BALL_LARGE, Material.FIRE_CHARGE, "大きい花火"),
@@ -159,13 +167,14 @@ class FireworkGeneratorApp : AppBase() {
     internal enum class FireworkColor(
         val material: Material,
         val color: Color,
-        val colorName: String
+        val colorName: String,
     ) {
         ORANGE(Material.ORANGE_WOOL, Color.ORANGE, "オレンジ"),
         FUCHSIA(Material.MAGENTA_WOOL, Color.FUCHSIA, "マゼンタ"),
         LIGHTBLUE(Material.LIGHT_BLUE_WOOL, Color.AQUA, "ライトブルー"),
         YELLOW(Material.YELLOW_WOOL, Color.YELLOW, "イエロー"),
         LIME(Material.LIME_WOOL, Color.LIME, "ライム"),
+
         // PINK(Material.PINK_WOOL, Color., "ピンク"),
         GRAY(Material.GRAY_WOOL, Color.GRAY, "グレー"),
         LIGHTGRAY(Material.LIGHT_GRAY_WOOL, Color.SILVER, "ライトグレー"),

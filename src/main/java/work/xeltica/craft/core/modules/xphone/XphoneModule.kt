@@ -25,7 +25,15 @@ import work.xeltica.craft.core.modules.stamprally.StampRallyApp
 import work.xeltica.craft.core.modules.vehicle.BoatApp
 import work.xeltica.craft.core.modules.vehicle.CartApp
 import work.xeltica.craft.core.modules.world.TeleportApp
-import work.xeltica.craft.core.xphone.apps.*
+import work.xeltica.craft.core.xphone.apps.AppBase
+import work.xeltica.craft.core.xphone.apps.EventCancelApp
+import work.xeltica.craft.core.xphone.apps.EventRespawnApp
+import work.xeltica.craft.core.xphone.apps.EventReturnWorldApp
+import work.xeltica.craft.core.xphone.apps.ProtectApp
+import work.xeltica.craft.core.xphone.apps.PunishApp
+import work.xeltica.craft.core.xphone.apps.SidebarApp
+import work.xeltica.craft.core.xphone.apps.TransferPlayerDataApp
+import work.xeltica.craft.core.xphone.apps.VoteApp
 
 /**
  * X Phone の基幹となるシステムです。

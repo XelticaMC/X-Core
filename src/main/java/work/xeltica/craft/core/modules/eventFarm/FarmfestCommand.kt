@@ -10,7 +10,6 @@ import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.api.XCoreException
 import work.xeltica.craft.core.api.commands.CommandBase
-import java.util.ArrayList
 
 class FarmfestCommand : CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
@@ -19,10 +18,12 @@ class FarmfestCommand : CommandBase() {
             "init" -> {
                 EventFarmModule.init()
             }
+
             "clearFarm" -> {
                 EventFarmModule.clearFarm()
                 sender.sendMessage("畑を初期化しました。")
             }
+
             "add" -> {
                 for (name in args.drop(1)) {
                     val p = Bukkit.getPlayer(name)
@@ -41,6 +42,7 @@ class FarmfestCommand : CommandBase() {
                     }
                 }
             }
+
             "start" -> {
                 if (EventFarmModule.isPlaying) {
                     sender.sendMessage("${ChatColor.RED}もう始まっている！")
@@ -56,6 +58,7 @@ class FarmfestCommand : CommandBase() {
                     }
                 }
             }
+
             "stop" -> {
                 if (!EventFarmModule.isPlaying) {
                     sender.sendMessage("${ChatColor.RED}もう終わっている！")
@@ -66,6 +69,7 @@ class FarmfestCommand : CommandBase() {
                     sender.sendMessage("${it.key.name}: ${it.value}ポイント")
                 }
             }
+
             else -> return false
         }
         return true

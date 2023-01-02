@@ -18,7 +18,7 @@ import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule.hasAchieved
 import work.xeltica.craft.core.modules.world.WorldModule
 
-class VehicleHandler: Listener {
+class VehicleHandler : Listener {
     private val vehicleItems = listOf(
         Material.ACACIA_BOAT,
         Material.BIRCH_BOAT,

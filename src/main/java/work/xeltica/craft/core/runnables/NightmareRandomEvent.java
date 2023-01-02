@@ -1,15 +1,11 @@
 package work.xeltica.craft.core.runnables;
 
-import java.util.Objects;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Piglin;
-import org.bukkit.entity.Shulker;
 import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -17,14 +13,27 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
 import work.xeltica.craft.core.XCorePlugin;
+
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * ナイトメアワールドを制御するバックグラウンドタスクです。
+ *
  * @author Xeltica
  */
 public class NightmareRandomEvent extends BukkitRunnable {
+    private final Plugin plugin;
+    private final Random random = new Random();
+    private final EntityType[] illigers = {
+            EntityType.PILLAGER,
+            EntityType.PILLAGER,
+            EntityType.VINDICATOR,
+            EntityType.VINDICATOR,
+            EntityType.WITCH,
+    };
+
     public NightmareRandomEvent(Plugin plugin) {
         this.plugin = plugin;
     }
@@ -110,7 +119,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
                     for (var i = 0; i < amount; i++) {
                         final var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
                         loc.setY(l.getWorld().getHighestBlockYAt(loc.getBlockX(), loc.getBlockZ() + 5));
-                        final var bee = (Bee)nightmare.spawnEntity(loc, EntityType.BEE);
+                        final var bee = (Bee) nightmare.spawnEntity(loc, EntityType.BEE);
                         // 30分おいかり
                         bee.setAnger(20 * 60 * 30);
                         bee.setTarget(player);
@@ -120,7 +129,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
                     for (var i = 0; i < amount; i++) {
                         final var loc = pivot.add(new Vector(random.nextInt(4) - 2, 0, random.nextInt(4) - 2));
                         loc.setY(l.getWorld().getHighestBlockYAt(loc.getBlockX(), loc.getBlockZ()) + 1);
-                        final var wolf = (Wolf)nightmare.spawnEntity(loc, EntityType.WOLF);
+                        final var wolf = (Wolf) nightmare.spawnEntity(loc, EntityType.WOLF);
                         // 30分おいかり
                         wolf.setAngry(true);
                         wolf.setTarget(player);
@@ -136,7 +145,7 @@ public class NightmareRandomEvent extends BukkitRunnable {
                     }, 20 * 60 * 5);
                 }
                 case MODE_CREEPER -> {
-                    final var creeper = (Creeper)l.getWorld().spawnEntity(l, EntityType.CREEPER);
+                    final var creeper = (Creeper) l.getWorld().spawnEntity(l, EntityType.CREEPER);
                     creeper.setPowered(true);
                     scheduler.runTaskLater(plugin, creeper::ignite, 20 * 60 * 5);
                 }
@@ -151,14 +160,4 @@ public class NightmareRandomEvent extends BukkitRunnable {
             }
         }
     }
-
-    private final Plugin plugin;
-    private final Random random = new Random();
-    private final EntityType[] illigers = {
-        EntityType.PILLAGER,
-        EntityType.PILLAGER,
-        EntityType.VINDICATOR,
-        EntityType.VINDICATOR,
-        EntityType.WITCH,
-    };
 }

@@ -9,7 +9,7 @@ import org.bukkit.event.Listener
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 
-class QuickChatHandler: Listener {
+class QuickChatHandler : Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlayerQuickChat(e: ChatEvent) {
         val component = e.message() as? TextComponent ?: return

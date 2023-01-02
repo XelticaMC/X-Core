@@ -11,7 +11,7 @@ class LoginBonusHandler : Listener {
     @EventHandler
     fun onLoginBonus(e: RealTimeNewDayEvent) {
         // ログボ記録を削除
-        PlayerStore.openAll().forEach{
+        PlayerStore.openAll().forEach {
             it.delete(LoginBonusModule.PS_KEY_LOGIN_BONUS)
         }
 

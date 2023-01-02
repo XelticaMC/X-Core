@@ -12,7 +12,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.event.block.SignChangeEvent
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import java.util.*
+import java.util.Arrays
+import java.util.LinkedList
 
 /**
  * 看板を編集するコマンド
@@ -58,8 +59,8 @@ class CommandSignEdit : CommandPlayerOnlyBase() {
         commandSender: CommandSender,
         command: Command,
         label: String,
-        args: Array<String>
-    ): List<String>? {
+        args: Array<String>,
+    ): List<String> {
         val errorNonSign = listOf("変更する対象の看板を見てください")
         val errorOutOfBounds = listOf("第一引数は0,1,2,3のいずれかにしてください")
         if (args.size < 2) return COMMANDS

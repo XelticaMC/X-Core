@@ -2,10 +2,10 @@ package work.xeltica.craft.core.modules.ebipowerShop
 
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.utils.CastHelper
-import work.xeltica.craft.core.api.Config
 import java.io.IOException
 
 object EbiPowerShopModule : ModuleBase() {

@@ -7,7 +7,8 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.FireworkMeta
 import work.xeltica.craft.core.api.ModuleBase
 import java.time.LocalDate
-import java.util.*
+import java.util.Random
+import java.util.UUID
 
 object EventSummerModule : ModuleBase() {
     const val PS_KEY_LOGIN_BONUS_SUMMER = "login_bonus_summer"

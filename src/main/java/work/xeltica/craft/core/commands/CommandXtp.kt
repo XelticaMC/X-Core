@@ -8,7 +8,6 @@ import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.api.commands.CommandBase
 import work.xeltica.craft.core.modules.world.WorldModule.teleportToSavedLocation
-import java.util.*
 
 /**
  * 指定したワールドの最後にいた場所に転送するコマンド

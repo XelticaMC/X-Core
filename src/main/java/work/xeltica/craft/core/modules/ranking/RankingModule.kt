@@ -2,11 +2,11 @@ package work.xeltica.craft.core.modules.ranking
 
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI
 import work.xeltica.craft.core.XCorePlugin
-import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.Config
+import work.xeltica.craft.core.api.ModuleBase
 import java.io.IOException
 
-object RankingModule: ModuleBase() {
+object RankingModule : ModuleBase() {
     private lateinit var config: Config
 
     override fun onEnable() {
@@ -63,7 +63,7 @@ object RankingModule: ModuleBase() {
             val ranking = ranks.queryRanking()
             for (i in 0..10) {
                 val name = if (isHidden) "??????????" else if (ranking.size <= i) "--------" else ranking[i].id
-                val value = if(isHidden) "??????????" else if (ranking.size <= i) "--------" else ranking[i].score
+                val value = if (isHidden) "??????????" else if (ranking.size <= i) "--------" else ranking[i].score
                 val prefix = if (i == 0) "§e" else if (i == 1) "§f" else if (i == 2) "§6" else "§d"
                 holo.appendTextLine("%s§l%d位: %s (%s)".format(prefix, i + 1, name, value))
             }

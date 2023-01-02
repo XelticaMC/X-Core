@@ -29,9 +29,10 @@ class MotdHandler : Listener {
 
         e.player.showTitle(
             Title.title(
-            Component.text("§aXelticaMC"),
-            Component.text("§f§b§nhttps://craft.xeltica.work")
-        ))
+                Component.text("§aXelticaMC"),
+                Component.text("§f§b§nhttps://craft.xeltica.work")
+            )
+        )
 
         HintModule.achieve(e.player, Hint.WELCOME)
     }

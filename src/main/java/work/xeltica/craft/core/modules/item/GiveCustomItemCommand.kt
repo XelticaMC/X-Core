@@ -9,7 +9,7 @@ import org.bukkit.command.Command
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 
-class GiveCustomItemCommand: CommandPlayerOnlyBase() {
+class GiveCustomItemCommand : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.size < 2) return false
         val p = Bukkit.getPlayer(args[0])

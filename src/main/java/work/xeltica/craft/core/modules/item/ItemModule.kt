@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import work.xeltica.craft.core.api.ModuleBase
 
-object ItemModule: ModuleBase() {
+object ItemModule : ModuleBase() {
     const val ITEM_NAME_XPHONE = "xphone"
     const val ITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT = "ticket_wildareab_ocean_monument"
 
@@ -22,7 +22,7 @@ object ItemModule: ModuleBase() {
         registerItems()
         Bukkit.getOnlinePlayers().forEach(this::givePhoneIfNeeded)
 
-        registerCommand("givecustomitem" ,GiveCustomItemCommand())
+        registerCommand("givecustomitem", GiveCustomItemCommand())
         registerHandler(ItemHandler())
     }
 

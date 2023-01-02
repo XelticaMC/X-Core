@@ -15,7 +15,7 @@ import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.utils.Ticks
 
-class OmikujiCommand: CommandPlayerOnlyBase() {
+class OmikujiCommand : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         val module = OmikujiModule
         if (module.isDrawnBy(player)) {
@@ -48,14 +48,16 @@ class OmikujiCommand: CommandPlayerOnlyBase() {
 
                 when (score) {
                     OmikujiScore.TOKUDAIKICHI -> {
-                        player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, Ticks.from(20,0.0), 1))
+                        player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, Ticks.from(20, 0.0), 1))
                         player.playSound(player.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1f, 1.6f)
                         HintModule.achieve(player, Hint.OMIKUJI_TOKUDAIKICHI)
                     }
+
                     OmikujiScore.DAIKICHI -> {
                         player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, Ticks.from(20, 0.0), 1))
                         player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 0.7f)
                     }
+
                     OmikujiScore.DAIKYOU -> {
                         player.addPotionEffect(PotionEffect(PotionEffectType.BAD_OMEN, Ticks.from(10, 0.0), 1))
                         player.addPotionEffect(PotionEffect(PotionEffectType.POISON, Ticks.from(10.0), 2))
@@ -63,6 +65,7 @@ class OmikujiCommand: CommandPlayerOnlyBase() {
                         player.playSound(player.location, Sound.BLOCK_END_PORTAL_SPAWN, SoundCategory.PLAYERS, 1f, 0.5f)
                         HintModule.achieve(player, Hint.OMIKUJI_DAIKYOU)
                     }
+
                     OmikujiScore.KYOU -> {
 
                         // 凶。不運が20分、吐き気が5秒つく
@@ -70,6 +73,7 @@ class OmikujiCommand: CommandPlayerOnlyBase() {
                         player.addPotionEffect(PotionEffect(PotionEffectType.CONFUSION, Ticks.from(5.0), 1))
                         player.playSound(player.location, Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1f, 0.5f)
                     }
+
                     else -> {
                         player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1f, 1.6f)
                     }

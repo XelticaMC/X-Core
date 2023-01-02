@@ -8,7 +8,7 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule
 import work.xeltica.craft.core.xphone.apps.AppBase
-import java.util.*
+import java.util.Calendar
 
 /**
  * テレポートアプリ
@@ -33,11 +33,13 @@ class TeleportApp : AppBase() {
     }
 
     private fun showMainMenu(player: Player) {
-        Gui.getInstance().openMenu(player, "テレポート", listOf(
-            MenuItem("ワールド…", { showWorldsMenu(player) }, Material.GRASS_BLOCK),
-            MenuItem("初期スポーン", { player.performCommand("respawn") }, Material.FIREWORK_ROCKET),
-            MenuItem("ベッド", { player.performCommand("respawn bed") }, Material.RED_BED),
-        ))
+        Gui.getInstance().openMenu(
+            player, "テレポート", listOf(
+                MenuItem("ワールド…", { showWorldsMenu(player) }, Material.GRASS_BLOCK),
+                MenuItem("初期スポーン", { player.performCommand("respawn") }, Material.FIREWORK_ROCKET),
+                MenuItem("ベッド", { player.performCommand("respawn bed") }, Material.RED_BED),
+            )
+        )
     }
 
     private fun showWorldsMenu(player: Player) {
@@ -98,56 +100,60 @@ class TeleportApp : AppBase() {
     }
 
     private fun showSharedWorldsMenu(player: Player) {
-        Gui.getInstance().openMenu(player, "共有ワールド…", listOf(
-            MenuItem("戻る…", { showWorldsMenu(player) }, Material.REDSTONE_TORCH),
+        Gui.getInstance().openMenu(
+            player, "共有ワールド…", listOf(
+                MenuItem("戻る…", { showWorldsMenu(player) }, Material.REDSTONE_TORCH),
 
-            MenuItem("共有ワールド", {
-                WorldModule.teleportToSavedLocation(player, "wildarea2")
-            }, Material.GRASS_BLOCK),
+                MenuItem("共有ワールド", {
+                    WorldModule.teleportToSavedLocation(player, "wildarea2")
+                }, Material.GRASS_BLOCK),
 
-            MenuItem("共有ネザー", {
-                WorldModule.teleportToSavedLocation(player, "wildarea2_nether")
-            }, Material.NETHERRACK),
+                MenuItem("共有ネザー", {
+                    WorldModule.teleportToSavedLocation(player, "wildarea2_nether")
+                }, Material.NETHERRACK),
 
-            MenuItem("共有エンド", {
-                WorldModule.teleportToSavedLocation(player, "wildarea2_the_end")
-            }, Material.END_STONE)
-        ))
+                MenuItem("共有エンド", {
+                    WorldModule.teleportToSavedLocation(player, "wildarea2_the_end")
+                }, Material.END_STONE)
+            )
+        )
     }
 
     private fun showShigenWorldsMenu(player: Player) {
-        Gui.getInstance().openMenu(player, "資源ワールド…", listOf(
-            MenuItem("戻る…", { showWorldsMenu(player) }, Material.REDSTONE_TORCH),
-            MenuItem("資源ワールド", {
-                val loc: Location = player.location
-                val x = loc.blockX * 16
-                val z = loc.blockZ * 16
-                player.sendMessage("ワールドを準備中です…。そのまましばらくお待ちください。")
-                player.world.getChunkAtAsync(x, z)
-                    .thenAccept {
-                        val wildareab = Bukkit.getWorld("wildareab")
-                        if (wildareab == null) {
-                            Gui.getInstance().error(player, "テレポートに失敗しました。ワールドが作成されていないようです。")
-                            return@thenAccept
+        Gui.getInstance().openMenu(
+            player, "資源ワールド…", listOf(
+                MenuItem("戻る…", { showWorldsMenu(player) }, Material.REDSTONE_TORCH),
+                MenuItem("資源ワールド", {
+                    val loc: Location = player.location
+                    val x = loc.blockX * 16
+                    val z = loc.blockZ * 16
+                    player.sendMessage("ワールドを準備中です…。そのまましばらくお待ちください。")
+                    player.world.getChunkAtAsync(x, z)
+                        .thenAccept {
+                            val wildareab = Bukkit.getWorld("wildareab")
+                            if (wildareab == null) {
+                                Gui.getInstance().error(player, "テレポートに失敗しました。ワールドが作成されていないようです。")
+                                return@thenAccept
+                            }
+                            val y = wildareab.getHighestBlockYAt(x, z) + 1
+                            val land =
+                                Location(wildareab, x.toDouble(), (y - 1).toDouble(), z.toDouble())
+                            if (land.block.type == Material.WATER) {
+                                land.block.type = Material.STONE
+                            }
+                            player.teleportAsync(Location(wildareab, x.toDouble(), y.toDouble(), z.toDouble()))
                         }
-                        val y = wildareab.getHighestBlockYAt(x, z) + 1
-                        val land =
-                            Location(wildareab, x.toDouble(), (y - 1).toDouble(), z.toDouble())
-                        if (land.block.type == Material.WATER) {
-                            land.block.type = Material.STONE
-                        }
-                        player.teleportAsync(Location(wildareab, x.toDouble(), y.toDouble(), z.toDouble()))
-                    }
-            }, Material.GRASS_BLOCK),
+                }, Material.GRASS_BLOCK),
 
-            MenuItem("資源ネザー", {
-                WorldModule.teleportToSavedLocation(player, "shigen_nether")
-            }, Material.NETHERRACK),
+                MenuItem("資源ネザー", {
+                    WorldModule.teleportToSavedLocation(player, "shigen_nether")
+                }, Material.NETHERRACK),
 
-            MenuItem("資源エンド", {
-                WorldModule.teleportToSavedLocation(player, "shigen_end")
-            }, Material.END_STONE)
-        ))
+                MenuItem("資源エンド", {
+                    WorldModule.teleportToSavedLocation(player, "shigen_end")
+                }, Material.END_STONE)
+            )
+        )
     }
 
     private fun isShigen(player: Player) = shigenWorldsList.contains(player.world.name)

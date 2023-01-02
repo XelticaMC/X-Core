@@ -1,6 +1,6 @@
 package work.xeltica.craft.core.modules.eventFirework
 
-data class ExplodeOperation (
+data class ExplodeOperation(
     val loc: Array<Double> = arrayOf(0.0, 0.0, 0.0),
     val random: Int = 0,
     val clone: Int = 0,

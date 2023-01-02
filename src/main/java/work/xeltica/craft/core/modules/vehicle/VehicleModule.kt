@@ -15,14 +15,14 @@ import org.bukkit.entity.Vehicle
 import org.bukkit.entity.minecart.RideableMinecart
 import org.bukkit.event.entity.CreatureSpawnEvent
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.world.WorldModule
-import work.xeltica.craft.core.api.Config
 
-object VehicleModule: ModuleBase() {
+object VehicleModule : ModuleBase() {
     private lateinit var config: Config
 
     private val collisionArea = listOf(

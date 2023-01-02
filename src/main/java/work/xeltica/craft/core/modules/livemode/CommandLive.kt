@@ -25,7 +25,7 @@ class CommandLive : CommandPlayerOnlyBase() {
         commandSender: CommandSender,
         command: Command,
         label: String,
-        args: Array<String>
+        args: Array<String>,
     ): List<String> {
         return if (args.size != 1) COMPLETE_LIST_EMPTY else COMPLETE_LIST_ONOFF
     }

@@ -122,7 +122,7 @@ object PromotionModule : ModuleBase() {
         val target = e.target as User
         val node = e.node
 
-        val task = object: Runnable {
+        val task = object : Runnable {
             override fun run() {
                 val player = Bukkit.getPlayer(target.uniqueId) ?: return
                 if (node is InheritanceNode && "citizen" == node.groupName) {

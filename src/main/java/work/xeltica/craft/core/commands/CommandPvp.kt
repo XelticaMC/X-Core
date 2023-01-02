@@ -29,7 +29,7 @@ class CommandPvp : CommandPlayerOnlyBase() {
 
     override fun onTabComplete(
         commandSender: CommandSender, command: Command, label: String,
-        args: Array<String>
+        args: Array<String>,
     ): List<String> {
         return COMPLETE_LIST_ONOFF
     }

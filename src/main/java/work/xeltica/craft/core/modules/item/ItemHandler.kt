@@ -29,6 +29,7 @@ class ItemHandler : Listener {
             }
         }
     }
+
     @EventHandler
     fun onGuardUsingCustomItemAsFuelInSmelting(e: FurnaceBurnEvent) {
         if (e.fuel.hasLore()) {

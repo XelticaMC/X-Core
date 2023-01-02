@@ -15,11 +15,13 @@ class ProtectApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.TRIPWIRE_HOOK
 
     override fun onLaunch(player: Player) {
-        Gui.getInstance().openMenu(player, "保護方法を選択…", listOf(
-            MenuItem("個人保護", { player.performCommand("cprivate") }, Material.RED_DYE, null),
-            MenuItem("共有保護", { player.performCommand("cpublic") }, Material.GREEN_DYE, null),
-            MenuItem("保護を削除する", { player.performCommand("cremove") }, Material.BARRIER, null),
-        ))
+        Gui.getInstance().openMenu(
+            player, "保護方法を選択…", listOf(
+                MenuItem("個人保護", { player.performCommand("cprivate") }, Material.RED_DYE, null),
+                MenuItem("共有保護", { player.performCommand("cpublic") }, Material.GREEN_DYE, null),
+                MenuItem("保護を削除する", { player.performCommand("cremove") }, Material.BARRIER, null),
+            )
+        )
     }
 
     override fun isVisible(player: Player): Boolean = listOf(

@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 
-class HubHandler: Listener {
+class HubHandler : Listener {
     @EventHandler
     fun onPlayerHurt(e: EntityDamageEvent) {
         if (e.entity !is Player) return

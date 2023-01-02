@@ -2,7 +2,7 @@ package work.xeltica.craft.core.api.playerStore
 
 import org.bukkit.OfflinePlayer
 import work.xeltica.craft.core.api.Config
-import java.util.*
+import java.util.UUID
 
 object PlayerStore {
     private lateinit var config: Config

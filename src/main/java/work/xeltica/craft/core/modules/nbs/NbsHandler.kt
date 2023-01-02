@@ -8,7 +8,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.NotePlayEvent
 import org.bukkit.event.player.PlayerQuitEvent
 
-class NbsHandler: Listener {
+class NbsHandler : Listener {
     /**
      * ブロック破壊したときに音を止める
      */

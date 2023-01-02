@@ -12,7 +12,8 @@ import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule.achieve
 import work.xeltica.craft.core.utils.Ticks
-import java.util.*
+import java.util.Arrays
+import java.util.LinkedList
 import java.util.function.Consumer
 
 /**

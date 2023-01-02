@@ -8,7 +8,7 @@ import work.xeltica.craft.core.api.playerStore.PlayerStore
 import java.io.IOException
 import java.util.*
 
-object CounterModule: ModuleBase() {
+object CounterModule : ModuleBase() {
     lateinit var config: Config
 
     const val PS_KEY_MODE = "counter_register_mode"

@@ -4,7 +4,7 @@ import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import work.xeltica.craft.core.utils.CastHelper
 
-class NbsModel(var location: Location, var songId: String, var distance: Int, var playbackMode: PlaybackMode): Cloneable, ConfigurationSerializable {
+class NbsModel(var location: Location, var songId: String, var distance: Int, var playbackMode: PlaybackMode) : Cloneable, ConfigurationSerializable {
     companion object {
         @JvmStatic
         fun deserialize(args: Map<String, Any>): NbsModel {
@@ -58,8 +58,10 @@ class NbsModel(var location: Location, var songId: String, var distance: Int, va
     enum class PlaybackMode {
         /** 普通  */
         NORMAL,
+
         /** ループする  */
         LOOP,
+
         /** トグルで停止せずに鳴り続ける  */
         ONESHOT
     }

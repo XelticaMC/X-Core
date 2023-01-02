@@ -15,16 +15,15 @@ import org.bukkit.block.Block
 import org.bukkit.block.Sign
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.nbs.NbsModel.PlaybackMode
 import work.xeltica.craft.core.utils.CastHelper
-import work.xeltica.craft.core.api.Config
 import java.io.File
 import java.io.IOException
-import java.util.*
-import kotlin.collections.HashMap
+import java.util.UUID
 
-object NbsModule: ModuleBase() {
+object NbsModule : ModuleBase() {
     override fun onEnable() {
         ConfigurationSerialization.registerClass(NbsModel::class.java, "NbsModel")
         nbs = Config("nbs")
@@ -198,6 +197,7 @@ object NbsModule: ModuleBase() {
         models.add(model)
         saveModels()
     }
+
     /**
      * モデルをシステムから削除します。
      * @param location 位置

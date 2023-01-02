@@ -11,9 +11,9 @@ import org.bukkit.inventory.ItemStack
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
-import java.util.*
+import java.util.Objects
 
-object MobBallModule: ModuleBase() {
+object MobBallModule : ModuleBase() {
     const val PS_KEY_DEX = "mob_dex"
 
     lateinit var tierMap: MutableMap<String, Int>

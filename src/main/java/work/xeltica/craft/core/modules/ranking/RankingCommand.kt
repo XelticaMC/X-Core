@@ -6,9 +6,8 @@ import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.api.commands.CommandBase
 import java.io.IOException
-import java.util.*
 
-class RankingCommand: CommandBase() {
+class RankingCommand : CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) return false
 
@@ -34,6 +33,7 @@ class RankingCommand: CommandBase() {
                     api.create(name, displayName, isPlayerMode)
                     sender.sendMessage("ランキング " + name + "を" + (if (isPlayerMode) "プレイヤーモードで" else "") + "作成しました。")
                 }
+
                 "delete" -> {
                     if (args.size != 2) {
                         sender.sendMessage("/ranking delete <name>")
@@ -47,6 +47,7 @@ class RankingCommand: CommandBase() {
                     }
                     sender.sendMessage(if (api.delete(name)) "削除に成功しました。" else "削除に失敗しました。")
                 }
+
                 "query" -> {
                     if (args.size != 2) {
                         sender.sendMessage("/ranking query <name>")
@@ -64,6 +65,7 @@ class RankingCommand: CommandBase() {
                         sender.sendMessage("§6%d位:§a%s §b%s".format(i + 1, id1, score))
                     }
                 }
+
                 "list" -> {
                     val list = api.getAll()
                     if (list.isEmpty()) {
@@ -73,6 +75,7 @@ class RankingCommand: CommandBase() {
                     list.map { "%s §7(%s)".format(it.name, it.getDisplayName()) }
                         .forEach(sender::sendMessage)
                 }
+
                 "set" -> {
                     if (args.size != 3) {
                         sender.sendMessage("/ranking set <rankingName> <value>")
@@ -96,6 +99,7 @@ class RankingCommand: CommandBase() {
                         sender.sendMessage("値には数値のみ認められます。")
                     }
                 }
+
                 "unset" -> {
                     if (args.size != 2) {
                         sender.sendMessage("/ranking unset <rankingName>")
@@ -114,6 +118,7 @@ class RankingCommand: CommandBase() {
                         sender.sendMessage("値には数値のみ認められます。")
                     }
                 }
+
                 "mode" -> {
                     if (args.size != 3) {
                         sender.sendMessage("/ranking mode <rankingName> <normal/time/point>")
@@ -136,6 +141,7 @@ class RankingCommand: CommandBase() {
                     api[name]!!.setMode(mode)
                     sender.sendMessage("モードを設定しました。")
                 }
+
                 "hologram" -> {
                     if (args.size < 3) {
                         sender.sendMessage("/ranking hologram <name> <sub-commands>")
@@ -162,6 +168,7 @@ class RankingCommand: CommandBase() {
                         "deobfuscate" -> data.setHologram(data.getHologramLocation(), false)
                     }
                 }
+
                 else -> {
                     return false
                 }
@@ -182,6 +189,7 @@ class RankingCommand: CommandBase() {
                 completions.sort()
                 return completions
             }
+
             2 -> {
                 if (listOf("delete", "query", "set", "unset", "hologram", "mode").contains(args[0])) return COMPLETE_LIST_EMPTY
                 val rankings = RankingModule.getAll().map(Ranking::name).toList()
@@ -190,6 +198,7 @@ class RankingCommand: CommandBase() {
                 completions.sort()
                 return rankings
             }
+
             3 -> {
                 when (args[0]) {
                     "mode" -> {
@@ -199,6 +208,7 @@ class RankingCommand: CommandBase() {
                         completions.sort()
                         return completions
                     }
+
                     "hologram" -> {
                         val subCommands = listOf("spawn", "despawn", "obfuscate", "deobfuscate")
                         val completions = ArrayList<String>()

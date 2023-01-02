@@ -4,12 +4,12 @@ import com.google.common.collect.Lists
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.hooks.VaultHook
-import work.xeltica.craft.core.api.Config
 import java.io.IOException
 
-object CloverModule: ModuleBase() {
+object CloverModule : ModuleBase() {
     lateinit var clovers: Config
 
     override fun onEnable() {

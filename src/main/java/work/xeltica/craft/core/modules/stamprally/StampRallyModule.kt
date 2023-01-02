@@ -6,13 +6,12 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.Sound
 import org.bukkit.configuration.MemorySection
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
-import work.xeltica.craft.core.api.Config
-import java.util.*
-import kotlin.collections.HashSet
+import java.util.UUID
 
-object StampRallyModule: ModuleBase() {
+object StampRallyModule : ModuleBase() {
     const val CREATE_PERMISSION = "otanoshimi.stamp.create"
     const val DESTROY_PERMISSION = "otanoshimi.stamp.destroy"
 

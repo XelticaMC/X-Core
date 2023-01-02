@@ -10,7 +10,7 @@ enum class Hint constructor(
     val hintName: String,
     val description: String,
     val power: Int = 0,
-    val type: HintType = HintType.NORMAL
+    val type: HintType = HintType.NORMAL,
 ) {
     // ようこそ
     WELCOME(
@@ -171,6 +171,7 @@ enum class Hint constructor(
         2000,
         HintType.CHALLENGE
     ),
+
     // 暴力反対
     VIOLENCE_CHILD(
         "Don't touch the child!",
@@ -217,6 +218,7 @@ enum class Hint constructor(
         0,  // 同上
         HintType.CHALLENGE
     ),
+
     // ヘルプ
     EBIPOWER(
         "エビパワーとは",

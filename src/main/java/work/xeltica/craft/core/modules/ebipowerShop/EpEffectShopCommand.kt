@@ -17,10 +17,10 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
-import java.util.*
+import java.util.Locale
 import java.util.function.Consumer
 
-class EpEffectShopCommand: CommandPlayerOnlyBase() {
+class EpEffectShopCommand : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         val subCommand = if (args.isNotEmpty()) args[0] else null
 
@@ -45,6 +45,7 @@ class EpEffectShopCommand: CommandPlayerOnlyBase() {
                 EbiPowerShopModule.addEffectItem(EbiPowerEffect(type, power, time, cost))
                 player.sendMessage("追加しました。")
             }
+
             "delete" -> openShopMenu(player, "削除するアイテムを選んでください") { item ->
                 EbiPowerShopModule.deleteEffectItem(item)
                 player.sendMessage("削除しました。")
@@ -61,6 +62,7 @@ class EpEffectShopCommand: CommandPlayerOnlyBase() {
                     player.sendMessage("エビパワー不足のため、購入に失敗しました。")
                     player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 0.5f)
                 }
+
                 EbiPowerShopModule.Result.SUCCESS -> {
                     player.sendMessage(
                         String.format(
@@ -73,6 +75,7 @@ class EpEffectShopCommand: CommandPlayerOnlyBase() {
                     player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
                     HintModule.achieve(player, Hint.EPEFFECTSHOP)
                 }
+
                 else -> {
                     player.sendMessage("不明なエラーが発生しました。")
                     player.playSound(player.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 0.5f)

@@ -5,12 +5,12 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.configuration.file.YamlConfiguration
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.hooks.DiscordHook
-import work.xeltica.craft.core.api.Config
 import java.io.IOException
 
-object MetaModule: ModuleBase() {
+object MetaModule : ModuleBase() {
     val changeLog = listOf("モジュール化").toTypedArray()
 
     lateinit var meta: Config

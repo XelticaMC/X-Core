@@ -6,8 +6,8 @@ import work.xeltica.craft.core.utils.CastHelper
 
 class CounterData(
     val name: String, val location1: Location, val location2: Location, val isDaily: Boolean,
-    var javaRankingId: String?, var bedrockRankingId: String?, var uwpRankingId: String?, var phoneRankingId: String?
-): Cloneable, ConfigurationSerializable {
+    var javaRankingId: String?, var bedrockRankingId: String?, var uwpRankingId: String?, var phoneRankingId: String?,
+) : Cloneable, ConfigurationSerializable {
     override fun serialize(): MutableMap<String, Any?> {
         val serialized = HashMap<String, Any?>()
         serialized["name"] = name

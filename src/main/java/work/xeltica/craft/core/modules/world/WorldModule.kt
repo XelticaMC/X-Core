@@ -1,6 +1,10 @@
 package work.xeltica.craft.core.modules.world
 
-import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.Difficulty
+import org.bukkit.GameRule
+import org.bukkit.Location
+import org.bukkit.World
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.XCorePlugin
@@ -10,7 +14,7 @@ import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 import java.io.IOException
 import java.util.function.Consumer
 
-object WorldModule: ModuleBase() {
+object WorldModule : ModuleBase() {
     /**
      * 一番最初のスポーンをしているかどうか。
      *

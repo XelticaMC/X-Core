@@ -6,9 +6,10 @@ import org.bukkit.event.player.PlayerTeleportEvent
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.world.WorldModule
-import java.util.*
+import java.util.Arrays
+import java.util.UUID
 
-object HubModule: ModuleBase() {
+object HubModule : ModuleBase() {
     private val noCooldownWorldNames = arrayOf(
         "art",
         "pvp",
@@ -62,7 +63,7 @@ object HubModule: ModuleBase() {
                 WorldModule.teleport(player, hub.worldName)
             }
             isWarpingMap.remove(player.uniqueId)
-        }, if (requireCooldown) 1 else 20*5)
+        }, if (requireCooldown) 1 else 20 * 5)
 
         if (!requireCooldown) {
             player.sendMessage("5秒後にロビーに移動します...")

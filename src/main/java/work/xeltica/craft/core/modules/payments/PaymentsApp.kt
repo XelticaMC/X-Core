@@ -13,9 +13,10 @@ class PaymentsApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.EMERALD_BLOCK
 
     override fun onLaunch(player: Player) {
-        Gui.getInstance().openMenu(player, "EbiPay - 残高 ${EbiPowerModule.get(player)} EP",
+        Gui.getInstance().openMenu(
+            player, "EbiPay - 残高 ${EbiPowerModule.get(player)} EP",
             MenuItem("他プレイヤーに送る", { choosePlayer(player) }, Material.LIME_DYE),
-            MenuItem("他プレイヤーに請求（開発中）", {  }, Material.LIGHT_GRAY_DYE),
+            MenuItem("他プレイヤーに請求（開発中）", { }, Material.LIGHT_GRAY_DYE),
         )
     }
 

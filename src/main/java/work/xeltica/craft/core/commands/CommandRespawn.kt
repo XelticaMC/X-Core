@@ -11,7 +11,7 @@ import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.utils.Ticks
-import java.util.*
+import java.util.UUID
 
 /**
  * 初期スポーンに転送するコマンド
@@ -106,7 +106,7 @@ class CommandRespawn : CommandPlayerOnlyBase() {
 
     override fun onTabComplete(
         commandSender: CommandSender, command: Command, label: String,
-        args: Array<String>
+        args: Array<String>,
     ): List<String> {
         return COMMANDS
     }

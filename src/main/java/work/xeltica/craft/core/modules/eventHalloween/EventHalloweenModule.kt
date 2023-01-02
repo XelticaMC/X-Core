@@ -2,28 +2,109 @@ package work.xeltica.craft.core.modules.eventHalloween
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
+import org.bukkit.Tag
 import org.bukkit.block.Biome
 import org.bukkit.configuration.serialization.ConfigurationSerialization
 import org.bukkit.enchantments.Enchantment
-import org.bukkit.entity.*
+import org.bukkit.entity.Entity
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Monster
+import org.bukkit.entity.Player
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.utils.CastHelper
-import work.xeltica.craft.core.api.Config
 import java.io.IOException
-import java.lang.IllegalArgumentException
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
+import java.util.Random
 import java.util.function.Consumer
 
 object EventHalloweenModule : ModuleBase() {
+    private const val CONFIG_NAME = "candyStore"
+    private const val CONFIG_KEY_ITEMS = "items"
+    private const val CONFIG_KEY_EVENT_MODE = "eventMode"
+    private const val CONFIG_KEY_SPAWN_RATIO_MAIN_WORLD = "spawnRatioMainWorld"
+    private const val CONFIG_KEY_SPAWN_RATIO_EVENT_WORLD = "spawnRatioEventWorld"
+
+    // TODO: ハードコーディングしなくても良いよう、ハスクとストレイが湧くバイオームが取れないだろうか…
+    private val huskBiomes = listOf(
+        Biome.DESERT.key,
+    )
+
+    private val strayBiomes = listOf(
+        Biome.SNOWY_PLAINS.key,
+        Biome.ICE_SPIKES.key,
+        Biome.FROZEN_RIVER.key,
+    )
+
+    private val entityTypes = listOf(
+        EntityType.ZOMBIE,
+        EntityType.SKELETON,
+    )
+
+    private val METADATA_KEY_EVENT_MOB = "halloween${GregorianCalendar().get(Calendar.YEAR)}"
+    private val ITEM_LORE_STRING = "XelticaMC${GregorianCalendar().get(Calendar.YEAR)}ハロウィン"
+
+    private val random = Random()
+
+    private val items = mutableListOf<CandyStoreItem>()
+    private var _isEventMode = false
+    private var _spawnRatioMainWorld = 100
+    private var _spawnRatioEventWorld = 100
+    private lateinit var candyStoreConfig: Config
+
+    /**
+     * イベントモードかどうか
+     */
+    var isEventMode
+        get() = _isEventMode
+        set(value) {
+            _isEventMode = value
+
+            candyStoreConfig.conf[CONFIG_KEY_EVENT_MODE] = value
+            try {
+                candyStoreConfig.save()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+
+    /**
+     * スポーン確率
+     */
+    var spawnRatioInMainWorld
+        get() = _spawnRatioMainWorld
+        set(value) {
+            _spawnRatioMainWorld = value
+
+            candyStoreConfig.conf[CONFIG_KEY_SPAWN_RATIO_MAIN_WORLD] = value
+        }
+
+    /**
+     * スポーン確率
+     */
+    var spawnRatioInEventWorld
+        get() = _spawnRatioEventWorld
+        set(value) {
+            _spawnRatioEventWorld = value
+
+            candyStoreConfig.conf[CONFIG_KEY_SPAWN_RATIO_EVENT_WORLD] = value
+        }
+
     override fun onEnable() {
         val logger = Bukkit.getLogger()
         ConfigurationSerialization.registerClass(CandyStoreItem::class.java, "CandyStoreItem")
@@ -157,6 +238,7 @@ object EventHalloweenModule : ModuleBase() {
                     is CandyStoreItem -> {
                         player.world.dropItem(player.location, it.item.clone())
                     }
+
                     is CandyStoreEPItem -> {
                         EbiPowerModule.tryGive(player, it.ep)
                     }
@@ -181,19 +263,21 @@ object EventHalloweenModule : ModuleBase() {
             val item: ItemStack = it.item
             val name: String = getItemName(item) ?: ""
             val displayName = name + "×" + item.amount + " (" + it.cost + "アメ)"
-            MenuItem(displayName, {_ ->
+            MenuItem(displayName, { _ ->
                 onChosen.accept(it)
             }, it.item.clone())
         }.toTypedArray()
-        Gui.getInstance().openMenu(player, title, listOf(
-            *menuItems,
-            MenuItem("2エビパワー (1アメ)", {
-            onChosen.accept(CandyStoreEPItem(2, 1))
-        }, Material.EMERALD, null, true),
-            MenuItem("128エビパワー (64アメ)", {
-                onChosen.accept(CandyStoreEPItem(128, 64))
-            }, Material.EMERALD_BLOCK, null, true),
-        ))
+        Gui.getInstance().openMenu(
+            player, title, listOf(
+                *menuItems,
+                MenuItem("2エビパワー (1アメ)", {
+                    onChosen.accept(CandyStoreEPItem(2, 1))
+                }, Material.EMERALD, null, true),
+                MenuItem("128エビパワー (64アメ)", {
+                    onChosen.accept(CandyStoreEPItem(128, 64))
+                }, Material.EMERALD_BLOCK, null, true),
+            )
+        )
     }
 
     /**
@@ -216,9 +300,11 @@ object EventHalloweenModule : ModuleBase() {
         val itemStack = ItemStack(Material.HEART_OF_THE_SEA, amount)
         itemStack.editMeta {
             it.displayName(Component.text("アメ"))
-            it.lore(listOf(
-                Component.text(ITEM_LORE_STRING)
-            ))
+            it.lore(
+                listOf(
+                    Component.text(ITEM_LORE_STRING)
+                )
+            )
         }
         return itemStack
     }
@@ -242,44 +328,6 @@ object EventHalloweenModule : ModuleBase() {
     }
 
     /**
-     * イベントモードかどうか
-     */
-    var isEventMode
-        get() = _isEventMode
-        set(value) {
-            _isEventMode = value
-
-            candyStoreConfig.conf[CONFIG_KEY_EVENT_MODE] = value
-            try {
-                candyStoreConfig.save()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-
-    /**
-     * スポーン確率
-     */
-    var spawnRatioInMainWorld
-        get() = _spawnRatioMainWorld
-        set(value) {
-            _spawnRatioMainWorld = value
-
-            candyStoreConfig.conf[CONFIG_KEY_SPAWN_RATIO_MAIN_WORLD] = value
-        }
-
-    /**
-     * スポーン確率
-     */
-    var spawnRatioInEventWorld
-        get() = _spawnRatioEventWorld
-        set(value) {
-            _spawnRatioEventWorld = value
-
-            candyStoreConfig.conf[CONFIG_KEY_SPAWN_RATIO_EVENT_WORLD] = value
-        }
-
-    /**
      * 指定したアイテムスタックから名前を取得します。
      * @param item 取得するアイテム
      * @return アイテムのdisplayName
@@ -288,36 +336,4 @@ object EventHalloweenModule : ModuleBase() {
         val dn = item.itemMeta.displayName()
         return if (dn != null) PlainTextComponentSerializer.plainText().serialize(dn) else item.i18NDisplayName
     }
-
-    // TODO: ハードコーディングしなくても良いよう、ハスクとストレイが湧くバイオームが取れないだろうか…
-    private val huskBiomes = listOf(
-        Biome.DESERT.key,
-    )
-
-    private val strayBiomes = listOf(
-        Biome.SNOWY_PLAINS.key,
-        Biome.ICE_SPIKES.key,
-        Biome.FROZEN_RIVER.key,
-    )
-
-    private val entityTypes = listOf(
-        EntityType.ZOMBIE,
-        EntityType.SKELETON,
-    )
-
-    private val METADATA_KEY_EVENT_MOB = "halloween${GregorianCalendar().get(Calendar.YEAR)}"
-    private val ITEM_LORE_STRING = "XelticaMC${GregorianCalendar().get(Calendar.YEAR)}ハロウィン"
-    private val CONFIG_NAME = "candyStore"
-    private val CONFIG_KEY_ITEMS = "items"
-    private val CONFIG_KEY_EVENT_MODE = "eventMode"
-    private val CONFIG_KEY_SPAWN_RATIO_MAIN_WORLD = "spawnRatioMainWorld"
-    private val CONFIG_KEY_SPAWN_RATIO_EVENT_WORLD = "spawnRatioEventWorld"
-
-    private val random = Random()
-
-    private val items = mutableListOf<CandyStoreItem>()
-    private var _isEventMode = false
-    private var _spawnRatioMainWorld = 100
-    private var _spawnRatioEventWorld = 100
-    private lateinit var candyStoreConfig: Config
 }

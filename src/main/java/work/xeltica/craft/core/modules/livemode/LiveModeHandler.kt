@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitTask
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.modules.livemode.LiveModeModule.liveBarMap
-import java.util.*
+import java.util.UUID
 
 /**
  * ライブモードに関するイベントハンドラをまとめています。

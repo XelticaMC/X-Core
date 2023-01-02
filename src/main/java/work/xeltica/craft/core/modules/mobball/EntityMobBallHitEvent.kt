@@ -6,7 +6,7 @@ import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
-class EntityMobBallHitEvent(val target: LivingEntity, val thrownBall: Projectile): Event(), Cancellable {
+class EntityMobBallHitEvent(val target: LivingEntity, val thrownBall: Projectile) : Event(), Cancellable {
 
     override fun getHandlers(): HandlerList {
         return HANDLERS_LIST

@@ -11,9 +11,9 @@ import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 import work.xeltica.craft.core.modules.ranking.Ranking
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 
-class CounterCommand: CommandPlayerOnlyBase() {
+class CounterCommand : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) return false
         val subCommand = args[0].lowercase(Locale.getDefault())
@@ -32,6 +32,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     player.sendMessage("カウンター登録モードは有効。カウンターの始点にする感圧板をクリックかタップしてください。")
                     player.sendMessage("キャンセルする際には、 /counter cancel を実行します。")
                 }
+
                 "cancel" -> {
                     record.delete(CounterModule.PS_KEY_MODE)
                     record.delete(CounterModule.PS_KEY_NAME)
@@ -39,6 +40,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     record.delete(CounterModule.PS_KEY_LOCATION)
                     player.sendMessage("カウンター登録モードを無効化し、キャンセルしました。")
                 }
+
                 "unregister" -> {
                     if (args.size != 2) return ui.error(player, "/counter unregister <name>")
                     val name = args[1]
@@ -46,6 +48,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     CounterModule.remove(data)
                     player.sendMessage(name + "を登録解除しました。")
                 }
+
                 "bind" -> {
                     if (args.size != 4) return ui.error(
                         player,
@@ -60,6 +63,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                             data.javaRankingId = rankingName
                             data.bedrockRankingId = rankingName
                         }
+
                         "java" -> data.javaRankingId = rankingName
                         "bedrock" -> data.bedrockRankingId = rankingName
                         "uwp" -> data.uwpRankingId = rankingName
@@ -68,6 +72,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     CounterModule.update(data)
                     player.sendMessage("カウンターをランキングに紐付けました。")
                 }
+
                 "unbind" -> {
                     if (args.size != 3) return ui.error(player, "/counter unbind <name> <all/java/bedrock/uwp/phone>")
                     val name = args[1].lowercase(Locale.getDefault())
@@ -78,6 +83,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                             data.javaRankingId = null
                             data.bedrockRankingId = null
                         }
+
                         "java" -> data.javaRankingId = null
                         "bedrock" -> data.bedrockRankingId = null
                         "uwp" -> data.uwpRankingId = null
@@ -86,6 +92,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     CounterModule.update(data)
                     player.sendMessage("カウンターをランキングから解除ました。")
                 }
+
                 "info" -> {
                     if (args.size != 2) return ui.error(player, "/counter info <name>")
                     val name = args[1]
@@ -100,6 +107,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                     player.sendMessage(" UWP: " + data.uwpRankingId)
                     player.sendMessage(" Phone: " + data.phoneRankingId)
                 }
+
                 "resetdaily" -> {
                     if (args.size != 2) {
                         CounterModule.resetAllPlayersPlayedLog()
@@ -115,6 +123,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
                         player.sendMessage("そのプレイヤーのプレイ済み履歴を削除しました。")
                     }
                 }
+
                 "list" -> {
                     val list = CounterModule.getCounters()
                     if (list.isEmpty()) {
@@ -126,9 +135,11 @@ class CounterCommand: CommandPlayerOnlyBase() {
                         }
                     }
                 }
+
                 "setisdaily" -> {
                     return ui.error(player, "未実装")
                 }
+
                 else -> {
                     return false
                 }
@@ -150,7 +161,7 @@ class CounterCommand: CommandPlayerOnlyBase() {
             completions.sort()
             return completions
         } else if (args.size == 2) {
-            when(subcommand) {
+            when (subcommand) {
                 "unregister", "info", "bind", "unbind" -> {
                     return CounterModule.getCounters().stream().map(CounterData::name).toList()
                 }

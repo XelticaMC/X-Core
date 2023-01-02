@@ -5,8 +5,7 @@ import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
-import java.util.*
-import kotlin.collections.HashMap
+import java.util.UUID
 
 object LiveModeModule : ModuleBase() {
     val liveBarMap = HashMap<UUID, BossBar>()

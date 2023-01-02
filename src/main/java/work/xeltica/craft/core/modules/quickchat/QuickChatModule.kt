@@ -1,15 +1,15 @@
 package work.xeltica.craft.core.modules.quickchat
 
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.world.WorldModule
-import work.xeltica.craft.core.api.Config
 import java.io.IOException
 
 /**
  * @author raink1208
  */
-object QuickChatModule: ModuleBase() {
+object QuickChatModule : ModuleBase() {
     lateinit var config: Config
 
     override fun onEnable() {

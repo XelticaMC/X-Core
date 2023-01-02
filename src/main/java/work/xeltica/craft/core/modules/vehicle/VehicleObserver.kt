@@ -2,7 +2,7 @@ package work.xeltica.craft.core.modules.vehicle
 
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
-import java.util.*
+import java.util.UUID
 
 class VehicleObserver : BukkitRunnable() {
     override fun run() {

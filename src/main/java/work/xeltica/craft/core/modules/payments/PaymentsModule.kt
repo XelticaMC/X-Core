@@ -1,6 +1,10 @@
 package work.xeltica.craft.core.modules.payments
 
-import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.OfflinePlayer
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.hooks.VaultHook

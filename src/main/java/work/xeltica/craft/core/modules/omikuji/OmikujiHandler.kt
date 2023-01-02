@@ -10,7 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.events.NewMorningEvent
 
-class OmikujiHandler: Listener {
+class OmikujiHandler : Listener {
     @EventHandler
     fun onNewMorning(e: NewMorningEvent) {
         OmikujiModule.reset()

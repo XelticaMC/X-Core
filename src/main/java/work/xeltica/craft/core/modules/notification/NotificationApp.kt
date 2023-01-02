@@ -10,7 +10,7 @@ import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.xphone.apps.AppBase
 
-class NotificationApp: AppBase() {
+class NotificationApp : AppBase() {
     override fun getName(player: Player): String {
         val count = NotificationModule.getUnreadNotification(player).count()
         return if (count > 0) "通知（${count}）" else "通知"

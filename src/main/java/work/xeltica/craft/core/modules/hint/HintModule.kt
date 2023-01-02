@@ -10,10 +10,10 @@ import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
-import work.xeltica.craft.core.api.Config
 import java.io.IOException
 import java.util.*
 
@@ -21,7 +21,7 @@ import java.util.*
  * プレイヤーのヒントを達成する処理や、ヒントを達成しているかどうかの取得などを行います。
  * @author Xeltica
  */
-object HintModule: ModuleBase() {
+object HintModule : ModuleBase() {
     private lateinit var hints: Config
 
     override fun onEnable() {
@@ -74,11 +74,13 @@ object HintModule: ModuleBase() {
         p.playSound(p.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1.4f)
         val component = p.displayName().color(TextColor.color(0x4CAF50))
             .append(Component.text("さんがヒント「"))
-            .append(Component
-                .text(hint.hintName)
-                .color(TextColor.color(0x03A9F4))
-                .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(hint.description)))
-                .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/hint " + hint.name)))
+            .append(
+                Component
+                    .text(hint.hintName)
+                    .color(TextColor.color(0x03A9F4))
+                    .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(hint.description)))
+                    .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/hint " + hint.name))
+            )
             .append(Component.text("」を達成しました！"))
             .asComponent()
         DiscordHook.broadcast(PlainTextComponentSerializer.plainText().serialize(component))

@@ -6,7 +6,7 @@ import org.bukkit.SoundCategory
 import org.bukkit.command.Command
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import java.util.*
+import java.util.Locale
 
 class CandyStoreCommand : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {

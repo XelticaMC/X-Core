@@ -2,8 +2,24 @@ package work.xeltica.craft.core.modules.mobball
 
 import de.tr7zw.nbtapi.NBTEntity
 import de.tr7zw.nbtapi.NBTItem
-import org.bukkit.*
-import org.bukkit.entity.*
+import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.NamespacedKey
+import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
+import org.bukkit.entity.Ageable
+import org.bukkit.entity.Egg
+import org.bukkit.entity.Entity
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Hoglin
+import org.bukkit.entity.Mob
+import org.bukkit.entity.Piglin
+import org.bukkit.entity.Player
+import org.bukkit.entity.Skeleton
+import org.bukkit.entity.Tameable
+import org.bukkit.entity.Zombie
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDispenseEvent
@@ -22,7 +38,8 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.CitizensHook.isCitizensNpc
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
-import java.util.*
+import java.util.Random
+import java.util.UUID
 
 class MobBallHandler : Listener {
     @EventHandler
@@ -85,7 +102,7 @@ class MobBallHandler : Listener {
 
         eggEntity.setCanMobPickup(false)
         eggEntity.setCanPlayerPickup(false)
-        object: BukkitRunnable() {
+        object : BukkitRunnable() {
             override fun run() {
                 if (i % 20 == 0) {
                     val randNum = random.nextInt(100)

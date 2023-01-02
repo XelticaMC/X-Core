@@ -8,11 +8,15 @@ import org.bukkit.entity.Projectile
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.*
+import org.bukkit.event.entity.CreatureSpawnEvent
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
+import org.bukkit.event.entity.EntityDeathEvent
+import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.event.player.PlayerBedEnterEvent
-import work.xeltica.craft.core.modules.mobball.EntityMobBallHitEvent
 import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule.isEventMob
+import work.xeltica.craft.core.modules.mobball.EntityMobBallHitEvent
 
 class EventHalloweenHandler : Listener {
     /**

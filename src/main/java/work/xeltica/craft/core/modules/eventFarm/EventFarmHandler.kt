@@ -29,6 +29,7 @@ class EventFarmHandler : Listener {
                 board[e.player] = (board[e.player] ?: 0) + 1
                 EventFarmModule.showStatus(e.player)
             }
+
             Material.WHEAT -> {
                 val minus = max(((board[e.player] ?: 0) * 0.05f).toInt(), 5)
                 board[e.player] = (board[e.player] ?: 0) - minus
@@ -38,6 +39,7 @@ class EventFarmHandler : Listener {
                 // e.player.world.createExplosion(e.player.location, 64f, false, false)
                 EventFarmModule.showStatus(e.player)
             }
+
             else -> {
                 e.isCancelled = true
             }

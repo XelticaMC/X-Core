@@ -9,7 +9,7 @@ import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.xphone.apps.AppBase
 import java.util.function.Consumer
 
-class StampRallyApp: AppBase() {
+class StampRallyApp : AppBase() {
     override fun getName(player: Player): String = "スタンプラリー"
 
     override fun getIcon(player: Player): Material {
@@ -22,7 +22,7 @@ class StampRallyApp: AppBase() {
 
         val ui = Gui.getInstance()
         val list = mutableListOf<MenuItem>()
-        val icon = fun (stampName: String): Material {
+        val icon = fun(stampName: String): Material {
             return if (hasStamp.contains(stampName)) Material.LIME_DYE else Material.GRAY_DYE
         }
 

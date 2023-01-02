@@ -4,8 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
-import java.util.*
-import kotlin.collections.HashMap
+import java.util.Locale
 
 object CommandRegistry : CommandExecutor {
     fun register(name: String, command: CommandBase) {

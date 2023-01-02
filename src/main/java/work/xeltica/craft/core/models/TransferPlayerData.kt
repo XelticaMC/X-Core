@@ -7,7 +7,7 @@ import work.xeltica.craft.core.modules.clover.CloverModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
-import java.util.*
+import java.util.UUID
 
 class TransferPlayerData(val from: Player, val to: Player) {
     enum class TransferPlayerType {

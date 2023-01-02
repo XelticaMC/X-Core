@@ -5,7 +5,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import work.xeltica.craft.core.utils.Ticks
 
-data class EbiPowerEffect(val effectType: PotionEffectType, val level: Int, val time: Int, val cost: Int) :Cloneable, ConfigurationSerializable {
+data class EbiPowerEffect(val effectType: PotionEffectType, val level: Int, val time: Int, val cost: Int) : Cloneable, ConfigurationSerializable {
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()
         result["effectType"] = effectType.name

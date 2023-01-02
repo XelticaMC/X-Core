@@ -17,11 +17,13 @@ class BedrockToolsApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.BEDROCK
 
     override fun onLaunch(player: Player) {
-        Gui.getInstance().openMenu(player, "統合版ツール", listOf(
-            MenuItem("進捗", { player.performCommand("geyser advancements") }, Material.BEDROCK, null),
-            MenuItem("統計", { player.performCommand("geyser statistics") }, Material.BEDROCK, null),
-            MenuItem("免責事項", { BedrockModule.showDisclaimer(player) }, Material.BEDROCK, null),
-        ))
+        Gui.getInstance().openMenu(
+            player, "統合版ツール", listOf(
+                MenuItem("進捗", { player.performCommand("geyser advancements") }, Material.BEDROCK, null),
+                MenuItem("統計", { player.performCommand("geyser statistics") }, Material.BEDROCK, null),
+                MenuItem("免責事項", { BedrockModule.showDisclaimer(player) }, Material.BEDROCK, null),
+            )
+        )
     }
 
     override fun isVisible(player: Player) = XphoneModule.isBedrockPlayer(player)

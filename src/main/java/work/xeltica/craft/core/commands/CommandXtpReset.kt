@@ -7,7 +7,6 @@ import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.commands.CommandBase
 import work.xeltica.craft.core.modules.world.WorldModule
-import java.util.*
 
 /**
  * xtpコマンドで使う保存された位置を初期化するコマンド
@@ -34,7 +33,7 @@ class CommandXtpReset : CommandBase() {
         commandSender: CommandSender,
         command: Command,
         label: String,
-        args: Array<String>
+        args: Array<String>,
     ): List<String>? {
         if (args.size == 1) {
             // toListしてる

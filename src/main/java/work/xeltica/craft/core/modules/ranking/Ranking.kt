@@ -6,7 +6,7 @@ import org.bukkit.configuration.ConfigurationSection
 import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.utils.Time
 import java.io.IOException
-import java.util.*
+import java.util.UUID
 
 class Ranking(val name: String, private val conf: Config) {
     private lateinit var records: HashMap<String, Int>
@@ -102,6 +102,7 @@ class Ranking(val name: String, private val conf: Config) {
                         RankingRecord(key, it.value.toString())
                     }
             }
+
             "time" -> {
                 return records.entries
                     .sortedBy { it.value }
@@ -114,6 +115,7 @@ class Ranking(val name: String, private val conf: Config) {
                         RankingRecord(key, Time.msToString(it.value.toLong()))
                     }
             }
+
             "point" -> {
                 return records.entries
                     .sortedBy { it.value }
@@ -127,6 +129,7 @@ class Ranking(val name: String, private val conf: Config) {
                         RankingRecord(key, it.value.toString() + "点")
                     }
             }
+
             else -> throw IllegalArgumentException()
         }
     }

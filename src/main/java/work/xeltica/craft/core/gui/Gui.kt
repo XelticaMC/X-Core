@@ -7,7 +7,12 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.wesjd.anvilgui.AnvilGUI
-import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.GameMode
+import org.bukkit.Material
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -26,13 +31,15 @@ import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.modules.item.ItemModule
-import java.util.*
+import java.util.ArrayDeque
+import java.util.UUID
 import java.util.function.Consumer
 import java.util.function.Predicate
 
-class Gui: Listener {
+class Gui : Listener {
     companion object {
         private lateinit var instance: Gui
+
         @JvmStatic
         fun getInstance(): Gui {
             return instance
@@ -242,7 +249,8 @@ class Gui: Listener {
             return
         }
 
-        Bukkit.getScheduler().runTaskLater(XCorePlugin.instance,
+        Bukkit.getScheduler().runTaskLater(
+            XCorePlugin.instance,
             Runnable { playSound(player, sound, volume, pitch) }, delay.toLong()
         )
     }
@@ -256,7 +264,8 @@ class Gui: Listener {
      * @param delay Tick
      */
     fun playSoundLocallyAfter(player: Player, sound: Sound, volume: Float, pitch: SoundPitch, delay: Int) {
-        Bukkit.getScheduler().runTaskLater(XCorePlugin.instance,
+        Bukkit.getScheduler().runTaskLater(
+            XCorePlugin.instance,
             Runnable { playSoundLocally(player, sound, volume, pitch) }, delay.toLong()
         )
     }
@@ -351,16 +360,19 @@ class Gui: Listener {
         fPlayer.sendForm(builder)
     }
 
-    private fun openDialogJavaImpl(player: Player, title: String, content: String,
-            callback: Consumer<DialogEventArgs>?, okButtonText: String) {
+    private fun openDialogJavaImpl(
+        player: Player, title: String, content: String,
+        callback: Consumer<DialogEventArgs>?, okButtonText: String,
+    ) {
         val book = ItemStack(Material.WRITTEN_BOOK)
         val meta = book.itemMeta as BookMeta
 
         val handleString = UUID.randomUUID().toString().replace("-", "")
 
         val comTitle = Component.text(title + "\n\n")
-        val comOkButton = Component.text("\n\n"+okButtonText,
-            Style.style(TextColor.color(0,0,0), TextDecoration.BOLD, TextDecoration.UNDERLINED)
+        val comOkButton = Component.text(
+            "\n\n" + okButtonText,
+            Style.style(TextColor.color(0, 0, 0), TextDecoration.BOLD, TextDecoration.UNDERLINED)
                 .clickEvent(ClickEvent.runCommand("/__core_gui_event__ $handleString"))
         )
 
@@ -391,8 +403,10 @@ class Gui: Listener {
         }
     }
 
-    private fun openDialogBedrockImpl(player: Player, title: String, content: String,
-            callback: Consumer<DialogEventArgs>?, okButtonText: String) {
+    private fun openDialogBedrockImpl(
+        player: Player, title: String, content: String,
+        callback: Consumer<DialogEventArgs>?, okButtonText: String,
+    ) {
         val api = FloodgateApi.getInstance()
         val form = SimpleForm.builder()
             .title(title)

@@ -2,10 +2,10 @@ package work.xeltica.craft.core.xphone.apps
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.api.playerStore.PlayerRecord
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.modules.counter.CounterModule
+import work.xeltica.craft.core.modules.nbs.NbsModule
 
 /**
  * イベント用：タイムアタックを中止するアプリ

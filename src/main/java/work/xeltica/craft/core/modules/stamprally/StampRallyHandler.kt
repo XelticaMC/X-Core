@@ -12,7 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.SignChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
-class StampRallyHandler: Listener {
+class StampRallyHandler : Listener {
     @EventHandler
     fun createStamp(event: SignChangeEvent) {
         val player = event.player
@@ -36,7 +36,7 @@ class StampRallyHandler: Listener {
             }
 
             event.line(0, Component.text("［§aスタンプ§r］"))
-            event.line(1, Component.text("§b"+line1.content()))
+            event.line(1, Component.text("§b" + line1.content()))
 
             StampRallyModule.create(name, event.block.location)
             player.sendMessage("スタンプ: " + name + "を作成しました")

@@ -3,6 +3,7 @@
 X-Core 開発者向けのドキュメントが含まれます。
 
 - [Introduction](introduction.md) - 本プラグインの開発背景と立ち位置 `執筆中`
+- [Coding Style](coding-style.md) - コーディング規約
 - [Integration Hook](hook.md) - 連携フック `執筆中`
 - [Module System](module-system.md) - モジュールの導入 `執筆中`
 - [Utility](utility.md) - 開発に役立つ、様々なユーティリティ `執筆中`

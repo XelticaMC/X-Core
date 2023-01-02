@@ -3,11 +3,6 @@ package work.xeltica.craft.core.runnables
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Particle
-import org.bukkit.entity.AreaEffectCloud
-import org.bukkit.entity.Entity
-import org.bukkit.entity.EntityType
-import org.bukkit.entity.Player
-import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.scheduler.BukkitRunnable
 
 /**

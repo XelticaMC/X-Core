@@ -1,10 +1,7 @@
 package work.xeltica.craft.core.commands;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,20 +11,32 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.title.Title;
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase;
 import work.xeltica.craft.core.gui.Gui;
 import work.xeltica.craft.core.gui.MenuItem;
 import work.xeltica.craft.core.hooks.DiscordHook;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
 /**
  * 処罰コマンド
  * TODO: punish コマンドに名称変更
+ *
  * @author Xeltica
  */
 public class CommandReport extends CommandPlayerOnlyBase {
+    private static final String WILL_MUTE = "あなたの発言を今後ミュートします";
+    private static final String WILL_BAN = "あなたを本サーバーからBANします";
+    private static final String WILL_KICK = "あなたを本サーバーからキックします";
+    private static final String FORCE_REMOVE = "強制撤去かつ悪質であれば" + WILL_BAN;
+    private final String warnTemplateWithoutAfterDoing = "%sは規約違反です。今すぐ停止してください。本警告を無視した場合、%s。";
+    private final String warnTemplate = "%sは規約違反です。今すぐ停止し、%s。本警告を無視した場合、%s。";
+    private final String punishLogTemplate = "利用規約で禁止されている「%s」を行った";
+    private final String broadcastTemplate = "§c§l[報告] §r§b%s§c：「§a%s§c」による規約違反で%sされました。";
+
     @Override
     public boolean execute(Player reporter, Command command, String label, String[] args) {
         if (args.length != 1) {
@@ -40,19 +49,22 @@ public class CommandReport extends CommandPlayerOnlyBase {
         return true;
     }
 
-    /** 処罰の種類を選ぶUIを表示します */
+    /**
+     * 処罰の種類を選ぶUIを表示します
+     */
     private void choosePunishmentType(Player reporter, String badPlayerName) {
-        final Consumer<MenuItem> cb = (m) -> chooseReason(reporter, badPlayerName, (String)m.getCustomData(), null);
+        final Consumer<MenuItem> cb = (m) -> chooseReason(reporter, badPlayerName, (String) m.getCustomData(), null);
         Gui.getInstance().openMenu(reporter, "処罰の種類"
-            , new MenuItem("BAN", cb, Material.BARRIER, "ban")
-            , new MenuItem("警告", cb, Material.BELL, "warn")
-            , new MenuItem("キック", cb, Material.RABBIT_FOOT, "kick")
-            , new MenuItem("ミュート", cb, Material.MUSIC_DISC_11, "mute")
+                , new MenuItem("BAN", cb, Material.BARRIER, "ban")
+                , new MenuItem("警告", cb, Material.BELL, "warn")
+                , new MenuItem("キック", cb, Material.RABBIT_FOOT, "kick")
+                , new MenuItem("ミュート", cb, Material.MUSIC_DISC_11, "mute")
         );
     }
 
-
-    /** 処罰の理由を選ぶUIを表示します */
+    /**
+     * 処罰の理由を選ぶUIを表示します
+     */
     private void chooseReason(Player reporter, String badPlayerName, String command, HashSet<AbuseType> state) {
         final var types = AbuseType.values();
         final HashSet<AbuseType> currentState = state == null ? new HashSet<>() : state;
@@ -70,36 +82,40 @@ public class CommandReport extends CommandPlayerOnlyBase {
         }, Material.RED_WOOL));
 
         menuItems.add(
-            new MenuItem("決定", _null -> {
-                if (currentState.size() == 0) {
-                    reporter.sendMessage(ChatColor.RED + "理由が指定されなかったため、何もしません。");
-                    return;
-                }
-                if (command.equals("ban") || command.equals("mute")) {
-                    chooseTime(reporter, badPlayerName, command, currentState);
-                } else {
-                    takeDown(reporter, badPlayerName, command, currentState, null);
-                }
-            }, Material.GREEN_WOOL)
+                new MenuItem("決定", _null -> {
+                    if (currentState.size() == 0) {
+                        reporter.sendMessage(ChatColor.RED + "理由が指定されなかったため、何もしません。");
+                        return;
+                    }
+                    if (command.equals("ban") || command.equals("mute")) {
+                        chooseTime(reporter, badPlayerName, command, currentState);
+                    } else {
+                        takeDown(reporter, badPlayerName, command, currentState, null);
+                    }
+                }, Material.GREEN_WOOL)
         );
 
         Gui.getInstance().openMenu(reporter, command + "すべき理由（複数選択可）", menuItems.toArray(MenuItem[]::new));
     }
 
-    /** 処罰期間を選ぶUIを表示します */
+    /**
+     * 処罰期間を選ぶUIを表示します
+     */
     private void chooseTime(Player reporter, String badPlayerName, String command, HashSet<AbuseType> state) {
-        final Consumer<MenuItem> cb = (m) -> takeDown(reporter, badPlayerName, command, state, (String)m.getCustomData());
+        final Consumer<MenuItem> cb = (m) -> takeDown(reporter, badPlayerName, command, state, (String) m.getCustomData());
 
         final String[] times = {
-            "1d", "3d", "5d", "7d", "14d", "1mo", "3mo", "6mo", "12mo", null,
+                "1d", "3d", "5d", "7d", "14d", "1mo", "3mo", "6mo", "12mo", null,
         };
 
         Gui.getInstance().openMenu(reporter, "期間を指定してください", Arrays.stream(times).map(
-            t -> new MenuItem(convertTimeToLocaleString(t), cb, Material.LIGHT_GRAY_WOOL, t)
+                t -> new MenuItem(convertTimeToLocaleString(t), cb, Material.LIGHT_GRAY_WOOL, t)
         ).toArray(MenuItem[]::new));
     }
 
-    /** 処罰を下します */
+    /**
+     * 処罰を下します
+     */
     private void takeDown(Player moderator, String badPlayerName, String command, HashSet<AbuseType> state, String time) {
         final var abuses = String.join(",", state.stream().map(s -> s.shortName).toArray(String[]::new));
         final var timeString = convertTimeToLocaleString(time);
@@ -112,8 +128,8 @@ public class CommandReport extends CommandPlayerOnlyBase {
             }
             for (var s : state) {
                 message = s.instruction == null
-                    ? String.format(warnTemplateWithoutAfterDoing, s.shortName, s.punishment)
-                    : String.format(warnTemplate, s.shortName, s.instruction, s.punishment);
+                        ? String.format(warnTemplateWithoutAfterDoing, s.shortName, s.punishment)
+                        : String.format(warnTemplate, s.shortName, s.instruction, s.punishment);
                 badPlayer.sendMessage("§c§l警告: §r§c" + message);
             }
             // 警告時は画面を暗くしたりして目立たせる
@@ -148,20 +164,12 @@ public class CommandReport extends CommandPlayerOnlyBase {
         moderator.performCommand(cmd);
     }
 
-    /** 時間文字列を日本語表記に変換します */
+    /**
+     * 時間文字列を日本語表記に変換します
+     */
     private String convertTimeToLocaleString(String time) {
         return time == null ? "無期限" : time.replace("d", "日間").replace("mo", "ヶ月");
     }
-
-    private final String warnTemplateWithoutAfterDoing = "%sは規約違反です。今すぐ停止してください。本警告を無視した場合、%s。";
-    private final String warnTemplate = "%sは規約違反です。今すぐ停止し、%s。本警告を無視した場合、%s。";
-    private final String punishLogTemplate = "利用規約で禁止されている「%s」を行った";
-    private final String broadcastTemplate = "§c§l[報告] §r§b%s§c：「§a%s§c」による規約違反で%sされました。";
-
-    private static final String WILL_MUTE = "あなたの発言を今後ミュートします";
-    private static final String WILL_BAN = "あなたを本サーバーからBANします";
-    private static final String WILL_KICK = "あなたを本サーバーからキックします";
-    private static final String FORCE_REMOVE = "強制撤去かつ悪質であれば" + WILL_BAN;
 
     /**
      * 現時点で存在する処罰一覧です。
@@ -203,20 +211,20 @@ public class CommandReport extends CommandPlayerOnlyBase {
         OTHER("トラブルの原因となる行為", Material.CAMPFIRE, WILL_BAN, "この後に続く指示に従ってください"),
         ;
 
+        private final String shortName;
+        private final Material icon;
+        private final String instruction;
+        private final String punishment;
+
         AbuseType(String shortName, Material icon, String punishment) {
             this(shortName, icon, punishment, null);
         }
 
-		AbuseType(String shortName, Material icon, String punishment, String whatToDoToAvoidPunishment) {
+        AbuseType(String shortName, Material icon, String punishment, String whatToDoToAvoidPunishment) {
             this.shortName = shortName;
             this.icon = icon;
             this.instruction = whatToDoToAvoidPunishment;
             this.punishment = punishment;
         }
-
-        private final String shortName;
-        private final Material icon;
-        private final String instruction;
-        private final String punishment;
     }
 }

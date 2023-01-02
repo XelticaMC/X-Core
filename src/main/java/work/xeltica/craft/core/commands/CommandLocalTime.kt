@@ -6,7 +6,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import java.util.*
+import java.util.Collections
+import java.util.Locale
 
 /**
  * 現在いるワールドのみの時間を操作するコマンド
@@ -69,7 +70,7 @@ class CommandLocalTime : CommandPlayerOnlyBase() {
         commandSender: CommandSender,
         command: Command,
         label: String,
-        args: Array<String>
+        args: Array<String>,
     ): List<String> {
         if (args.size == 1) {
             val commands: List<String> = mutableListOf("set", "add", "query")

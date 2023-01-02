@@ -17,6 +17,6 @@ class VoteApp : AppBase() {
         player.performCommand("vote")
     }
 
-    override fun isVisible(player: Player): Boolean = !XphoneModule.isBedrockPlayer(player) &&  player.world.name != "event"
+    override fun isVisible(player: Player): Boolean = !XphoneModule.isBedrockPlayer(player) && player.world.name != "event"
 }
 

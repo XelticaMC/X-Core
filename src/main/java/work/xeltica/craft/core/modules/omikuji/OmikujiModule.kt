@@ -1,12 +1,12 @@
 package work.xeltica.craft.core.modules.omikuji
 
 import org.bukkit.entity.Player
-import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.Config
+import work.xeltica.craft.core.api.ModuleBase
 import java.io.IOException
-import java.util.*
+import java.util.Random
 
-object OmikujiModule: ModuleBase() {
+object OmikujiModule : ModuleBase() {
     lateinit var config: Config
     private val random = Random()
 

@@ -10,7 +10,7 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.utils.Ticks
-import java.util.*
+import java.util.UUID
 
 object KusaModule : ModuleBase() {
     private val kusaTimeMap: HashMap<UUID, Int> = HashMap()
