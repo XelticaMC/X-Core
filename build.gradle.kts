@@ -81,8 +81,8 @@ dependencies {
 }
 
 group = "work.xeltica.craft.core"
-version = "2.39.3"
-description = "X-Core"
+version = "3.0.0-beta.1"
+description = "A Core System Plugin for XelticaMC."
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 bukkit {
