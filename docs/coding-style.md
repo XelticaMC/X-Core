@@ -32,15 +32,15 @@ if以外でも同様です。
 **○ OK**
 
 ```kotlin
-if (player.name == "_knit_") player.banPlayer()
+if (player.name == "_knit_") {
+    player.banPlayer()
+}
 ```
 
 **× NG**
 
 ```kotlin
-if (player.name == "_knit_") {
-    player.banPlayer()
-}
+if (player.name == "_knit_") player.banPlayer()
 ```
 
 ## if ステートメント
