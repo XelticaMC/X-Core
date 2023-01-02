@@ -24,6 +24,7 @@ object ItemModule : ModuleBase() {
 
         registerCommand("givecustomitem", GiveCustomItemCommand())
         registerHandler(ItemHandler())
+        registerHandler(TicketWildareaBHandler())
     }
 
     fun getItem(key: String): ItemStack {

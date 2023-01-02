@@ -178,10 +178,6 @@ class XCorePlugin : JavaPlugin() {
         val pm = server.pluginManager
         pm.registerEvents(NightmareHandler(), this)
         logger.info("Loaded NightmareHandler")
-        pm.registerEvents(LoginBonusHandler(), this)
-        logger.info("Loaded LoginBonusHandler")
-        pm.registerEvents(TicketWildareaBHandler(), this)
-        logger.info("Loaded TicketWildareaBHandler")
     }
 
     private fun loadRunnables() {
