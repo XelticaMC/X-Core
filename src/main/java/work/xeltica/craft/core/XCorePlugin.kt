@@ -20,7 +20,6 @@ import work.xeltica.craft.core.commands.CommandXtp
 import work.xeltica.craft.core.commands.CommandXtpReset
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.handlers.NightmareHandler
-import work.xeltica.craft.core.handlers.TicketWildareaBHandler
 import work.xeltica.craft.core.hooks.CitizensHook
 import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.hooks.VaultHook
@@ -40,7 +39,6 @@ import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.kusa.KusaModule
 import work.xeltica.craft.core.modules.livemode.LiveModeModule
-import work.xeltica.craft.core.modules.loginBonus.LoginBonusHandler
 import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
 import work.xeltica.craft.core.modules.motd.MotdModule
@@ -60,7 +58,6 @@ import work.xeltica.craft.core.runnables.DaylightObserver
 import work.xeltica.craft.core.runnables.FlyingObserver
 import work.xeltica.craft.core.runnables.NightmareRandomEvent
 import work.xeltica.craft.core.runnables.RealTimeObserver
-import work.xeltica.craft.core.runnables.TimeAttackObserver
 import work.xeltica.craft.core.utils.Ticks
 
 /**
@@ -185,7 +182,6 @@ class XCorePlugin : JavaPlugin() {
         FlyingObserver().runTaskTimer(this, 0, 4)
         NightmareRandomEvent(this).runTaskTimer(this, 0, Ticks.from(15.0).toLong())
         RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
-        TimeAttackObserver().runTaskTimer(this, 0, 5)
     }
 
     private val hooks: Array<HookBase> = arrayOf(

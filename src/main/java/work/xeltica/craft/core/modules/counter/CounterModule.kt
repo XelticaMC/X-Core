@@ -2,6 +2,7 @@ package work.xeltica.craft.core.modules.counter
 
 import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerialization
+import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.playerStore.PlayerStore
@@ -35,6 +36,7 @@ object CounterModule : ModuleBase() {
         loadAll()
         registerCommand("counter", CounterCommand())
         registerHandler(CounterHandler())
+        TimeAttackObserver().runTaskTimer(XCorePlugin.instance, 0, 5)
     }
 
     /**

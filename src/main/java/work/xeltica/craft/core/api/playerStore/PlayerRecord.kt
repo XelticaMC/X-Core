@@ -20,8 +20,8 @@ class PlayerRecord(private val section: ConfigurationSection) {
     }
 
     @JvmOverloads
-    fun getString(key: String, defaultValue: String? = null): String? {
-        return section.getString(key, defaultValue)
+    fun getString(key: String, defaultValue: String = ""): String {
+        return section.getString(key, defaultValue)!!
     }
 
     fun isString(key: String): Boolean {
