@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
-import work.xeltica.craft.core.events.NewMorningEvent
+import work.xeltica.craft.core.api.events.NewMorningEvent
 
 class OmikujiHandler : Listener {
     @EventHandler

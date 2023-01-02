@@ -4,8 +4,8 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
+import work.xeltica.craft.core.api.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.events.RealTimeNewDayEvent
 
 class LoginBonusHandler : Listener {
     @EventHandler

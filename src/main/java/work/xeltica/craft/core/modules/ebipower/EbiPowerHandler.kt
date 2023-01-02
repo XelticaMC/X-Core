@@ -29,8 +29,8 @@ import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
+import work.xeltica.craft.core.api.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.hooks.CitizensHook.isCitizensNpc
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule

@@ -16,8 +16,8 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.geysermc.connector.common.ChatColor
 import org.geysermc.floodgate.api.FloodgateApi
 import org.geysermc.floodgate.util.DeviceOs
+import work.xeltica.craft.core.api.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.DiscordHook
 import work.xeltica.craft.core.modules.ranking.RankingModule

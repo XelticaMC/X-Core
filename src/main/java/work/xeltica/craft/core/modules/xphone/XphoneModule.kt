@@ -13,6 +13,9 @@ import work.xeltica.craft.core.modules.cat.CatApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerDrugStoreApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerStoreApp
 import work.xeltica.craft.core.modules.eventHalloween.CandyStoreApp
+import work.xeltica.craft.core.modules.eventSummer.EventCancelApp
+import work.xeltica.craft.core.modules.eventSummer.EventRespawnApp
+import work.xeltica.craft.core.modules.eventSummer.EventReturnWorldApp
 import work.xeltica.craft.core.modules.eventSummer.FireworkApp
 import work.xeltica.craft.core.modules.hint.HintApp
 import work.xeltica.craft.core.modules.livemode.LiveModeApp
@@ -26,9 +29,6 @@ import work.xeltica.craft.core.modules.vehicle.BoatApp
 import work.xeltica.craft.core.modules.vehicle.CartApp
 import work.xeltica.craft.core.modules.world.TeleportApp
 import work.xeltica.craft.core.xphone.apps.AppBase
-import work.xeltica.craft.core.xphone.apps.EventCancelApp
-import work.xeltica.craft.core.xphone.apps.EventRespawnApp
-import work.xeltica.craft.core.xphone.apps.EventReturnWorldApp
 import work.xeltica.craft.core.xphone.apps.ProtectApp
 import work.xeltica.craft.core.xphone.apps.PunishApp
 import work.xeltica.craft.core.xphone.apps.SidebarApp

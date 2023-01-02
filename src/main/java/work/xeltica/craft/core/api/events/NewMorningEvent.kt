@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.events
+package work.xeltica.craft.core.api.events
 
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList

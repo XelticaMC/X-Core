@@ -7,14 +7,14 @@ import org.bukkit.plugin.java.JavaPlugin
 import work.xeltica.craft.core.api.HookBase
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.commands.CommandRegistry
+import work.xeltica.craft.core.api.commands.CommandXDebug
+import work.xeltica.craft.core.api.commands.CommandXReload
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.commands.CommandCountdown
 import work.xeltica.craft.core.commands.CommandLocalTime
 import work.xeltica.craft.core.commands.CommandReport
 import work.xeltica.craft.core.commands.CommandRespawn
 import work.xeltica.craft.core.commands.CommandSignEdit
-import work.xeltica.craft.core.commands.CommandXDebug
-import work.xeltica.craft.core.commands.CommandXReload
 import work.xeltica.craft.core.commands.CommandXtp
 import work.xeltica.craft.core.commands.CommandXtpReset
 import work.xeltica.craft.core.gui.Gui
@@ -54,8 +54,6 @@ import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.modules.vehicle.VehicleModule
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.modules.xphone.XphoneModule
-import work.xeltica.craft.core.runnables.DaylightObserver
-import work.xeltica.craft.core.runnables.RealTimeObserver
 import work.xeltica.craft.core.utils.Ticks
 
 /**
@@ -66,14 +64,12 @@ class XCorePlugin : JavaPlugin() {
 
     override fun onEnable() {
         instance = this
-        PlayerStore.onEnable()
-        Gui.onEnable()
+        initializeFoundation()
         loadHooks()
         loadModules()
 
         // TODO 廃止
         loadCommands()
-        loadRunnables()
 
         logger.info("Booted XelticaMC Core System.")
     }
@@ -151,6 +147,16 @@ class XCorePlugin : JavaPlugin() {
         }
     }
 
+    private fun initializeFoundation() {
+        PlayerStore.onEnable()
+        Gui.onEnable()
+        CommandRegistry.register("xreload", CommandXReload())
+        CommandRegistry.register("xdebug", CommandXDebug())
+        TimeObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
+
+        Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
+    }
+
     private fun loadCommands() {
         CommandRegistry.clearMap()
 
@@ -160,16 +166,7 @@ class XCorePlugin : JavaPlugin() {
         CommandRegistry.register("localtime", CommandLocalTime())
         CommandRegistry.register("xtp", CommandXtp())
         CommandRegistry.register("countdown", CommandCountdown())
-        CommandRegistry.register("xreload", CommandXReload())
         CommandRegistry.register("xtpreset", CommandXtpReset())
-        CommandRegistry.register("xdebug", CommandXDebug())
-
-        Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
-    }
-
-    private fun loadRunnables() {
-        DaylightObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
-        RealTimeObserver().runTaskTimer(this, 0, Ticks.from(1.0).toLong())
     }
 
     private val hooks: Array<HookBase> = arrayOf(

@@ -9,8 +9,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerBedEnterEvent
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
+import work.xeltica.craft.core.api.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.modules.counter.PlayerCounterFinish
 import work.xeltica.craft.core.modules.counter.PlayerCounterStart
 import work.xeltica.craft.core.modules.nbs.NbsModel
