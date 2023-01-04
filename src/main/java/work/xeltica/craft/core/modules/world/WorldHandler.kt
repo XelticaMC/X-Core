@@ -16,6 +16,7 @@ import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.api.playerStore.PlayerStore
@@ -124,8 +125,11 @@ class WorldHandler : Listener {
         }, Ticks.from(5.0).toLong())
     }
 
+    /**
+     * 禁止された場所では睡眠を取れないようガードする
+     */
     @EventHandler
-    fun onPlayerTryBed(e: PlayerInteractEvent) {
+    fun onGuardBedInDenyWorld(e: PlayerInteractEvent) {
         val p = e.player
         val block = e.clickedBlock
         if (e.action != Action.RIGHT_CLICK_BLOCK || block == null) return
@@ -145,6 +149,21 @@ class WorldHandler : Listener {
     fun onGuardCobbleStoneGenerator(e: BlockFormEvent) {
         if (e.newState.type == Material.STONE) {
             e.newState.type = Material.COBBLESTONE
+        }
+    }
+
+    /**
+     * プレイヤーが資源ワールドで死んだときにメインワールドに転送する
+     */
+    @EventHandler
+    fun onPlayerDeath(e: PlayerRespawnEvent) {
+        val p = e.player
+        if (p.world.name.startsWith("wildareab")) {
+            var respawnLocation = p.bedSpawnLocation
+            if (respawnLocation == null) {
+                respawnLocation = Bukkit.getWorld("main")?.spawnLocation!!
+            }
+            e.respawnLocation = respawnLocation
         }
     }
 }

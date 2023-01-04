@@ -43,7 +43,6 @@ import work.xeltica.craft.core.modules.nightmare.NightmareModule
 import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.modules.omikuji.OmikujiModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
-import work.xeltica.craft.core.modules.player.PlayerModule
 import work.xeltica.craft.core.modules.promotion.PromotionModule
 import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.modules.ranking.RankingModule
@@ -158,7 +157,6 @@ class XCorePlugin : JavaPlugin() {
     private fun loadCommands() {
         CommandRegistry.clearMap()
 
-        CommandRegistry.register("respawn", CommandRespawn())
         CommandRegistry.register("signedit", CommandSignEdit())
         CommandRegistry.register("report", CommandReport())
         CommandRegistry.register("countdown", CommandCountdown())
@@ -196,7 +194,6 @@ class XCorePlugin : JavaPlugin() {
         NotificationModule,
         OmikujiModule,
         PaymentsModule,
-        PlayerModule,
         PromotionModule,
         QuickChatModule,
         RankingModule,
