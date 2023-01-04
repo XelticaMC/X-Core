@@ -30,9 +30,6 @@ import work.xeltica.craft.core.modules.transferPlayerData.TransferPlayerDataApp
 import work.xeltica.craft.core.modules.vehicle.BoatApp
 import work.xeltica.craft.core.modules.vehicle.CartApp
 import work.xeltica.craft.core.modules.world.TeleportApp
-import work.xeltica.craft.core.xphone.apps.ProtectApp
-import work.xeltica.craft.core.xphone.apps.SidebarApp
-import work.xeltica.craft.core.xphone.apps.VoteApp
 
 /**
  * X Phone の基幹となるシステムです。
