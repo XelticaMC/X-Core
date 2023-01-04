@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.commands
+package work.xeltica.craft.core.modules.signEdit
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
