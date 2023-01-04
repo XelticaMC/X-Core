@@ -11,7 +11,6 @@ import work.xeltica.craft.core.api.commands.CommandXDebug
 import work.xeltica.craft.core.api.commands.CommandXReload
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.commands.CommandCountdown
-import work.xeltica.craft.core.commands.CommandReport
 import work.xeltica.craft.core.commands.CommandSignEdit
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.CitizensHook
@@ -43,6 +42,8 @@ import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.modules.omikuji.OmikujiModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
 import work.xeltica.craft.core.modules.promotion.PromotionModule
+import work.xeltica.craft.core.modules.punishment.CommandReport
+import work.xeltica.craft.core.modules.punishment.PunishmentModule
 import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.modules.stamprally.StampRallyModule
@@ -194,6 +195,7 @@ class XCorePlugin : JavaPlugin() {
         OmikujiModule,
         PaymentsModule,
         PromotionModule,
+        PunishmentModule,
         QuickChatModule,
         RankingModule,
         StampRallyModule,

@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.commands;
+package work.xeltica.craft.core.modules.punishment;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
