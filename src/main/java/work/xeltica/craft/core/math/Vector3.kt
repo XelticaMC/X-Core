@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.models
+package work.xeltica.craft.core.math
 
 /**
  * 3次元ベクトルを表すシンプルなモデルクラスです。
