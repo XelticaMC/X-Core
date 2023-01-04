@@ -13,13 +13,13 @@ import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.CitizensHook
 import work.xeltica.craft.core.hooks.DiscordHook
+import work.xeltica.craft.core.hooks.FloodgateHook
 import work.xeltica.craft.core.hooks.VaultHook
 import work.xeltica.craft.core.modules.autoCrafter.AutoCrafterModule
 import work.xeltica.craft.core.modules.bedrock.BedrockModule
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.cat.CatModule
 import work.xeltica.craft.core.modules.clover.CloverModule
-import work.xeltica.craft.core.modules.countdown.CommandCountdown
 import work.xeltica.craft.core.modules.countdown.CountdownModule
 import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
@@ -42,11 +42,9 @@ import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.modules.omikuji.OmikujiModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
 import work.xeltica.craft.core.modules.promotion.PromotionModule
-import work.xeltica.craft.core.modules.punishment.CommandReport
 import work.xeltica.craft.core.modules.punishment.PunishmentModule
 import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.modules.ranking.RankingModule
-import work.xeltica.craft.core.modules.signEdit.CommandSignEdit
 import work.xeltica.craft.core.modules.signEdit.SignEditModule
 import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.modules.transferPlayerData.TransferPlayerDataModule
@@ -67,10 +65,8 @@ class XCorePlugin : JavaPlugin() {
         loadHooks()
         loadModules()
 
-        // TODO 廃止
-        loadCommands()
-
-        logger.info("Booted XelticaMC Core System.")
+        logger.info("X-Core - XelticaMC Core System Plugin")
+        logger.info("起動しました。")
     }
 
     override fun onDisable() {
@@ -89,9 +85,9 @@ class XCorePlugin : JavaPlugin() {
         hooks.forEach {
             try {
                 it.onEnable()
-                logger.info("Successfully enabled ${it.javaClass.name}!")
+                logger.info("連携フック '${it.javaClass.name}' を正常に有効化しました。")
             } catch (e: Exception) {
-                logger.severe("Failed to enable '${it.javaClass.name}'")
+                logger.severe("連携フック '${it.javaClass.name}' の有効化に失敗しました。'")
                 e.printStackTrace()
             }
         }
@@ -102,9 +98,9 @@ class XCorePlugin : JavaPlugin() {
         hooks.forEach {
             try {
                 it.onDisable()
-                logger.info("Successfully disabled ${it.javaClass.name}!")
+                logger.info("連携フック '${it.javaClass.name}' を正常に無効化しました。")
             } catch (e: Exception) {
-                logger.severe("Failed to disable '${it.javaClass.name}'")
+                logger.severe("連携フック '${it.javaClass.name}' の無効化に失敗しました。")
                 e.printStackTrace()
             }
         }
@@ -115,9 +111,9 @@ class XCorePlugin : JavaPlugin() {
         modules.forEach {
             try {
                 it.onEnable()
-                logger.info("Successfully enabled ${it.javaClass.name}!")
+                logger.info("モジュール '${it.javaClass.name}' を正常に有効化しました。")
             } catch (e: Exception) {
-                logger.severe("Failed to enable '${it.javaClass.name}'")
+                logger.severe("モジュール '${it.javaClass.name}' の有効化に失敗しました。")
                 e.printStackTrace()
             }
         }
@@ -125,9 +121,9 @@ class XCorePlugin : JavaPlugin() {
         modules.forEach {
             try {
                 it.onPostEnable()
-                logger.info("Successfully post-enabled ${it.javaClass.name}!")
+                logger.info("モジュール '${it.javaClass.name}' の初期化後処理を実行しました。")
             } catch (e: Exception) {
-                logger.severe("Failed to post-enable '${it.javaClass.name}'")
+                logger.severe("モジュール '${it.javaClass.name}' の初期化後処理の実行に失敗しました。")
                 e.printStackTrace()
             }
         }
@@ -138,9 +134,9 @@ class XCorePlugin : JavaPlugin() {
         modules.forEach {
             try {
                 it.onDisable()
-                logger.info("Successfully disabled ${it.javaClass.name}!")
+                logger.info("モジュール '${it.javaClass.name}' を正常に無効化しました。")
             } catch (e: Exception) {
-                logger.severe("Failed to disable '${it.javaClass.name}'")
+                logger.severe("モジュール '${it.javaClass.name}' の無効化に失敗しました。")
                 e.printStackTrace()
             }
         }
@@ -156,18 +152,11 @@ class XCorePlugin : JavaPlugin() {
         Bukkit.getOnlinePlayers().forEach { it.updateCommands() }
     }
 
-    private fun loadCommands() {
-        CommandRegistry.clearMap()
-
-        CommandRegistry.register("signedit", CommandSignEdit())
-        CommandRegistry.register("report", CommandReport())
-        CommandRegistry.register("countdown", CommandCountdown())
-    }
-
     private val hooks: Array<HookBase> = arrayOf(
         CitizensHook,
         DiscordHook,
         VaultHook,
+        FloodgateHook,
     )
 
     private val modules: Array<ModuleBase> = arrayOf(
