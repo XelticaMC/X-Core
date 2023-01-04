@@ -43,6 +43,7 @@ object WorldModule : ModuleBase() {
         registerCommand("xtp", CommandXtp())
         registerCommand("xtpreset", CommandXtpReset())
         registerCommand("localtime", CommandLocalTime())
+        registerCommand("respawn", CommandRespawn())
     }
 
     fun getWorldInfo(world: World) = getWorldInfo(world.name)

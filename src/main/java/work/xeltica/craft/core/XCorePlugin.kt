@@ -12,7 +12,6 @@ import work.xeltica.craft.core.api.commands.CommandXReload
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.commands.CommandCountdown
 import work.xeltica.craft.core.commands.CommandReport
-import work.xeltica.craft.core.commands.CommandRespawn
 import work.xeltica.craft.core.commands.CommandSignEdit
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.CitizensHook

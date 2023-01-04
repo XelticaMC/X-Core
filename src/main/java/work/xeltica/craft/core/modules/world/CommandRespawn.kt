@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.commands
+package work.xeltica.craft.core.modules.world
 
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -9,7 +9,6 @@ import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.utils.Ticks
 import java.util.UUID
 
