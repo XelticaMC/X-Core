@@ -14,6 +14,7 @@ object CloverModule : ModuleBase() {
 
     override fun onEnable() {
         clovers = Config("clovers")
+        registerHandler(CloverHandler())
     }
 
     fun saveAllCloversAccount() {

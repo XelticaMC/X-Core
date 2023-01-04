@@ -28,6 +28,7 @@ object HintModule : ModuleBase() {
         hints = Config("hints")
 
         registerCommand("hint", HintCommand())
+        registerHandler(HintHandler())
     }
 
     fun getArchived(p: Player): List<String> {

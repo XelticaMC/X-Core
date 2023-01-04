@@ -25,13 +25,13 @@ import work.xeltica.craft.core.modules.payments.PaymentsApp
 import work.xeltica.craft.core.modules.promotion.PromoApp
 import work.xeltica.craft.core.modules.quickchat.QuickChatApp
 import work.xeltica.craft.core.modules.stamprally.StampRallyApp
+import work.xeltica.craft.core.modules.transferPlayerData.TransferPlayerDataApp
 import work.xeltica.craft.core.modules.vehicle.BoatApp
 import work.xeltica.craft.core.modules.vehicle.CartApp
 import work.xeltica.craft.core.modules.world.TeleportApp
 import work.xeltica.craft.core.xphone.apps.ProtectApp
 import work.xeltica.craft.core.xphone.apps.PunishApp
 import work.xeltica.craft.core.xphone.apps.SidebarApp
-import work.xeltica.craft.core.xphone.apps.TransferPlayerDataApp
 import work.xeltica.craft.core.xphone.apps.VoteApp
 
 /**

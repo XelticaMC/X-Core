@@ -436,7 +436,7 @@ class Gui : Listener {
     private fun openTextInputBedrockImpl(player: Player, title: String, responseHandler: Consumer<String>?) {
         val fPlayer = FloodgateApi.getInstance().getPlayer(player.uniqueId)
         val form = CustomForm.builder().title(title).input("").responseHandler { form, res ->
-            responseHandler?.accept(form.parseResponse(res).getInput(0)!!)
+            responseHandler?.accept(form.parseResponse(res).getInput(0) ?: "")
         }
         fPlayer.sendForm(form)
     }

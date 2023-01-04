@@ -34,6 +34,7 @@ import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.hooks.CitizensHook.isCitizensNpc
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
+import work.xeltica.craft.core.modules.transferPlayerData.TransferPlayerDataEvent
 import work.xeltica.craft.core.modules.world.WorldModule
 import java.util.Date
 import java.util.Random
@@ -240,6 +241,13 @@ class EbiPowerHandler : Listener {
         PlayerStore.openAll().forEach {
             it[EbiPowerModule.PS_KEY_BROKEN_BLOCKS_COUNT] = 0
         }
+    }
+
+    @EventHandler
+    fun onTransferPlayerData(e: TransferPlayerDataEvent) {
+        val power = EbiPowerModule.get(e.from)
+        EbiPowerModule.tryTake(e.from, power)
+        EbiPowerModule.tryGive(e.to, power)
     }
 
     private fun notification(p: Player, mes: String) {
