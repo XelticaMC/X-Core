@@ -169,10 +169,10 @@ bukkit {
             aliases = listOf("xteleportreset")
         }
         register("xphone") {
-            description = "X Phone を入手する"
-            usage = "/xphone"
+            description = "X Phoneメニューを開くか、アイテム「X Phone」をもらう"
+            usage = "/xphone [get]"
             permission = "otanoshimi.command.xphone"
-            aliases = listOf("phone")
+            aliases = listOf("phone", "p")
         }
         register("live") {
             description = "ライブ配信モードを切り替える"

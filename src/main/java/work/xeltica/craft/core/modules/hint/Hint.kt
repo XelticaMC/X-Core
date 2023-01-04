@@ -109,8 +109,8 @@ enum class Hint constructor(
         200
     ),
     TWIN_XPHONE(
-        "そう、X Phoneならね。",
-        "/phone コマンドを実行するとX Phoneが貰える。もし無くしたら試してみよう。",
+        "X Phoneデビュー",
+        "X Phoneを右クリック/タップで使用するか、 /p コマンドを実行するとゲームメニューが表示される。",
         100
     ),
     COUNTDOWN(

@@ -17,7 +17,9 @@ import work.xeltica.craft.core.modules.eventSummer.EventCancelApp
 import work.xeltica.craft.core.modules.eventSummer.EventRespawnApp
 import work.xeltica.craft.core.modules.eventSummer.EventReturnWorldApp
 import work.xeltica.craft.core.modules.eventSummer.FireworkApp
+import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintApp
+import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.livemode.LiveModeApp
 import work.xeltica.craft.core.modules.notification.NotificationApp
 import work.xeltica.craft.core.modules.omikuji.OmikujiApp
@@ -37,7 +39,7 @@ import work.xeltica.craft.core.modules.world.TeleportApp
 object XphoneModule : ModuleBase() {
     const val PS_KEY_GIVEN_PHONE = "given_phone"
 
-    private const val PHONE_TITLE = "X Phone OS 3.1"
+    private const val PHONE_TITLE = "§6§l§oゲームメニュー"
     private lateinit var apps: MutableList<AppBase>
 
     /**
@@ -105,6 +107,7 @@ object XphoneModule : ModuleBase() {
         }.map { app ->
             MenuItem(app.getName(player), { app.onLaunch(player) }, app.getIcon(player), null, app.isShiny(player))
         })
+        HintModule.achieve(player, Hint.TWIN_XPHONE)
     }
 
     /**

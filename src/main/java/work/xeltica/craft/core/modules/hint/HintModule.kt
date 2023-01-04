@@ -73,17 +73,17 @@ object HintModule : ModuleBase() {
             EbiPowerModule.tryGive(p, hint.power)
         }
         p.playSound(p.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1.4f)
+
+        val hintNameComponent = Component.text(hint.hintName).color(TextColor.color(0x03A9F4))
+            .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(hint.description)))
+            .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/hint " + hint.name))
+
         val component = p.displayName().color(TextColor.color(0x4CAF50))
             .append(Component.text("さんがヒント「"))
-            .append(
-                Component
-                    .text(hint.hintName)
-                    .color(TextColor.color(0x03A9F4))
-                    .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(hint.description)))
-                    .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/hint " + hint.name))
-            )
+            .append(hintNameComponent)
             .append(Component.text("」を達成しました！"))
             .asComponent()
+
         DiscordHook.broadcast(PlainTextComponentSerializer.plainText().serialize(component))
         Bukkit.getServer().sendMessage(component)
         if (hint.type === Hint.HintType.CHALLENGE) {
