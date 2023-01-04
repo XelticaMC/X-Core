@@ -11,7 +11,15 @@ import work.xeltica.craft.core.hooks.DiscordHook
 import java.io.IOException
 
 object MetaModule : ModuleBase() {
-    val changeLog = listOf("モジュール化").toTypedArray()
+    val changeLog = listOf(
+        "システム内部を大規模に書き直しました。",
+        "/phone コマンドの挙動を、「メニューが開く」に変更しました。",
+        "/phone get コマンドでX Phoneアイテムを入手できるように変更しました。",
+        "/phone を /p と書けるようにしました。",
+        "モブボール：アイアンゴーレムおよびスノーゴーレムを捕獲時に、それぞれのスポーンエッグ柄のモブケースになるように変更しました。",
+        "エビパワー没収の対象になるモブでできたNPCを殴ると、ダメージが入らないのにエビパワーだけ没収される問題を修正しました。",
+        "自動クラフト：カスタムアイテムをクラフトに使用できてしまう問題を修正しました。",
+    ).toTypedArray()
 
     lateinit var meta: Config
     var currentVersion: String? = null; private set

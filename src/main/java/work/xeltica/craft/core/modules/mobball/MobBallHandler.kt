@@ -241,9 +241,12 @@ class MobBallHandler : Listener {
     }
 
     private fun getSpawnEggMaterial(type: EntityType): Material {
-        // ムーシュルームだけ名前が:tokushu:なので特殊処理
-        if (type == EntityType.MUSHROOM_COW) return Material.MOOSHROOM_SPAWN_EGG
-        return Material.values().firstOrNull { it.name == "${type.name}_SPAWN_EGG" } ?: Material.CHICKEN_SPAWN_EGG
+        // 名前が特殊なモブだけ特殊処理
+        return when (type) {
+            EntityType.MUSHROOM_COW -> Material.MOOSHROOM_SPAWN_EGG
+            EntityType.SNOWMAN -> Material.SNOW_GOLEM_SPAWN_EGG
+            else -> Material.values().firstOrNull { it.name == "${type.name}_SPAWN_EGG" } ?: Material.CHICKEN_SPAWN_EGG
+        }
     }
 
     private fun dropEgg(egg: Egg, player: Player, string: String? = null) {
