@@ -27,9 +27,11 @@ import org.bukkit.inventory.meta.BookMeta
 import org.bukkit.scheduler.BukkitRunnable
 import org.geysermc.cumulus.CustomForm
 import org.geysermc.cumulus.SimpleForm
-import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.commands.CommandRegistry
+import work.xeltica.craft.core.hooks.FloodgateHook
+import work.xeltica.craft.core.hooks.FloodgateHook.isFloodgatePlayer
+import work.xeltica.craft.core.hooks.FloodgateHook.toFloodgatePlayer
 import work.xeltica.craft.core.modules.item.ItemModule
 import java.util.ArrayDeque
 import java.util.UUID
@@ -50,11 +52,6 @@ class Gui : Listener {
             instance = Gui()
             CommandRegistry.register("__core_gui_event__", CommandXCoreGuiEvent())
             Bukkit.getPluginManager().registerEvents(instance, XCorePlugin.instance)
-        }
-
-        @JvmStatic
-        fun isBedrock(player: Player): Boolean {
-            return FloodgateApi.getInstance().isFloodgateId(player.uniqueId)
         }
 
         private const val NEW_PAGE_CODE = "_NEW_PAGE_"
@@ -82,7 +79,7 @@ class Gui : Listener {
      * @param items メニューのアイテム
      */
     fun openMenu(player: Player, title: String, items: Collection<MenuItem>) {
-        if (isBedrock(player)) {
+        if (player.isFloodgatePlayer()) {
             openMenuBedrockImpl(player, title, items.toList())
         } else {
             openMenuJavaImpl(player, title, items.toList())
@@ -121,7 +118,7 @@ class Gui : Listener {
     fun openDialog(player: Player, title: String, content: String, callback: Consumer<DialogEventArgs>?, okButtonText: String?) {
         val okText = okButtonText ?: "OK"
 
-        if (isBedrock(player)) {
+        if (player.isFloodgatePlayer()) {
             openDialogBedrockImpl(player, title, content, callback, okText)
         } else {
             openDialogJavaImpl(player, title, content, callback, okText)
@@ -171,7 +168,7 @@ class Gui : Listener {
     }
 
     fun openTextInput(player: Player, title: String, responseHandler: Consumer<String>?) {
-        if (isBedrock(player)) {
+        if (player.isFloodgatePlayer()) {
             openTextInputBedrockImpl(player, title, responseHandler)
         } else {
             openTextInputJavaImplChat(player, title, responseHandler)
@@ -356,7 +353,7 @@ class Gui : Listener {
             items[id].onClick?.accept(items[id])
         }
 
-        val fPlayer = FloodgateApi.getInstance().getPlayer(player.uniqueId)
+        val fPlayer = player.toFloodgatePlayer() ?: return
         fPlayer.sendForm(builder)
     }
 
@@ -391,7 +388,7 @@ class Gui : Listener {
             meta.addPages(page)
         }
 
-        meta.author = "XelticaMc"
+        meta.author = "XelticaMC"
         meta.title = title
 
         book.itemMeta = meta
@@ -407,15 +404,14 @@ class Gui : Listener {
         player: Player, title: String, content: String,
         callback: Consumer<DialogEventArgs>?, okButtonText: String,
     ) {
-        val api = FloodgateApi.getInstance()
         val form = SimpleForm.builder()
             .title(title)
             .content(content)
             .button(okButtonText)
-            .responseHandler { _ ->
+            .responseHandler(Consumer {
                 callback?.accept(DialogEventArgs(player))
-            }
-        api.getPlayer(player.uniqueId).sendForm(form)
+            })
+        FloodgateHook.api.getPlayer(player.uniqueId).sendForm(form)
     }
 
     private fun openTextInputJavaImpl(player: Player, title: String, responseHandler: Consumer<String>?) {
@@ -434,10 +430,14 @@ class Gui : Listener {
     }
 
     private fun openTextInputBedrockImpl(player: Player, title: String, responseHandler: Consumer<String>?) {
-        val fPlayer = FloodgateApi.getInstance().getPlayer(player.uniqueId)
-        val form = CustomForm.builder().title(title).input("").responseHandler { form, res ->
-            responseHandler?.accept(form.parseResponse(res).getInput(0) ?: "")
-        }
+        val fPlayer = player.toFloodgatePlayer() ?: throw IllegalArgumentException()
+        val form = CustomForm
+            .builder()
+            .title(title)
+            .input("")
+            .responseHandler { form, res ->
+                responseHandler?.accept(form.parseResponse(res).getInput(0) ?: "")
+            }
         fPlayer.sendForm(form)
     }
 

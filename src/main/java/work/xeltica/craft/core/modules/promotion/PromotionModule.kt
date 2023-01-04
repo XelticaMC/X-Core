@@ -31,7 +31,6 @@ object PromotionModule : ModuleBase() {
 
     override fun onDisable() {
         val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider ?: return
-
         luckPerms.contextManager.unregisterCalculator(calculator)
     }
 

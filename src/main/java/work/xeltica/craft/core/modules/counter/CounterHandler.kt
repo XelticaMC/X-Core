@@ -14,12 +14,13 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.geysermc.connector.common.ChatColor
-import org.geysermc.floodgate.api.FloodgateApi
 import org.geysermc.floodgate.util.DeviceOs
 import work.xeltica.craft.core.api.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.DiscordHook
+import work.xeltica.craft.core.hooks.FloodgateHook.isFloodgatePlayer
+import work.xeltica.craft.core.hooks.FloodgateHook.toFloodgatePlayer
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import work.xeltica.craft.core.utils.Time
 import java.io.IOException
@@ -65,7 +66,7 @@ class CounterHandler : Listener {
             } else {
                 CounterModule.add(
                     CounterData(
-                        name.toString(),
+                        name,
                         loc,
                         block.location,
                         daily,
@@ -107,8 +108,8 @@ class CounterHandler : Listener {
         val last = CounterModule.getByLocation2(block.location)
         val record = PlayerStore.open(player)
         val counterId = record.getString(CounterModule.PS_KEY_ID)
-        val startedAt = record.getString(CounterModule.PS_KEY_TIME, "0")!!.toLong()
-        val counter = if (counterId == null) null else CounterModule[counterId]
+        val startedAt = record.getString(CounterModule.PS_KEY_TIME, "0").toLong()
+        val counter = CounterModule[counterId]
         val isUsingCounter = counter != null
 
         // カウンター開始する
@@ -182,10 +183,10 @@ class CounterHandler : Listener {
      * ランキングに投稿するやつ
      */
     private fun handleRanking(player: Player, counter: CounterData, diff: Int) {
-        val floodgate = FloodgateApi.getInstance()
-        if (floodgate.isFloodgatePlayer(player.uniqueId)) {
+        if (player.isFloodgatePlayer()) {
             // bedrock
-            val type = floodgate.getPlayer(player.uniqueId).deviceOs
+            val fplayer = player.toFloodgatePlayer() ?: return
+            val type = fplayer.deviceOs
             addRanking(if (type == DeviceOs.UWP) counter.uwpRankingId else counter.phoneRankingId, player, diff)
             addRanking(counter.bedrockRankingId, player, diff)
         } else {
@@ -195,19 +196,18 @@ class CounterHandler : Listener {
     }
 
     private fun addRanking(id: String?, player: Player, diff: Int) {
-        val rankingApi = RankingModule
-        if (id != null && rankingApi.has(id)) {
-            val ranking = rankingApi[id]
-            val prev = ranking!![player.uniqueId.toString()]
-            if (prev == 0 || prev > diff) {
-                ranking.add(player.uniqueId.toString(), diff)
-                player.sendMessage("§a§l新記録達成！§cおめでとう！")
-                player.playSound(player.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1f, 1f)
-            } else {
-                player.sendMessage("§7新記録達成ならず…。")
-                player.playSound(player.location, Sound.ENTITY_CAT_AMBIENT, SoundCategory.PLAYERS, 1f, 1f)
-            }
-            player.sendMessage("§dまたチャレンジしてね！")
+        if (id == null) return
+        val ranking = RankingModule[id] ?: return
+        val uniqueId = player.uniqueId.toString()
+        val prev = ranking[uniqueId]
+        if (prev == 0 || prev > diff) {
+            ranking.add(uniqueId, diff)
+            player.sendMessage("§a§l新記録達成！§cおめでとう！")
+            player.playSound(player.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1f, 1f)
+        } else {
+            player.sendMessage("§7新記録達成ならず…。")
+            player.playSound(player.location, Sound.ENTITY_CAT_AMBIENT, SoundCategory.PLAYERS, 1f, 1f)
         }
+        player.sendMessage("§dまたチャレンジしてね！")
     }
 }

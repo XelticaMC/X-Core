@@ -3,11 +3,11 @@ package work.xeltica.craft.core.modules.xphone
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.gui.SoundPitch
+import work.xeltica.craft.core.hooks.FloodgateHook.isFloodgatePlayer
 import work.xeltica.craft.core.modules.bedrock.BedrockToolsApp
 import work.xeltica.craft.core.modules.cat.CatApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerDrugStoreApp
@@ -37,7 +37,7 @@ import work.xeltica.craft.core.modules.world.TeleportApp
 object XphoneModule : ModuleBase() {
     const val PS_KEY_GIVEN_PHONE = "given_phone"
 
-    private const val PHONE_TITLE = "X Phone OS 3.0"
+    private const val PHONE_TITLE = "X Phone OS 3.1"
     private lateinit var apps: MutableList<AppBase>
 
     /**
@@ -110,8 +110,9 @@ object XphoneModule : ModuleBase() {
     /**
      * プレイヤーが統合版であるかどうかを取得します。
      */
+    @Deprecated("Use FloodgateHook instead.", ReplaceWith("player.isFloodgatePlayer()", "work.xeltica.craft.core.hooks.FloodgateHook.isFloodgatePlayer"))
     fun isBedrockPlayer(player: Player): Boolean {
-        return FloodgateApi.getInstance().isFloodgatePlayer(player.uniqueId)
+        return player.isFloodgatePlayer()
     }
 
     fun ui() = Gui.getInstance()
@@ -120,17 +121,17 @@ object XphoneModule : ModuleBase() {
      * 起動音を再生します。
      */
     fun playStartupSound(player: Player) {
-        ui().playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1f, SoundPitch.A1)
-        ui().playSoundAfter(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1f, SoundPitch.D2, 4)
-        ui().playSoundAfter(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1f, SoundPitch.C_2, 8)
+        ui().playSound(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1f, SoundPitch.A1)
+        ui().playSoundAfter(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1f, SoundPitch.D2, 4)
+        ui().playSoundAfter(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1f, SoundPitch.C_2, 8)
     }
 
     /**
      * 通知音を再生します。
      */
     fun playTritone(player: Player) {
-        ui().playSoundLocally(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.D1)
-        ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.A1, 2)
-        ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE, 1f, SoundPitch.D2, 4)
+        ui().playSoundLocally(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1f, SoundPitch.D1)
+        ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1f, SoundPitch.A1, 3)
+        ui().playSoundLocallyAfter(player, Sound.BLOCK_NOTE_BLOCK_HARP, 1f, SoundPitch.D2, 6)
     }
 }

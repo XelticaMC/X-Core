@@ -2,11 +2,11 @@ package work.xeltica.craft.core.modules.bedrock
 
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
+import work.xeltica.craft.core.hooks.FloodgateHook.isFloodgatePlayer
 
 object BedrockModule : ModuleBase() {
     const val PS_KEY_ACCEPT_DISCLAIMER = "accept_disclaimer"
@@ -28,8 +28,7 @@ object BedrockModule : ModuleBase() {
     }
 
     fun showDisclaimerAsync(p: Player) {
-        val fapi = FloodgateApi.getInstance()
-        if (!fapi.isFloodgatePlayer(p.uniqueId)) return
+        if (!p.isFloodgatePlayer()) return
         Bukkit.getScheduler().runTaskLater(XCorePlugin.instance, Runnable { showDisclaimer(p) }, 20)
     }
 
