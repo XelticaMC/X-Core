@@ -1,4 +1,4 @@
-package work.xeltica.craft.core.commands
+package work.xeltica.craft.core.modules.countdown
 
 import org.bukkit.Bukkit
 import org.bukkit.Sound

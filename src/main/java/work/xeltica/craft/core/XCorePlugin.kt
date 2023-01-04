@@ -10,8 +10,6 @@ import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.api.commands.CommandXDebug
 import work.xeltica.craft.core.api.commands.CommandXReload
 import work.xeltica.craft.core.api.playerStore.PlayerStore
-import work.xeltica.craft.core.commands.CommandCountdown
-import work.xeltica.craft.core.commands.CommandSignEdit
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.hooks.CitizensHook
 import work.xeltica.craft.core.hooks.DiscordHook
@@ -21,6 +19,8 @@ import work.xeltica.craft.core.modules.bedrock.BedrockModule
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.cat.CatModule
 import work.xeltica.craft.core.modules.clover.CloverModule
+import work.xeltica.craft.core.modules.countdown.CommandCountdown
+import work.xeltica.craft.core.modules.countdown.CountdownModule
 import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.modules.eventFarm.EventFarmModule
@@ -174,6 +174,7 @@ class XCorePlugin : JavaPlugin() {
         BossBarModule,
         CatModule,
         CloverModule,
+        CountdownModule,
         CounterModule,
         EbiPowerModule,
         EventFarmModule,
