@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 
 /**
  * サーバー投票アプリ
- * @author Ebise Lutica
+ * @author Lutica
  */
 class VoteApp : AppBase() {
     override fun getName(player: Player): String = "サーバー投票"

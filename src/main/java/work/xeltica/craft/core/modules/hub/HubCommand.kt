@@ -7,7 +7,7 @@ import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 
 /**
  * ロビーへ移動するコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class HubCommand : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {

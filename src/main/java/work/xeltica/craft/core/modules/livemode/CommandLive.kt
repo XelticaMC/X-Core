@@ -8,7 +8,7 @@ import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 
 /**
  * 配信モードを切り替えるコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class CommandLive : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {

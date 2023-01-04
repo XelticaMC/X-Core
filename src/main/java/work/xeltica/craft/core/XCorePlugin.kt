@@ -55,13 +55,14 @@ import work.xeltica.craft.core.utils.Ticks
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
- * @author Xeltica
+ * @author Lutica
  */
 class XCorePlugin : JavaPlugin() {
 
     override fun onEnable() {
         instance = this
         initializeFoundation()
+
         loadHooks()
         loadModules()
 

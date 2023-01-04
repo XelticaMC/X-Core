@@ -6,6 +6,9 @@ import work.xeltica.craft.core.modules.eventFirework.EventFireworkModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
 import work.xeltica.craft.core.modules.notification.NotificationModule
 
+/**
+ * X-Core の設定ファイルなどの再読み込みコマンド。
+ */
 class CommandXReload : CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) return false

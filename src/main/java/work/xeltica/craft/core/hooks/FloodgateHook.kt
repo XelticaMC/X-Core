@@ -6,6 +6,10 @@ import org.geysermc.floodgate.api.FloodgateApi
 import org.geysermc.floodgate.api.player.FloodgatePlayer
 import work.xeltica.craft.core.api.HookBase
 
+/**
+ * 統合版サポートプラグイン Floodgate との連携フック。
+ * 統合版ユーザーの情報の取得をサポートします。
+ */
 object FloodgateHook : HookBase() {
     lateinit var api: FloodgateApi private set
 

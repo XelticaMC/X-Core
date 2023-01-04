@@ -7,7 +7,7 @@ import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * ボートを射出するアプリ。
- * @author Ebise Lutica
+ * @author Lutica
  */
 class BoatApp : AppBase() {
     override fun getName(player: Player): String = "ボート召喚"

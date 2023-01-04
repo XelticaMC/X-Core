@@ -12,7 +12,7 @@ import work.xeltica.craft.core.modules.item.ItemModule.getItem
 
 /**
  * X Phoneを受け取るコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class XphoneCommand : CommandPlayerOnlyBase() {
     private val subCommands = listOf("get")

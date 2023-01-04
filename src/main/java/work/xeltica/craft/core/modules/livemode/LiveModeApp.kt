@@ -6,7 +6,7 @@ import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * 配信モード切り替えアプリ
- * @author Ebise Lutica
+ * @author Lutica
  */
 class LiveModeApp : AppBase() {
     override fun getName(player: Player): String = "配信モードを${if (isLiveMode(player)) "オフ" else "オン"}にする"

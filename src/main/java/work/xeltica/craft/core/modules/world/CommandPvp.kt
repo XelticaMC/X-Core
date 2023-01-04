@@ -8,7 +8,7 @@ import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 
 /**
  * PvPの有効・無効を切り替えるコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class CommandPvp : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {

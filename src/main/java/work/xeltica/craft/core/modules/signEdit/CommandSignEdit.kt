@@ -17,7 +17,7 @@ import java.util.LinkedList
 
 /**
  * 看板を編集するコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class CommandSignEdit : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {

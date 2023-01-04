@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 /**
  * 時間イベントのための監視 Runnable。
  * 監視する時間には、サーバーOSのタイムゾーンを使用しています。
- * @author Xeltica
+ * @author Lutica
  */
 class TimeObserver : BukkitRunnable() {
     override fun run() {

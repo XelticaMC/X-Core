@@ -12,7 +12,7 @@ import java.util.Calendar
 
 /**
  * テレポートアプリ
- * @author Ebise Lutica
+ * @author Lutica
  */
 class TeleportApp : AppBase() {
     override fun getName(player: Player): String = if (isShigen(player)) "メインワールドに帰る" else "テレポート"

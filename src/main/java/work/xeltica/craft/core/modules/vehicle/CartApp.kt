@@ -7,7 +7,7 @@ import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * トロッコを射出するアプリ。
- * @author Ebise Lutica
+ * @author Lutica
  */
 class CartApp : AppBase() {
     override fun getName(player: Player): String = "トロッコ召喚"

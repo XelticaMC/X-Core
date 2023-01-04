@@ -24,7 +24,7 @@ import work.xeltica.craft.core.modules.world.WorldModule
 
 /**
  * わかばロール向けの機能制限に関するハンドラーをまとめています。
- * @author Xeltica
+ * @author Lutica
  */
 class PromotionHandler : Listener {
     private val deniedBlocks: MutableSet<Material> = HashSet()

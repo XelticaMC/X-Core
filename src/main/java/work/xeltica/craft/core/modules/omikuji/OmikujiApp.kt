@@ -6,7 +6,7 @@ import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * おみくじアプリ
- * @author Ebise Lutica
+ * @author Lutica
  */
 class OmikujiApp : AppBase() {
     override fun getName(player: Player): String = "おみくじ"

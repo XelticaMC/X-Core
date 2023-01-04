@@ -6,7 +6,7 @@ import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * ヒントアプリ
- * @author Ebise Lutica
+ * @author Lutica
  */
 class HintApp : AppBase() {
     override fun getName(player: Player): String = "ヒント"

@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * 処罰コマンド
  * TODO: punish コマンドに名称変更
  *
- * @author Xeltica
+ * @author Lutica
  */
 public class CommandReport extends CommandPlayerOnlyBase {
     private static final String WILL_MUTE = "あなたの発言を今後ミュートします";

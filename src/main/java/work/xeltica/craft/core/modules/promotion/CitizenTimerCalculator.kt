@@ -11,7 +11,7 @@ import work.xeltica.craft.core.api.playerStore.PlayerStore
  * 市民になるまでの時間を経過しているかどうかの情報を提供するLuckPermsのアドオンクラスです。
  * LuckPermsの設定で、この値がtrueになっているかどうかを、
  * 市民ロールであるかどうかの条件式の一つとするために用いています。
- * @author Xeltica
+ * @author Lutica
  */
 class CitizenTimerCalculator : ContextCalculator<Player?> {
     override fun calculate(target: Player, contextConsumer: ContextConsumer) {

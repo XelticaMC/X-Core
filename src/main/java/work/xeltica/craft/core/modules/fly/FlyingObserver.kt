@@ -8,7 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable
 /**
  * 正規の手段で飛行していることを明確にするために、飛行状態のプレイヤーの足に
  * ジェットのようなパーティクルを出すためのバックグラウンドタスクです。
- * @author Xeltica
+ * @author Lutica
  */
 class FlyingObserver : BukkitRunnable() {
     override fun run() {

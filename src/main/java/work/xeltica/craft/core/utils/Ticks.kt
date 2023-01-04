@@ -2,7 +2,7 @@ package work.xeltica.craft.core.utils
 
 /**
  * 時間をMinecraft Tickに変換するのと、その逆をする機能を持つ
- * @author Xeltica
+ * @author Lutica
  */
 object Ticks {
     /** 秒をTickに変換  */

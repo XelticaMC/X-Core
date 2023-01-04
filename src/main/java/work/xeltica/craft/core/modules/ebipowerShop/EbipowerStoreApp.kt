@@ -6,7 +6,7 @@ import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * エビパワーストアアプリ。
- * @author Ebise Lutica
+ * @author Lutica
  */
 class EbipowerStoreApp : AppBase() {
     override fun getName(player: Player) = "エビパワーストア"

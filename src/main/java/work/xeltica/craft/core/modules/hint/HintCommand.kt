@@ -13,7 +13,7 @@ import java.util.stream.Stream
 
 /**
  * ヒントアプリを開くコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class HintCommand : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {

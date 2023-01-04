@@ -4,6 +4,9 @@ import org.bukkit.OfflinePlayer
 import work.xeltica.craft.core.api.Config
 import java.util.UUID
 
+/**
+ * プレイヤーそれぞれに紐づいたデータ格納用キーバリューストア。
+ */
 object PlayerStore {
     private lateinit var config: Config
     fun onEnable() {

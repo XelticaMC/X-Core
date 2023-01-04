@@ -7,7 +7,7 @@ import work.xeltica.craft.core.gui.MenuItem
 
 /**
  * インベントリを保護するためのアプリ
- * @author Ebise Lutica
+ * @author Lutica
  */
 class ProtectApp : AppBase() {
     override fun getName(player: Player): String = "インベントリ保護"

@@ -4,7 +4,7 @@ import work.xeltica.craft.core.modules.ebipower.EbiPowerHandler
 
 /**
  * ヒントを定義しています。
- * @author Xeltica
+ * @author Lutica
  */
 enum class Hint constructor(
     val hintName: String,

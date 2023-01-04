@@ -11,7 +11,7 @@ import work.xeltica.craft.core.modules.world.WorldModule.teleportToSavedLocation
 
 /**
  * 指定したワールドの最後にいた場所に転送するコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class CommandXtp : CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {

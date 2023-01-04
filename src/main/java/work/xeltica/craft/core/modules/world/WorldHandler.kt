@@ -29,7 +29,7 @@ import work.xeltica.craft.core.utils.Ticks
 /**
  * ワールド制御に関するハンドラーをまとめています。
  * TODO: 機能別に再編
- * @author Xeltica
+ * @author Lutica
  */
 class WorldHandler : Listener {
     /*

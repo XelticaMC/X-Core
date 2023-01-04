@@ -9,7 +9,7 @@ import work.xeltica.craft.core.modules.xphone.XphoneModule
 
 /**
  * 統合版ユーザー向けツールを揃えたアプリ。
- * @author Ebise Lutica
+ * @author Lutica
  */
 class BedrockToolsApp : AppBase() {
     override fun getName(player: Player): String = "統合版ツール"

@@ -6,7 +6,7 @@ import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * 処罰を実行するアプリ
- * @author Ebise Lutica
+ * @author Lutica
  */
 class PunishApp : AppBase() {
     override fun getName(player: Player): String = "（スタッフ用）処罰"

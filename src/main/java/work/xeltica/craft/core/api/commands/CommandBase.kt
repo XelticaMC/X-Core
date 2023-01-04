@@ -6,7 +6,7 @@ import org.bukkit.command.TabCompleter
 
 /**
  * X-Core コマンドの基底クラス。
- * @author Xeltica
+ * @author Lutica
  */
 abstract class CommandBase : TabCompleter {
     /**

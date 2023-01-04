@@ -7,7 +7,7 @@ import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 
 /**
  * ボートを出現させるコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class CommandBoat : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {

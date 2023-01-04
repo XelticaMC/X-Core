@@ -7,6 +7,9 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.HookBase
 
+/**
+ * 経済、権限、チャットプラグインとのAPI連携を抽象化するプラグインVaultとの連携フック。
+ */
 object VaultHook : HookBase() {
     private lateinit var economy: Economy
     override val isEnabled = Bukkit.getPluginManager().getPlugin("Vault") != null

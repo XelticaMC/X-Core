@@ -10,7 +10,7 @@ import work.xeltica.craft.core.gui.SoundPitch
 
 /**
  * 猫モードを切り替えるコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class CommandCat : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {

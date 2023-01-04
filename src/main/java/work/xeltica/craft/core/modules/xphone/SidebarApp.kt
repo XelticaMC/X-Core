@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 
 /**
  * サイドバー切り替えアプリ
- * @author Ebise Lutica
+ * @author Lutica
  */
 class SidebarApp : AppBase() {
     override fun getName(player: Player): String = "サイドバー切り替え"

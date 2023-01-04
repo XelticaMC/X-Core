@@ -6,7 +6,7 @@ import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * 市民かどうかを確認するアプリ
- * @author Ebise Lutica
+ * @author Lutica
  */
 class PromoApp : AppBase() {
     override fun getName(player: Player): String = "市民システム"

@@ -38,10 +38,16 @@ import java.util.UUID
 import java.util.function.Consumer
 import java.util.function.Predicate
 
+/**
+ * X-Core GUI API。メニューやダイアログの表示、入力受付などを実現します。
+ */
 class Gui : Listener {
     companion object {
         private lateinit var instance: Gui
 
+        /**
+         * GUI APIのインスタンスを取得します。
+         */
         @JvmStatic
         fun getInstance(): Gui {
             return instance
@@ -128,7 +134,7 @@ class Gui : Listener {
     /**
      * 現在参加中のプレイヤーを選択するメニューを開きます。
      * @param player メニューを開くプレイヤー
-     * @param onSelect 選択肢に入るプレイヤーを指定
+     * @param onSelect プレイヤーを選択した後に呼び出されるコールバック
      */
     fun openPlayersMenu(player: Player, onSelect: Consumer<Player>?) {
         openPlayersMenu(player, "プレイヤーを選んでください", onSelect)
@@ -137,8 +143,8 @@ class Gui : Listener {
     /**
      * 現在参加中のプレイヤーを選択するメニューを開きます。
      * @param player メニューを開くプレイヤー
-     * @param onSelect 選択肢に入るプレイヤーを指定
      * @param title メニューのタイトルを指定
+     * @param onSelect プレイヤーを選択した後に呼び出されるコールバック
      */
     fun openPlayersMenu(player: Player, title: String, onSelect: Consumer<Player>?) {
         openPlayersMenu(player, title, onSelect, null)
@@ -167,6 +173,12 @@ class Gui : Listener {
         openMenu(player, title, list)
     }
 
+    /**
+     * [player] に対し、[title]という名前で文字列を入力させます。
+     * 入力後に [responseHandler] が実行されます。
+     *
+     * Java版ではチャット欄、統合版ではFormが呼ばれます。
+     */
     fun openTextInput(player: Player, title: String, responseHandler: Consumer<String>?) {
         if (player.isFloodgatePlayer()) {
             openTextInputBedrockImpl(player, title, responseHandler)

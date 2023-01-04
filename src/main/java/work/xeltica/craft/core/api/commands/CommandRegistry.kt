@@ -6,7 +6,14 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import java.util.Locale
 
+/**
+ * X-Core のコマンドを管理し、呼び出すレジストリです。
+ */
 object CommandRegistry : CommandExecutor {
+
+    /**
+     * システムにコマンド [command] を [name] という名前で登録します。
+     */
     fun register(name: String, command: CommandBase) {
         val logger = Bukkit.getLogger()
         if (commandsMap.containsKey(name)) {
@@ -24,10 +31,16 @@ object CommandRegistry : CommandExecutor {
         logger.info("コマンド '$name' を登録しました。")
     }
 
+    /**
+     * コマンド一覧を消去します。
+     */
     fun clearMap() {
         commandsMap.clear()
     }
 
+    /**
+     * コマンドが実行されるときに呼び出されます。
+     */
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         val name = command.name.lowercase(Locale.getDefault())
         val com = commandsMap[name] ?: return false

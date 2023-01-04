@@ -19,7 +19,7 @@ import java.util.*
 
 /**
  * プレイヤーのヒントを達成する処理や、ヒントを達成しているかどうかの取得などを行います。
- * @author Xeltica
+ * @author Lutica
  */
 object HintModule : ModuleBase() {
     private lateinit var hints: Config

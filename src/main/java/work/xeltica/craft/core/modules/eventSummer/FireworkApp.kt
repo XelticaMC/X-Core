@@ -12,7 +12,7 @@ import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * 祭り用花火購入・入手アプリ
- * @author Ebise Lutica
+ * @author Lutica
  */
 class FireworkApp : AppBase() {
     private val fireworkCount = 16

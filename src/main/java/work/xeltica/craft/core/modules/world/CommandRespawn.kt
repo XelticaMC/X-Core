@@ -14,7 +14,7 @@ import java.util.UUID
 
 /**
  * 初期スポーンに転送するコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class CommandRespawn : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {

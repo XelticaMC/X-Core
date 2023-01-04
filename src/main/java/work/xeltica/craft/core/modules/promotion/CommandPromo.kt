@@ -8,7 +8,7 @@ import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 
 /**
  * 市民システムの情報表示コマンド
- * @author Xeltica
+ * @author Lutica
  */
 class CommandPromo : CommandPlayerOnlyBase() {
     override fun execute(sender: Player, command: Command, label: String, args: Array<out String>): Boolean {

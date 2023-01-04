@@ -9,6 +9,9 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.HookBase
 
+/**
+ * Discord との連携フック。
+ */
 object DiscordHook : HookBase() {
     override val isEnabled = Bukkit.getPluginManager().getPlugin("DiscordSRV") != null
 

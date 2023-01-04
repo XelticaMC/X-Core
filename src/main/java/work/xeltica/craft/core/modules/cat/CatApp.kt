@@ -8,7 +8,7 @@ import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * ネコモードを切り替えるプラグイン。
- * @author Ebise Lutica
+ * @author Lutica
  */
 class CatApp : AppBase() {
     override fun getName(player: Player): String {

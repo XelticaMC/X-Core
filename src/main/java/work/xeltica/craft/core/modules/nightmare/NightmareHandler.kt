@@ -17,7 +17,7 @@ import java.util.Random
 /**
  * ナイトメアワールドに関するハンドラーをまとめています。
  *
- * @author Xeltica
+ * @author Lutica
  */
 class NightmareHandler : Listener {
     private val random = Random()

@@ -5,7 +5,7 @@ import org.bukkit.event.HandlerList
 
 /**
  * 現実時間で次の日になったイベント
- * @author Xeltica
+ * @author Lutica
  */
 class RealTimeNewDayEvent : Event() {
     override fun getHandlers(): HandlerList {

@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 
 /**
  * X Phone アプリのベース。
- * @author Ebise Lutica
+ * @author Lutica
  */
 abstract class AppBase {
     /**

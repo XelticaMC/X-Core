@@ -11,7 +11,7 @@ import java.util.Locale
 
 /**
  * 現在いるワールドのみの時間を操作するコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class CommandLocalTime : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {

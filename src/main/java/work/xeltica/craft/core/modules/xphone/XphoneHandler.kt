@@ -15,7 +15,7 @@ import work.xeltica.craft.core.modules.item.ItemModule
 
 /**
  * X Phoneに関する機能をまとめています。
- * @author Xeltica
+ * @author Lutica
  */
 class XphoneHandler : Listener {
     @EventHandler(priority = EventPriority.HIGH)

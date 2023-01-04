@@ -9,7 +9,7 @@ import work.xeltica.craft.core.api.commands.CommandBase
 
 /**
  * xtpコマンドで使う保存された位置を初期化するコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class CommandXtpReset : CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {

@@ -18,7 +18,7 @@ import java.util.function.Consumer
 
 /**
  * カウントダウンコマンド
- * @author Xeltica
+ * @author Lutica
  */
 class CommandCountdown : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {

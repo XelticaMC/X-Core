@@ -7,7 +7,7 @@ import org.bukkit.entity.Player
 
 /**
  * プレイヤー限定のコマンドの基底クラス
- * @author Xeltica
+ * @author Lutica
  */
 abstract class CommandPlayerOnlyBase : CommandBase() {
     /**

@@ -5,6 +5,9 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import work.xeltica.craft.core.api.HookBase
 
+/**
+ * Citizens NPC プラグインとのAPI連携フック。
+ */
 object CitizensHook : HookBase() {
     override val isEnabled = Bukkit.getPluginManager().getPlugin("Citizens") != null
 

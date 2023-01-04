@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 /**
  * メニューのアイテム。
  *
- * @author Xeltica
+ * @author Lutica
  */
 public class MenuItem {
     private final String name;
