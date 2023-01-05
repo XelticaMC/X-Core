@@ -7,7 +7,7 @@ import work.xeltica.craft.core.modules.transferPlayerData.TransferPlayerDataEven
 class HintHandler : Listener {
     @EventHandler
     fun onTransferPlayerData(e: TransferPlayerDataEvent) {
-        for (hintName in HintModule.getArchived(e.from)) {
+        for (hintName in HintModule.getAllAchievedHintNames(e.from)) {
             for (hint in Hint.values()) {
                 if (hint.hintName == hintName) {
                     HintModule.achieve(e.to, hint, false)
@@ -15,6 +15,6 @@ class HintHandler : Listener {
                 }
             }
         }
-        HintModule.deleteArchiveData(e.from)
+        HintModule.clearHints(e.from)
     }
 }

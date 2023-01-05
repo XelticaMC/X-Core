@@ -11,6 +11,9 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import java.util.UUID
 
+/**
+ * スタンプラリー機能を提供するモジュールです。
+ */
 object StampRallyModule : ModuleBase() {
     const val CREATE_PERMISSION = "otanoshimi.stamp.create"
     const val DESTROY_PERMISSION = "otanoshimi.stamp.destroy"
@@ -26,6 +29,9 @@ object StampRallyModule : ModuleBase() {
         registerCommand("stamp", StampCommand())
     }
 
+    /**
+     * スタンプラリーの周回が完了したプレイヤーの一覧を取得します。
+     */
     fun getDonePlayerList(): List<OfflinePlayer> {
         val keys = activatedStamp.conf.getKeys(false)
         val players = mutableListOf<OfflinePlayer>()
@@ -38,6 +44,9 @@ object StampRallyModule : ModuleBase() {
         return players
     }
 
+    /**
+     * [player] が スタンプ [stampName] を達成したとマークします。
+     */
     fun activate(player: Player, stampName: String) {
         if (!contains(stampName)) return
 
@@ -62,6 +71,9 @@ object StampRallyModule : ModuleBase() {
         }
     }
 
+    /**
+     * [player] がスタンプラリーを達成したかどうかを取得します。
+     */
     fun isStampAchieved(player: Player): Boolean {
         val entireStamp = HashSet(getEntireStampList())
         val activated = activatedStamp.conf.getStringList(player.uniqueId.toString())
@@ -69,19 +81,31 @@ object StampRallyModule : ModuleBase() {
         return entireStamp.isEmpty()
     }
 
+    /**
+     * 全てのスタンプ一覧を取得します。
+     */
     fun getEntireStampList(): List<String> {
         return stampList.conf.getStringList("stamps")
     }
 
+    /**
+     * [player] が達成したスタンプの一覧を取得します。
+     */
     fun getActivatedStampList(player: Player): List<String> {
         return activatedStamp.conf.getStringList(player.uniqueId.toString())
     }
 
+    /**
+     * [stampName] で表されるスタンプの詳細情報を取得します。
+     */
     fun getStampInfo(stampName: String): Stamp {
         val data = stampList.conf.get(stampName)
         return Stamp.deserialize(data as MemorySection)
     }
 
+    /**
+     * スタンプを [stampName] という名前で、 [location] に新規作成します。
+     */
     fun create(stampName: String, location: Location) {
         if (contains(stampName)) return
         val stamps = getEntireStampList()
@@ -95,11 +119,17 @@ object StampRallyModule : ModuleBase() {
         stampList.save()
     }
 
+    /**
+     * スタンプ [stampName] が存在するかどうかを取得します。
+     */
     fun contains(stampName: String): Boolean {
         val stamps = getEntireStampList()
         return stamps.contains(stampName)
     }
 
+    /**
+     * スタンプ [stampName] を削除します。
+     */
     fun destroy(stampName: String) {
         if (!contains(stampName)) return
         val stamps = stampList.conf.getStringList("stamps")

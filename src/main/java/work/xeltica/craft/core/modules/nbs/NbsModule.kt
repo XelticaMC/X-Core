@@ -23,6 +23,9 @@ import java.io.File
 import java.io.IOException
 import java.util.UUID
 
+/**
+ * NoteBlock Studioで作成された音楽の再生機能を提供します。
+ */
 object NbsModule : ModuleBase() {
     override fun onEnable() {
         ConfigurationSerialization.registerClass(NbsModel::class.java, "NbsModel")

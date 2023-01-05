@@ -4,6 +4,9 @@ import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import work.xeltica.craft.core.utils.CastHelper
 
+/**
+ * タイムアタックカウンターの設置情報を保持する、シリアライズ可能なクラスです。
+ */
 class CounterData(
     val name: String, val location1: Location, val location2: Location, val isDaily: Boolean,
     var javaRankingId: String?, var bedrockRankingId: String?, var uwpRankingId: String?, var phoneRankingId: String?,

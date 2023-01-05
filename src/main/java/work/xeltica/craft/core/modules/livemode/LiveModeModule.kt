@@ -7,6 +7,9 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import java.util.UUID
 
+/**
+ * 配信モード機能を提供するモジュール。
+ */
 object LiveModeModule : ModuleBase() {
     val liveBarMap = HashMap<UUID, BossBar>()
 
@@ -15,6 +18,9 @@ object LiveModeModule : ModuleBase() {
         registerHandler(LiveModeHandler())
     }
 
+    /**
+     * [player] の配信モードを [isLive] に設定します。
+     */
     fun setLiveMode(player: Player, isLive: Boolean) {
         if (isLive == isLiveMode(player)) return
         if (isLive) {
@@ -31,6 +37,9 @@ object LiveModeModule : ModuleBase() {
         }
     }
 
+    /**
+     * [player] が配信モードかどうかを取得します。
+     */
     fun isLiveMode(player: Player): Boolean {
         return liveBarMap.containsKey(player.uniqueId)
     }

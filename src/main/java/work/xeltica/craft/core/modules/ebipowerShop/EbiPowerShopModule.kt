@@ -8,6 +8,9 @@ import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
 import work.xeltica.craft.core.utils.CastHelper
 import java.io.IOException
 
+/**
+ * エビパワーストアおよびエビパワードラッグストアの機能を提供するモジュールです。
+ */
 object EbiPowerShopModule : ModuleBase() {
     private const val CONFIG_KEY_SHOP_ITEMS = "shopItems"
     private const val CONFIG_KEY_EFFECT_SHOP_ITEMS = "effectShopItems"
@@ -40,6 +43,9 @@ object EbiPowerShopModule : ModuleBase() {
         registerCommand("epeffectshop", EpEffectShopCommand())
     }
 
+    /**
+     * エビパワーストアに商品を追加します。
+     */
     fun addItem(item: EbiPowerItem) {
         shopItems.add(item)
         ep.conf.set(CONFIG_KEY_SHOP_ITEMS, shopItems)
@@ -50,6 +56,9 @@ object EbiPowerShopModule : ModuleBase() {
         }
     }
 
+    /**
+     * エビパワーストアから商品を削除します。
+     */
     fun deleteItem(item: EbiPowerItem) {
         shopItems.remove(item)
         ep.conf.set(CONFIG_KEY_SHOP_ITEMS, shopItems)
@@ -60,6 +69,9 @@ object EbiPowerShopModule : ModuleBase() {
         }
     }
 
+    /**
+     * エビパワードラッグストアに商品を追加します。
+     */
     fun addEffectItem(item: EbiPowerEffect) {
         effectShopItems.add(item)
         ep.conf.set(CONFIG_KEY_EFFECT_SHOP_ITEMS, effectShopItems)
@@ -70,6 +82,9 @@ object EbiPowerShopModule : ModuleBase() {
         }
     }
 
+    /**
+     * エビパワードラッグストアから商品を削除します。
+     */
     fun deleteEffectItem(item: EbiPowerEffect) {
         effectShopItems.remove(item)
         ep.conf.set(CONFIG_KEY_EFFECT_SHOP_ITEMS, effectShopItems)
@@ -80,21 +95,24 @@ object EbiPowerShopModule : ModuleBase() {
         }
     }
 
-    fun tryBuyItem(p: Player, item: EbiPowerItem): Result {
+    /**
+     * エビパワーストアで [player] が [item] を購入するのを試みます。
+     */
+    fun tryBuyItem(player: Player, item: EbiPowerItem): Result {
         val isFree = item.cost == 0
-        if (!isFree && !EbiPowerModule.tryTake(p, item.cost)) {
+        if (!isFree && !EbiPowerModule.tryTake(player, item.cost)) {
             return Result.NO_ENOUGH_POWER
         }
-        val res = p.inventory.addItem(item.item.clone())
+        val res = player.inventory.addItem(item.item.clone())
         return if (res.size != 0) {
             // 購入失敗なので返金
-            if (!isFree) EbiPowerModule.tryGive(p, item.cost)
+            if (!isFree) EbiPowerModule.tryGive(player, item.cost)
             val partiallyAddedItemsCount = item.item.amount - res[0]!!.amount
             if (partiallyAddedItemsCount > 0) {
                 // 部分的に追加されてしまったアイテムを剥奪
                 val partial = item.item.clone()
                 partial.amount = partiallyAddedItemsCount
-                p.inventory.removeItemAnySlot(partial)
+                player.inventory.removeItemAnySlot(partial)
             }
             Result.NO_ENOUGH_INVENTORY
         } else {
@@ -102,12 +120,15 @@ object EbiPowerShopModule : ModuleBase() {
         }
     }
 
-    fun tryBuyEffectItem(p: Player, item: EbiPowerEffect): Result {
+    /**
+     * エビパワードラッグストアで [player] が [item] を購入するのを試みます。
+     */
+    fun tryBuyEffectItem(player: Player, item: EbiPowerEffect): Result {
         val isFree = item.cost == 0
-        if (!isFree && !EbiPowerModule.tryTake(p, item.cost)) {
+        if (!isFree && !EbiPowerModule.tryTake(player, item.cost)) {
             return Result.NO_ENOUGH_POWER
         }
-        p.addPotionEffect(item.toPotionEffect())
+        player.addPotionEffect(item.toPotionEffect())
         return Result.SUCCESS
     }
 

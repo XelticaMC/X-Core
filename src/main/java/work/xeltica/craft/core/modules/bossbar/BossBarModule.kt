@@ -5,6 +5,9 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
 
+/**
+ * 画面上部のボスバーにアクセスするモジュールです。
+ */
 object BossBarModule : ModuleBase() {
     private val bossBars: ArrayList<BossBar> = ArrayList()
 

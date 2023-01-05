@@ -15,11 +15,17 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.item.ItemModule.isCustomItem
 import work.xeltica.craft.core.utils.CollectionHelper.sum
 
+/**
+ * ディスペンサーと輝く額縁を使った自動クラフト機能を提供します。
+ */
 object AutoCrafterModule : ModuleBase() {
     override fun onEnable() {
         registerHandler(AutoCrafterHandler())
     }
 
+    /**
+     * [block] の付近にある、輝く額縁を探して返します。
+     */
     fun getNearbyGlowItemFrame(block: Block): GlowItemFrame? {
         val frames = block.location.toCenterLocation().getNearbyEntitiesByType(GlowItemFrame::class.java, 1.0)
 
@@ -29,6 +35,9 @@ object AutoCrafterModule : ModuleBase() {
         }
     }
 
+    /**
+     * [result] が完成するような作業台レシピを全て検索し、返します。
+     */
     fun getAllRecipesOf(result: ItemStack): List<CraftRecipe> {
         return Bukkit.getRecipesFor(result).mapNotNull {
             when (it) {
@@ -51,6 +60,9 @@ object AutoCrafterModule : ModuleBase() {
         }
     }
 
+    /**
+     * [dispenser] を用いて、 [recipes] の中からクラフト可能なものをクラフトします。
+     */
     fun autoCraft(dispenser: Dispenser, recipes: List<CraftRecipe>) {
         val blockData = dispenser.blockData
         val inventory = dispenser.inventory

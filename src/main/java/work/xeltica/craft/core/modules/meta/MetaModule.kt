@@ -10,6 +10,9 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.hooks.DiscordHook
 import java.io.IOException
 
+/**
+ * X-Core のバージョンおよびチェンジログを保持し、更新を検知して通知する機能を提供するモジュールです。
+ */
 object MetaModule : ModuleBase() {
     val changeLog = listOf(
         "システム内部を大規模に書き直しました。",

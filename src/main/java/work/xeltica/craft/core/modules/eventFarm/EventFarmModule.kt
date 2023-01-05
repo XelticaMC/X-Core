@@ -16,6 +16,9 @@ import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.utils.Ticks
 import java.util.*
 
+/**
+ * 農業祭イベント用、じゃがいも掘りゲームを提供するモジュール。
+ */
 object EventFarmModule : ModuleBase() {
     override fun onEnable() {
         init()
@@ -31,6 +34,9 @@ object EventFarmModule : ModuleBase() {
         )
     }
 
+    /**
+     * 戦績を初期化します。
+     */
     fun init() {
         board.clear()
     }

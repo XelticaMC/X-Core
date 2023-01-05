@@ -12,6 +12,9 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import work.xeltica.craft.core.api.ModuleBase
 
+/**
+ * カスタムアイテムを管理するモジュールです。
+ */
 object ItemModule : ModuleBase() {
     const val ITEM_NAME_XPHONE = "xphone"
     const val ITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT = "ticket_wildareab_ocean_monument"
@@ -27,19 +30,31 @@ object ItemModule : ModuleBase() {
         registerHandler(TicketWildareaBHandler())
     }
 
+    /**
+     * [key] に対応するカスタムアイテムを取得します。
+     */
     fun getItem(key: String): ItemStack {
-        if (!customItems.contains(key)) throw IllegalArgumentException()
-        return customItems[key]!!.clone()
+        val item = customItems[key] ?: throw IllegalArgumentException()
+        return item.clone()
     }
 
+    /**
+     * このアイテムがカスタムアイテムであるかどうかを取得します。
+     */
     fun ItemStack.isCustomItem(): Boolean {
         return this.hasLore()
     }
 
+    /**
+     * このアイテムが lore プロパティを保有しているかどうかを取得します。
+     */
     fun ItemStack.hasLore(): Boolean {
         return this.lore()?.isNotEmpty() ?: false
     }
 
+    /**
+     * カスタムアイテムを作成します。
+     */
     fun createCustomItem(name: String, vararg lore: String): ItemStack {
         val st = ItemStack(Material.KNOWLEDGE_BOOK)
 
@@ -52,6 +67,9 @@ object ItemModule : ModuleBase() {
         return st
     }
 
+    /**
+     * [stack1] と [stack2] が等しいかどうかを検証します。
+     */
     fun compareCustomItem(stack1: ItemStack, stack2: ItemStack): Boolean {
         if (stack1.type != stack2.type) return false
 
@@ -67,6 +85,9 @@ object ItemModule : ModuleBase() {
         return lore1 == lore2
     }
 
+    /**
+     * 必要に応じて [player] にX Phoneを渡します。
+     */
     fun givePhoneIfNeeded(player: Player) {
         val inv = player.inventory
         val phone = getItem(ITEM_NAME_XPHONE)
@@ -74,6 +95,9 @@ object ItemModule : ModuleBase() {
         if (!hasItem) inv.addItem(phone)
     }
 
+    /**
+     * 指定したプレイヤーの頭を取得します。
+     */
     fun getPlayerHead(player: Player): ItemStack {
         val stack = ItemStack(Material.PLAYER_HEAD)
         stack.editMeta {
@@ -84,10 +108,16 @@ object ItemModule : ModuleBase() {
         return stack
     }
 
+    /**
+     * Bukkit APIを用いてプレイヤーの頭情報を解決します。
+     */
     private fun resolvePlayerHeadWithBukkit(player: Player, meta: SkullMeta) {
         meta.playerProfile = player.playerProfile
     }
 
+    /**
+     * カスタムアイテムを定義します。
+     */
     private fun registerItems() {
         customItems[ITEM_NAME_XPHONE] = createCustomItem("X Phone SE", "XelticaMCの独自機能にアクセスできるスマホ。")
         customItems[ITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT] =

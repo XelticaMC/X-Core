@@ -81,6 +81,9 @@ class XCorePlugin : JavaPlugin() {
         return CommandRegistry.onCommand(sender, command, label, args)
     }
 
+    /**
+     * 連携フックを全て有効化します。
+     */
     private fun loadHooks() {
         // 連携フックの有効化
         hooks.forEach {
@@ -94,6 +97,9 @@ class XCorePlugin : JavaPlugin() {
         }
     }
 
+    /**
+     * 連携フックを全て無効化します。
+     */
     private fun unloadHooks() {
         // 連携フックの有効化
         hooks.forEach {
@@ -107,6 +113,9 @@ class XCorePlugin : JavaPlugin() {
         }
     }
 
+    /**
+     * モジュールを全て有効化します。
+     */
     private fun loadModules() {
         // モジュールの有効化フック
         modules.forEach {
@@ -130,6 +139,9 @@ class XCorePlugin : JavaPlugin() {
         }
     }
 
+    /**
+     * モジュールを全て無効化します。
+     */
     private fun unloadModules() {
         // モジュールの無効化フック
         modules.forEach {
@@ -201,7 +213,6 @@ class XCorePlugin : JavaPlugin() {
 
     companion object {
         @JvmStatic
-        lateinit var instance: XCorePlugin
-            private set
+        lateinit var instance: XCorePlugin private set
     }
 }

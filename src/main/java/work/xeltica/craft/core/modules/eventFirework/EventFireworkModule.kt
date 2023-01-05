@@ -15,6 +15,11 @@ import work.xeltica.craft.core.api.commands.CommandRegistry
 import work.xeltica.craft.core.utils.Ticks
 import java.util.Random
 
+/**
+ * 花火大会イベント用のモジュール。
+ *
+ * yaml形式で花火を打ち上げるためのスクリプトを実行できる機能を持っています。
+ */
 object EventFireworkModule : ModuleBase() {
     lateinit var scripts: Map<String, List<OperationBase>>
         private set

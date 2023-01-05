@@ -4,6 +4,9 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable
 import org.bukkit.inventory.ItemStack
 import work.xeltica.craft.core.utils.CastHelper
 
+/**
+ * エビパワーストアで購入可能なアイテムを表す、シリアライズ可能なデータクラス。
+ */
 data class EbiPowerItem(val item: ItemStack, val cost: Int) : Cloneable, ConfigurationSerializable {
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()

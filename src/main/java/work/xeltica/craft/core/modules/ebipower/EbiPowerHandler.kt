@@ -26,7 +26,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.event.entity.EntityBreedEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDeathEvent
-import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import work.xeltica.craft.core.api.events.RealTimeNewDayEvent
@@ -36,7 +35,6 @@ import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.transferPlayerData.TransferPlayerDataEvent
 import work.xeltica.craft.core.modules.world.WorldModule
-import java.util.Date
 import java.util.Random
 
 /**
@@ -46,7 +44,6 @@ import java.util.Random
 class EbiPowerHandler : Listener {
     companion object {
         private const val HARVEST_POWER_MULTIPLIER = 1
-        private const val LOGIN_BONUS_POWER = 50
         const val BREAK_BLOCK_BONUS_LIMIT = 4000
     }
 
@@ -92,6 +89,21 @@ class EbiPowerHandler : Listener {
         breakBonusList.add(Material.PRISMARINE)
     }
 
+    /**
+     * プレイヤーが、特別に愛護・庇護すべき動物を殴った場合、ペナルティを生じさせます。
+     *
+     * ### ネコを殴った場合
+     * あまりにもありえない行為のため考えたくもありませんが、
+     * そのような人からは100EPを没収します。
+     *
+     * ### 他者のペットを殴った場合
+     * 動物愛護の観点だけでなく、他者の所有物に損害を及ぼしたという点でも10EPを没収します。
+     * ただし、スケルトンホースはスケルトンが手懐けている場合もあるため、例外です。
+     *
+     * ### 子供のモブを殴った場合
+     * 子供に危害を加えるのは人として最低な行為です。10EPを没収します。
+     * ただし、モンスターの子供は例外です。
+     */
     @EventHandler(priority = EventPriority.NORMAL)
     fun onPlayerDamageFriendlyCreatures(e: EntityDamageByEntityEvent) {
         val killer = e.damager as? Player ?: return
@@ -118,6 +130,9 @@ class EbiPowerHandler : Listener {
         }
     }
 
+    /**
+     * プレイヤーがモブを倒した時にエビパワーを付与します。
+     */
     @EventHandler
     fun onPlayerKillMobs(e: EntityDeathEvent) {
         val victim = e.entity
@@ -146,18 +161,10 @@ class EbiPowerHandler : Listener {
         }
     }
 
-    @EventHandler
-    fun onPlayerLoggedIn(e: PlayerJoinEvent) {
-        val now = Date()
-        val record = PlayerStore.open(e.player)
-        val prev = Date(record.getLong(EbiPowerModule.PS_KEY_LAST_JOINED, now.time))
-        if (prev.year != now.year && prev.month != now.month && prev.date != now.date) {
-            EbiPowerModule.tryGive(e.player, LOGIN_BONUS_POWER)
-            notification(e.player, "ログボ達成！" + LOGIN_BONUS_POWER.toString() + "EPを獲得。")
-        }
-        record[EbiPowerModule.PS_KEY_LAST_JOINED] = now.time
-    }
-
+    /**
+     * 最大まで成長した作物を伐採したとき、エビパワーを付与します。
+     * 付与される値は、作物1つにつき（1+幸運の数値）EPです。
+     */
     @EventHandler
     fun onHarvestCrops(e: BlockBreakEvent) {
         val p = e.player
@@ -170,15 +177,17 @@ class EbiPowerHandler : Listener {
             EbiPowerModule.tryGive(p, power)
             // もし幸運ボーナスがあれば30%の確率で耐久が減っていく
             if (bonus > 0 && random.nextInt(100) < 30) {
-                tool.editMeta { meta ->
-                    if (meta is Damageable) {
-                        meta.damage += 1
-                    }
+                tool.editMeta {
+                    if (it !is Damageable) return@editMeta
+                    it.damage += 1
                 }
             }
         }
     }
 
+    /**
+     * 動物を繁殖させた場合、2EP貰えます。
+     */
     @EventHandler
     fun onBreedEntities(e: EntityBreedEvent) {
         val breeder = e.breeder as? Player ?: return
@@ -187,6 +196,9 @@ class EbiPowerHandler : Listener {
         HintModule.achieve(breeder, Hint.BREED_AND_EARN_MONEY)
     }
 
+    /**
+     * ブロックを採掘した場合、ブロックの種別やツルハシの幸運値によってエビパワーを貰えます。
+     */
     @EventHandler
     fun onMineBlocks(e: BlockBreakEvent) {
         if (!breakBonusList.contains(e.block.type)) return

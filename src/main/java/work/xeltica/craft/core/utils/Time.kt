@@ -1,6 +1,9 @@
 package work.xeltica.craft.core.utils
 
 object Time {
+    /**
+     * ミリ秒表現の時間を文字列に変換します。
+     */
     @JvmStatic
     fun msToString(timeInMilliseconds: Long): String {
         val ms = timeInMilliseconds % 1000

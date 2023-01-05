@@ -10,11 +10,17 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.hooks.VaultHook
 import java.util.logging.Logger
 
+/**
+ * EbiPay アプリを提供するモジュールです。
+ */
 object PaymentsModule : ModuleBase() {
     override fun onEnable() {
         logger = Bukkit.getLogger()
     }
 
+    /**
+     * [from] から [to] に [amount] EPを支払います。
+     */
     fun pay(from: Player, to: OfflinePlayer, amount: Int) {
         if (!VaultHook.isEnabled) return
         val economy = VaultHook.rawEconomyApi

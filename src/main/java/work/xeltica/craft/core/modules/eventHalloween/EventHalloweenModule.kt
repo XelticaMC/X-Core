@@ -33,6 +33,9 @@ import java.util.GregorianCalendar
 import java.util.Random
 import java.util.function.Consumer
 
+/**
+ * ハロウィンイベント用のモジュール。
+ */
 object EventHalloweenModule : ModuleBase() {
     private const val CONFIG_NAME = "candyStore"
     private const val CONFIG_KEY_ITEMS = "items"

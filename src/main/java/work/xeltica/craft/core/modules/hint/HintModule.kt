@@ -18,7 +18,7 @@ import java.io.IOException
 import java.util.*
 
 /**
- * プレイヤーのヒントを達成する処理や、ヒントを達成しているかどうかの取得などを行います。
+ * プレイヤーが遊ぶ上での足掛かりとなるヒント機能を提供するモジュールです。
  * @author Lutica
  */
 object HintModule : ModuleBase() {
@@ -31,12 +31,18 @@ object HintModule : ModuleBase() {
         registerHandler(HintHandler())
     }
 
-    fun getArchived(p: Player): List<String> {
-        return open(p)
+    /**
+     * [player] が達成したヒントの名前リストを取得します。
+     */
+    fun getAllAchievedHintNames(player: Player): MutableList<String> {
+        return getAllAchievedHintNames(player.uniqueId)
     }
 
-    fun deleteArchiveData(p: Player) {
-        hints.conf[p.uniqueId.toString()] = null
+    /**
+     * [player] のヒント達成履歴を消去します。
+     */
+    fun clearHints(player: Player) {
+        hints.conf[player.uniqueId.toString()] = null
         try {
             save()
         } catch (e: IOException) {
@@ -44,19 +50,24 @@ object HintModule : ModuleBase() {
         }
     }
 
-    fun hasAchieved(p: Player, hint: Hint): Boolean {
-        return open(p).contains(hint.name)
+    /**
+     * [player] が [hint] を達成済みかどうかを取得します。
+     */
+    fun hasAchieved(player: Player, hint: Hint): Boolean {
+        return hint.name in getAllAchievedHintNames(player)
     }
 
-    fun achieve(p: Player, hint: Hint, reward: Boolean) {
+    /**
+     * [player] が [hint] を達成します。[reward] がtrueの場合、リワードを与えます。
+     */
+    fun achieve(player: Player, hint: Hint, reward: Boolean = true) {
+        if (hasAchieved(player, hint)) return
+        val list = getAllAchievedHintNames(player)
+        list.add(hint.name)
+        hints.conf[player.uniqueId.toString()] = list
         if (reward) {
-            achieve(p, hint)
-            return
+            giveReward(player, hint)
         }
-        if (hasAchieved(p, hint)) return
-        val list = open(p)
-        list.add(hint.name)
-        hints.conf[p.uniqueId.toString()] = list
         try {
             save()
         } catch (e: IOException) {
@@ -64,21 +75,21 @@ object HintModule : ModuleBase() {
         }
     }
 
-    fun achieve(p: Player, hint: Hint) {
-        if (hasAchieved(p, hint)) return
-        val list = open(p)
-        list.add(hint.name)
-        hints.conf[p.uniqueId.toString()] = list
+    private fun getAllAchievedHintNames(id: UUID): MutableList<String> {
+        return hints.conf.getStringList(id.toString())
+    }
+
+    private fun giveReward(player: Player, hint: Hint) {
         if (hint.power > 0) {
-            EbiPowerModule.tryGive(p, hint.power)
+            EbiPowerModule.tryGive(player, hint.power)
         }
-        p.playSound(p.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1.4f)
+        player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1.4f)
 
         val hintNameComponent = Component.text(hint.hintName).color(TextColor.color(0x03A9F4))
             .hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(hint.description)))
             .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, "/hint " + hint.name))
 
-        val component = p.displayName().color(TextColor.color(0x4CAF50))
+        val component = player.displayName().color(TextColor.color(0x4CAF50))
             .append(Component.text("さんがヒント「"))
             .append(hintNameComponent)
             .append(Component.text("」を達成しました！"))
@@ -96,19 +107,6 @@ object HintModule : ModuleBase() {
                 )
             )
         }
-        try {
-            save()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun open(p: Player): MutableList<String> {
-        return open(p.uniqueId)
-    }
-
-    private fun open(id: UUID): MutableList<String> {
-        return hints.conf.getStringList(id.toString())
     }
 
     @Throws(IOException::class)

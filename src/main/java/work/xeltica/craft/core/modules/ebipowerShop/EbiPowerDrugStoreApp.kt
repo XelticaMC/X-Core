@@ -8,7 +8,7 @@ import work.xeltica.craft.core.modules.xphone.AppBase
  * エビパワードラッグストアアプリ。
  * @author Lutica
  */
-class EbipowerDrugStoreApp : AppBase() {
+class EbiPowerDrugStoreApp : AppBase() {
     override fun getName(player: Player): String = "エビパワードラッグストア"
 
     override fun getIcon(player: Player): Material = Material.BREWING_STAND

@@ -10,6 +10,9 @@ import work.xeltica.craft.core.gui.SoundPitch
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 
+/**
+ * チャットのテキストをネコ語に置き換える、ネコモードを提供するモジュールです。
+ */
 object CatModule : ModuleBase() {
     const val PS_KEY_CAT = "cat"
 
@@ -18,24 +21,32 @@ object CatModule : ModuleBase() {
         registerCommand("cat", CommandCat())
     }
 
-    fun nyaize(m: String): String {
-        var mes = m
-        mes = mes.replace("な", "にゃ")
-        mes = mes.replace("ナ", "ニャ")
-        mes = mes.replace("ﾅ", "ﾆｬ")
-        mes = mes.replace("everyone", "everynyan")
-        mes = mes.replace("morning", "mornyan")
-        mes = mes.replace("na", "nya")
-        mes = mes.replace("EVERYONE", "EVERYNYAN")
-        mes = mes.replace("MORNING", "MORNYAN")
-        mes = mes.replace("NA", "NYA")
-        return mes
+    /**
+     * [text] をネコ語に変換します。
+     */
+    fun nyaize(text: String): String {
+        return text
+            .replace("な", "にゃ")
+            .replace("ナ", "ニャ")
+            .replace("ﾅ", "ﾆｬ")
+            .replace("everyone", "everynyan")
+            .replace("morning", "mornyan")
+            .replace("na", "nya")
+            .replace("EVERYONE", "EVERYNYAN")
+            .replace("MORNING", "MORNYAN")
+            .replace("NA", "NYA")
     }
 
+    /**
+     * [player] がネコモードを true にしているかどうかを取得します。
+     */
     fun isCat(player: OfflinePlayer): Boolean {
         return PlayerStore.open(player).getBoolean(PS_KEY_CAT)
     }
 
+    /**
+     * [player] のネコモードを [value] に設定します。
+     */
     fun setCat(player: Player, value: Boolean) {
         PlayerStore.open(player)[PS_KEY_CAT] = value
         if (value) {

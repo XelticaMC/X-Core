@@ -13,6 +13,9 @@ import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import java.util.Objects
 
+/**
+ * モブボール機能を提供するモジュールです。
+ */
 object MobBallModule : ModuleBase() {
     const val PS_KEY_DEX = "mob_dex"
 
@@ -38,6 +41,9 @@ object MobBallModule : ModuleBase() {
         }
     }
 
+    /**
+     * モブボールを [amount] つだけ作成します。
+     */
     fun createMobBall(amount: Int): ItemStack {
         val item = ItemStack(Material.EGG, amount)
         item.addUnsafeEnchantment(Enchantment.DURABILITY, 1)
@@ -49,10 +55,16 @@ object MobBallModule : ModuleBase() {
         return item
     }
 
+    /**
+     * [item] がモブボールかどうかを取得します。
+     */
     fun isMobBall(item: ItemStack): Boolean {
         return isBall(item, createMobBall(1))
     }
 
+    /**
+     * [spawnEgg] がモブケースとして機能するように、メタ情報を付与します。
+     */
     fun setMobCaseMeta(spawnEgg: ItemStack) {
         val eggNBT = NBTItem(spawnEgg)
         val caseTitle = eggNBT.getString("mobCase") ?: return
@@ -69,6 +81,9 @@ object MobBallModule : ModuleBase() {
         }
     }
 
+    /**
+     * [mob] の捕獲率を算出します。
+     */
     fun calculate(mob: Mob): Int {
         var mobType = mob.type.toString().lowercase()
         if (mob is Axolotl && mob.variant == Axolotl.Variant.BLUE) mobType = "_blue_axolotl"
@@ -78,6 +93,9 @@ object MobBallModule : ModuleBase() {
         return (100 * ((1 - hp / (hpMax * 1.6)) * tierDifficulty)).toInt()
     }
 
+    /**
+     * [item] が [ball] と等しいかどうかを取得します。
+     */
     private fun isBall(item: ItemStack, ball: ItemStack): Boolean {
         if (item.type != Material.EGG) return false
         val lore = item.lore() ?: return false

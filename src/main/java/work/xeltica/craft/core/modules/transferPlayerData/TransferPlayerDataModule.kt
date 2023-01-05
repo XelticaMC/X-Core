@@ -20,6 +20,9 @@ object TransferPlayerDataModule : ModuleBase() {
 
     }
 
+    /**
+     * [from] から [to] へのプレイヤーデータの引っ越しをリクエストします。
+     */
     fun requestTransfer(from: Player, to: Player): PendingData {
         if (pendingMap.containsKey(from.uniqueId) || pendingMap.containsKey(to.uniqueId)) {
             throw Exception()
@@ -33,15 +36,24 @@ object TransferPlayerDataModule : ModuleBase() {
         return pendingData
     }
 
+    /**
+     * このプレイヤーの引っ越し保留情報を取得します。
+     */
     fun Player.getTransferPendingData(): PendingData? {
         return pendingMap[uniqueId]
     }
 
+    /**
+     * このプレイヤーの引っ越し状況を取得します。
+     */
     fun Player.getTransferState(): TransferState {
         val data = pendingMap[uniqueId] ?: return TransferState.NONE
         return if (data.from.uniqueId == uniqueId) TransferState.FROM else TransferState.TO
     }
 
+    /**
+     * 引っ越しを開始します。
+     */
     fun PendingData.process() {
         from.sendMessage("引っ越しを開始します")
         to.sendMessage("引っ越しを開始します")
@@ -57,6 +69,9 @@ object TransferPlayerDataModule : ModuleBase() {
         pendingMap.remove(to.uniqueId)
     }
 
+    /**
+     * 引っ越しをキャンセルします。
+     */
     fun PendingData.cancel() {
         from.sendMessage("引っ越しがキャンセルされました")
         pendingMap.remove(from.uniqueId)

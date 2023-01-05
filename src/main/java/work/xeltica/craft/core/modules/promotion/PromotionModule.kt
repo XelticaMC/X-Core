@@ -16,6 +16,9 @@ import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.utils.Ticks
 
+/**
+ * 市民昇格制度を管理するモジュールです。
+ */
 object PromotionModule : ModuleBase() {
     const val PS_KEY_NEWCOMER_TIME = "newcomer_time"
 
@@ -34,10 +37,16 @@ object PromotionModule : ModuleBase() {
         luckPerms.contextManager.unregisterCalculator(calculator)
     }
 
+    /**
+     * [player] が市民ロールかどうかを取得します。
+     */
     fun isCitizen(player: Player): Boolean {
         return player.hasPermission("otanoshimi.citizen")
     }
 
+    /**
+     * [player] の市民昇格条件などを含むメッセージを取得します。
+     */
     fun getPromoInfo(player: Player): String {
         val builder = StringBuilder()
         val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider ?: throw Exception()

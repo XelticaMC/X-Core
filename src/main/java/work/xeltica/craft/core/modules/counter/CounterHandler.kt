@@ -169,6 +169,9 @@ class CounterHandler : Listener {
         }
     }
 
+    /**
+     * 日付が来たら、タイムアタックのプレイ済み履歴をリセットする
+     */
     @EventHandler
     fun onDailyReset(e: RealTimeNewDayEvent) {
         try {
@@ -194,7 +197,7 @@ class CounterHandler : Listener {
             addRanking(counter.javaRankingId, player, diff)
         }
     }
-
+    
     private fun addRanking(id: String?, player: Player, diff: Int) {
         if (id == null) return
         val ranking = RankingModule[id] ?: return

@@ -5,6 +5,9 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import work.xeltica.craft.core.utils.Ticks
 
+/**
+ * エビパワードラッグストアで購入可能なポーションを表す、シリアライズ可能なデータクラス。
+ */
 data class EbiPowerEffect(val effectType: PotionEffectType, val level: Int, val time: Int, val cost: Int) : Cloneable, ConfigurationSerializable {
     override fun serialize(): MutableMap<String, Any> {
         val result = LinkedHashMap<String, Any>()

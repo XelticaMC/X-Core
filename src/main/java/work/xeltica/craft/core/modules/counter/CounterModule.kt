@@ -9,6 +9,9 @@ import work.xeltica.craft.core.api.playerStore.PlayerStore
 import java.io.IOException
 import java.util.*
 
+/**
+ * タイムアタック機能と、それを実行するためのカウンターを設置する機能を提供するモジュールです。
+ */
 object CounterModule : ModuleBase() {
     lateinit var config: Config
 
@@ -40,42 +43,35 @@ object CounterModule : ModuleBase() {
     }
 
     /**
-     * 名前を用いてCounterDataを取得します。
-     * @param name CounterDataの名前
-     * @return 対応するCounterData。なければnull
+     * [name] という名前の [CounterData] を取得します。
      */
     operator fun get(name: String): CounterData? {
         return counters[name]
     }
 
     /**
-     * 始点座標を用いてCounterDataを取得します。
-     * @return 対応するCounterData。なければnull
+     * [location] を始点とする [CounterData] を取得します。
      */
     fun getByLocation1(location: Location): CounterData? {
         return location1Index[location]
     }
 
     /**
-     * 終点座標を用いてCounterDataを取得します。
-     * @return 対応するCounterData。なければnull
+     * [location] を終点とする [CounterData] を取得します。
      */
     fun getByLocation2(location: Location): CounterData? {
         return location2Index[location]
     }
 
     /**
-     * カウンターの一覧を取得します。
-     * @return カウンターの一覧。
+     * [CounterData] の一覧を取得します。
      */
     fun getCounters(): List<CounterData> {
         return counters.values.stream().toList()
     }
 
     /**
-     * CounterDataを追加します。
-     * @param data 追加するデータ
-     * @throws IOException 保存に失敗した
+     * [CounterData] を新規追加します。
      */
     @Throws(IOException::class)
     fun add(data: CounterData) {
@@ -85,15 +81,16 @@ object CounterModule : ModuleBase() {
     }
 
     /**
-     * CounterDataを削除します。
-     * @param data 削除するデータ
-     * @throws IOException 保存に失敗した
+     * [CounterData] を削除します。
      */
     @Throws(IOException::class)
     fun remove(data: CounterData) {
         remove(data.name)
     }
 
+    /**
+     * [CounterData] を更新します。
+     */
     @Throws(IOException::class)
     fun update(data: CounterData) {
         require(counters.containsKey(data.name))
@@ -102,9 +99,7 @@ object CounterModule : ModuleBase() {
     }
 
     /**
-     * CounterDataを削除します。
-     * @param name 削除するデータの名前
-     * @throws IOException 保存に失敗した
+     * [CounterData] を削除します。
      */
     @Throws(IOException::class)
     fun remove(name: String) {
@@ -117,7 +112,6 @@ object CounterModule : ModuleBase() {
 
     /**
      * 全プレイヤーのデイリーイベントプレイ履歴を削除します。
-     * @throws IOException 保存に失敗した
      */
     @Throws(IOException::class)
     fun resetAllPlayersPlayedLog() {
@@ -127,7 +121,7 @@ object CounterModule : ModuleBase() {
     /**
      * インデックスにカウンターデータを追加する
      */
-    fun addToIndex(data: CounterData) {
+    private fun addToIndex(data: CounterData) {
         location1Index[data.location1] = data
         location2Index[data.location2] = data
     }
@@ -135,12 +129,12 @@ object CounterModule : ModuleBase() {
     /**
      * インデックスからカウンターデータを削除する
      */
-    fun removeFromIndex(data: CounterData) {
+    private fun removeFromIndex(data: CounterData) {
         location1Index.remove(data.location1)
         location2Index.remove(data.location2)
     }
 
-    fun loadAll() {
+    private fun loadAll() {
         val yml = config.conf
         for (name in yml.getKeys(false)) {
             val counter = yml.getObject(name, CounterData::class.java) as CounterData

@@ -11,8 +11,10 @@ import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 import java.io.IOException
-import java.util.function.Consumer
 
+/**
+ * ワールドの管理や、各ワールドのメタ情報などを提供するモジュール。
+ */
 object WorldModule : ModuleBase() {
     /**
      * 一番最初のスポーンをしているかどうか。
@@ -46,13 +48,22 @@ object WorldModule : ModuleBase() {
         registerCommand("respawn", CommandRespawn())
     }
 
+    /**
+     * [world] に関するワールド情報を取得します。
+     */
     fun getWorldInfo(world: World) = getWorldInfo(world.name)
 
+    /**
+     * [worldName] に対応するワールドのわーるど情報を取得します。
+     */
     fun getWorldInfo(worldName: String) = worldsMap[worldName] ?: WorldInfo(
         worldName,
         worldName,
     )
 
+    /**
+     * [player] の現在位置をディスクに保存します。
+     */
     fun saveCurrentLocation(player: Player) {
         val conf: YamlConfiguration = locationConfig.conf
         val pid = player.uniqueId.toString()
@@ -68,13 +79,19 @@ object WorldModule : ModuleBase() {
         }
     }
 
-    fun getLocation(player: Player, name: String): Location? {
+    /**
+     * ディスクに保存された、[player] の [worldName] における座標を取得します。存在しなければnullを返します。
+     */
+    fun getLocation(player: Player, worldName: String): Location? {
         val conf: YamlConfiguration = locationConfig.conf
         val pid = player.uniqueId.toString()
         val playerSection = conf.getConfigurationSection(pid) ?: return null
-        return playerSection.getLocation(name)
+        return playerSection.getLocation(worldName)
     }
 
+    /**
+     * [player] を [worldName] の初期スポーンに転送します。
+     */
     fun teleport(player: Player, worldName: String) {
         val world = Bukkit.getWorld(worldName)
         if (world == null) {
@@ -84,6 +101,9 @@ object WorldModule : ModuleBase() {
         player.teleportAsync(world.spawnLocation)
     }
 
+    /**
+     * [player] を [worldName] の、ディスクに保存された最終位置に転送します。
+     */
     fun teleportToSavedLocation(player: Player, worldName: String) {
         if (player.world.name == worldName) {
             getInstance().error(player, "既に" + getWorldInfo(worldName).displayName + "にいます。")
@@ -98,15 +118,18 @@ object WorldModule : ModuleBase() {
         player.teleportAsync(loc)
     }
 
+    /**
+     * ディスクに保存された [worldName] の最終位置情報を削除します。
+     */
     fun deleteSavedLocation(worldName: String) {
         val conf: YamlConfiguration = locationConfig.conf
-        conf.getKeys(false).forEach(Consumer { pid: String ->
-            var playerSection = conf.getConfigurationSection(pid)
+        conf.getKeys(false).forEach {
+            var playerSection = conf.getConfigurationSection(it)
             if (playerSection == null) {
-                playerSection = conf.createSection(pid)
+                playerSection = conf.createSection(it)
             }
             playerSection[worldName] = null
-        })
+        }
         try {
             locationConfig.save()
         } catch (e: IOException) {
@@ -114,6 +137,9 @@ object WorldModule : ModuleBase() {
         }
     }
 
+    /**
+     * ディスクに保存された、[player] の [worldName] における最終位置情報を削除します。
+     */
     fun deleteSavedLocation(worldName: String, player: Player) {
         val conf: YamlConfiguration = locationConfig.conf
         val pid = player.uniqueId.toString()

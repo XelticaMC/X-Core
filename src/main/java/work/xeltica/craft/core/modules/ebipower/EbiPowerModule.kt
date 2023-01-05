@@ -15,6 +15,9 @@ import work.xeltica.craft.core.hooks.VaultHook
 import work.xeltica.craft.core.utils.Ticks
 import java.util.Locale
 
+/**
+ * エビパワーを入手する手段や、受け渡しのAPIを提供するモジュールです。
+ */
 object EbiPowerModule : ModuleBase() {
     const val PS_KEY_LAST_JOINED = "last_joined"
     const val PS_KEY_BROKEN_BLOCKS_COUNT = "broken_blocks_count"
@@ -28,20 +31,32 @@ object EbiPowerModule : ModuleBase() {
         config = Config("mobEP")
     }
 
-    fun get(p: Player): Int {
-        return VaultHook.getBalance(p).toInt()
+    /**
+     * [player] の所有エビパワーを取得します。
+     */
+    fun get(player: Player): Int {
+        return VaultHook.getBalance(player).toInt()
     }
 
-    fun tryGive(p: Player, amount: Int): Boolean {
+    /**
+     * [player] に [amount] EPを付与します。
+     */
+    fun tryGive(player: Player, amount: Int): Boolean {
         require(amount > 0) { "amountを0以下の数にはできない" }
-        return VaultHook.tryDepositPlayer(p, amount.toDouble())
+        return VaultHook.tryDepositPlayer(player, amount.toDouble())
     }
 
-    fun tryTake(p: Player, amount: Int): Boolean {
+    /**
+     * [player] から [amount] EPを剥奪します。
+     */
+    fun tryTake(player: Player, amount: Int): Boolean {
         require(amount > 0) { "amountを0以下の数にはできない" }
-        return VaultHook.tryWithdrawPlayer(p, amount.toDouble())
+        return VaultHook.tryWithdrawPlayer(player, amount.toDouble())
     }
 
+    /**
+     * [entity] が倒された時に手に入るEPを取得します。
+     */
     fun getMobDropEP(entity: Entity, event: EntityDeathEvent): Int {
         if (entity.type == EntityType.ENDERMAN) {
             if (event.drops.stream().map { obj: ItemStack -> obj.type }.toList().contains(Material.ENDER_PEARL)) {

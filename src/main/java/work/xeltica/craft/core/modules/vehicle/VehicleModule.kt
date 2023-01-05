@@ -22,6 +22,9 @@ import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.world.WorldModule
 
+/**
+ * トロッコやボートの射出機能、放置された乗り物の自動削除機能などを提供するモジュールです。
+ */
 object VehicleModule : ModuleBase() {
     private lateinit var config: Config
 
@@ -53,18 +56,30 @@ object VehicleModule : ModuleBase() {
         VehicleObserver().runTaskTimer(XCorePlugin.instance, 0L, 1L)
     }
 
+    /**
+     * 乗り物のID一覧を取得します。
+     */
     fun getVehicleIds(): Set<String> {
         return config.conf.getKeys(false)
     }
 
+    /**
+     * [vehicleId] の寿命を取得します。
+     */
     fun getTick(vehicleId: String): Int {
         return config.conf.getInt(vehicleId)
     }
 
+    /**
+     * [vehicleId] の寿命を設定します。
+     */
     fun setTick(vehicleId: String, tick: Int) {
         config.conf.set(vehicleId, tick)
     }
 
+    /**
+     * [vehicle] を管理対象に追加します。
+     */
     fun registerVehicle(vehicle: Vehicle) {
         if (!isValidVehicle(vehicle)) return
 
@@ -74,6 +89,9 @@ object VehicleModule : ModuleBase() {
         config.conf.set(id, 20 * 60 * 5)
     }
 
+    /**
+     * [vehicle] を管理対象から外します。
+     */
     fun unregisterVehicle(vehicle: Vehicle) {
         if (!isValidVehicle(vehicle)) return
 
@@ -82,10 +100,23 @@ object VehicleModule : ModuleBase() {
         unregisterVehicle(id)
     }
 
+    /**
+     * [id] に対応する乗り物を管理対象から外します。
+     */
+    fun unregisterVehicle(id: String) {
+        config.conf.set(id, null)
+    }
+
+    /**
+     * この乗り物が管理対象であるかどうかを取得します。
+     */
     fun isValidVehicle(v: Vehicle?): Boolean {
         return v is Boat || v is RideableMinecart
     }
 
+    /**
+     * トロッコの射出を試みます。
+     */
     fun trySummonCart(player: Player): Boolean {
         if (!WorldModule.getWorldInfo(player.world).allowVehicleSpawn) {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。")
@@ -104,6 +135,9 @@ object VehicleModule : ModuleBase() {
         return true
     }
 
+    /**
+     * ボートの射出を試みます。
+     */
     fun trySummonBoat(player: Player): Boolean {
         if (!WorldModule.getWorldInfo(player.world).allowVehicleSpawn) {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。")
@@ -135,10 +169,6 @@ object VehicleModule : ModuleBase() {
         player.playSound(player.location, Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1f, 2f)
         HintModule.achieve(player, Hint.BOAT)
         return true
-    }
-
-    fun unregisterVehicle(id: String) {
-        config.conf.set(id, null)
     }
 
     private fun collidesAt(loc: Location): Boolean {

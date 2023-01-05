@@ -24,10 +24,17 @@ import java.util.Random
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * ナイトメアワールドを制御するモジュールです。
+ */
 object NightmareModule : ModuleBase() {
     const val NIGHTMARE_WORLD_NAME = "nightmare2"
 
     private val random = Random()
+
+    /**
+     * ナイトメアワールドでランダムに発生する現象
+     */
     private val tasks = listOf<(Location, Int, Player) -> Unit>(
         this::taskSummonBlazes,
         this::taskSummonPiglins,

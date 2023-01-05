@@ -10,6 +10,9 @@ import java.time.LocalDate
 import java.util.Random
 import java.util.UUID
 
+/**
+ * 夏祭りイベント用モジュール。スタッフ向けの花火作成機能や、花火ログボ機能などを提供します。
+ */
 object EventSummerModule : ModuleBase() {
     const val PS_KEY_LOGIN_BONUS_SUMMER = "login_bonus_summer"
 
@@ -32,6 +35,10 @@ object EventSummerModule : ModuleBase() {
         registerHandler(EventSummerHandler())
     }
 
+    /**
+     * イベント中かどうかを取得します。
+     * TODO: 日付をハードコーディングしない
+     */
     @JvmStatic
     fun isEventNow(): Boolean {
         val today = LocalDate.now()
@@ -40,6 +47,9 @@ object EventSummerModule : ModuleBase() {
         return today.isAfter(startEventDay) && today.isBefore(endEventDay)
     }
 
+    /**
+     * プレイヤーの [uuid] に基づいてランダム生成された花火を [amount] つ生成します。
+     */
     fun getRandomFireworkByUUID(uuid: UUID, amount: Int): ItemStack {
         val random = Random(uuid.hashCode().toLong())
         val item = ItemStack(Material.FIREWORK_ROCKET, amount)

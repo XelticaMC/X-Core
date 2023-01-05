@@ -12,6 +12,9 @@ import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.utils.Ticks
 import java.util.UUID
 
+/**
+ * 「草」などとチャットすると、足元に草が生える機能を提供するモジュールです。
+ */
 object KusaModule : ModuleBase() {
     private val kusaTimeMap: HashMap<UUID, Int> = HashMap()
     private val kusaRegex: Regex = Regex("^w+$")
@@ -20,6 +23,9 @@ object KusaModule : ModuleBase() {
         registerHandler(KusaHandler())
     }
 
+    /**
+     * [message] を検証し、[player] 周辺に草を生やします。
+     */
     fun handleKusa(message: String, player: Player) {
         val messageLower = message.lowercase()
         if (message == "草" || messageLower == "kusa" || kusaRegex.matches(messageLower)) {

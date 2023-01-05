@@ -10,7 +10,7 @@ import work.xeltica.craft.core.gui.SoundPitch
 import work.xeltica.craft.core.hooks.FloodgateHook.isFloodgatePlayer
 import work.xeltica.craft.core.modules.bedrock.BedrockToolsApp
 import work.xeltica.craft.core.modules.cat.CatApp
-import work.xeltica.craft.core.modules.ebipowerShop.EbipowerDrugStoreApp
+import work.xeltica.craft.core.modules.ebipowerShop.EbiPowerDrugStoreApp
 import work.xeltica.craft.core.modules.ebipowerShop.EbipowerStoreApp
 import work.xeltica.craft.core.modules.eventHalloween.CandyStoreApp
 import work.xeltica.craft.core.modules.eventSummer.EventCancelApp
@@ -34,7 +34,7 @@ import work.xeltica.craft.core.modules.vehicle.CartApp
 import work.xeltica.craft.core.modules.world.TeleportApp
 
 /**
- * X Phone の基幹となるシステムです。
+ * X Phone ゲームメニュー機能を提供します。
  */
 object XphoneModule : ModuleBase() {
     const val PS_KEY_GIVEN_PHONE = "given_phone"
@@ -61,7 +61,7 @@ object XphoneModule : ModuleBase() {
             BoatApp(),
             CartApp(),
             EbipowerStoreApp(),
-            EbipowerDrugStoreApp(),
+            EbiPowerDrugStoreApp(),
             FireworkApp(),
             HintApp(),
             LiveModeApp(),
