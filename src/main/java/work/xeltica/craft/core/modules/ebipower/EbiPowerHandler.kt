@@ -103,7 +103,7 @@ class EbiPowerHandler : Listener {
         if (victim is Cat || victim is Ocelot) {
             EbiPowerModule.tryTake(killer, 100)
             notification(killer, "可愛い可愛いネコちゃんを殴るなんて！100EPを失った。")
-            killer.playSound(killer.location, Sound.ENTITY_ZOMBIE_VILLAGER_AMBIENT, 0.7f, 0.5f)
+            killer.playSound(killer.location, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 0.7f, 0.5f)
             HintModule.achieve(killer, Hint.VIOLENCE_CAT)
         } else if (victim is Tameable && victim.isTamed && victim !is SkeletonHorse) {
             EbiPowerModule.tryTake(killer, 10)
