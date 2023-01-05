@@ -41,7 +41,7 @@ class NightmareHandler : Listener {
     fun onPlayerUseBed(e: PlayerInteractEvent) {
         val block = e.clickedBlock ?: return
         val loc = block.location
-        if (loc.world.name == NightmareModule.NIGHTMARE_WORLD_NAME) return
+        if (e.player.world.name != NightmareModule.NIGHTMARE_WORLD_NAME) return
         if (Tag.BEDS.isTagged(block.type)) {
             block.breakNaturally()
             e.isCancelled = true
@@ -54,7 +54,7 @@ class NightmareHandler : Listener {
      */
     @EventHandler
     fun onDropRareItems(e: EntityDeathEvent) {
-        if (e.entity.world.name == NightmareModule.NIGHTMARE_WORLD_NAME) return
+        if (e.entity.world.name != NightmareModule.NIGHTMARE_WORLD_NAME) return
         if (random.nextDouble() > superRareItemsDropRatio) {
             e.drops.removeIf { superRareItems.contains(it.type) }
         }
@@ -65,7 +65,7 @@ class NightmareHandler : Listener {
      */
     @EventHandler
     fun onEntityTouchWater(e: EntityDamageEvent) {
-        if (e.entity.world.name == NightmareModule.NIGHTMARE_WORLD_NAME) return
+        if (e.entity.world.name != NightmareModule.NIGHTMARE_WORLD_NAME) return
         if (e.entityType == EntityType.PLAYER) return
         if (e.cause == EntityDamageEvent.DamageCause.DROWNING) {
             e.isCancelled = true
@@ -77,7 +77,7 @@ class NightmareHandler : Listener {
      */
     @EventHandler
     fun onCreeperPrim(e: EntityDamageEvent) {
-        if (e.entity.world.name == NightmareModule.NIGHTMARE_WORLD_NAME) return
+        if (e.entity.world.name != NightmareModule.NIGHTMARE_WORLD_NAME) return
         if (e.entityType != EntityType.CREEPER) return
         val creeper = e.entity as Creeper
         if (e.cause !in listOf(
@@ -95,7 +95,7 @@ class NightmareHandler : Listener {
      */
     @EventHandler
     fun onTryTame(e: EntityTameEvent) {
-        if (e.entity.world.name == NightmareModule.NIGHTMARE_WORLD_NAME) return
+        if (e.entity.world.name != NightmareModule.NIGHTMARE_WORLD_NAME) return
         e.isCancelled = true
     }
 
@@ -104,7 +104,7 @@ class NightmareHandler : Listener {
      */
     @EventHandler
     fun onBlockPlace(e: BlockPlaceEvent) {
-        if (e.player.name == NightmareModule.NIGHTMARE_WORLD_NAME) return
+        if (e.player.world.name != NightmareModule.NIGHTMARE_WORLD_NAME) return
         e.setBuild(false)
     }
 
@@ -113,7 +113,7 @@ class NightmareHandler : Listener {
      */
     @EventHandler
     fun onBlockBreak(e: BlockBreakEvent) {
-        if (e.player.world.name == NightmareModule.NIGHTMARE_WORLD_NAME) return
+        if (e.player.world.name != NightmareModule.NIGHTMARE_WORLD_NAME) return
         e.isCancelled = true
     }
 }
