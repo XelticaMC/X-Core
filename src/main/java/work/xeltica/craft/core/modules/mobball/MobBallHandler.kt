@@ -15,6 +15,7 @@ import org.bukkit.entity.Egg
 import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Hoglin
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Mob
 import org.bukkit.entity.Piglin
 import org.bukkit.entity.Player
@@ -189,6 +190,10 @@ class MobBallHandler : Listener {
             if (it is Tameable) {
                 it.isTamed = true
                 it.owner = e.player
+            }
+            // デスポーンさせない
+            if (it is LivingEntity) {
+                it.removeWhenFarAway = false
             }
         }
         nbt.setBoolean("isActive", false)
