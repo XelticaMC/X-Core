@@ -8,7 +8,6 @@ import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.hint.Hint.HintType
-import java.util.function.Consumer
 import java.util.stream.Stream
 
 /**
@@ -48,12 +47,12 @@ class HintCommand : CommandPlayerOnlyBase() {
             ) { player.performCommand("hint") }
         } else {
             // ヒント一覧をプレイヤーに表示
-            val items = hints.map {
-                val isAchieved = module.hasAchieved(player, it)
-                val isQuest = it.power > 0
-                val name = it.hintName + if (isQuest) " (" + it.power + "EP)" else ""
-                val icon = getIcon(it, isAchieved)
-                val onClick = Consumer { _: MenuItem? -> player.performCommand("hint " + it.name) }
+            val items = hints.map { hint ->
+                val isAchieved = module.hasAchieved(player, hint)
+                val isQuest = hint.power > 0
+                val name = hint.hintName + if (isQuest) " (" + hint.power + "EP)" else ""
+                val icon = getIcon(hint, isAchieved)
+                val onClick: (MenuItem) -> Unit = { player.performCommand("hint ${hint.hintName}") }
                 MenuItem(name, onClick, icon, null, 1, isAchieved)
             }.toList()
             Gui.getInstance().openMenu(player, "ヒント", items)
