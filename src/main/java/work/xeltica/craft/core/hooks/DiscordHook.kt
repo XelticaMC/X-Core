@@ -13,7 +13,7 @@ import work.xeltica.craft.core.api.HookBase
  * Discord との連携フック。
  */
 object DiscordHook : HookBase() {
-    override val isEnabled = Bukkit.getPluginManager().getPlugin("DiscordSRV") != null
+    override val isEnabled = Bukkit.getPluginManager().getPlugin("DiscordSRV")?.isEnabled ?: false
 
     /**
      * プレイヤーに紐づくDiscordユーザーを取得します。
