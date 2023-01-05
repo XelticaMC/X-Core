@@ -23,6 +23,7 @@ import work.xeltica.craft.core.modules.clover.CloverModule
 import work.xeltica.craft.core.modules.countdown.CountdownModule
 import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
+import work.xeltica.craft.core.modules.ebipowerShop.EbiPowerShopModule
 import work.xeltica.craft.core.modules.eventFarm.EventFarmModule
 import work.xeltica.craft.core.modules.eventFirework.EventFireworkModule
 import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule
@@ -181,6 +182,7 @@ class XCorePlugin : JavaPlugin() {
         CountdownModule,
         CounterModule,
         EbiPowerModule,
+        EbiPowerShopModule,
         EventFarmModule,
         EventFireworkModule,
         EventHalloweenModule,
