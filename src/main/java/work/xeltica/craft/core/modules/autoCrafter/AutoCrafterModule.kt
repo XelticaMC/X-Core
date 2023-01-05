@@ -6,12 +6,12 @@ import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.block.Block
 import org.bukkit.block.Dispenser
+import org.bukkit.block.data.Directional
 import org.bukkit.entity.GlowItemFrame
 import org.bukkit.inventory.BlockInventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.inventory.ShapelessRecipe
-import org.bukkit.material.Directional
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.item.ItemModule.isCustomItem
 import work.xeltica.craft.core.utils.CollectionHelper.sum
@@ -99,17 +99,18 @@ object AutoCrafterModule : ModuleBase() {
                 }
                 if (blockData is Directional) {
                     val location: Location = dispenser.location.toBlockLocation().add(blockData.facing.direction)
-                    (location.block.state as? BlockInventoryHolder)?.let {
-                        val result: HashMap<Int, ItemStack> = it.inventory.addItem(recipe.result)
+                    val containerState = location.block.state
+                    if (containerState is BlockInventoryHolder) {
+                        val result: HashMap<Int, ItemStack> = containerState.inventory.addItem(recipe.result)
                         if (result.isNotEmpty()) {
                             for (i in result.values) {
                                 dispenser.world.dropItem(location, i)
                             }
                         }
+                    } else {
+                        dispenser.world.dropItem(dispenser.location, recipe.result)
                     }
-                    return
                 }
-                dispenser.world.dropItem(dispenser.location, recipe.result)
             }
         }
     }
