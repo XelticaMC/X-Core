@@ -18,16 +18,14 @@ class HintCommand : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         val subCommand = if (args.isNotEmpty()) args[0] else null
         val module = HintModule
-        val hints = Stream.of(*Hint.values())
+        val hints = Hint.values()
         if (subCommand != null) {
             // 指定されたIDのヒントの詳細をプレイヤーに表示
-            val optionalHint = hints.filter { h: Hint -> subCommand.equals(h.name, ignoreCase = true) }
-                .findFirst()
-            if (optionalHint.isEmpty) {
+            val hint = hints.firstOrNull { subCommand.equals(it.name, ignoreCase = true) }
+            if (hint == null) {
                 player.sendMessage("ヒントが存在しません。")
                 return true
             }
-            val hint = optionalHint.get()
             var content = hint.description
             if (hint.power > 0) {
                 content += """
@@ -52,7 +50,7 @@ class HintCommand : CommandPlayerOnlyBase() {
                 val isQuest = hint.power > 0
                 val name = hint.hintName + if (isQuest) " (" + hint.power + "EP)" else ""
                 val icon = getIcon(hint, isAchieved)
-                val onClick: (MenuItem) -> Unit = { player.performCommand("hint ${hint.hintName}") }
+                val onClick: (MenuItem) -> Unit = { player.performCommand("hint ${hint.name}") }
                 MenuItem(name, onClick, icon, null, 1, isAchieved)
             }.toList()
             Gui.getInstance().openMenu(player, "ヒント", items)
