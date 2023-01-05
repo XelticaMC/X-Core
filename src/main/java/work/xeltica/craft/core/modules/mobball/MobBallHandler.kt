@@ -9,6 +9,7 @@ import org.bukkit.NamespacedKey
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
+import org.bukkit.block.BlockFace
 import org.bukkit.entity.Ageable
 import org.bukkit.entity.Egg
 import org.bukkit.entity.Entity
@@ -20,7 +21,9 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Skeleton
 import org.bukkit.entity.Tameable
 import org.bukkit.entity.Zombie
+import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.entity.CreatureSpawnEvent
@@ -147,14 +150,26 @@ class MobBallHandler : Listener {
         }.runTaskTimer(XCorePlugin.instance, 0, 1L)
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     fun onReleaseMob(e: PlayerInteractEvent) {
+        // アイテムを持っていなければreturn
         val item = e.item ?: return
         val nbt = NBTItem(item)
+        // 持ち物がモブケースでなければreturn
         if (!nbt.hasKey("mobCase")) return
-        e.isCancelled = true
-
+        e.setUseItemInHand(Event.Result.DENY)
+        // ブロックを叩いていなければreturn
         val block = e.clickedBlock ?: return
+        e.player.sendMessage(block.type.name)
+        // ブロックの上面（つまり床）でなければreturn
+        if (e.blockFace !== BlockFace.UP) return
+        e.player.sendMessage(e.blockFace.name)
+        // イベントが以前にキャンセルされていればreturn
+        e.player.sendMessage(e.useInteractedBlock().name)
+        if (e.useInteractedBlock() == Event.Result.DENY) return
+        // 触れたブロックが有機能であればreturn
+        if (block.type.isInteractable && !e.player.isSneaking) return
+        e.player.sendMessage(block.type.isInteractable.toString())
 
         if (!nbt.getBoolean("isActive")) {
             return
