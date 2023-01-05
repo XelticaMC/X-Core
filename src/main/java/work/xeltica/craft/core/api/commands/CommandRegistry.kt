@@ -28,7 +28,6 @@ object CommandRegistry : CommandExecutor {
         cmd.setExecutor(this)
         cmd.tabCompleter = command
         commandsMap[name] = command
-        logger.info("コマンド '$name' を登録しました。")
     }
 
     /**

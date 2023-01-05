@@ -1,6 +1,7 @@
 package work.xeltica.craft.core
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
@@ -61,14 +62,15 @@ import work.xeltica.craft.core.utils.Ticks
 class XCorePlugin : JavaPlugin() {
 
     override fun onEnable() {
+        logger.info("${ChatColor.AQUA}------------------------------------------")
+        logger.info("  ${ChatColor.GREEN}X-Core${ChatColor.GRAY} - XelticaMC Core System Plugin")
+        logger.info("      ${ChatColor.GRAY}ver ${description.version}")
+        logger.info("${ChatColor.AQUA}------------------------------------------")
         instance = this
         initializeFoundation()
 
         loadHooks()
         loadModules()
-
-        logger.info("X-Core - XelticaMC Core System Plugin")
-        logger.info("起動しました。")
     }
 
     override fun onDisable() {
@@ -86,16 +88,18 @@ class XCorePlugin : JavaPlugin() {
      * 連携フックを全て有効化します。
      */
     private fun loadHooks() {
+        logger.info("連携フック 総数 ${hooks.size}")
         // 連携フックの有効化
         hooks.forEach {
             try {
                 it.onEnable()
-                logger.info("連携フック '${it.javaClass.name}' を正常に有効化しました。")
+                logger.info("${ChatColor.GRAY}- ${it.javaClass.simpleName}${ChatColor.GREEN} » ○")
             } catch (e: Exception) {
-                logger.severe("連携フック '${it.javaClass.name}' の有効化に失敗しました。'")
+                logger.severe("${ChatColor.GRAY}- ${it.javaClass.simpleName}${ChatColor.RED} » ×")
                 e.printStackTrace()
             }
         }
+        logger.info("連携フックを全て読み込み、有効化しました。")
     }
 
     /**
@@ -106,11 +110,11 @@ class XCorePlugin : JavaPlugin() {
         hooks.forEach {
             try {
                 it.onDisable()
-                logger.info("連携フック '${it.javaClass.name}' を正常に無効化しました。")
             } catch (e: Exception) {
-                logger.severe("連携フック '${it.javaClass.name}' の無効化に失敗しました。")
+                logger.severe("連携フック '${it.javaClass.simpleName}' の無効化に失敗しました。")
                 e.printStackTrace()
             }
+            logger.info("連携フックを全て無効化しました。")
         }
     }
 
@@ -118,13 +122,14 @@ class XCorePlugin : JavaPlugin() {
      * モジュールを全て有効化します。
      */
     private fun loadModules() {
+        logger.info("モジュール 総数 ${modules.size}")
         // モジュールの有効化フック
         modules.forEach {
             try {
                 it.onEnable()
-                logger.info("モジュール '${it.javaClass.name}' を正常に有効化しました。")
+                logger.info("${ChatColor.GRAY}- ${it.javaClass.simpleName}${ChatColor.GREEN} » ○")
             } catch (e: Exception) {
-                logger.severe("モジュール '${it.javaClass.name}' の有効化に失敗しました。")
+                logger.severe("${ChatColor.GRAY}- ${it.javaClass.simpleName}${ChatColor.RED} » ×")
                 e.printStackTrace()
             }
         }
@@ -132,12 +137,12 @@ class XCorePlugin : JavaPlugin() {
         modules.forEach {
             try {
                 it.onPostEnable()
-                logger.info("モジュール '${it.javaClass.name}' の初期化後処理を実行しました。")
             } catch (e: Exception) {
-                logger.severe("モジュール '${it.javaClass.name}' の初期化後処理の実行に失敗しました。")
+                logger.severe("モジュール '${it.javaClass.simpleName}' の初期化後処理の実行に失敗しました。")
                 e.printStackTrace()
             }
         }
+        logger.info("モジュールを全て読み込み、有効化しました。")
     }
 
     /**
@@ -148,12 +153,12 @@ class XCorePlugin : JavaPlugin() {
         modules.forEach {
             try {
                 it.onDisable()
-                logger.info("モジュール '${it.javaClass.name}' を正常に無効化しました。")
             } catch (e: Exception) {
                 logger.severe("モジュール '${it.javaClass.name}' の無効化に失敗しました。")
                 e.printStackTrace()
             }
         }
+        logger.info("モジュールを全て無効化しました。")
     }
 
     private fun initializeFoundation() {

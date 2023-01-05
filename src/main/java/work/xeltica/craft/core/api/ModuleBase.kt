@@ -22,7 +22,6 @@ abstract class ModuleBase {
 
     protected fun registerHandler(handler: Listener) {
         Bukkit.getPluginManager().registerEvents(handler, XCorePlugin.instance)
-        Bukkit.getLogger().info("イベントハンドラー '${handler.javaClass.typeName}' を登録しました。")
     }
 
     protected fun registerXPhoneApp(app: AppBase) {
