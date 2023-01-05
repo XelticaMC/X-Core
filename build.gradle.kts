@@ -5,7 +5,6 @@
 plugins {
     kotlin("jvm") version "1.8.0"
 
-    java
     `maven-publish`
 
     id("net.minecrell.plugin-yml.bukkit") version "0.5.2"
@@ -68,13 +67,13 @@ dependencies {
     compileOnly("net.luckperms:api:5.4")
     compileOnly("org.geysermc:connector:1.4.3-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
-    compileOnly("de.tr7zw:item-nbt-api-plugin:2.8.0")
+    compileOnly("de.tr7zw:item-nbt-api-plugin:2.11.1")
     compileOnly("com.discordsrv:discordsrv:1.25.1")
     compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
     compileOnly("com.github.koca2000:NoteBlockAPI:1.6.1")
     compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
     compileOnly("com.github.ucchyocean.lc:LunaChat:3.0.16")
-    implementation("net.wesjd:anvilgui:1.5.3-SNAPSHOT")
+    implementation("net.wesjd:anvilgui:1.6.3-SNAPSHOT")
 
     library("com.google.code.gson", "gson", "2.8.7")
     bukkitLibrary("com.google.code.gson", "gson", "2.8.7")
@@ -89,7 +88,7 @@ bukkit {
     name = "XCore"
     main = "work.xeltica.craft.core.XCorePlugin"
     version = getVersion().toString()
-    apiVersion = "1.19.3"
+    apiVersion = "1.19"
     softDepend = listOf("SkinsRestorer", "Citizens")
     depend = listOf("kotlin-stdlib", "Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
 
@@ -398,13 +397,10 @@ publishing {
     }
 }
 
-tasks.withType<JavaCompile>() {
-    options.encoding = "UTF-8"
-}
-
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = "17"
+        incremental = true
     }
 }
 
