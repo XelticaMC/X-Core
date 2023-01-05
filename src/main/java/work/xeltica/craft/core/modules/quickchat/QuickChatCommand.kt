@@ -4,9 +4,9 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.api.commands.CommandBase
-import java.util.*
+import java.util.Locale
 
-class QuickChatCommand: CommandBase() {
+class QuickChatCommand : CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) return false
 
@@ -19,6 +19,7 @@ class QuickChatCommand: CommandBase() {
                     sender.sendMessage("既に" + args[1] + "は登録されています")
                 }
             }
+
             "unregister" -> {
                 if (args.size < 2) return false
                 if (QuickChatModule.unregister(args[1])) {
@@ -27,6 +28,7 @@ class QuickChatCommand: CommandBase() {
                     sender.sendMessage(args[1] + "は存在しません")
                 }
             }
+
             "list" -> {
                 sender.sendMessage("===== Quick Chat List =====")
                 for (prefix in QuickChatModule.getAllPrefix()) {
@@ -37,12 +39,7 @@ class QuickChatCommand: CommandBase() {
         return true
     }
 
-    override fun onTabComplete(
-        commandSender: CommandSender,
-        command: Command,
-        label: String,
-        args: Array<out String>
-    ): MutableList<String> {
+    override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String> {
         if (args.isEmpty()) return COMPLETE_LIST_EMPTY
         val subCmd = args[0].lowercase(Locale.getDefault())
         if (args.size == 1) {

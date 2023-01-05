@@ -1,15 +1,22 @@
 package work.xeltica.craft.core.gui;
 
-import java.util.function.Consumer;
-
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.function.Consumer;
+
 /**
  * メニューのアイテム。
- * @author Xeltica
+ *
+ * @author Lutica
  */
 public class MenuItem {
+    private final String name;
+    private final ItemStack icon;
+    private final Consumer<MenuItem> onClick;
+    private final Object customData;
+    private final boolean shiny;
+
     public MenuItem(String name) {
         this(name, null);
     }
@@ -19,7 +26,7 @@ public class MenuItem {
     }
 
     public MenuItem(String name, Consumer<MenuItem> onClick, Material icon) {
-       this(name, onClick, icon, null);
+        this(name, onClick, icon, null);
     }
 
     public MenuItem(String name, Consumer<MenuItem> onClick, Material icon, Object customData) {
@@ -54,15 +61,23 @@ public class MenuItem {
         this.shiny = shiny;
     }
 
-    public String getName() { return name; }
-    public Consumer<MenuItem> getOnClick() { return onClick; }
-    public ItemStack getIcon() { return icon; }
-    public Object getCustomData() { return customData; }
-    public boolean isShiny() { return shiny; }
+    public String getName() {
+        return name;
+    }
 
-    private final String name;
-    private final ItemStack icon;
-    private final Consumer<MenuItem> onClick;
-    private final Object customData;
-    private final boolean shiny;
+    public Consumer<MenuItem> getOnClick() {
+        return onClick;
+    }
+
+    public ItemStack getIcon() {
+        return icon;
+    }
+
+    public Object getCustomData() {
+        return customData;
+    }
+
+    public boolean isShiny() {
+        return shiny;
+    }
 }

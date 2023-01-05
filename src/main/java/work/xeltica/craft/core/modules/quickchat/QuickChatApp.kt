@@ -5,10 +5,10 @@ import org.bukkit.Sound
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.models.Hint
-import work.xeltica.craft.core.models.SoundPitch
-import work.xeltica.craft.core.stores.HintStore
-import work.xeltica.craft.core.xphone.apps.AppBase
+import work.xeltica.craft.core.gui.SoundPitch
+import work.xeltica.craft.core.modules.hint.Hint
+import work.xeltica.craft.core.modules.hint.HintModule
+import work.xeltica.craft.core.modules.xphone.AppBase
 
 /**
  * クイックチャットアプリ
@@ -29,7 +29,7 @@ class QuickChatApp : AppBase() {
             list.add(
                 MenuItem(String.format("%s §7(.%s)", msg, chat), {
                     player.chat(msg)
-                    HintStore.instance.achieve(player, Hint.QUICKCHAT_APP)
+                    HintModule.achieve(player, Hint.QUICKCHAT_APP)
                 }, Material.PAPER)
             )
         }
