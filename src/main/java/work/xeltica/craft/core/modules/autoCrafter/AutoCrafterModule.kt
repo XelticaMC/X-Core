@@ -7,6 +7,7 @@ import org.bukkit.SoundCategory
 import org.bukkit.block.Block
 import org.bukkit.block.Dispenser
 import org.bukkit.entity.GlowItemFrame
+import org.bukkit.inventory.BlockInventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.inventory.ShapelessRecipe
@@ -98,14 +99,17 @@ object AutoCrafterModule : ModuleBase() {
                 }
                 if (blockData is Directional) {
                     val location: Location = dispenser.location.toBlockLocation().add(blockData.facing.direction)
-                    val result: HashMap<Int, ItemStack> = dispenser.inventory.addItem(recipe.result)
-                    if (result.isNotEmpty()) {
-                        for (i in result.values) {
-                            dispenser.world.dropItem(location, i)
+                    (location.block.state as? BlockInventoryHolder)?.let {
+                        val result: HashMap<Int, ItemStack> = it.inventory.addItem(recipe.result)
+                        if (result.isNotEmpty()) {
+                            for (i in result.values) {
+                                dispenser.world.dropItem(location, i)
+                            }
                         }
                     }
                     return
                 }
+                dispenser.world.dropItem(dispenser.location, recipe.result)
             }
         }
     }
