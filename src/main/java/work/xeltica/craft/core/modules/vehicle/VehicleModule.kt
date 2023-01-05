@@ -1,6 +1,6 @@
 package work.xeltica.craft.core.modules.vehicle
 
-import com.destroystokyo.paper.block.TargetBlockInfo
+import org.bukkit.FluidCollisionMode
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -121,7 +121,7 @@ object VehicleModule : ModuleBase() {
         if (!WorldModule.getWorldInfo(player.world).allowVehicleSpawn) {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。")
         }
-        val lookBlock = player.getTargetBlock(5) ?: return true
+        val lookBlock = player.getTargetBlockExact(5) ?: return true
         if (lookBlock.type.data == Rail::class.java || lookBlock.type.data == RedstoneRail::class.java) {
             val spawnLoc = lookBlock.location.add(0.0, 0.5, 0.0)
             spawnLoc.world.spawnEntity(spawnLoc, EntityType.MINECART, CreatureSpawnEvent.SpawnReason.CUSTOM)
@@ -143,9 +143,9 @@ object VehicleModule : ModuleBase() {
             return Gui.getInstance().error(player, "§cここには召喚できないようだ…。")
         }
         var spawnLoc = player.location
-        val lookBlock = player.getTargetBlock(5, TargetBlockInfo.FluidMode.ALWAYS)
+        val lookBlock = player.getTargetBlockExact(5, FluidCollisionMode.ALWAYS)
         if (lookBlock != null && lookBlock.type != Material.AIR) {
-            val lookFace = player.getTargetBlockFace(5, TargetBlockInfo.FluidMode.ALWAYS)
+            val lookFace = player.getTargetBlockFace(5, FluidCollisionMode.ALWAYS)
             spawnLoc = lookBlock.location
             if (lookFace != null) {
                 spawnLoc.add(lookFace.direction)
