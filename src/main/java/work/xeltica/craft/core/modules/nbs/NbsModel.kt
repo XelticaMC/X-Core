@@ -6,6 +6,7 @@ import work.xeltica.craft.core.utils.CastHelper
 
 class NbsModel(var location: Location, var songId: String, var distance: Int, var playbackMode: PlaybackMode) : Cloneable, ConfigurationSerializable {
     companion object {
+        // NOTE: Spigotは動的にこの関数を呼び出すため、JvmStaticでなければならない
         @JvmStatic
         fun deserialize(args: Map<String, Any>): NbsModel {
             require(args.containsKey("location")) { "location is null" }

@@ -12,7 +12,7 @@ import java.util.function.Consumer
  * Spigot の設定ファイル機能を扱いやすいように、面倒な部分をラッピングしています。
  * @author Lutica
  */
-class Config @JvmOverloads constructor(val configName: String, private val onReloaded: Consumer<Config>? = null) {
+class Config constructor(val configName: String, private val onReloaded: Consumer<Config>? = null) {
     private var autoSaveWorker: BukkitRunnable? = null
 
     lateinit var conf: YamlConfiguration

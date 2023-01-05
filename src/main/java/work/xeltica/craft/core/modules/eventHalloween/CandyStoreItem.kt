@@ -16,6 +16,7 @@ data class CandyStoreItem(val item: ItemStack, override val cost: Int) : Cloneab
     }
 
     companion object {
+        // NOTE: Spigotは動的にこの関数を呼び出すため、JvmStaticでなければならない
         @JvmStatic
         fun deserialize(args: Map<String?, Any?>): CandyStoreItem {
             val item = ItemStack.deserialize(CastHelper.checkMap<String, Any>(args["item"] as Map<*, *>))

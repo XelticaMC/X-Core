@@ -25,6 +25,7 @@ class CounterData(
     }
 
     companion object {
+        // NOTE: Spigotは動的にこの関数を呼び出すため、JvmStaticでなければならない
         @JvmStatic
         fun deserialize(args: Map<String, Any>): CounterData {
             assertKey(args, "name")

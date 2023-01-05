@@ -3,7 +3,6 @@ package work.xeltica.craft.core.modules.world
 import org.bukkit.Bukkit
 import org.bukkit.World
 
-@JvmRecord
 data class WorldInfo(
     val name: String,
     val displayName: String,

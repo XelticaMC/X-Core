@@ -14,7 +14,6 @@ object CitizensHook : HookBase() {
     /**
      * Citizensプラグイン由来のNPCであるかどうかを取得します。
      */
-    @JvmStatic
     fun Entity.isCitizensNpc(): Boolean {
         // Citizens が読み込まれていなければ常にfalse
         if (!isEnabled) return false

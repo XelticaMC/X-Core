@@ -9,18 +9,17 @@ import java.util.function.Consumer
  *
  * @author Lutica
  */
-class MenuItem @JvmOverloads constructor(
+class MenuItem(
     val name: String,
     val onClick: Consumer<MenuItem>?,
     val icon: ItemStack,
-    @JvmField val customData: Any? = null,
+    val customData: Any? = null,
     val isShiny: Boolean = false,
 ) {
 
     constructor(name: String, onClick: Consumer<MenuItem>?, icon: Material, customData: Any?, shiny: Boolean)
             : this(name, onClick, icon, customData, 1, shiny)
 
-    @JvmOverloads
     constructor(name: String, onClick: Consumer<MenuItem>? = null, icon: Material = Material.STONE_BUTTON, customData: Any? = null, count: Int = 1, shiny: Boolean = false)
             : this(name, onClick, ItemStack(icon, count), customData, shiny)
 }

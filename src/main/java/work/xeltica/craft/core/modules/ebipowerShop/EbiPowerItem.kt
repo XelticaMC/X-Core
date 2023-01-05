@@ -17,6 +17,7 @@ data class EbiPowerItem(val item: ItemStack, val cost: Int) : Cloneable, Configu
     }
 
     companion object {
+        // NOTE: Spigotは動的にこの関数を呼び出すため、JvmStaticでなければならない
         @JvmStatic
         fun deserialize(args: Map<String, Any>): EbiPowerItem {
             val item = ItemStack.deserialize(CastHelper.checkMap<String, Any>(args["item"] as Map<*, *>))

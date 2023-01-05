@@ -214,7 +214,6 @@ class XCorePlugin : JavaPlugin() {
     )
 
     companion object {
-        @JvmStatic
         lateinit var instance: XCorePlugin private set
     }
 }

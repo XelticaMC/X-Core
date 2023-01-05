@@ -10,11 +10,13 @@ class TransferPlayerDataEvent(val from: Player, val to: Player) : Event() {
     }
 
     companion object {
+        // NOTE: Spigotは動的にこの関数を呼び出すため、JvmStaticでなければならない
         @JvmStatic
         fun getHandlerList(): HandlerList {
             return HANDLERS_LIST
         }
 
+        // NOTE: Spigotは動的にこの関数を呼び出すため、JvmStaticでなければならない
         @JvmStatic
         private val HANDLERS_LIST = HandlerList()
     }

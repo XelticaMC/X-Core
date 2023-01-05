@@ -48,12 +48,10 @@ class Gui : Listener {
         /**
          * GUI APIのインスタンスを取得します。
          */
-        @JvmStatic
         fun getInstance(): Gui {
             return instance
         }
 
-        @JvmStatic
         fun onEnable() {
             instance = Gui()
             CommandRegistry.register("__core_gui_event__", CommandXCoreGuiEvent())

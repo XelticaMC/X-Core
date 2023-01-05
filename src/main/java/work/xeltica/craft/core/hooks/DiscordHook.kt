@@ -20,7 +20,6 @@ object DiscordHook : HookBase() {
      * @param player プレイヤー
      * @return 指定したプレイヤーに紐づく、Discordユーザー。未連携であれば null。
      */
-    @JvmStatic
     fun getMember(player: Player): Member? {
         if (!isEnabled) return null
         if (!linkedToDiscord(player)) return null
@@ -35,7 +34,6 @@ object DiscordHook : HookBase() {
      * @param time 期限
      * @param command 処罰内容
      */
-    @JvmStatic
     fun reportDiscord(badPlayerName: String, abuses: String, time: String, command: String) {
         if (!isEnabled) return
         val guild = DiscordSRV.getPlugin().mainGuild
@@ -48,7 +46,6 @@ object DiscordHook : HookBase() {
      * 新規さんの来訪を担当スタッフにメンションします。
      * @param newcomer 新規さん
      */
-    @JvmStatic
     fun alertNewcomer(newcomer: Player) {
         if (!isEnabled) return
         val guild = DiscordSRV.getPlugin().mainGuild
@@ -68,7 +65,6 @@ object DiscordHook : HookBase() {
      * ゲーム内チャットにメッセージを送信します。
      * @param text 送信する内容
      */
-    @JvmStatic
     fun broadcast(text: String) {
         if (!isEnabled) return
         val discord = DiscordSRV.getPlugin()
@@ -80,7 +76,6 @@ object DiscordHook : HookBase() {
      * @param version X-Core のバージョン
      * @param changeLog 変更内容
      */
-    @JvmStatic
     fun postChangelog(version: String, changeLog: Array<String>) {
         if (!isEnabled) return
         val guild = DiscordSRV.getPlugin().mainGuild

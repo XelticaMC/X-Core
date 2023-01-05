@@ -10,7 +10,6 @@ class PlayerRecord(private val section: ConfigurationSection) {
         section.set(key, value)
     }
 
-    @JvmOverloads
     operator fun get(key: String, defaultValue: Any? = null): Any? {
         return section.get(key, defaultValue)
     }
@@ -19,7 +18,6 @@ class PlayerRecord(private val section: ConfigurationSection) {
         return section.contains(key)
     }
 
-    @JvmOverloads
     fun getString(key: String, defaultValue: String = ""): String {
         return section.getString(key, defaultValue)!!
     }
@@ -36,7 +34,6 @@ class PlayerRecord(private val section: ConfigurationSection) {
         return section.isList(key)
     }
 
-    @JvmOverloads
     fun getInt(key: String, defaultValue: Int = 0): Int {
         return section.getInt(key, defaultValue)
     }
@@ -45,7 +42,6 @@ class PlayerRecord(private val section: ConfigurationSection) {
         return section.isInt(key)
     }
 
-    @JvmOverloads
     fun getBoolean(key: String, defaultValue: Boolean = false): Boolean {
         return section.getBoolean(key, defaultValue)
     }
@@ -54,7 +50,6 @@ class PlayerRecord(private val section: ConfigurationSection) {
         return section.isBoolean(key)
     }
 
-    @JvmOverloads
     fun getDouble(key: String, defaultValue: Double = 0.0): Double {
         return section.getDouble(key, defaultValue)
     }
@@ -63,7 +58,6 @@ class PlayerRecord(private val section: ConfigurationSection) {
         return section.isDouble(key)
     }
 
-    @JvmOverloads
     fun getLong(key: String, defaultValue: Long = 1): Long {
         return section.getLong(key, defaultValue)
     }
@@ -72,7 +66,6 @@ class PlayerRecord(private val section: ConfigurationSection) {
         return section.isLong(key)
     }
 
-    @JvmOverloads
     fun getVector(key: String, defaultValue: Vector? = null): Vector? {
         return section.getVector(key, defaultValue)
     }
@@ -81,7 +74,6 @@ class PlayerRecord(private val section: ConfigurationSection) {
         return section.isVector(key)
     }
 
-    @JvmOverloads
     fun getLocation(key: String, defaultValue: Location? = null): Location? {
         return section.getLocation(key, defaultValue)
     }

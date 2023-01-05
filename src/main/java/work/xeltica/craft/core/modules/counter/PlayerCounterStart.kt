@@ -11,6 +11,7 @@ class PlayerCounterStart(val player: Player, val counter: CounterData) : Event()
     companion object {
         private val HANDLERS_LIST = HandlerList()
 
+        // NOTE: Spigotは動的にこの関数を呼び出すため、JvmStaticでなければならない
         @JvmStatic
         fun getHandlerList(): HandlerList {
             return HANDLERS_LIST

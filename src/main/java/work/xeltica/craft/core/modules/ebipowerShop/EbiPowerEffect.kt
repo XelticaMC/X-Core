@@ -24,6 +24,7 @@ data class EbiPowerEffect(val effectType: PotionEffectType, val level: Int, val 
     }
 
     companion object {
+        // NOTE: Spigotは動的にこの関数を呼び出すため、JvmStaticでなければならない
         @JvmStatic
         fun deserialize(args: Map<String, Any>): EbiPowerEffect {
             val effectType = PotionEffectType.getByName(args["effectType"].toString())

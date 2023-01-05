@@ -39,7 +39,6 @@ object EventSummerModule : ModuleBase() {
      * イベント中かどうかを取得します。
      * TODO: 日付をハードコーディングしない
      */
-    @JvmStatic
     fun isEventNow(): Boolean {
         val today = LocalDate.now()
         val startEventDay = LocalDate.of(2022, 8, 15)
