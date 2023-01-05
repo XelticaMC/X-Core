@@ -30,7 +30,7 @@ class EventCancelApp : AppBase() {
     }
 
     override fun isVisible(player: Player): Boolean {
-        return player.world.name == "event" && getRecord(player).getString(CounterModule.PS_KEY_ID) != null
+        return player.world.name == "event" && getRecord(player).has(CounterModule.PS_KEY_ID)
     }
 
     private fun getRecord(player: Player): PlayerRecord {

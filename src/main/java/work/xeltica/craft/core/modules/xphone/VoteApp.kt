@@ -2,6 +2,7 @@ package work.xeltica.craft.core.modules.xphone
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import work.xeltica.craft.core.hooks.FloodgateHook.isFloodgatePlayer
 
 /**
  * サーバー投票アプリ
@@ -16,6 +17,6 @@ class VoteApp : AppBase() {
         player.performCommand("vote")
     }
 
-    override fun isVisible(player: Player): Boolean = !XphoneModule.isBedrockPlayer(player) && player.world.name != "event"
+    override fun isVisible(player: Player): Boolean = !player.isFloodgatePlayer() && player.world.name != "event"
 }
 
