@@ -1370,14 +1370,6 @@ municipalities:
     name: N-BSW地域 風露村
     world: main
     stations: [ scr_16 ]
-  kusashima:
-    name: 草島村
-    world: main
-    stations: [ mutsuki_shinso_1,yaga_yaga_1 ]
-  dioramas:
-    name: 薫風緑苑
-    world: main
-    stations: [ nyv_main_16 ]
   kosaka:
     name: 甲阪市
     world: main
@@ -1386,10 +1378,6 @@ municipalities:
     name: 昆布教基地
     world: main
     stations: [ ]
-  hell_zone:
-    name: 地獄特区
-    world: main
-    stations: [ mutsuki_shinso_7,scr_02 ]
   new_yamabuki:
     name: 新山吹村
     world: main
@@ -1414,10 +1402,6 @@ municipalities:
     name: 樽旗国
     world: main
     stations: [ ]
-  tool_town:
-    name: 通留町
-    world: main
-    stations: [ yaga_mizue_3 ]
   dolphin_resort:
     name: ドルフィンリゾート
     world: main
@@ -1426,10 +1410,10 @@ municipalities:
     name: 新鮫市
     world: main
     stations: [ mutsuki_niizamenamboku_S1,mutsuki_shinso_7,niizame_ebikawa_1,niizame_ebikawa_2 ]
-  hamazato:
-    name: 浜里町
+  byoto_yousai:
+    name: 杪冬要塞
     world: main
-    stations: [ mutsuki_shinso_R20,mutsuki_shinso_L23,hamazato_1,hamazato_2,hamazato_3,hamazato_4,hamazato_5,hamazato_6,hamazato_7,hamazato_8,hamazato_9 ]
+    stations: [ ]
   minasato:
     name: 水郷町
     world: main
