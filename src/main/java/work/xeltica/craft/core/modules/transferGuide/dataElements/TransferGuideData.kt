@@ -1,8 +1,13 @@
 package work.xeltica.craft.core.modules.transferGuide.dataElements
 
 import org.bukkit.configuration.ConfigurationSection
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.api.Config
 import java.time.LocalDateTime
+
+/**
+ * 路線データを表すクラス
+ * @author Knit prg.
+ */
 
 class TransferGuideData {
     val stations: Map<String, KStation>

@@ -2,8 +2,13 @@ package work.xeltica.craft.core.modules.transferGuide.routeElements
 
 import org.bukkit.ChatColor
 import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
-import work.xeltica.craft.core.modules.transferGuide.dataElements.TransferGuideData
 import work.xeltica.craft.core.modules.transferGuide.dataElements.KStation
+import work.xeltica.craft.core.modules.transferGuide.dataElements.TransferGuideData
+
+/**
+ * 経路データを表すクラス
+ * @author Knit prg.
+ */
 
 class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
     private val routes: Array<KRouteBlock>
@@ -34,10 +39,10 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
             if (pathsCandidates[i].size <= 1) continue
             fun isBeforeDecided(): Boolean {
                 val beforeDecided = pathsCandidates[i - 1].size == 1
-                if (beforeDecided) {//前の路線が確定しているならば
+                if (beforeDecided) { //前の路線が確定しているならば
                     for (now in pathsCandidates[i]) {
                         val before = pathsCandidates[i - 1][0]
-                        if (now is KRoutePathReal && before is KRoutePathReal && now.line == before.line && now.direction == before.direction) {//前の路線と同じものを検索
+                        if (now is KRoutePathReal && before is KRoutePathReal && now.line == before.line && now.direction == before.direction) { //前の路線と同じものを検索
                             pathsCandidates[i] = arrayListOf(now)
                             break
                         }
@@ -50,10 +55,10 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
 
             fun isNextDecided(): Boolean {
                 val nextDecided = pathsCandidates[i + 1].size == 1
-                if (nextDecided) {//次の路線が確定しているならば
+                if (nextDecided) { //次の路線が確定しているならば
                     for (now in pathsCandidates[i]) {
                         val next = pathsCandidates[i + 1][0]
-                        if (now is KRoutePathReal && next is KRoutePathReal && now.line == next.line && now.direction == next.direction) {//次の路線と同じものを検索
+                        if (now is KRoutePathReal && next is KRoutePathReal && now.line == next.line && now.direction == next.direction) { //次の路線と同じものを検索
                             pathsCandidates[i] = arrayListOf(now)
                             break
                         }
@@ -63,13 +68,13 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                 if (pathsCandidates[i].size >= 2) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
                 return nextDecided
             }
-            if (i == 0) {//先頭の場合
-                if (!isNextDecided()) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])//次の路線が確定していなければ適当に
-            } else if (i == pathsCandidates.lastIndex) {//終端の場合
-                if (!isBeforeDecided()) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])//前の路線が確定していなければ適当に
-            } else {//中間部の場合
+            if (i == 0) { //先頭の場合
+                if (!isNextDecided()) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0]) //次の路線が確定していなければ適当に
+            } else if (i == pathsCandidates.lastIndex) { //終端の場合
+                if (!isBeforeDecided()) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0]) //前の路線が確定していなければ適当に
+            } else { //中間部の場合
                 if (!(isNextDecided() && isBeforeDecided())) pathsCandidates[i] =
-                    arrayListOf(pathsCandidates[i][0])//前後の路線が確定していない場合は適当に
+                    arrayListOf(pathsCandidates[i][0]) //前後の路線が確定していない場合は適当に
             }
         }
         //駅と路線を纒める

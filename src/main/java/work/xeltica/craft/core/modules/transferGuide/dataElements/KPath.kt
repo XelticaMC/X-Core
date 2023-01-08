@@ -4,6 +4,11 @@ import org.bukkit.ChatColor
 import org.bukkit.configuration.ConfigurationSection
 import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
 
+/**
+ * 路線データ内の隣の駅までの経路を表すクラス
+ * @author Knit prg.
+ */
+
 class KPath(conf: ConfigurationSection) {
     val to = conf.getString("to") ?: "null"
     val line = conf.getString("line") ?: "null"

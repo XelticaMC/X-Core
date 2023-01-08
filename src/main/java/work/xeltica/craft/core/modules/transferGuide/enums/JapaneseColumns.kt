@@ -1,5 +1,10 @@
 package work.xeltica.craft.core.modules.transferGuide.enums
 
+/**
+ * 五十音を表す列挙型、五十音順検索で使う
+ * @author Knit prg.
+ */
+
 enum class JapaneseColumns(val firstChar: String, val chars: Array<String>) {
     A("あ", arrayOf("あ", "い", "う", "え", "お")),
     KA("か", arrayOf("か", "き", "く", "け", "こ", "が", "ぎ", "ぐ", "げ", "ご")),

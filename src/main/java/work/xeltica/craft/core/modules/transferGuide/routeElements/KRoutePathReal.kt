@@ -4,6 +4,10 @@ import org.bukkit.ChatColor
 import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
 import work.xeltica.craft.core.modules.transferGuide.dataElements.TransferGuideData
 
+/**
+ * 経路データ内の移動を表すクラス。
+ */
+
 class KRoutePathReal(
     val line: String,
     val direction: String,
