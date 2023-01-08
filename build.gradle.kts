@@ -3,9 +3,8 @@
  */
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.6.10"
+    kotlin("jvm") version "1.8.0"
 
-    java
     `maven-publish`
 
     id("net.minecrell.plugin-yml.bukkit") version "0.5.2"
@@ -15,7 +14,7 @@ plugins {
 repositories {
     mavenLocal()
     maven {
-	url = uri("https://repo.maven.apache.org/maven2/")
+        url = uri("https://repo.maven.apache.org/maven2/")
     }
 
     maven {
@@ -29,11 +28,11 @@ repositories {
     maven {
         url = uri("https://jitpack.io")
     }
-    
+
     maven {
-       url = uri("https://m2.dv8tion.net/releases")
+        url = uri("https://m2.dv8tion.net/releases")
     }
-    
+
     maven {
         url = uri("https://repo.opencollab.dev/maven-snapshots")
     }
@@ -63,33 +62,33 @@ dependencies {
     compileOnly("net.skinsrestorer:skinsrestorer:14.1.4-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.30")
-    compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("org.geysermc:connector:1.4.3-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
-    compileOnly("de.tr7zw:item-nbt-api-plugin:2.8.0")
+    compileOnly("de.tr7zw:item-nbt-api-plugin:2.11.1")
     compileOnly("com.discordsrv:discordsrv:1.25.1")
     compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
     compileOnly("com.github.koca2000:NoteBlockAPI:1.6.1")
     compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
     compileOnly("com.github.ucchyocean.lc:LunaChat:3.0.16")
-    implementation("net.wesjd:anvilgui:1.5.3-SNAPSHOT")
+    implementation("net.wesjd:anvilgui:1.6.3-SNAPSHOT")
 
     library("com.google.code.gson", "gson", "2.8.7")
     bukkitLibrary("com.google.code.gson", "gson", "2.8.7")
 }
 
 group = "work.xeltica.craft.core"
-version = "2.39.2"
-description = "X-Core"
+version = "3.0.0-beta.1"
+description = "A Core System Plugin for XelticaMC."
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 bukkit {
     name = "XCore"
     main = "work.xeltica.craft.core.XCorePlugin"
     version = getVersion().toString()
-    apiVersion = "1.18"
+    apiVersion = "1.19"
     softDepend = listOf("SkinsRestorer", "Citizens")
     depend = listOf("kotlin-stdlib", "Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
 
@@ -169,10 +168,10 @@ bukkit {
             aliases = listOf("xteleportreset")
         }
         register("xphone") {
-            description = "X Phone を入手する"
-            usage = "/xphone"
+            description = "X Phoneメニューを開くか、アイテム「X Phone」をもらう"
+            usage = "/xphone [get]"
             permission = "otanoshimi.command.xphone"
-            aliases = listOf("phone")
+            aliases = listOf("phone", "p")
         }
         register("live") {
             description = "ライブ配信モードを切り替える"
@@ -332,9 +331,6 @@ bukkit {
         register("otanoshimi.command.live") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
         }
-        register("otanoshimi.command.nickname") {
-            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
-        }
         register("otanoshimi.command.counter") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
@@ -401,13 +397,10 @@ publishing {
     }
 }
 
-tasks.withType<JavaCompile>() {
-    options.encoding = "UTF-8"
-}
-
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = "17"
+        incremental = true
     }
 }
 
