@@ -8,7 +8,6 @@ import java.time.LocalDateTime
  * 路線データを表すクラス
  * @author Knit prg.
  */
-
 class TransferGuideData {
     val stations: Map<String, KStation>
     val lines: Map<String, KLine>

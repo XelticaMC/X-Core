@@ -27,7 +27,6 @@ class KMunis private constructor(data: TransferGuideData) {
     /**
      * ワールドで自治体を抽出します。
      */
-
     fun filterByWorld(worldName: String): KMunis {
         val newValue = arrayListOf<Pair<String, KMuni>>()
         value.forEach {

@@ -9,7 +9,6 @@ import work.xeltica.craft.core.modules.xphone.AppBase
  * 乗換案内アプリ
  * @author Knit prg.
  */
-
 class TransferGuideApp : AppBase() {
     override fun getName(player: Player): String = "乗換案内"
 

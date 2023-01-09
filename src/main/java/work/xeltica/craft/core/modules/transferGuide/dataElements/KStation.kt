@@ -6,7 +6,6 @@ import org.bukkit.configuration.ConfigurationSection
  * 路線データ内や経路内での駅を表すクラス
  * @author Knit prg.
  */
-
 class KStation(conf: ConfigurationSection, val id: String) {
     val name = conf.getString("name") ?: "null"
     val yomi = conf.getString("yomi") ?: "null"

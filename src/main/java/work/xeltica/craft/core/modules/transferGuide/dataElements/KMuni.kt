@@ -6,7 +6,6 @@ import org.bukkit.configuration.ConfigurationSection
  * 路線データ内の自治体を表すクラス
  * @author Knit prg.
  */
-
 class KMuni(conf: ConfigurationSection, val id: String) {
     val name = conf.getString("name") ?: "null"
     val world = conf.getString("world")

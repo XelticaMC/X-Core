@@ -9,7 +9,6 @@ import work.xeltica.craft.core.modules.transferGuide.dataElements.TransferGuideD
  * 経路データを表すクラス
  * @author Knit prg.
  */
-
 class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
     private val routes: Array<KRouteBlock>
 

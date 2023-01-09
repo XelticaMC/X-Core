@@ -13,6 +13,7 @@ import java.time.LocalDateTime
  * @author Knit prg.
  */
 object TransferGuideModule : ModuleBase() {
+
     /**
      * モジュール読み込み時に呼び出されるやつ
      */
@@ -96,7 +97,6 @@ object TransferGuideModule : ModuleBase() {
     /**
      * 路線データの更新が必要かどうかを確認します。
      */
-
     private fun willBeUpdated(): Boolean {
         val instanceResource = XCorePlugin.instance.getResource("transferGuideData.yml") ?: return false
         val instanceResourceUpdatedStr =

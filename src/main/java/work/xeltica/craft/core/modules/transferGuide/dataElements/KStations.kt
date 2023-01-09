@@ -45,7 +45,6 @@ class KStations private constructor(data: TransferGuideData) {
     /**
      * 路線で駅を抽出します。
      */
-
     fun filterByLine(line: KLine): KStations {
         val newValue = arrayListOf<Pair<String, KStation>>()
         value.forEach {
@@ -102,7 +101,6 @@ class KStations private constructor(data: TransferGuideData) {
     /**
      * 読みが特定の文字から始まる駅のみを抽出します。
      */
-
     fun filterByYomiInitial(yomiInitial: String): KStations {
         val newValue = arrayListOf<Pair<String, KStation>>()
         value.forEach {

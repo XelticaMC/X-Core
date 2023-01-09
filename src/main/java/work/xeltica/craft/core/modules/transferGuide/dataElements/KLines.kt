@@ -27,7 +27,6 @@ class KLines private constructor(data: TransferGuideData) {
     /**
      * 会社で路線を抽出します。
      */
-
     fun filterByCompany(company: KCompany): KLines {
         val newValue = arrayListOf<Pair<String, KLine>>()
         value.forEach {
