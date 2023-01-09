@@ -185,7 +185,7 @@ class TransferGuideSession(val player: Player) {
     private fun chooseStationAiueo(stationChoiceTarget: StationChoiceTarget, column: JapaneseColumns, char: String) {
         val stations = ArrayList<KStation>()
         data.getStationsInWorld(player.world.name)
-            .filter { it.yomi.first().toString() == char }
+            .filter { it.yomi.first().toString() == char && it.type == "station" }
             .forEach { stations.add(it) }
         val items = ArrayList<MenuItem>()
         stations
@@ -254,7 +254,7 @@ class TransferGuideSession(val player: Player) {
                 logger.warning("[TransferGuideData] 存在しない駅ID:${it}(${line.name}内)")
                 return@forEach
             }
-            if (station.world == player.world.name) {
+            if (station.world == player.world.name && station.type == "station") {
                 items.add(
                     MenuItem(
                         station.name,
@@ -318,9 +318,12 @@ class TransferGuideSession(val player: Player) {
         }
         val distances = stations.keys.sorted()
         val items = ArrayList<MenuItem>()
-        for (i in 0..15) {
+        for (i in 0..16) {
             try {
                 val station = stations.getValue(distances[i])
+                if (station.type != "station") {
+                    continue
+                }
                 items.add(
                     MenuItem(
                         "${station.name}(約${TransferGuideUtil.metersToString(distances[i])})",
@@ -343,6 +346,7 @@ class TransferGuideSession(val player: Player) {
     private fun chooseStationWild(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
         data.getStationsInWorld(player.world.name).forEach { station ->
+            if (station.type != "station") return@forEach
             items.add(
                 MenuItem(
                     station.name,
@@ -450,7 +454,9 @@ class TransferGuideSession(val player: Player) {
                     "routeArrayList=${routeArrayList.joinToString { it.id }}"
         }
         knitB@ while (j < data.loopMax) {
-            if (data.consoleDebug) logger.info("[TransferGuideData(debug)] ${loopBDebugString()}")
+            if (data.consoleDebug) {
+                logger.info("[TransferGuideData(debug)] ${loopBDebugString()}")
+            }
             val lastStationPath = routeArrayList.last().paths
             val candidates: MutableMap<KStation, Double> = mutableMapOf()
             lastStationPath.forEach { path ->
@@ -458,13 +464,17 @@ class TransferGuideSession(val player: Player) {
                     gui.error(player, "[TransferGuideData] 存在しない駅ID(${path.to})")
                     return@forEach
                 }
-                if (closed.any { it.id == path.to }) candidates[pathTo] =
-                    TransferGuideUtil.calcDistance(end.location, pathTo.location)
+                if (closed.any { it.id == path.to }) {
+                    candidates[pathTo] =
+                        TransferGuideUtil.calcDistance(end.location, pathTo.location)
+                }
             }
             if (candidates.isEmpty()) {
                 var k = 0
                 while (k < data.loopMax) {
-                    if (data.consoleDebug) logger.info("[TransferGuideData(debug)] step=Ba${k}\n${loopBDebugString()}")
+                    if (data.consoleDebug) {
+                        logger.info("[TransferGuideData(debug)] step=Ba${k}\n${loopBDebugString()}")
+                    }
                     for (path in routeArrayList.last().paths) {
                         if (closed.any { it.id == path.to }) continue@knitB
                     }

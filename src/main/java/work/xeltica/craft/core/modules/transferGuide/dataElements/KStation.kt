@@ -13,6 +13,7 @@ class KStation(conf: ConfigurationSection, val id: String) {
     val number = conf.getString("number")
     val world = conf.getString("world") ?: "null"
     val location = conf.getDoubleList("location").toDoubleArray()
+    val type = conf.getString("type") ?: "null"
     val paths = pathsConfigToKPaths(conf.getConfigurationSection("paths"))
     private fun pathsConfigToKPaths(conf: ConfigurationSection?): MutableSet<KPath> {
         val set = mutableSetOf<KPath>()

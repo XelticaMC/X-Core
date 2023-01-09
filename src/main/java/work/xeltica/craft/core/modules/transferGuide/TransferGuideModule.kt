@@ -30,6 +30,19 @@ object TransferGuideModule : ModuleBase() {
         val logger = Bukkit.getLogger()
         var count = 0
         data.stations.forEach { station ->
+            if (station.value.name == "null") {
+                logger.warning("[TransferGuideData(verifyData)] 駅の名前の欠如:${station.key}")
+            }
+            if (station.value.yomi == "null") {
+                logger.warning("[TransferGuideData(verifyData)] 駅の読みの欠如:${station.key}")
+            }
+            if (!data.availableWorlds.keys.contains(station.value.world)) {
+                logger.warning("[TransferGuideData(verifyData)] 非対応のワールドに存在する駅:${station.key}")
+            }
+            if (station.value.type == "null") {
+                logger.warning("[TransferGuideData(verifyData)] 駅の種類の欠如:${station.key}")
+                count++
+            }
             station.value.paths.forEach { path ->
                 if (!data.stationExists(path.to)) {
                     logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${path.to}(stations.${station.key})")

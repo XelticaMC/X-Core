@@ -126,7 +126,7 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
             }
         }
         sb.append("${gray}所要時間:${white}約${TransferGuideUtil.secondsToString(appendTime)}\n")
-        sb.append("${white}=".repeat(20))
+        sb.append("${gray}=".repeat(20))
         return sb.toString()
     }
 }
