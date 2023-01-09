@@ -117,9 +117,9 @@ class TransferGuideSession(val player: Player) {
      */
 
     private fun chooseStation(stationChoiceTarget: StationChoiceTarget) {
-        when (player.world.name) {
+        when (data.availableWorlds[player.world.name]) {
             "main" -> chooseStationMain(stationChoiceTarget)
-            "wildarea2", "wildarea2_nether" -> chooseStationWild(stationChoiceTarget)
+            "wild" -> chooseStationWild(stationChoiceTarget)
             else -> gui.error(player, "今いるワールドには鉄道は登録されていません！")
         }
     }
@@ -351,6 +351,7 @@ class TransferGuideSession(val player: Player) {
                 )
             )
         }
+        items.add(MenuItem("戻る", { openMainMenu() }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "駅一覧", items)
     }
 

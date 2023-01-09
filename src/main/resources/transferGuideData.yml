@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2023-01-09T14:31"
+update: "2023-01-09T14:43"
 
 stations:
   mutsuki_shinso_1:
@@ -1441,11 +1441,10 @@ municipalities:
 
 loopMax: 210
 
-availableWorlds: [
-  main,
-  wildarea2,
-  wildarea2_nether,
-]
+availableWorlds:
+  main: main
+  wildarea2: wild
+  wildarea2_nether: wild
 
 #コンソールが滅茶滅茶になるので、本番環境ではfalseにすることを強めに推奨
 consoleDebug: false

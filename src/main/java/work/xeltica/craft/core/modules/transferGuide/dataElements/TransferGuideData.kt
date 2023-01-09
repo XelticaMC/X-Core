@@ -17,7 +17,7 @@ class TransferGuideData {
     val municipalities: Map<String, KMuni>
     val loopMax: Int
     val update: LocalDateTime
-    val availableWorlds: List<String>
+    val availableWorlds: Map<String, String>
     val consoleDebug: Boolean
 
     init {
@@ -29,7 +29,7 @@ class TransferGuideData {
         municipalities = munisConfigToKMunis(conf.getConfigurationSection("municipalities"))
         loopMax = conf.getInt("loopMax")
         update = LocalDateTime.parse(conf.getString("update"))
-        availableWorlds = conf.getStringList("availableWorlds")
+        availableWorlds = pairStringConfigToMap(conf.getConfigurationSection("availableWorlds"))
         consoleDebug = conf.getBoolean("consoleDebug", false)
     }
 
