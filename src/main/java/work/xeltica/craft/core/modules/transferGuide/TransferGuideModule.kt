@@ -18,14 +18,12 @@ object TransferGuideModule : ModuleBase() {
      */
     override fun onEnable() {
         updateData()
-        if (verifyData()) {
-            Bukkit.getLogger().warning("[TransferGuide] 路線データに整合性がありません。")
-        }
-        Bukkit.getLogger().info("[TransferGuide] 乗換案内を読み込みまいた。")
+        verifyData()
     }
 
     /**
      * 路線データの整合性があるかないかを返します。
+     * 整合性がある場合trueを返します。
      */
     private fun verifyData(): Boolean {
         val data = TransferGuideData()
@@ -74,8 +72,11 @@ object TransferGuideModule : ModuleBase() {
                 }
             }
         }
-        if (count > 0) logger.warning("[TransferGuideData(verifyData)] ${count}個のデータ誤りが見つかりました。")
-        else logger.info("[TransferGuideData(verifyData)] データに誤りは見つかりませんでした。")
+        if (count != 0) {
+            logger.warning("[TransferGuideData(verifyData)] ${count}個のデータ誤りが見つかりました。")
+        } else {
+            logger.info("[TransferGuideData(verifyData)] データに誤りは見つかりませんでした。")
+        }
         return count == 0
     }
 
