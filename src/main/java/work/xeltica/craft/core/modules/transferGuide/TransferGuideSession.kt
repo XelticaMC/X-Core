@@ -32,13 +32,13 @@ class TransferGuideSession(val player: Player) {
 
     init {
         val userData = Config("transferGuideUserData").conf.getConfigurationSection(player.uniqueId.toString())
-        userData?.getString("start")?.run {
+        userData?.getString("${player.world.name}.start")?.run {
             if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) startId = this
         }
-        userData?.getString("end")?.run {
+        userData?.getString("${player.world.name}.end")?.run {
             if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) endId = this
         }
-        userData?.getString("info")?.run {
+        userData?.getString("${player.world.name}.info")?.run {
             if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) infoId = this
         }
     }
@@ -77,9 +77,9 @@ class TransferGuideSession(val player: Player) {
         try {
             val userData = Config("transferGuideUserData")
             val uuid = player.uniqueId.toString()
-            userData.conf.set("${uuid}.start", startId)
-            userData.conf.set("${uuid}.end", endId)
-            userData.conf.set("${uuid}.info", infoId)
+            userData.conf.set("${uuid}.${player.world.name}.start", startId)
+            userData.conf.set("${uuid}.${player.world.name}.end", endId)
+            userData.conf.set("${uuid}.${player.world.name}.info", infoId)
             userData.save()
         } catch (e: IOException) {
             e.printStackTrace()
