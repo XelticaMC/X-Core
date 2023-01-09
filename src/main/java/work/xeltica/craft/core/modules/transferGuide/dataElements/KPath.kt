@@ -8,11 +8,10 @@ import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
  * 路線データ内の隣の駅までの経路を表すクラス
  * @author Knit prg.
  */
-
-class KPath(conf: ConfigurationSection) {
-    val to = conf.getString("to") ?: "null"
-    val line = conf.getString("line") ?: "null"
-    val direction = conf.getString("direction") ?: "null"
+class KPath(conf: ConfigurationSection, val id: String) {
+    val to = conf.getString("to")
+    val line = conf.getString("line")
+    val direction = conf.getString("direction")
     val time = conf.getInt("time")
     fun toStringForGuide(data: TransferGuideData): String {
         val gray = ChatColor.GRAY

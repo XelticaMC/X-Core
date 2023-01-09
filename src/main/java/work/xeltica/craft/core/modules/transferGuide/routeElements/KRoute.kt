@@ -24,8 +24,8 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                     if (path.to == stations[i + 1].id) {
                         candidates.add(
                             KRoutePathReal(
-                                path.line,
-                                path.direction,
+                                path.line ?: "",
+                                path.direction ?: "",
                                 path.time
                             )
                         )

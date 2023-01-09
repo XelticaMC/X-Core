@@ -5,12 +5,12 @@ package work.xeltica.craft.core.modules.transferGuide.dataElements
  * @author Knit prg.
  */
 class KLines private constructor(data: TransferGuideData) {
-    var value: ArrayList<Pair<String, KLine>>
+    var value: ArrayList<KLine>
 
     init {
-        val v = arrayListOf<Pair<String, KLine>>()
+        val v = arrayListOf<KLine>()
         data.lines.forEach {
-            v.add(Pair(it.key, it.value))
+            v.add(it.value)
         }
         value = v
     }
@@ -28,9 +28,9 @@ class KLines private constructor(data: TransferGuideData) {
      * 会社で路線を抽出します。
      */
     fun filterByCompany(company: KCompany): KLines {
-        val newValue = arrayListOf<Pair<String, KLine>>()
+        val newValue = arrayListOf<KLine>()
         value.forEach {
-            if (company.lines.contains(it.first)) {
+            if (company.lines.contains(it.id)) {
                 newValue.add(it)
             }
         }
@@ -42,9 +42,9 @@ class KLines private constructor(data: TransferGuideData) {
      * 特定のワールドにある路線のみを抽出します。
      */
     fun filterByWorld(worldName: String): KLines {
-        val newValue = arrayListOf<Pair<String, KLine>>()
+        val newValue = arrayListOf<KLine>()
         value.forEach {
-            if (it.second.world == worldName) {
+            if (it.world == worldName) {
                 newValue.add(it)
             }
         }

@@ -61,7 +61,7 @@ class TransferGuideData {
         val map = mutableMapOf<String, KLine>()
         conf ?: return map
         conf.getKeys(false).forEach { key ->
-            conf.getConfigurationSection(key)?.run { map[key] = KLine(this) }
+            conf.getConfigurationSection(key)?.run { map[key] = KLine(this, key) }
         }
         return map
     }
@@ -70,7 +70,7 @@ class TransferGuideData {
         val map = mutableMapOf<String, KCompany>()
         conf ?: return map
         conf.getKeys(false).forEach { key ->
-            conf.getConfigurationSection(key)?.run { map[key] = KCompany(this) }
+            conf.getConfigurationSection(key)?.run { map[key] = KCompany(this, key) }
         }
         return map.toMap()
     }

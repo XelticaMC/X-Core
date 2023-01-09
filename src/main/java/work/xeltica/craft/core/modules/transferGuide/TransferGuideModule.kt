@@ -31,29 +31,29 @@ object TransferGuideModule : ModuleBase() {
         val logger = Bukkit.getLogger()
         var count = 0
         data.stations.forEach { station ->
-            if (station.value.name == "null") {
+            if (station.value.name == null) {
                 logger.warning("[TransferGuideData(verifyData)] 駅の名前の欠如:${station.key}")
             }
-            if (station.value.yomi == "null") {
+            if (station.value.yomi == null) {
                 logger.warning("[TransferGuideData(verifyData)] 駅の読みの欠如:${station.key}")
             }
             if (!data.availableWorlds.keys.contains(station.value.world)) {
                 logger.warning("[TransferGuideData(verifyData)] 非対応のワールドに存在する駅:${station.key}")
             }
-            if (station.value.type == "null") {
+            if (station.value.type == null) {
                 logger.warning("[TransferGuideData(verifyData)] 駅の種類の欠如:${station.key}")
                 count++
             }
             station.value.paths.forEach { path ->
-                if (!data.stationExists(path.to)) {
+                if (path.to == null || !data.stationExists(path.to)) {
                     logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${path.to}(stations.${station.key})")
                     count++
                 }
-                if (path.line != "walk" && !data.lineExists(path.line)) {
+                if (path.line == null || path.line != "walk" && !data.lineExists(path.line)) {
                     logger.warning("[TransferGuideData(verifyData)] 存在しない路線ID:${path.line}(stations.${station.key})")
                     count++
                 }
-                if (!data.directionExists(path.direction)) {
+                if (path.direction == null || !data.directionExists(path.direction)) {
                     logger.warning("[TransferGuideData(verifyData)] 存在しない方向ID:${path.line}(stations.${station.key})")
                 }
                 if (path.time <= 0) {

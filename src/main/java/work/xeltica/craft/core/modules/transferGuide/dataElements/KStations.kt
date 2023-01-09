@@ -7,12 +7,12 @@ import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
  * @author Knit prg.
  */
 class KStations private constructor(data: TransferGuideData) {
-    var value: ArrayList<Pair<String, KStation>>
+    var value: ArrayList<KStation>
 
     init {
-        val v = arrayListOf<Pair<String, KStation>>()
+        val v = arrayListOf<KStation>()
         data.stations.forEach {
-            v.add(Pair(it.key, it.value))
+            v.add(it.value)
         }
         value = v
     }
@@ -30,7 +30,7 @@ class KStations private constructor(data: TransferGuideData) {
      * 先頭から[n]個の駅を抽出します。
      */
     fun fromBegin(n: Int): KStations {
-        val newValue = arrayListOf<Pair<String, KStation>>()
+        val newValue = arrayListOf<KStation>()
         for (i in 0 until n) {
             try {
                 newValue.add(value[i])
@@ -46,9 +46,9 @@ class KStations private constructor(data: TransferGuideData) {
      * 路線で駅を抽出します。
      */
     fun filterByLine(line: KLine): KStations {
-        val newValue = arrayListOf<Pair<String, KStation>>()
+        val newValue = arrayListOf<KStation>()
         value.forEach {
-            if (line.stations.contains(it.first)) {
+            if (line.stations.contains(it.id)) {
                 newValue.add(it)
             }
         }
@@ -60,9 +60,9 @@ class KStations private constructor(data: TransferGuideData) {
      * 最寄り自治体で駅を抽出します。
      */
     fun filterByMuni(muni: KMuni): KStations {
-        val newValue = arrayListOf<Pair<String, KStation>>()
+        val newValue = arrayListOf<KStation>()
         value.forEach {
-            if (muni.stations.contains(it.first)) {
+            if (muni.stations.contains(it.id)) {
                 newValue.add(it)
             }
         }
@@ -74,9 +74,9 @@ class KStations private constructor(data: TransferGuideData) {
      * 特定の種類の駅のみを抽出します。
      */
     fun filterByType(type: String): KStations {
-        val newValue = arrayListOf<Pair<String, KStation>>()
+        val newValue = arrayListOf<KStation>()
         value.forEach {
-            if (it.second.type == type) {
+            if (it.type == type) {
                 newValue.add(it)
             }
         }
@@ -88,9 +88,9 @@ class KStations private constructor(data: TransferGuideData) {
      * 特定のワールドにある駅のみを抽出します。
      */
     fun filterByWorld(worldName: String): KStations {
-        val newValue = arrayListOf<Pair<String, KStation>>()
+        val newValue = arrayListOf<KStation>()
         value.forEach {
-            if (it.second.world == worldName) {
+            if (it.world == worldName) {
                 newValue.add(it)
             }
         }
@@ -102,9 +102,9 @@ class KStations private constructor(data: TransferGuideData) {
      * 読みが特定の文字から始まる駅のみを抽出します。
      */
     fun filterByYomiInitial(yomiInitial: String): KStations {
-        val newValue = arrayListOf<Pair<String, KStation>>()
+        val newValue = arrayListOf<KStation>()
         value.forEach {
-            if (it.second.yomi.first().toString() == yomiInitial) {
+            if (it.yomi?.first()?.toString() == yomiInitial) {
                 newValue.add(it)
             }
         }
@@ -116,13 +116,13 @@ class KStations private constructor(data: TransferGuideData) {
      * 距離で並び替えます。
      */
     fun sortByDistance(coordinate: DoubleArray): KStations {
-        val distanceList = ArrayList<Pair<Double, Pair<String, KStation>>>()
+        val distanceList = ArrayList<Pair<Double, KStation>>()
         value.forEach {
-            val distance = TransferGuideUtil.calcDistance(coordinate, it.second.location)
+            val distance = TransferGuideUtil.calcDistance(coordinate, it.location)
             distanceList.add(Pair(distance, it))
         }
         distanceList.sortBy { it.first }
-        val newValue = arrayListOf<Pair<String, KStation>>()
+        val newValue = arrayListOf<KStation>()
         distanceList.forEach {
             newValue.add(it.second)
         }
@@ -134,7 +134,7 @@ class KStations private constructor(data: TransferGuideData) {
      * 読みで並び替えます。
      */
     fun sortByYomi(): KStations {
-        value.sortBy { it.second.yomi }
+        value.sortBy { it.yomi }
         return this
     }
 }

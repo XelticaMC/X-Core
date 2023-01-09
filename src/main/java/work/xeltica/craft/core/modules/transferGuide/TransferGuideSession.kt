@@ -19,12 +19,12 @@ import work.xeltica.craft.core.modules.transferGuide.enums.JapaneseColumns
 import work.xeltica.craft.core.modules.transferGuide.enums.StationChoiceTarget
 import work.xeltica.craft.core.modules.transferGuide.routeElements.KRoute
 import java.io.IOException
+import java.util.function.Consumer
 
 /**
  * プレイヤーがアプリを開いてから閉じるまでの一連の流れ(セッション)を表します。
  * @author Knit prg.
  */
-
 class TransferGuideSession(val player: Player) {
     private val data = TransferGuideData()
     private val gui = Gui.getInstance()
@@ -36,17 +36,17 @@ class TransferGuideSession(val player: Player) {
     init {
         val userData = Config("transferGuideUserData").conf.getConfigurationSection(player.uniqueId.toString())
         userData?.getString("${player.world.name}.start")?.run {
-            if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) {
+            if (data.isStationInWorld(this, player.world.name)) {
                 startId = this
             }
         }
         userData?.getString("${player.world.name}.end")?.run {
-            if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) {
+            if (data.isStationInWorld(this, player.world.name)) {
                 endId = this
             }
         }
         userData?.getString("${player.world.name}.info")?.run {
-            if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) {
+            if (data.isStationInWorld(this, player.world.name)) {
                 infoId = this
             }
         }
@@ -62,7 +62,6 @@ class TransferGuideSession(val player: Player) {
     /**
      * 駅を設定してメインメニューに戻ります。
      */
-
     private fun setStationIdAndOpenMainMenu(newId: String, stationChoiceTarget: StationChoiceTarget) {
         when (stationChoiceTarget) {
             StationChoiceTarget.START -> startId = newId
@@ -81,7 +80,6 @@ class TransferGuideSession(val player: Player) {
     /**
      * ユーザーが選択した駅を保存します。
      */
-
     private fun saveUserData() {
         try {
             val userData = Config("transferGuideUserData")
@@ -98,33 +96,24 @@ class TransferGuideSession(val player: Player) {
     /**
      * GUI: メインメニュー
      */
-
     private fun openMainMenu() {
-        gui.openMenu(
-            player, "乗換案内メインメニュー", listOf(
-                MenuItem(
-                    "出発地点:${data.stations[startId]?.name ?: "未設定"}",
-                    { chooseStation(StationChoiceTarget.START) },
-                    Material.LIME_BANNER
-                ),
-                MenuItem(
-                    "到着地点:${data.stations[endId]?.name ?: "未設定"}",
-                    { chooseStation(StationChoiceTarget.END) },
-                    Material.RED_BANNER
-                ),
-                MenuItem("計算開始", { calcRoute() }, Material.COMMAND_BLOCK_MINECART),
-                MenuItem("駅情報", { openStationInfoMenu() }, Material.CHEST_MINECART),
-                MenuItem("このアプリについて", { showAbout() }, Material.ENCHANTED_BOOK),
-                MenuItem("終了", null, Material.BARRIER)
-            )
+        val startStationName = data.stations[startId]?.name ?: "未設定"
+        val endStationName = data.stations[endId]?.name ?: "未設定"
+        val items = listOf(
+            MenuItem("出発地点:$startStationName", { chooseStation(StationChoiceTarget.START) }, Material.LIME_BANNER),
+            MenuItem("到着地点:$endStationName", { chooseStation(StationChoiceTarget.END) }, Material.RED_BANNER),
+            MenuItem("計算開始", { calcRoute() }, Material.COMMAND_BLOCK_MINECART),
+            MenuItem("駅情報", { openStationInfoMenu() }, Material.CHEST_MINECART),
+            MenuItem("このアプリについて", { showAbout() }, Material.ENCHANTED_BOOK),
+            MenuItem("終了", null, Material.BARRIER)
         )
+        gui.openMenu(player, "乗換案内メインメニュー", items)
     }
 
     /**
      * GUI: 駅選択
      * ワールドに応じて適した駅選択画面を開きます。
      */
-
     private fun chooseStation(stationChoiceTarget: StationChoiceTarget) {
         when (data.availableWorlds[player.world.name]) {
             "main" -> chooseStationMain(stationChoiceTarget)
@@ -137,7 +126,6 @@ class TransferGuideSession(val player: Player) {
      * GUI: 駅選択
      * メインワールド等の駅や路線が多いワールドに適した駅選択画面です。
      */
-
     private fun chooseStationMain(stationChoiceTarget: StationChoiceTarget) {
         val items = arrayListOf(
             MenuItem("近い順", { chooseStationNear(stationChoiceTarget) }, Material.DIAMOND_HORSE_ARMOR),
@@ -145,22 +133,17 @@ class TransferGuideSession(val player: Player) {
             MenuItem("会社・路線別", { chooseStationLine(stationChoiceTarget) }, Material.SPRUCE_DOOR),
             MenuItem("最寄自治体別", { chooseStationMuni(stationChoiceTarget) }, Material.FILLED_MAP),
         )
-        when (stationChoiceTarget) {
-            StationChoiceTarget.START, StationChoiceTarget.END -> items.add(
-                MenuItem("戻る", { openMainMenu() }, Material.REDSTONE_TORCH)
-            )
-
-            StationChoiceTarget.INFO -> items.add(
-                MenuItem("戻る", { openStationInfoMenu() }, Material.REDSTONE_TORCH)
-            )
+        val goToMenu: Consumer<MenuItem> = when (stationChoiceTarget) {
+            StationChoiceTarget.START, StationChoiceTarget.END -> Consumer { openMainMenu() }
+            StationChoiceTarget.INFO -> Consumer { openStationInfoMenu() }
         }
+        items.add(MenuItem("戻る", goToMenu, Material.REDSTONE_TORCH))
         gui.openMenu(player, "駅選択", items)
     }
 
     /**
      * GUI: 駅選択/五十音順
      */
-
     private fun chooseStationAiueo(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
         JapaneseColumns.values().forEach { column ->
@@ -175,7 +158,6 @@ class TransferGuideSession(val player: Player) {
     /**
      * GUI: 駅選択/五十音順/○行
      */
-
     private fun chooseStationAiueo(stationChoiceTarget: StationChoiceTarget, column: JapaneseColumns) {
         val items = ArrayList<MenuItem>()
         column.chars.forEach { char ->
@@ -190,7 +172,6 @@ class TransferGuideSession(val player: Player) {
     /**
      * GUI: 駅選択/五十音順/○行/□から始まる駅一覧
      */
-
     private fun chooseStationAiueo(stationChoiceTarget: StationChoiceTarget, column: JapaneseColumns, char: String) {
         val stations = KStations.allStations(data)
             .filterByWorld(player.world.name)
@@ -200,7 +181,7 @@ class TransferGuideSession(val player: Player) {
         val items = ArrayList<MenuItem>()
         stations.value.forEach { station ->
             items.add(
-                MenuItem(station.second.name, { setStationIdAndOpenMainMenu(station.first, stationChoiceTarget) }, Material.MINECART)
+                MenuItem(station.name ?: station.id, { setStationIdAndOpenMainMenu(station.id, stationChoiceTarget) }, Material.MINECART)
             )
         }
         items.add(MenuItem("戻る", { chooseStationAiueo(stationChoiceTarget, column) }, Material.REDSTONE_TORCH))
@@ -210,11 +191,10 @@ class TransferGuideSession(val player: Player) {
     /**
      * GUI: 駅選択/会社選択
      */
-
     private fun chooseStationLine(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
-        data.companies.values.forEach { company ->
-            items.add(MenuItem(company.name, { chooseStationLine(stationChoiceTarget, company) }, Material.SPRUCE_DOOR))
+        data.companies.forEach { company ->
+            items.add(MenuItem(company.value.name ?: company.key, { chooseStationLine(stationChoiceTarget, company.value) }, Material.SPRUCE_DOOR))
         }
         items.add(MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "会社選択", items)
@@ -223,7 +203,6 @@ class TransferGuideSession(val player: Player) {
     /**
      * GUI: 駅選択/会社選択/(会社)
      */
-
     private fun chooseStationLine(stationChoiceTarget: StationChoiceTarget, company: KCompany) {
         val items = ArrayList<MenuItem>()
         val lines = KLines.allLines(data)
@@ -231,17 +210,16 @@ class TransferGuideSession(val player: Player) {
             .filterByCompany(company)
         lines.value.forEach { line ->
             items.add(
-                MenuItem(line.second.name, { chooseStationLine(stationChoiceTarget, company, line.second) }, Material.RAIL)
+                MenuItem(line.name ?: line.id, { chooseStationLine(stationChoiceTarget, company, line) }, Material.RAIL)
             )
         }
         items.add(MenuItem("戻る", { chooseStationLine(stationChoiceTarget) }, Material.REDSTONE_TORCH))
-        gui.openMenu(player, company.name, items)
+        gui.openMenu(player, company.name ?: company.id, items)
     }
 
     /**
      * GUI: 駅選択/会社選択/(会社)/(路線)
      */
-
     private fun chooseStationLine(stationChoiceTarget: StationChoiceTarget, company: KCompany, line: KLine) {
         val items = ArrayList<MenuItem>()
         val stations = KStations.allStations(data)
@@ -250,24 +228,23 @@ class TransferGuideSession(val player: Player) {
             .filterByLine(line)
         stations.value.forEach { station ->
             items.add(
-                MenuItem(station.second.name, { setStationIdAndOpenMainMenu(station.first, stationChoiceTarget) }, Material.MINECART)
+                MenuItem(station.name ?: station.id, { setStationIdAndOpenMainMenu(station.id, stationChoiceTarget) }, Material.MINECART)
             )
         }
         items.add(MenuItem("戻る", { chooseStationLine(stationChoiceTarget, company) }, Material.REDSTONE_TORCH))
-        gui.openMenu(player, line.name, items)
+        gui.openMenu(player, line.name ?: "", items)
     }
 
     /**
      * GUI: 駅選択/自治体選択
      */
-
     private fun chooseStationMuni(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
         val munis = KMunis.allMunis(data)
             .filterByWorld(player.world.name)
         munis.value.forEach { muni ->
             items.add(
-                MenuItem(muni.second.name, { chooseStationMuni(stationChoiceTarget, muni.second) }, Material.FILLED_MAP)
+                MenuItem(muni.name ?: muni.id, { chooseStationMuni(stationChoiceTarget, muni) }, Material.FILLED_MAP)
             )
         }
         items.add(MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH))
@@ -277,7 +254,6 @@ class TransferGuideSession(val player: Player) {
     /**
      * GUI: 駅選択/自治体選択/(自治体)
      */
-
     private fun chooseStationMuni(stationChoiceTarget: StationChoiceTarget, muni: KMuni) {
         val items = ArrayList<MenuItem>()
         val stations = KStations.allStations(data)
@@ -286,7 +262,7 @@ class TransferGuideSession(val player: Player) {
             .filterByMuni(muni)
         stations.value.forEach { station ->
             items.add(
-                MenuItem(station.second.name, { setStationIdAndOpenMainMenu(station.first, stationChoiceTarget) }, Material.MINECART)
+                MenuItem(station.name ?: station.id, { setStationIdAndOpenMainMenu(station.id, stationChoiceTarget) }, Material.MINECART)
             )
         }
         items.add(MenuItem("戻る", { chooseStationMuni(stationChoiceTarget) }, Material.REDSTONE_TORCH))
@@ -296,7 +272,6 @@ class TransferGuideSession(val player: Player) {
     /**
      * GUI: 駅選択/近い順
      */
-
     private fun chooseStationNear(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
         val playerLocation = doubleArrayOf(player.location.x, player.location.z)
@@ -306,9 +281,9 @@ class TransferGuideSession(val player: Player) {
             .sortByDistance(playerLocation)
             .fromBegin(16)
         stations.value.forEach { station ->
-            val distance = TransferGuideUtil.metersToString(TransferGuideUtil.calcDistance(playerLocation, station.second.location))
+            val distance = TransferGuideUtil.metersToString(TransferGuideUtil.calcDistance(playerLocation, station.location))
             items.add(
-                MenuItem("${station.second.name}(約${distance})", { setStationIdAndOpenMainMenu(station.first, stationChoiceTarget) }, Material.MINECART)
+                MenuItem("${station.name}(約${distance})", { setStationIdAndOpenMainMenu(station.id, stationChoiceTarget) }, Material.MINECART)
             )
         }
         items.add(MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH))
@@ -319,7 +294,6 @@ class TransferGuideSession(val player: Player) {
      * GUI: 駅選択
      * ワイルドエリア等の散発的に少数の路線が存在するワールドに適した駅選択画面です。
      */
-
     private fun chooseStationWild(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
         val stations = KStations.allStations(data)
@@ -327,7 +301,7 @@ class TransferGuideSession(val player: Player) {
             .filterByType("station")
         stations.value.forEach { station ->
             items.add(
-                MenuItem(station.second.name, { setStationIdAndOpenMainMenu(station.first, stationChoiceTarget) }, Material.MINECART)
+                MenuItem(station.name ?: station.id, { setStationIdAndOpenMainMenu(station.id, stationChoiceTarget) }, Material.MINECART)
             )
         }
         items.add(MenuItem("戻る", { openMainMenu() }, Material.REDSTONE_TORCH))
@@ -337,7 +311,6 @@ class TransferGuideSession(val player: Player) {
     /**
      * 選択した駅からルートを検索します。
      */
-
     private fun calcRoute() {
         if (startId == null && endId == null) {
             gui.error(player, "駅が設定されていません！")
@@ -491,7 +464,6 @@ class TransferGuideSession(val player: Player) {
     /**
      * GUI: メインメニュー/駅情報
      */
-
     private fun openStationInfoMenu() {
         val items = ArrayList<MenuItem>()
         if (infoId != null) {
@@ -511,7 +483,6 @@ class TransferGuideSession(val player: Player) {
     /**
      * GUI: メインメニュー/駅情報
      */
-
     private fun showStationData() {
         val sb = StringBuilder()
         val station = data.stations[infoId]
@@ -559,13 +530,13 @@ class TransferGuideSession(val player: Player) {
                 )
             })\n"
         )
-        sb.append("${gray}会社:${white}${companies.joinToString(separator = "、", transform = { it.name })}\n")
-        sb.append("${gray}路線:${white}${lines.joinToString(separator = "、", transform = { it.value.name })}\n")
+        sb.append("${gray}会社:${white}${companies.joinToString(separator = "、", transform = { it.name ?: "" })}\n")
+        sb.append("${gray}路線:${white}${lines.joinToString(separator = "、", transform = { it.value.name ?: "" })}\n")
         sb.append("${gray}近隣自治体:")
         if (municipalities.isEmpty()) {
             sb.append("${darkGray}無し\n")
         } else {
-            sb.append("${white}${municipalities.joinToString(separator = "、", transform = { it.name })}\n")
+            sb.append("${white}${municipalities.joinToString(separator = "、", transform = { it.name ?: "" })}\n")
         }
         sb.append("${gray}隣の駅:\n")
         station.paths.forEach {
@@ -578,7 +549,6 @@ class TransferGuideSession(val player: Player) {
     /**
      * GUI: メインメニュー/このアプリについて
      */
-
     private fun showAbout() {
         player.sendMessage(
             "Knit乗換案内\n" +
@@ -587,5 +557,4 @@ class TransferGuideSession(val player: Player) {
                     "経路は機械的に算出されたものです。必ずしも最適な経路ではない可能性があります。情報を利用したことによる損害は負いかねます。"
         )
     }
-
 }

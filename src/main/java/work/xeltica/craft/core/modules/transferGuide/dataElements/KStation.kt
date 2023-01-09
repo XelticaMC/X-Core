@@ -7,18 +7,18 @@ import org.bukkit.configuration.ConfigurationSection
  * @author Knit prg.
  */
 class KStation(conf: ConfigurationSection, val id: String) {
-    val name = conf.getString("name") ?: "null"
-    val yomi = conf.getString("yomi") ?: "null"
+    val name = conf.getString("name")
+    val yomi = conf.getString("yomi")
     val number = conf.getString("number")
-    val world = conf.getString("world") ?: "null"
+    val world = conf.getString("world")
     val location = conf.getDoubleList("location").toDoubleArray()
-    val type = conf.getString("type") ?: "null"
+    val type = conf.getString("type")
     val paths = pathsConfigToKPaths(conf.getConfigurationSection("paths"))
     private fun pathsConfigToKPaths(conf: ConfigurationSection?): MutableSet<KPath> {
         val set = mutableSetOf<KPath>()
         conf ?: return set
         conf.getKeys(false).forEach { key ->
-            conf.getConfigurationSection(key)?.run { set.add(KPath(this)) }
+            conf.getConfigurationSection(key)?.run { set.add(KPath(this, key)) }
         }
         return set
     }

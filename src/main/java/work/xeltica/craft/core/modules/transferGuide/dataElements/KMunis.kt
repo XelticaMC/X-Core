@@ -5,12 +5,12 @@ package work.xeltica.craft.core.modules.transferGuide.dataElements
  * @author Knit prg.
  */
 class KMunis private constructor(data: TransferGuideData) {
-    var value: ArrayList<Pair<String, KMuni>>
+    var value: ArrayList<KMuni>
 
     init {
-        val v = arrayListOf<Pair<String, KMuni>>()
+        val v = arrayListOf<KMuni>()
         data.municipalities.forEach {
-            v.add(Pair(it.key, it.value))
+            v.add(it.value)
         }
         value = v
     }
@@ -28,9 +28,9 @@ class KMunis private constructor(data: TransferGuideData) {
      * ワールドで自治体を抽出します。
      */
     fun filterByWorld(worldName: String): KMunis {
-        val newValue = arrayListOf<Pair<String, KMuni>>()
+        val newValue = arrayListOf<KMuni>()
         value.forEach {
-            if (it.second.world == worldName) {
+            if (it.world == worldName) {
                 newValue.add(it)
             }
         }
