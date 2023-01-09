@@ -22,13 +22,15 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
             } else {
                 val candidates = ArrayList<KRoutePath>()
                 for (path in stations[i].paths) {
-                    if (path.to == stations[i + 1].id) candidates.add(
-                        KRoutePathReal(
-                            path.line,
-                            path.direction,
-                            path.time
+                    if (path.to == stations[i + 1].id) {
+                        candidates.add(
+                            KRoutePathReal(
+                                path.line,
+                                path.direction,
+                                path.time
+                            )
                         )
-                    )
+                    }
                 }
                 pathsCandidates.add(candidates)
             }
@@ -49,7 +51,9 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                     }
                 }
                 //見つからなければ適当に
-                if (pathsCandidates[i].size >= 2) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
+                if (pathsCandidates[i].size >= 2) {
+                    pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
+                }
                 return beforeDecided
             }
 
@@ -65,21 +69,31 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                     }
                 }
                 //見つからなければ適当に
-                if (pathsCandidates[i].size >= 2) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
+                if (pathsCandidates[i].size >= 2) {
+                    pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
+                }
                 return nextDecided
             }
             if (i == 0) { //先頭の場合
-                if (!isNextDecided()) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0]) //次の路線が確定していなければ適当に
+                if (!isNextDecided()) {
+                    pathsCandidates[i] = arrayListOf(pathsCandidates[i][0]) //次の路線が確定していなければ適当に
+                }
             } else if (i == pathsCandidates.lastIndex) { //終端の場合
-                if (!isBeforeDecided()) pathsCandidates[i] = arrayListOf(pathsCandidates[i][0]) //前の路線が確定していなければ適当に
+                if (!isBeforeDecided()) {
+                    pathsCandidates[i] = arrayListOf(pathsCandidates[i][0]) //前の路線が確定していなければ適当に
+                }
             } else { //中間部の場合
-                if (!(isNextDecided() && isBeforeDecided())) pathsCandidates[i] =
-                    arrayListOf(pathsCandidates[i][0]) //前後の路線が確定していない場合は適当に
+                if (!(isNextDecided() && isBeforeDecided())) {
+                    pathsCandidates[i] =
+                        arrayListOf(pathsCandidates[i][0]) //前後の路線が確定していない場合は適当に
+                }
             }
         }
         //駅と路線を纒める
         val routesListNull = ArrayList<KRouteBlock?>()
-        for (i in stations.indices) routesListNull.add(KRouteBlock(stations[i], pathsCandidates[i][0]))
+        for (i in stations.indices) {
+            routesListNull.add(KRouteBlock(stations[i], pathsCandidates[i][0]))
+        }
         //同じ路線を纒める
         for (i in routesListNull.indices) {
             if (i == 0) continue
@@ -99,7 +113,9 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
         }
         val routesList = ArrayList<KRouteBlock>()
         for (route in routesListNull) {
-            if (route != null) routesList.add(route)
+            if (route != null) {
+                routesList.add(route)
+            }
         }
         routes = routesList.toTypedArray()
     }

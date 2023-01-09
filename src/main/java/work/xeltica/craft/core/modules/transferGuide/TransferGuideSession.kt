@@ -36,13 +36,19 @@ class TransferGuideSession(val player: Player) {
     init {
         val userData = Config("transferGuideUserData").conf.getConfigurationSection(player.uniqueId.toString())
         userData?.getString("${player.world.name}.start")?.run {
-            if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) startId = this
+            if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) {
+                startId = this
+            }
         }
         userData?.getString("${player.world.name}.end")?.run {
-            if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) endId = this
+            if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) {
+                endId = this
+            }
         }
         userData?.getString("${player.world.name}.info")?.run {
-            if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) infoId = this
+            if (data.stationExists(this) && data.isStationInWorld(this, player.world.name)) {
+                infoId = this
+            }
         }
     }
 
@@ -412,7 +418,9 @@ class TransferGuideSession(val player: Player) {
                 unsearched.remove(pathToInUnsearched.id)
                 if (endId == pathToInUnsearched.id) {
                     closed.add(pathToInUnsearched)
-                    if (data.consoleDebug) logger.info("[TransferGuide(debug)] A_END\n${loopADebugString()}")
+                    if (data.consoleDebug) {
+                        logger.info("[TransferGuide(debug)] A_END\n${loopADebugString()}")
+                    }
                     break@knitA
                 }
             }
@@ -451,7 +459,9 @@ class TransferGuideSession(val player: Player) {
                         logger.info("[TransferGuideData(debug)] step=Ba${k}\n${loopBDebugString()}")
                     }
                     for (path in routeArrayList.last().paths) {
-                        if (closed.any { it.id == path.to }) continue@knitB
+                        if (closed.any { it.id == path.to }) {
+                            continue@knitB
+                        }
                     }
                     routeArrayList.removeLast()
                     k++
@@ -466,7 +476,9 @@ class TransferGuideSession(val player: Player) {
             routeArrayList.add(min.key)
             closed.remove(min.key)
             if (min.key.id == startId) {
-                if (data.consoleDebug) logger.info("[TransferGuide] step: B_END\n${loopBDebugString()}")
+                if (data.consoleDebug) {
+                    logger.info("[TransferGuide] step: B_END\n${loopBDebugString()}")
+                }
                 break@knitB
             }
             j++
@@ -518,21 +530,23 @@ class TransferGuideSession(val player: Player) {
         data.companies.values
             .forEach { company ->
                 lines.forEach {
-                    if (!(companies.contains(company)) && company.lines.contains(it.key)) companies.add(company)
+                    if (!(companies.contains(company)) && company.lines.contains(it.key)) {
+                        companies.add(company)
+                    }
                 }
             }
         val municipalities = data.municipalities.values.filter { it.stations.contains(infoId) }
-        val aqua = ChatColor.AQUA
         val bold = ChatColor.BOLD
         val darkGray = ChatColor.DARK_GRAY
         val gray = ChatColor.GRAY
         val reset = ChatColor.RESET
         val white = ChatColor.WHITE
-        sb.append("${gray}===== ${aqua}${bold}${station.name}${reset}${white}駅 ${gray}=====\n")
+        sb.append("${gray}===== ${bold}${station.name}${reset}${white}駅 ${gray}=====\n")
         sb.append("${gray}読み:${white}${station.yomi}\n")
         sb.append("${gray}駅番号:")
-        if (station.number == null) sb.append("${darkGray}無し\n")
-        else sb.append("${white}${station.number}\n")
+        if (station.number == null) {
+            sb.append("${darkGray}無し\n")
+        } else sb.append("${white}${station.number}\n")
         sb.append(
             "${gray}座標:[X:${white}${station.location[0]}${gray},Z:${white}${station.location[1]}${gray}]付近(ここから約${white}${
                 TransferGuideUtil.metersToString(
@@ -548,8 +562,11 @@ class TransferGuideSession(val player: Player) {
         sb.append("${gray}会社:${white}${companies.joinToString(separator = "、", transform = { it.name })}\n")
         sb.append("${gray}路線:${white}${lines.joinToString(separator = "、", transform = { it.value.name })}\n")
         sb.append("${gray}近隣自治体:")
-        if (municipalities.isEmpty()) sb.append("${darkGray}無し\n")
-        else sb.append("${white}${municipalities.joinToString(separator = "、", transform = { it.name })}\n")
+        if (municipalities.isEmpty()) {
+            sb.append("${darkGray}無し\n")
+        } else {
+            sb.append("${white}${municipalities.joinToString(separator = "、", transform = { it.name })}\n")
+        }
         sb.append("${gray}隣の駅:\n")
         station.paths.forEach {
             sb.append(" ${it.toStringForGuide(data)}\n")
