@@ -41,10 +41,6 @@ class TransferGuideData {
         return stations[stationId]?.world == worldName
     }
 
-    fun getStationsInWorld(worldName: String): Set<KStation> {
-        return stations.filter { it.value.world == worldName }.values.toSet()
-    }
-
     fun lineExists(lineId: String): Boolean {
         return lines[lineId] != null
     }

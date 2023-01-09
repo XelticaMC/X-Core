@@ -384,14 +384,20 @@ class TransferGuideSession(val player: Player) {
         knitA@ while (i < data.loopMax) {
             opened.forEach { openedEntry ->
                 var distance = TransferGuideUtil.calcDistance(end.location, openedEntry.key.location)
-                if (closed.isNotEmpty()) distance -= TransferGuideUtil.calcDistance(
-                    closed.last().location,
-                    openedEntry.key.location
-                )
-                if (TransferGuideUtil.containsSamePath(openedEntry.key.paths, end.paths)) distance /= 2
+                if (closed.isNotEmpty()) {
+                    distance -= TransferGuideUtil.calcDistance(
+                        closed.last().location,
+                        openedEntry.key.location
+                    )
+                }
+                if (TransferGuideUtil.containsSamePath(openedEntry.key.paths, end.paths)) {
+                    distance /= 2
+                }
                 opened[openedEntry.key] = distance
             }
-            if (data.consoleDebug) logger.info("[TransferGuide(debug)] ${loopADebugString()}")
+            if (data.consoleDebug) {
+                logger.info("[TransferGuide(debug)] ${loopADebugString()}")
+            }
             val minStationEntry = opened.minByOrNull { it.value }
             if (minStationEntry == null) {
                 gui.error(player, "最小値からの駅探索Aに失敗しました。")
