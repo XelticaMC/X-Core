@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2023-01-09T13:46"
+update: "2023-01-09T14:31"
 
 stations:
   mutsuki_shinso_1:
@@ -1309,7 +1309,7 @@ directions:
   eastwalk: 東へ
   north: 北行
   northwalk: 北へ
-  south: 南方
+  south: 南行
   southwalk: 南へ
   west: 西行
   westwalk: 西へ
@@ -1440,6 +1440,12 @@ municipalities:
     stations: [ mutsuki_kohoku_2 ]
 
 loopMax: 210
+
+availableWorlds: [
+  main,
+  wildarea2,
+  wildarea2_nether,
+]
 
 #コンソールが滅茶滅茶になるので、本番環境ではfalseにすることを強めに推奨
 consoleDebug: false
