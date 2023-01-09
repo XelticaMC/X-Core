@@ -50,7 +50,6 @@ class TransferGuideSession(val player: Player) {
         openMainMenu()
     }
 
-
     /**
      * 駅を設定してメインメニューに戻ります。
      */
@@ -93,7 +92,7 @@ class TransferGuideSession(val player: Player) {
 
     private fun openMainMenu() {
         gui.openMenu(
-            player, "地点選択", listOf(
+            player, "乗換案内メインメニュー", listOf(
                 MenuItem(
                     "出発地点:${data.stations[startId]?.name ?: "未設定"}",
                     { chooseStation(StationChoiceTarget.START) },
@@ -104,8 +103,8 @@ class TransferGuideSession(val player: Player) {
                     { chooseStation(StationChoiceTarget.END) },
                     Material.RED_BANNER
                 ),
-                MenuItem("駅情報", { openStationInfoMenu() }, Material.CHEST_MINECART),
                 MenuItem("計算開始", { calcRoute() }, Material.COMMAND_BLOCK_MINECART),
+                MenuItem("駅情報", { openStationInfoMenu() }, Material.CHEST_MINECART),
                 MenuItem("このアプリについて", { showAbout() }, Material.ENCHANTED_BOOK),
                 MenuItem("終了", null, Material.BARRIER)
             )
@@ -585,6 +584,5 @@ class TransferGuideSession(val player: Player) {
                     "経路は機械的に算出されたものです。必ずしも最適な経路ではない可能性があります。情報を利用したことによる損害は負いかねます。"
         )
     }
-
 
 }

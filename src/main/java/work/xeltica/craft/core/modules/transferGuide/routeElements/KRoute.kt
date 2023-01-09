@@ -116,7 +116,11 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
             sb.append("/X:${it.station.location[0]},Z:${it.station.location[1]})\n")
             if (it.routePath is KRoutePathReal) {
                 appendTime += it.routePath.time
-                appendTime += if (it.routePath.line == "walk") 10 else 30
+                appendTime += if (it.routePath.line == "walk") {
+                    10
+                } else {
+                    30
+                }
                 sb.append("${white} | ")
                 sb.append("${it.routePath.toStringForGuide(data)}\n")
             }
