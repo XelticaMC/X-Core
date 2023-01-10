@@ -512,7 +512,7 @@ class TransferGuideSession(val player: Player) {
         val gray = ChatColor.GRAY
         val reset = ChatColor.RESET
         val white = ChatColor.WHITE
-        sb.append("${gray}===== ${bold}${station.name}${reset}${white}駅 ${gray}=====\n")
+        sb.append("${gray}===== ${white}${bold}${station.name}${reset}${white}駅 ${gray}=====\n")
         sb.append("${gray}読み:${white}${station.yomi}\n")
         sb.append("${gray}駅番号:")
         if (station.number == null) {

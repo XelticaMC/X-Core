@@ -26,7 +26,7 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                             KRoutePathReal(
                                 path.line ?: "",
                                 path.direction ?: "",
-                                path.time
+                                path.time ?: -1
                             )
                         )
                     }
@@ -136,7 +136,7 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                 } else {
                     30
                 }
-                sb.append("${white} | ")
+                sb.append("$white | ")
                 sb.append("${it.routePath.toStringForGuide(data)}\n")
             }
         }

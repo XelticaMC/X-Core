@@ -33,30 +33,48 @@ object TransferGuideModule : ModuleBase() {
         data.stations.forEach { station ->
             if (station.value.name == null) {
                 logger.warning("[TransferGuideData(verifyData)] 駅の名前の欠如:${station.key}")
+                count++
             }
             if (station.value.yomi == null) {
                 logger.warning("[TransferGuideData(verifyData)] 駅の読みの欠如:${station.key}")
+                count++
             }
             if (!data.availableWorlds.keys.contains(station.value.world)) {
                 logger.warning("[TransferGuideData(verifyData)] 非対応のワールドに存在する駅:${station.key}")
+                count++
+            }
+            if (station.value.location.size != 2) {
+                logger.warning("[TransferGuideData(verifyData)] 不正な座標データ:${station.key}")
             }
             if (station.value.type == null) {
                 logger.warning("[TransferGuideData(verifyData)] 駅の種類の欠如:${station.key}")
                 count++
             }
             station.value.paths.forEach { path ->
-                if (path.to == null || !data.stationExists(path.to)) {
+                if (path.to == null) {
+                    logger.warning("[TransferGuideData(verifyData)] 行き先の存在しないpath:stations.${station.key}")
+                    count++
+                } else if (!data.stationExists(path.to)) {
                     logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${path.to}(stations.${station.key})")
                     count++
                 }
-                if (path.line == null || path.line != "walk" && !data.lineExists(path.line)) {
+                if (path.line == null) {
+                    logger.warning("[TransferGuideData(verifyData)] 路線が指定されていないpath:stations.${station.key}")
+                    count++
+                } else if (path.line != "walk" && !data.lineExists(path.line)) {
                     logger.warning("[TransferGuideData(verifyData)] 存在しない路線ID:${path.line}(stations.${station.key})")
                     count++
                 }
-                if (path.direction == null || !data.directionExists(path.direction)) {
+                if (path.direction == null) {
+                    logger.warning("[TransferGuideData(verifyData)] 方向が指定されていないpath:stations.${station.key}")
+                    count++
+                } else if (!data.directionExists(path.direction)) {
                     logger.warning("[TransferGuideData(verifyData)] 存在しない方向ID:${path.line}(stations.${station.key})")
                 }
-                if (path.time <= 0) {
+                if (path.time == null) {
+                    logger.warning("[TransferGuideData(verifyData)] 時間が指定されていないpath:stations.${station.key}")
+                    count++
+                } else if (path.time <= 0) {
                     logger.warning("[TransferGuideData(verifyData)] 無効な所要時間:${path.time}(stations.${station.key})")
                     count++
                 }

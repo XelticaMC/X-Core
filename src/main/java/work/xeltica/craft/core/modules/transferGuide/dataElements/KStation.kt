@@ -13,13 +13,41 @@ class KStation(conf: ConfigurationSection, val id: String) {
     val world = conf.getString("world")
     val location = conf.getDoubleList("location").toDoubleArray()
     val type = conf.getString("type")
-    val paths = pathsConfigToKPaths(conf.getConfigurationSection("paths"))
-    private fun pathsConfigToKPaths(conf: ConfigurationSection?): MutableSet<KPath> {
-        val set = mutableSetOf<KPath>()
-        conf ?: return set
-        conf.getKeys(false).forEach { key ->
-            conf.getConfigurationSection(key)?.run { set.add(KPath(this, key)) }
+    val paths = pathsConfigToKPaths(conf.getList("paths"))
+    private fun pathsConfigToKPaths(conf: List<*>?): Array<KPath> {
+        val set = arrayListOf<KPath>()
+        conf ?: return set.toTypedArray()
+        for (i in conf.indices) {
+            val item = conf[i]
+            if (item !is java.util.LinkedHashMap<*, *>) continue
+            val toT = item["to"]
+            val lineT = item["line"]
+            val directionT = item["direction"]
+            val timeT = item["time"]
+            val to = if (toT is String) {
+                toT
+            } else {
+                null
+            }
+            val line = if (lineT is String) {
+                lineT
+            } else {
+                null
+            }
+            val direction = if (directionT is String) {
+                directionT
+            } else {
+                null
+            }
+            val time = if (timeT is Int) {
+                timeT
+            } else {
+                null
+            }
+            set.add(
+                KPath(to, line, direction, time)
+            )
         }
-        return set
+        return set.toTypedArray()
     }
 }
