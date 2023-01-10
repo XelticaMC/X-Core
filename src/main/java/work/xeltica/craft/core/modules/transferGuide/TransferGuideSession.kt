@@ -350,6 +350,21 @@ class TransferGuideSession(val player: Player) {
         val unsearched = data.stations.toMutableMap()
         val opened: MutableMap<KStation, Double> = mutableMapOf()
         val closed: MutableSet<KStation> = mutableSetOf()
+        if (TransferGuideUtil.containsPathWithSameLine(start.paths, end.paths)) {
+            val sameLine = TransferGuideUtil.getPathWithSameLine(start.paths, end.paths)
+            val toRemove = ArrayList<String>()
+            unsearched.forEach { station ->
+                if (station.value.paths.none { it.line == sameLine }) {
+                    toRemove.add(station.key)
+                }
+            }
+            toRemove.forEach {
+                unsearched.remove(it)
+            }
+            if (data.consoleDebug) {
+                logger.info("[TransferGuideData(debug)] 同一路線:${sameLine}")
+            }
+        }
         opened[start] = TransferGuideUtil.calcDistance(start.location, end.location)
         unsearched.remove(startId)
         var i = 0
@@ -517,7 +532,9 @@ class TransferGuideSession(val player: Player) {
         sb.append("${gray}駅番号:")
         if (station.number == null) {
             sb.append("${darkGray}無し\n")
-        } else sb.append("${white}${station.number}\n")
+        } else {
+            sb.append("${white}${station.number}\n")
+        }
         sb.append(
             "${gray}座標:[X:${white}${station.location[0]}${gray},Z:${white}${station.location[1]}${gray}]付近(ここから約${white}${
                 TransferGuideUtil.metersToString(

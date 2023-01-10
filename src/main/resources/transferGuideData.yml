@@ -244,6 +244,7 @@ stations:
     type: station
     paths: [
       { to: mutsuki_shinso_19, line: mutsuki_shinso_rapid, direction: west, time: 62 },
+      { to: mutsuki_shinso_R21, line: mutsuki_shinso_rapid, direction: east, time: 40 },
       { to: hamazato_1, line: walk, direction: southwalk, time: 13 },
     ]
   mutsuki_shinso_R21:

@@ -17,9 +17,21 @@ object TransferGuideUtil {
     fun calcDistance(start: DoubleArray, end: DoubleArray): Double {
         return abs(sqrt((start[0] - end[0]).pow(2.0) + (start[1] - end[1]).pow(2.0)))
     }
-    
+
     /**
-     * 同じKPathを含むかどうかを判定します。
+     * 同じ路線のKPathを含むかどうかを判定します。
+     */
+    fun containsPathWithSameLine(pathsA: Array<KPath>, pathsB: Array<KPath>): Boolean {
+        pathsA.forEach { pathA ->
+            pathsB.forEach { pathB ->
+                if (pathA.line == pathB.line) return true
+            }
+        }
+        return false
+    }
+
+    /**
+     * 同じ路線と方向のKPathを含むかどうかを判定します。
      */
     fun containsSamePath(pathsA: Array<KPath>, pathsB: Array<KPath>): Boolean {
         pathsA.forEach { pathA ->
@@ -28,6 +40,30 @@ object TransferGuideUtil {
             }
         }
         return false
+    }
+
+    /**
+     * 同じ路線のKPathの路線IDを抽出します。
+     */
+    fun getPathWithSameLine(pathsA: Array<KPath>, pathsB: Array<KPath>): String? {
+        pathsA.forEach { pathA ->
+            pathsB.forEach { pathB ->
+                if (pathA.line == pathB.line) return pathA.line
+            }
+        }
+        return null
+    }
+
+    /**
+     * 同じ路線と方向のKPathの路線IDと方向IDを抽出します。firstが路線、secondが方向です。
+     */
+    fun getSamePath(pathsA: Array<KPath>, pathsB: Array<KPath>): Pair<String?, String?>? {
+        pathsA.forEach { pathA ->
+            pathsB.forEach { pathB ->
+                if (pathA.line == pathB.line && pathA.direction == pathB.direction) return Pair(pathA.line, pathA.direction)
+            }
+        }
+        return null
     }
 
     /**
