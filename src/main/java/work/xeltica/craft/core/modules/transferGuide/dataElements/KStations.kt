@@ -47,9 +47,9 @@ class KStations private constructor(data: TransferGuideData) {
      */
     fun filterByLine(line: KLine): KStations {
         val newValue = arrayListOf<KStation>()
-        value.forEach {
-            if (line.stations.contains(it.id)) {
-                newValue.add(it)
+        line.stations.forEach { station ->
+            value.find { it.id == station }?.run {
+                newValue.add(this)
             }
         }
         value = newValue
@@ -61,9 +61,9 @@ class KStations private constructor(data: TransferGuideData) {
      */
     fun filterByMuni(muni: KMuni): KStations {
         val newValue = arrayListOf<KStation>()
-        value.forEach {
-            if (muni.stations.contains(it.id)) {
-                newValue.add(it)
+        muni.stations.forEach { station ->
+            value.find { it.id == station }?.run {
+                newValue.add(this)
             }
         }
         value = newValue
