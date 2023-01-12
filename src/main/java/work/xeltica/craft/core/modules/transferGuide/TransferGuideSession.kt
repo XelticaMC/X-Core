@@ -310,6 +310,7 @@ class TransferGuideSession(val player: Player) {
 
     /**
      * 選択した駅からルートを検索します。
+     * A*アルゴリズムの実装になっているハズ、多分
      */
     private fun calcRoute() {
         if (startId == null && endId == null) {
@@ -337,19 +338,15 @@ class TransferGuideSession(val player: Player) {
             logger.warning("[TransferGuideData] 存在しない駅ID:${endId}")
             return
         }
-        /*
-            アルゴリズムの大まかなイメージ
-            A*っぽいもののつもりだけどちゃんと実装できているかは不明
-            1. 全ての駅を表すカードが裏返しで置いてあると想定する。(unsearched)
-            2. 出発地点の駅のカードを開ける。(unsearchedから削除、openedへ追加)
-            3. 既に開いているカードの内、最も到着地点の駅への直線距離が短い駅(minStation)の隣の駅を全て開け(openedへ追加)、
-               その駅に印をつける(closedに追加しopenedから削除)。
-            4. 開いたカードに到着地点の駅が含まれていなければ3. へ戻る。(Aループ)
-            5. 印をつけた駅を結んで、おわり。(Bループ)
-        */
+        /**未探索の駅*/
         val unsearched = data.stations.toMutableMap()
+
+        /**次の探索の候補となる駅(OPENリスト)*/
         val opened: MutableMap<KStation, Double> = mutableMapOf()
+
+        /**探索済みの駅(CLOSEリスト)*/
         val closed: MutableSet<KStation> = mutableSetOf()
+        //始点と終点が同一路線に属する駅の場合、その路線に属さない駅を未探索の駅から削除
         if (TransferGuideUtil.containsPathWithSameLine(start.paths, end.paths)) {
             val sameLine = TransferGuideUtil.getPathWithSameLine(start.paths, end.paths)
             val toRemove = ArrayList<String>()
@@ -365,9 +362,12 @@ class TransferGuideSession(val player: Player) {
                 logger.info("[TransferGuideData(debug)] 同一路線:${sameLine}")
             }
         }
-        opened[start] = TransferGuideUtil.calcDistance(start.location, end.location)
+        //始点の駅を未探索から探索候補に移す
+        opened[start] = 0.0
         unsearched.remove(startId)
         var i = 0
+
+        /**デバッグモードがオンの場合やエラー発生時に出力する文字列を生成するメソッド*/
         fun loopADebugString(): String {
             return "step=A${i}\n" +
                     "route=${startId}->${endId}\n" +
@@ -376,34 +376,40 @@ class TransferGuideSession(val player: Player) {
                     "closed=${closed.joinToString { it.id }}"
         }
         knitA@ while (i < data.loopMax) {
-            opened.forEach { openedEntry ->
-                var distance = TransferGuideUtil.calcDistance(end.location, openedEntry.key.location)
+            //探索候補の駅に対し、それぞれの優先度を決定する
+            opened.forEach {
+                var distance = TransferGuideUtil.calcDistance(end.location, it.key.location)
                 if (closed.isNotEmpty()) {
                     distance -= TransferGuideUtil.calcDistance(
                         closed.last().location,
-                        openedEntry.key.location
+                        it.key.location
                     )
                 }
-                if (TransferGuideUtil.containsSamePath(openedEntry.key.paths, end.paths)) {
+                if (TransferGuideUtil.containsSamePath(it.key.paths, end.paths)) {
                     distance /= 2
                 }
-                opened[openedEntry.key] = distance
+                opened[it.key] = distance
             }
             if (data.consoleDebug) {
                 logger.info("[TransferGuide(debug)] ${loopADebugString()}")
             }
-            val minStationEntry = opened.minByOrNull { it.value }
-            if (minStationEntry == null) {
-                gui.error(player, "最小値からの駅探索Aに失敗しました。")
+            //探索候補の駅の内、優先度値が最も低いものを選択する
+            val minOpenedStation = opened.minByOrNull { it.value }
+            //優先度値が最も低いものが見つからない場合、両駅間の経路は存在しないものと考えられる
+            if (minOpenedStation == null) {
+                gui.error(player, "指定された駅同士を結ぶ有効な経路が存在しません。")
                 logger.warning("[TransferGuide] 最小値からの駅探索失敗A\n${loopADebugString()}")
                 return
             }
-            closed.add(minStationEntry.key)
-            opened.remove(minStationEntry.key)
-            for (path in minStationEntry.key.paths) {
+            //優先度値が最も低い駅を探索候補から探索済へ移動
+            closed.add(minOpenedStation.key)
+            opened.remove(minOpenedStation.key)
+            //優先度値が最も低い駅の隣の駅を探索候補へ移動
+            for (path in minOpenedStation.key.paths) {
                 val pathToInUnsearched = unsearched[path.to] ?: continue
-                opened[pathToInUnsearched] = TransferGuideUtil.calcDistance(end.location, pathToInUnsearched.location)
+                opened[pathToInUnsearched] = 0.0
                 unsearched.remove(pathToInUnsearched.id)
+                //もし終点が含まれていれば、そこで終了
                 if (endId == pathToInUnsearched.id) {
                     closed.add(pathToInUnsearched)
                     if (data.consoleDebug) {
@@ -414,22 +420,33 @@ class TransferGuideSession(val player: Player) {
             }
             i++
         }
+        if (i >= data.loopMax && closed.none { it.id == endId }) {
+            player.sendMessage("計算回数が既定の回数以上になった為、強制終了しました。")
+            logger.warning("[TransferGuide] 計算回数(${i})がloopMax(${data.loopMax})以上になりました。\nloopMaxの値を上げても解決しない場合、バグの可能性があります。\n${loopADebugString()}")
+            return
+        }
+        /**経路を通る駅の一覧で表したリスト*/
         val routeArrayList = ArrayList<KStation>()
         routeArrayList.add(end)
         closed.removeIf { it.id == endId }
         var j = 0
+
+        /**デバッグモードがオンの場合やエラー発生時に出力する文字列を生成するメソッド*/
         fun loopBDebugString(): String {
             return "step=B${j}\n" +
                     "route=${startId}->${endId}\n" +
                     "closed=${closed.joinToString { it.id }}\n" +
                     "routeArrayList=${routeArrayList.joinToString { it.id }}"
         }
+        //探索済みリストを遡ってルートを決定する
         knitB@ while (j < data.loopMax) {
             if (data.consoleDebug) {
                 logger.info("[TransferGuideData(debug)] ${loopBDebugString()}")
             }
+            //経路リストの終端にある駅から繋がっている駅の内、探索済みリストにある駅を全て取得
             val lastStationPath = routeArrayList.last().paths
             val candidates: MutableMap<KStation, Double> = mutableMapOf()
+            //TODO:
             lastStationPath.forEach { path ->
                 val pathTo = data.stations[path.to] ?: run {
                     gui.error(player, "[TransferGuideData] 存在しない駅ID(${path.to})")
@@ -440,6 +457,7 @@ class TransferGuideSession(val player: Player) {
                         TransferGuideUtil.calcDistance(end.location, pathTo.location)
                 }
             }
+            //駅が取得できない場合、袋小路に入ったものと考え、分岐点まで戻る
             if (candidates.isEmpty()) {
                 var k = 0
                 while (k < data.loopMax) {
@@ -455,15 +473,18 @@ class TransferGuideSession(val player: Player) {
                     k++
                 }
             }
-            val min = candidates.minByOrNull { it.value }
-            if (min == null) {
+            //取得した駅の内、最も経路リストの終端にある駅から最も遠い駅を選択(その方が駅数が少なくなると考えられる)
+            val max = candidates.maxByOrNull { it.value }
+            if (max == null) {
                 gui.error(player, "最小値からの駅探索Bに失敗しました。")
                 logger.warning("[TransferGuideData] 最小値からの駅探索失敗B\n${loopBDebugString()}")
                 return
             }
-            routeArrayList.add(min.key)
-            closed.remove(min.key)
-            if (min.key.id == startId) {
+            //選択した駅を探索済みリストから経路リストに移動
+            routeArrayList.add(max.key)
+            closed.remove(max.key)
+            //始点に到達したら終了
+            if (max.key.id == startId) {
                 if (data.consoleDebug) {
                     logger.info("[TransferGuide] step: B_END\n${loopBDebugString()}")
                 }
@@ -471,8 +492,14 @@ class TransferGuideSession(val player: Player) {
             }
             j++
         }
+        if (j >= data.loopMax) {
+            player.sendMessage("計算回数が規定の回数以上になった為、計算を打ち切りました。以下の出力結果は正しくない場合があります。")
+            logger.warning("[TransferGuide] 計算回数(${j})がloopMax(${data.loopMax})以上になりました。\nloopMaxの値を上げても解決しない場合、バグの可能性があります。\n${loopBDebugString()}")
+        }
+        //終点→始点になっているので、反転させる
         routeArrayList.reverse()
         val routeArray = routeArrayList.toTypedArray()
+        //結果表示
         player.sendMessage(KRoute(data, routeArray).toStringForGuide())
     }
 
