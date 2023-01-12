@@ -1,6 +1,6 @@
 package work.xeltica.craft.core.modules.transferGuide
 
-import work.xeltica.craft.core.modules.transferGuide.dataElements.KPath
+import work.xeltica.craft.core.modules.transferGuide.dataElements.TransferGuideData
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -19,51 +19,35 @@ object TransferGuideUtil {
     }
 
     /**
-     * 同じ路線のKPathを含むかどうかを判定します。
+     * 特定の駅へのステップ数を計算します。
      */
-    fun containsPathWithSameLine(pathsA: Array<KPath>, pathsB: Array<KPath>): Boolean {
-        pathsA.forEach { pathA ->
-            pathsB.forEach { pathB ->
-                if (pathA.line == pathB.line) return true
+    fun calcStepsTo(data: TransferGuideData, destination: String): Map<String, Int> {
+        val map = mutableMapOf<String, Int>()
+        val stations = data.stations.toMutableMap()
+        map[destination] = 0
+        stations.remove(destination)
+        var i = 1
+        while (i < data.loopMax && stations.isNotEmpty()) {
+            val beforeStepStations = map.filter { it.value == i - 1 }
+            beforeStepStations.forEach { beforeStepStation ->
+                data.stations[beforeStepStation.key]?.paths?.forEach { path ->
+                    val pathTo = stations[path.to]
+                    if (pathTo != null) {
+                        map[pathTo.id] = i
+                        stations.remove(path.to)
+                    }
+                }
             }
+            i++
         }
-        return false
+        return map
     }
 
     /**
-     * 同じ路線と方向のKPathを含むかどうかを判定します。
+     * 共通する路線を抽出します。
      */
-    fun containsSamePath(pathsA: Array<KPath>, pathsB: Array<KPath>): Boolean {
-        pathsA.forEach { pathA ->
-            pathsB.forEach { pathB ->
-                if (pathA.line == pathB.line && pathA.direction == pathB.direction) return true
-            }
-        }
-        return false
-    }
-
-    /**
-     * 同じ路線のKPathの路線IDを抽出します。
-     */
-    fun getPathWithSameLine(pathsA: Array<KPath>, pathsB: Array<KPath>): String? {
-        pathsA.forEach { pathA ->
-            pathsB.forEach { pathB ->
-                if (pathA.line == pathB.line) return pathA.line
-            }
-        }
-        return null
-    }
-
-    /**
-     * 同じ路線と方向のKPathの路線IDと方向IDを抽出します。firstが路線、secondが方向です。
-     */
-    fun getSamePath(pathsA: Array<KPath>, pathsB: Array<KPath>): Pair<String?, String?>? {
-        pathsA.forEach { pathA ->
-            pathsB.forEach { pathB ->
-                if (pathA.line == pathB.line && pathA.direction == pathB.direction) return Pair(pathA.line, pathA.direction)
-            }
-        }
-        return null
+    fun getSameLines(data: TransferGuideData, startId: String, endId: String): Array<String> {
+        return data.lines.filter { it.value.stations.containsAll(setOf(startId, endId)) }.keys.toTypedArray()
     }
 
     /**

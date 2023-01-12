@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.transferGuide.routeElements
 
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
 import work.xeltica.craft.core.modules.transferGuide.dataElements.KStation
@@ -34,58 +35,63 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                 pathsCandidates.add(candidates)
             }
         }
+        if (data.consoleDebug) {
+            Bukkit.getLogger().info(pathsCandidates.joinToString { candidate ->
+                "[" +
+                        candidate.joinToString {
+                            if (it is KRoutePathReal) {
+                                "${it.line}:${it.direction}"
+                            } else {
+                                "END"
+                            }
+                        } + "]"
+            })
+        }
         //使用可能な移動経路群から使用する経路を選択
         for (i in pathsCandidates.indices) {
-            if (pathsCandidates.size <= 1) break
-            if (pathsCandidates[i].size <= 1) continue
-            fun isBeforeDecided(): Boolean {
-                val beforeDecided = pathsCandidates[i - 1].size == 1
-                if (beforeDecided) { //前の路線が確定しているならば
-                    for (now in pathsCandidates[i]) {
-                        val before = pathsCandidates[i - 1][0]
-                        if (now is KRoutePathReal && before is KRoutePathReal && now.line == before.line && now.direction == before.direction) { //前の路線と同じものを検索
-                            pathsCandidates[i] = arrayListOf(now)
-                            break
-                        }
+            val before = if (i == 0) {
+                null
+            } else {
+                pathsCandidates[i - 1]
+            }
+            val now = pathsCandidates[i]
+            val after = if (i == pathsCandidates.lastIndex) {
+                null
+            } else {
+                pathsCandidates[i + 1]
+            }
+            val beforeDecided = before != null && before.size == 1
+            val afterDecided = after != null && after.size == 1
+            if (beforeDecided && before != null) {
+                val beforeD = before[0]
+                if (beforeD !is KRoutePathReal) continue
+                val found = now.find {
+                    if (it is KRoutePathReal) {
+                        it.line == beforeD.line && it.direction == beforeD.direction
+                    } else {
+                        false
                     }
                 }
-                //見つからなければ適当に
-                if (pathsCandidates[i].size >= 2) {
-                    pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
+                if (found != null) {
+                    pathsCandidates[i] = arrayListOf(found)
                 }
-                return beforeDecided
             }
-
-            fun isNextDecided(): Boolean {
-                val nextDecided = pathsCandidates[i + 1].size == 1
-                if (nextDecided) { //次の路線が確定しているならば
-                    for (now in pathsCandidates[i]) {
-                        val next = pathsCandidates[i + 1][0]
-                        if (now is KRoutePathReal && next is KRoutePathReal && now.line == next.line && now.direction == next.direction) { //次の路線と同じものを検索
-                            pathsCandidates[i] = arrayListOf(now)
-                            break
-                        }
+            if (afterDecided && after != null) {
+                val afterD = after[0]
+                if (afterD !is KRoutePathReal) continue
+                val found = now.find {
+                    if (it is KRoutePathReal) {
+                        it.line == afterD.line && it.direction == afterD.direction
+                    } else {
+                        false
                     }
                 }
-                //見つからなければ適当に
-                if (pathsCandidates[i].size >= 2) {
-                    pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
+                if (found != null) {
+                    pathsCandidates[i] = arrayListOf(found)
                 }
-                return nextDecided
             }
-            if (i == 0) { //先頭の場合
-                if (!isNextDecided()) {
-                    pathsCandidates[i] = arrayListOf(pathsCandidates[i][0]) //次の路線が確定していなければ適当に
-                }
-            } else if (i == pathsCandidates.lastIndex) { //終端の場合
-                if (!isBeforeDecided()) {
-                    pathsCandidates[i] = arrayListOf(pathsCandidates[i][0]) //前の路線が確定していなければ適当に
-                }
-            } else { //中間部の場合
-                if (!(isNextDecided() && isBeforeDecided())) {
-                    pathsCandidates[i] =
-                        arrayListOf(pathsCandidates[i][0]) //前後の路線が確定していない場合は適当に
-                }
+            if (pathsCandidates[i].size >= 2) {
+                pathsCandidates[i] = arrayListOf(pathsCandidates[i][0])
             }
         }
         //駅と路線を纒める
@@ -141,7 +147,7 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
             }
         }
         sb.append("${gray}所要時間:${white}約${TransferGuideUtil.secondsToString(appendTime)}\n")
-        sb.append("${gray}=".repeat(20))
+        sb.append("${gray}=".repeat(15))
         return sb.toString()
     }
 }

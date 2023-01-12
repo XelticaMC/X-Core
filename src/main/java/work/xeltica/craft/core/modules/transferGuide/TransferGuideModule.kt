@@ -57,6 +57,8 @@ object TransferGuideModule : ModuleBase() {
                 } else if (!data.stationExists(path.to)) {
                     logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${path.to}(stations.${station.key})")
                     count++
+                } else if (path.to == station.key) {
+                    logger.warning("[TransferGuideData(verifyData)] 自駅への参照:stations.${station.key}")
                 }
                 if (path.line == null) {
                     logger.warning("[TransferGuideData(verifyData)] 路線が指定されていないpath:stations.${station.key}")
@@ -69,7 +71,7 @@ object TransferGuideModule : ModuleBase() {
                     logger.warning("[TransferGuideData(verifyData)] 方向が指定されていないpath:stations.${station.key}")
                     count++
                 } else if (!data.directionExists(path.direction)) {
-                    logger.warning("[TransferGuideData(verifyData)] 存在しない方向ID:${path.line}(stations.${station.key})")
+                    logger.warning("[TransferGuideData(verifyData)] 存在しない方向ID:${path.direction}(stations.${station.key})")
                 }
                 if (path.time == null) {
                     logger.warning("[TransferGuideData(verifyData)] 時間が指定されていないpath:stations.${station.key}")
