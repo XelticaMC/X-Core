@@ -170,6 +170,7 @@ class EbiPowerHandler : Listener {
         val p = e.player
         if (playerIsInBlacklisted(p)) return
         val blockData = e.block.blockData
+        HintModule.achieve(p, Hint.HARVEST_AND_EARN_MONEY)
         if (blockData is org.bukkit.block.data.Ageable && blockData.age == blockData.maximumAge) {
             val tool = p.inventory.itemInMainHand
             val bonus = getBlockDropBonus(tool)
