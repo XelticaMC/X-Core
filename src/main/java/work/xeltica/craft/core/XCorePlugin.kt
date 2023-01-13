@@ -114,8 +114,8 @@ class XCorePlugin : JavaPlugin() {
                 logger.severe("連携フック '${it.javaClass.simpleName}' の無効化に失敗しました。")
                 e.printStackTrace()
             }
-            logger.info("連携フックを全て無効化しました。")
         }
+        logger.info("連携フックを全て無効化しました。")
     }
 
     /**

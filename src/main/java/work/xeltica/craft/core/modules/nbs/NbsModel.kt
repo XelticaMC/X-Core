@@ -36,7 +36,7 @@ class NbsModel(var location: Location, var songId: String, var distance: Int, va
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other == this) return true
+        if (other === this) return true
         if (other !is NbsModel) return false
         if (this.location != other.location) return false
         if (this.songId != other.songId) return false
