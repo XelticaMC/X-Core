@@ -59,7 +59,7 @@ class MobBallHandler : Listener {
     /**
      * モブボールが震える音
      */
-    private val SOUND_VIBE = Sound.BLOCK_BEACON_DEACTIVATE
+    private val SOUND_VIBE = Sound.BLOCK_NOTE_BLOCK_HAT
 
     /**
      * モブボールが跳ね返る音
