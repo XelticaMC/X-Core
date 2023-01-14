@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.player.PlayerTeleportEvent
+import org.bukkit.event.raid.RaidTriggerEvent
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
@@ -165,5 +166,11 @@ class WorldHandler : Listener {
             }
             e.respawnLocation = respawnLocation
         }
+    }
+
+    @EventHandler
+    fun onRaid(e: RaidTriggerEvent) {
+        if (WorldModule.getWorldInfo(e.world).allowRaids) return
+        e.isCancelled = true
     }
 }

@@ -14,6 +14,7 @@ data class WorldInfo(
     val canRespawn: Boolean = true,
     val allowVehicleSpawn: Boolean = false,
     val allowAdvancements: Boolean = false,
+    val allowRaids: Boolean = false,
     val respawnWorld: String = "",
     val description: String = "",
 ) {
