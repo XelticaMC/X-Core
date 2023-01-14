@@ -32,76 +32,86 @@ object TransferGuideModule : ModuleBase() {
         var count = 0
         data.stations.forEach { station ->
             if (station.value.name == null) {
-                logger.warning("[TransferGuideData(verifyData)] 駅の名前の欠如:${station.key}")
+                logger.warning("[TransferGuideData(verifyData)] 駅の名前の欠如:stations.${station.key}.name")
                 count++
             }
             if (station.value.yomi == null) {
-                logger.warning("[TransferGuideData(verifyData)] 駅の読みの欠如:${station.key}")
+                logger.warning("[TransferGuideData(verifyData)] 駅の読みの欠如:stations.${station.key}.yomi")
                 count++
             }
             if (!data.availableWorlds.keys.contains(station.value.world)) {
-                logger.warning("[TransferGuideData(verifyData)] 非対応のワールドに存在する駅:${station.key}")
+                logger.warning("[TransferGuideData(verifyData)] 非対応のワールドに存在する駅:stations.${station.key}.world")
                 count++
             }
             if (station.value.location.size != 2) {
-                logger.warning("[TransferGuideData(verifyData)] 不正な座標データ:${station.key}")
+                logger.warning("[TransferGuideData(verifyData)] 不正な座標データ:stations.${station.key}.location")
             }
             if (station.value.type == null) {
-                logger.warning("[TransferGuideData(verifyData)] 駅の種類の欠如:${station.key}")
+                logger.warning("[TransferGuideData(verifyData)] 駅の種類の欠如:stations.${station.key}.type")
                 count++
             }
-            station.value.paths.forEach { path ->
+            station.value.paths.forEachIndexed { i, path ->
                 if (path.to == null) {
-                    logger.warning("[TransferGuideData(verifyData)] 行き先の存在しないpath:stations.${station.key}")
+                    logger.warning("[TransferGuideData(verifyData)] 行き先の存在しないpath:stations.${station.key}.paths[$i].to")
                     count++
                 } else if (!data.stationExists(path.to)) {
-                    logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${path.to}(stations.${station.key})")
+                    logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${path.to}(stations.${station.key}.paths[$i].to)")
                     count++
                 } else if (path.to == station.key) {
-                    logger.warning("[TransferGuideData(verifyData)] 自駅への参照:stations.${station.key}")
+                    logger.warning("[TransferGuideData(verifyData)] 自駅への参照:stations.${station.key}.paths[$i].to")
+                    count++
                 }
                 if (path.line == null) {
-                    logger.warning("[TransferGuideData(verifyData)] 路線が指定されていないpath:stations.${station.key}")
+                    logger.warning("[TransferGuideData(verifyData)] 路線が指定されていないpath:stations.${station.key}.paths[$i].line")
                     count++
-                } else if (path.line != "walk" && !data.lineExists(path.line)) {
-                    logger.warning("[TransferGuideData(verifyData)] 存在しない路線ID:${path.line}(stations.${station.key})")
+                } else if ((path.line != "walk" && path.line != "boat") && !data.lineExists(path.line)) {
+                    logger.warning("[TransferGuideData(verifyData)] 存在しない路線ID:${path.line}(stations.${station.key}.paths[$i].line)")
                     count++
                 }
                 if (path.direction == null) {
-                    logger.warning("[TransferGuideData(verifyData)] 方向が指定されていないpath:stations.${station.key}")
+                    logger.warning("[TransferGuideData(verifyData)] 方向が指定されていないpath:stations.${station.key}.paths[$i].direction")
                     count++
                 } else if (!data.directionExists(path.direction)) {
-                    logger.warning("[TransferGuideData(verifyData)] 存在しない方向ID:${path.direction}(stations.${station.key})")
+                    logger.warning("[TransferGuideData(verifyData)] 存在しない方向ID:${path.direction}(stations.${station.key}.paths[$i].direction)")
+                    count++
                 }
                 if (path.time == null) {
-                    logger.warning("[TransferGuideData(verifyData)] 時間が指定されていないpath:stations.${station.key}")
+                    logger.warning("[TransferGuideData(verifyData)] 時間が指定されていないpath:stations.${station.key}.paths[$i].time")
                     count++
                 } else if (path.time <= 0) {
-                    logger.warning("[TransferGuideData(verifyData)] 無効な所要時間:${path.time}(stations.${station.key})")
+                    logger.warning("[TransferGuideData(verifyData)] 無効な所要時間:${path.time}(stations.${station.key}.paths[$i].time)")
                     count++
                 }
             }
         }
+        val unlinkedStations = data.stations.toMutableMap()
         data.lines.forEach { line ->
-            line.value.stations.forEach { station ->
+            line.value.stations.forEachIndexed { i, station ->
+                unlinkedStations.remove(station)
                 if (!data.stationExists(station)) {
-                    logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${station}(lines.${line.key}.stations)")
+                    logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${station}(lines.${line.key}.stations[$i])")
                     count++
                 }
+            }
+        }
+        unlinkedStations.forEach { station ->
+            if (station.value.paths.all { it.line != "walk" && it.line != "boat" }) {
+                logger.warning("[TransferGuideData(verifyData)] どの路線にも属していない駅:stations.${station.key}")
+                count++
             }
         }
         data.companies.forEach { company ->
-            company.value.lines.forEach { line ->
+            company.value.lines.forEachIndexed { i, line ->
                 if (!data.lineExists(line)) {
-                    logger.warning("[TransferGuideData(verifyData)] 存在しない路線ID:${line}(companies.${company.key}.lines)")
+                    logger.warning("[TransferGuideData(verifyData)] 存在しない路線ID:${line}(companies.${company.key}.lines[$i])")
                     count++
                 }
             }
         }
         data.municipalities.forEach { municipality ->
-            municipality.value.stations.forEach { station ->
+            municipality.value.stations.forEachIndexed { i, station ->
                 if (!data.stationExists(station)) {
-                    logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${station}(municipalities.${municipality.key}.stations)")
+                    logger.warning("[TransferGuideData(verifyData)] 存在しない駅ID:${station}(municipalities.${municipality.key}.stations[$i])")
                     count++
                 }
             }

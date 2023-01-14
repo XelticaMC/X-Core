@@ -16,6 +16,11 @@ class KPath(val to: String?, val line: String?, val direction: String?, val time
                 time ?: -1
             )
         }歩く"
+        else if (line == "boat") "${white}${data.stations[to]?.name}${gray}:${data.directions[direction]}約${
+            TransferGuideUtil.secondsToString(
+                time ?: -1
+            )
+        }ボートに乗る"
         else "${white}${data.stations[to]?.name}${gray}:${data.lines[line]?.name}(${data.directions[direction]}) 約${
             TransferGuideUtil.secondsToString(
                 time ?: -1

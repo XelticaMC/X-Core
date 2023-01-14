@@ -102,6 +102,7 @@ class TransferGuideSession(val player: Player) {
         val items = listOf(
             MenuItem("出発地点:$startStationName", { chooseStation(StationChoiceTarget.START) }, Material.LIME_BANNER),
             MenuItem("到着地点:$endStationName", { chooseStation(StationChoiceTarget.END) }, Material.RED_BANNER),
+            MenuItem("出発地点と到着地点を入れ替える", { reverseChosenStations() }, Material.LEVER),
             MenuItem("計算開始", { calcRoute() }, Material.COMMAND_BLOCK_MINECART),
             MenuItem("駅情報", { openStationInfoMenu() }, Material.CHEST_MINECART),
             MenuItem("このアプリについて", { showAbout() }, Material.ENCHANTED_BOOK),
@@ -306,6 +307,19 @@ class TransferGuideSession(val player: Player) {
         }
         items.add(MenuItem("戻る", { openMainMenu() }, Material.REDSTONE_TORCH))
         gui.openMenu(player, "駅一覧", items)
+    }
+
+    /**
+     * GUI: 出発地点と到着地点を入れ替える
+     */
+
+    private fun reverseChosenStations() {
+        val tempStart = startId
+        val tempEnd = endId
+        startId = tempEnd
+        endId = tempStart
+        saveUserData()
+        openMainMenu()
     }
 
     /**
@@ -614,8 +628,7 @@ class TransferGuideSession(val player: Player) {
      */
     private fun showAbout() {
         player.sendMessage(
-            "Knit乗換案内\n" +
-                    "製作者:Knit\n" +
+            "乗換案内\n" +
                     "データベース更新日:${data.update}\n" +
                     "経路は機械的に算出されたものです。必ずしも最適な経路ではない可能性があります。情報を利用したことによる損害は負いかねます。"
         )

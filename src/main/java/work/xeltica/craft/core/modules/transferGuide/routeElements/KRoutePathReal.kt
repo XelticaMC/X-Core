@@ -17,6 +17,8 @@ class KRoutePathReal(
         val white = ChatColor.WHITE
         return if (line == "walk") {
             "${white}${data.directions[direction]}歩く ${gray}約${TransferGuideUtil.secondsToString(time)}"
+        } else if (line == "boat") {
+            "${white}${data.directions[direction]}ボートに乗る ${gray}約${TransferGuideUtil.secondsToString(time)}"
         } else {
             "${white}${data.lines[line]?.name}(${data.directions[direction]}) ${gray}約${
                 TransferGuideUtil.secondsToString(

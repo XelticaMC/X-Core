@@ -131,13 +131,15 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
         val gray = ChatColor.GRAY
         val white = ChatColor.WHITE
         sb.append("${gray}===== ${white}結果 ${gray}=====\n")
-        routes.forEach {
+        routes.forEachIndexed { i, it ->
             sb.append("${white}${it.station.name}${gray}(${it.station.yomi}")
             it.station.number?.run { sb.append("/${it.station.number}") }
             sb.append("/X:${it.station.location[0]},Z:${it.station.location[1]})\n")
             if (it.routePath is KRoutePathReal) {
                 appendTime += it.routePath.time
-                appendTime += if (it.routePath.line == "walk") {
+                appendTime += if (routes.lastIndex == i) {
+                    0
+                } else if (it.routePath.line == "walk" || it.routePath.line == "boat") {
                     10
                 } else {
                     30
