@@ -25,6 +25,7 @@ import work.xeltica.craft.core.models.PlayerDataKey
 import work.xeltica.craft.core.modules.coreProtectGuiTest.CoreProtectGuiTestModule
 import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
 import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
+import work.xeltica.craft.core.modules.gamemodeChange.GamemodeChangeModule
 import work.xeltica.craft.core.modules.halloween.HalloweenModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
 import work.xeltica.craft.core.utils.DiscordService
@@ -259,6 +260,7 @@ class XCorePlugin : JavaPlugin() {
         PaymentsModule,
         HalloweenModule,
         CoreProtectGuiTestModule,
+        GamemodeChangeModule,
     )
 
     private lateinit var calculator: CitizenTimerCalculator
