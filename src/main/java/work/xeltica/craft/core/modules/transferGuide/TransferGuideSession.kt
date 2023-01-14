@@ -4,9 +4,11 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
+import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.transferGuide.dataElements.KCompany
 import work.xeltica.craft.core.modules.transferGuide.dataElements.KLine
 import work.xeltica.craft.core.modules.transferGuide.dataElements.KLines
@@ -19,6 +21,7 @@ import work.xeltica.craft.core.modules.transferGuide.enums.JapaneseColumns
 import work.xeltica.craft.core.modules.transferGuide.enums.StationChoiceTarget
 import work.xeltica.craft.core.modules.transferGuide.routeElements.KRoute
 import java.io.IOException
+import java.util.UUID
 import java.util.function.Consumer
 
 /**
@@ -26,6 +29,7 @@ import java.util.function.Consumer
  * @author Knit prg.
  */
 class TransferGuideSession(val player: Player) {
+    private val knit = "fef8dd2a-762a-463a-916f-f2e1ac62041b"
     private val data = TransferGuideData()
     private val gui = Gui.getInstance()
     private val logger = Bukkit.getLogger()
@@ -99,7 +103,7 @@ class TransferGuideSession(val player: Player) {
     private fun openMainMenu() {
         val startStationName = data.stations[startId]?.name ?: "未設定"
         val endStationName = data.stations[endId]?.name ?: "未設定"
-        val items = listOf(
+        val items = arrayListOf(
             MenuItem("出発地点:$startStationName", { chooseStation(StationChoiceTarget.START) }, Material.LIME_BANNER),
             MenuItem("到着地点:$endStationName", { chooseStation(StationChoiceTarget.END) }, Material.RED_BANNER),
             MenuItem("出発地点と到着地点を入れ替える", { reverseChosenStations() }, Material.LEVER),
@@ -108,6 +112,16 @@ class TransferGuideSession(val player: Player) {
             MenuItem("このアプリについて", { showAbout() }, Material.ENCHANTED_BOOK),
             MenuItem("終了", null, Material.BARRIER)
         )
+        if (player.isOp || player.uniqueId.toString() == knit) {
+            val head = Bukkit.getPlayer(UUID.fromString(knit))?.run {
+                ItemModule.getPlayerHead(this)
+            }
+            items.addAll(
+                arrayListOf(
+                    MenuItem("デバッグメニュー", { openDebugMenu() }, head ?: ItemStack(Material.NETHERITE_AXE), isShiny = true)
+                )
+            )
+        }
         gui.openMenu(player, "乗換案内メインメニュー", items)
     }
 
@@ -630,7 +644,122 @@ class TransferGuideSession(val player: Player) {
         player.sendMessage(
             "乗換案内\n" +
                     "データベース更新日:${data.update}\n" +
-                    "経路は機械的に算出されたものです。必ずしも最適な経路ではない可能性があります。情報を利用したことによる損害は負いかねます。"
+                    "経路は機械的に算出されたものです。必ずしも最適な経路ではない可能性があります。\n" +
+                    "情報を利用したことによる損害は負いかねます。"
         )
+    }
+
+    /**
+     * GUI: メインメニュー/デバッグメニュー
+     */
+    private fun openDebugMenu() {
+        val items = arrayListOf(
+            MenuItem("路線データの整合性チェック", { verifyData(data) }, Material.SPYGLASS),
+            MenuItem(
+                "戻る", { openMainMenu() }, Material.REDSTONE_TORCH
+            ),
+        )
+        gui.openMenu(player, "デバッグメニュー", items)
+    }
+
+    /**
+     * 路線データの整合性をチェックし、整合性がある場合trueを返します。
+     */
+    private fun verifyData(data: TransferGuideData): Boolean {
+        val yellow = ChatColor.YELLOW
+        var count = 0
+        data.stations.forEach { station ->
+            if (station.value.name == null) {
+                player.sendMessage("${yellow}駅の名前の欠如:stations.${station.key}.name")
+                count++
+            }
+            if (station.value.yomi == null) {
+                player.sendMessage("${yellow}駅の読みの欠如:stations.${station.key}.yomi")
+                count++
+            }
+            if (!data.availableWorlds.keys.contains(station.value.world)) {
+                player.sendMessage("${yellow}非対応のワールドに存在する駅:stations.${station.key}.world")
+                count++
+            }
+            if (station.value.location.size != 2) {
+                player.sendMessage("${yellow}不正な座標データ:stations.${station.key}.location")
+                count++
+            }
+            if (station.value.type == null) {
+                player.sendMessage("${yellow}駅の種類の欠如:stations.${station.key}.type")
+                count++
+            }
+            station.value.paths.forEachIndexed { i, path ->
+                if (path.to == null) {
+                    player.sendMessage("${yellow}行き先の存在しないpath:stations.${station.key}.paths[$i].to")
+                    count++
+                } else if (!data.stationExists(path.to)) {
+                    player.sendMessage("${yellow}存在しない駅ID:${path.to}(stations.${station.key}.paths[$i].to)")
+                    count++
+                } else if (path.to == station.key) {
+                    player.sendMessage("${yellow}自駅への参照:stations.${station.key}.paths[$i].to")
+                    count++
+                }
+                if (path.line == null) {
+                    player.sendMessage("${yellow}路線が指定されていないpath:stations.${station.key}.paths[$i].line")
+                    count++
+                } else if ((path.line != "walk" && path.line != "boat") && !data.lineExists(path.line)) {
+                    player.sendMessage("${yellow}存在しない路線ID:${path.line}(stations.${station.key}.paths[$i].line)")
+                    count++
+                }
+                if (path.direction == null) {
+                    player.sendMessage("${yellow}方向が指定されていないpath:stations.${station.key}.paths[$i].direction")
+                    count++
+                } else if (!data.directionExists(path.direction)) {
+                    player.sendMessage("${yellow}存在しない方向ID:${path.direction}(stations.${station.key}.paths[$i].direction)")
+                    count++
+                }
+                if (path.time == null) {
+                    player.sendMessage("${yellow}時間が指定されていないpath:stations.${station.key}.paths[$i].time")
+                    count++
+                } else if (path.time <= 0) {
+                    player.sendMessage("${yellow}無効な所要時間:${path.time}(stations.${station.key}.paths[$i].time)")
+                    count++
+                }
+            }
+        }
+        val unlinkedStations = data.stations.toMutableMap()
+        data.lines.forEach { line ->
+            line.value.stations.forEachIndexed { i, station ->
+                unlinkedStations.remove(station)
+                if (!data.stationExists(station)) {
+                    player.sendMessage("${yellow}存在しない駅ID:${station}(lines.${line.key}.stations[$i])")
+                    count++
+                }
+            }
+        }
+        unlinkedStations.forEach { station ->
+            if (station.value.paths.all { it.line != "walk" && it.line != "boat" }) {
+                player.sendMessage("${yellow}どの路線にも属していない駅:stations.${station.key}")
+                count++
+            }
+        }
+        data.companies.forEach { company ->
+            company.value.lines.forEachIndexed { i, line ->
+                if (!data.lineExists(line)) {
+                    player.sendMessage("${yellow}存在しない路線ID:${line}(companies.${company.key}.lines[$i])")
+                    count++
+                }
+            }
+        }
+        data.municipalities.forEach { municipality ->
+            municipality.value.stations.forEachIndexed { i, station ->
+                if (!data.stationExists(station)) {
+                    player.sendMessage("${yellow}存在しない駅ID:${station}(municipalities.${municipality.key}.stations[$i])")
+                    count++
+                }
+            }
+        }
+        if (count == 0) {
+            player.sendMessage("データに誤りは見つかりませんでした。")
+        } else {
+            player.sendMessage("${yellow}${count}個のデータ誤りが見つかりました。")
+        }
+        return count == 0
     }
 }
