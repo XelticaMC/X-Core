@@ -80,7 +80,7 @@ dependencies {
 }
 
 group = "work.xeltica.craft.core"
-version = "3.0.0-beta.1"
+version = "3.0.0"
 description = "A Core System Plugin for XelticaMC."
 java.sourceCompatibility = JavaVersion.VERSION_17
 
