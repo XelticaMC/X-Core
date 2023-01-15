@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2023-01-14T17:50"
+update: "2023-01-15T03:09"
 
 #駅データ
 # name: 駅名
@@ -11,7 +11,7 @@ update: "2023-01-14T17:50"
 #  type: station 乗降可能な駅、駅選択画面に表示される
 #  type: signal_station 信号場、駅選択画面に表示されない
 # paths: 隣の駅までの道筋
-#  { to: 隣の駅のID, line: 路線ID, direction: 方向ID, time: 時間(整数秒) },
+#  { to: 隣の駅のID, line: 路線ID, direction: 方向ID, time: 時間(整数秒), rapid_not_in_parallel: 緩行線と別ルートを快速線が通る場合true },
 # pathsは基本的に上から走査されるので、快速など優先的に表示されるべき路線は上に
 stations:
   mutsuki_shinso_1:
@@ -22,9 +22,9 @@ stations:
     location: [ -1998.5, -5.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_5, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 179 },
-      { to: mutsuki_shinso_2, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 51 },
-      { to: yaga_yaga_1, line: walk, direction: northwalk, time: 30 },
+      { to: mutsuki_shinso_5, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 179, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_2, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 51, rapid_not_in_parallel: false },
+      { to: yaga_yaga_1, line: walk, direction: northwalk, time: 30, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_2:
     name: 渓谷前
@@ -34,8 +34,8 @@ stations:
     location: [ -1604.0, -5.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_1, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 51 },
-      { to: mutsuki_shinso_3, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 49 },
+      { to: mutsuki_shinso_1, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 51, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_3, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 49, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_3:
     name: 第二大書見台帝国
@@ -45,9 +45,9 @@ stations:
     location: [ -1232.5, -5.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_2, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 49 },
-      { to: mutsuki_shinso_4, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 35 },
-      { to: enr_2_4, line: walk, direction: northwalk, time: 30 },
+      { to: mutsuki_shinso_2, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 49, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_4, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 35, rapid_not_in_parallel: false },
+      { to: enr_2_4, line: walk, direction: northwalk, time: 30, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_4:
     name: シラカバの森
@@ -57,9 +57,9 @@ stations:
     location: [ -969.5, -5.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_3, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 35 },
-      { to: mutsuki_shinso_5, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 51 },
-      { to: scr_06, line: walk, direction: southwalk, time: 67 },
+      { to: mutsuki_shinso_3, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 35, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_5, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 51, rapid_not_in_parallel: false },
+      { to: scr_06, line: walk, direction: southwalk, time: 67, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_5:
     name: もさんな
@@ -69,10 +69,10 @@ stations:
     location: [ -761.5, -194.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_1, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 179 },
-      { to: mutsuki_shinso_8, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 108 },
-      { to: mutsuki_shinso_4, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 51 },
-      { to: mutsuki_shinso_6, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 33 },
+      { to: mutsuki_shinso_1, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 179, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_8, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 108, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_4, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 51, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_6, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 33, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_6:
     name: 砂川(睦電)
@@ -82,10 +82,10 @@ stations:
     location: [ -591.5, -281.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_5, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 33 },
-      { to: mutsuki_shinso_7, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 31 },
-      { to: scr_01, line: walk, direction: southwalk, time: 15 },
-      { to: scr_07, line: walk, direction: northwalk, time: 64 },
+      { to: mutsuki_shinso_5, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 33, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_7, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 31, rapid_not_in_parallel: false },
+      { to: scr_01, line: walk, direction: southwalk, time: 15, rapid_not_in_parallel: false },
+      { to: scr_07, line: walk, direction: northwalk, time: 64, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_7:
     name: 海老川本町
@@ -95,9 +95,9 @@ stations:
     location: [ -362.0, -281.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_6, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 31 },
-      { to: mutsuki_shinso_8, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 47 },
-      { to: niizame_ebikawa_1, line: walk, direction: northwalk, time: 60 },
+      { to: mutsuki_shinso_6, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 31, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_8, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 47, rapid_not_in_parallel: false },
+      { to: niizame_ebikawa_1, line: walk, direction: northwalk, time: 60, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_8:
     name: 新スポーン地点
@@ -107,13 +107,13 @@ stations:
     location: [ -69.75, -295.0 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_5, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 108 },
-      { to: mutsuki_shinso_9, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 41 },
-      { to: mutsuki_shinso_7, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 47 },
-      { to: mutsuki_shinso_9, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 41 },
-      { to: mutsuki_niizamenamboku_S1, line: mutsuki_niizamenamboku_south, direction: to_niizame, time: 73 },
-      { to: mutsuki_niizamenamboku_S3, line: mutsuki_niizamenamboku_south, direction: to_yamuwakka, time: 42 },
-      { to: mutsuki_kohoku_12, line: mutsuki_adachi, direction: to_kasukotamagawa, time: 146 },
+      { to: mutsuki_shinso_5, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 108, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_9, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 41, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_7, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 47, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_9, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 41, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_S1, line: mutsuki_niizamenamboku_south, direction: to_niizame, time: 73, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_S3, line: mutsuki_niizamenamboku_south, direction: to_yamuwakka, time: 42, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_12, line: mutsuki_adachi, direction: to_kasukotamagawa, time: 146, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_9:
     name: 海鮮王国東
@@ -123,10 +123,10 @@ stations:
     location: [ 233.5, -206.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_8, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 41 },
-      { to: mutsuki_shinso_12, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 88 },
-      { to: mutsuki_shinso_8, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 41 },
-      { to: mutsuki_shinso_10, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 48 },
+      { to: mutsuki_shinso_8, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 41, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_12, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 88, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_8, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 41, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_10, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 48, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_10:
     name: 曲山
@@ -136,8 +136,8 @@ stations:
     location: [ 233.5, -106.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_9, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 48 },
-      { to: mutsuki_shinso_11, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 40 },
+      { to: mutsuki_shinso_9, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 48, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_11, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 40, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_11:
     name: 湖断島東
@@ -147,8 +147,8 @@ stations:
     location: [ 471.5, 234.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_10, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 40 },
-      { to: mutsuki_shinso_12, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 41 },
+      { to: mutsuki_shinso_10, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 40, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_12, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 41, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_12:
     name: 湖断島中央
@@ -158,11 +158,11 @@ stations:
     location: [ 780.5, 230.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_9, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 88 },
-      { to: mutsuki_shinso_16, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 99 },
-      { to: mutsuki_shinso_11, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 41 },
-      { to: mutsuki_shinso_13, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 34 },
-      { to: yaga_mizue_1, line: walk, direction: southwalk, time: 20 },
+      { to: mutsuki_shinso_9, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 88, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_16, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 99, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_11, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 41, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_13, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 34, rapid_not_in_parallel: false },
+      { to: yaga_mizue_1, line: walk, direction: southwalk, time: 20, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_13:
     name: 湖断島砂漠
@@ -172,8 +172,8 @@ stations:
     location: [ 1040.5, 234.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_12, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 34 },
-      { to: mutsuki_shinso_14, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 49 },
+      { to: mutsuki_shinso_12, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 34, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_14, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 49, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_14:
     name: 響星町
@@ -183,8 +183,8 @@ stations:
     location: [ 1420.5, 234.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_13, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 49 },
-      { to: mutsuki_shinso_15, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 34 },
+      { to: mutsuki_shinso_13, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 49, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_15, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 34, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_15:
     name: 高天江(睦電)
@@ -194,9 +194,9 @@ stations:
     location: [ 1517.5, 74.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_14, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 34 },
-      { to: mutsuki_shinso_16, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 40 },
-      { to: nyv_main_3, line: walk, direction: westwalk, time: 32 },
+      { to: mutsuki_shinso_14, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 34, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_16, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 40, rapid_not_in_parallel: false },
+      { to: nyv_main_3, line: walk, direction: westwalk, time: 32, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_16:
     name: ひだまり草原
@@ -206,11 +206,11 @@ stations:
     location: [ 1555.5, -188.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_12, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 99 },
-      { to: mutsuki_shinso_19, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 110 },
-      { to: mutsuki_shinso_15, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 40 },
-      { to: mutsuki_shinso_17, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 31 },
-      { to: mutsuki_kohoku_2, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 43 },
+      { to: mutsuki_shinso_12, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 99, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_19, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 110, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_15, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 40, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_17, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 31, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_2, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 43, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_17:
     name: 驢馬市
@@ -220,8 +220,8 @@ stations:
     location: [ 1791.5, -187.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_16, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 31 },
-      { to: mutsuki_shinso_18, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 37 },
+      { to: mutsuki_shinso_16, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 31, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_18, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 37, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_18:
     name: 蝸牛湖
@@ -231,8 +231,8 @@ stations:
     location: [ 2071.5, -187.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_17, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 37 },
-      { to: mutsuki_shinso_19, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 46 },
+      { to: mutsuki_shinso_17, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 37, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_19, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 46, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_19:
     name: 南北高山
@@ -242,11 +242,11 @@ stations:
     location: [ 2423.5, -187.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_16, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 110 },
-      { to: mutsuki_shinso_R20, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 62 },
-      { to: mutsuki_shinso_18, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 46 },
-      { to: mutsuki_shinso_L23, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 45 },
-      { to: nyv_takayama_5, line: walk, direction: southwalk, time: 50 },
+      { to: mutsuki_shinso_16, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 110, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_R20, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 62, rapid_not_in_parallel: true },
+      { to: mutsuki_shinso_18, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 46, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L23, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 45, rapid_not_in_parallel: false },
+      { to: nyv_takayama_5, line: walk, direction: southwalk, time: 50, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_R20:
     name: 東氷塊海岸
@@ -256,9 +256,9 @@ stations:
     location: [ 2907.5, -189.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_19, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 62 },
-      { to: mutsuki_shinso_R21, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 40 },
-      { to: hamazato_1, line: walk, direction: southwalk, time: 13 },
+      { to: mutsuki_shinso_19, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 62, rapid_not_in_parallel: true },
+      { to: mutsuki_shinso_R21, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 40, rapid_not_in_parallel: true },
+      { to: hamazato_1, line: walk, direction: southwalk, time: 13, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_R21:
     name: 東氷塊小島
@@ -268,8 +268,8 @@ stations:
     location: [ 3212.5, -189.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_R20, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 40 },
-      { to: mutsuki_shinso_R22, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 63 },
+      { to: mutsuki_shinso_R20, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 40, rapid_not_in_parallel: true },
+      { to: mutsuki_shinso_R22, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 63, rapid_not_in_parallel: true },
     ]
   mutsuki_shinso_R22:
     name: 手川
@@ -279,8 +279,8 @@ stations:
     location: [ 3704.5, -76.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_R21, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 63 },
-      { to: mutsuki_shinso_34, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 67 },
+      { to: mutsuki_shinso_R21, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 63, rapid_not_in_parallel: true },
+      { to: mutsuki_shinso_34, line: mutsuki_shinso_rapid, direction: to_nampu_mesa, time: 67, rapid_not_in_parallel: true },
     ]
   mutsuki_shinso_L23:
     name: 南松霜(睦電)
@@ -290,9 +290,9 @@ stations:
     location: [ 2584.5, 42.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_19, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 45 },
-      { to: mutsuki_shinso_L24, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 31 },
-      { to: hamazato_9, line: walk, direction: eastwalk, time: 12 },
+      { to: mutsuki_shinso_19, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 45, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L24, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 31, rapid_not_in_parallel: false },
+      { to: hamazato_9, line: walk, direction: eastwalk, time: 12, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_L24:
     name: 下山林(睦電)
@@ -302,9 +302,9 @@ stations:
     location: [ 2584.5, 274.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_L23, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 31 },
-      { to: mutsuki_shinso_L25, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 31 },
-      { to: nyv_main_11, line: walk, direction: westwalk, time: 34 },
+      { to: mutsuki_shinso_L23, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 31, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L25, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 31, rapid_not_in_parallel: false },
+      { to: nyv_main_11, line: walk, direction: westwalk, time: 34, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_L25:
     name: 大滝湿地
@@ -314,9 +314,9 @@ stations:
     location: [ 2584.5, 505.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_L24, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 31 },
-      { to: mutsuki_shinso_L26, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 31 },
-      { to: nyv_main_13, line: walk, direction: westwalk, time: 23 },
+      { to: mutsuki_shinso_L24, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 31, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L26, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 31, rapid_not_in_parallel: false },
+      { to: nyv_main_13, line: walk, direction: westwalk, time: 23, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_L26:
     name: 東滝山
@@ -326,8 +326,8 @@ stations:
     location: [ 2639.5, 688.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_L25, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 31 },
-      { to: mutsuki_shinso_L27, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 39 },
+      { to: mutsuki_shinso_L25, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 31, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L27, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 39, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_L27:
     name: 南白樺
@@ -337,8 +337,8 @@ stations:
     location: [ 2811.5, 826.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_L26, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 39 },
-      { to: mutsuki_shinso_L28, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 36 },
+      { to: mutsuki_shinso_L26, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 39, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L28, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 36, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_L28:
     name: 黒馬海岸
@@ -348,8 +348,8 @@ stations:
     location: [ 3083.5, 826.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_L27, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 36 },
-      { to: mutsuki_shinso_L29, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 38 },
+      { to: mutsuki_shinso_L27, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 36, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L29, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 38, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_L29:
     name: サバナ池上
@@ -359,8 +359,8 @@ stations:
     location: [ 3375.5, 826.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_L28, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 38 },
-      { to: mutsuki_shinso_L30, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 55 },
+      { to: mutsuki_shinso_L28, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 38, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L30, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 55, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_L30:
     name: 中歩危
@@ -370,8 +370,8 @@ stations:
     location: [ 3546.5, 559.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_L29, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 55 },
-      { to: mutsuki_shinso_L31, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 34 },
+      { to: mutsuki_shinso_L29, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 55, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L31, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 34, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_L31:
     name: サバナみかづき
@@ -381,8 +381,8 @@ stations:
     location: [ 3777.5, 535.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_L30, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 34 },
-      { to: mutsuki_shinso_L32, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 43 },
+      { to: mutsuki_shinso_L30, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 34, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L32, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 43, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_L32:
     name: 十湾
@@ -392,8 +392,8 @@ stations:
     location: [ 3867.5, 272.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_L31, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 43 },
-      { to: mutsuki_shinso_L33, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 40 },
+      { to: mutsuki_shinso_L31, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 43, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L33, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 40, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_L33:
     name: 東手川
@@ -403,8 +403,8 @@ stations:
     location: [ 3867.5, -29.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_L32, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 40 },
-      { to: mutsuki_shinso_34, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 50 },
+      { to: mutsuki_shinso_L32, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 40, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_34, line: mutsuki_shinso_local, direction: to_nampu_mesa, time: 50, rapid_not_in_parallel: false },
     ]
   mutsuki_shinso_34:
     name: 南風メサ
@@ -414,8 +414,8 @@ stations:
     location: [ 4056.5, -243.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_R22, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 67 },
-      { to: mutsuki_shinso_L33, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 50 },
+      { to: mutsuki_shinso_R22, line: mutsuki_shinso_rapid, direction: to_kusanoshima, time: 67, rapid_not_in_parallel: true },
+      { to: mutsuki_shinso_L33, line: mutsuki_shinso_local, direction: to_kusanoshima, time: 50, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_2:
     name: 虹龍塩津
@@ -425,8 +425,8 @@ stations:
     location: [ 1465.5, -446.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_16, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 43 },
-      { to: mutsuki_kohoku_3, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 39 },
+      { to: mutsuki_shinso_16, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 43, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_3, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 39, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_3:
     name: 紅龍中里
@@ -436,8 +436,8 @@ stations:
     location: [ 1428.5, -710.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_2, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 39 },
-      { to: mutsuki_kohoku_4, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 26 },
+      { to: mutsuki_kohoku_2, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 39, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_4, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 26, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_4:
     name: 湾内大島
@@ -447,8 +447,8 @@ stations:
     location: [ 1428.5, -908.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_3, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 26 },
-      { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 23 },
+      { to: mutsuki_kohoku_3, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 26, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 23, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_5:
     name: 塩川
@@ -458,8 +458,8 @@ stations:
     location: [ 1250, -1000 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_4, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 23 },
-      { to: mutsuki_kohoku_6, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 22 },
+      { to: mutsuki_kohoku_4, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 23, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_6, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 22, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_6:
     name: 九条湖
@@ -469,8 +469,8 @@ stations:
     location: [ 1177.5, -1016.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 22 },
-      { to: mutsuki_kohoku_7, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 38 },
+      { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 22, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_7, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 38, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_7:
     name: 小路岸綾
@@ -480,10 +480,10 @@ stations:
     location: [ 887.5, -1048.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_6, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 38 },
-      { to: mutsuki_kohoku_8, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 34 },
-      { to: kosaka, line: walk, direction: westwalk, time: 85 },
-      { to: kosaka_c15, line: walk, direction: westwalk, time: 72 },
+      { to: mutsuki_kohoku_6, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 38, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_8, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 34, rapid_not_in_parallel: false },
+      { to: kosaka, line: walk, direction: westwalk, time: 85, rapid_not_in_parallel: false },
+      { to: kosaka_c15, line: walk, direction: westwalk, time: 72, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_8:
     name: 猪熊海岸
@@ -493,8 +493,8 @@ stations:
     location: [ 629.5, -1048.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_7, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 34 },
-      { to: mutsuki_kohoku_9, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 32 },
+      { to: mutsuki_kohoku_7, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 34, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_9, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 32, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_9:
     name: 上忍大宮
@@ -504,10 +504,10 @@ stations:
     location: [ 600.5, -1263.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_8, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 32 },
-      { to: mutsuki_kohoku_10, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 24 },
-      { to: kosaka, line: walk, direction: westwalk, time: 58 },
-      { to: kosaka_c15, line: walk, direction: westwalk, time: 115 },
+      { to: mutsuki_kohoku_8, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 32, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_10, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 24, rapid_not_in_parallel: false },
+      { to: kosaka, line: walk, direction: westwalk, time: 58, rapid_not_in_parallel: false },
+      { to: kosaka_c15, line: walk, direction: westwalk, time: 115, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_10:
     name: 片列
@@ -517,8 +517,8 @@ stations:
     location: [ 443.5, -1291.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_9, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 24 },
-      { to: mutsuki_kohoku_11, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 25 },
+      { to: mutsuki_kohoku_9, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 24, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_11, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 25, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_11:
     name: 松原日暮
@@ -528,8 +528,8 @@ stations:
     location: [ 252.5, -1291.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_10, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 25 },
-      { to: mutsuki_kohoku_12, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 28 },
+      { to: mutsuki_kohoku_10, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 25, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_12, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 28, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_12:
     name: 幽子霊川
@@ -539,10 +539,10 @@ stations:
     location: [ 80.5, -1332.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_11, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 28 },
-      { to: mutsuki_shinso_8, line: mutsuki_adachi, direction: to_new_spawn_point, time: 146 },
-      { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_rapid, direction: to_shinryokukawa, time: 63 },
-      { to: mutsuki_niizamenamboku_N2, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 22 },
+      { to: mutsuki_kohoku_11, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 28, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_8, line: mutsuki_adachi, direction: to_new_spawn_point, time: 146, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_rapid, direction: to_shinryokukawa, time: 63, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N2, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 22, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_S1:
     name: 新鮫
@@ -552,7 +552,7 @@ stations:
     location: [ 92.5, -711.0 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_8, line: mutsuki_niizamenamboku_south, direction: to_yamuwakka, time: 73 },
+      { to: mutsuki_shinso_8, line: mutsuki_niizamenamboku_south, direction: to_yamuwakka, time: 73, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_S3:
     name: 自然王国西
@@ -562,8 +562,8 @@ stations:
     location: [ -77.5, -1.5 ]
     type: station
     paths: [
-      { to: mutsuki_shinso_8, line: mutsuki_niizamenamboku_south, direction: to_niizame, time: 42 },
-      { to: mutsuki_niizamenamboku_S4, line: mutsuki_niizamenamboku_south, direction: to_yamuwakka, time: 33 },
+      { to: mutsuki_shinso_8, line: mutsuki_niizamenamboku_south, direction: to_niizame, time: 42, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_S4, line: mutsuki_niizamenamboku_south, direction: to_yamuwakka, time: 33, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_S4:
     name: 新曲山
@@ -573,8 +573,8 @@ stations:
     location: [ -77.5, 239.5 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_S3, line: mutsuki_niizamenamboku_south, direction: to_niizame, time: 33 },
-      { to: mutsuki_niizamenamboku_S5, line: mutsuki_niizamenamboku_south, direction: to_yamuwakka, time: 34 },
+      { to: mutsuki_niizamenamboku_S3, line: mutsuki_niizamenamboku_south, direction: to_niizame, time: 33, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_S5, line: mutsuki_niizamenamboku_south, direction: to_yamuwakka, time: 34, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_S5:
     name: 難庄
@@ -584,8 +584,8 @@ stations:
     location: [ -77.5, 499.5 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_S4, line: mutsuki_niizamenamboku_south, direction: to_niizame, time: 34 },
-      { to: yamuwakka, line: mutsuki_niizamenamboku_south, direction: to_yamuwakka, time: 178 },
+      { to: mutsuki_niizamenamboku_S4, line: mutsuki_niizamenamboku_south, direction: to_niizame, time: 34, rapid_not_in_parallel: false },
+      { to: yamuwakka, line: mutsuki_niizamenamboku_south, direction: to_yamuwakka, time: 178, rapid_not_in_parallel: false },
     ]
   yamuwakka:
     name: 止若
@@ -595,8 +595,8 @@ stations:
     location: [ -269.5, 1730.0 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_S5, line: mutsuki_niizamenamboku_south, direction: to_niizame, time: 178 },
-      { to: scr_12, line: scr_nansho, direction: to_ebikawa_watashi, time: 68 },
+      { to: mutsuki_niizamenamboku_S5, line: mutsuki_niizamenamboku_south, direction: to_niizame, time: 178, rapid_not_in_parallel: false },
+      { to: scr_12, line: scr_nansho, direction: to_ebikawa_watashi, time: 68, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N2:
     name: 幽子真知
@@ -606,8 +606,8 @@ stations:
     location: [ 80.5, -1491.0 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_12, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 22 },
-      { to: mutsuki_niizamenamboku_N3, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 20 },
+      { to: mutsuki_kohoku_12, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 22, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N3, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 20, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N3:
     name: 賽津
@@ -617,8 +617,8 @@ stations:
     location: [ 80.5, -1643.5 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_N2, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 20 },
-      { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 25 },
+      { to: mutsuki_niizamenamboku_N2, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 20, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 25, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N4:
     name: 二ノ通
@@ -628,10 +628,10 @@ stations:
     location: [ 80.5, -1823.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_12, line: mutsuki_niizamenamboku_north_rapid, direction: to_kasukotamagawa, time: 63 },
-      { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_north_rapid, direction: to_shinryokukawa, time: 77 },
-      { to: mutsuki_niizamenamboku_N3, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 25 },
-      { to: mutsuki_niizamenamboku_N5, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 26 },
+      { to: mutsuki_kohoku_12, line: mutsuki_niizamenamboku_north_rapid, direction: to_kasukotamagawa, time: 63, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_north_rapid, direction: to_shinryokukawa, time: 77, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N3, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 25, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N5, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 26, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N5:
     name: 鱧が谷
@@ -641,8 +641,8 @@ stations:
     location: [ 80.5, -2016.5 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 26 },
-      { to: mutsuki_niizamenamboku_N6, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 22 },
+      { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 26, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N6, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 22, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N6:
     name: 鮪前平
@@ -652,8 +652,8 @@ stations:
     location: [ 80.5, -2182.5 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_N5, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 22 },
-      { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 33 },
+      { to: mutsuki_niizamenamboku_N5, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 22, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 33, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N7:
     name: 鮪沼
@@ -663,10 +663,10 @@ stations:
     location: [ 244.5, -2279.5 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_rapid, direction: to_kasukotamagawa, time: 77 },
-      { to: mutsuki_niizamenamboku_N10, line: mutsuki_niizamenamboku_north_rapid, direction: to_shinryokukawa, time: 68 },
-      { to: mutsuki_niizamenamboku_N6, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 33 },
-      { to: mutsuki_niizamenamboku_N8, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 25 },
+      { to: mutsuki_niizamenamboku_N4, line: mutsuki_niizamenamboku_north_rapid, direction: to_kasukotamagawa, time: 77, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N10, line: mutsuki_niizamenamboku_north_rapid, direction: to_shinryokukawa, time: 68, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N6, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 33, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N8, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 25, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N8:
     name: 白樺島
@@ -676,8 +676,8 @@ stations:
     location: [ 380.5, -2351.5 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 25 },
-      { to: mutsuki_niizamenamboku_N9, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 22 },
+      { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 25, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N9, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 22, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N9:
     name: 森囲
@@ -687,8 +687,8 @@ stations:
     location: [ 380.5, -2511.5 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_N8, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 22 },
-      { to: mutsuki_niizamenamboku_N10, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 23 },
+      { to: mutsuki_niizamenamboku_N8, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 22, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N10, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 23, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N10:
     name: 茄白樺
@@ -698,10 +698,10 @@ stations:
     location: [ 380.5, -2684.5 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_north_rapid, direction: to_kasukotamagawa, time: 68 },
-      { to: mutsuki_niizamenamboku_N12, line: mutsuki_niizamenamboku_north_rapid, direction: to_shinryokukawa, time: 42 },
-      { to: mutsuki_niizamenamboku_N9, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 23 },
-      { to: mutsuki_niizamenamboku_N11, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 21 },
+      { to: mutsuki_niizamenamboku_N7, line: mutsuki_niizamenamboku_north_rapid, direction: to_kasukotamagawa, time: 68, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N12, line: mutsuki_niizamenamboku_north_rapid, direction: to_shinryokukawa, time: 42, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N9, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 23, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N11, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 21, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N11:
     name: 白磯
@@ -711,8 +711,8 @@ stations:
     location: [ 380.5, -2844.0 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_N10, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 21 },
-      { to: mutsuki_niizamenamboku_N12, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 23 },
+      { to: mutsuki_niizamenamboku_N10, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 21, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N12, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 23, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N12:
     name: 緑田原
@@ -722,10 +722,10 @@ stations:
     location: [ 380.5, -3013.5 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_N10, line: mutsuki_niizamenamboku_north_rapid, direction: to_kasukotamagawa, time: 42 },
-      { to: mutsuki_niizamenamboku_N13, line: mutsuki_niizamenamboku_north_rapid, direction: to_shinryokukawa, time: 24 },
-      { to: mutsuki_niizamenamboku_N11, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 23 },
-      { to: mutsuki_niizamenamboku_N13, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 24 },
+      { to: mutsuki_niizamenamboku_N10, line: mutsuki_niizamenamboku_north_rapid, direction: to_kasukotamagawa, time: 42, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N13, line: mutsuki_niizamenamboku_north_rapid, direction: to_shinryokukawa, time: 24, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N11, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 23, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N13, line: mutsuki_niizamenamboku_north_local, direction: to_shinryokukawa, time: 24, rapid_not_in_parallel: false },
     ]
   mutsuki_niizamenamboku_N13:
     name: 新緑河
@@ -735,8 +735,8 @@ stations:
     location: [ 380.5 ,-3185.5 ]
     type: station
     paths: [
-      { to: mutsuki_niizamenamboku_N12, line: mutsuki_niizamenamboku_north_rapid, direction: to_kasukotamagawa, time: 24 },
-      { to: mutsuki_niizamenamboku_N12, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 24 },
+      { to: mutsuki_niizamenamboku_N12, line: mutsuki_niizamenamboku_north_rapid, direction: to_kasukotamagawa, time: 24, rapid_not_in_parallel: false },
+      { to: mutsuki_niizamenamboku_N12, line: mutsuki_niizamenamboku_north_local, direction: to_kasukotamagawa, time: 24, rapid_not_in_parallel: false },
     ]
   enr_2_3:
     name: 南都南
@@ -746,8 +746,8 @@ stations:
     location: [ -1249.5, 106.5 ]
     type: station
     paths: [
-      { to: enr_2_4, line: enr_nakatsumichi_rapid, direction: to_kitatsu_higashi, time: 20 },
-      { to: enr_2_4, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 20 },
+      { to: enr_2_4, line: enr_nakatsumichi_rapid, direction: to_kitatsu_higashi, time: 20, rapid_not_in_parallel: false },
+      { to: enr_2_4, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 20, rapid_not_in_parallel: false },
     ]
   enr_2_4:
     name: 南都中央
@@ -757,11 +757,11 @@ stations:
     location: [ -1249.5, -44.5 ]
     type: station
     paths: [
-      { to: enr_2_3, line: enr_nakatsumichi_rapid, direction: to_minamitsu_minami, time: 20 },
-      { to: enr_2_7, line: enr_nakatsumichi_rapid, direction: to_kitatsu_higashi, time: 70 },
-      { to: enr_2_3, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 20 },
-      { to: enr_2_5, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 24 },
-      { to: mutsuki_shinso_3, line: walk, direction: southwalk, time: 30 },
+      { to: enr_2_3, line: enr_nakatsumichi_rapid, direction: to_minamitsu_minami, time: 20, rapid_not_in_parallel: false },
+      { to: enr_2_7, line: enr_nakatsumichi_rapid, direction: to_kitatsu_higashi, time: 70, rapid_not_in_parallel: false },
+      { to: enr_2_3, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 20, rapid_not_in_parallel: false },
+      { to: enr_2_5, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 24, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_3, line: walk, direction: southwalk, time: 30, rapid_not_in_parallel: false },
     ]
   enr_2_5:
     name: 南都北
@@ -771,8 +771,8 @@ stations:
     location: [ -1241.5, -218.5 ]
     type: station
     paths: [
-      { to: enr_2_4, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 24 },
-      { to: enr_2_6, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 25 },
+      { to: enr_2_4, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 24, rapid_not_in_parallel: false },
+      { to: enr_2_6, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 25, rapid_not_in_parallel: false },
     ]
   enr_2_6:
     name: 中都谷
@@ -782,8 +782,8 @@ stations:
     location: [ -1184.5, -351.5 ]
     type: station
     paths: [
-      { to: enr_2_5, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 25 },
-      { to: enr_2_7, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 24 },
+      { to: enr_2_5, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 25, rapid_not_in_parallel: false },
+      { to: enr_2_7, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 24, rapid_not_in_parallel: false },
     ]
   enr_2_7:
     name: 中都川
@@ -793,11 +793,11 @@ stations:
     location: [ -1137.5, -491.5 ]
     type: station
     paths: [
-      { to: enr_2_4, line: enr_nakatsumichi_rapid, direction: to_minamitsu_minami, time: 70 },
-      { to: enr_2_9, line: enr_nakatsumichi_rapid, direction: to_kitatsu_higashi, time: 40 },
-      { to: enr_2_6, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 24 },
-      { to: enr_2_8, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 22 },
-      { to: enr_2_8, line: enr_kitatsu, direction: to_mitsumeike, time: 22 },
+      { to: enr_2_4, line: enr_nakatsumichi_rapid, direction: to_minamitsu_minami, time: 70, rapid_not_in_parallel: false },
+      { to: enr_2_9, line: enr_nakatsumichi_rapid, direction: to_kitatsu_higashi, time: 40, rapid_not_in_parallel: false },
+      { to: enr_2_6, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 24, rapid_not_in_parallel: false },
+      { to: enr_2_8, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 22, rapid_not_in_parallel: false },
+      { to: enr_2_8, line: enr_kitatsu, direction: to_mitsumeike, time: 22, rapid_not_in_parallel: false },
     ]
   enr_2_8:
     name: 第二大書見台前
@@ -807,10 +807,10 @@ stations:
     location: [ -1024.5, -557.5 ]
     type: station
     paths: [
-      { to: enr_2_7, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 22 },
-      { to: enr_2_9, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 19 },
-      { to: enr_2_7, line: enr_kitatsu, direction: to_nakatsugawa, time: 22 },
-      { to: enr_3_2, line: enr_kitatsu, direction: to_mitsumeike, time: 14 },
+      { to: enr_2_7, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 22, rapid_not_in_parallel: false },
+      { to: enr_2_9, line: enr_nakatsumichi_local, direction: to_kitatsu_higashi, time: 19, rapid_not_in_parallel: false },
+      { to: enr_2_7, line: enr_kitatsu, direction: to_nakatsugawa, time: 22, rapid_not_in_parallel: false },
+      { to: enr_3_2, line: enr_kitatsu, direction: to_mitsumeike, time: 14, rapid_not_in_parallel: false },
     ]
   enr_2_9:
     name: 北都東
@@ -820,8 +820,8 @@ stations:
     location: [ -886.5, -557.5 ]
     type: station
     paths: [
-      { to: enr_2_7, line: enr_nakatsumichi_rapid, direction: to_minamitsu_minami, time: 40 },
-      { to: enr_2_8, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 19 },
+      { to: enr_2_7, line: enr_nakatsumichi_rapid, direction: to_minamitsu_minami, time: 40, rapid_not_in_parallel: false },
+      { to: enr_2_8, line: enr_nakatsumichi_local, direction: to_minamitsu_minami, time: 19, rapid_not_in_parallel: false },
     ]
   enr_3_2:
     name: 第二大書見台
@@ -831,8 +831,8 @@ stations:
     location: [ -1048.5, -670.5 ]
     type: station
     paths: [
-      { to: enr_2_8, line: enr_kitatsu, direction: to_nakatsugawa, time: 14 },
-      { to: enr_3_2a, line: enr_kitatsu, direction: to_mitsumeike, time: 10 },
+      { to: enr_2_8, line: enr_kitatsu, direction: to_nakatsugawa, time: 14, rapid_not_in_parallel: false },
+      { to: enr_3_2a, line: enr_kitatsu, direction: to_mitsumeike, time: 10, rapid_not_in_parallel: false },
     ]
   enr_3_2a:
     name: 三目池信号場
@@ -842,8 +842,8 @@ stations:
     location: [ -1084.5, -725.5 ]
     type: signal_station
     paths: [
-      { to: enr_3_3, line: enr_rashin_east, direction: to_segime, time: 9 },
-      { to: enr_3_3, line: enr_rashin_west, direction: to_segime, time: 9 },
+      { to: enr_3_3, line: enr_rashin_east, direction: to_segime, time: 9, rapid_not_in_parallel: false },
+      { to: enr_3_3, line: enr_rashin_west, direction: to_segime, time: 9, rapid_not_in_parallel: false },
     ]
   enr_3_3:
     name: 三目池
@@ -853,9 +853,9 @@ stations:
     location: [ -1128.5, -723.5 ]
     type: station
     paths: [
-      { to: enr_3_2, line: enr_kitatsu, direction: to_nakatsugawa, time: 20 },
-      { to: enr_4_2, line: enr_rashin_east, direction: to_segime, time: 45 },
-      { to: enr_5_2, line: enr_rashin_west, direction: to_segime, time: 44 },
+      { to: enr_3_2, line: enr_kitatsu, direction: to_nakatsugawa, time: 20, rapid_not_in_parallel: false },
+      { to: enr_4_2, line: enr_rashin_east, direction: to_segime, time: 45, rapid_not_in_parallel: false },
+      { to: enr_5_2, line: enr_rashin_west, direction: to_segime, time: 44, rapid_not_in_parallel: false },
     ]
   enr_4_2:
     name: 旦ヶ丘
@@ -865,9 +865,9 @@ stations:
     location: [ -1253.5, -965.5 ]
     type: station
     paths: [
-      { to: enr_3_3, line: enr_rashin_east, direction: to_mitsumeike, time: 45 },
-      { to: yaga_yaga_3, line: toki_gakuentoshi, direction: to_morikami, time: 179 },
-      { to: kosaka, line: toki_gakuentoshi, direction: to_kosaka, time: 251 },
+      { to: enr_3_3, line: enr_rashin_east, direction: to_mitsumeike, time: 45, rapid_not_in_parallel: false },
+      { to: yaga_yaga_3, line: toki_gakuentoshi, direction: to_morikami, time: 179, rapid_not_in_parallel: false },
+      { to: kosaka, line: toki_gakuentoshi, direction: to_kosaka, time: 251, rapid_not_in_parallel: false },
     ]
   enr_5_2:
     name: 樽旗国
@@ -877,7 +877,7 @@ stations:
     location: [ -1432.5, -684.5 ]
     type: station
     paths: [
-      { to: enr_3_3, line: enr_rashin_west, direction: to_mitsumeike, time: 44 },
+      { to: enr_3_3, line: enr_rashin_west, direction: to_mitsumeike, time: 44, rapid_not_in_parallel: false },
     ]
   yaga_yaga_1:
     name: 草島
@@ -887,8 +887,8 @@ stations:
     location: [ -1999.5, -45.5 ]
     type: station
     paths: [
-      { to: yaga_yaga_2, line: yaga_yaga, direction: to_okuyaga, time: 52 },
-      { to: mutsuki_shinso_1, line: walk, direction: southwalk, time: 30 },
+      { to: yaga_yaga_2, line: yaga_yaga, direction: to_okuyaga, time: 52, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_1, line: walk, direction: southwalk, time: 30, rapid_not_in_parallel: false },
     ]
   yaga_yaga_2:
     name: 鎬浜
@@ -898,8 +898,8 @@ stations:
     location: [ -2123.5, -442.0 ]
     type: station
     paths: [
-      { to: yaga_yaga_1, line: yaga_yaga, direction: to_kusashima, time: 52 },
-      { to: yaga_yaga_3, line: yaga_yaga, direction: to_okuyaga, time: 60 },
+      { to: yaga_yaga_1, line: yaga_yaga, direction: to_kusashima, time: 52, rapid_not_in_parallel: false },
+      { to: yaga_yaga_3, line: yaga_yaga, direction: to_okuyaga, time: 60, rapid_not_in_parallel: false },
     ]
   yaga_yaga_3:
     name: 森上
@@ -909,9 +909,9 @@ stations:
     location: [ -2452.5, -855.5 ]
     type: station
     paths: [
-      { to: yaga_yaga_2, line: yaga_yaga, direction: to_kusashima, time: 60 },
-      { to: yaga_yaga_4, line: yaga_yaga, direction: to_okuyaga, time: 40 },
-      { to: enr_4_2, line: toki_gakuentoshi, direction: to_kosaka, time: 179 },
+      { to: yaga_yaga_2, line: yaga_yaga, direction: to_kusashima, time: 60, rapid_not_in_parallel: false },
+      { to: yaga_yaga_4, line: yaga_yaga, direction: to_okuyaga, time: 40, rapid_not_in_parallel: false },
+      { to: enr_4_2, line: toki_gakuentoshi, direction: to_kosaka, time: 179, rapid_not_in_parallel: false },
     ]
   yaga_yaga_4:
     name: 奥谷峨
@@ -921,7 +921,7 @@ stations:
     location: [ -2540.5, -1072.0 ]
     type: station
     paths: [
-      { to: yaga_yaga_3, line: yaga_yaga, direction: to_kusashima, time: 40 },
+      { to: yaga_yaga_3, line: yaga_yaga, direction: to_kusashima, time: 40, rapid_not_in_parallel: false },
     ]
   yaga_mizue_1:
     name: 江橋
@@ -931,9 +931,9 @@ stations:
     location: [ 797.5, 268.0 ]
     type: station
     paths: [
-      { to: yaga_mizue_2, line: yaga_mizue_minasato, direction: to_minasato, time: 40 },
-      { to: yaga_mizue_2n, line: yaga_mizue_tool, direction: to_tool, time: 62 },
-      { to: mutsuki_shinso_12, line: walk, direction: northwalk, time: 20 },
+      { to: yaga_mizue_2, line: yaga_mizue_minasato, direction: to_minasato, time: 40, rapid_not_in_parallel: false },
+      { to: yaga_mizue_2n, line: yaga_mizue_tool, direction: to_tool, time: 62, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_12, line: walk, direction: northwalk, time: 20, rapid_not_in_parallel: false },
     ]
   yaga_mizue_2:
     name: 水郷
@@ -943,7 +943,7 @@ stations:
     location: [ 715.0, 499.5 ]
     type: station
     paths: [
-      { to: yaga_mizue_1, line: yaga_mizue_minasato, direction: to_ebashi, time: 40 },
+      { to: yaga_mizue_1, line: yaga_mizue_minasato, direction: to_ebashi, time: 40, rapid_not_in_parallel: false },
     ]
   yaga_mizue_2n:
     name: 新水郷
@@ -953,8 +953,8 @@ stations:
     location: [ 802.5, 734.5 ]
     type: station
     paths: [
-      { to: yaga_mizue_1, line: yaga_mizue_tool, direction: to_ebashi, time: 62 },
-      { to: yaga_mizue_3, line: yaga_mizue_tool, direction: to_tool, time: 62 },
+      { to: yaga_mizue_1, line: yaga_mizue_tool, direction: to_ebashi, time: 62, rapid_not_in_parallel: false },
+      { to: yaga_mizue_3, line: yaga_mizue_tool, direction: to_tool, time: 62, rapid_not_in_parallel: false },
     ]
   yaga_mizue_3:
     name: 通留町
@@ -964,7 +964,7 @@ stations:
     location: [ 654.5, 1084.0 ]
     type: station
     paths: [
-      { to: yaga_mizue_2n, line: yaga_mizue_tool, direction: to_ebashi, time: 62 },
+      { to: yaga_mizue_2n, line: yaga_mizue_tool, direction: to_ebashi, time: 62, rapid_not_in_parallel: false },
     ]
   hamazato_1:
     name: 浜里
@@ -974,8 +974,8 @@ stations:
     location: [ 2890.5, -165.5 ]
     type: station
     paths: [
-      { to: hamazato_2, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 12 },
-      { to: mutsuki_shinso_R20, line: walk, direction: northwalk, time: 13 },
+      { to: hamazato_2, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 12, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_R20, line: walk, direction: northwalk, time: 13, rapid_not_in_parallel: false },
     ]
   hamazato_2:
     name: 浜里中央
@@ -985,8 +985,8 @@ stations:
     location: [ 2857.5, -135.5 ]
     type: station
     paths: [
-      { to: hamazato_1, line: hamazato_hamazato, direction: to_hamazato, time: 12 },
-      { to: hamazato_3, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 12 },
+      { to: hamazato_1, line: hamazato_hamazato, direction: to_hamazato, time: 12, rapid_not_in_parallel: false },
+      { to: hamazato_3, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 12, rapid_not_in_parallel: false },
     ]
   hamazato_3:
     name: 神野田
@@ -996,8 +996,8 @@ stations:
     location: [ 2770.0, -135.5 ]
     type: station
     paths: [
-      { to: hamazato_2, line: hamazato_hamazato, direction: to_hamazato, time: 12 },
-      { to: hamazato_4, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 8 },
+      { to: hamazato_2, line: hamazato_hamazato, direction: to_hamazato, time: 12, rapid_not_in_parallel: false },
+      { to: hamazato_4, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 8, rapid_not_in_parallel: false },
     ]
   hamazato_4:
     name: 西町
@@ -1007,8 +1007,8 @@ stations:
     location: [ 2727.5, -124.5 ]
     type: station
     paths: [
-      { to: hamazato_3, line: hamazato_hamazato, direction: to_hamazato, time: 8 },
-      { to: hamazato_5, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 16 },
+      { to: hamazato_3, line: hamazato_hamazato, direction: to_hamazato, time: 8, rapid_not_in_parallel: false },
+      { to: hamazato_5, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 16, rapid_not_in_parallel: false },
     ]
   hamazato_5:
     name: 浜里川
@@ -1018,8 +1018,8 @@ stations:
     location: [ 2621.5, -121.5 ]
     type: station
     paths: [
-      { to: hamazato_4, line: hamazato_hamazato, direction: to_hamazato, time: 18 },
-      { to: hamazato_6, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 12 },
+      { to: hamazato_4, line: hamazato_hamazato, direction: to_hamazato, time: 18, rapid_not_in_parallel: false },
+      { to: hamazato_6, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 12, rapid_not_in_parallel: false },
     ]
   hamazato_6:
     name: 川端
@@ -1029,8 +1029,8 @@ stations:
     location: [ 2575.5, -103.5 ]
     type: station
     paths: [
-      { to: hamazato_5, line: hamazato_hamazato, direction: to_hamazato, time: 12 },
-      { to: hamazato_7, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 8 },
+      { to: hamazato_5, line: hamazato_hamazato, direction: to_hamazato, time: 12, rapid_not_in_parallel: false },
+      { to: hamazato_7, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 8, rapid_not_in_parallel: false },
     ]
   hamazato_7:
     name: 緑別
@@ -1040,8 +1040,8 @@ stations:
     location: [ 2578.5, -60.5 ]
     type: station
     paths: [
-      { to: hamazato_6, line: hamazato_hamazato, direction: to_hamazato, time: 8 },
-      { to: hamazato_8, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 8 },
+      { to: hamazato_6, line: hamazato_hamazato, direction: to_hamazato, time: 8, rapid_not_in_parallel: false },
+      { to: hamazato_8, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 8, rapid_not_in_parallel: false },
     ]
   hamazato_8:
     name: 高幌
@@ -1051,8 +1051,8 @@ stations:
     location: [ 2577.5, -20.5 ]
     type: station
     paths: [
-      { to: hamazato_7, line: hamazato_hamazato, direction: to_hamazato, time: 8 },
-      { to: hamazato_9, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 9 },
+      { to: hamazato_7, line: hamazato_hamazato, direction: to_hamazato, time: 8, rapid_not_in_parallel: false },
+      { to: hamazato_9, line: hamazato_hamazato, direction: to_minami_matsushimo, time: 9, rapid_not_in_parallel: false },
     ]
   hamazato_9:
     name: 南松霜駅前(はまざと)
@@ -1062,8 +1062,8 @@ stations:
     location: [ 2577.5, 31.5 ]
     type: station
     paths: [
-      { to: hamazato_8, line: hamazato_hamazato, direction: to_hamazato, time: 9 },
-      { to: mutsuki_shinso_L23, line: walk, direction: westwalk, time: 12 },
+      { to: hamazato_8, line: hamazato_hamazato, direction: to_hamazato, time: 9, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L23, line: walk, direction: westwalk, time: 12, rapid_not_in_parallel: false },
     ]
   scr_01:
     name: 砂川(SCR)
@@ -1073,8 +1073,8 @@ stations:
     location: [ -565.0, -261.0 ]
     type: station
     paths: [
-      { to: scr_02, line: scr_hakusa, direction: to_shirakaba_oomagari, time: 20 },
-      { to: mutsuki_shinso_6, line: walk, direction: southwalk, time: 15 },
+      { to: scr_02, line: scr_hakusa, direction: to_shirakaba_oomagari, time: 20, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_6, line: walk, direction: southwalk, time: 15, rapid_not_in_parallel: false },
     ]
   scr_02:
     name: 獄前
@@ -1084,8 +1084,8 @@ stations:
     location: [ -494.5, -218.5 ]
     type: station
     paths: [
-      { to: scr_01, line: scr_hakusa, direction: to_sunakawa, time: 20 },
-      { to: scr_03, line: scr_hakusa, direction: to_shirakaba_oomagari, time: 31 },
+      { to: scr_01, line: scr_hakusa, direction: to_sunakawa, time: 20, rapid_not_in_parallel: false },
+      { to: scr_03, line: scr_hakusa, direction: to_shirakaba_oomagari, time: 31, rapid_not_in_parallel: false },
     ]
   scr_03:
     name: 幌歌中央
@@ -1095,10 +1095,10 @@ stations:
     location: [ -492.0, 0.0 ]
     type: station
     paths: [
-      { to: scr_02, line: scr_hakusa, direction: to_sunakawa, time: 31 },
-      { to: scr_04, line: scr_hakusa, direction: to_shirakaba_oomagari, time: 22 },
-      { to: scr_07, line: scr_nansho, direction: to_ebikawa_watashi, time: 41 },
-      { to: scr_08, line: scr_nansho, direction: to_yamuwakka, time: 60 },
+      { to: scr_02, line: scr_hakusa, direction: to_sunakawa, time: 31, rapid_not_in_parallel: false },
+      { to: scr_04, line: scr_hakusa, direction: to_shirakaba_oomagari, time: 22, rapid_not_in_parallel: false },
+      { to: scr_07, line: scr_nansho, direction: to_ebikawa_watashi, time: 41, rapid_not_in_parallel: false },
+      { to: scr_08, line: scr_nansho, direction: to_yamuwakka, time: 60, rapid_not_in_parallel: false },
     ]
   scr_04:
     name: 士狩別
@@ -1108,8 +1108,8 @@ stations:
     location: [ -527.5, 137.5 ]
     type: station
     paths: [
-      { to: scr_03, line: scr_hakusa, direction: to_sunakawa, time: 22 },
-      { to: scr_05, line: scr_hakusa, direction: to_shirakaba_oomagari, time: 18 },
+      { to: scr_03, line: scr_hakusa, direction: to_sunakawa, time: 22, rapid_not_in_parallel: false },
+      { to: scr_05, line: scr_hakusa, direction: to_shirakaba_oomagari, time: 18, rapid_not_in_parallel: false },
     ]
   scr_05:
     name: 詩槌
@@ -1119,8 +1119,8 @@ stations:
     location: [ -623.5, 146.5 ]
     type: station
     paths: [
-      { to: scr_04, line: scr_hakusa, direction: to_sunakawa, time: 16 },
-      { to: scr_06, line: scr_hakusa, direction: to_shirakaba_oomagari, time: 31 },
+      { to: scr_04, line: scr_hakusa, direction: to_sunakawa, time: 16, rapid_not_in_parallel: false },
+      { to: scr_06, line: scr_hakusa, direction: to_shirakaba_oomagari, time: 31, rapid_not_in_parallel: false },
     ]
   scr_06:
     name: 白樺大曲
@@ -1130,8 +1130,8 @@ stations:
     location: [ -822.5, 102.0 ]
     type: station
     paths: [
-      { to: scr_05, line: scr_hakusa, direction: to_sunakawa, time: 31 },
-      { to: mutsuki_shinso_4, line: walk, direction: northwalk, time: 67 },
+      { to: scr_05, line: scr_hakusa, direction: to_sunakawa, time: 31, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_4, line: walk, direction: northwalk, time: 67, rapid_not_in_parallel: false },
     ]
   scr_07:
     name: 神居牧場
@@ -1141,9 +1141,9 @@ stations:
     location: [ -494.5, -314.5 ]
     type: station
     paths: [
-      { to: scr_03, line: scr_nansho, direction: to_yamuwakka, time: 41 },
-      { to: scr_17, line: scr_nansho, direction: to_ebikawa_watashi, time: 15 },
-      { to: mutsuki_shinso_6, line: walk, direction: southwalk, time: 64 },
+      { to: scr_03, line: scr_nansho, direction: to_yamuwakka, time: 41, rapid_not_in_parallel: false },
+      { to: scr_17, line: scr_nansho, direction: to_ebikawa_watashi, time: 15, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_6, line: walk, direction: southwalk, time: 64, rapid_not_in_parallel: false },
     ]
   scr_08:
     name: 赤窪
@@ -1153,9 +1153,9 @@ stations:
     location: [ -471.0, 434.5 ]
     type: station
     paths: [
-      { to: scr_03, line: scr_nansho, direction: to_ebikawa_watashi, time: 60 },
-      { to: scr_09, line: scr_nansho, direction: to_yamuwakka, time: 50 },
-      { to: scr_13, line: scr_kazetsuyu, direction: to_kazetsuyu_kawashimo, time: 42 },
+      { to: scr_03, line: scr_nansho, direction: to_ebikawa_watashi, time: 60, rapid_not_in_parallel: false },
+      { to: scr_09, line: scr_nansho, direction: to_yamuwakka, time: 50, rapid_not_in_parallel: false },
+      { to: scr_13, line: scr_kazetsuyu, direction: to_kazetsuyu_kawashimo, time: 42, rapid_not_in_parallel: false },
     ]
   scr_09:
     name: 荒谷
@@ -1165,8 +1165,8 @@ stations:
     location: [ -251.5, 602.5 ]
     type: station
     paths: [
-      { to: scr_08, line: scr_nansho, direction: to_ebikawa_watashi, time: 50 },
-      { to: scr_10, line: scr_nansho, direction: to_yamuwakka, time: 24 },
+      { to: scr_08, line: scr_nansho, direction: to_ebikawa_watashi, time: 50, rapid_not_in_parallel: false },
+      { to: scr_10, line: scr_nansho, direction: to_yamuwakka, time: 24, rapid_not_in_parallel: false },
     ]
   scr_10:
     name: 高野原
@@ -1176,8 +1176,8 @@ stations:
     location: [ -185.5, 677.5 ]
     type: station
     paths: [
-      { to: scr_09, line: scr_nansho, direction: to_ebikawa_watashi, time: 24 },
-      { to: scr_11, line: scr_nansho, direction: to_yamuwakka, time: 28 },
+      { to: scr_09, line: scr_nansho, direction: to_ebikawa_watashi, time: 24, rapid_not_in_parallel: false },
+      { to: scr_11, line: scr_nansho, direction: to_yamuwakka, time: 28, rapid_not_in_parallel: false },
     ]
   scr_11:
     name: 南沼大山
@@ -1187,8 +1187,8 @@ stations:
     location: [ -154.5, 865.5 ]
     type: station
     paths: [
-      { to: scr_09, line: scr_nansho, direction: to_ebikawa_watashi, time: 24 },
-      { to: scr_12, line: scr_nansho, direction: to_yamuwakka, time: 56 },
+      { to: scr_09, line: scr_nansho, direction: to_ebikawa_watashi, time: 24, rapid_not_in_parallel: false },
+      { to: scr_12, line: scr_nansho, direction: to_yamuwakka, time: 56, rapid_not_in_parallel: false },
     ]
   scr_12:
     name: 高園
@@ -1198,8 +1198,8 @@ stations:
     location: [ -193.5, 1284.5 ]
     type: station
     paths: [
-      { to: scr_11, line: scr_nansho, direction: to_ebikawa_watashi, time: 56 },
-      { to: yamuwakka, line: scr_nansho, direction: to_yamuwakka, time: 68 },
+      { to: scr_11, line: scr_nansho, direction: to_ebikawa_watashi, time: 56, rapid_not_in_parallel: false },
+      { to: yamuwakka, line: scr_nansho, direction: to_yamuwakka, time: 68, rapid_not_in_parallel: false },
     ]
   scr_13:
     name: 寧樹
@@ -1209,8 +1209,8 @@ stations:
     location: [ -608.5, 660.5 ]
     type: station
     paths: [
-      { to: scr_08, line: scr_kazetsuyu, direction: to_akakubo, time: 42 },
-      { to: scr_14, line: scr_kazetsuyu, direction: to_kazetsuyu_kawashimo, time: 23 },
+      { to: scr_08, line: scr_kazetsuyu, direction: to_akakubo, time: 42, rapid_not_in_parallel: false },
+      { to: scr_14, line: scr_kazetsuyu, direction: to_kazetsuyu_kawashimo, time: 23, rapid_not_in_parallel: false },
     ]
   scr_14:
     name: 寧辺
@@ -1220,8 +1220,8 @@ stations:
     location: [ -662.5, 778.5 ]
     type: station
     paths: [
-      { to: scr_13, line: scr_kazetsuyu, direction: to_akakubo, time: 23 },
-      { to: scr_15, line: scr_kazetsuyu, direction: to_kazetsuyu_kawashimo, time: 30 },
+      { to: scr_13, line: scr_kazetsuyu, direction: to_akakubo, time: 23, rapid_not_in_parallel: false },
+      { to: scr_15, line: scr_kazetsuyu, direction: to_kazetsuyu_kawashimo, time: 30, rapid_not_in_parallel: false },
     ]
   scr_15:
     name: 辺家
@@ -1231,8 +1231,8 @@ stations:
     location: [ -844.5, 819.5 ]
     type: station
     paths: [
-      { to: scr_14, line: scr_kazetsuyu, direction: to_akakubo, time: 30 },
-      { to: scr_16, line: scr_kazetsuyu, direction: to_kazetsuyu_kawashimo, time: 34 },
+      { to: scr_14, line: scr_kazetsuyu, direction: to_akakubo, time: 30, rapid_not_in_parallel: false },
+      { to: scr_16, line: scr_kazetsuyu, direction: to_kazetsuyu_kawashimo, time: 34, rapid_not_in_parallel: false },
     ]
   scr_16:
     name: 風露川下
@@ -1242,7 +1242,7 @@ stations:
     location: [ -1013, 948.5 ]
     type: station
     paths: [
-      { to: scr_15, line: scr_kazetsuyu, direction: to_akakubo, time: 34 },
+      { to: scr_15, line: scr_kazetsuyu, direction: to_akakubo, time: 34, rapid_not_in_parallel: false },
     ]
   scr_17:
     name: 海老川渡
@@ -1252,7 +1252,7 @@ stations:
     location: [ -518.5, -422.5 ]
     type: station
     paths: [
-      { to: scr_07, line: scr_nansho, direction: to_yamuwakka, time: 15 },
+      { to: scr_07, line: scr_nansho, direction: to_yamuwakka, time: 15, rapid_not_in_parallel: false },
     ]
   niizame_ebikawa_1:
     name: 海老川南
@@ -1262,8 +1262,8 @@ stations:
     location: [ -263.5, -379.5 ]
     type: station
     paths: [
-      { to: niizame_ebikawa_2, line: niizame_ebikawa, direction: to_ebikawa_kita, time: 36 },
-      { to: mutsuki_shinso_7, line: walk, direction: southwalk, time: 60 },
+      { to: niizame_ebikawa_2, line: niizame_ebikawa, direction: to_ebikawa_kita, time: 36, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_7, line: walk, direction: southwalk, time: 60, rapid_not_in_parallel: false },
     ]
   niizame_ebikawa_2:
     name: 海老川北
@@ -1273,7 +1273,7 @@ stations:
     location: [ -329.5, -583.0 ]
     type: station
     paths: [
-      { to: niizame_ebikawa_1, line: niizame_ebikawa, direction: to_ebikawa_minami, time: 36 },
+      { to: niizame_ebikawa_1, line: niizame_ebikawa, direction: to_ebikawa_minami, time: 36, rapid_not_in_parallel: false },
     ]
   nyv_main_1:
     name: 知羽岬
@@ -1283,7 +1283,7 @@ stations:
     location: [ 1274.0, 66.5 ]
     type: station
     paths: [
-      { to: nyv_main_2, line: nyv_main, direction: to_fukamiwan, time: 30 },
+      { to: nyv_main_2, line: nyv_main, direction: to_fukamiwan, time: 30, rapid_not_in_parallel: false },
     ]
   nyv_main_2:
     name: 中倉
@@ -1293,8 +1293,8 @@ stations:
     location: [ 1427.5, 144.0 ]
     type: station
     paths: [
-      { to: nyv_main_1, line: nyv_main, direction: to_shirehasaki, time: 30 },
-      { to: nyv_main_3, line: nyv_main, direction: to_fukamiwan, time: 18 },
+      { to: nyv_main_1, line: nyv_main, direction: to_shirehasaki, time: 30, rapid_not_in_parallel: false },
+      { to: nyv_main_3, line: nyv_main, direction: to_fukamiwan, time: 18, rapid_not_in_parallel: false },
     ]
   nyv_main_3:
     name: 高天江(新山吹)
@@ -1304,10 +1304,10 @@ stations:
     location: [ 1501.5, 102.5 ]
     type: station
     paths: [
-      { to: nyv_main_2, line: nyv_main, direction: to_shirehasaki, time: 18 },
-      { to: nyv_main_4, line: nyv_main, direction: to_fukamiwan, time: 18 },
-      { to: nyv_takayama_1, line: nyv_takayama, direction: to_hatsumaya, time: 33 },
-      { to: nyv_takayama_3, line: nyv_takayama, direction: to_yamabukitakayama, time: 24 },
+      { to: nyv_main_2, line: nyv_main, direction: to_shirehasaki, time: 18, rapid_not_in_parallel: false },
+      { to: nyv_main_4, line: nyv_main, direction: to_fukamiwan, time: 18, rapid_not_in_parallel: false },
+      { to: nyv_takayama_1, line: nyv_takayama, direction: to_hatsumaya, time: 33, rapid_not_in_parallel: false },
+      { to: nyv_takayama_3, line: nyv_takayama, direction: to_yamabukitakayama, time: 24, rapid_not_in_parallel: false },
     ]
   nyv_main_4:
     name: 川中島
@@ -1317,8 +1317,8 @@ stations:
     location: [ 1630.5, 102.5 ]
     type: station
     paths: [
-      { to: nyv_main_3, line: nyv_main, direction: to_shirehasaki, time: 18 },
-      { to: nyv_main_5, line: nyv_main, direction: to_fukamiwan, time: 19 },
+      { to: nyv_main_3, line: nyv_main, direction: to_shirehasaki, time: 18, rapid_not_in_parallel: false },
+      { to: nyv_main_5, line: nyv_main, direction: to_fukamiwan, time: 19, rapid_not_in_parallel: false },
     ]
   nyv_main_5:
     name: 澄苑
@@ -1328,8 +1328,8 @@ stations:
     location: [ 1769.5, 102.5 ]
     type: station
     paths: [
-      { to: nyv_main_4, line: nyv_main, direction: to_shirehasaki, time: 19 },
-      { to: nyv_main_6, line: nyv_main, direction: to_fukamiwan, time: 28 },
+      { to: nyv_main_4, line: nyv_main, direction: to_shirehasaki, time: 19, rapid_not_in_parallel: false },
+      { to: nyv_main_6, line: nyv_main, direction: to_fukamiwan, time: 28, rapid_not_in_parallel: false },
     ]
   nyv_main_6:
     name: 水野山
@@ -1339,8 +1339,8 @@ stations:
     location: [ 1980.5, 102.5 ]
     type: station
     paths: [
-      { to: nyv_main_5, line: nyv_main, direction: to_shirehasaki, time: 28 },
-      { to: nyv_main_7, line: nyv_main, direction: to_fukamiwan, time: 19 },
+      { to: nyv_main_5, line: nyv_main, direction: to_shirehasaki, time: 28, rapid_not_in_parallel: false },
+      { to: nyv_main_7, line: nyv_main, direction: to_fukamiwan, time: 19, rapid_not_in_parallel: false },
     ]
   nyv_main_7:
     name: 水野追分
@@ -1350,9 +1350,9 @@ stations:
     location: [ 2121.5, 102.5 ]
     type: station
     paths: [
-      { to: nyv_main_6, line: nyv_main, direction: to_shirehasaki, time: 19 },
-      { to: nyv_main_8, line: nyv_main, direction: to_fukamiwan, time: 16 },
-      { to: nyv_manozumi_2, line: nyv_manozumi, direction: to_manozumitou_nishi, time: 30 },
+      { to: nyv_main_6, line: nyv_main, direction: to_shirehasaki, time: 19, rapid_not_in_parallel: false },
+      { to: nyv_main_8, line: nyv_main, direction: to_fukamiwan, time: 16, rapid_not_in_parallel: false },
+      { to: nyv_manozumi_2, line: nyv_manozumi, direction: to_manozumitou_nishi, time: 30, rapid_not_in_parallel: false },
     ]
   nyv_main_8:
     name: 寒館川
@@ -1362,8 +1362,8 @@ stations:
     location: [ 2234.5, 94.5 ]
     type: station
     paths: [
-      { to: nyv_main_7, line: nyv_main, direction: to_shirehasaki, time: 16 },
-      { to: nyv_main_9, line: nyv_main, direction: to_fukamiwan, time: 19 },
+      { to: nyv_main_7, line: nyv_main, direction: to_shirehasaki, time: 16, rapid_not_in_parallel: false },
+      { to: nyv_main_9, line: nyv_main, direction: to_fukamiwan, time: 19, rapid_not_in_parallel: false },
     ]
   nyv_main_9:
     name: 南布里
@@ -1373,10 +1373,10 @@ stations:
     location: [ 2365.5, 92.5 ]
     type: station
     paths: [
-      { to: nyv_main_8, line: nyv_main, direction: to_shirehasaki, time: 19 },
-      { to: nyv_main_10, line: nyv_main, direction: to_fukamiwan, time: 25 },
-      { to: nyv_takayama_3, line: nyv_takayama, direction: to_hatsumaya, time: 60 },
-      { to: nyv_takayama_5, line: nyv_takayama, direction: to_yamabukitakayama, time: 33 },
+      { to: nyv_main_8, line: nyv_main, direction: to_shirehasaki, time: 19, rapid_not_in_parallel: false },
+      { to: nyv_main_10, line: nyv_main, direction: to_fukamiwan, time: 25, rapid_not_in_parallel: false },
+      { to: nyv_takayama_3, line: nyv_takayama, direction: to_hatsumaya, time: 60, rapid_not_in_parallel: false },
+      { to: nyv_takayama_5, line: nyv_takayama, direction: to_yamabukitakayama, time: 33, rapid_not_in_parallel: false },
     ]
   nyv_main_10:
     name: 似帯
@@ -1386,8 +1386,8 @@ stations:
     location: [ 2493.5, 148.5 ]
     type: station
     paths: [
-      { to: nyv_main_9, line: nyv_main, direction: to_shirehasaki, time: 25 },
-      { to: nyv_main_10a, line: nyv_main, direction: to_fukamiwan, time: 16 },
+      { to: nyv_main_9, line: nyv_main, direction: to_shirehasaki, time: 25, rapid_not_in_parallel: false },
+      { to: nyv_main_10a, line: nyv_main, direction: to_fukamiwan, time: 16, rapid_not_in_parallel: false },
     ]
   nyv_main_10a:
     name: 南似帯(信号所)
@@ -1397,8 +1397,8 @@ stations:
     location: [ 2482.5, 232.5 ]
     type: signal_station
     paths: [
-      { to: nyv_main_10, line: nyv_main, direction: to_shirehasaki, time: 16 },
-      { to: nyv_main_11, line: nyv_main, direction: to_fukamiwan, time: 10 },
+      { to: nyv_main_10, line: nyv_main, direction: to_shirehasaki, time: 16, rapid_not_in_parallel: false },
+      { to: nyv_main_11, line: nyv_main, direction: to_fukamiwan, time: 10, rapid_not_in_parallel: false },
     ]
   nyv_main_11:
     name: 下山林(新山吹)
@@ -1408,9 +1408,9 @@ stations:
     location: [ 2522.5, 261.5 ]
     type: station
     paths: [
-      { to: nyv_main_10a, line: nyv_main, direction: to_shirehasaki, time: 10 },
-      { to: nyv_main_12, line: nyv_main, direction: to_fukamiwan, time: 19 },
-      { to: mutsuki_shinso_L24, line: walk, direction: eastwalk, time: 34 },
+      { to: nyv_main_10a, line: nyv_main, direction: to_shirehasaki, time: 10, rapid_not_in_parallel: false },
+      { to: nyv_main_12, line: nyv_main, direction: to_fukamiwan, time: 19, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L24, line: walk, direction: eastwalk, time: 34, rapid_not_in_parallel: false },
     ]
   nyv_main_12:
     name: 千瀬
@@ -1420,8 +1420,8 @@ stations:
     location: [ 2490.5, 365.5 ]
     type: station
     paths: [
-      { to: nyv_main_11, line: nyv_main, direction: to_shirehasaki, time: 19 },
-      { to: nyv_main_13, line: nyv_main, direction: to_fukamiwan, time: 20 },
+      { to: nyv_main_11, line: nyv_main, direction: to_shirehasaki, time: 19, rapid_not_in_parallel: false },
+      { to: nyv_main_13, line: nyv_main, direction: to_fukamiwan, time: 20, rapid_not_in_parallel: false },
     ]
   nyv_main_13:
     name: 深雪
@@ -1431,9 +1431,9 @@ stations:
     location: [ 2545.5, 457.5 ]
     type: station
     paths: [
-      { to: nyv_main_12, line: nyv_main, direction: to_shirehasaki, time: 20 },
-      { to: nyv_main_14, line: nyv_main, direction: to_fukamiwan, time: 19 },
-      { to: mutsuki_shinso_L25, line: walk, direction: eastwalk, time: 23 },
+      { to: nyv_main_12, line: nyv_main, direction: to_shirehasaki, time: 20, rapid_not_in_parallel: false },
+      { to: nyv_main_14, line: nyv_main, direction: to_fukamiwan, time: 19, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_L25, line: walk, direction: eastwalk, time: 23, rapid_not_in_parallel: false },
     ]
   nyv_main_14:
     name: 南深雪
@@ -1443,8 +1443,8 @@ stations:
     location: [ 2543.5, 597.5 ]
     type: station
     paths: [
-      { to: nyv_main_13, line: nyv_main, direction: to_shirehasaki, time: 19 },
-      { to: nyv_main_15, line: nyv_main, direction: to_fukamiwan, time: 23 },
+      { to: nyv_main_13, line: nyv_main, direction: to_shirehasaki, time: 19, rapid_not_in_parallel: false },
+      { to: nyv_main_15, line: nyv_main, direction: to_fukamiwan, time: 23, rapid_not_in_parallel: false },
     ]
   nyv_main_15:
     name: 北白染野
@@ -1454,8 +1454,8 @@ stations:
     location: [ 2515.5, 687.5 ]
     type: station
     paths: [
-      { to: nyv_main_14, line: nyv_main, direction: to_shirehasaki, time: 23 },
-      { to: nyv_main_16, line: nyv_main, direction: to_fukamiwan, time: 22 },
+      { to: nyv_main_14, line: nyv_main, direction: to_shirehasaki, time: 23, rapid_not_in_parallel: false },
+      { to: nyv_main_16, line: nyv_main, direction: to_fukamiwan, time: 22, rapid_not_in_parallel: false },
     ]
   nyv_main_16:
     name: 薫風緑苑
@@ -1465,8 +1465,8 @@ stations:
     location: [ 2360.5, 698.5 ]
     type: station
     paths: [
-      { to: nyv_main_15, line: nyv_main, direction: to_shirehasaki, time: 22 },
-      { to: nyv_main_17, line: nyv_main, direction: to_fukamiwan, time: 25 },
+      { to: nyv_main_15, line: nyv_main, direction: to_shirehasaki, time: 22, rapid_not_in_parallel: false },
+      { to: nyv_main_17, line: nyv_main, direction: to_fukamiwan, time: 25, rapid_not_in_parallel: false },
     ]
   nyv_main_17:
     name: 下越
@@ -1476,8 +1476,8 @@ stations:
     location: [ 2418.5, 843.5 ]
     type: station
     paths: [
-      { to: nyv_main_16, line: nyv_main, direction: to_shirehasaki, time: 25 },
-      { to: nyv_main_18, line: nyv_main, direction: to_fukamiwan, time: 12 },
+      { to: nyv_main_16, line: nyv_main, direction: to_shirehasaki, time: 25, rapid_not_in_parallel: false },
+      { to: nyv_main_18, line: nyv_main, direction: to_fukamiwan, time: 12, rapid_not_in_parallel: false },
     ]
   nyv_main_18:
     name: 平屋ノ原
@@ -1487,8 +1487,8 @@ stations:
     location: [ 2424.5, 925.5 ]
     type: station
     paths: [
-      { to: nyv_main_17, line: nyv_main, direction: to_shirehasaki, time: 12 },
-      { to: nyv_main_19, line: nyv_main, direction: to_fukamiwan, time: 23 },
+      { to: nyv_main_17, line: nyv_main, direction: to_shirehasaki, time: 12, rapid_not_in_parallel: false },
+      { to: nyv_main_19, line: nyv_main, direction: to_fukamiwan, time: 23, rapid_not_in_parallel: false },
     ]
   nyv_main_19:
     name: 大樹快車町
@@ -1498,8 +1498,8 @@ stations:
     location: [ 2439.5, 1087.0 ]
     type: station
     paths: [
-      { to: nyv_main_18, line: nyv_main, direction: to_shirehasaki, time: 23 },
-      { to: nyv_main_20, line: nyv_main, direction: to_fukamiwan, time: 38 },
+      { to: nyv_main_18, line: nyv_main, direction: to_shirehasaki, time: 23, rapid_not_in_parallel: false },
+      { to: nyv_main_20, line: nyv_main, direction: to_fukamiwan, time: 38, rapid_not_in_parallel: false },
     ]
   nyv_main_20:
     name: 南大樹
@@ -1509,9 +1509,9 @@ stations:
     location: [ 2569.5, 1211.5 ]
     type: station
     paths: [
-      { to: nyv_main_19, line: nyv_main, direction: to_shirehasaki, time: 38 },
-      { to: nyv_main_21, line: nyv_main, direction: to_fukamiwan, time: 17 },
-      { to: nyv_yayoigawa_2, line: nyv_yayoigawa, direction: to_hachimi, time: 16 },
+      { to: nyv_main_19, line: nyv_main, direction: to_shirehasaki, time: 38, rapid_not_in_parallel: false },
+      { to: nyv_main_21, line: nyv_main, direction: to_fukamiwan, time: 17, rapid_not_in_parallel: false },
+      { to: nyv_yayoigawa_2, line: nyv_yayoigawa, direction: to_hachimi, time: 16, rapid_not_in_parallel: false },
     ]
   nyv_main_21:
     name: 瓢箪半島口
@@ -1521,8 +1521,8 @@ stations:
     location: [ 2569.5, 1336.5 ]
     type: station
     paths: [
-      { to: nyv_main_20, line: nyv_main, direction: to_shirehasaki, time: 17 },
-      { to: nyv_main_22, line: nyv_main, direction: to_fukamiwan, time: 19 },
+      { to: nyv_main_20, line: nyv_main, direction: to_shirehasaki, time: 17, rapid_not_in_parallel: false },
+      { to: nyv_main_22, line: nyv_main, direction: to_fukamiwan, time: 19, rapid_not_in_parallel: false },
     ]
   nyv_main_22:
     name: 境ガ浜
@@ -1532,8 +1532,8 @@ stations:
     location: [ 2551.5, 1460.5 ]
     type: station
     paths: [
-      { to: nyv_main_21, line: nyv_main, direction: to_shirehasaki, time: 19 },
-      { to: nyv_main_23, line: nyv_main, direction: to_fukamiwan, time: 19 },
+      { to: nyv_main_21, line: nyv_main, direction: to_shirehasaki, time: 19, rapid_not_in_parallel: false },
+      { to: nyv_main_23, line: nyv_main, direction: to_fukamiwan, time: 19, rapid_not_in_parallel: false },
     ]
   nyv_main_23:
     name: 風連野府
@@ -1543,8 +1543,8 @@ stations:
     location: [ 2551.5, 1594.5 ]
     type: station
     paths: [
-      { to: nyv_main_22, line: nyv_main, direction: to_shirehasaki, time: 19 },
-      { to: nyv_main_24, line: nyv_main, direction: to_fukamiwan, time: 11 },
+      { to: nyv_main_22, line: nyv_main, direction: to_shirehasaki, time: 19, rapid_not_in_parallel: false },
+      { to: nyv_main_24, line: nyv_main, direction: to_fukamiwan, time: 11, rapid_not_in_parallel: false },
     ]
   nyv_main_24:
     name: 深見湾
@@ -1554,7 +1554,7 @@ stations:
     location: [ 2536.5, 1653.5 ]
     type: station
     paths: [
-      { to: nyv_main_23, line: nyv_main, direction: to_shirehasaki, time: 11 },
+      { to: nyv_main_23, line: nyv_main, direction: to_shirehasaki, time: 11, rapid_not_in_parallel: false },
     ]
   nyv_manozumi_2:
     name: 南境
@@ -1564,8 +1564,8 @@ stations:
     location: [ 2130.5, 324.5 ]
     type: station
     paths: [
-      { to: nyv_main_7, line: nyv_manozumi, direction: to_minano_oiwake, time: 30 },
-      { to: nyv_manozumi_3, line: nyv_manozumi, direction: to_manozumitou_nishi, time: 13 },
+      { to: nyv_main_7, line: nyv_manozumi, direction: to_minano_oiwake, time: 30, rapid_not_in_parallel: false },
+      { to: nyv_manozumi_3, line: nyv_manozumi, direction: to_manozumitou_nishi, time: 13, rapid_not_in_parallel: false },
     ]
   nyv_manozumi_3:
     name: 北薫子沼
@@ -1575,8 +1575,8 @@ stations:
     location: [ 2149.5, 397.5 ]
     type: station
     paths: [
-      { to: nyv_manozumi_2, line: nyv_manozumi, direction: to_minano_oiwake, time: 13 },
-      { to: nyv_manozumi_4, line: nyv_manozumi, direction: to_manozumitou_nishi, time: 21 },
+      { to: nyv_manozumi_2, line: nyv_manozumi, direction: to_minano_oiwake, time: 13, rapid_not_in_parallel: false },
+      { to: nyv_manozumi_4, line: nyv_manozumi, direction: to_manozumitou_nishi, time: 21, rapid_not_in_parallel: false },
     ]
   nyv_manozumi_4:
     name: 馬住川
@@ -1586,8 +1586,8 @@ stations:
     location: [ 2059.5, 483.5 ]
     type: station
     paths: [
-      { to: nyv_manozumi_3, line: nyv_manozumi, direction: to_minano_oiwake, time: 21 },
-      { to: nyv_manozumi_5, line: nyv_manozumi, direction: to_manozumitou_nishi, time: 14 },
+      { to: nyv_manozumi_3, line: nyv_manozumi, direction: to_minano_oiwake, time: 21, rapid_not_in_parallel: false },
+      { to: nyv_manozumi_5, line: nyv_manozumi, direction: to_manozumitou_nishi, time: 14, rapid_not_in_parallel: false },
     ]
   nyv_manozumi_5:
     name: 久遠田浜
@@ -1597,8 +1597,8 @@ stations:
     location: [ 1962.5, 483.5 ]
     type: station
     paths: [
-      { to: nyv_manozumi_4, line: nyv_manozumi, direction: to_minano_oiwake, time: 14 },
-      { to: nyv_manozumi_6, line: nyv_manozumi, direction: to_manozumitou_nishi, time: 20 },
+      { to: nyv_manozumi_4, line: nyv_manozumi, direction: to_minano_oiwake, time: 14, rapid_not_in_parallel: false },
+      { to: nyv_manozumi_6, line: nyv_manozumi, direction: to_manozumitou_nishi, time: 20, rapid_not_in_parallel: false },
     ]
   nyv_manozumi_6:
     name: 馬住島西
@@ -1608,7 +1608,7 @@ stations:
     location: [ 1860.5, 531.5 ]
     type: station
     paths: [
-      { to: nyv_manozumi_5, line: nyv_manozumi, direction: to_minano_oiwake, time: 20 },
+      { to: nyv_manozumi_5, line: nyv_manozumi, direction: to_minano_oiwake, time: 20, rapid_not_in_parallel: false },
     ]
   nyv_yayoigawa_2:
     name: 大樹砂原
@@ -1618,8 +1618,8 @@ stations:
     location: [ 2473.5, 1250.5 ]
     type: station
     paths: [
-      { to: nyv_main_20, line: nyv_yayoigawa, direction: to_minami_taiki, time: 16 },
-      { to: nyv_yayoigawa_3, line: nyv_yayoigawa, direction: to_hachimi, time: 29 },
+      { to: nyv_main_20, line: nyv_yayoigawa, direction: to_minami_taiki, time: 16, rapid_not_in_parallel: false },
+      { to: nyv_yayoigawa_3, line: nyv_yayoigawa, direction: to_hachimi, time: 29, rapid_not_in_parallel: false },
     ]
   nyv_yayoigawa_3:
     name: 西砂原
@@ -1629,8 +1629,8 @@ stations:
     location: [ 2261.5, 1241.5 ]
     type: station
     paths: [
-      { to: nyv_yayoigawa_2, line: nyv_yayoigawa, direction: to_minami_taiki, time: 29 },
-      { to: nyv_yayoigawa_4, line: nyv_yayoigawa, direction: to_hachimi, time: 27 },
+      { to: nyv_yayoigawa_2, line: nyv_yayoigawa, direction: to_minami_taiki, time: 29, rapid_not_in_parallel: false },
+      { to: nyv_yayoigawa_4, line: nyv_yayoigawa, direction: to_hachimi, time: 27, rapid_not_in_parallel: false },
     ]
   nyv_yayoigawa_4:
     name: 弥生川
@@ -1640,8 +1640,8 @@ stations:
     location: [ 2102.5, 1280.5 ]
     type: station
     paths: [
-      { to: nyv_yayoigawa_3, line: nyv_yayoigawa, direction: to_minami_taiki, time: 27 },
-      { to: nyv_yayoigawa_5, line: nyv_yayoigawa, direction: to_hachimi, time: 35 },
+      { to: nyv_yayoigawa_3, line: nyv_yayoigawa, direction: to_minami_taiki, time: 27, rapid_not_in_parallel: false },
+      { to: nyv_yayoigawa_5, line: nyv_yayoigawa, direction: to_hachimi, time: 35, rapid_not_in_parallel: false },
     ]
   nyv_yayoigawa_5:
     name: 南弥生
@@ -1651,8 +1651,8 @@ stations:
     location: [ 2081.5, 1533.5 ]
     type: station
     paths: [
-      { to: nyv_yayoigawa_4, line: nyv_yayoigawa, direction: to_minami_taiki, time: 35 },
-      { to: nyv_yayoigawa_6, line: nyv_yayoigawa, direction: to_hachimi, time: 27 },
+      { to: nyv_yayoigawa_4, line: nyv_yayoigawa, direction: to_minami_taiki, time: 35, rapid_not_in_parallel: false },
+      { to: nyv_yayoigawa_6, line: nyv_yayoigawa, direction: to_hachimi, time: 27, rapid_not_in_parallel: false },
     ]
   nyv_yayoigawa_6:
     name: 弥生砂央
@@ -1662,8 +1662,8 @@ stations:
     location: [ 1907.5, 1565.5 ]
     type: station
     paths: [
-      { to: nyv_yayoigawa_5, line: nyv_yayoigawa, direction: to_minami_taiki, time: 27 },
-      { to: nyv_yayoigawa_7, line: nyv_yayoigawa, direction: to_hachimi, time: 35 },
+      { to: nyv_yayoigawa_5, line: nyv_yayoigawa, direction: to_minami_taiki, time: 27, rapid_not_in_parallel: false },
+      { to: nyv_yayoigawa_7, line: nyv_yayoigawa, direction: to_hachimi, time: 35, rapid_not_in_parallel: false },
     ]
   nyv_yayoigawa_7:
     name: 蜂味
@@ -1673,7 +1673,7 @@ stations:
     location: [ 1636.5, 1565.5 ]
     type: station
     paths: [
-      { to: nyv_yayoigawa_6, line: nyv_yayoigawa, direction: to_minami_taiki, time: 35 },
+      { to: nyv_yayoigawa_6, line: nyv_yayoigawa, direction: to_minami_taiki, time: 35, rapid_not_in_parallel: false },
     ]
   nyv_takayama_1:
     name: 八厩
@@ -1683,7 +1683,7 @@ stations:
     location: [ 1334.5, 56.5 ]
     type: station
     paths: [
-      { to: nyv_main_3, line: nyv_takayama, direction: to_yamabukitakayama, time: 33 },
+      { to: nyv_main_3, line: nyv_takayama, direction: to_yamabukitakayama, time: 33, rapid_not_in_parallel: false },
     ]
   nyv_takayama_2a:
     name: 北川(信号所)
@@ -1693,8 +1693,8 @@ stations:
     location: [ 1675.5, 81.0 ]
     type: signal_station
     paths: [
-      { to: nyv_main_3, line: nyv_takayama, direction: to_hatsumaya, time: 24 },
-      { to: nyv_takayama_3, line: nyv_takayama, direction: to_yamabukitakayama, time: 45 },
+      { to: nyv_main_3, line: nyv_takayama, direction: to_hatsumaya, time: 24, rapid_not_in_parallel: false },
+      { to: nyv_takayama_3, line: nyv_takayama, direction: to_yamabukitakayama, time: 45, rapid_not_in_parallel: false },
     ]
   nyv_takayama_3:
     name: 新興掘原
@@ -1704,8 +1704,8 @@ stations:
     location: [ 1991.5, 6.5 ]
     type: station
     paths: [
-      { to: nyv_takayama_2a, line: nyv_takayama, direction: to_hatsumaya, time: 45 },
-      { to: nyv_main_9, line: nyv_takayama, direction: to_yamabukitakayama, time: 60 },
+      { to: nyv_takayama_2a, line: nyv_takayama, direction: to_hatsumaya, time: 45, rapid_not_in_parallel: false },
+      { to: nyv_main_9, line: nyv_takayama, direction: to_yamabukitakayama, time: 60, rapid_not_in_parallel: false },
     ]
   nyv_takayama_5:
     name: 山吹高山
@@ -1715,8 +1715,8 @@ stations:
     location: [ 2366.5, -126.0 ]
     type: station
     paths: [
-      { to: nyv_main_9, line: nyv_takayama, direction: to_hatsumaya, time: 33 },
-      { to: mutsuki_shinso_19, line: walk, direction: northwalk, time: 50 },
+      { to: nyv_main_9, line: nyv_takayama, direction: to_hatsumaya, time: 33, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_19, line: walk, direction: northwalk, time: 50, rapid_not_in_parallel: false },
     ]
   kosaka:
     name: 甲阪
@@ -1726,10 +1726,10 @@ stations:
     location: [ 730.5, -1159.5 ]
     type: station
     paths: [
-      { to: enr_4_2, line: toki_gakuentoshi, direction: to_morikami, time: 251 },
-      { to: mutsuki_kohoku_7, line: walk, direction: eastwalk, time: 85 },
-      { to: mutsuki_kohoku_9, line: walk, direction: westwalk, time: 58 },
-      { to: kosaka_c15, line: walk, direction: southwalk, time: 90 },
+      { to: enr_4_2, line: toki_gakuentoshi, direction: to_morikami, time: 251, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_7, line: walk, direction: eastwalk, time: 85, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_9, line: walk, direction: westwalk, time: 58, rapid_not_in_parallel: false },
+      { to: kosaka_c15, line: walk, direction: southwalk, time: 90, rapid_not_in_parallel: false },
     ]
   kosaka_c15:
     name: 甲阪港
@@ -1739,10 +1739,10 @@ stations:
     location: [ 720.5, -941.5 ]
     type: station
     paths: [
-      { to: kosaka_c16, line: kosaka_chuo, direction: to_prism_square, time: 39 },
-      { to: mutsuki_kohoku_7, line: walk, direction: eastwalk, time: 72 },
-      { to: mutsuki_kohoku_9, line: walk, direction: westwalk, time: 115 },
-      { to: kosaka, line: walk, direction: northwalk, time: 90 },
+      { to: kosaka_c16, line: kosaka_chuo, direction: to_prism_square, time: 39, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_7, line: walk, direction: eastwalk, time: 72, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_9, line: walk, direction: westwalk, time: 115, rapid_not_in_parallel: false },
+      { to: kosaka, line: walk, direction: northwalk, time: 90, rapid_not_in_parallel: false },
     ]
   kosaka_c16:
     name: 新海地
@@ -1752,8 +1752,8 @@ stations:
     location: [ 841.5, -748.5 ]
     type: station
     paths: [
-      { to: kosaka_c15, line: kosaka_chuo, direction: to_midorigaoka, time: 39 },
-      { to: kosaka_c17, line: kosaka_chuo, direction: to_prism_square, time: 34 },
+      { to: kosaka_c15, line: kosaka_chuo, direction: to_midorigaoka, time: 39, rapid_not_in_parallel: false },
+      { to: kosaka_c17, line: kosaka_chuo, direction: to_prism_square, time: 34, rapid_not_in_parallel: false },
     ]
   kosaka_c17:
     name: プリズムスクエア
@@ -1763,7 +1763,7 @@ stations:
     location: [ 906.5, -540.5 ]
     type: station
     paths: [
-      { to: kosaka_c16, line: kosaka_chuo, direction: to_midorigaoka, time: 34 },
+      { to: kosaka_c16, line: kosaka_chuo, direction: to_midorigaoka, time: 34, rapid_not_in_parallel: false },
     ]
   wildarea2_central_w:
     name: 共有拠点(西)
@@ -1773,12 +1773,12 @@ stations:
     location: [ -20.5, 52.0 ]
     type: station
     paths: [
-      { to: wildarea2_tt_w_01_2, line: wildarea2_tt_w_01, direction: to_wildarea2_tt_w_01, time: 91 },
-      { to: wildarea2_tt_w_02, line: wildarea2_tt_w_02, direction: to_wildarea2_tt_w_02, time: 97 },
-      { to: wildarea2_central_e, line: walk, direction: northwalk, time: 31 },
-      { to: wildarea2_tt_w_04, line: walk, direction: northwalk, time: 23 },
-      { to: wildarea2_tt_w_05, line: wildarea2_tt_w_05, direction: to_wildarea2_tt_w_05, time: 54 },
-      { to: wildarea2_tt_w_06, line: boat, direction: southwalk, time: 67 },
+      { to: wildarea2_tt_w_01_2, line: wildarea2_tt_w_01, direction: to_wildarea2_tt_w_01, time: 91, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_02, line: wildarea2_tt_w_02, direction: to_wildarea2_tt_w_02, time: 97, rapid_not_in_parallel: false },
+      { to: wildarea2_central_e, line: walk, direction: northwalk, time: 31, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_04, line: walk, direction: northwalk, time: 23, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_05, line: wildarea2_tt_w_05, direction: to_wildarea2_tt_w_05, time: 54, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_06, line: boat, direction: southwalk, time: 67, rapid_not_in_parallel: false },
     ]
   wildarea2_central_e:
     name: 共有拠点(東)
@@ -1788,9 +1788,9 @@ stations:
     location: [ 66.5, -16.5 ]
     type: station
     paths: [
-      { to: wildarea2_central_w, line: walk, direction: southwalk, time: 31 },
-      { to: wildarea2_tt_w_03, line: wildarea2_tt_w_03, direction: to_wildarea2_tt_w_03, time: 483 },
-      { to: wildarea2_tt_w_04, line: walk, direction: westwalk, time: 20 },
+      { to: wildarea2_central_w, line: walk, direction: southwalk, time: 31, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_03, line: wildarea2_tt_w_03, direction: to_wildarea2_tt_w_03, time: 483, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_04, line: walk, direction: westwalk, time: 20, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_01_2:
     name: 誰かの拠点
@@ -1800,8 +1800,8 @@ stations:
     location: [ -723.5, 55.5 ]
     type: station
     paths: [
-      { to: wildarea2_central_w, line: wildarea2_tt_w_01, direction: to_wildarea2_central, time: 91 },
-      { to: wildarea2_tt_w_01, line: wildarea2_tt_w_01, direction: to_wildarea2_tt_w_01, time: 304 },
+      { to: wildarea2_central_w, line: wildarea2_tt_w_01, direction: to_wildarea2_central, time: 91, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_01, line: wildarea2_tt_w_01, direction: to_wildarea2_tt_w_01, time: 304, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_01:
     name: ゾンビTT(TT-W-01)
@@ -1811,7 +1811,7 @@ stations:
     location: [ -785.5, 2409.5 ]
     type: station
     paths: [
-      { to: wildarea2_tt_w_01_2, line: wildarea2_tt_w_01, direction: to_wildarea2_central, time: 304 },
+      { to: wildarea2_tt_w_01_2, line: wildarea2_tt_w_01, direction: to_wildarea2_central, time: 304, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_02:
     name: スケルトンTT(TT-W-02)
@@ -1821,7 +1821,7 @@ stations:
     location: [ -50.0, 793.5 ]
     type: station
     paths: [
-      { to: wildarea2_central_w, line: wildarea2_tt_w_02, direction: to_wildarea2_central, time: 97 },
+      { to: wildarea2_central_w, line: wildarea2_tt_w_02, direction: to_wildarea2_central, time: 97, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_03:
     name: 海底神殿跡地TT(TT-W-03)
@@ -1831,7 +1831,7 @@ stations:
     location: [ 2646.5, -1281.5 ]
     type: station
     paths: [
-      { to: wildarea2_central_e, line: wildarea2_tt_w_03, direction: to_wildarea2_central, time: 483 },
+      { to: wildarea2_central_e, line: wildarea2_tt_w_03, direction: to_wildarea2_central, time: 483, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_04:
     name: アイアンゴーレムトラップ(TT-W-04)
@@ -1841,8 +1841,8 @@ stations:
     location: [ 42.0, -26.0 ]
     type: station
     paths: [
-      { to: wildarea2_central_w, line: walk, direction: southwalk, time: 23 },
-      { to: wildarea2_central_e, line: walk, direction: eastwalk, time: 20 },
+      { to: wildarea2_central_w, line: walk, direction: southwalk, time: 23, rapid_not_in_parallel: false },
+      { to: wildarea2_central_e, line: walk, direction: eastwalk, time: 20, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_05:
     name: 洞窟蜘蛛TT(TT-W-05)
@@ -1852,7 +1852,7 @@ stations:
     location: [ -248.5, 243.5 ]
     type: station
     paths: [
-      { to: wildarea2_central_w, line: wildarea2_tt_w_05, direction: to_wildarea2_central, time: 54 },
+      { to: wildarea2_central_w, line: wildarea2_tt_w_05, direction: to_wildarea2_central, time: 54, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_06:
     name: クリーパートラップ(TT-W-06)
@@ -1862,7 +1862,7 @@ stations:
     location: [ -124.5, 452.5 ]
     type: station
     paths: [
-      { to: wildarea2_central_w, line: boat, direction: southwalk, time: 67 },
+      { to: wildarea2_central_w, line: boat, direction: southwalk, time: 67, rapid_not_in_parallel: false },
     ]
   wildarea2_nether_central:
     name: 拠点
@@ -1872,8 +1872,8 @@ stations:
     location: [ -7.0, 2.5 ]
     type: station
     paths: [
-      { to: wildarea2_nether_tt_n_01_b, line: walk, direction: westwalk, time: 17 },
-      { to: wildarea2_nether_end, line: wildarea2_nether_end, direction: to_wildarea2_nether_end, time: 42 },
+      { to: wildarea2_nether_tt_n_01_b, line: walk, direction: westwalk, time: 17, rapid_not_in_parallel: false },
+      { to: wildarea2_nether_end, line: wildarea2_nether_end, direction: to_wildarea2_nether_end, time: 42, rapid_not_in_parallel: false },
     ]
   wildarea2_nether_tt_n_01_b:
     name: (乗降場)
@@ -1883,8 +1883,8 @@ stations:
     location: [ -61.0, -4.0 ]
     type: signal_station
     paths: [
-      { to: wildarea2_nether_central, line: walk, direction: eastwalk, time: 17 },
-      { to: wildarea2_nether_tt_n_01_a, line: wildarea2_nether_tt_n_01_a, direction: to_wildarea2_nether_tt_n_01, time: 14 },
+      { to: wildarea2_nether_central, line: walk, direction: eastwalk, time: 17, rapid_not_in_parallel: false },
+      { to: wildarea2_nether_tt_n_01_a, line: wildarea2_nether_tt_n_01_a, direction: to_wildarea2_nether_tt_n_01, time: 14, rapid_not_in_parallel: false },
     ]
   wildarea2_nether_tt_n_01_a:
     name: (乗降場)
@@ -1894,8 +1894,8 @@ stations:
     location: [ -481.0 ,-4.5 ]
     type: signal_station
     paths: [
-      { to: wildarea2_nether_tt_n_01_b, line: wildarea2_nether_tt_n_01_a, direction: to_wildarea2_nether_central, time: 14 },
-      { to: wildarea2_nether_tt_n_01, line: wildarea2_nether_tt_n_01_b, direction: to_wildarea2_nether_tt_n_01, time: 10 },
+      { to: wildarea2_nether_tt_n_01_b, line: wildarea2_nether_tt_n_01_a, direction: to_wildarea2_nether_central, time: 14, rapid_not_in_parallel: false },
+      { to: wildarea2_nether_tt_n_01, line: wildarea2_nether_tt_n_01_b, direction: to_wildarea2_nether_tt_n_01, time: 10, rapid_not_in_parallel: false },
     ]
   wildarea2_nether_tt_n_01:
     name: ポテト屋(TT-N-01)
@@ -1905,7 +1905,7 @@ stations:
     location: [ -530.5, 16.0 ]
     type: station
     paths: [
-      { to: wildarea2_nether_tt_n_01_a, line: wildarea2_nether_tt_n_01_b, direction: to_wildarea2_nether_central, time: 10 },
+      { to: wildarea2_nether_tt_n_01_a, line: wildarea2_nether_tt_n_01_b, direction: to_wildarea2_nether_central, time: 10, rapid_not_in_parallel: false },
     ]
   wildarea2_nether_end:
     name: エンド要塞
@@ -1915,13 +1915,14 @@ stations:
     location: [ -289.5, 18.5 ]
     type: station
     paths: [
-      { to: wildarea2_nether_central, line: wildarea2_nether_end, direction: to_wildarea2_nether_central, time: 42 },
+      { to: wildarea2_nether_central, line: wildarea2_nether_end, direction: to_wildarea2_nether_central, time: 42, rapid_not_in_parallel: false },
     ]
 
 #線データ(この順番でそのまま駅選択画面に載る)
 #路線は基本的に上から走査されるので、快速など優先的に表示されるべき路線はより上に
 # name: 路線名
 # world: 路線の存在するワールドのID
+# rapid: 路線の大半を緩行線に並行される快速線の場合true
 # stations: [
 #  路線上にある駅のID,(この順番でそのまま駅選択画面に載る)
 #  ︙
@@ -1930,6 +1931,7 @@ lines:
   mutsuki_shinso_rapid:
     name: 共天睦月電鉄 新草線 快速
     world: main
+    rapid: true
     stations: [
       mutsuki_shinso_1,
       mutsuki_shinso_5,
@@ -1946,6 +1948,7 @@ lines:
   mutsuki_shinso_local:
     name: 共天睦月電鉄 新草線 普通
     world: main
+    rapid: false
     stations: [
       mutsuki_shinso_1,
       mutsuki_shinso_2,
@@ -1982,6 +1985,7 @@ lines:
   mutsuki_niizamenamboku_south:
     name: 共天睦月電鉄 新鮫南北線(南)
     world: main
+    rapid: false
     stations: [
       mutsuki_niizamenamboku_S1,
       mutsuki_shinso_8,
@@ -1993,6 +1997,7 @@ lines:
   mutsuki_kohoku:
     name: 共天睦月電鉄 湖北線
     world: main
+    rapid: false
     stations: [
       mutsuki_shinso_16,
       mutsuki_kohoku_2,
@@ -2010,6 +2015,7 @@ lines:
   mutsuki_adachi:
     name: 共天睦月電鉄 北方連絡線(足立線)
     world: main
+    rapid: false
     stations: [
       mutsuki_shinso_8,
       mutsuki_kohoku_12,
@@ -2017,6 +2023,7 @@ lines:
   mutsuki_niizamenamboku_north_rapid:
     name: 共天睦月電鉄 新鮫南北線(北) 快速
     world: main
+    rapid: true
     stations: [
       mutsuki_kohoku_12,
       mutsuki_niizamenamboku_N4,
@@ -2028,6 +2035,7 @@ lines:
   mutsuki_niizamenamboku_north_local:
     name: 共天睦月電鉄 新鮫南北線(北) 普通
     world: main
+    rapid: false
     stations: [
       mutsuki_kohoku_12,
       mutsuki_niizamenamboku_N2,
@@ -2046,6 +2054,7 @@ lines:
   enr_nakatsumichi_rapid:
     name: 大書見台帝国連邦鉄道 中都道線 快速
     world: main
+    rapid: true
     stations: [
       enr_2_3,
       enr_2_4,
@@ -2055,6 +2064,7 @@ lines:
   enr_nakatsumichi_local:
     name: 大書見台帝国連邦鉄道 中都道線 普通
     world: main
+    rapid: false
     stations: [
       enr_2_3,
       enr_2_4,
@@ -2067,6 +2077,7 @@ lines:
   enr_kitatsu:
     name: 大書見台帝国連邦鉄道 北都線
     world: main
+    rapid: false
     stations: [
       enr_2_7,
       enr_2_8,
@@ -2077,6 +2088,7 @@ lines:
   enr_rashin_east:
     name: 大書見台帝国連邦鉄道 羅辰東線
     world: main
+    rapid: false
     stations: [
       enr_3_3,
       enr_4_2,
@@ -2084,6 +2096,7 @@ lines:
   enr_rashin_west:
     name: 大書見台帝国連邦鉄道 羅辰西線
     world: main
+    rapid: false
     stations: [
       enr_3_3,
       enr_5_2,
@@ -2091,6 +2104,7 @@ lines:
   yaga_yaga:
     name: とき鉄道 谷峨線
     world: main
+    rapid: false
     stations: [
       yaga_yaga_1,
       yaga_yaga_2,
@@ -2100,6 +2114,7 @@ lines:
   yaga_mizue_minasato:
     name: とき鉄道 水江線(水郷)
     world: main
+    rapid: false
     stations: [
       yaga_mizue_1,
       yaga_mizue_2,
@@ -2107,6 +2122,7 @@ lines:
   yaga_mizue_tool:
     name: とき鉄道 水江線(通留)
     world: main
+    rapid: false
     stations: [
       yaga_mizue_1,
       yaga_mizue_2n,
@@ -2115,6 +2131,7 @@ lines:
   toki_gakuentoshi:
     name: とき鉄道 学園都市線
     world: main
+    rapid: false
     stations: [
       kosaka,
       enr_4_2,
@@ -2123,6 +2140,7 @@ lines:
   hamazato_hamazato:
     name: はまざと簡易軌道 本線
     world: main
+    rapid: false
     stations: [
       hamazato_1,
       hamazato_2,
@@ -2137,6 +2155,7 @@ lines:
   scr_hakusa:
     name: 砂川簡易軌道 白砂線
     world: main
+    rapid: false
     stations: [
       scr_01,
       scr_02,
@@ -2148,6 +2167,7 @@ lines:
   scr_nansho:
     name: 砂川簡易軌道 南沼線
     world: main
+    rapid: false
     stations: [
       scr_17,
       scr_07,
@@ -2162,6 +2182,7 @@ lines:
   scr_kazetsuyu:
     name: 砂川簡易軌道 風露線
     world: main
+    rapid: false
     stations: [
       scr_08,
       scr_13,
@@ -2172,6 +2193,7 @@ lines:
   niizame_ebikawa:
     name: 新鮫市営地下鉄 海老川線
     world: main
+    rapid: false
     stations: [
       niizame_ebikawa_1,
       niizame_ebikawa_2,
@@ -2179,6 +2201,7 @@ lines:
   nyv_main:
     name: 新山吹村営鉄道 本線
     world: main
+    rapid: false
     stations: [
       nyv_main_1,
       nyv_main_2,
@@ -2209,6 +2232,7 @@ lines:
   nyv_manozumi:
     name: 新山吹村営鉄道 馬住支線
     world: main
+    rapid: false
     stations: [
       nyv_main_7,
       nyv_manozumi_2,
@@ -2220,6 +2244,7 @@ lines:
   nyv_yayoigawa:
     name: 新山吹村営鉄道 弥生川支線
     world: main
+    rapid: false
     stations: [
       nyv_main_20,
       nyv_yayoigawa_2,
@@ -2232,6 +2257,7 @@ lines:
   nyv_takayama:
     name: 新山吹村営鉄道 高山支線
     world: main
+    rapid: false
     stations: [
       nyv_takayama_1,
       nyv_main_3,
@@ -2243,6 +2269,7 @@ lines:
   kosaka_chuo:
     name: 甲阪市営地下鉄 中央線
     world: main
+    rapid: false
     stations: [
       kosaka_c15,
       kosaka_c16,
@@ -2251,6 +2278,7 @@ lines:
   wildarea2_tt_w_01:
     name: ゾンビTT連絡線
     world: wildarea2
+    rapid: false
     stations: [
       wildarea2_central_w,
       wildarea2_tt_w_01_2,
@@ -2259,6 +2287,7 @@ lines:
   wildarea2_tt_w_02:
     name: スケルトンTT連絡線
     world: wildarea2
+    rapid: false
     stations: [
       wildarea2_central_w,
       wildarea2_tt_w_02,
@@ -2266,6 +2295,7 @@ lines:
   wildarea2_tt_w_03:
     name: 海底神殿跡地TT連絡線
     world: wildarea2
+    rapid: false
     stations: [
       wildarea2_central_e,
       wildarea2_tt_w_03,
@@ -2273,6 +2303,7 @@ lines:
   wildarea2_tt_w_05:
     name: 洞窟蜘蛛TT連絡線
     world: wildarea2
+    rapid: false
     stations: [
       wildarea2_central_w,
       wildarea2_tt_w_05,
@@ -2280,6 +2311,7 @@ lines:
   wildarea2_nether_tt_n_01_a:
     name: ポテト屋連絡線(氷ボート)
     world: wildarea2_nether
+    rapid: false
     stations: [
       wildarea2_nether_tt_n_01_b,
       wildarea2_nether_tt_n_01_a,
@@ -2287,6 +2319,7 @@ lines:
   wildarea2_nether_tt_n_01_b:
     name: ポテト屋連絡線(線路)
     world: wildarea2_nether
+    rapid: false
     stations: [
       wildarea2_nether_tt_n_01_a,
       wildarea2_nether_tt_n_01,
@@ -2294,6 +2327,7 @@ lines:
   wildarea2_nether_end:
     name: エンド要塞連絡線
     world: wildarea2_nether
+    rapid: false
     stations: [
       wildarea2_nether_central,
       wildarea2_nether_end,

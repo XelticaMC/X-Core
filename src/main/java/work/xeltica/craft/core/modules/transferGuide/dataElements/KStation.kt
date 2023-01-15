@@ -24,6 +24,7 @@ class KStation(conf: ConfigurationSection, val id: String) {
             val lineT = item["line"]
             val directionT = item["direction"]
             val timeT = item["time"]
+            val rapidNotInParallelT = item["rapid_not_in_parallel"]
             val to = if (toT is String) {
                 toT
             } else {
@@ -44,8 +45,13 @@ class KStation(conf: ConfigurationSection, val id: String) {
             } else {
                 null
             }
+            val rapidNotInParallel = if (rapidNotInParallelT is Boolean) {
+                rapidNotInParallelT
+            } else {
+                null
+            }
             set.add(
-                KPath(to, line, direction, time)
+                KPath(to, line, direction, time, rapidNotInParallel)
             )
         }
         return set.toTypedArray()

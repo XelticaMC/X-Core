@@ -7,7 +7,7 @@ import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
  * 路線データ内の隣の駅までの経路を表すクラス
  * @author Knit prg.
  */
-class KPath(val to: String?, val line: String?, val direction: String?, val time: Int?) {
+class KPath(val to: String?, val line: String?, val direction: String?, val time: Int?, val rapidNotInParallel: Boolean?) {
     fun toStringForGuide(data: TransferGuideData): String {
         val gray = ChatColor.GRAY
         val white = ChatColor.WHITE

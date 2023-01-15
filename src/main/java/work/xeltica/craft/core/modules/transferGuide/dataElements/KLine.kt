@@ -9,5 +9,6 @@ import org.bukkit.configuration.ConfigurationSection
 class KLine(conf: ConfigurationSection, val id: String) {
     val name = conf.getString("name")
     val world = conf.getString("world")
+    val rapid = conf.getBoolean("rapid")
     val stations: List<String> = conf.getStringList("stations")
 }

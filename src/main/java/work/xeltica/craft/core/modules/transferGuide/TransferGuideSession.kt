@@ -375,13 +375,13 @@ class TransferGuideSession(val player: Player) {
         /**探索済みの駅(CLOSEリスト)*/
         val closed: MutableSet<KStation> = mutableSetOf()
 
-        /**始点からの駅数リスト*/
-        val stepsList = TransferGuideUtil.calcStepsTo(data, startId ?: "")
+        /**終点までの駅数リスト*/
+        val stepsList = TransferGuideUtil.calcStepsTo(data, endId ?: "")
         if (data.consoleDebug) {
             logger.info("[TransferGuide(debug)] $stepsList")
         }
         //始点と終点が同一路線に属する駅の場合、その路線に属さない駅を未探索の駅から削除
-        val sameLines = TransferGuideUtil.getSameLines(data, startId!!, endId!!)
+        /*val sameLines = TransferGuideUtil.getSameLines(data, startId!!, endId!!)
         if (sameLines.isNotEmpty()) {
             val toRemove = ArrayList<String>()
             unsearched.forEach { station ->
@@ -395,12 +395,20 @@ class TransferGuideSession(val player: Player) {
             if (data.consoleDebug) {
                 logger.info("[TransferGuideData(debug)] 同一路線:${sameLines[0]}")
             }
-        }
+        }*/
         //始点の駅を未探索から探索候補に移す
         opened[start] = 0.0
         unsearched.remove(startId)
         var i = 0
-
+        val toRemove = arrayListOf<String>()
+        unsearched.forEach {
+            if (it.value.world != start.world) {
+                toRemove.add(it.key)
+            }
+        }
+        toRemove.forEach {
+            unsearched.remove(it)
+        }
         /**デバッグモードがオンの場合やエラー発生時に出力する文字列を生成するメソッド*/
         fun loopADebugString(): String {
             return "step=A${i}\n" +
@@ -411,16 +419,14 @@ class TransferGuideSession(val player: Player) {
         }
         knitA@ while (i < data.loopMax) {
             //探索候補の駅に対し、それぞれの優先度を決定する
-            //計算式:(終点との直線距離×残り液数),同じ路線なら÷2
+            //計算式:(終点との直線距離×残り駅数),同じ路線なら÷2
             opened.forEach {
-                if (it.value == 0.0) {
-                    var distance = TransferGuideUtil.calcDistance(end.location, it.key.location)
-                    distance *= stepsList[it.key.id] ?: 1
-                    if (TransferGuideUtil.getSameLines(data, it.key.id, endId!!).isNotEmpty()) {
-                        distance /= 2
-                    }
-                    opened[it.key] = distance
+                var distance = TransferGuideUtil.calcDistance(end.location, it.key.location)
+                distance *= stepsList[it.key.id] ?: 1
+                if (TransferGuideUtil.getSameLines(data, it.key.id, endId!!).isNotEmpty()) {
+                    distance /= 1.25
                 }
+                opened[it.key] = distance
             }
             if (data.consoleDebug) {
                 logger.info("[TransferGuide(debug)] ${loopADebugString()}")
@@ -438,6 +444,8 @@ class TransferGuideSession(val player: Player) {
             opened.remove(minOpenedStation.key)
             //優先度値が最も低い駅の隣の駅を探索候補へ移動
             for (path in minOpenedStation.key.paths) {
+                //快速線で並行する緩行線がある線は無視
+                if (data.lines[path.line]?.rapid == true && path.rapidNotInParallel == false) continue
                 val pathToInUnsearched = unsearched[path.to] ?: continue
                 opened[pathToInUnsearched] = 0.0
                 unsearched.remove(pathToInUnsearched.id)
@@ -450,7 +458,7 @@ class TransferGuideSession(val player: Player) {
                     break@knitA
                 }
                 //終着駅と同じ路線に辿り着いたら、その他の路線に行かないようにする
-                val sameLinesFromMinStation = TransferGuideUtil.getSameLines(data, minOpenedStation.key.id, endId!!)
+                /*val sameLinesFromMinStation = TransferGuideUtil.getSameLines(data, minOpenedStation.key.id, endId!!)
                 if (sameLinesFromMinStation.isNotEmpty()) {
                     if (data.consoleDebug) {
                         logger.info("[TransferGuide(debug)] 同一路線:${sameLinesFromMinStation[0]}")
@@ -470,7 +478,7 @@ class TransferGuideSession(val player: Player) {
                         opened.remove(it)
                         unsearched.remove(it.id)
                     }
-                }
+                }*/
             }
             i++
         }
@@ -500,7 +508,10 @@ class TransferGuideSession(val player: Player) {
             //経路リストの終端にある駅から繋がっている駅の内、探索済みリストにある駅を全て取得
             val candidates: MutableMap<KStation, Double> = mutableMapOf()
             closed.forEach { station ->
-                if (station.paths.any { it.to == routeArrayList.last().id }) {
+                if (station.paths.any {
+                        it.to == routeArrayList.last().id
+                                && ((it.line == "walk" || it.line == "boat") || data.lines[it.line]?.rapid == false || it.rapidNotInParallel == true)
+                    }) {
                     candidates[station] = TransferGuideUtil.calcDistance(end.location, station.location)
                 }
             }
@@ -513,12 +524,14 @@ class TransferGuideSession(val player: Player) {
                     }
                     for (path in routeArrayList.last().paths) {
                         if (closed.any { it.id == path.to }) {
+                            j++
                             continue@knitB
                         }
                     }
                     routeArrayList.removeLast()
                     k++
                 }
+                j++
             }
             //取得した駅の内、最も経路リストの終端にある駅から最も遠い駅を選択(その方が駅数が少なくなると考えられる)
             val max = candidates.maxByOrNull { it.value }
@@ -545,7 +558,30 @@ class TransferGuideSession(val player: Player) {
         }
         //終点→始点になっているので、反転させる
         routeArrayList.reverse()
-        val routeArray = routeArrayList.toTypedArray()
+        val toBePassed = mutableSetOf<Int>()
+        //快速線が利用可能な場合、飛ばせる駅を飛ばす
+        routeArrayList.forEachIndexed { index, station ->
+            station.paths.forEach { path ->
+                val otherStationIndex = routeArrayList.indexOf(routeArrayList.findLast { it.id == path.to })
+                if (otherStationIndex > index) {
+                    var indexChecking = index + 1
+                    while (indexChecking < otherStationIndex) {
+                        toBePassed.add(indexChecking)
+                        indexChecking++
+                    }
+                }
+            }
+        }
+        val routeArrayListTemp = arrayListOf<KStation>()
+        routeArrayList.forEachIndexed { index, value ->
+            if (!toBePassed.contains(index)) {
+                routeArrayListTemp.add(value)
+            }
+        }
+        val routeArray = routeArrayListTemp.toTypedArray()
+        if (data.consoleDebug) {
+            logger.info("routeArray=${routeArray.joinToString { it.id }}")
+        }
         //結果表示
         player.sendMessage(KRoute(data, routeArray).toStringForGuide())
     }
@@ -719,6 +755,10 @@ class TransferGuideSession(val player: Player) {
                     count++
                 } else if (path.time <= 0) {
                     player.sendMessage("${yellow}無効な所要時間:${path.time}(stations.${station.key}.paths[$i].time)")
+                    count++
+                }
+                if (path.rapidNotInParallel == null) {
+                    player.sendMessage("${yellow}非並行緩行線の有無が未指定:stations.${station.key}.paths[$i].rapid_not_in_parallel")
                     count++
                 }
             }
