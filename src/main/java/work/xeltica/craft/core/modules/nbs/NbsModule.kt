@@ -100,8 +100,8 @@ object NbsModule : ModuleBase() {
         radioCache[player.uniqueId] = radio
 
         if (song.title.isNotEmpty()) {
-            val author = if (song.author.isNotEmpty()) song.author else "不明"
-            player.sendActionBar(Component.text("再生中 ♪ ${song.title.isNotEmpty()} - $author"))
+            val author = song.author.ifEmpty { "不明" }
+            player.sendActionBar(Component.text("再生中 ♪ ${song.title.ifEmpty { "無題" }} - $author"))
         }
     }
 

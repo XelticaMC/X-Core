@@ -115,6 +115,7 @@ class CounterHandler : Listener {
         // カウンター開始する
         if (first != null) {
             if (isUsingCounter) {
+                player.sendMessage("isUsingCounter")
                 return
             }
             val ts = System.currentTimeMillis().toString()
@@ -128,6 +129,7 @@ class CounterHandler : Listener {
         // カウンター終了する
         if (last != null) {
             if (!isUsingCounter) {
+                player.sendMessage("!isUsingCounter")
                 return
             }
             if (last.name != counterId) {

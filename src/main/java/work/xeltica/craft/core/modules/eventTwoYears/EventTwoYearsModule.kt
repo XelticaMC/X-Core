@@ -10,6 +10,7 @@ object EventTwoYearsModule : ModuleBase() {
     const val PS_KEY_CHECKPOINT = "2yearsParkourGameCheckpoint"
     const val PS_KEY_DEATH_COUNT = "2yearsParkourGameDeathCount"
     const val EVENT_COUNTER_ID = "2yearsparkour"
+
     override fun onEnable() {
         registerHandler(EventTwoYearsHandler())
     }
@@ -20,8 +21,8 @@ object EventTwoYearsModule : ModuleBase() {
     }
 
     fun getCheckPoint(player: Player): Location {
-        val counterStartLocation = CounterModule[EVENT_COUNTER_ID]?.location1 ?: throw Exception("カウンター $EVENT_COUNTER_ID が見つからない")
-
+        val counterStartLocation = CounterModule[EVENT_COUNTER_ID]?.location1?.clone() ?: throw Exception("カウンター $EVENT_COUNTER_ID が見つからない")
+        counterStartLocation.yaw = 180f
         return PlayerStore.open(player).getLocation(PS_KEY_CHECKPOINT, counterStartLocation) ?: throw Exception("BUG")
     }
 

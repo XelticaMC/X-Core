@@ -7,6 +7,7 @@ import org.bukkit.SoundCategory
 import org.bukkit.Tag
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageEvent
@@ -40,10 +41,9 @@ class EventTwoYearsHandler : Listener {
         player.teleport(EventTwoYearsModule.getCheckPoint(player))
         player.fireTicks = 0
         EventTwoYearsModule.incrementDeathCount(player)
-        player.playSound(player, Sound.BLOCK_ANVIL_PLACE, SoundCategory.PLAYERS, 1f, 1f)
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     fun onClickBed(e: PlayerInteractEvent) {
         if (e.action === Action.PHYSICAL) return
         val block = e.clickedBlock ?: return
