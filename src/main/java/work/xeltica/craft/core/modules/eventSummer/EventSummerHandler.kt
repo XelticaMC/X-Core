@@ -34,6 +34,8 @@ class EventSummerHandler : Listener {
     fun onCounterStart(e: PlayerCounterStart) {
         val player = e.player
         if (player.world.name != "event") return
+        // イベント用のカウンターをプレイ中でなければreturn
+        if (e.counter.name != "summer22") return
         playRadio(player, "submerged3", NbsModel.PlaybackMode.LOOP)
     }
 
@@ -44,6 +46,8 @@ class EventSummerHandler : Listener {
     fun onCounterFinish(e: PlayerCounterFinish) {
         val player = e.player
         if (player.world.name != "event") return
+        // イベント用のカウンターをプレイ中でなければreturn
+        if (e.counter.name != "summer22") return
         stopRadio(player)
         Bukkit.getScheduler().runTaskLater(instance, Runnable {
             player.sendMessage("${ChatColor.AQUA}メインワールドに戻る場合は、X Phoneをお使いください。")

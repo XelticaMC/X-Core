@@ -15,12 +15,25 @@ import java.util.*
 object CounterModule : ModuleBase() {
     lateinit var config: Config
 
+    /** 登録中のカウンターのモード */
     const val PS_KEY_MODE = "counter_register_mode"
+
+    /** 登録中のカウンターの名前 */
     const val PS_KEY_NAME = "counter_register_name"
+
+    /** 登録中のカウンターがデイリー制かどうか */
     const val PS_KEY_IS_DAILY = "counter_register_is_daily"
+
+    /** 登録中のカウンターの初期位置 */
     const val PS_KEY_LOCATION = "counter_register_location"
+
+    /** プレイ中のカウンターの名前 */
     const val PS_KEY_ID = "counter_id"
+    
+    /** タイムアタックのプレイを開始した時刻 */
     const val PS_KEY_TIME = "counter_time"
+
+    /** 今日、タイムアタックをプレイした回数 */
     const val PS_KEY_COUNT = "counter_count"
 
     /** カウンターデータのマップ  */
