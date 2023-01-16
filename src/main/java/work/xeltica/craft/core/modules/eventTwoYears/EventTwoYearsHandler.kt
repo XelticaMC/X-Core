@@ -71,6 +71,7 @@ class EventTwoYearsHandler : Listener {
     fun onCounterStart(e: PlayerCounterStart) {
         val player = e.player
         if (e.counter.name != EventTwoYearsModule.EVENT_COUNTER_ID) return
+        EventTwoYearsModule.resetPlayerStore(player)
         NbsModule.playRadio(player, "csikospost", NbsModel.PlaybackMode.LOOP)
     }
 
@@ -87,6 +88,5 @@ class EventTwoYearsHandler : Listener {
         if (deathCount == 0 && checkpoint == null) {
             HintModule.achieve(player, Hint.TWO_YEARS_EVENT_NO_MISS)
         }
-        EventTwoYearsModule.resetPlayerStore(player)
     }
 }
