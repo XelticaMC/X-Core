@@ -15,8 +15,7 @@ import java.io.IOException
  */
 object MetaModule : ModuleBase() {
     val changeLog = listOf(
-        "一部のワールドで /respawn コマンドおよびテレポートアプリによるリスポーンができない問題を修正しました。",
-        "タイムアタックのデバッグ用メッセージを削除しました。",
+        "2周年記念イベントパルクール：リタイアすると、チェックポイントなどがリセットされない不具合を修正しました。"
     ).toTypedArray()
 
     lateinit var meta: Config
