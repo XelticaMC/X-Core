@@ -388,6 +388,9 @@ bukkit {
         register("otanoshimi.stamp.destroy") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
+        register("xcore.teleport.event") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
     }
 }
 

@@ -8,7 +8,6 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule
 import work.xeltica.craft.core.modules.xphone.AppBase
-import java.util.Calendar
 
 /**
  * テレポートアプリ
@@ -61,11 +60,9 @@ class TeleportApp : AppBase() {
         if (worldName == "main") {
             list.add(MenuItem("資源ワールド…", { showShigenWorldsMenu(player) }, Material.DIAMOND_PICKAXE))
 
-            val calendar = Calendar.getInstance()
-            val month = calendar.get(Calendar.MONTH) + 1
             // 夏イベント用テレポート。
             // TODO イベント機能をどっかにうつす
-            if (month == 8 || player.isOp) {
+            if (player.hasPermission("xcore.teleport.event") || player.isOp) {
                 list.add(
                     MenuItem("イベント", {
                         val eventWorldLocation = Bukkit.getWorld("event")?.spawnLocation
