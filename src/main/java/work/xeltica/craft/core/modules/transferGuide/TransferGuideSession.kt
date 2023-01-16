@@ -376,26 +376,10 @@ class TransferGuideSession(val player: Player) {
         val closed: MutableSet<KStation> = mutableSetOf()
 
         /**終点までの駅数リスト*/
-        val stepsList = TransferGuideUtil.calcStepsTo(data, endId ?: "")
+        val stepsList = calcStepsTo(data, endId ?: "")
         if (data.consoleDebug) {
             logger.info("[TransferGuide(debug)] $stepsList")
         }
-        //始点と終点が同一路線に属する駅の場合、その路線に属さない駅を未探索の駅から削除
-        /*val sameLines = TransferGuideUtil.getSameLines(data, startId!!, endId!!)
-        if (sameLines.isNotEmpty()) {
-            val toRemove = ArrayList<String>()
-            unsearched.forEach { station ->
-                if (data.lines[sameLines[0]]?.stations?.contains(station.key) == false) {
-                    toRemove.add(station.key)
-                }
-            }
-            toRemove.forEach {
-                unsearched.remove(it)
-            }
-            if (data.consoleDebug) {
-                logger.info("[TransferGuideData(debug)] 同一路線:${sameLines[0]}")
-            }
-        }*/
         //始点の駅を未探索から探索候補に移す
         opened[start] = 0.0
         unsearched.remove(startId)
@@ -423,7 +407,7 @@ class TransferGuideSession(val player: Player) {
             opened.forEach {
                 var distance = TransferGuideUtil.calcDistance(end.location, it.key.location)
                 distance *= stepsList[it.key.id] ?: 1
-                if (TransferGuideUtil.getSameLines(data, it.key.id, endId!!).isNotEmpty()) {
+                if (getSameLines(data, it.key.id, endId!!).isNotEmpty()) {
                     distance /= 1.25
                 }
                 opened[it.key] = distance
@@ -457,28 +441,6 @@ class TransferGuideSession(val player: Player) {
                     }
                     break@knitA
                 }
-                //終着駅と同じ路線に辿り着いたら、その他の路線に行かないようにする
-                /*val sameLinesFromMinStation = TransferGuideUtil.getSameLines(data, minOpenedStation.key.id, endId!!)
-                if (sameLinesFromMinStation.isNotEmpty()) {
-                    if (data.consoleDebug) {
-                        logger.info("[TransferGuide(debug)] 同一路線:${sameLinesFromMinStation[0]}")
-                    }
-                    val toRemove = ArrayList<KStation>()
-                    opened.forEach {
-                        if (data.lines[sameLinesFromMinStation[0]]?.stations?.contains(it.key.id) == false) {
-                            toRemove.add(it.key)
-                        }
-                    }
-                    unsearched.forEach {
-                        if (data.lines[sameLinesFromMinStation[0]]?.stations?.contains(it.key) == false) {
-                            toRemove.add(it.value)
-                        }
-                    }
-                    toRemove.forEach {
-                        opened.remove(it)
-                        unsearched.remove(it.id)
-                    }
-                }*/
             }
             i++
         }
@@ -801,5 +763,37 @@ class TransferGuideSession(val player: Player) {
             player.sendMessage("${yellow}${count}個のデータ誤りが見つかりました。")
         }
         return count == 0
+    }
+
+    /**
+     * 特定の駅へのステップ数を計算します。
+     */
+    private fun calcStepsTo(data: TransferGuideData, destination: String): Map<String, Int> {
+        val map = mutableMapOf<String, Int>()
+        val stations = data.stations.toMutableMap()
+        map[destination] = 0
+        stations.remove(destination)
+        var i = 1
+        while (i < data.loopMax && stations.isNotEmpty()) {
+            val beforeStepStations = map.filter { it.value == i - 1 }
+            beforeStepStations.forEach { beforeStepStation ->
+                data.stations[beforeStepStation.key]?.paths?.forEach { path ->
+                    val pathTo = stations[path.to]
+                    if (pathTo != null) {
+                        map[pathTo.id] = i
+                        stations.remove(path.to)
+                    }
+                }
+            }
+            i++
+        }
+        return map
+    }
+
+    /**
+     * 共通する路線を抽出します。
+     */
+    private fun getSameLines(data: TransferGuideData, startId: String, endId: String): Array<String> {
+        return data.lines.filter { it.value.stations.containsAll(setOf(startId, endId)) }.keys.toTypedArray()
     }
 }

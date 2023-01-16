@@ -1,6 +1,5 @@
 package work.xeltica.craft.core.modules.transferGuide
 
-import work.xeltica.craft.core.modules.transferGuide.dataElements.TransferGuideData
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -16,38 +15,6 @@ object TransferGuideUtil {
      */
     fun calcDistance(start: DoubleArray, end: DoubleArray): Double {
         return abs(sqrt((start[0] - end[0]).pow(2.0) + (start[1] - end[1]).pow(2.0)))
-    }
-
-    /**
-     * 特定の駅へのステップ数を計算します。
-     */
-    fun calcStepsTo(data: TransferGuideData, destination: String): Map<String, Int> {
-        val map = mutableMapOf<String, Int>()
-        val stations = data.stations.toMutableMap()
-        map[destination] = 0
-        stations.remove(destination)
-        var i = 1
-        while (i < data.loopMax && stations.isNotEmpty()) {
-            val beforeStepStations = map.filter { it.value == i - 1 }
-            beforeStepStations.forEach { beforeStepStation ->
-                data.stations[beforeStepStation.key]?.paths?.forEach { path ->
-                    val pathTo = stations[path.to]
-                    if (pathTo != null) {
-                        map[pathTo.id] = i
-                        stations.remove(path.to)
-                    }
-                }
-            }
-            i++
-        }
-        return map
-    }
-
-    /**
-     * 共通する路線を抽出します。
-     */
-    fun getSameLines(data: TransferGuideData, startId: String, endId: String): Array<String> {
-        return data.lines.filter { it.value.stations.containsAll(setOf(startId, endId)) }.keys.toTypedArray()
     }
 
     /**
