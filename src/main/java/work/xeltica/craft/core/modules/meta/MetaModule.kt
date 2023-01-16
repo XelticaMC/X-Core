@@ -15,8 +15,8 @@ import java.io.IOException
  */
 object MetaModule : ModuleBase() {
     val changeLog = listOf(
-        "2周年記念イベント限定！パルクールゲーム機能を追加しました。",
-        "ミュージック：再生時に音符ブロックの音も鳴ってしまう不具合を修正しました。",
+        "一部のワールドで /respawn コマンドおよびテレポートアプリによるリスポーンができない問題を修正しました。",
+        "タイムアタックのデバッグ用メッセージを削除しました。",
     ).toTypedArray()
 
     lateinit var meta: Config
