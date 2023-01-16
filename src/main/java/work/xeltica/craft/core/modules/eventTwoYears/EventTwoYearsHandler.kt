@@ -19,7 +19,6 @@ import work.xeltica.craft.core.modules.counter.PlayerCounterFinish
 import work.xeltica.craft.core.modules.counter.PlayerCounterStart
 import work.xeltica.craft.core.modules.nbs.NbsModel
 import work.xeltica.craft.core.modules.nbs.NbsModule
-import work.xeltica.craft.core.utils.Ticks
 
 class EventTwoYearsHandler : Listener {
     /**
@@ -39,6 +38,7 @@ class EventTwoYearsHandler : Listener {
         if (e.cause !== EntityDamageEvent.DamageCause.LAVA) return
 
         player.teleport(EventTwoYearsModule.getCheckPoint(player))
+        player.fireTicks = 0
         EventTwoYearsModule.incrementDeathCount(player)
         player.playSound(player, Sound.BLOCK_ANVIL_PLACE, SoundCategory.PLAYERS, 1f, 1f)
     }
@@ -57,6 +57,7 @@ class EventTwoYearsHandler : Listener {
         e.isCancelled = true
 
         val checkpoint = block.location.add(0.0, 1.0, 0.0)
+        checkpoint.yaw = e.player.location.yaw
         EventTwoYearsModule.setCheckpoint(e.player, checkpoint)
         e.player.world.spawnParticle(Particle.COMPOSTER, checkpoint, 16, 0.3, 0.5, 0.3, 0.1)
         e.player.playSound(e.player, Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.BLOCKS, 1f, 1f)
@@ -81,10 +82,11 @@ class EventTwoYearsHandler : Listener {
         val player = e.player
         if (e.counter.name != EventTwoYearsModule.EVENT_COUNTER_ID) return
         NbsModule.stopRadio(player)
-        Bukkit.getScheduler().runTaskLater(XCorePlugin.instance, Runnable {
-            player.sendMessage("${ChatColor.AQUA}メインワールドに戻る場合は、X Phoneをお使いください。")
-            player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 1.2f)
-        }, Ticks.from(3.0).toLong())
+        val deathCount = PlayerStore.open(player).getInt(EventTwoYearsModule.PS_KEY_DEATH_COUNT, 0)
+        val checkpoint = PlayerStore.open(player).getLocation(EventTwoYearsModule.PS_KEY_CHECKPOINT)
+        if (deathCount == 0 && checkpoint == null) {
+            HintModule.achieve(player, Hint.TWO_YEARS_EVENT_NO_MISS)
+        }
         EventTwoYearsModule.resetPlayerStore(player)
     }
 }
