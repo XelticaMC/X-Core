@@ -534,16 +534,4 @@ class CoreProtectGuiTestApp : AppBase() {
         }
     }
 
-    /**
-     * メニューで選択した値やコンソールから入力された送られた値をまとめたクラス
-     *
-     * NOTE: 初期化のためにlateinit を外したが、ちょっといい感じにできるかもしれない
-     */
-    private class CoreProtectCommand {
-        var user: String = ""
-        var radius: String = ""
-        var date: String = ""
-        var action: String = ""
-    }
-
 }
