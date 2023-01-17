@@ -523,6 +523,7 @@ class TransferGuideSession(val player: Player) {
         val toBePassed = mutableSetOf<Int>()
         //快速線が利用可能な場合、飛ばせる駅を飛ばす
         routeArrayList.forEachIndexed { index, station ->
+            if (toBePassed.contains(index)) return@forEachIndexed
             station.paths.forEach { path ->
                 val otherStationIndex = routeArrayList.indexOf(routeArrayList.findLast { it.id == path.to })
                 if (otherStationIndex > index) {
