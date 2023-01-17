@@ -25,7 +25,15 @@ class CoreProtectGuiTestApp : AppBase() {
     }
 
     override fun onLaunch(player: Player) {
-        showMenu(player, "選択する方法を選択してください", coreProtectModeList(player))
+        showMenu(player, "選択する方法を選択してください",
+                listOf(
+                        MenuItem("ログを検索する", { lookupModeStart(player) }, Material.WRITABLE_BOOK),
+                        MenuItem("ロールバック", { rollbackModeStart(player) }, Material.ENDER_CHEST),
+                        MenuItem("ページを取得する", { inputLookUpPage(player) }, Material.BOOK),
+                        MenuItem("インスペクトモード切り替え", { player.performCommand("co i") }, Material.ENDER_EYE),
+                        MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+                )
+        )
     }
 
     /**
@@ -117,7 +125,16 @@ class CoreProtectGuiTestApp : AppBase() {
     private fun onInputPlayerName(userName: String, command: CoreProtectCommand, player: Player) {
         command.user = userName
 
-        showMenu(player, "ワールドの範囲を指定してください", radiusWorldList)
+        showMenu(player, "ワールドの範囲を指定してください",
+                listOf(
+                        MenuItem("すべてのワールド", { onRadiusWorldMenuClick("#global", command, player) }, Material.DIRT),
+                        MenuItem("メインワールド", { onRadiusWorldMenuClick("#main", command, player) }, Material.CRAFTING_TABLE),
+                        MenuItem("共有ワールド", { onRadiusWorldMenuClick("#wildarea2", command, player) }, Material.GRASS_BLOCK),
+                        MenuItem("共有ネザー", { onRadiusWorldMenuClick("#wildarea2_nether", command, player) }, Material.NETHERRACK),
+                        MenuItem("共有エンド", { onRadiusWorldMenuClick("#wildarea2_the_end", command, player) }, Material.END_STONE),
+                        MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+                )
+        )
     }
 
     /**
@@ -257,57 +274,22 @@ class CoreProtectGuiTestApp : AppBase() {
     private fun inputDuringTime(flag: Boolean, command: CoreProtectCommand, player: Player) {
         gui.openTextInput(player, "時間の数値(整数)を入力してください。") { inputString ->
             val value = inputString.toIntOrNull()
-            value?.let {
-                if (it <= 0) {
-                    Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
-                    return@openTextInput
-                }
-
-                val duringUnitList = getDuringUnitList(value, flag, player)
-                showMenu(player, "時間の単位を選択してください", duringUnitList)
-            } ?: run {
+            if (value == null || value <= 0) {
                 Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
                 return@openTextInput
             }
 
-    /**
-     * ログを取得する単位を選択するメニューリストを返す(範囲選択用)
-     *
-     * @param value 単位の前の数値
-     * @param flag 1個目の日時選択の場合はtrue
-     * @param player メニューを開いたプレイヤー
-     * @return メニューアイテムのリスト
-     */
-    private fun getDuringUnitList(value: Int, flag: Boolean, player: Player): List<MenuItem> {
-        return listOf(
-                MenuItem("週", { onDuringTimeUnit(player, Pair(value, "w"), flag) }, Material.CLOCK),
-                MenuItem("日", { onDuringTimeUnit(player, Pair(value, "d"), flag) }, Material.CLOCK),
-                MenuItem("時", { onDuringTimeUnit(player, Pair(value, "h"), flag) }, Material.CLOCK),
-                MenuItem("分", { onDuringTimeUnit(player, Pair(value, "m"), flag) }, Material.CLOCK),
-                MenuItem("秒", { onDuringTimeUnit(player, Pair(value, "s"), flag) }, Material.CLOCK),
-                MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
-        )
-    }
-
-    /**
-     * アクションを選択するメニューリストを返す
-     *
-     * @param player メニューを開くプレイヤー
-     * @return メニューアイテムのリスト
-     */
-    private fun getActionMenuList(player: Player): List<MenuItem> {
-        return listOf(
-                MenuItem("チェスト", { onActionMenuClick("container", player) }, Material.CHEST_MINECART),
-                MenuItem("ブロック", { onActionMenuClick("block", player) }, Material.GRASS_BLOCK),
-                MenuItem("アイテム", { onActionMenuClick("item", player) }, Material.WHEAT_SEEDS),
-                MenuItem("チャット", { onActionMenuClick("chat", player) }, Material.JUKEBOX),
-                MenuItem("クリック", { onActionMenuClick("click", player) }, Material.BOOK),
-                MenuItem("コマンド", { onActionMenuClick("command", player) }, Material.PLAYER_HEAD),
-                MenuItem("キル", { onActionMenuClick("kill", player) }, Material.ZOMBIE_HEAD),
-                MenuItem("ユーザーネーム", { onActionMenuClick("username", player) }, Material.WRITABLE_BOOK),
-                MenuItem("指定しない", { onNoDesignate(player) }, Material.REDSTONE_TORCH),
-                MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
-        )
+            showMenu(player, "時間の単位を選択してください",
+                    listOf(
+                            MenuItem("週", { onDuringTimeUnit(player, Pair(value, "w"), flag, command) }, Material.CLOCK),
+                            MenuItem("日", { onDuringTimeUnit(player, Pair(value, "d"), flag, command) }, Material.CLOCK),
+                            MenuItem("時", { onDuringTimeUnit(player, Pair(value, "h"), flag, command) }, Material.CLOCK),
+                            MenuItem("分", { onDuringTimeUnit(player, Pair(value, "m"), flag, command) }, Material.CLOCK),
+                            MenuItem("秒", { onDuringTimeUnit(player, Pair(value, "s"), flag, command) }, Material.CLOCK),
+                            MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+                    )
+            )
+        }
     }
 
     /**
@@ -317,6 +299,8 @@ class CoreProtectGuiTestApp : AppBase() {
      * @param action 選択したアクションの文字列
      * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      * @return メニューアイテムのリスト
+     *
+     * NOTE: 一か所しか呼び出さないが、分岐がとにかく長いのでメソッドへ
      */
     private fun getOptionMenuList(player: Player, action: String, command: CoreProtectCommand): List<MenuItem> {
         return when (action) {
