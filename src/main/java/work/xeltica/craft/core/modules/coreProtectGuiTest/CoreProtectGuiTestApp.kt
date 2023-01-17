@@ -51,112 +51,81 @@ class CoreProtectGuiTestApp : AppBase() {
     }
 
     /**
-     * 1度目に取得した日時と2度目に取得した日時を比較して
-     * [CoreProtectCommand.date]に格納する文字列を決定するやつ
+     * ログを検索する
+     *
+     * @param player ログを取りにいくプレイヤー
      */
-    private fun checkDuringTime() {
-        val firstDate = firstDateTime.first.toLong() * convertUnit(firstDateTime.second)
-        val lastDate = secondDateTime.first.toLong() * convertUnit(secondDateTime.second)
-
-        if (firstDate < lastDate) {
-            coreProtectCommand.date = (firstDateTime.first.toString() + firstDateTime.second) + "-" + (secondDateTime.first.toString() + secondDateTime.second)
-            Bukkit.getLogger().info("FirstDate more than")
-        } else if (firstDate > lastDate) {
-            coreProtectCommand.date = (secondDateTime.first.toString() + secondDateTime.second) + "-" + (firstDateTime.first.toString() + firstDateTime.second)
-            Bukkit.getLogger().info("LastDate more than")
-        } else {
-            // ここに到達する場合は同値である場合なので、onTimeUnitMenuClick と同じ経路になるような形で
-            // コマンドの文字列を確定させる
-            coreProtectCommand.date = firstDateTime.first.toString() + firstDateTime.second
-        }
-        Bukkit.getLogger().info(coreProtectCommand.date)
+    private fun lookupModeStart(player: Player) {
+        val command = CoreProtectCommand()
+        command.prefixCommand = "co lookup"
+        showMenu(player, "ログを取るプレイヤーを指定", chooseHowToGetPlayerName(player, command))
     }
 
     /**
-     * 単位を秒数に変換する
+     * ロールバックを実行する
      *
-     * @param unit 単位
-     * @return 単位を秒数に変換した数値。値がでかくなるので[Long]で変換
-     *
-     * NOTE: 合理的な処理が思いつかなかった
+     * @param player ロールバックを実行するプレイヤー
      */
-    private fun convertUnit(unit: String): Long {
-        return when (unit) {
-            "s" -> {
-                1
-            }
-
-            "m" -> {
-                60
-            }
-
-            "h" -> {
-                3600
-            }
-
-            "d" -> {
-                86400
-            }
-
-            "w" -> {
-                604800
-            }
-
-            else -> {
-                0
-            }
-        }
+    private fun rollbackModeStart(player: Player) {
+        val command = CoreProtectCommand()
+        command.prefixCommand = "co rollback"
+        showMenu(player, "どのプレイヤーの行動をロールバックするのかを指定", chooseHowToGetPlayerName(player, command))
     }
 
     /**
-     * コマンドをコンソールに送る
+     * プレイヤーネームの取得方法を選択するメニューアイテムのリストを返す
      *
-     * @param player コマンドを送るプレイヤー
+     * @param [player] メニューを開くプレイヤー
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
+     * @return メニューアイテムのリスト
      */
-    private fun commandSend(player: Player) {
-        val sendCommand = StringBuilder()
-        sendCommand.append(commandFirst)
-
-        // あくまで空文字だったらコマンドのパラメーターから除外するって処理なので、ここら辺はうまい具合にできそうかも
-        if (coreProtectCommand.user.isNotBlank()) {
-            sendCommand.append("user:" + coreProtectCommand.user + " ")
-        }
-        if (coreProtectCommand.radius.isNotBlank()) {
-            sendCommand.append("radius:" + coreProtectCommand.radius + " ")
-        }
-        if (coreProtectCommand.date.isNotBlank()) {
-            sendCommand.append("time:" + coreProtectCommand.date + " ")
-        }
-        if (coreProtectCommand.action.isNotBlank()) {
-            sendCommand.append("action:" + coreProtectCommand.action + " ")
-        }
-
-        Bukkit.getLogger().info(sendCommand.toString())
-        player.performCommand(sendCommand.toString())
-    }
-
-    private fun commandSend(value: Int, player: Player) {
-        player.performCommand("coreprotect:co lookup $value")
+    private fun chooseHowToGetPlayerName(player: Player, command: CoreProtectCommand): List<MenuItem> {
+        return listOf(
+                MenuItem("コンソール入力で取得する", { getInputTextByConsole(player, command) }, Material.WRITABLE_BOOK),
+                MenuItem("現在いるプレイヤーから取得する", { getChooseByPlayerMenu(player, command) }, Material.BOOK),
+                MenuItem("クリーパー", { onInputPlayerName("#creeper", command, player) }, Material.CREEPER_HEAD),
+                MenuItem("TNT", { onInputPlayerName("#tnt", command, player) }, Material.TNT),
+                MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+        )
     }
 
     /**
-     * インスペクトモードの切り替えが選択されたら呼ばれる
+     * テキストでログを取るプレイヤーを指定する
      *
-     * @param player メニューを選択したプレイヤー
+     * @param player コマンドを打つプレイヤー
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      */
-    private fun onInspectMode(player: Player) {
-        player.performCommand("co i")
+    private fun getInputTextByConsole(player: Player, command: CoreProtectCommand) {
+        gui.openTextInput(player, "プレイヤーのIDを指定してください") { userName ->
+            onInputPlayerName(userName, command, player)
+        }
+        return
+    }
+
+    /**
+     * メニューからログを取るプレイヤーを指定する
+     *
+     * @param player コマンドを打つプレイヤー
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
+     */
+    private fun getChooseByPlayerMenu(player: Player, command: CoreProtectCommand) {
+        gui.openPlayersMenu(player, "プレイヤーを指定してください", { playerName ->
+            playerName.player?.name?.let {
+                onInputPlayerName(it, command, player)
+            }
+        }, { it.uniqueId != player.uniqueId || it.uniqueId == player.uniqueId })
+        return
     }
 
     /**
      * プレイヤー名を入力したら呼ばれる
      *
      * @param userName 入力したプレイヤー名
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      * @param player メニューを開いたプレイヤー
      */
-    private fun onInputPlayerName(userName: String, player: Player) {
-        coreProtectCommand.user = userName
-        val radiusWorldList = getRadiusList(player)
+    private fun onInputPlayerName(userName: String, command: CoreProtectCommand, player: Player) {
+        command.user = userName
 
         showMenu(player, "ワールドの範囲を指定してください", radiusWorldList)
     }
@@ -165,10 +134,11 @@ class CoreProtectGuiTestApp : AppBase() {
      * ワールド範囲を選択したら呼ばれる
      *
      * @param radius ログを取るワールドの範囲
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      * @param player メニューを開いたプレイヤー
      */
-    private fun onRadiusWorldMenuClick(radius: String, player: Player) {
-        coreProtectCommand.radius = radius
+    private fun onRadiusWorldMenuClick(radius: String, command: CoreProtectCommand, player: Player) {
+        command.radius = radius
 
         val duringModeList = getDuringModeList(player)
         showMenu(player, "時間の指定方法を選択してください", duringModeList)
@@ -178,40 +148,52 @@ class CoreProtectGuiTestApp : AppBase() {
      * 期間指定かどうかを選択したら呼ばれる
      *
      * @param duringModeFlag 選択結果
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      * @param player メニューを開いたプレイヤー
      */
-    private fun onSelectDuringMode(duringModeFlag: Boolean, player: Player) {
+    private fun onSelectDuringMode(duringModeFlag: Boolean, command: CoreProtectCommand, player: Player) {
         if (duringModeFlag) {
-            inputDuringTime(true, player)
+            inputDuringTime(true, command, player)
         } else {
-            inputTime(player)
+            inputDuringTime(false, command, player)
         }
     }
 
     /**
      * 時間の単位を選択したら呼ばれる(伝播されてくる)
      *
+     * @param player メニューを開いたプレイヤー
      * @param dateTime 時間と単位をPairでまとめたやつ
      * @param flag 1個目の日時選択の場合はtrue
-     * @param player メニューを開いたプレイヤー
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      */
-    private fun onDuringTimeUnit(player: Player, dateTime: Pair<Int, String>, flag: Boolean) {
+    private fun onDuringTimeUnit(player: Player, dateTime: Pair<Int, String>, flag: Boolean, command: CoreProtectCommand) {
         if (flag) {
-            firstDateTime = dateTime
-            inputDuringTime(false, player)
+            command.firstInputDate = dateTime
+            inputDuringTime(false, command, player)
         } else {
-            secondDateTime = dateTime
-            checkDuringTime()
-            val actionMenuList = getActionMenuList(player)
-            showMenu(player, "アクションの種類を選択してください", actionMenuList)
+            command.secondInputDate = dateTime
+            showMenu(player, "アクションの種類を選択してください",
+                    listOf(
+                            MenuItem("チェスト", { onActionMenuClick("container", command, player) }, Material.CHEST_MINECART),
+                            MenuItem("ブロック", { onActionMenuClick("block", command, player) }, Material.GRASS_BLOCK),
+                            MenuItem("アイテム", { onActionMenuClick("item", command, player) }, Material.WHEAT_SEEDS),
+                            MenuItem("チャット", { onActionMenuClick("chat", command, player) }, Material.JUKEBOX),
+                            MenuItem("クリック", { onActionMenuClick("click", command, player) }, Material.BOOK),
+                            MenuItem("コマンド", { onActionMenuClick("command", command, player) }, Material.PLAYER_HEAD),
+                            MenuItem("キル", { onActionMenuClick("kill", command, player) }, Material.ZOMBIE_HEAD),
+                            MenuItem("ユーザーネーム", { onActionMenuClick("username", command, player) }, Material.WRITABLE_BOOK),
+                            MenuItem("指定しない", { onActionMenuClick(command, player) }, Material.REDSTONE_TORCH),
+                            MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+                    )
+            )
         }
     }
 
     /**
-     * 時間の単位を選択したら呼ばれる
+     * 「指定しない」を選択したら呼ばれる
      *
-     * @param value 数値
-     * @param unit  メニューで選択した時間の単位
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      * @param player メニューを開いたプレイヤー
      */
     private fun onTimeUnitMenuClick(value: Int, unit: String, player: Player) {
@@ -225,32 +207,31 @@ class CoreProtectGuiTestApp : AppBase() {
      *
      * @param player メニューを選択したプレイヤー
      */
-    private fun onNoDesignate(player: Player) {
-        commandSend(player)
+    private fun onActionMenuClick(command: CoreProtectCommand, player: Player) {
+        CoreProtectGuiTestModule.commandSend(player, command)
     }
 
     /**
      * action の種類を選択したら呼ばれる
      *
      * @param action メニューから指定したアクション
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      * @param player メニューを開いたプレイヤー
      */
-    private fun onActionMenuClick(action: String, player: Player) {
-        Bukkit.getLogger().info(action)
-        val optionMenuList = getOptionMenuList(player, action)
-
-        showMenu(player, "オプションを選択してください", optionMenuList)
+    private fun onActionMenuClick(action: String, command: CoreProtectCommand, player: Player) {
+        showMenu(player, "オプションを選択してください", getOptionMenuList(player, action, command))
     }
 
     /**
      * actionのオプションを選択したら呼ばれる
      *
      * @param action 最終的にコマンドに付与するアクションの形
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      * @param player メニューを開いたプレイヤー
      */
-    private fun onOptionMenuClick(action: String, player: Player) {
-        coreProtectCommand.action = action
-        commandSend(player)
+    private fun onOptionMenuClick(action: String, command: CoreProtectCommand, player: Player) {
+        command.action = action
+        CoreProtectGuiTestModule.commandSend(player, command)
     }
 
     /**
@@ -304,19 +285,16 @@ class CoreProtectGuiTestApp : AppBase() {
      * @param player コマンドを打ちたいプレイヤー
      */
     private fun inputLookUpPage(player: Player) {
+        val command = CoreProtectCommand()
+        command.prefixCommand = "co lookup "
         gui.openTextInput(player, "閲覧するページを選択してください") { inputString ->
             val value = inputString.toIntOrNull()
-            value?.let {
-                if (it <= 0) {
-                    Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
-                    return@openTextInput
-                }
-
-                commandSend(value, player)
-            } ?: run {
+            if (value == null || value <= 0) {
                 Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
                 return@openTextInput
             }
+
+            player.performCommand(command.prefixCommand + value)
         }
     }
 
@@ -436,10 +414,12 @@ class CoreProtectGuiTestApp : AppBase() {
     /**
      * time の値を入力する(範囲選択用)
      *
+     * @param flag 1個目の日時選択の場合はtrue
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      * @param player 入力をするプレイヤー
      * @param flag 1個目の日時選択の場合はtrue
      */
-    private fun inputDuringTime(flag: Boolean, player: Player) {
+    private fun inputDuringTime(flag: Boolean, command: CoreProtectCommand, player: Player) {
         gui.openTextInput(player, "時間の数値(整数)を入力してください。") { inputString ->
             val value = inputString.toIntOrNull()
             value?.let {
@@ -502,38 +482,36 @@ class CoreProtectGuiTestApp : AppBase() {
      *
      * @param player メニューを開くプレイヤー
      * @param action 選択したアクションの文字列
+     * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      * @return メニューアイテムのリスト
      */
-    private fun getOptionMenuList(player: Player, action: String): List<MenuItem> {
+    private fun getOptionMenuList(player: Player, action: String, command: CoreProtectCommand): List<MenuItem> {
         return when (action) {
             "container" -> {
                 listOf(
-                        MenuItem("アイテムを入れた", { onOptionMenuClick("+$action", player) }, Material.REDSTONE),
-                        MenuItem("アイテムをとった", { onOptionMenuClick("-$action", player) }, Material.REDSTONE_TORCH),
-                        MenuItem("指定しない", { onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
+                        MenuItem("アイテムを入れた", { onOptionMenuClick("+$action", command, player) }, Material.REDSTONE),
+                        MenuItem("アイテムをとった", { onOptionMenuClick("-$action", command, player) }, Material.REDSTONE_TORCH),
+                        MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
                         MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
                 )
-
             }
 
             "block" -> {
                 listOf(
-                        MenuItem("ブロックを設置した", { onOptionMenuClick("+$action", player) }, Material.REDSTONE),
-                        MenuItem("ブロックを破壊した", { onOptionMenuClick("-$action", player) }, Material.REDSTONE_TORCH),
-                        MenuItem("指定しない", { onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
+                        MenuItem("ブロックを設置した", { onOptionMenuClick("+$action", command, player) }, Material.REDSTONE),
+                        MenuItem("ブロックを破壊した", { onOptionMenuClick("-$action", command, player) }, Material.REDSTONE_TORCH),
+                        MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
                         MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
                 )
-
             }
 
             "item" -> {
                 listOf(
-                        MenuItem("アイテムの拾得", { onOptionMenuClick("+$action", player) }, Material.REDSTONE),
-                        MenuItem("アイテムのドロップ", { onOptionMenuClick("-$action", player) }, Material.REDSTONE_TORCH),
-                        MenuItem("指定しない", { onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
+                        MenuItem("アイテムの拾得", { onOptionMenuClick("+$action", command, player) }, Material.REDSTONE),
+                        MenuItem("アイテムのドロップ", { onOptionMenuClick("-$action", command, player) }, Material.REDSTONE_TORCH),
+                        MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
                         MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
                 )
-
             }
 
             "chat",
@@ -542,15 +520,14 @@ class CoreProtectGuiTestApp : AppBase() {
             "kill",
             "username" -> {
                 listOf(
-                        MenuItem("実行", { onOptionMenuClick(action, player) }, Material.REDSTONE),
+                        MenuItem("実行", { onOptionMenuClick(action, command, player) }, Material.REDSTONE),
                         MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
                 )
-
             }
             // ここに来る想定はないが、現状ここでescapeで戻ることしかできないため、仮の値を作っておく
             else -> {
                 listOf(
-                        MenuItem("指定しない", { onOptionMenuClick(action, player) }, Material.REDSTONE_LAMP),
+                        MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
                         MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
                 )
             }
