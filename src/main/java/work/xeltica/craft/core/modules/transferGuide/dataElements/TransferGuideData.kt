@@ -16,6 +16,7 @@ class TransferGuideData {
     val municipalities: Map<String, KMuni>
     val loopMax: Int
     val update: LocalDateTime
+    val updateInfo: String?
     val availableWorlds: Map<String, String>
     val consoleDebug: Boolean
 
@@ -28,6 +29,15 @@ class TransferGuideData {
         municipalities = munisConfigToKMunis(conf.getConfigurationSection("municipalities"))
         loopMax = conf.getInt("loopMax")
         update = LocalDateTime.parse(conf.getString("update"))
+        val updateInfoRawLined = conf.getString("update_info")?.split("\n")
+        val sb = StringBuilder()
+        updateInfoRawLined?.forEachIndexed { index, line ->
+            sb.append(" ").append(line)
+            if (index != updateInfoRawLined.lastIndex) {
+                sb.append("\n")
+            }
+        }
+        updateInfo = sb.toString()
         availableWorlds = pairStringConfigToMap(conf.getConfigurationSection("availableWorlds"))
         consoleDebug = conf.getBoolean("consoleDebug", false)
     }

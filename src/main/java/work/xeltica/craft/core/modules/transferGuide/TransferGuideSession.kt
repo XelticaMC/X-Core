@@ -641,10 +641,12 @@ class TransferGuideSession(val player: Player) {
      */
     private fun showAbout() {
         player.sendMessage(
-            "乗換案内\n" +
-                    "データベース更新日:${data.update}\n" +
+            "${ChatColor.BOLD}乗換案内${ChatColor.RESET}\n" +
                     "経路は機械的に算出されたものです。必ずしも最適な経路ではない可能性があります。\n" +
-                    "情報を利用したことによる損害は負いかねます。"
+                    "情報を利用したことによる損害は負いかねます。\n" +
+                    "データベース更新日:${data.update}\n" +
+                    "更新内容:\n" +
+                    data.updateInfo
         )
     }
 

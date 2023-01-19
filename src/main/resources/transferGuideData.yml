@@ -1,5 +1,16 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2023-01-15T03:09"
+update: "2023-01-19T19:12"
+update_info: |-
+  路線追加:
+   共天睦月電鉄(新草線、新鮫南北線、湖北線、足立線)
+   大書見台帝国連邦鉄道(中都道線、北都線、羅辰東線、羅辰西線)
+   とき鉄道(谷峨線、水江線、学園都市線)
+   はまざと簡易軌道(本線)
+   砂川簡易軌道(白砂線、南沼線、風露線)
+   新鮫市交通局(新鮫市営地下鉄(海老川線))
+   新山吹村営鉄道(本線、馬住支線、弥生川支線、高山支線)
+   甲坂市交通局(甲阪市営地下鉄(中央線))
+   ワイルドエリア各線(ゾンビTT、スケルトンTT、海底神殿跡地TT、洞窟蜘蛛TTポテト屋、エンド要塞連絡線)
 
 #駅データ
 # name: 駅名
@@ -1983,7 +1994,7 @@ lines:
       mutsuki_shinso_34,
     ]
   mutsuki_niizamenamboku_south:
-    name: 共天睦月電鉄 新鮫南北線(南)
+    name: 共天睦月電鉄 新鮫南北線(南方)
     world: main
     rapid: false
     stations: [
@@ -2021,7 +2032,7 @@ lines:
       mutsuki_kohoku_12,
     ]
   mutsuki_niizamenamboku_north_rapid:
-    name: 共天睦月電鉄 新鮫南北線(北) 快速
+    name: 共天睦月電鉄 新鮫南北線(北方) 快速
     world: main
     rapid: true
     stations: [
@@ -2033,7 +2044,7 @@ lines:
       mutsuki_niizamenamboku_N13,
     ]
   mutsuki_niizamenamboku_north_local:
-    name: 共天睦月電鉄 新鮫南北線(北) 普通
+    name: 共天睦月電鉄 新鮫南北線(北方) 普通
     world: main
     rapid: false
     stations: [
