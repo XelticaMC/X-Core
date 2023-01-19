@@ -4,8 +4,8 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
-import work.xeltica.craft.core.stores.EbiPowerStore
-import work.xeltica.craft.core.xphone.apps.AppBase
+import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
+import work.xeltica.craft.core.modules.xphone.AppBase
 
 class PaymentsApp : AppBase() {
     override fun getName(player: Player): String = "EbiPay™"
@@ -13,9 +13,10 @@ class PaymentsApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.EMERALD_BLOCK
 
     override fun onLaunch(player: Player) {
-        Gui.getInstance().openMenu(player, "EbiPay - 残高 ${EbiPowerStore.getInstance().get(player)} EP",
+        Gui.getInstance().openMenu(
+            player, "EbiPay - 残高 ${EbiPowerModule.get(player)} EP",
             MenuItem("他プレイヤーに送る", { choosePlayer(player) }, Material.LIME_DYE),
-            MenuItem("他プレイヤーに請求（開発中）", {  }, Material.LIGHT_GRAY_DYE),
+            MenuItem("他プレイヤーに請求（開発中）", { }, Material.LIGHT_GRAY_DYE),
         )
     }
 
@@ -27,7 +28,7 @@ class PaymentsApp : AppBase() {
                     Gui.getInstance().error(player, "正しい数値を入力する必要があります。")
                     return@openTextInput
                 }
-                if (EbiPowerStore.getInstance().get(player) < amount) {
+                if (EbiPowerModule.get(player) < amount) {
                     Gui.getInstance().error(player, "エビパワーが足りません！")
                     return@openTextInput
                 }

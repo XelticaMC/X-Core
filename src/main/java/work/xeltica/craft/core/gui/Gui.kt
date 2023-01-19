@@ -7,7 +7,12 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.wesjd.anvilgui.AnvilGUI
-import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.GameMode
+import org.bukkit.Material
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -16,42 +21,41 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.AsyncPlayerChatEvent
-import org.bukkit.event.player.PlayerEditBookEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.BookMeta
 import org.bukkit.scheduler.BukkitRunnable
 import org.geysermc.cumulus.CustomForm
 import org.geysermc.cumulus.SimpleForm
-import org.geysermc.floodgate.api.FloodgateApi
 import work.xeltica.craft.core.XCorePlugin
-import work.xeltica.craft.core.models.SoundPitch
-import work.xeltica.craft.core.stores.ItemStore
+import work.xeltica.craft.core.api.commands.CommandRegistry
+import work.xeltica.craft.core.hooks.FloodgateHook
+import work.xeltica.craft.core.hooks.FloodgateHook.isFloodgatePlayer
+import work.xeltica.craft.core.hooks.FloodgateHook.toFloodgatePlayer
+import work.xeltica.craft.core.modules.item.ItemModule
 import java.util.ArrayDeque
 import java.util.UUID
 import java.util.function.Consumer
 import java.util.function.Predicate
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 
-class Gui: Listener {
+/**
+ * X-Core GUI API。メニューやダイアログの表示、入力受付などを実現します。
+ */
+class Gui : Listener {
     companion object {
-        private var instance: Gui? = null
-        @JvmStatic
+        private lateinit var instance: Gui
+
+        /**
+         * GUI APIのインスタンスを取得します。
+         */
         fun getInstance(): Gui {
-            val i = instance ?: Gui()
-            instance = i
-            return i
+            return instance
         }
 
-        @JvmStatic
-        fun resetInstance() {
-            instance = null
-        }
-
-        @JvmStatic
-        fun isBedrock(player: Player): Boolean {
-            return FloodgateApi.getInstance().isFloodgateId(player.uniqueId)
+        fun onEnable() {
+            instance = Gui()
+            CommandRegistry.register("__core_gui_event__", CommandXCoreGuiEvent())
+            Bukkit.getPluginManager().registerEvents(instance, XCorePlugin.instance)
         }
 
         private const val NEW_PAGE_CODE = "_NEW_PAGE_"
@@ -79,7 +83,7 @@ class Gui: Listener {
      * @param items メニューのアイテム
      */
     fun openMenu(player: Player, title: String, items: Collection<MenuItem>) {
-        if (isBedrock(player)) {
+        if (player.isFloodgatePlayer()) {
             openMenuBedrockImpl(player, title, items.toList())
         } else {
             openMenuJavaImpl(player, title, items.toList())
@@ -118,7 +122,7 @@ class Gui: Listener {
     fun openDialog(player: Player, title: String, content: String, callback: Consumer<DialogEventArgs>?, okButtonText: String?) {
         val okText = okButtonText ?: "OK"
 
-        if (isBedrock(player)) {
+        if (player.isFloodgatePlayer()) {
             openDialogBedrockImpl(player, title, content, callback, okText)
         } else {
             openDialogJavaImpl(player, title, content, callback, okText)
@@ -128,7 +132,7 @@ class Gui: Listener {
     /**
      * 現在参加中のプレイヤーを選択するメニューを開きます。
      * @param player メニューを開くプレイヤー
-     * @param onSelect 選択肢に入るプレイヤーを指定
+     * @param onSelect プレイヤーを選択した後に呼び出されるコールバック
      */
     fun openPlayersMenu(player: Player, onSelect: Consumer<Player>?) {
         openPlayersMenu(player, "プレイヤーを選んでください", onSelect)
@@ -137,8 +141,8 @@ class Gui: Listener {
     /**
      * 現在参加中のプレイヤーを選択するメニューを開きます。
      * @param player メニューを開くプレイヤー
-     * @param onSelect 選択肢に入るプレイヤーを指定
      * @param title メニューのタイトルを指定
+     * @param onSelect プレイヤーを選択した後に呼び出されるコールバック
      */
     fun openPlayersMenu(player: Player, title: String, onSelect: Consumer<Player>?) {
         openPlayersMenu(player, title, onSelect, null)
@@ -157,7 +161,7 @@ class Gui: Listener {
             stream = stream.filter(filter)
         }
         val list = stream.map { p ->
-            val head = ItemStore.getInstance().getPlayerHead(p)
+            val head = ItemModule.getPlayerHead(p)
             val name = PlainTextComponentSerializer.plainText().serialize(p.displayName())
             return@map MenuItem(name, {
                 onSelect?.accept(p)
@@ -167,8 +171,14 @@ class Gui: Listener {
         openMenu(player, title, list)
     }
 
+    /**
+     * [player] に対し、[title]という名前で文字列を入力させます。
+     * 入力後に [responseHandler] が実行されます。
+     *
+     * Java版ではチャット欄、統合版ではFormが呼ばれます。
+     */
     fun openTextInput(player: Player, title: String, responseHandler: Consumer<String>?) {
-        if (isBedrock(player)) {
+        if (player.isFloodgatePlayer()) {
             openTextInputBedrockImpl(player, title, responseHandler)
         } else {
             openTextInputJavaImplChat(player, title, responseHandler)
@@ -246,7 +256,8 @@ class Gui: Listener {
             return
         }
 
-        Bukkit.getScheduler().runTaskLater(XCorePlugin.instance,
+        Bukkit.getScheduler().runTaskLater(
+            XCorePlugin.instance,
             Runnable { playSound(player, sound, volume, pitch) }, delay.toLong()
         )
     }
@@ -260,7 +271,8 @@ class Gui: Listener {
      * @param delay Tick
      */
     fun playSoundLocallyAfter(player: Player, sound: Sound, volume: Float, pitch: SoundPitch, delay: Int) {
-        Bukkit.getScheduler().runTaskLater(XCorePlugin.instance,
+        Bukkit.getScheduler().runTaskLater(
+            XCorePlugin.instance,
             Runnable { playSoundLocally(player, sound, volume, pitch) }, delay.toLong()
         )
     }
@@ -351,20 +363,23 @@ class Gui: Listener {
             items[id].onClick?.accept(items[id])
         }
 
-        val fPlayer = FloodgateApi.getInstance().getPlayer(player.uniqueId)
+        val fPlayer = player.toFloodgatePlayer() ?: return
         fPlayer.sendForm(builder)
     }
 
-    private fun openDialogJavaImpl(player: Player, title: String, content: String,
-            callback: Consumer<DialogEventArgs>?, okButtonText: String) {
+    private fun openDialogJavaImpl(
+        player: Player, title: String, content: String,
+        callback: Consumer<DialogEventArgs>?, okButtonText: String,
+    ) {
         val book = ItemStack(Material.WRITTEN_BOOK)
         val meta = book.itemMeta as BookMeta
 
         val handleString = UUID.randomUUID().toString().replace("-", "")
 
         val comTitle = Component.text(title + "\n\n")
-        val comOkButton = Component.text("\n\n"+okButtonText,
-            Style.style(TextColor.color(0,0,0), TextDecoration.BOLD, TextDecoration.UNDERLINED)
+        val comOkButton = Component.text(
+            "\n\n" + okButtonText,
+            Style.style(TextColor.color(0, 0, 0), TextDecoration.BOLD, TextDecoration.UNDERLINED)
                 .clickEvent(ClickEvent.runCommand("/__core_gui_event__ $handleString"))
         )
 
@@ -383,7 +398,7 @@ class Gui: Listener {
             meta.addPages(page)
         }
 
-        meta.author = "XelticaMc"
+        meta.author = "XelticaMC"
         meta.title = title
 
         book.itemMeta = meta
@@ -395,17 +410,18 @@ class Gui: Listener {
         }
     }
 
-    private fun openDialogBedrockImpl(player: Player, title: String, content: String,
-            callback: Consumer<DialogEventArgs>?, okButtonText: String) {
-        val api = FloodgateApi.getInstance()
+    private fun openDialogBedrockImpl(
+        player: Player, title: String, content: String,
+        callback: Consumer<DialogEventArgs>?, okButtonText: String,
+    ) {
         val form = SimpleForm.builder()
             .title(title)
             .content(content)
             .button(okButtonText)
-            .responseHandler { _ ->
+            .responseHandler(Consumer {
                 callback?.accept(DialogEventArgs(player))
-            }
-        api.getPlayer(player.uniqueId).sendForm(form)
+            })
+        FloodgateHook.api.getPlayer(player.uniqueId).sendForm(form)
     }
 
     private fun openTextInputJavaImpl(player: Player, title: String, responseHandler: Consumer<String>?) {
@@ -424,10 +440,14 @@ class Gui: Listener {
     }
 
     private fun openTextInputBedrockImpl(player: Player, title: String, responseHandler: Consumer<String>?) {
-        val fPlayer = FloodgateApi.getInstance().getPlayer(player.uniqueId)
-        val form = CustomForm.builder().title(title).input("").responseHandler { form, res ->
-            responseHandler?.accept(form.parseResponse(res).getInput(0)!!)
-        }
+        val fPlayer = player.toFloodgatePlayer() ?: throw IllegalArgumentException()
+        val form = CustomForm
+            .builder()
+            .title(title)
+            .input("")
+            .responseHandler { form, res ->
+                responseHandler?.accept(form.parseResponse(res).getInput(0) ?: "")
+            }
         fPlayer.sendForm(form)
     }
 
