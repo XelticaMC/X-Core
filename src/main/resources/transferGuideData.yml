@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2023-01-20T12:54"
+update: "2023-01-21T01:14"
 update_info: |-
   路線追加:
    共天睦月電鉄(新草線、新鮫南北線、湖北線、足立線)
@@ -2463,6 +2463,10 @@ municipalities:
     name: 奥谷峨郡
     world: main
     stations: [ yaga_yaga_3,yaga_yaga_4 ]
+  onegi_campus:
+    name: おねぎキャンパス
+    world: main
+    stations: [ mutsuki_shinso_7 ]
   kaisen_kingdom:
     name: 海鮮王国
     world: main
