@@ -3,8 +3,10 @@ package work.xeltica.craft.core.modules.setMarker
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.block.Sign
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
+import org.bukkit.event.Event
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.inventory.EquipmentSlot
@@ -66,15 +68,26 @@ class SetMarkerHandler: Listener {
             Bukkit.getLogger().info("左クリックしました")
             if(SetMarkerModule.isMarkerToolAD(item)) {
                 Bukkit.getLogger().info("ADを左クリックしました")
-                if ( (loc.block.type == Material.REDSTONE_TORCH || clickBlock.location.block.type == Material.SOUL_TORCH)) {
-                    if(SetMarkerModule.isClickMarker(player,loc) == 2){
+                if ( (loc.block.type == Material.REDSTONE_TORCH || loc.block.type == Material.SOUL_TORCH)) {
+                    if(SetMarkerModule.isClickMarker(player,loc,false) == 2){
                         SetMarkerModule.dellMarker(player, clickBlock.location)
-                    }else if(SetMarkerModule.isClickMarker(player,loc) == 1){
+                    }else if(SetMarkerModule.isClickMarker(player,loc,false) == 1){
                         //撤去イベントキャンセル
                     }
-
                 }
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onSignClick(e: PlayerInteractEvent) {
+        // 右クリックでない or スニークしていない なら中止
+        if (e.action !== Action.RIGHT_CLICK_BLOCK || !e.player.isSneaking) return
+        // 既にキャンセルされているなら中止
+        if (e.useInteractedBlock() == Event.Result.DENY) return
+        // クリックしたブロックが看板でなければ中止
+        val sign = e.clickedBlock?.state as? Sign ?: return
+
+        e.player.openSign(sign)
     }
 }

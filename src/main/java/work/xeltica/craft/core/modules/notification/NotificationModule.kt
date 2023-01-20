@@ -12,18 +12,14 @@ import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import work.xeltica.craft.core.XCorePlugin
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.models.Notification
-import work.xeltica.craft.core.utils.Config
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import java.io.File
 import java.io.FileReader
 import java.util.UUID
 
-object NotificationModule: ModuleBase() {
-    lateinit var instance: NotificationModule
-    private set
-
+object NotificationModule : ModuleBase() {
     private lateinit var confirmed: Config
 
     private const val FILE_NAME = "notification.json"
@@ -45,7 +41,6 @@ object NotificationModule: ModuleBase() {
     private val notifications: MutableList<Notification> = mutableListOf()
 
     override fun onEnable() {
-        instance = this
         confirmed = Config("confirmed")
         registerHandler(NotificationHandler())
         reload()

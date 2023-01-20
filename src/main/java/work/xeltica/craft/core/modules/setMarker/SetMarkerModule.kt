@@ -4,14 +4,15 @@ import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import work.xeltica.craft.core.XCorePlugin
-
+import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.utils.Config
+import work.xeltica.craft.core.modules.world.WorldModule
 import java.io.IOException
 import java.util.*
 import kotlin.math.floor
@@ -26,12 +27,15 @@ object SetMarkerModule : ModuleBase(){
     ToDo 1 他プレイヤーのマーカーかどうかも判定しなければいけない
     ToDO 2 マルチでの検証ができていないのでやる。
      */
-
     override fun onEnable() {
         Bukkit.getLogger().info( "モジュールが読み込まれました")
         marker = Config("marker")
         registerHandler(SetMarkerHandler())
     }
+
+    //-----------------------------------------
+    //マーカー操作
+    //-----------------------------------------
 
     /**
      * マーカーを置きます。
@@ -45,7 +49,7 @@ object SetMarkerModule : ModuleBase(){
         val list = getLocationList(p,p.getWorld().getName())
         if(index == null || index == -1) index = 0
         else index += 1
-        addLocationList(p,dest,index)
+        saveLocationList(p,dest,index)
         dest.block.type = Material.SOUL_TORCH
         dest.block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
         locIndex[pid] = index
@@ -64,33 +68,7 @@ object SetMarkerModule : ModuleBase(){
         return marker.conf.getKeys(true)
     }
 
-    /**
-     * 指定した座標をブロック座標にし、マーカーコンフィグに保存します。
-     * インデックスを指定した場合はリストの指定箇所に追加されます。
-     * また、インデックスがリスト長を超えた場合は最後に追加されます。
-     */
-    fun addLocationList(p: Player, loc: Location, index: Int? = null){
-        val conf = marker.getConf()
-        val pid = p.getUniqueId().toString()
-        var locationList : MutableList<Location>? = mutableListOf()
-        var playerSection = conf?.getConfigurationSection(pid)
-        if (playerSection == null) {
-            playerSection = conf?.createSection(pid)
-        }else{
-            if(getLocationList(p, p.getWorld().getName()) != null) {
-                locationList = getLocationList(p, p.getWorld().getName())
-            }
-        }
-        if(index == null || locationList == null) locationList?.add(toBlockLocation(loc))
-        else if(index >= locationList.size) locationList.add(toBlockLocation(loc))
-        else locationList.add(index,toBlockLocation(loc))
-        playerSection?.set(p.getWorld().getName(), locationList)
-        try {
-            marker.save()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
+
 
     /**
      * クリック対象がマーカーかどうかを判定する。
@@ -98,7 +76,7 @@ object SetMarkerModule : ModuleBase(){
      * 1 マーカーだが自分のではない
      * 2 自分のマーカー
      */
-    fun isClickMarker(p: Player, loc: Location) :Int {
+    fun isClickMarker(p: Player, loc: Location, change: Boolean = true) :Int {
         Bukkit.getLogger().info("isClick load")
         loadLocIndex(p)
         val locationList = getLocationList(p, p.getWorld().getName())
@@ -123,7 +101,7 @@ object SetMarkerModule : ModuleBase(){
         if(index == -1) {
             return 0
         }
-        if(index2 != null){
+        if(index2 != null && change){
             locationList[index2].block.type = Material.REDSTONE_TORCH
             locationList[index].block.type = Material.SOUL_TORCH
         }
@@ -138,7 +116,7 @@ object SetMarkerModule : ModuleBase(){
      */
     fun moveMaker(p: Player, loc: Location){
         Bukkit.getLogger().info("move load")
-        val conf = marker.getConf()
+        val conf: YamlConfiguration = marker.conf
         val pid = p.getUniqueId().toString()
         val playerSection = conf.getConfigurationSection(pid) ?: return
         val locationList = getLocationList(p, p.getWorld().getName()) ?: return
@@ -166,7 +144,7 @@ object SetMarkerModule : ModuleBase(){
      * 今いるワールドの自身が作成したマーカーを削除します。
      */
     fun dellAllMarker(p: Player){
-        val conf = marker.getConf()
+        val conf: YamlConfiguration = marker.conf
         val pid = p.getUniqueId().toString()
         val world = p.getWorld().getName()
         conf?.getConfigurationSection(pid) ?: return
@@ -190,7 +168,7 @@ object SetMarkerModule : ModuleBase(){
      * 今いるワールドの自身が作成したマーカーを削除します。
      */
     fun dellMarker(p: Player, loc: Location){
-        val conf = marker.getConf()
+        val conf: YamlConfiguration = marker.conf
         val pid = p.getUniqueId().toString()
         val world = p.getWorld().getName()
         conf?.getConfigurationSection(pid) ?: return
@@ -221,6 +199,87 @@ object SetMarkerModule : ModuleBase(){
         }
     }
 
+
+
+
+
+    /**
+     * Block座標に変換します。
+     * ピッチとヨーは0.0に設定されます。
+     */
+    fun toBlockLocation(location: Location): Location{
+        location.set(floor(location.x),floor(location.y),floor(location.z))
+        location.setPitch(0.0F)
+        location.setYaw(0.0F)
+
+        return location
+    }
+
+    //-----------------------------------------
+    //コンフィグ操作
+    //-----------------------------------------
+
+    /**
+     * 指定した座標をブロック座標にし、マーカーコンフィグに保存します。
+     * インデックスを指定した場合はリストの指定箇所に追加されます。
+     * また、インデックスがリスト長を超えた場合は最後に追加されます。
+     */
+    fun saveLocationList(p: Player, loc: Location, index: Int? = null){
+        val conf: YamlConfiguration = marker.conf
+        val pid = p.getUniqueId().toString()
+        var locationList : MutableList<Location>? = mutableListOf()
+        var playerSection = conf?.getConfigurationSection(pid)
+        if (playerSection == null) {
+            playerSection = conf?.createSection(pid)
+        }else{
+            if(getLocationList(p, p.getWorld().getName()) != null) {
+                locationList = getLocationList(p, p.getWorld().getName())
+            }
+        }
+        if(index == null || locationList == null) locationList?.add(toBlockLocation(loc))
+        else if(index >= locationList.size) locationList.add(toBlockLocation(loc))
+        else locationList.add(index,toBlockLocation(loc))
+        playerSection?.set(p.getWorld().getName(), locationList)
+        try {
+            marker.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * マーカーコンフィグから指定したプレイヤーとワールドの座標リストを返します。
+     */
+    fun getLocationList(p: Player, worldName: String): MutableList<Location>? {
+        val conf: YamlConfiguration = marker.conf
+        val pid = p.getUniqueId().toString()
+        val playerSection = conf?.getConfigurationSection(pid) ?: return null
+        return playerSection.getList(worldName) as MutableList<Location>?
+    }
+
+    private fun saveLocIndex(p: Player){
+        val conf: YamlConfiguration = marker.conf
+        val pid = p.getUniqueId().toString()
+        var playerSection = conf?.getConfigurationSection(pid)
+        if (playerSection == null) {
+            playerSection = conf?.createSection(pid)
+        }
+        playerSection?.set(pid, locIndex[pid])
+        try {
+            marker.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun loadLocIndex(p: Player){
+        val conf: YamlConfiguration = marker.conf
+        val pid = p.getUniqueId().toString()
+        val playerSection = conf?.getConfigurationSection(pid) ?: return
+        locIndex[pid] = playerSection.getInt(pid,-1)
+        Bukkit.getLogger().info( ""+locIndex[pid])
+    }
+
     /**
      * マーカーコンフィグから、今いるワールドの座標リストをコンソールに出力します。
      */
@@ -236,53 +295,8 @@ object SetMarkerModule : ModuleBase(){
         Bukkit.getLogger().info("合計："+locationList.size)
     }
 
-    /**
-     * マーカーコンフィグから指定したプレイヤーとワールドの座標リストを返します。
-     */
-    fun getLocationList(p: Player, worldName: String): MutableList<Location>? {
-        val conf = marker.getConf()
-        val pid = p.getUniqueId().toString()
-        val playerSection = conf?.getConfigurationSection(pid) ?: return null
-        return playerSection.getList(worldName) as MutableList<Location>?
-    }
-
-    private fun saveLocIndex(p: Player){
-        val conf = marker.getConf()
-        val pid = p.getUniqueId().toString()
-        var playerSection = conf?.getConfigurationSection(pid)
-        if (playerSection == null) {
-            playerSection = conf?.createSection(pid)
-        }
-        playerSection?.set(pid, locIndex[pid])
-        try {
-            marker.save()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun loadLocIndex(p: Player){
-        val conf = marker.getConf()
-        val pid = p.getUniqueId().toString()
-        val playerSection = conf?.getConfigurationSection(pid) ?: return
-        locIndex[pid] = playerSection.getInt(pid,-1)
-        Bukkit.getLogger().info( ""+locIndex[pid])
-    }
-
-    /**
-     * Block座標に変換します。
-     * ピッチとヨーは0.0に設定されます。
-     */
-    fun toBlockLocation(location: Location): Location{
-        location.set(floor(location.x),floor(location.y),floor(location.z))
-        location.setPitch(0.0F)
-        location.setYaw(0.0F)
-
-        return location
-    }
-
     //-----------------------------------------
-    //以上マーカー座標関係　以下ツール関係
+    //ツール関係
     //-----------------------------------------
 
     /**
