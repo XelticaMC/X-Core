@@ -8,6 +8,7 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.Tag
+import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
@@ -18,6 +19,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.player.PlayerTeleportEvent
+import org.bukkit.event.raid.RaidTriggerEvent
 import work.xeltica.craft.core.XCorePlugin.Companion.instance
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.gui.Gui
@@ -133,6 +135,7 @@ class WorldHandler : Listener {
         val p = e.player
         val block = e.clickedBlock
         if (e.action != Action.RIGHT_CLICK_BLOCK || block == null) return
+        if (e.useInteractedBlock() == Event.Result.DENY) return
 
         val worldInfo = WorldModule.getWorldInfo(p.world.name)
         if (!worldInfo.canSleep && Tag.BEDS.isTagged(block.type)) {
@@ -147,6 +150,7 @@ class WorldHandler : Listener {
      */
     @EventHandler
     fun onGuardCobbleStoneGenerator(e: BlockFormEvent) {
+        if (e.isCancelled) return
         if (e.newState.type == Material.STONE) {
             e.newState.type = Material.COBBLESTONE
         }
@@ -165,5 +169,11 @@ class WorldHandler : Listener {
             }
             e.respawnLocation = respawnLocation
         }
+    }
+
+    @EventHandler
+    fun onRaid(e: RaidTriggerEvent) {
+        if (WorldModule.getWorldInfo(e.world).allowRaids) return
+        e.isCancelled = true
     }
 }

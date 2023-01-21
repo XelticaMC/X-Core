@@ -46,6 +46,31 @@ import java.util.Random
 import java.util.UUID
 
 class MobBallHandler : Listener {
+    /**
+     * モブが射出される音
+     */
+    private val SOUND_RELEASE = Sound.BLOCK_BEACON_ACTIVATE
+
+    /**
+     * モブが収納される音
+     */
+    private val SOUND_RESTORE = Sound.BLOCK_BEACON_DEACTIVATE
+
+    /**
+     * モブボールが震える音
+     */
+    private val SOUND_VIBE = Sound.BLOCK_NOTE_BLOCK_HAT
+
+    /**
+     * モブボールが跳ね返る音
+     */
+    private val SOUND_BOUNCE = Sound.ITEM_SHIELD_BLOCK
+
+    /**
+     * アイテムが壊れる音
+     */
+    private val SOUND_BREAK = Sound.ENTITY_ITEM_BREAK
+
     @EventHandler
     fun onPlayerThrowMobBall(e: PlayerEggThrowEvent) {
         if (!MobBallModule.isMobBall(e.egg.item)) return
@@ -112,7 +137,7 @@ class MobBallHandler : Listener {
                     val randNum = random.nextInt(100)
                     isGotcha = randNum < difficulty
                     i = if (isGotcha) i else 80
-                    eggEntity.world.playSound(eggEntity.location, Sound.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 1f, 1.5f)
+                    eggEntity.world.playSound(eggEntity.location, SOUND_VIBE, SoundCategory.PLAYERS, 1f, 1.5f)
                     if (i < 80) {
                         showWaitingParticle(eggEntity.location)
                     }
@@ -132,14 +157,14 @@ class MobBallHandler : Listener {
                             dex.add(target.type.toString())
                         }
                     } else {
-                        egg.world.playSound(egg.location, Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1f, 1f)
+                        egg.world.playSound(egg.location, SOUND_BREAK, SoundCategory.PLAYERS, 1f, 1f)
                         val entityTag = eggNbt.getCompound("EntityTag")
                         entityTag.removeKey("Pos")
                         val type = EntityType.valueOf(eggNbt.getString("mobType"))
                         eggEntity.world.spawnEntity(eggEntity.location, type, CreatureSpawnEvent.SpawnReason.CUSTOM) {
                             sanitizeFailedMob(it)
                             NBTEntity(it).mergeCompound(entityTag)
-                            it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
+                            it.world.playSound(it.location, SOUND_RELEASE, SoundCategory.PLAYERS, 1f, 1f)
                             showTeleportParticle(it.location)
                             player.sendMessage("残念！ボールから出てきてしまった…。")
                             eggEntity.remove()
@@ -161,16 +186,12 @@ class MobBallHandler : Listener {
         e.setUseItemInHand(Event.Result.DENY)
         // ブロックを叩いていなければreturn
         val block = e.clickedBlock ?: return
-        e.player.sendMessage(block.type.name)
         // ブロックの上面（つまり床）でなければreturn
         if (e.blockFace !== BlockFace.UP) return
-        e.player.sendMessage(e.blockFace.name)
         // イベントが以前にキャンセルされていればreturn
-        e.player.sendMessage(e.useInteractedBlock().name)
         if (e.useInteractedBlock() == Event.Result.DENY) return
         // 触れたブロックが有機能であればreturn
         if (block.type.isInteractable && !e.player.isSneaking) return
-        e.player.sendMessage(block.type.isInteractable.toString())
 
         if (!nbt.getBoolean("isActive")) {
             return
@@ -183,7 +204,7 @@ class MobBallHandler : Listener {
             sanitizeReleasedMob(it)
             NBTEntity(it).mergeCompound(entityTag)
             it.teleport(block.location.add(e.blockFace.direction))
-            it.world.playSound(it.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
+            it.world.playSound(it.location, SOUND_RELEASE, SoundCategory.PLAYERS, 1f, 1f)
             it.persistentDataContainer.set(NamespacedKey(XCorePlugin.instance, "isCaptured"), PersistentDataType.INTEGER, 1)
             showTeleportParticle(it.location)
             // もしTameableなら、出した人を親とする
@@ -255,7 +276,7 @@ class MobBallHandler : Listener {
         eggNbt.applyNBT(spawnEgg)
         MobBallModule.setMobCaseMeta(spawnEgg)
         target.remove()
-        target.world.playSound(target.location, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 1f, 1f)
+        target.world.playSound(target.location, SOUND_RESTORE, SoundCategory.PLAYERS, 1f, 1f)
         showTeleportParticle(target.location)
         return eggNbt
     }
@@ -271,7 +292,7 @@ class MobBallHandler : Listener {
 
     private fun dropEgg(egg: Egg, player: Player, string: String? = null) {
         egg.world.dropItem(egg.location, egg.item)
-        egg.world.playSound(egg.location, Sound.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1f, 0.5f)
+        egg.world.playSound(egg.location, SOUND_BOUNCE, SoundCategory.PLAYERS, 1f, 0.5f)
         if (string != null) Gui.getInstance().error(player, string)
     }
 

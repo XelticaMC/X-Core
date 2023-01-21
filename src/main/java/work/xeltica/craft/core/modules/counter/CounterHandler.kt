@@ -115,7 +115,6 @@ class CounterHandler : Listener {
         // カウンター開始する
         if (first != null) {
             if (isUsingCounter) {
-                ui.error(player, "既にタイムアタックが始まっています！")
                 return
             }
             val ts = System.currentTimeMillis().toString()
@@ -129,7 +128,6 @@ class CounterHandler : Listener {
         // カウンター終了する
         if (last != null) {
             if (!isUsingCounter) {
-                ui.error(player, "こちらはゴールです。スタート地点から開始してください。")
                 return
             }
             if (last.name != counterId) {
@@ -197,7 +195,7 @@ class CounterHandler : Listener {
             addRanking(counter.javaRankingId, player, diff)
         }
     }
-    
+
     private fun addRanking(id: String?, player: Player, diff: Int) {
         if (id == null) return
         val ranking = RankingModule[id] ?: return

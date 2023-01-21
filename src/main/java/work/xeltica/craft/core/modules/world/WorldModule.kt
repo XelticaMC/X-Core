@@ -168,6 +168,7 @@ object WorldModule : ModuleBase() {
             val canRespawn = section.getBoolean("canRespawn", true)
             val allowVehicleSpawn = section.getBoolean("allowVehicleSpawn", false)
             val allowAdvancements = section.getBoolean("allowAdvancements", true)
+            val allowRaids = section.getBoolean("allowRaids", false)
             val respawnWorld = section.getString("respawnWorld", it)!!
             val description = section.getString("description", "")!!
             worldsMap[it] = WorldInfo(
@@ -181,15 +182,20 @@ object WorldModule : ModuleBase() {
                 canRespawn,
                 allowVehicleSpawn,
                 allowAdvancements,
+                allowRaids,
                 respawnWorld,
-                description
+                description,
             )
         }
     }
 
     private fun initializeWorlds() {
         worldsMap.values.forEach {
-            it.world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, it.allowAdvancements)
+            try {
+                it.world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, it.allowAdvancements)
+            } catch (e: IllegalAccessException) {
+                Bukkit.getLogger().warning("ワールド ${it.name} は作成されていません。スキップします。")
+            }
         }
     }
 }

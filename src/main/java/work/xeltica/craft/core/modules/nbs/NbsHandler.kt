@@ -30,6 +30,7 @@ class NbsHandler : Listener {
             e.isCancelled = true
         } else if (song != null) {
             NbsModule.play(location, song.songId, song.distance, song.mode)
+            e.isCancelled = true
         }
     }
 

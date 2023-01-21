@@ -80,7 +80,7 @@ dependencies {
 }
 
 group = "work.xeltica.craft.core"
-version = "3.0.0-beta.1"
+version = "3.1.2"
 description = "A Core System Plugin for XelticaMC."
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -386,6 +386,9 @@ bukkit {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
         register("otanoshimi.stamp.destroy") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("xcore.teleport.event") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
         }
     }

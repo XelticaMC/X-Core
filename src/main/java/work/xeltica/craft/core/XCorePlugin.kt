@@ -29,6 +29,7 @@ import work.xeltica.craft.core.modules.eventFarm.EventFarmModule
 import work.xeltica.craft.core.modules.eventFirework.EventFireworkModule
 import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule
 import work.xeltica.craft.core.modules.eventSummer.EventSummerModule
+import work.xeltica.craft.core.modules.eventTwoYears.EventTwoYearsModule
 import work.xeltica.craft.core.modules.fly.FlyModule
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
@@ -115,8 +116,8 @@ class XCorePlugin : JavaPlugin() {
                 logger.severe("連携フック '${it.javaClass.simpleName}' の無効化に失敗しました。")
                 e.printStackTrace()
             }
-            logger.info("連携フックを全て無効化しました。")
         }
+        logger.info("連携フックを全て無効化しました。")
     }
 
     /**
@@ -193,6 +194,7 @@ class XCorePlugin : JavaPlugin() {
         EventFireworkModule,
         EventHalloweenModule,
         EventSummerModule,
+        EventTwoYearsModule,
         FlyModule,
         HintModule,
         HubModule,

@@ -65,7 +65,7 @@ class CommandRespawn : CommandPlayerOnlyBase() {
      */
     private fun teleportToInitialSpawn(player: Player) {
         val world = WorldModule.getWorldInfo(player.world)
-        if (!world.canSleep) {
+        if (!world.canRespawn) {
             player.sendMessage(ChatColor.RED.toString() + "このワールドでは許可されていません")
             return
         }
