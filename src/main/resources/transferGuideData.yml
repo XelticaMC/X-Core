@@ -1717,7 +1717,7 @@ stations:
     location: [ 1991.5, 6.5 ]
     type: station
     paths: [
-      { to: nyv_takayama_2a, line: nyv_takayama, direction: to_hatsumaya, time: 45, rapid_not_in_parallel: false },
+      { to: nyv_main_3, line: nyv_takayama, direction: to_hatsumaya, time: 24, rapid_not_in_parallel: false },
       { to: nyv_main_9, line: nyv_takayama, direction: to_yamabukitakayama, time: 60, rapid_not_in_parallel: false },
     ]
   nyv_takayama_5:
