@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2023-01-21T01:14"
+update: "2023-01-21T20:40"
 update_info: |-
   路線追加:
    共天睦月電鉄(新草線、新鮫南北線、湖北線、足立線)
@@ -10,7 +10,9 @@ update_info: |-
    新鮫市交通局(新鮫市営地下鉄(海老川線))
    新山吹村営鉄道(本線、馬住支線、弥生川支線、高山支線)
    甲坂市交通局(甲阪市営地下鉄(中央線))
-   ワイルドエリア各線(各TT、エンド要塞連絡線)
+   ﾜｲﾙﾄﾞｴﾘｱ一部路線(ｿﾞﾝﾋﾞ、洞窟蜘蛛、海底神殿跡地TT、ｴﾝﾄﾞ要塞連絡線)
+  未対応路線:
+   ﾜｲﾙﾄﾞｴﾘｱ一部路線(ｽｹﾙﾄﾝ、ｸﾘｰﾊﾟｰ、ﾒｻ線)(2月中対応予定)
 
 #駅データ
 # name: 駅名
@@ -1785,11 +1787,9 @@ stations:
     type: station
     paths: [
       { to: wildarea2_tt_w_01_2, line: wildarea2_tt_w_01, direction: to_wildarea2_tt_w_01, time: 91, rapid_not_in_parallel: false },
-      { to: wildarea2_tt_w_02, line: wildarea2_tt_w_02, direction: to_wildarea2_tt_w_02, time: 97, rapid_not_in_parallel: false },
       { to: wildarea2_central_e, line: walk, direction: northwalk, time: 31, rapid_not_in_parallel: false },
       { to: wildarea2_tt_w_04, line: walk, direction: northwalk, time: 23, rapid_not_in_parallel: false },
       { to: wildarea2_tt_w_05, line: wildarea2_tt_w_05, direction: to_wildarea2_tt_w_05, time: 54, rapid_not_in_parallel: false },
-      { to: wildarea2_tt_w_06, line: boat, direction: southwalk, time: 67, rapid_not_in_parallel: false },
     ]
   wildarea2_central_e:
     name: 共有拠点(東)
@@ -1824,16 +1824,6 @@ stations:
     paths: [
       { to: wildarea2_tt_w_01_2, line: wildarea2_tt_w_01, direction: to_wildarea2_central, time: 304, rapid_not_in_parallel: false },
     ]
-  wildarea2_tt_w_02:
-    name: スケルトンTT(TT-W-02)
-    yomi: すけるとんとらっぷたわー
-    number: TT-W-02
-    world: wildarea2
-    location: [ -50.0, 793.5 ]
-    type: station
-    paths: [
-      { to: wildarea2_central_w, line: wildarea2_tt_w_02, direction: to_wildarea2_central, time: 97, rapid_not_in_parallel: false },
-    ]
   wildarea2_tt_w_03:
     name: 海底神殿跡地TT(TT-W-03)
     yomi: かいていしんでんあとちとらっぷたわー
@@ -1864,16 +1854,6 @@ stations:
     type: station
     paths: [
       { to: wildarea2_central_w, line: wildarea2_tt_w_05, direction: to_wildarea2_central, time: 54, rapid_not_in_parallel: false },
-    ]
-  wildarea2_tt_w_06:
-    name: クリーパートラップ(TT-W-06)
-    yomi: くりーぱーとらっぷ
-    number: TT-W-06
-    world: wildarea2
-    location: [ -124.5, 452.5 ]
-    type: station
-    paths: [
-      { to: wildarea2_central_w, line: boat, direction: southwalk, time: 67, rapid_not_in_parallel: false },
     ]
   wildarea2_nether_central:
     name: 拠点
@@ -2294,14 +2274,6 @@ lines:
       wildarea2_central_w,
       wildarea2_tt_w_01_2,
       wildarea2_tt_w_01,
-    ]
-  wildarea2_tt_w_02:
-    name: スケルトンTT連絡線
-    world: wildarea2
-    rapid: false
-    stations: [
-      wildarea2_central_w,
-      wildarea2_tt_w_02,
     ]
   wildarea2_tt_w_03:
     name: 海底神殿跡地TT連絡線
