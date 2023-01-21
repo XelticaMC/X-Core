@@ -137,7 +137,7 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
             sb.append("/X:${it.station.location[0]},Z:${it.station.location[1]})\n")
             if (it.routePath is KRoutePathReal) {
                 appendTime += it.routePath.time
-                appendTime += if (routes.lastIndex == i) {
+                appendTime += if (routes.lastIndex - 1 == i) {
                     0
                 } else if (it.routePath.line == "walk" || it.routePath.line == "boat") {
                     10
