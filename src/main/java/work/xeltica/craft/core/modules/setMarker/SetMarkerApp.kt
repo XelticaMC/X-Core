@@ -25,11 +25,11 @@ class SetMarkerApp : AppBase() {
                     Bukkit.getLogger().info(SetMarkerModule.getAllPrefix().toString())
                 }, Material.BLUE_DYE),
                 MenuItem("削除", {
-                    SetMarkerModule.dellAllMarker(player)
+                    SetMarkerModule.dellAll(player)
                 }, Material.RED_DYE),
                 MenuItem("ツール取得", {
                     player.world.dropItem(player.location, SetMarkerModule.createMarkerToolAD(1))
                 }, Material.SOUL_TORCH),
-        ));
+        ))
     }
 }

@@ -12,321 +12,342 @@ import org.bukkit.metadata.FixedMetadataValue
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
-import work.xeltica.craft.core.modules.world.WorldModule
+import work.xeltica.craft.core.modules.item.ItemModule
 import java.io.IOException
-import java.util.*
-import kotlin.math.floor
 
-object SetMarkerModule : ModuleBase(){
+object SetMarkerModule : ModuleBase() {
     lateinit var marker: Config
-    val locIndex = mutableMapOf<String ,Int?>()
-    val locationTemp = mutableMapOf<String ,Location>()
-    val isMarkerClick = mutableMapOf<String ,Boolean>()
 
     /*
     ToDo 1 他プレイヤーのマーカーかどうかも判定しなければいけない
     ToDO 2 マルチでの検証ができていないのでやる。
      */
     override fun onEnable() {
-        Bukkit.getLogger().info( "モジュールが読み込まれました")
+        Bukkit.getLogger().info("モジュールが読み込まれました")
         marker = Config("marker")
         registerHandler(SetMarkerHandler())
     }
 
-    //-----------------------------------------
-    //マーカー操作
-    //-----------------------------------------
+    //マーカー本体操作
+    /**
+     * プレイヤーが立っている座標にマーカーを設置する
+     */
+    fun setMarker(p: Player) {
+        setMarker(p, p.location)
+    }
 
     /**
-     * マーカーを置きます。
+     * 代入された位置にマーカーを設置する
      */
-    fun setMarker(p: Player, loc: Location? = null) {
-        loadLocIndex(p)
-        var dest = Location(p.world, p.getLocation().x,p.getLocation().y,p.getLocation().z)
-        if(loc != null) dest = loc
-        val pid = p.getUniqueId().toString()
-        var index = locIndex[pid]
-        val list = getLocationList(p,p.getWorld().getName())
-        if(index == null || index == -1) index = 0
-        else index += 1
-        saveLocationList(p,dest,index)
+    fun setMarker(p: Player, loc: Location) {
+        val pid = p.uniqueId.toString()
+        var index = getLocationIndex(p)
+        val dest = Location(p.world, loc.x, loc.y, loc.z).toBlockLocation()
+        var locationList: MutableList<Location>? = getLocationList(p)
+        if (index < 0 || locationList == null) {
+            Bukkit.getLogger().info("追加座標 : $dest")
+            locationList?.add(dest)
+            infoList(locationList) //---------------------デバック！！！！！
+            index = 0
+            Bukkit.getLogger().info("リスト作成")
+        } else if (index >= (locationList.size - 1)) {
+            locationList.add(dest)
+            index = locationList.size - 1
+            Bukkit.getLogger().info("リスト末尾追加")
+        } else {
+            index++
+            locationList.add(index, dest)
+            Bukkit.getLogger().info("リスト途中追加")
+        }
+
         dest.block.type = Material.SOUL_TORCH
         dest.block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
-        locIndex[pid] = index
-        if(list != null){
-            if(list.size > 1 && index > 0){
-                list[index-1].block.type = Material.REDSTONE_TORCH
-            }
+        if (locationList != null && locationList.size >= 2 && index >= 1) {
+            locationList[index - 1].block.type = Material.REDSTONE_TORCH
         }
-        saveLocIndex(p)
+        saveLocationAll(p, locationList, index)
     }
 
     /**
-    マーカーコンフィグに保存されているkeyを返します。
+     * マーカーをプレイヤーの足元に移動
      */
-    fun getAllPrefix(): Set<String> {
-        return marker.conf.getKeys(true)
+    fun moveMarker(p: Player) {
+        moveMarker(p, p.location)
     }
 
-
+    /**
+     * マーカーを指定した座標に移動
+     */
+    fun moveMarker(p: Player, loc: Location) {
+        val pid = p.uniqueId.toString()
+        val index = getLocationIndex(p)
+        if (index < 0) return
+        val locationList = getLocationList(p) ?: return
+        val dest = Location(p.world, loc.x, loc.y, loc.z).toBlockLocation()
+        locationList[index].block.type = Material.AIR
+        locationList[index] = dest
+        locationList[index].block.type = Material.SOUL_TORCH
+        locationList[index].block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
+        saveLocationList(p, locationList)
+    }
 
     /**
-     * クリック対象がマーカーかどうかを判定する。
-     * 0 マーカーではない
+     * 新しく指定したマーカーをアクティブマーカーに変更
+     */
+    fun changeActiveMarker(p: Player, loc: Location) {
+        val newIndex = isMarkerIndex(p, loc)
+        val oldIndex = getLocationIndex(p)
+        changeActiveMarker(p, oldIndex, newIndex)
+    }
+
+    /**
+     * アクティブマーカー[index1]を[index2]へ移動
+     */
+    fun changeActiveMarker(p: Player, index1: Int, index2: Int) {
+        val locationList = getLocationList(p) ?: return
+        locationList[index1].block.type = Material.REDSTONE_TORCH
+        locationList[index2].block.type = Material.SOUL_TORCH
+        saveLocationIndex(p, index2)
+    }
+
+    /**
+     * 座標にあるマーカーが自分の物かそうじゃないかの判定
+     * @return
+     * 0 マーカーでない
      * 1 マーカーだが自分のではない
      * 2 自分のマーカー
      */
-    fun isClickMarker(p: Player, loc: Location, change: Boolean = true) :Int {
-        Bukkit.getLogger().info("isClick load")
-        loadLocIndex(p)
-        val locationList = getLocationList(p, p.getWorld().getName())
-        val pid = p.getUniqueId().toString()
-        val loc2 = toBlockLocation(loc)
-        if(loc.block.hasMetadata("marker")){
-            if(!loc.block.getMetadata("marker").equals(pid)) return 1
+    fun isMarker(p: Player, loc: Location): Int {
+        val pid = p.uniqueId.toString()
+        if (loc.block.type != Material.REDSTONE_TORCH) return 0
+        if (!loc.block.hasMetadata("marker")) return 0
+        if (!loc.block.getMetadata("marker").equals(pid)) {
+            return 1
         }
-        //isMarkerClick[pid] = false
-        locationTemp[pid] = loc2
-        if(locationList == null) {
-            return 0
-        }
-        Bukkit.getLogger().info("-----------------------------------")
-        for(i in locationList.indices){
-            Bukkit.getLogger().info(""+i+"："+locationList[i]+"")
-        }
-        Bukkit.getLogger().info("-----------------------------------")
-        Bukkit.getLogger().info(""+loc2)
-        val index = locationList.indexOf(loc2)
-        val index2 = locIndex[pid]
-        if(index == -1) {
-            return 0
-        }
-        if(index2 != null && change){
-            locationList[index2].block.type = Material.REDSTONE_TORCH
-            locationList[index].block.type = Material.SOUL_TORCH
-        }
-        locIndex[pid] = index
-        saveLocIndex(p)
-        isMarkerClick[pid] = true
         return 2
     }
 
-    /**
-     * マーカーを移動します。
-     */
-    fun moveMaker(p: Player, loc: Location){
-        Bukkit.getLogger().info("move load")
-        val conf: YamlConfiguration = marker.conf
-        val pid = p.getUniqueId().toString()
-        val playerSection = conf.getConfigurationSection(pid) ?: return
-        val locationList = getLocationList(p, p.getWorld().getName()) ?: return
-
-        Bukkit.getLogger().info(locIndex.toString())
-        val index = locIndex[pid] ?: return
-        if(isMarkerClick[pid] == true){
-            loc.set(loc.x,loc.y+1,loc.z)
-            locationList[index].block.type = Material.AIR
-            locationList[index] = loc
-            locationList[index].block.type = Material.SOUL_TORCH
-            locationList[index].block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
-        }
-        playerSection.set(p.getWorld().getName(), locationList)
-        try {
-            marker.save()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        //isMarkerClick[pid] = false
+    fun isMarkerIndex(p: Player, loc: Location): Int {
+        val locationList = getLocationList(p) ?: return -1
+        return locationList.indexOf(loc)
     }
 
     /**
-     * 今いるワールドの自身が作成したマーカーを削除します。
+     * LocationListから指定した座標とマーカーを削除（マーカーでない場合は削除されたものとする）
+     * @return 削除できたかどうか（成功：true 失敗:false）
      */
-    fun dellAllMarker(p: Player){
-        val conf: YamlConfiguration = marker.conf
-        val pid = p.getUniqueId().toString()
-        val world = p.getWorld().getName()
-        conf?.getConfigurationSection(pid) ?: return
-        val locationList : MutableList<Location> = getLocationList(p, p.getWorld().getName()) ?: return
-        for(i in locationList.indices){
-            val dest = Location(p.world, locationList[i].x,locationList[i].y,locationList[i].z)
+    fun dellMarker(p: Player, loc: Location): Boolean {
+        val locationList = getLocationList(p) ?: return false
+        val index = locationList.indexOf(loc)
+        return dellMarker(p, index)
+    }
+
+    /**
+     * LocationListから指定したインデックスの座標とマーカーを削除（マーカーでない場合は削除されたものとする）
+     * @return 削除できたかどうか（成功：true 失敗:false）
+     */
+    fun dellMarker(p: Player, index_: Int): Boolean {
+        var index = index_
+        val pid = p.uniqueId.toString()
+        val confIndex = getLocationIndex(p)
+        val locationList = getLocationList(p) ?: return false
+        if (index < 0) return false
+        if (index > locationList.size - 1) return false
+        val loc = locationList[index]
+        if (loc.block.type != Material.REDSTONE_TORCH) return true
+        if (!loc.block.hasMetadata("marker")) return true
+        if (!loc.block.getMetadata("marker").equals(pid)) {
+            p.sendMessage("自分のマーカーではないため削除できません。")
+            return false
+        }
+        loc.block.type = Material.AIR
+        locationList.removeAt(index)
+        if (index == confIndex) { //アクティブマーカーをずらす処理
+            index = (confIndex - 1)
+            if (index < 0) {
+                index = 0
+            }
+            locationList[index].block.type = Material.SOUL_TORCH
+        }
+        saveLocationAll(p, locationList, index)
+        return true
+    }
+
+    /**
+     * プレイヤーが今いるワールドでの、全マーカーとLocationListを削除
+     */
+    fun dellAll(p: Player) {
+        val locationList = getLocationList(p) ?: return
+        for (i in locationList.indices) {
+            val dest = Location(p.world, locationList[i].x, locationList[i].y, locationList[i].z)
             dest.block.type = Material.AIR
         }
-        locIndex[pid] = null
-        Bukkit.getLogger().info( "-1 : "+locIndex[pid])
-        saveLocIndex(p)
-        marker.conf.set("$pid.$world",null)
-        try {
-            marker.save()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-
-    /**
-     * 今いるワールドの自身が作成したマーカーを削除します。
-     */
-    fun dellMarker(p: Player, loc: Location){
-        val conf: YamlConfiguration = marker.conf
-        val pid = p.getUniqueId().toString()
-        val world = p.getWorld().getName()
-        conf?.getConfigurationSection(pid) ?: return
-        val locationList : MutableList<Location> = getLocationList(p, p.getWorld().getName()) ?: return
-        if(loc.block.hasMetadata("marker")){
-            if(!loc.block.getMetadata("marker").equals(pid)){
-                p.sendMessage("自分のマーカーではないため削除できません。")
-                return
-            }
-            return
-        }
-        val i = locationList.indexOf(loc)
-        val dest = Location(p.world, locationList[i].x,locationList[i].y,locationList[i].z)
-        locationList.removeAt(i)
-        dest.block.type = Material.AIR
-        if(locIndex[pid] == 0){
-            locIndex[pid] = 0
-        }else if(locIndex[pid] != 0 && locIndex[pid] == i){
-            locIndex[pid] = i-1
-        }
-        Bukkit.getLogger().info( "-2 : "+locIndex[pid])
-        saveLocIndex(p)
-        marker.conf.set("$pid.$world",locationList)
-        try {
-            marker.save()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-
-
-
-
-
-    /**
-     * Block座標に変換します。
-     * ピッチとヨーは0.0に設定されます。
-     */
-    fun toBlockLocation(location: Location): Location{
-        location.set(floor(location.x),floor(location.y),floor(location.z))
-        location.setPitch(0.0F)
-        location.setYaw(0.0F)
-
-        return location
-    }
-
-    //-----------------------------------------
-    //コンフィグ操作
-    //-----------------------------------------
-
-    /**
-     * 指定した座標をブロック座標にし、マーカーコンフィグに保存します。
-     * インデックスを指定した場合はリストの指定箇所に追加されます。
-     * また、インデックスがリスト長を超えた場合は最後に追加されます。
-     */
-    fun saveLocationList(p: Player, loc: Location, index: Int? = null){
-        val conf: YamlConfiguration = marker.conf
-        val pid = p.getUniqueId().toString()
-        var locationList : MutableList<Location>? = mutableListOf()
-        var playerSection = conf?.getConfigurationSection(pid)
-        if (playerSection == null) {
-            playerSection = conf?.createSection(pid)
-        }else{
-            if(getLocationList(p, p.getWorld().getName()) != null) {
-                locationList = getLocationList(p, p.getWorld().getName())
-            }
-        }
-        if(index == null || locationList == null) locationList?.add(toBlockLocation(loc))
-        else if(index >= locationList.size) locationList.add(toBlockLocation(loc))
-        else locationList.add(index,toBlockLocation(loc))
-        playerSection?.set(p.getWorld().getName(), locationList)
-        try {
-            marker.save()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-
-    /**
-     * マーカーコンフィグから指定したプレイヤーとワールドの座標リストを返します。
-     */
-    fun getLocationList(p: Player, worldName: String): MutableList<Location>? {
-        val conf: YamlConfiguration = marker.conf
-        val pid = p.getUniqueId().toString()
-        val playerSection = conf?.getConfigurationSection(pid) ?: return null
-        return playerSection.getList(worldName) as MutableList<Location>?
-    }
-
-    private fun saveLocIndex(p: Player){
-        val conf: YamlConfiguration = marker.conf
-        val pid = p.getUniqueId().toString()
-        var playerSection = conf?.getConfigurationSection(pid)
-        if (playerSection == null) {
-            playerSection = conf?.createSection(pid)
-        }
-        playerSection?.set(pid, locIndex[pid])
-        try {
-            marker.save()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun loadLocIndex(p: Player){
-        val conf: YamlConfiguration = marker.conf
-        val pid = p.getUniqueId().toString()
-        val playerSection = conf?.getConfigurationSection(pid) ?: return
-        locIndex[pid] = playerSection.getInt(pid,-1)
-        Bukkit.getLogger().info( ""+locIndex[pid])
+        deleteLocationList(p)
+        deleteLocationIndex(p)
     }
 
     /**
      * マーカーコンフィグから、今いるワールドの座標リストをコンソールに出力します。
      */
-    fun infoMarker(p: Player){
-        val locationList = getLocationList(p, p.getWorld().getName())
-        if(locationList == null) {
+    fun infoMarker(p: Player) {
+        val locationList = getLocationList(p)
+        if (locationList == null) {
             Bukkit.getLogger().info("List is null")
             return
         }
-        for(i in locationList.indices){
-            Bukkit.getLogger().info(""+i+"："+locationList[i])
+        for (i in locationList.indices) {
+            Bukkit.getLogger().info("" + i + "：" + locationList[i])
         }
-        Bukkit.getLogger().info("合計："+locationList.size)
+        Bukkit.getLogger().info("合計：" + locationList.size)
     }
 
-    //-----------------------------------------
-    //ツール関係
-    //-----------------------------------------
+    //コンフィグ関係
 
+    /**
+     * [player] の [locationList] を保存します。
+     */
+    fun saveLocationList(player: Player, locationList: MutableList<Location>) {
+        val conf: YamlConfiguration = marker.conf
+        val pid = player.uniqueId.toString()
+        var playerSection = conf.getConfigurationSection(pid)
+        if (playerSection == null) {
+            playerSection = conf.createSection(pid)
+        }
+        playerSection.set(player.world.name, locationList)
+        try {
+            marker.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * [player] のマーカー番号 [index] を保存します。
+     */
+    fun saveLocationIndex(player: Player, index: Int) {
+        val conf: YamlConfiguration = marker.conf
+        val pid = player.uniqueId.toString()
+        var playerSection = conf.getConfigurationSection(pid)
+        if (playerSection == null) {
+            playerSection = conf.createSection(pid)
+        }
+        playerSection.set(pid, index)
+        try {
+            marker.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun saveLocationAll(player: Player, locationList: MutableList<Location>?, index: Int) {
+        val conf: YamlConfiguration = marker.conf
+        val pid = player.uniqueId.toString()
+        var playerSection = conf.getConfigurationSection(pid)
+        if (playerSection == null) {
+            playerSection = conf.createSection(pid)
+        }
+        playerSection.set(player.world.name, locationList)
+        playerSection.set(pid, index)
+        try {
+            marker.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * [player]と紐づいている、プレイヤーが今いるワールドの座標リストを返します。
+     */
+    fun getLocationList(player: Player): MutableList<Location>? {
+        val conf: YamlConfiguration = marker.conf
+        val pid = player.uniqueId.toString()
+        val playerSection = conf.getConfigurationSection(pid) ?: return null
+        return playerSection.getList(player.world.name) as MutableList<Location>?
+    }
+
+    /**
+     * [player]に紐づいているインデックスを返します。
+     * setMarkerでは最後に追加された点として利用
+     */
+    fun getLocationIndex(p: Player): Int {
+        val conf: YamlConfiguration = marker.conf
+        val pid = p.uniqueId.toString()
+        val playerSection = conf.getConfigurationSection(pid) ?: return -1
+        return playerSection.getInt(pid, -1)//戻り値のデフォルト = -1
+    }
+
+    /**
+     * [player]のいるワールドのLocationListを削除
+     */
+    fun deleteLocationList(player: Player) {
+        val conf: YamlConfiguration = marker.conf
+        val pid = player.uniqueId.toString()
+        var playerSection = conf.getConfigurationSection(pid) ?: return
+        playerSection.set(player.world.name, null)
+        try {
+            marker.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * [player]に紐づいているインデックスを削除
+     */
+    fun deleteLocationIndex(player: Player) {
+        val conf: YamlConfiguration = marker.conf
+        val pid = player.uniqueId.toString()
+        val playerSection = conf.getConfigurationSection(pid) ?: return
+        playerSection.set(pid, null)
+        try {
+            marker.save()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun getAllPrefix(): Set<String> {
+        return marker.conf.getKeys(true)
+    }
+
+    //ツール関係
     /**
      * マーカーツールADかどうか判定
      */
-    fun isMarkerToolAD(item: ItemStack): Boolean{
-        return isEqualItem(item, createMarkerToolAD(1))
+    fun isMarkerToolAD(item: ItemStack): Boolean {
+        return ItemModule.compareCustomItem(item, createMarkerToolAD())
     }
 
     /**
      * マーカーツールMかどうか判定
      */
-    fun isMarkerToolM(item: ItemStack): Boolean{
-        return isEqualItem(item, createMarkerToolM(1))
+    fun isMarkerToolM(item: ItemStack): Boolean {
+        return ItemModule.compareCustomItem(item, createMarkerToolM())
+    }
+
+    /**
+     * マーカーツールかどうか判定
+     */
+    fun isMarkerTool(item: ItemStack): Boolean {
+        if (ItemModule.compareCustomItem(item, createMarkerToolM())) return true
+        if (ItemModule.compareCustomItem(item, createMarkerToolAD())) return true
+        return false
     }
 
 
-    fun toolSwitching(p: Player, item: ItemStack){
-        if(isMarkerToolAD(item)){
-            p.getInventory().setItemInMainHand(createMarkerToolM())
+    fun toolSwitching(p: Player, item: ItemStack) {
+        if (isMarkerToolAD(item)) {
+            p.inventory.setItemInMainHand(createMarkerToolM())
         }
-        if(isMarkerToolM(item)){
-            p.getInventory().setItemInMainHand(createMarkerToolAD())
+        if (isMarkerToolM(item)) {
+            p.inventory.setItemInMainHand(createMarkerToolAD())
         }
     }
 
     /**
      * マーカーツール　設置・破壊専用アイテムの作成。
      */
-    fun createMarkerToolAD(amount: Int = 1) : ItemStack{
+    fun createMarkerToolAD(amount: Int = 1): ItemStack {
         val item = ItemStack(Material.CARROT_ON_A_STICK, amount)
         item.addUnsafeEnchantment(Enchantment.DURABILITY, 1)
         item.editMeta {
@@ -341,7 +362,7 @@ object SetMarkerModule : ModuleBase(){
     /**
      * マーカーツール　移動専用アイテムの作成。
      */
-    fun createMarkerToolM(amount: Int = 1) : ItemStack{
+    fun createMarkerToolM(amount: Int = 1): ItemStack {
         val item = ItemStack(Material.WARPED_FUNGUS_ON_A_STICK, amount)
         item.addUnsafeEnchantment(Enchantment.DURABILITY, 1)
         item.editMeta {
@@ -353,14 +374,43 @@ object SetMarkerModule : ModuleBase(){
         return item
     }
 
+    //その他
+
     /**
-     * アイテムが同じか比較
+     * 引数からチャット欄に返すコード。主にマーカーの状態表示
      */
-    fun isEqualItem(item1: ItemStack, item2: ItemStack) : Boolean{
-        if (item1.type != item2.type) return false
-        val lore1 = item1.lore() ?: return false
-        val lore2 = item2.lore() ?: return false
-        if (!Objects.equals(lore1[0], lore2[0])) return false
-        return true
+    fun reply(p: Player, int: Int) {
+        when (int) {
+            0 -> p.sendMessage("マーカー以外のブロックです")
+            1 -> p.sendMessage("あなたのマーカーではありません。移動もしくは破壊したい場合は、設置した本人にお願いしてください")
+            2 -> p.sendMessage("あなたのマーカーです。")
+            else -> p.sendMessage("-1,0,1,2以外の引数が渡されました。")
+        }
+    }
+
+    /**
+     * クリックしたブロックの面に応じて、返す座標を1マスずらします。
+     */
+    fun offset(loc: Location, blockFace: String): Location {
+        var reLoc = loc
+        when (blockFace) {
+            "NORTH" -> reLoc = Location(loc.world, loc.x, loc.y, loc.z - 1)
+            "EAST" -> reLoc = Location(loc.world, loc.x + 1, loc.y, loc.z)
+            "SOUTH" -> reLoc = Location(loc.world, loc.x, loc.y, loc.z + 1)
+            "WEST" -> reLoc = Location(loc.world, loc.x - 1, loc.y, loc.z)
+            "UP" -> reLoc = Location(loc.world, loc.x, loc.y + 1, loc.z)
+            "DOWN" -> reLoc = Location(loc.world, loc.x, loc.y - 1, loc.z)
+        }
+        return reLoc
+    }
+
+    fun infoList(list: MutableList<Location>?) {
+        if (list == null) {
+            Bukkit.getLogger().info("list is null")
+            return
+        }
+        for (i in list) {
+            Bukkit.getLogger().info("" + i)
+        }
     }
 }
