@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.transferGuide
 
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.modules.transferGuide.dataElements.TransferGuideData
@@ -20,6 +21,12 @@ class TransferGuideApp : AppBase() {
     }
 
     override fun isVisible(player: Player): Boolean {
-        return TransferGuideData().availableWorlds.contains(player.world.name)
+        return try {
+            TransferGuideData().availableWorlds.contains(player.world.name)
+        } catch (e: Exception) {
+            Bukkit.getLogger().warning("路線データが破損しています！")
+            e.printStackTrace()
+            false
+        }
     }
 }
