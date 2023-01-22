@@ -23,20 +23,17 @@ class SetMarkerHandler : Listener {
         val thisMarker = SetMarkerModule.isMarker(player, loc) //右クリックした対象がマーカーかどうか
         if (thisMarker == 1) {//他人のマーカー
             SetMarkerModule.reply(player, thisMarker)
-            return
         }
         if (thisMarker == 2) {//自分のマーカー
             if (SetMarkerModule.isMarkerTool(item)) {
                 SetMarkerModule.changeActiveMarker(player, loc)
             }
-            return
         }
         if (SetMarkerModule.isMarkerToolAD(item)) {
             Bukkit.getLogger().info("ADで右クリックしました")
             if (thisMarker == 0) {
                 val offsetLoc = SetMarkerModule.offset(loc, face)
                 SetMarkerModule.setMarker(player, offsetLoc)
-                return
             }
         }
         if (SetMarkerModule.isMarkerToolM(item)) {
@@ -44,9 +41,9 @@ class SetMarkerHandler : Listener {
             if (thisMarker == 0) {
                 val offsetLoc = SetMarkerModule.offset(loc, face)
                 SetMarkerModule.moveMarker(player, offsetLoc)
-                return
             }
         }
+        Bukkit.getLogger().info("" + thisMarker)
         Bukkit.getLogger().info("" + SetMarkerModule.isMarker(player, clickBlock.location))
     }
 

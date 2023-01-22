@@ -44,10 +44,9 @@ object SetMarkerModule : ModuleBase() {
         var index = getLocationIndex(p)
         val dest = Location(p.world, loc.x, loc.y, loc.z).toBlockLocation()
         var locationList: MutableList<Location>? = getLocationList(p)
+        infoList(locationList) //---------------------デバック！！！！！
         if (index < 0 || locationList == null) {
-            Bukkit.getLogger().info("追加座標 : $dest")
-            locationList?.add(dest)
-            infoList(locationList) //---------------------デバック！！！！！
+            locationList = mutableListOf(dest)//nullの時は.addだと動かない
             index = 0
             Bukkit.getLogger().info("リスト作成")
         } else if (index >= (locationList.size - 1)) {
@@ -62,8 +61,9 @@ object SetMarkerModule : ModuleBase() {
 
         dest.block.type = Material.SOUL_TORCH
         dest.block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
-        if (locationList != null && locationList.size >= 2 && index >= 1) {
+        if (locationList.size >= 2 && index >= 1) {
             locationList[index - 1].block.type = Material.REDSTONE_TORCH
+            locationList[index - 1].block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
         }
         saveLocationAll(p, locationList, index)
     }
@@ -104,9 +104,12 @@ object SetMarkerModule : ModuleBase() {
      * アクティブマーカー[index1]を[index2]へ移動
      */
     fun changeActiveMarker(p: Player, index1: Int, index2: Int) {
+        val pid = p.uniqueId.toString()
         val locationList = getLocationList(p) ?: return
         locationList[index1].block.type = Material.REDSTONE_TORCH
+        locationList[index1].block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
         locationList[index2].block.type = Material.SOUL_TORCH
+        locationList[index2].block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
         saveLocationIndex(p, index2)
     }
 
@@ -119,7 +122,8 @@ object SetMarkerModule : ModuleBase() {
      */
     fun isMarker(p: Player, loc: Location): Int {
         val pid = p.uniqueId.toString()
-        if (loc.block.type != Material.REDSTONE_TORCH) return 0
+        if (loc.block.type != Material.REDSTONE_TORCH && loc.block.type != Material.SOUL_TORCH) return 0
+        Bukkit.getLogger().info("ここまで実行")
         if (!loc.block.hasMetadata("marker")) return 0
         if (!loc.block.getMetadata("marker").equals(pid)) {
             return 1
@@ -261,7 +265,7 @@ object SetMarkerModule : ModuleBase() {
     fun getLocationList(player: Player): MutableList<Location>? {
         val conf: YamlConfiguration = marker.conf
         val pid = player.uniqueId.toString()
-        val playerSection = conf.getConfigurationSection(pid) ?: return null
+        val playerSection = conf.getConfigurationSection(pid) ?: return mutableListOf()
         return playerSection.getList(player.world.name) as MutableList<Location>?
     }
 
