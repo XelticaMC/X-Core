@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2023-01-21T20:40"
+update: "2023-01-22T22:22"
 update_info: |-
   路線追加:
    共天睦月電鉄(新草線、新鮫南北線、湖北線、足立線)
@@ -461,18 +461,18 @@ stations:
     type: station
     paths: [
       { to: mutsuki_kohoku_3, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 26, rapid_not_in_parallel: false },
-      { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 23, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 26, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_5:
     name: 塩川
     yomi: しおかわ
     number: MK-05
     world: main
-    location: [ 1250, -1000 ]
+    location: [ 1317.5, -1016.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_4, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 23, rapid_not_in_parallel: false },
-      { to: mutsuki_kohoku_6, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 22, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_4, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 26, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_6, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 18, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_6:
     name: 九条湖
@@ -482,7 +482,7 @@ stations:
     location: [ 1177.5, -1016.5 ]
     type: station
     paths: [
-      { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 22, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_5, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 18, rapid_not_in_parallel: false },
       { to: mutsuki_kohoku_7, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 38, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_7:
@@ -495,8 +495,6 @@ stations:
     paths: [
       { to: mutsuki_kohoku_6, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 38, rapid_not_in_parallel: false },
       { to: mutsuki_kohoku_8, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 34, rapid_not_in_parallel: false },
-      { to: kosaka, line: walk, direction: westwalk, time: 85, rapid_not_in_parallel: false },
-      { to: kosaka_c15, line: walk, direction: westwalk, time: 72, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_8:
     name: 猪熊海岸
@@ -508,6 +506,8 @@ stations:
     paths: [
       { to: mutsuki_kohoku_7, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 34, rapid_not_in_parallel: false },
       { to: mutsuki_kohoku_9, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 32, rapid_not_in_parallel: false },
+      { to: kosaka, line: walk, direction: northwalk, time: 54, rapid_not_in_parallel: false },
+      { to: kosaka_c15, line: walk, direction: southwalk, time: 78, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_9:
     name: 上忍大宮
@@ -519,8 +519,6 @@ stations:
     paths: [
       { to: mutsuki_kohoku_8, line: mutsuki_kohoku, direction: to_hidamari_sougen, time: 32, rapid_not_in_parallel: false },
       { to: mutsuki_kohoku_10, line: mutsuki_kohoku, direction: to_kasukotamagawa, time: 24, rapid_not_in_parallel: false },
-      { to: kosaka, line: walk, direction: westwalk, time: 58, rapid_not_in_parallel: false },
-      { to: kosaka_c15, line: walk, direction: westwalk, time: 115, rapid_not_in_parallel: false },
     ]
   mutsuki_kohoku_10:
     name: 片列
@@ -1740,8 +1738,7 @@ stations:
     type: station
     paths: [
       { to: enr_4_2, line: toki_gakuentoshi, direction: to_morikami, time: 251, rapid_not_in_parallel: false },
-      { to: mutsuki_kohoku_7, line: walk, direction: eastwalk, time: 85, rapid_not_in_parallel: false },
-      { to: mutsuki_kohoku_9, line: walk, direction: westwalk, time: 58, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_8, line: walk, direction: southwalk, time: 54, rapid_not_in_parallel: false },
       { to: kosaka_c15, line: walk, direction: southwalk, time: 90, rapid_not_in_parallel: false },
     ]
   kosaka_c15:
@@ -1753,8 +1750,7 @@ stations:
     type: station
     paths: [
       { to: kosaka_c16, line: kosaka_chuo, direction: to_prism_square, time: 39, rapid_not_in_parallel: false },
-      { to: mutsuki_kohoku_7, line: walk, direction: eastwalk, time: 72, rapid_not_in_parallel: false },
-      { to: mutsuki_kohoku_9, line: walk, direction: westwalk, time: 115, rapid_not_in_parallel: false },
+      { to: mutsuki_kohoku_8, line: walk, direction: northwalk, time: 78, rapid_not_in_parallel: false },
       { to: kosaka, line: walk, direction: northwalk, time: 90, rapid_not_in_parallel: false },
     ]
   kosaka_c16:
@@ -1790,6 +1786,7 @@ stations:
       { to: wildarea2_central_e, line: walk, direction: northwalk, time: 31, rapid_not_in_parallel: false },
       { to: wildarea2_tt_w_04, line: walk, direction: northwalk, time: 23, rapid_not_in_parallel: false },
       { to: wildarea2_tt_w_05, line: wildarea2_tt_w_05, direction: to_wildarea2_tt_w_05, time: 54, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_06_1, line: wildarea2_mesa, direction: south, time: 45, rapid_not_in_parallel: false },
     ]
   wildarea2_central_e:
     name: 共有拠点(東)
@@ -1824,6 +1821,49 @@ stations:
     paths: [
       { to: wildarea2_tt_w_01_2, line: wildarea2_tt_w_01, direction: to_wildarea2_central, time: 304, rapid_not_in_parallel: false },
     ]
+  wildarea2_tt_w_02:
+    name: スケルトンTT(TT-W-02)
+    yomi: すけるとんとらっぷたわー
+    number: TT-W-02
+    world: wildarea2
+    location: [ -50.5,793.5 ]
+    type: station
+    paths: [
+      { to: wildarea2_tt_w_02_3, line: wildarea2_tt_w_02, direction: to_wildarea2_tt_w_02a, time: 5, rapid_not_in_parallel: false },
+    ]
+  wildarea2_tt_w_02_1:
+    name: スケルトンTTデルタ
+    yomi: すけるとんとらっぷたわーでるた
+    number:
+    world: wildarea2
+    location: [ -50.5, 750.5 ]
+    type: signal_station
+    paths: [
+      { to: wildarea2_tt_w_02, line: wildarea2_tt_w_02, direction: to_wildarea2_tt_w_02, time: 8, rapid_not_in_parallel: false },
+      { to: wildarea2_yms_02, line: wildarea2_mesa, direction: south, time: 605, rapid_not_in_parallel: false },
+    ]
+  wildarea2_tt_w_02_2:
+    name: スケルトンTTデルタ
+    yomi: すけるとんとらっぷたわーでるた
+    number:
+    world: wildarea2
+    location: [ -33.0, 752.5 ]
+    type: signal_station
+    paths: [
+      { to: wildarea2_tt_w_02, line: wildarea2_tt_w_02, direction: to_wildarea2_tt_w_02, time: 11, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_06_2, line: wildarea2_mesa, direction: north, time: 44, rapid_not_in_parallel: false },
+    ]
+  wildarea2_tt_w_02_3:
+    name: スケルトンTTデルタ
+    yomi: すけるとんとらっぷたわーでるた
+    number:
+    world: wildarea2
+    location: [ -53.0,765.5 ]
+    type: signal_station
+    paths: [
+      { to: wildarea2_tt_w_06_2, line: wildarea2_tt_w_02_to_mesa, direction: north, time: 27, rapid_not_in_parallel: false },
+      { to: wildarea2_yms_02, line: wildarea2_tt_w_02_to_mesa, direction: north, time: 608, rapid_not_in_parallel: false },
+    ]
   wildarea2_tt_w_03:
     name: 海底神殿跡地TT(TT-W-03)
     yomi: かいていしんでんあとちとらっぷたわー
@@ -1854,6 +1894,59 @@ stations:
     type: station
     paths: [
       { to: wildarea2_central_w, line: wildarea2_tt_w_05, direction: to_wildarea2_central, time: 54, rapid_not_in_parallel: false },
+    ]
+  wildarea2_tt_w_06:
+    name: クリーパートラップ(TT-W-06)
+    yomi: くりーぱーとらっぷ
+    number: TT-W-06
+    world: wildarea2
+    location: [ -128.0, 457.5 ]
+    type: station
+    paths: [
+      { to: wildarea2_tt_w_06_3, line: wildarea2_tt_w_06, direction: to_wildarea2_tt_w_06a, time: 10, rapid_not_in_parallel: false },
+    ]
+  wildarea2_tt_w_06_1:
+    name: 砂漠海岸1信号所
+    yomi: さばくかいがんいちしんごうじょ
+    number:
+    world: wildarea2
+    location: [ -51.5, 370.5 ]
+    type: signal_station
+    paths: [
+      { to: wildarea2_tt_w_02_1, line: wildarea2_mesa, direction: south, time: 50, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_06, line: wildarea2_tt_w_06, direction: to_wildarea2_tt_w_06, time: 24, rapid_not_in_parallel: false },
+    ]
+  wildarea2_tt_w_06_2:
+    name: 砂漠海岸2信号所
+    yomi: さばくかいがんにしんごうじょ
+    number:
+    world: wildarea2
+    location: [ -52.5, 562.0 ]
+    type: signal_station
+    paths: [
+      { to: wildarea2_central_w, line: wildarea2_mesa, direction: north, time: 68, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_06, line: wildarea2_tt_w_06, direction: to_wildarea2_tt_w_06, time: 24, rapid_not_in_parallel: false },
+    ]
+  wildarea2_tt_w_06_3:
+    name: 砂漠海岸海上信号所
+    yomi: さばくかいがんかいじょうしんごうじょ
+    number:
+    world: wildarea2
+    location: [ -63.0,456.5 ]
+    type: signal_station
+    paths: [
+      { to: wildarea2_central_w, line: wildarea2_tt_w_06_to_mesa, direction: north, time: 57, rapid_not_in_parallel: false },
+      { to: wildarea2_tt_w_02_1, line: wildarea2_tt_w_06_to_mesa, direction: south, time: 39, rapid_not_in_parallel: false },
+    ]
+  wildarea2_yms_02:
+    name: 流氷海岸
+    yomi: りゅうひょうかいがん
+    number: YMS-02
+    world: wildarea2
+    location: [ 20.5,5550.5 ]
+    type: station
+    paths: [
+      { to: wildarea2_tt_w_02_2, line: wildarea2_mesa, direction: north, time: 602, rapid_not_in_parallel: false },
     ]
   wildarea2_nether_central:
     name: 拠点
@@ -2275,6 +2368,24 @@ lines:
       wildarea2_tt_w_01_2,
       wildarea2_tt_w_01,
     ]
+  wildarea2_tt_w_02:
+    name: スケルトンTT連絡線
+    rapid: false
+    stations: [
+      wildarea2_tt_w_02,
+      wildarea2_tt_w_02_1,
+      wildarea2_tt_w_02_2,
+      wildarea2_tt_w_02_3,
+      wildarea2_yms_02,
+    ]
+  wildarea2_tt_w_02_to_mesa:
+    name: スケルトンTT連絡線→メサ線
+    rapid: false
+    stations: [
+      wildarea2_tt_w_02_3,
+      wildarea2_tt_w_06_2,
+      wildarea2_yms_02,
+    ]
   wildarea2_tt_w_03:
     name: 海底神殿跡地TT連絡線
     world: wildarea2
@@ -2290,6 +2401,38 @@ lines:
     stations: [
       wildarea2_central_w,
       wildarea2_tt_w_05,
+    ]
+  wildarea2_tt_w_06:
+    name: クリーパートラップ連絡線
+    world: wildarea2
+    rapid: false
+    stations: [
+      wildarea2_tt_w_06,
+      wildarea2_tt_w_06_1,
+      wildarea2_tt_w_06_2,
+      wildarea2_tt_w_06_3,
+    ]
+  wildarea2_tt_w_06_to_mesa:
+    name: クリーパートラップ連絡線→メサ線
+    world: wildarea2
+    rapid: false
+    stations: [
+      wildarea2_tt_w_06,
+      wildarea2_tt_w_06_3,
+      wildarea2_central_w,
+      wildarea2_tt_w_02_1,
+    ]
+  wildarea2_mesa:
+    name: メサ線
+    world: wildarea2
+    rapid: false
+    stations: [
+      wildarea2_central_w,
+      wildarea2_tt_w_06_1,
+      wildarea2_tt_w_06_2,
+      wildarea2_tt_w_02_1,
+      wildarea2_tt_w_02_2,
+      wildarea2_yms_02,
     ]
   wildarea2_nether_tt_n_01_a:
     name: ポテト屋連絡線(氷ボート)
@@ -2367,8 +2510,11 @@ directions:
   to_wildarea2_central: 共有拠点方面
   to_wildarea2_tt_w_01: ゾンビTT方面
   to_wildarea2_tt_w_02: スケルトンTT方面
+  to_wildarea2_tt_w_02a: スケルトンTTデルタ方面
   to_wildarea2_tt_w_03: 海底神殿跡地TT方面
   to_wildarea2_tt_w_05: 洞窟蜘蛛TT方面
+  to_wildarea2_tt_w_06: クリーパートラップ方面
+  to_wildarea2_tt_w_06a: 砂漠海岸信号場方面
   to_wildarea2_nether_central: 拠点方面
   to_wildarea2_nether_tt_n_01: ポテト屋方面
   to_wildarea2_nether_end: エンド要塞方面
