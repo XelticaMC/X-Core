@@ -376,7 +376,7 @@ class TransferGuideSession(val player: Player) {
         val closed: MutableSet<KStation> = mutableSetOf()
 
         /**終点までの駅数リスト*/
-        val stepsList = calcStepsTo(data, endId ?: "")
+        val stepsList = calcStepsAndTimeTo(endId ?: "")
         if (data.consoleDebug) {
             logger.info("[TransferGuide(debug)] $stepsList")
         }
@@ -403,14 +403,16 @@ class TransferGuideSession(val player: Player) {
         }
         knitA@ while (i < data.loopMax) {
             //探索候補の駅に対し、それぞれの優先度を決定する
-            //計算式:(終点との直線距離×残り駅数),同じ路線なら÷2
+            //計算式:(((終点との直線距離÷2)+推定所要時間)×残り駅数),終点と同じ路線なら÷1.25
             opened.forEach {
-                var distance = TransferGuideUtil.calcDistance(end.location, it.key.location)
-                distance *= stepsList[it.key.id] ?: 1
-                if (getSameLines(data, it.key.id, endId!!).isNotEmpty()) {
-                    distance /= 1.25
+                val distance = TransferGuideUtil.calcDistance(end.location, it.key.location)
+                val steps = stepsList[it.key.id]?.first ?: 1
+                val time = stepsList[it.key.id]?.second ?: 1
+                var priority = (((distance / 2) + time) * steps)
+                if (getSameLines(it.key.id, endId!!).isNotEmpty()) {
+                    priority /= 1.25
                 }
-                opened[it.key] = distance
+                opened[it.key] = priority
             }
             if (data.consoleDebug) {
                 logger.info("[TransferGuide(debug)] ${loopADebugString()}")
@@ -664,9 +666,9 @@ class TransferGuideSession(val player: Player) {
     }
 
     /**
-     * 路線データの整合性をチェックし、整合性がある場合trueを返します。
+     * 路線データの整合性をチェックします。
      */
-    private fun verifyData(data: TransferGuideData): Boolean {
+    private fun verifyData(data: TransferGuideData) {
         val yellow = ChatColor.YELLOW
         var count = 0
         data.stations.forEach { station ->
@@ -765,25 +767,24 @@ class TransferGuideSession(val player: Player) {
         } else {
             player.sendMessage("${yellow}${count}個のデータ誤りが見つかりました。")
         }
-        return count == 0
     }
 
     /**
-     * 特定の駅へのステップ数を計算します。
+     * 特定の駅へのステップ数と所要時間を計算します。
      */
-    private fun calcStepsTo(data: TransferGuideData, destination: String): Map<String, Int> {
-        val map = mutableMapOf<String, Int>()
+    private fun calcStepsAndTimeTo(destination: String): Map<String, Pair<Int, Int>> {
+        val map = mutableMapOf<String, Pair<Int, Int>>()
         val stations = data.stations.toMutableMap()
-        map[destination] = 0
+        map[destination] = Pair(0, 0)
         stations.remove(destination)
         var i = 1
         while (i < data.loopMax && stations.isNotEmpty()) {
-            val beforeStepStations = map.filter { it.value == i - 1 }
+            val beforeStepStations = map.filter { it.value.first == i - 1 }
             beforeStepStations.forEach { beforeStepStation ->
                 data.stations[beforeStepStation.key]?.paths?.forEach { path ->
                     val pathTo = stations[path.to]
                     if (pathTo != null) {
-                        map[pathTo.id] = i
+                        map[pathTo.id] = Pair(i, beforeStepStation.value.second + (path.time ?: 0))
                         stations.remove(path.to)
                     }
                 }
@@ -796,7 +797,7 @@ class TransferGuideSession(val player: Player) {
     /**
      * 共通する路線を抽出します。
      */
-    private fun getSameLines(data: TransferGuideData, startId: String, endId: String): Array<String> {
+    private fun getSameLines(startId: String, endId: String): Array<String> {
         return data.lines.filter { it.value.stations.containsAll(setOf(startId, endId)) }.keys.toTypedArray()
     }
 }
