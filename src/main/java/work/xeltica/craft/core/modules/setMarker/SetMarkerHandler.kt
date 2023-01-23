@@ -1,7 +1,6 @@
 package work.xeltica.craft.core.modules.setMarker
 
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
@@ -20,7 +19,9 @@ class SetMarkerHandler : Listener {
         val loc = clickBlock.location
         val face = e.blockFace.toString()
         Bukkit.getLogger().info("右クリックしました")
+
         val thisMarker = SetMarkerModule.isMarker(player, loc) //右クリックした対象がマーカーかどうか
+        SetMarkerModule.reply(player, thisMarker)
         if (thisMarker == 1) {//他人のマーカー
             SetMarkerModule.reply(player, thisMarker)
         }
@@ -52,7 +53,6 @@ class SetMarkerHandler : Listener {
         val player = e.player
         val item = e.player.inventory.itemInMainHand
         if (Action.RIGHT_CLICK_AIR == e.action && e.hand == EquipmentSlot.HAND) {
-            Bukkit.getLogger().info("空気を右クリックしました")
             SetMarkerModule.toolSwitching(player, item)
         }
     }
@@ -61,21 +61,12 @@ class SetMarkerHandler : Listener {
     fun onLClick(e: PlayerInteractEvent) {
         val player = e.player
         val item = e.player.inventory.itemInMainHand
-        if (listOf(Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK).contains(e.action)) {
-            val clickBlock = e.clickedBlock ?: return
-            val loc = clickBlock.location
-            Bukkit.getLogger().info("左クリックしました")
-            if (SetMarkerModule.isMarkerToolAD(item)) {
-                Bukkit.getLogger().info("ADを左クリックしました")
-                if ((loc.block.type == Material.REDSTONE_TORCH || loc.block.type == Material.SOUL_TORCH)) {
-                    if (SetMarkerModule.isMarker(player, loc) == 2) {
-                        SetMarkerModule.dellMarker(player, clickBlock.location)
-                    } else if (SetMarkerModule.isMarker(player, loc) == 1) {
-                        //撤去イベントキャンセル
-                    }
-                }
-            }
-        }
-
+        if (!listOf(Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK).contains(e.action)) return
+        val clickBlock = e.clickedBlock ?: return
+        val loc = clickBlock.location
+        Bukkit.getLogger().info("左クリックしました")
+        if (!SetMarkerModule.isMarkerToolAD(item)) return
+        Bukkit.getLogger().info("ADを左クリックしました")
+        
     }
 }

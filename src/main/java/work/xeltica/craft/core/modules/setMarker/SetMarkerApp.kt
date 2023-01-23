@@ -1,6 +1,5 @@
 package work.xeltica.craft.core.modules.setMarker
 
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
@@ -21,8 +20,9 @@ class SetMarkerApp : AppBase() {
                     SetMarkerModule.setMarker(player)
                 }, Material.REDSTONE_TORCH),
                 MenuItem("確認", {
-                    SetMarkerModule.infoMarker(player)
-                    Bukkit.getLogger().info(SetMarkerModule.getAllPrefix().toString())
+                    //SetMarkerModule.infoMarker(player)
+                    //Bukkit.getLogger().info(SetMarkerModule.getAllPrefix().toString())
+                    SetMarkerModule.searchLocationPid(player.location, player.world.name)
                 }, Material.BLUE_DYE),
                 MenuItem("削除", {
                     SetMarkerModule.dellAll(player)

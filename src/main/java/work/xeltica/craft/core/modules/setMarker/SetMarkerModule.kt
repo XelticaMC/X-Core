@@ -60,10 +60,10 @@ object SetMarkerModule : ModuleBase() {
         }
 
         dest.block.type = Material.SOUL_TORCH
-        dest.block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
+        dest.block.setMetadata("marker", FixedMetadataValue(XCorePlugin.instance, pid))
         if (locationList.size >= 2 && index >= 1) {
             locationList[index - 1].block.type = Material.REDSTONE_TORCH
-            locationList[index - 1].block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
+            locationList[index - 1].block.setMetadata("marker", FixedMetadataValue(XCorePlugin.instance, pid))
         }
         saveLocationAll(p, locationList, index)
     }
@@ -87,7 +87,7 @@ object SetMarkerModule : ModuleBase() {
         locationList[index].block.type = Material.AIR
         locationList[index] = dest
         locationList[index].block.type = Material.SOUL_TORCH
-        locationList[index].block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
+        locationList[index].block.setMetadata("marker", FixedMetadataValue(XCorePlugin.instance, pid))
         saveLocationList(p, locationList)
     }
 
@@ -107,9 +107,9 @@ object SetMarkerModule : ModuleBase() {
         val pid = p.uniqueId.toString()
         val locationList = getLocationList(p) ?: return
         locationList[index1].block.type = Material.REDSTONE_TORCH
-        locationList[index1].block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
+        locationList[index1].block.setMetadata("marker", FixedMetadataValue(XCorePlugin.instance, pid))
         locationList[index2].block.type = Material.SOUL_TORCH
-        locationList[index2].block.setMetadata("maker", FixedMetadataValue(XCorePlugin.instance, pid))
+        locationList[index2].block.setMetadata("marker", FixedMetadataValue(XCorePlugin.instance, pid))
         saveLocationIndex(p, index2)
     }
 
@@ -122,10 +122,13 @@ object SetMarkerModule : ModuleBase() {
      */
     fun isMarker(p: Player, loc: Location): Int {
         val pid = p.uniqueId.toString()
+
         if (loc.block.type != Material.REDSTONE_TORCH && loc.block.type != Material.SOUL_TORCH) return 0
-        Bukkit.getLogger().info("ここまで実行")
+        Bukkit.getLogger().info("" + loc.block.hasMetadata("marker"))
         if (!loc.block.hasMetadata("marker")) return 0
-        if (!loc.block.getMetadata("marker").equals(pid)) {
+        val metadata = loc.block.getMetadata("marker")
+        Bukkit.getLogger().info("" + metadata[0].asString() + "" + pid)
+        if (metadata[0].asString() != pid) {
             return 1
         }
         return 2
@@ -160,7 +163,8 @@ object SetMarkerModule : ModuleBase() {
         val loc = locationList[index]
         if (loc.block.type != Material.REDSTONE_TORCH) return true
         if (!loc.block.hasMetadata("marker")) return true
-        if (!loc.block.getMetadata("marker").equals(pid)) {
+        val metadata = loc.block.getMetadata("marker")
+        if (metadata[0].asString() != pid) {
             p.sendMessage("自分のマーカーではないため削除できません。")
             return false
         }
@@ -270,6 +274,15 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
+     * [pid]と[worldName]から座標リストを返します。
+     */
+    fun getLocationList(pid: String, worldName: String): MutableList<Location>? {
+        val conf: YamlConfiguration = marker.conf
+        val playerSection = conf.getConfigurationSection(pid) ?: return mutableListOf()
+        return playerSection.getList(worldName) as MutableList<Location>?
+    }
+
+    /**
      * [player]に紐づいているインデックスを返します。
      * setMarkerでは最後に追加された点として利用
      */
@@ -308,6 +321,23 @@ object SetMarkerModule : ModuleBase() {
         } catch (e: IOException) {
             e.printStackTrace()
         }
+    }
+
+    /**
+     * すべての座標のなかに座標:[loc]があるか検索します。
+     * @return その座標があったpidを返します。なかった場合はnullが返ります
+     */
+    fun searchLocationPid(location: Location, worldName: String): String? {
+        val loc = Location(location.world, location.x, location.y, location.z).toBlockLocation()
+        Bukkit.getLogger().info("" + loc)
+        val keyList = marker.conf.getKeys(false).toList()
+        for (pid in keyList) {
+            val locationList = getLocationList(pid, worldName)
+            if (locationList != null && locationList.contains(loc)) {
+                return pid
+            }
+        }
+        return null
     }
 
     fun getAllPrefix(): Set<String> {
