@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.signEdit
 
+import org.bukkit.Material
 import org.bukkit.block.Sign
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
@@ -13,6 +14,8 @@ class SignEditHandler : Listener {
     fun onSignClick(e: PlayerInteractEvent) {
         // 右クリックでない or スニークしていない なら中止
         if (e.action !== Action.RIGHT_CLICK_BLOCK || !e.player.isSneaking) return
+        // 素手でない場合は中止
+        if (e.player.inventory.itemInMainHand.type != Material.AIR || e.player.inventory.itemInOffHand.type != Material.AIR) return
         // 既にキャンセルされているなら中止
         if (e.useInteractedBlock() == Event.Result.DENY) return
         // クリックしたブロックが看板でなければ中止
