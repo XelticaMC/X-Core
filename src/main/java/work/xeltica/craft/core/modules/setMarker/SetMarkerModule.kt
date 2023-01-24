@@ -41,6 +41,7 @@ object SetMarkerModule : ModuleBase() {
         val pid = p.uniqueId.toString()
         var index = getLocationIndex(p)
         val dest = Location(p.world, loc.x, loc.y, loc.z).toBlockLocation()
+        if (!replaceable.contains(dest.block.type)) return
         var locationList: MutableList<Location>? = getLocationList(p)
         if (index < 0 || locationList == null) {
             locationList = mutableListOf(dest)//nullの時は.addだと動かない
@@ -52,7 +53,6 @@ object SetMarkerModule : ModuleBase() {
             index++
             locationList.add(index, dest)
         }
-
         dest.block.type = Material.SOUL_TORCH
         if (locationList.size >= 2 && index >= 1) {
             locationList[index - 1].block.type = Material.REDSTONE_TORCH
@@ -178,13 +178,13 @@ object SetMarkerModule : ModuleBase() {
     fun infoMarker(p: Player) {
         val locationList = getLocationList(p)
         if (locationList == null) {
-            Bukkit.getLogger().info("List is null")
+            p.sendMessage("このワールドに所有マーカーはありません")
             return
         }
         for (i in locationList.indices) {
             Bukkit.getLogger().info("" + i + "：" + locationList[i])
         }
-        Bukkit.getLogger().info("合計：" + locationList.size)
+        p.sendMessage("合計：" + locationList.size)
     }
 
     //コンフィグ関係
@@ -307,7 +307,6 @@ object SetMarkerModule : ModuleBase() {
      */
     fun searchLocationPid(location: Location, worldName: String): String? {
         val loc = Location(location.world, location.x, location.y, location.z).toBlockLocation()
-        Bukkit.getLogger().info("" + loc)
         val keyList = marker.conf.getKeys(false).toList()
         for (pid in keyList) {
             val locationList = getLocationList(pid, worldName)
@@ -389,18 +388,6 @@ object SetMarkerModule : ModuleBase() {
     //その他
 
     /**
-     * 引数からチャット欄に返すコード。主にマーカーの状態表示
-     */
-    fun reply(p: Player, int: Int) {
-        when (int) {
-            0 -> p.sendMessage("マーカー以外のブロックです")
-            1 -> p.sendMessage("あなたのマーカーではありません。移動もしくは破壊したい場合は、設置した本人にお願いしてください")
-            2 -> p.sendMessage("あなたのマーカーです。")
-            else -> p.sendMessage("-1,0,1,2以外の引数が渡されました。")
-        }
-    }
-
-    /**
      * クリックしたブロックの面に応じて、返す座標を1マスずらします。
      */
     fun offset(loc: Location, blockFace: String): Location {
@@ -416,13 +403,14 @@ object SetMarkerModule : ModuleBase() {
         return reLoc
     }
 
-    fun infoList(list: MutableList<Location>?) {
-        if (list == null) {
-            Bukkit.getLogger().info("list is null")
-            return
-        }
-        for (i in list) {
-            Bukkit.getLogger().info("" + i)
-        }
-    }
+    /**
+     * 置換可能ブロックリスト
+     */
+    private val replaceable = listOf(
+            Material.AIR,
+            Material.GRASS,
+            Material.FERN,
+            Material.TALL_GRASS,
+            Material.LARGE_FERN
+    )
 }

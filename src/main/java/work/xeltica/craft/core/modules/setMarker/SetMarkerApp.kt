@@ -12,24 +12,27 @@ class SetMarkerApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.TNT
 
     override fun onLaunch(player: Player) {
-        // TODO("Not yet implemented")
         val gui = Gui.getInstance()
 
-        gui.openMenu(player, "test", listOf(
-                MenuItem("マーカー設置", {
-                    SetMarkerModule.setMarker(player)
+        gui.openMenu(player, "マーカーメニュー", listOf(
+                MenuItem("新規設置", {
+                    SetMarkerModule.infoMarker(player)
+                    SetMarkerModule.searchLocationPid(player.location, player.world.name)
                 }, Material.REDSTONE_TORCH),
+                MenuItem("移動", {
+                    SetMarkerModule.infoMarker(player)
+                    SetMarkerModule.searchLocationPid(player.location, player.world.name)
+                }, Material.SOUL_TORCH),
+                MenuItem("全消去", {
+                    SetMarkerModule.dellAll(player)
+                }, Material.STRUCTURE_VOID),
                 MenuItem("確認", {
                     SetMarkerModule.infoMarker(player)
-                    //Bukkit.getLogger().info(SetMarkerModule.getAllPrefix().toString())
                     SetMarkerModule.searchLocationPid(player.location, player.world.name)
-                }, Material.BLUE_DYE),
-                MenuItem("削除", {
-                    SetMarkerModule.dellAll(player)
-                }, Material.RED_DYE),
+                }, Material.KNOWLEDGE_BOOK),
                 MenuItem("ツール取得", {
                     player.world.dropItem(player.location, SetMarkerModule.createMarkerToolAD(1))
-                }, Material.SOUL_TORCH),
+                }, Material.CARROT_ON_A_STICK),
         ))
     }
 }
