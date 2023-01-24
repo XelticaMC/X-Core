@@ -151,8 +151,6 @@ object SetMarkerModule : ModuleBase() {
      * LocationListから指定したインデックスの座標とマーカーを削除（自分のマーカーでない場合は削除されたものとする）
      * @return 削除できたかどうか（成功：true 失敗:false）
      */
-
-    //index はずらさない時とずらすときがあるのでそこを修正中
     fun dellMarker(p: Player, index_: Int): Boolean {
         var index = index_
         val pid = p.uniqueId.toString()
@@ -195,17 +193,21 @@ object SetMarkerModule : ModuleBase() {
      * マーカーコンフィグから、今いるワールドの座標リストをコンソールに出力します。
      */
     fun infoMarker(p: Player) {
+        // ToDo チャット欄に座標リストをページを分けて出力できるようにする。
         val locationList = getLocationList(p)
         if (locationList == null) {
             p.sendMessage("このワールドに所有マーカーはありません")
             return
         }
+
+        /*
         Bukkit.getLogger().info("----------------------------------------")
         for (i in locationList.indices) {
             Bukkit.getLogger().info("" + i + "：" + locationList[i])
         }
         Bukkit.getLogger().info("合計：" + locationList.size)
         Bukkit.getLogger().info("----------------------------------------")
+        */
         p.sendMessage("合計：" + locationList.size)
     }
 
@@ -230,14 +232,14 @@ object SetMarkerModule : ModuleBase() {
     /**
      * [player] の [locationList] を保存します。
      */
-    fun saveLocationList(player: Player, locationList: MutableList<Location>) {
+    fun saveLocationList(p: Player, locationList: MutableList<Location>) {
         val conf: YamlConfiguration = marker.conf
-        val pid = player.uniqueId.toString()
+        val pid = p.uniqueId.toString()
         var playerSection = conf.getConfigurationSection(pid)
         if (playerSection == null) {
             playerSection = conf.createSection(pid)
         }
-        playerSection.set(player.world.name, locationList)
+        playerSection.set(p.world.name, locationList)
         try {
             marker.save()
         } catch (e: IOException) {
@@ -248,14 +250,14 @@ object SetMarkerModule : ModuleBase() {
     /**
      * [player] のマーカー番号 [index] を保存します。
      */
-    fun saveLocationIndex(player: Player, index_: Int) {
+    fun saveLocationIndex(p: Player, index: Int) {
         val conf: YamlConfiguration = marker.conf
-        val pid = player.uniqueId.toString()
+        val pid = p.uniqueId.toString()
         var playerSection = conf.getConfigurationSection(pid)
         if (playerSection == null) {
             playerSection = conf.createSection(pid)
         }
-        playerSection.set(player.world.name + " index", index_)
+        playerSection.set(p.world.name + " index", index)
         try {
             marker.save()
         } catch (e: IOException) {
@@ -263,15 +265,18 @@ object SetMarkerModule : ModuleBase() {
         }
     }
 
-    fun saveLocationAll(player: Player, locationList: MutableList<Location>?, index: Int) {
+    /**
+     * 座標リストとアクティブマーカーのインデックスを保存
+     */
+    fun saveLocationAll(p: Player, locationList: MutableList<Location>?, index: Int) {
         val conf: YamlConfiguration = marker.conf
-        val pid = player.uniqueId.toString()
+        val pid = p.uniqueId.toString()
         var playerSection = conf.getConfigurationSection(pid)
         if (playerSection == null) {
             playerSection = conf.createSection(pid)
         }
-        playerSection.set(player.world.name, locationList)
-        playerSection.set(player.world.name + " index", index)
+        playerSection.set(p.world.name, locationList)
+        playerSection.set(p.world.name + " index", index)
         try {
             marker.save()
         } catch (e: IOException) {
@@ -282,11 +287,11 @@ object SetMarkerModule : ModuleBase() {
     /**
      * [player]と紐づいている、プレイヤーが今いるワールドの座標リストを返します。
      */
-    fun getLocationList(player: Player): MutableList<Location>? {
+    fun getLocationList(p: Player): MutableList<Location>? {
         val conf: YamlConfiguration = marker.conf
-        val pid = player.uniqueId.toString()
+        val pid = p.uniqueId.toString()
         val playerSection = conf.getConfigurationSection(pid) ?: return mutableListOf()
-        return playerSection.getList(player.world.name) as MutableList<Location>?
+        return playerSection.getList(p.world.name) as MutableList<Location>?
     }
 
     /**
@@ -312,11 +317,11 @@ object SetMarkerModule : ModuleBase() {
     /**
      * [player]のいるワールドのLocationListを削除
      */
-    fun deleteLocationList(player: Player) {
+    fun deleteLocationList(p: Player) {
         val conf: YamlConfiguration = marker.conf
-        val pid = player.uniqueId.toString()
+        val pid = p.uniqueId.toString()
         val playerSection = conf.getConfigurationSection(pid) ?: return
-        playerSection.set(player.world.name, null)
+        playerSection.set(p.world.name, null)
         try {
             marker.save()
         } catch (e: IOException) {
@@ -327,11 +332,11 @@ object SetMarkerModule : ModuleBase() {
     /**
      * [player]に紐づいているインデックスを削除
      */
-    fun deleteLocationIndex(player: Player) {
+    fun deleteLocationIndex(p: Player) {
         val conf: YamlConfiguration = marker.conf
-        val pid = player.uniqueId.toString()
+        val pid = p.uniqueId.toString()
         val playerSection = conf.getConfigurationSection(pid) ?: return
-        playerSection.set(player.world.name + " index", null)
+        playerSection.set(p.world.name + " index", null)
         try {
             marker.save()
         } catch (e: IOException) {
@@ -383,7 +388,9 @@ object SetMarkerModule : ModuleBase() {
         return false
     }
 
-
+    /**
+     * ツールを交換
+     */
     fun toolSwitching(p: Player, item: ItemStack) {
         if (isMarkerToolAD(item)) {
             p.inventory.setItemInMainHand(createMarkerToolM())
