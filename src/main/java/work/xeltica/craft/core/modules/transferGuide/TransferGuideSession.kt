@@ -23,6 +23,7 @@ import work.xeltica.craft.core.modules.transferGuide.routeElements.KRoute
 import java.io.IOException
 import java.util.UUID
 import java.util.function.Consumer
+import kotlin.math.abs
 
 /**
  * プレイヤーがアプリを開いてから閉じるまでの一連の流れ(セッション)を表します。
@@ -134,7 +135,7 @@ class TransferGuideSession(val player: Player) {
             MenuItem("出発地点:$startStationName", { chooseStation(StationChoiceTarget.START) }, Material.LIME_BANNER),
             MenuItem("到着地点:$endStationName", { chooseStation(StationChoiceTarget.END) }, Material.RED_BANNER),
             MenuItem("出発地点と到着地点を入れ替える", { reverseChosenStations() }, Material.LEVER),
-            MenuItem("計算開始", { calcRoute() }, Material.COMMAND_BLOCK_MINECART),
+            MenuItem("計算開始", { showRoute(calcRoute(startId, endId)) }, Material.COMMAND_BLOCK_MINECART),
             MenuItem("駅情報", { openStationInfoMenu() }, Material.CHEST_MINECART),
         )
         if (data.availableWorlds[player.world.name] == "main") {
@@ -392,31 +393,31 @@ class TransferGuideSession(val player: Player) {
      * 選択した駅からルートを検索します。
      * A*アルゴリズムの実装になっているハズ、多分
      */
-    private fun calcRoute() {
+    private fun calcRoute(startId: String?, endId: String?): KRoute? {
         if (startId == null && endId == null) {
             gui.error(player, "駅が設定されていません！")
-            return
+            return null
         } else if (startId == endId) {
             gui.error(player, "出発地点と到着地点が同一です。")
-            return
+            return null
         } else if (startId == null) {
             gui.error(player, "出発地点が設定されていません！")
-            return
+            return null
         } else if (endId == null) {
             gui.error(player, "到着地点が設定されていません！")
-            return
+            return null
         }
         val start = data.stations[startId]
         if (start == null) {
             gui.error(player, "出発地点に存在しない駅が指定されました。")
             logger.warning("[TransferGuideData] 存在しない駅ID:${startId}")
-            return
+            return null
         }
         val end = data.stations[endId]
         if (end == null) {
             gui.error(player, "到着地点に存在しない駅が指定されました。")
             logger.warning("[TransferGuideData] 存在しない駅ID:${endId}")
-            return
+            return null
         }
         /**未探索の駅*/
         val unsearched = data.stations.toMutableMap()
@@ -428,7 +429,7 @@ class TransferGuideSession(val player: Player) {
         val closed: MutableSet<KStation> = mutableSetOf()
 
         /**終点までの駅数リスト*/
-        val stepsList = calcStepsAndTimeTo(endId ?: "")
+        val stepsList = calcStepsAndTimeTo(endId)
         if (data.consoleDebug) {
             logger.info("[TransferGuide(debug)] $stepsList")
         }
@@ -461,7 +462,7 @@ class TransferGuideSession(val player: Player) {
                 val steps = stepsList[it.key.id]?.first ?: 1
                 val time = stepsList[it.key.id]?.second ?: 1
                 var priority = (((distance / 2) + time) * steps)
-                if (getSameLines(it.key.id, endId!!).isNotEmpty()) {
+                if (getSameLines(it.key.id, endId).isNotEmpty()) {
                     priority /= 1.25
                 }
                 opened[it.key] = priority
@@ -475,7 +476,7 @@ class TransferGuideSession(val player: Player) {
             if (minOpenedStation == null) {
                 gui.error(player, "指定された駅同士を結ぶ有効な経路が存在しません。")
                 logger.warning("[TransferGuide] 最小値からの駅探索失敗A\n${loopADebugString()}")
-                return
+                return null
             }
             //優先度値が最も低い駅を探索候補から探索済へ移動
             closed.add(minOpenedStation.key)
@@ -501,7 +502,7 @@ class TransferGuideSession(val player: Player) {
         if (i >= data.loopMax && closed.none { it.id == endId }) {
             player.sendMessage("計算回数が既定の回数以上になった為、強制終了しました。")
             logger.warning("[TransferGuide] 計算回数(${i})がloopMax(${data.loopMax})以上になりました。\nloopMaxの値を上げても解決しない場合、バグの可能性があります。\n${loopADebugString()}")
-            return
+            return null
         }
         /**経路を通る駅の一覧で表したリスト*/
         val routeArrayList = ArrayList<KStation>()
@@ -554,7 +555,7 @@ class TransferGuideSession(val player: Player) {
             if (max == null) {
                 gui.error(player, "最小値からの駅探索Bに失敗しました。")
                 logger.warning("[TransferGuideData] 最小値からの駅探索失敗B\n${loopBDebugString()}")
-                return
+                return null
             }
             //選択した駅を探索済みリストから経路リストに移動
             routeArrayList.add(max.key)
@@ -569,8 +570,9 @@ class TransferGuideSession(val player: Player) {
             j++
         }
         if (j >= data.loopMax) {
-            player.sendMessage("計算回数が規定の回数以上になった為、計算を打ち切りました。以下の出力結果は正しくない場合があります。")
+            player.sendMessage("計算回数が規定の回数以上になった為、計算を打ち切りました。")
             logger.warning("[TransferGuide] 計算回数(${j})がloopMax(${data.loopMax})以上になりました。\nloopMaxの値を上げても解決しない場合、バグの可能性があります。\n${loopBDebugString()}")
+            return null
         }
         //終点→始点になっているので、反転させる
         routeArrayList.reverse()
@@ -599,8 +601,11 @@ class TransferGuideSession(val player: Player) {
         if (data.consoleDebug) {
             logger.info("routeArray=${routeArray.joinToString { it.id }}")
         }
-        //結果表示
-        player.sendMessage(KRoute(data, routeArray).toStringForGuide())
+        return KRoute(data, routeArray)
+    }
+
+    private fun showRoute(route: KRoute?) {
+        player.sendMessage(route?.toStringForGuide() ?: "空白")
     }
 
     /**
@@ -780,10 +785,10 @@ class TransferGuideSession(val player: Player) {
      */
     private fun openDebugMenu() {
         val items = arrayListOf(
-            MenuItem("路線データの整合性チェック", { verifyData(data) }, Material.SPYGLASS),
-            MenuItem(
-                "戻る", { openMainMenu() }, Material.REDSTONE_TORCH
-            ),
+            MenuItem("路線データの整合性チェック", { verifyData() }, Material.SPYGLASS),
+            MenuItem("全経路チェック", { verifyAllRoutesWarn(false) }, Material.SPYGLASS),
+            MenuItem("全経路チェック(到達可能性のみ)", { verifyAllRoutesWarn(true) }, Material.SPYGLASS),
+            MenuItem("戻る", { openMainMenu() }, Material.REDSTONE_TORCH),
         )
         gui.openMenu(player, "デバッグメニュー", items)
     }
@@ -791,7 +796,7 @@ class TransferGuideSession(val player: Player) {
     /**
      * 路線データの整合性をチェックします。
      */
-    private fun verifyData(data: TransferGuideData) {
+    private fun verifyData() {
         val yellow = ChatColor.YELLOW
         var count = 0
         data.stations.forEach { station ->
@@ -889,6 +894,79 @@ class TransferGuideSession(val player: Player) {
             player.sendMessage("データに誤りは見つかりませんでした。")
         } else {
             player.sendMessage("${yellow}${count}個のデータ誤りが見つかりました。")
+        }
+    }
+
+    /**
+     * 全駅が全駅に対して到達可能であることを確認する前の確認をします。
+     */
+    private fun verifyAllRoutesWarn(onlyReachable: Boolean) {
+        gui.openTextInput(
+            player, "この処理にはサーバーのパフォーマンスに影響を与える可能性があります。本当に実行しますか？\n" +
+                    "実行する場合、「Knitは天才」、実行しない場合はそれ以外の文字列をチャット欄に打ち込んで下さい。\n" +
+                    "${ChatColor.YELLOW}あなたがスタッフではない場合、セキュリティ上重大なバグが発生しています。実行せずにバグ報告をして下さい。"
+        ) {
+            if (it != "Knitは天才" || !player.isOp) {
+                player.sendMessage("実行をキャンセルしました。")
+                return@openTextInput
+            }
+            verifyAllRoutes(onlyReachable)
+        }
+    }
+
+    /**
+     * 全駅が全駅に対して到達可能であることを確認します。
+     */
+    private fun verifyAllRoutes(onlyReachable: Boolean) {
+        var problemCount = 0
+        var itemCount = 0
+        val yellow = ChatColor.YELLOW
+        val stations = KStations.allStations(data).filterByWorld(player.world.name).value
+        val total = stations.size * stations.size
+        stations.forEach { start ->
+            stations.forEach inner@{ end ->
+                if (start.id == end.id) {
+                    itemCount++
+                    return@inner
+                }
+                val startToEnd = calcRoute(start.id, end.id)
+                if (startToEnd == null) {
+                    player.sendMessage("${yellow}${start.id}から${end.id}へ到達できません。")
+                    problemCount++
+                }
+                if (!onlyReachable) {
+                    val endToStart = calcRoute(end.id, start.id)
+                    if (endToStart == null) {
+                        player.sendMessage("${yellow}${end.id}から${start.id}へ到達できません。")
+                        problemCount++
+                    }
+                    val startToEndTime = startToEnd?.getTime()
+                    val endToStartTime = endToStart?.getTime()
+                    if (startToEndTime != endToStartTime) {
+                        val difference = TransferGuideUtil.secondsToString(abs((startToEndTime ?: 0) - (endToStartTime ?: 0)))
+                        player.sendMessage("行きと帰りで${difference}の差があります")
+                        player.sendMessage("行き:")
+                        startToEnd?.toStringForGuide()?.split("\n")?.forEach {
+                            player.sendMessage(" $it")
+                        }
+                        player.sendMessage("帰り:")
+                        endToStart?.toStringForGuide()?.split("\n")?.forEach {
+                            player.sendMessage(" $it")
+                        }
+                        problemCount++
+                    }
+                }
+                itemCount++
+                if (itemCount % 100 == 0) {
+                    player.sendMessage("検証中[${itemCount}/${total}]")
+                }
+            }
+        }
+        player.sendMessage("検証終了[${itemCount}/${total}]")
+        if (problemCount == 0) {
+            player.sendMessage("全ての駅からすべての駅に到達可能です。")
+        } else {
+            player.sendMessage("${yellow}${problemCount}個の問題が見つかりました。")
         }
     }
 

@@ -125,6 +125,23 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
         routes = routesList.toTypedArray()
     }
 
+    fun getTime(): Int {
+        var appendTime = 0
+        routes.forEachIndexed { i, it ->
+            if (it.routePath is KRoutePathReal) {
+                appendTime += it.routePath.time
+                appendTime += if (routes.lastIndex - 1 == i) {
+                    0
+                } else if (it.routePath.line == "walk" || it.routePath.line == "boat") {
+                    10
+                } else {
+                    30
+                }
+            }
+        }
+        return appendTime
+    }
+
     fun toStringForGuide(): String {
         val sb = StringBuilder()
         var appendTime = 0
