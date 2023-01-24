@@ -15,12 +15,6 @@ class SetMarkerApp : AppBase() {
         val gui = Gui.getInstance()
 
         gui.openMenu(player, "マーカーメニュー", listOf(
-                MenuItem("新規設置", {
-                    SetMarkerModule.setMarker(player)
-                }, Material.REDSTONE_TORCH),
-                MenuItem("移動", {
-                    SetMarkerModule.moveMarker(player)
-                }, Material.SOUL_TORCH),
                 MenuItem("全消去", {
                     SetMarkerModule.dellAll(player)
                 }, Material.STRUCTURE_VOID),
@@ -28,6 +22,9 @@ class SetMarkerApp : AppBase() {
                     SetMarkerModule.infoMarker(player)
                     SetMarkerModule.searchLocationPid(player.location, player.world.name)
                 }, Material.KNOWLEDGE_BOOK),
+                MenuItem("再設置", {
+                    SetMarkerModule.reposition(player)
+                }, Material.REDSTONE_TORCH),
                 MenuItem("ツール取得", {
                     player.world.dropItem(player.location, SetMarkerModule.createMarkerToolAD(1))
                 }, Material.CARROT_ON_A_STICK),

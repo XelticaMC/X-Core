@@ -202,6 +202,22 @@ object SetMarkerModule : ModuleBase() {
         p.sendMessage("合計：" + locationList.size)
     }
 
+    /**
+     * マーカーを再設置します。
+     */
+    fun reposition(p: Player) {
+        val locationList = getLocationList(p)
+        val index = getLocationIndex(p)
+        if (locationList == null) {
+            p.sendMessage("このワールドに所有マーカーはありません")
+            return
+        }
+        for (i in locationList.indices) {
+            locationList[i].block.type = Material.REDSTONE_TORCH
+            if (i == index) locationList[i].block.type = Material.SOUL_TORCH
+        }
+    }
+
     //コンフィグ関係
 
     /**

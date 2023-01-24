@@ -1,11 +1,9 @@
 package work.xeltica.craft.core.modules.setMarker
 
-import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
-import org.bukkit.event.block.BlockDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 
@@ -58,8 +56,7 @@ class SetMarkerHandler : Listener {
     fun onBreak(e: BlockBreakEvent) {
         val player = e.player
         val item = e.player.inventory.itemInMainHand
-        val block = e.block
-        val loc = block.location
+        val loc = e.block.location
         val thisMarker = SetMarkerModule.isMarker(player, loc)
         //そもそもマーカーではない
         if (thisMarker == 0) return
@@ -85,10 +82,4 @@ class SetMarkerHandler : Listener {
             }
         }
     }
-
-    @EventHandler
-    fun itemDrop(e: BlockDropItemEvent) {
-        Bukkit.getLogger().info("実行")
-    }
-
 }
