@@ -16,12 +16,10 @@ class SetMarkerApp : AppBase() {
 
         gui.openMenu(player, "マーカーメニュー", listOf(
                 MenuItem("新規設置", {
-                    SetMarkerModule.infoMarker(player)
-                    SetMarkerModule.searchLocationPid(player.location, player.world.name)
+                    SetMarkerModule.setMarker(player)
                 }, Material.REDSTONE_TORCH),
                 MenuItem("移動", {
-                    SetMarkerModule.infoMarker(player)
-                    SetMarkerModule.searchLocationPid(player.location, player.world.name)
+                    SetMarkerModule.moveMarker(player)
                 }, Material.SOUL_TORCH),
                 MenuItem("全消去", {
                     SetMarkerModule.dellAll(player)

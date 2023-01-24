@@ -1,9 +1,11 @@
 package work.xeltica.craft.core.modules.setMarker
 
+import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 
@@ -20,21 +22,25 @@ class SetMarkerHandler : Listener {
         val face = e.blockFace.toString()
         val thisMarker = SetMarkerModule.isMarker(player, loc) //右クリックした対象がマーカーかどうか
         if (thisMarker == 1) {//他人のマーカー
+            player.sendMessage("あなたのマーカーではないようです…")
+            return
         }
         if (thisMarker == 2) {//自分のマーカー
-            if (SetMarkerModule.isMarkerTool(item)) {
+            if (SetMarkerModule.isMarkerTool(item)) {//専用ツールであるかどうか
                 SetMarkerModule.changeActiveMarker(player, loc)
+                return
             }
         }
         //マーカー以外のブロック
         if (thisMarker == 0) {
             if (SetMarkerModule.isMarkerToolAD(item)) {//追加ツール動作
-                val offsetLoc = SetMarkerModule.offset(loc, face)
-                SetMarkerModule.setMarker(player, offsetLoc)
+                SetMarkerModule.setMarker(player, loc, face)
+                return
             }
             if (SetMarkerModule.isMarkerToolM(item)) {//移動ツール動作
                 val offsetLoc = SetMarkerModule.offset(loc, face)
                 SetMarkerModule.moveMarker(player, offsetLoc)
+                return
             }
         }
     }
@@ -79,4 +85,10 @@ class SetMarkerHandler : Listener {
             }
         }
     }
+
+    @EventHandler
+    fun itemDrop(e: BlockDropItemEvent) {
+        Bukkit.getLogger().info("実行")
+    }
+
 }

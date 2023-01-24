@@ -17,8 +17,7 @@ object SetMarkerModule : ModuleBase() {
     lateinit var marker: Config
 
     /*
-    ToDo 1 他プレイヤーのマーカーかどうかも判定しなければいけない
-    ToDO 2 マルチでの検証ができていないのでやる。
+    ToDO マルチでの検証ができていないのでやる。
      */
     override fun onEnable() {
         Bukkit.getLogger().info("モジュールが読み込まれました")
@@ -37,11 +36,22 @@ object SetMarkerModule : ModuleBase() {
     /**
      * 代入された位置にマーカーを設置する
      */
-    fun setMarker(p: Player, loc: Location) {
-        val pid = p.uniqueId.toString()
+    fun setMarker(p: Player, loc: Location, face: String? = null) {
+        val dest: Location
+        if (replaceable.contains(loc.block.type)) {
+            dest = offset(loc, null)
+        } else {
+            dest = offset(loc, face)
+            if (!replaceable.contains(dest.block.type)) {
+                return
+            }
+        }
         var index = getLocationIndex(p)
-        val dest = Location(p.world, loc.x, loc.y, loc.z).toBlockLocation()
-        if (!replaceable.contains(dest.block.type)) return
+
+        if (dest.block.type == Material.WATER) {
+            p.sendMessage("水中には置けません")
+            return
+        }
         var locationList: MutableList<Location>? = getLocationList(p)
         if (index < 0 || locationList == null) {
             locationList = mutableListOf(dest)//nullの時は.addだと動かない
@@ -54,6 +64,7 @@ object SetMarkerModule : ModuleBase() {
             locationList.add(index, dest)
         }
         dest.block.type = Material.SOUL_TORCH
+
         if (locationList.size >= 2 && index >= 1) {
             locationList[index - 1].block.type = Material.REDSTONE_TORCH
         }
@@ -71,11 +82,14 @@ object SetMarkerModule : ModuleBase() {
      * マーカーを指定した座標に移動
      */
     fun moveMarker(p: Player, loc: Location) {
-        val pid = p.uniqueId.toString()
         val index = getLocationIndex(p)
         if (index < 0) return
         val locationList = getLocationList(p) ?: return
         val dest = Location(p.world, loc.x, loc.y, loc.z).toBlockLocation()
+        if (dest.block.type == Material.WATER) {
+            p.sendMessage("水中には移動できません")
+            return
+        }
         locationList[index].block.type = Material.AIR
         locationList[index] = dest
         locationList[index].block.type = Material.SOUL_TORCH
@@ -95,7 +109,6 @@ object SetMarkerModule : ModuleBase() {
      * アクティブマーカー[index1]を[index2]へ移動
      */
     fun changeActiveMarker(p: Player, index1: Int, index2: Int) {
-        val pid = p.uniqueId.toString()
         val locationList = getLocationList(p) ?: return
         locationList[index1].block.type = Material.REDSTONE_TORCH
         locationList[index2].block.type = Material.SOUL_TORCH
@@ -112,8 +125,8 @@ object SetMarkerModule : ModuleBase() {
     fun isMarker(p: Player, loc: Location): Int {
         val pid = p.uniqueId.toString()
         if (loc.block.type != Material.REDSTONE_TORCH && loc.block.type != Material.SOUL_TORCH) return 0
-        return if (!searchLocationPid(loc, p.world.name).equals(pid)) 1
-        else 2
+        val thisMarker = searchLocationPid(loc, p.world.name) ?: return 0
+        return if (thisMarker != pid) 1 else 2
     }
 
     /**
@@ -153,7 +166,9 @@ object SetMarkerModule : ModuleBase() {
             if (index < 0) {
                 index = 0
             }
-            locationList[index].block.type = Material.SOUL_TORCH
+            if (locationList.size > 0) {
+                locationList[index].block.type = Material.SOUL_TORCH
+            }
         }
         saveLocationAll(p, locationList, index)
         return true
@@ -277,7 +292,7 @@ object SetMarkerModule : ModuleBase() {
     fun deleteLocationList(player: Player) {
         val conf: YamlConfiguration = marker.conf
         val pid = player.uniqueId.toString()
-        var playerSection = conf.getConfigurationSection(pid) ?: return
+        val playerSection = conf.getConfigurationSection(pid) ?: return
         playerSection.set(player.world.name, null)
         try {
             marker.save()
@@ -390,15 +405,16 @@ object SetMarkerModule : ModuleBase() {
     /**
      * クリックしたブロックの面に応じて、返す座標を1マスずらします。
      */
-    fun offset(loc: Location, blockFace: String): Location {
+    fun offset(loc: Location, blockFace: String?): Location {
         var reLoc = loc
+        if (blockFace == null) return reLoc
         when (blockFace) {
-            "NORTH" -> reLoc = Location(loc.world, loc.x, loc.y, loc.z - 1)
-            "EAST" -> reLoc = Location(loc.world, loc.x + 1, loc.y, loc.z)
-            "SOUTH" -> reLoc = Location(loc.world, loc.x, loc.y, loc.z + 1)
-            "WEST" -> reLoc = Location(loc.world, loc.x - 1, loc.y, loc.z)
-            "UP" -> reLoc = Location(loc.world, loc.x, loc.y + 1, loc.z)
-            "DOWN" -> reLoc = Location(loc.world, loc.x, loc.y - 1, loc.z)
+            "NORTH" -> reLoc = Location(loc.world, loc.x, loc.y, loc.z - 1).toBlockLocation()
+            "EAST" -> reLoc = Location(loc.world, loc.x + 1, loc.y, loc.z).toBlockLocation()
+            "SOUTH" -> reLoc = Location(loc.world, loc.x, loc.y, loc.z + 1).toBlockLocation()
+            "WEST" -> reLoc = Location(loc.world, loc.x - 1, loc.y, loc.z).toBlockLocation()
+            "UP" -> reLoc = Location(loc.world, loc.x, loc.y + 1, loc.z).toBlockLocation()
+            "DOWN" -> reLoc = Location(loc.world, loc.x, loc.y - 1, loc.z).toBlockLocation()
         }
         return reLoc
     }
@@ -411,6 +427,7 @@ object SetMarkerModule : ModuleBase() {
             Material.GRASS,
             Material.FERN,
             Material.TALL_GRASS,
-            Material.LARGE_FERN
+            Material.LARGE_FERN,
+            Material.VINE,
     )
 }
