@@ -8,8 +8,6 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.bukkit.metadata.FixedMetadataValue
-import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.item.ItemModule
@@ -44,26 +42,20 @@ object SetMarkerModule : ModuleBase() {
         var index = getLocationIndex(p)
         val dest = Location(p.world, loc.x, loc.y, loc.z).toBlockLocation()
         var locationList: MutableList<Location>? = getLocationList(p)
-        infoList(locationList) //---------------------デバック！！！！！
         if (index < 0 || locationList == null) {
             locationList = mutableListOf(dest)//nullの時は.addだと動かない
             index = 0
-            Bukkit.getLogger().info("リスト作成")
         } else if (index >= (locationList.size - 1)) {
             locationList.add(dest)
             index = locationList.size - 1
-            Bukkit.getLogger().info("リスト末尾追加")
         } else {
             index++
             locationList.add(index, dest)
-            Bukkit.getLogger().info("リスト途中追加")
         }
 
         dest.block.type = Material.SOUL_TORCH
-        dest.block.setMetadata("marker", FixedMetadataValue(XCorePlugin.instance, pid))
         if (locationList.size >= 2 && index >= 1) {
             locationList[index - 1].block.type = Material.REDSTONE_TORCH
-            locationList[index - 1].block.setMetadata("marker", FixedMetadataValue(XCorePlugin.instance, pid))
         }
         saveLocationAll(p, locationList, index)
     }
@@ -87,7 +79,6 @@ object SetMarkerModule : ModuleBase() {
         locationList[index].block.type = Material.AIR
         locationList[index] = dest
         locationList[index].block.type = Material.SOUL_TORCH
-        locationList[index].block.setMetadata("marker", FixedMetadataValue(XCorePlugin.instance, pid))
         saveLocationList(p, locationList)
     }
 
@@ -107,9 +98,7 @@ object SetMarkerModule : ModuleBase() {
         val pid = p.uniqueId.toString()
         val locationList = getLocationList(p) ?: return
         locationList[index1].block.type = Material.REDSTONE_TORCH
-        locationList[index1].block.setMetadata("marker", FixedMetadataValue(XCorePlugin.instance, pid))
         locationList[index2].block.type = Material.SOUL_TORCH
-        locationList[index2].block.setMetadata("marker", FixedMetadataValue(XCorePlugin.instance, pid))
         saveLocationIndex(p, index2)
     }
 
@@ -122,18 +111,14 @@ object SetMarkerModule : ModuleBase() {
      */
     fun isMarker(p: Player, loc: Location): Int {
         val pid = p.uniqueId.toString()
-
         if (loc.block.type != Material.REDSTONE_TORCH && loc.block.type != Material.SOUL_TORCH) return 0
-        Bukkit.getLogger().info("" + loc.block.hasMetadata("marker"))
-        if (!loc.block.hasMetadata("marker")) return 0
-        val metadata = loc.block.getMetadata("marker")
-        Bukkit.getLogger().info("" + metadata[0].asString() + "" + pid)
-        if (metadata[0].asString() != pid) {
-            return 1
-        }
-        return 2
+        return if (!searchLocationPid(loc, p.world.name).equals(pid)) 1
+        else 2
     }
 
+    /**
+     * プレイヤーに紐づいているLocationListの中に[loc]があるかどうか
+     */
     fun isMarkerIndex(p: Player, loc: Location): Int {
         val locationList = getLocationList(p) ?: return -1
         return locationList.indexOf(loc)
@@ -150,7 +135,7 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * LocationListから指定したインデックスの座標とマーカーを削除（マーカーでない場合は削除されたものとする）
+     * LocationListから指定したインデックスの座標とマーカーを削除（自分のマーカーでない場合は削除されたものとする）
      * @return 削除できたかどうか（成功：true 失敗:false）
      */
     fun dellMarker(p: Player, index_: Int): Boolean {
@@ -158,16 +143,9 @@ object SetMarkerModule : ModuleBase() {
         val pid = p.uniqueId.toString()
         val confIndex = getLocationIndex(p)
         val locationList = getLocationList(p) ?: return false
-        if (index < 0) return false
-        if (index > locationList.size - 1) return false
+        if (index < 0 || index > locationList.size - 1) return false
         val loc = locationList[index]
-        if (loc.block.type != Material.REDSTONE_TORCH) return true
-        if (!loc.block.hasMetadata("marker")) return true
-        val metadata = loc.block.getMetadata("marker")
-        if (metadata[0].asString() != pid) {
-            p.sendMessage("自分のマーカーではないため削除できません。")
-            return false
-        }
+        if (!searchLocationPid(loc, p.world.name).equals(pid)) return false
         loc.block.type = Material.AIR
         locationList.removeAt(index)
         if (index == confIndex) { //アクティブマーカーをずらす処理

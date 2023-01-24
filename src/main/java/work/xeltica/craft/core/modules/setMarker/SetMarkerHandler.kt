@@ -1,9 +1,11 @@
 package work.xeltica.craft.core.modules.setMarker
 
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 
@@ -58,15 +60,26 @@ class SetMarkerHandler : Listener {
     }
 
     @EventHandler
-    fun onLClick(e: PlayerInteractEvent) {
+    fun onBreak(e: BlockBreakEvent) {
         val player = e.player
         val item = e.player.inventory.itemInMainHand
-        if (!listOf(Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK).contains(e.action)) return
-        val clickBlock = e.clickedBlock ?: return
-        val loc = clickBlock.location
-        Bukkit.getLogger().info("左クリックしました")
-        if (!SetMarkerModule.isMarkerToolAD(item)) return
-        Bukkit.getLogger().info("ADを左クリックしました")
-        
+        val block = e.block
+        val loc = block.location
+        Bukkit.getLogger().info("ブロックを破壊しました")
+        if (loc.block.type != Material.REDSTONE_TORCH && loc.block.type != Material.SOUL_TORCH) return
+        if (SetMarkerModule.searchLocationPid(block.location, block.world.name) == null) return
+        if (!SetMarkerModule.searchLocationPid(block.location, block.world.name).equals(player.uniqueId.toString())) {
+            e.isCancelled = true;
+            return
+        }
+        if (!SetMarkerModule.isMarkerToolAD(item)) {
+            e.isCancelled = true;
+            return
+        }
+        val flag = SetMarkerModule.dellMarker(player, loc)
+        if (!flag) {
+            player.sendMessage("破壊に失敗しました")
+            e.isCancelled = true;
+        }
     }
 }

@@ -20,7 +20,7 @@ class SetMarkerApp : AppBase() {
                     SetMarkerModule.setMarker(player)
                 }, Material.REDSTONE_TORCH),
                 MenuItem("確認", {
-                    //SetMarkerModule.infoMarker(player)
+                    SetMarkerModule.infoMarker(player)
                     //Bukkit.getLogger().info(SetMarkerModule.getAllPrefix().toString())
                     SetMarkerModule.searchLocationPid(player.location, player.world.name)
                 }, Material.BLUE_DYE),
