@@ -151,12 +151,15 @@ object SetMarkerModule : ModuleBase() {
      * LocationListから指定したインデックスの座標とマーカーを削除（自分のマーカーでない場合は削除されたものとする）
      * @return 削除できたかどうか（成功：true 失敗:false）
      */
+
+    //index はずらさない時とずらすときがあるのでそこを修正中
     fun dellMarker(p: Player, index_: Int): Boolean {
         var index = index_
         val pid = p.uniqueId.toString()
         val confIndex = getLocationIndex(p)
         val locationList = getLocationList(p) ?: return false
-        if (index < 0 || index > locationList.size - 1) return false
+        if (index < 0) index = 0
+        if (index >= locationList.size) index = locationList.size - 1
         val loc = locationList[index]
         if (!searchLocationPid(loc, p.world.name).equals(pid)) return false
         loc.block.type = Material.AIR
@@ -169,8 +172,9 @@ object SetMarkerModule : ModuleBase() {
             if (locationList.size > 0) {
                 locationList[index].block.type = Material.SOUL_TORCH
             }
+            saveLocationAll(p, locationList, index)
         }
-        saveLocationAll(p, locationList, index)
+        saveLocationList(p, locationList)
         return true
     }
 
@@ -196,9 +200,12 @@ object SetMarkerModule : ModuleBase() {
             p.sendMessage("このワールドに所有マーカーはありません")
             return
         }
+        Bukkit.getLogger().info("----------------------------------------")
         for (i in locationList.indices) {
             Bukkit.getLogger().info("" + i + "：" + locationList[i])
         }
+        Bukkit.getLogger().info("合計：" + locationList.size)
+        Bukkit.getLogger().info("----------------------------------------")
         p.sendMessage("合計：" + locationList.size)
     }
 
@@ -241,14 +248,14 @@ object SetMarkerModule : ModuleBase() {
     /**
      * [player] のマーカー番号 [index] を保存します。
      */
-    fun saveLocationIndex(player: Player, index: Int) {
+    fun saveLocationIndex(player: Player, index_: Int) {
         val conf: YamlConfiguration = marker.conf
         val pid = player.uniqueId.toString()
         var playerSection = conf.getConfigurationSection(pid)
         if (playerSection == null) {
             playerSection = conf.createSection(pid)
         }
-        playerSection.set(pid, index)
+        playerSection.set(player.world.name + " index", index_)
         try {
             marker.save()
         } catch (e: IOException) {
@@ -264,7 +271,7 @@ object SetMarkerModule : ModuleBase() {
             playerSection = conf.createSection(pid)
         }
         playerSection.set(player.world.name, locationList)
-        playerSection.set(pid, index)
+        playerSection.set(player.world.name + " index", index)
         try {
             marker.save()
         } catch (e: IOException) {
@@ -299,7 +306,7 @@ object SetMarkerModule : ModuleBase() {
         val conf: YamlConfiguration = marker.conf
         val pid = p.uniqueId.toString()
         val playerSection = conf.getConfigurationSection(pid) ?: return -1
-        return playerSection.getInt(pid, -1)//戻り値のデフォルト = -1
+        return playerSection.getInt(p.world.name + " index", -1)//戻り値のデフォルト = -1
     }
 
     /**
@@ -324,7 +331,7 @@ object SetMarkerModule : ModuleBase() {
         val conf: YamlConfiguration = marker.conf
         val pid = player.uniqueId.toString()
         val playerSection = conf.getConfigurationSection(pid) ?: return
-        playerSection.set(pid, null)
+        playerSection.set(player.world.name + " index", null)
         try {
             marker.save()
         } catch (e: IOException) {
