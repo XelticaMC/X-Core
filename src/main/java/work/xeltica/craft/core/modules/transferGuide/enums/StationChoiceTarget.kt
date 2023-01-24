@@ -5,5 +5,5 @@ package work.xeltica.craft.core.modules.transferGuide.enums
  * @author Knit prg.
  */
 enum class StationChoiceTarget {
-    START, END, INFO
+    START, END, INFO, FAVORITES_ADD
 }

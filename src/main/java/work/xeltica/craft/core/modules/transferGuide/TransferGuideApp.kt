@@ -16,8 +16,7 @@ class TransferGuideApp : AppBase() {
     override fun getIcon(player: Player): Material = Material.POWERED_RAIL
 
     override fun onLaunch(player: Player) {
-        val session = TransferGuideSession(player)
-        session.start()
+        TransferGuideSession(player).start()
     }
 
     override fun isVisible(player: Player): Boolean {

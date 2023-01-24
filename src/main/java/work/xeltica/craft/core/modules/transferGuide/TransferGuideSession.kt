@@ -36,6 +36,7 @@ class TransferGuideSession(val player: Player) {
     private var startId: String? = null
     private var endId: String? = null
     private var infoId: String? = null
+    private val favorites: ArrayList<String> = arrayListOf()
 
     init {
         val userData = Config("transferGuideUserData").conf.getConfigurationSection(player.uniqueId.toString())
@@ -54,6 +55,13 @@ class TransferGuideSession(val player: Player) {
                 infoId = this
             }
         }
+        userData?.getStringList("${player.world.name}.favorites")?.run {
+            this.forEach {
+                if (data.isStationInWorld(it, player.world.name)) {
+                    favorites.add(it)
+                }
+            }
+        }
     }
 
     /**
@@ -68,17 +76,35 @@ class TransferGuideSession(val player: Player) {
      */
     private fun setStationIdAndOpenMainMenu(newId: String, stationChoiceTarget: StationChoiceTarget) {
         when (stationChoiceTarget) {
-            StationChoiceTarget.START -> startId = newId
-            StationChoiceTarget.END -> endId = newId
+            StationChoiceTarget.START -> {
+                startId = newId
+                saveUserData()
+                openMainMenu()
+                return
+            }
+
+            StationChoiceTarget.END -> {
+                endId = newId
+                saveUserData()
+                openMainMenu()
+                return
+            }
+
             StationChoiceTarget.INFO -> {
                 infoId = newId
                 saveUserData()
                 showStationData()
                 return
             }
+
+            StationChoiceTarget.FAVORITES_ADD -> {
+                favorites.add(newId)
+                saveUserData()
+                openFavoritesMenu()
+                return
+            }
+
         }
-        saveUserData()
-        openMainMenu()
     }
 
     /**
@@ -91,6 +117,7 @@ class TransferGuideSession(val player: Player) {
             userData.conf.set("${uuid}.${player.world.name}.start", startId)
             userData.conf.set("${uuid}.${player.world.name}.end", endId)
             userData.conf.set("${uuid}.${player.world.name}.info", infoId)
+            userData.conf.set("${uuid}.${player.world.name}.favorites", favorites)
             userData.save()
         } catch (e: IOException) {
             e.printStackTrace()
@@ -109,9 +136,12 @@ class TransferGuideSession(val player: Player) {
             MenuItem("出発地点と到着地点を入れ替える", { reverseChosenStations() }, Material.LEVER),
             MenuItem("計算開始", { calcRoute() }, Material.COMMAND_BLOCK_MINECART),
             MenuItem("駅情報", { openStationInfoMenu() }, Material.CHEST_MINECART),
-            MenuItem("このアプリについて", { showAbout() }, Material.ENCHANTED_BOOK),
-            MenuItem("終了", null, Material.BARRIER)
         )
+        if (data.availableWorlds[player.world.name] == "main") {
+            items.add(MenuItem("お気に入りの駅", { openFavoritesMenu() }, Material.OAK_SIGN))
+        }
+        items.add(MenuItem("このアプリについて", { showAbout() }, Material.ENCHANTED_BOOK))
+        items.add(MenuItem("終了", null, Material.BARRIER))
         if (player.isOp || player.uniqueId.toString() == knit) {
             val head = Bukkit.getPlayer(UUID.fromString(knit))?.run {
                 ItemModule.getPlayerHead(this)
@@ -148,9 +178,13 @@ class TransferGuideSession(val player: Player) {
             MenuItem("会社・路線別", { chooseStationLine(stationChoiceTarget) }, Material.SPRUCE_DOOR),
             MenuItem("最寄自治体別", { chooseStationMuni(stationChoiceTarget) }, Material.FILLED_MAP),
         )
+        if (stationChoiceTarget != StationChoiceTarget.FAVORITES_ADD) {
+            items.add(MenuItem("お気に入りの駅", { chooseStationFavorites(stationChoiceTarget) }, Material.OAK_SIGN))
+        }
         val goToMenu: Consumer<MenuItem> = when (stationChoiceTarget) {
             StationChoiceTarget.START, StationChoiceTarget.END -> Consumer { openMainMenu() }
             StationChoiceTarget.INFO -> Consumer { openStationInfoMenu() }
+            StationChoiceTarget.FAVORITES_ADD -> Consumer { openFavoritesMenu() }
         }
         items.add(MenuItem("戻る", goToMenu, Material.REDSTONE_TORCH))
         gui.openMenu(player, "駅選択", items)
@@ -306,6 +340,19 @@ class TransferGuideSession(val player: Player) {
     }
 
     /**
+     * GUI: 駅選択/お気に入りの駅
+     */
+    private fun chooseStationFavorites(stationChoiceTarget: StationChoiceTarget) {
+        val items = ArrayList<MenuItem>()
+        favorites.forEach { stationId ->
+            val station = data.stations[stationId] ?: return@forEach
+            items.add(MenuItem(station.name ?: station.id, { setStationIdAndOpenMainMenu(stationId, stationChoiceTarget) }, Material.MINECART))
+        }
+        items.add(MenuItem("戻る", { chooseStation(stationChoiceTarget) }, Material.REDSTONE_TORCH))
+        gui.openMenu(player, "お気に入りの駅", items)
+    }
+
+    /**
      * GUI: 駅選択
      * ワイルドエリア等の散発的に少数の路線が存在するワールドに適した駅選択画面です。
      */
@@ -319,7 +366,12 @@ class TransferGuideSession(val player: Player) {
                 MenuItem(station.name ?: station.id, { setStationIdAndOpenMainMenu(station.id, stationChoiceTarget) }, Material.MINECART)
             )
         }
-        items.add(MenuItem("戻る", { openMainMenu() }, Material.REDSTONE_TORCH))
+        val goToMenu: Consumer<MenuItem> = when (stationChoiceTarget) {
+            StationChoiceTarget.START, StationChoiceTarget.END -> Consumer { openMainMenu() }
+            StationChoiceTarget.INFO -> Consumer { openStationInfoMenu() }
+            else -> Consumer { openMainMenu() }
+        }
+        items.add(MenuItem("戻る", goToMenu, Material.REDSTONE_TORCH))
         gui.openMenu(player, "駅一覧", items)
     }
 
@@ -636,6 +688,77 @@ class TransferGuideSession(val player: Player) {
         }
         sb.append("=".repeat(20))
         player.sendMessage(sb.toString())
+    }
+
+    /**
+     * GUI: お気に入りの駅
+     */
+    private fun openFavoritesMenu() {
+        val items = arrayListOf(
+            MenuItem("追加", { chooseStation(StationChoiceTarget.FAVORITES_ADD) }, Material.BLACK_DYE),
+            MenuItem("削除", { deleteFavoritesMenu() }, Material.WHITE_DYE),
+            MenuItem("並び替え", { sortFavoritesMenu(null) }, Material.CHEST),
+            MenuItem("戻る", { openMainMenu() }, Material.REDSTONE_TORCH),
+        )
+        gui.openMenu(player, "お気に入りの駅", items)
+    }
+
+    /**
+     * GUI: お気に入りの駅/削除
+     */
+    private fun deleteFavoritesMenu() {
+        val items = ArrayList<MenuItem>()
+        favorites.forEach { station ->
+            items.add(MenuItem(data.stations[station]?.name ?: station, { deleteFavoritesAndOpenDeleteFavoritesMenu(station) }, Material.MINECART))
+        }
+        items.add(MenuItem("戻る", { openFavoritesMenu() }, Material.REDSTONE_TORCH))
+        gui.openMenu(player, "お気に入りの駅の削除", items)
+    }
+
+    /**
+     * お気に入りの駅を消して削除メニューに戻る
+     */
+    private fun deleteFavoritesAndOpenDeleteFavoritesMenu(station: String) {
+        favorites.remove(station)
+        saveUserData()
+        deleteFavoritesMenu()
+    }
+
+    /**
+     * GUI: お気に入りの駅/並び替え
+     */
+    private fun sortFavoritesMenu(first: String?) {
+        val items = ArrayList<MenuItem>()
+        favorites.forEach { station ->
+            val nextAction: Consumer<MenuItem> = when (first) {
+                null -> {
+                    Consumer { sortFavoritesMenu(station) }
+                }
+
+                station -> {
+                    Consumer { sortFavoritesMenu(null) }
+                }
+
+                else -> {
+                    Consumer { sortFavoritesAndOpenFavoritesMenu(first, station) }
+                }
+            }
+            val isShiny = first == station
+            items.add(MenuItem(data.stations[station]?.name ?: station, nextAction, Material.MINECART, shiny = isShiny))
+        }
+        items.add(MenuItem("戻る", { openFavoritesMenu() }, Material.REDSTONE_TORCH))
+        gui.openMenu(player, "並び替え", items)
+    }
+
+    /**
+     * お気に入りの駅を入れ替えてお気に入りメニューに戻る
+     */
+    private fun sortFavoritesAndOpenFavoritesMenu(first: String, second: String) {
+        val firstIndex = favorites.indexOf(first)
+        val secondIndex = favorites.indexOf(second)
+        favorites[firstIndex] = second
+        favorites[secondIndex] = first
+        sortFavoritesMenu(null)
     }
 
     /**
