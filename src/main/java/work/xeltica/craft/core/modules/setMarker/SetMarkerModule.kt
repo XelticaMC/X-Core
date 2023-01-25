@@ -241,7 +241,7 @@ object SetMarkerModule : ModuleBase() {
     /**
      * マーカーを再設置します。
      */
-    fun reposition(p: Player) {
+    fun reload(p: Player) {
         val locationList = getLocationList(p)
         val index = getLocationIndex(p)
         if (locationList == null) {

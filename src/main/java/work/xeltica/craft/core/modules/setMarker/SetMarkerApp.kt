@@ -22,7 +22,7 @@ class SetMarkerApp : AppBase() {
                     SetMarkerModule.infoMarker(player)
                 }, Material.KNOWLEDGE_BOOK),
                 MenuItem("再設置", {
-                    SetMarkerModule.reposition(player)
+                    SetMarkerModule.reload(player)
                 }, Material.REDSTONE_TORCH),
                 MenuItem("ツール取得", {
                     player.world.dropItem(player.location, SetMarkerModule.createMarkerToolAD(1))

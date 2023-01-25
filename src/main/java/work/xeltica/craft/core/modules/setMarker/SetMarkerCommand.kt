@@ -48,12 +48,18 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
             "delete" -> {
                 when (args.size) {
                     1 -> {
-                        SetMarkerModule.dellMarker(player, player.location)
+                        SetMarkerModule.dellAll(player)
                         return true
                     }
 
                     2 -> {
-                        val index = args[1].toInt()
+                        val index: Int
+                        try {
+                            index = args[1].toInt()
+                        } catch (e: NumberFormatException) {
+                            player.sendMessage("§cマーカー番号には整数を入力してください！")
+                            return false
+                        }
                         SetMarkerModule.dellMarker(player, index)
                     }
 
@@ -122,7 +128,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                         val z = args[4]
 
                         val loc = SetMarkerModule.tildaToLocation(player, x, y, z) ?: return false
-                        SetMarkerModule.moveMarker(player, index, loc, null)
+                        SetMarkerModule.moveMarker(player, index, loc.toBlockLocation(), null)
                     }
 
                     6 -> {
@@ -146,7 +152,11 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                 }
             }
 
-            else -> player.sendMessage("< delete | move | set >のどれかを指定して下さい")
+            "reload" -> {
+                SetMarkerModule.reload(player)
+            }
+
+            else -> player.sendMessage("< delete | move | reload | set >のどれかを指定して下さい")
             // /marker move <index | location> [location]
         }
 
@@ -158,7 +168,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
         val subcommand = args[0].lowercase(Locale.getDefault())
         when (args.size) {
             1 -> {
-                val commands = listOf("delete", "set", "move")
+                val commands = listOf("delete", "set", "move", "reload")
                 val completions = ArrayList<String>()
                 StringUtil.copyPartialMatches(subcommand, commands, completions)
                 completions.sort()
