@@ -22,6 +22,7 @@ object SetMarkerModule : ModuleBase() {
     override fun onEnable() {
         Bukkit.getLogger().info("モジュールが読み込まれました")
         marker = Config("marker")
+        registerCommand("marker", SetMarkerCommand())
         registerHandler(SetMarkerHandler())
     }
 
@@ -49,7 +50,7 @@ object SetMarkerModule : ModuleBase() {
         var index = getLocationIndex(p)
 
         if (dest.block.type == Material.WATER) {
-            p.sendMessage("水中には置けません")
+            p.sendMessage("水中には置けません。")
             return
         }
         var locationList: MutableList<Location>? = getLocationList(p)
@@ -72,20 +73,46 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * マーカーをプレイヤーの足元に移動
+     * アクティブマーカーをプレイヤーの足元に移動
      */
     fun moveMarker(p: Player) {
-        moveMarker(p, p.location)
+        moveMarker(p, p.location, null)
     }
 
     /**
-     * マーカーを指定した座標に移動
+     * アクティブマーカ―を指定した場所に移動
      */
-    fun moveMarker(p: Player, loc: Location) {
+    fun moveMarker(p: Player, loc: Location, face: String?) {
         val index = getLocationIndex(p)
+        moveMarker(p, index, loc, face)
+    }
+
+    /**
+     * 座標[loc1]にあるマーカ―を指定した座標[loc2]に移動
+     */
+    fun moveMarker(p: Player, loc1: Location, loc2: Location) {
+        val index = isMarkerIndex(p, loc1)
+        if (index < 0) {
+            return
+        }
+        moveMarker(p, index, loc2, null)
+    }
+
+    /**
+     * 番号指定したマーカーを指定した座標に移動
+     */
+    fun moveMarker(p: Player, index: Int, loc: Location, face: String?) {
         if (index < 0) return
         val locationList = getLocationList(p) ?: return
-        val dest = Location(p.world, loc.x, loc.y, loc.z).toBlockLocation()
+        val dest: Location
+        if (replaceable.contains(loc.block.type)) {
+            dest = offset(loc, null)
+        } else {
+            dest = offset(loc, face)
+            if (!replaceable.contains(dest.block.type)) {
+                return
+            }
+        }
         if (dest.block.type == Material.WATER) {
             p.sendMessage("水中には移動できません")
             return
@@ -95,6 +122,7 @@ object SetMarkerModule : ModuleBase() {
         locationList[index].block.type = Material.SOUL_TORCH
         saveLocationList(p, locationList)
     }
+
 
     /**
      * 新しく指定したマーカーをアクティブマーカーに変更
@@ -143,23 +171,22 @@ object SetMarkerModule : ModuleBase() {
      */
     fun dellMarker(p: Player, loc: Location): Boolean {
         val locationList = getLocationList(p) ?: return false
-        val index = locationList.indexOf(loc)
+        val index = locationList.indexOf(loc.toBlockLocation())
         return dellMarker(p, index)
     }
 
     /**
-     * LocationListから指定したインデックスの座標とマーカーを削除（自分のマーカーでない場合は削除されたものとする）
+     * LocationListから指定したインデックスの座標とマーカーを削除（自分のマーカーでない場合は失敗する）
      * @return 削除できたかどうか（成功：true 失敗:false）
      */
     fun dellMarker(p: Player, index_: Int): Boolean {
         var index = index_
-        val pid = p.uniqueId.toString()
         val confIndex = getLocationIndex(p)
         val locationList = getLocationList(p) ?: return false
         if (index < 0) index = 0
         if (index >= locationList.size) index = locationList.size - 1
         val loc = locationList[index]
-        if (!searchLocationPid(loc, p.world.name).equals(pid)) return false
+        if (isMarker(p, loc) != 2) return false
         loc.block.type = Material.AIR
         locationList.removeAt(index)
         if (index == confIndex) { //アクティブマーカーをずらす処理
@@ -200,14 +227,14 @@ object SetMarkerModule : ModuleBase() {
             return
         }
 
-        /*
+
         Bukkit.getLogger().info("----------------------------------------")
         for (i in locationList.indices) {
             Bukkit.getLogger().info("" + i + "：" + locationList[i])
         }
         Bukkit.getLogger().info("合計：" + locationList.size)
         Bukkit.getLogger().info("----------------------------------------")
-        */
+
         p.sendMessage("合計：" + locationList.size)
     }
 
@@ -345,7 +372,7 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * すべての座標のなかに座標:[loc]があるか検索します。
+     * すべての座標のなかに座標があるか検索します。
      * @return その座標があったpidを返します。なかった場合はnullが返ります
      */
     fun searchLocationPid(location: Location, worldName: String): String? {
@@ -447,6 +474,41 @@ object SetMarkerModule : ModuleBase() {
             "DOWN" -> reLoc = Location(loc.world, loc.x, loc.y - 1, loc.z).toBlockLocation()
         }
         return reLoc
+    }
+
+    fun tildaToLocation(player: Player, x_: String, y_: String, z_: String): Location? {
+        var x = 0.0
+        var y = 0.0
+        var z = 0.0
+        if (x_.equals("~")) {
+            x = player.location.x
+        } else {
+            try {
+                x = x_.toDouble()
+            } catch (e: NumberFormatException) {
+                return null
+            }
+
+        }
+        if (y_.equals("~")) {
+            y = player.location.y
+        } else {
+            try {
+                x = x_.toDouble()
+            } catch (e: NumberFormatException) {
+                return null
+            }
+        }
+        if (z_.equals("~")) {
+            z = player.location.z
+        } else {
+            try {
+                x = x_.toDouble()
+            } catch (e: NumberFormatException) {
+                return null
+            }
+        }
+        return Location(player.world, x, y, z)
     }
 
     /**

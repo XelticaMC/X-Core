@@ -36,8 +36,7 @@ class SetMarkerHandler : Listener {
                 return
             }
             if (SetMarkerModule.isMarkerToolM(item)) {//移動ツール動作
-                val offsetLoc = SetMarkerModule.offset(loc, face)
-                SetMarkerModule.moveMarker(player, offsetLoc)
+                SetMarkerModule.moveMarker(player, loc, face)
                 return
             }
         }

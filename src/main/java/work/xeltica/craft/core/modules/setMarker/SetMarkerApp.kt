@@ -20,7 +20,6 @@ class SetMarkerApp : AppBase() {
                 }, Material.STRUCTURE_VOID),
                 MenuItem("確認", {
                     SetMarkerModule.infoMarker(player)
-                    SetMarkerModule.searchLocationPid(player.location, player.world.name)
                 }, Material.KNOWLEDGE_BOOK),
                 MenuItem("再設置", {
                     SetMarkerModule.reposition(player)
