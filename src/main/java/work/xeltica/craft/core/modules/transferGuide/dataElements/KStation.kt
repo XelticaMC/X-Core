@@ -10,10 +10,16 @@ class KStation(conf: ConfigurationSection, val id: String) {
     val name = conf.getString("name")
     val yomi = conf.getString("yomi")
     val number = conf.getString("number")
+    val nameAndNumber: String = if (number == null) {
+        name ?: id
+    } else {
+        "$name($number)"
+    }
     val world = conf.getString("world")
     val location = conf.getDoubleList("location").toDoubleArray()
     val type = conf.getString("type")
     val paths = pathsConfigToKPaths(conf.getList("paths"))
+
     private fun pathsConfigToKPaths(conf: List<*>?): Array<KPath> {
         val set = arrayListOf<KPath>()
         conf ?: return set.toTypedArray()

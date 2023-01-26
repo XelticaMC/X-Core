@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2023-01-26T17:57"
+update: "2023-01-27T00:50"
 update_info: |-
   路線追加:
    共天睦月電鉄(新草線、新鮫南北線、湖北線、足立線)
@@ -1810,7 +1810,7 @@ stations:
       { to: wildarea2_tt_w_01, line: wildarea2_tt_w_01, direction: to_wildarea2_tt_w_01, time: 304, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_01:
-    name: ゾンビTT(TT-W-01)
+    name: ゾンビTT
     yomi: ぞんびとらっぷたわー
     number: TT-W-01
     world: wildarea2
@@ -1820,7 +1820,7 @@ stations:
       { to: wildarea2_tt_w_01_2, line: wildarea2_tt_w_01, direction: to_wildarea2_central, time: 304, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_02:
-    name: スケルトンTT(TT-W-02)
+    name: スケルトンTT
     yomi: すけるとんとらっぷたわー
     number: TT-W-02
     world: wildarea2
@@ -1863,7 +1863,7 @@ stations:
       { to: wildarea2_yms_02, line: wildarea2_tt_w_02_to_mesa, direction: north, time: 608, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_03:
-    name: 海底神殿跡地TT(TT-W-03)
+    name: 海底神殿跡地TT
     yomi: かいていしんでんあとちとらっぷたわー
     number: TT-W-03
     world: wildarea2
@@ -1873,7 +1873,7 @@ stations:
       { to: wildarea2_central_e, line: wildarea2_tt_w_03, direction: to_wildarea2_central, time: 483, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_04:
-    name: アイアンゴーレムトラップ(TT-W-04)
+    name: アイアンゴーレムトラップ
     yomi: あいあんごーれむとらっぷ
     number: TT-W-04
     world: wildarea2
@@ -1884,7 +1884,7 @@ stations:
       { to: wildarea2_central_e, line: walk, direction: eastwalk, time: 20, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_05:
-    name: 洞窟蜘蛛TT(TT-W-05)
+    name: 洞窟蜘蛛TT
     yomi: どうくつぐもとらっぷたわー
     number: TT-W-05
     world: wildarea2
@@ -1894,7 +1894,7 @@ stations:
       { to: wildarea2_central_w, line: wildarea2_tt_w_05, direction: to_wildarea2_central, time: 54, rapid_not_in_parallel: false },
     ]
   wildarea2_tt_w_06:
-    name: クリーパートラップ(TT-W-06)
+    name: クリーパートラップ
     yomi: くりーぱーとらっぷ
     number: TT-W-06
     world: wildarea2
@@ -1980,7 +1980,7 @@ stations:
       { to: wildarea2_nether_tt_n_01, line: wildarea2_nether_tt_n_01_b, direction: to_wildarea2_nether_tt_n_01, time: 10, rapid_not_in_parallel: false },
     ]
   wildarea2_nether_tt_n_01:
-    name: ポテト屋(TT-N-01)
+    name: ポテト屋
     yomi: ぽてとや
     number: TT-N-01
     world: wildarea2_nether
