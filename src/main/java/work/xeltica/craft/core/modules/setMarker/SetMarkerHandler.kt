@@ -87,9 +87,9 @@ class SetMarkerHandler : Listener {
     @EventHandler
     fun onPlayerGameModeChange(e: PlayerGameModeChangeEvent) {
         if (e.newGameMode == GameMode.SPECTATOR) {
-            e.player.performCommand("dynmap hide");
+            e.player.performCommand("dynmap hide")
         } else if (e.player.hasPermission("dynmap.show")) {
-            e.player.performCommand("dynmap show");
+            e.player.performCommand("dynmap show")
         }
     }
 

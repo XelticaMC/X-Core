@@ -510,19 +510,15 @@ object SetMarkerModule : ModuleBase() {
             return loc
 
         } else if (input.matches(tildaFilter)) { //~[0-9]{1,}
-            Bukkit.getLogger().info("tildaFilter : " + input.substring(1).toDouble())
             return loc + input.substring(1).toDouble()
 
         } else if (input.matches(tildaMinusFilter)) {//~-[0-9]{1,}
-            Bukkit.getLogger().info("tildaMinusFilter : " + input.substring(2).toDouble())
             return loc - (input.substring(2).toDouble())
 
         } else if (input.matches(minusFilter)) {//-[0-9]{1,}
-            Bukkit.getLogger().info("minusFilter : " + input.substring(1).toDouble())
             return 0 - (input.substring(1).toDouble())
 
         } else if (input.matches(numsFilter)) {//[0-9]{1,}
-            Bukkit.getLogger().info("numsFilter : " + input.toDouble())
             return input.toDouble()
 
         } else return null
