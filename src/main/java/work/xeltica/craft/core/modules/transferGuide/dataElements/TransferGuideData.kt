@@ -19,6 +19,7 @@ class TransferGuideData {
     val updateInfo: String?
     val availableWorlds: Map<String, String>
     val consoleDebug: Boolean
+    val allowsElephant: Boolean
 
     init {
         val conf = Config("transferGuideData").conf
@@ -40,6 +41,7 @@ class TransferGuideData {
         updateInfo = sb.toString()
         availableWorlds = pairStringConfigToMap(conf.getConfigurationSection("availableWorlds"))
         consoleDebug = conf.getBoolean("consoleDebug", false)
+        allowsElephant = conf.getBoolean("allowsElephant", false)
     }
 
     fun stationExists(stationId: String): Boolean {

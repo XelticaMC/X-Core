@@ -135,7 +135,7 @@ class TransferGuideSession(val player: Player) {
             MenuItem("出発地点:$startStationName", { chooseStation(StationChoiceTarget.START) }, Material.LIME_BANNER),
             MenuItem("到着地点:$endStationName", { chooseStation(StationChoiceTarget.END) }, Material.RED_BANNER),
             MenuItem("出発地点と到着地点を入れ替える", { reverseChosenStations() }, Material.LEVER),
-            MenuItem("計算開始", { showRoute(calcRoute(startId, endId)) }, Material.COMMAND_BLOCK_MINECART),
+            MenuItem("計算開始", { showRoute() }, Material.COMMAND_BLOCK_MINECART),
             MenuItem("駅情報", { openStationInfoMenu() }, Material.CHEST_MINECART),
         )
         if (data.availableWorlds[player.world.name] == "main") {
@@ -178,6 +178,7 @@ class TransferGuideSession(val player: Player) {
             MenuItem("五十音順", { chooseStationAiueo(stationChoiceTarget) }, Material.BOOK),
             MenuItem("会社・路線別", { chooseStationLine(stationChoiceTarget) }, Material.SPRUCE_DOOR),
             MenuItem("最寄自治体別", { chooseStationMuni(stationChoiceTarget) }, Material.FILLED_MAP),
+            MenuItem("ランダム", { chooseStationRandom(stationChoiceTarget) }, Material.TARGET)
         )
         if (stationChoiceTarget != StationChoiceTarget.FAVORITES_ADD) {
             items.add(MenuItem("お気に入りの駅", { chooseStationFavorites(stationChoiceTarget) }, Material.OAK_SIGN))
@@ -189,6 +190,16 @@ class TransferGuideSession(val player: Player) {
         }
         items.add(MenuItem("戻る", goToMenu, Material.REDSTONE_TORCH))
         gui.openMenu(player, "駅選択", items)
+    }
+
+    /**
+     * ランダムに駅を選択します。
+     */
+    private fun chooseStationRandom(stationChoiceTarget: StationChoiceTarget) {
+        val stations = KStations.allStations(data).filterByWorld(player.world.name).filterByType("station").value
+        val range = 0 until stations.size
+        val station = stations[range.random()]
+        setStationIdAndOpenMainMenu(station.id, stationChoiceTarget)
     }
 
     /**
@@ -393,7 +404,7 @@ class TransferGuideSession(val player: Player) {
      * 選択した駅からルートを検索します。
      * A*アルゴリズムの実装になっているハズ、多分
      */
-    private fun calcRoute(startId: String?, endId: String?): KRoute? {
+    private fun calcRoute(startId: String?, endId: String?, reverse: Boolean = false): KRoute? {
         if (startId == null && endId == null) {
             gui.error(player, "駅が設定されていません！")
             return null
@@ -423,7 +434,7 @@ class TransferGuideSession(val player: Player) {
         val unsearched = data.stations.toMutableMap()
 
         /**次の探索の候補となる駅(OPENリスト)*/
-        val opened: MutableMap<KStation, Double> = mutableMapOf()
+        val opened: MutableMap<KStation, OpenedValue> = mutableMapOf()
 
         /**探索済みの駅(CLOSEリスト)*/
         val closed: MutableSet<KStation> = mutableSetOf()
@@ -434,7 +445,7 @@ class TransferGuideSession(val player: Player) {
             logger.info("[TransferGuide(debug)] $stepsList")
         }
         //始点の駅を未探索から探索候補に移す
-        opened[start] = 0.0
+        opened[start] = OpenedValue(0, 0)
         unsearched.remove(startId)
         var i = 0
         val toRemove = arrayListOf<String>()
@@ -451,27 +462,23 @@ class TransferGuideSession(val player: Player) {
             return "step=A${i}\n" +
                     "route=${startId}->${endId}\n" +
                     "unsearched=${unsearched.toList().joinToString { it.first }}\n" +
-                    "opened=${opened.toList().joinToString { "${it.first.id}(${it.second})" }}\n" +
+                    "opened=${opened.toList().joinToString { "${it.first.id}(${it.second.elapsedTime}:${it.second.priority})" }}\n" +
                     "closed=${closed.joinToString { it.id }}"
         }
         knitA@ while (i < data.loopMax) {
             //探索候補の駅に対し、それぞれの優先度を決定する
             //計算式:(((終点との直線距離÷2)+推定所要時間)×残り駅数),終点と同じ路線なら÷1.25
             opened.forEach {
-                val distance = TransferGuideUtil.calcDistance(end.location, it.key.location)
-                val steps = stepsList[it.key.id]?.first ?: 1
-                val time = stepsList[it.key.id]?.second ?: 1
-                var priority = (((distance / 2) + time) * steps)
-                if (getSameLines(it.key.id, endId).isNotEmpty()) {
-                    priority /= 1.25
-                }
-                opened[it.key] = priority
+                val xDistance = abs(end.location[0] - it.key.location[0]).toInt()
+                val yDistance = abs(end.location[1] - it.key.location[1]).toInt()
+                val priority = (xDistance + yDistance) / 8
+                opened[it.key] = OpenedValue(it.value.elapsedTime, it.value.elapsedTime + priority)
             }
             if (data.consoleDebug) {
                 logger.info("[TransferGuide(debug)] ${loopADebugString()}")
             }
             //探索候補の駅の内、優先度値が最も低いものを選択する
-            val minOpenedStation = opened.minByOrNull { it.value }
+            val minOpenedStation = opened.minByOrNull { it.value.priority }
             //優先度値が最も低いものが見つからない場合、両駅間の経路は存在しないものと考えられる
             if (minOpenedStation == null) {
                 gui.error(player, "指定された駅同士を結ぶ有効な経路が存在しません。")
@@ -486,7 +493,7 @@ class TransferGuideSession(val player: Player) {
                 //快速線で並行する緩行線がある線は無視
                 if (data.lines[path.line]?.rapid == true && path.rapidNotInParallel == false) continue
                 val pathToInUnsearched = unsearched[path.to] ?: continue
-                opened[pathToInUnsearched] = 0.0
+                opened[pathToInUnsearched] = OpenedValue(minOpenedStation.value.elapsedTime + (path.time ?: 0), 0)
                 unsearched.remove(pathToInUnsearched.id)
                 //もし終点が含まれていれば、そこで終了
                 if (endId == pathToInUnsearched.id) {
@@ -532,16 +539,26 @@ class TransferGuideSession(val player: Player) {
                     candidates[station] = TransferGuideUtil.calcDistance(end.location, station.location)
                 }
             }
+            if (data.consoleDebug) {
+                logger.info("[TransferGuideData(debug)] candidates=${candidates.toList().joinToString { it.first.id + "(" + it.second + ")" }}")
+            }
             //駅が取得できない場合、袋小路に入ったものと考え、分岐点まで戻る
             if (candidates.isEmpty()) {
                 var k = 0
                 while (k < data.loopMax) {
                     routeArrayList.removeLast()
+                    if (routeArrayList.isEmpty()) {
+                        gui.error(player, "最小値からの駅探索Bに失敗しました。")
+                        logger.warning("[TransferGuideData] 最小値からの駅探索失敗B\n${loopBDebugString()}")
+                        return null
+                    }
                     if (data.consoleDebug) {
                         logger.info("[TransferGuideData(debug)] step=Ba${k}\n${loopBDebugString()}")
                     }
                     for (path in routeArrayList.last().paths) {
-                        if (closed.any { it.id == path.to }) {
+                        if ((path.line == "walk" || path.line == "boat" || data.lines[path.line]?.rapid == false || path.rapidNotInParallel == true) || closed.any {
+                                it.id == path.to
+                            }) {
                             j++
                             continue@knitB
                         }
@@ -597,6 +614,9 @@ class TransferGuideSession(val player: Player) {
                 routeArrayListTemp.add(value)
             }
         }
+        if (reverse) {
+            routeArrayListTemp.reverse()
+        }
         val routeArray = routeArrayListTemp.toTypedArray()
         if (data.consoleDebug) {
             logger.info("routeArray=${routeArray.joinToString { it.id }}")
@@ -604,8 +624,20 @@ class TransferGuideSession(val player: Player) {
         return KRoute(data, routeArray)
     }
 
-    private fun showRoute(route: KRoute?) {
-        player.sendMessage(route?.toStringForGuide() ?: "空白")
+    /**
+     * ルートを表示します。
+     */
+    private fun showRoute() {
+        val startToEnd = calcRoute(startId, endId)
+        val endToStart: KRoute?
+        var shorter: KRoute?
+        try {
+            endToStart = calcRoute(endId, startId, true)
+            shorter = listOf(startToEnd, endToStart).minByOrNull { it?.getTime() ?: 0 }
+        } catch (_: Exception) {
+            shorter = startToEnd
+        }
+        player.sendMessage(shorter?.toStringForGuide() ?: "失敗")
     }
 
     /**
@@ -906,11 +938,16 @@ class TransferGuideSession(val player: Player) {
                     "実行する場合、「Knitは天才」、実行しない場合はそれ以外の文字列をチャット欄に打ち込んで下さい。\n" +
                     "${ChatColor.YELLOW}あなたがスタッフではない場合、セキュリティ上重大なバグが発生しています。実行せずにバグ報告をして下さい。"
         ) {
-            if (it != "Knitは天才" || !player.isOp) {
+            if (!data.allowsElephant || it != "Knitは天才" || !player.isOp) {
                 player.sendMessage("実行をキャンセルしました。")
                 return@openTextInput
             }
-            verifyAllRoutes(onlyReachable)
+            val thread = object : Thread() {
+                override fun run() {
+                    verifyAllRoutes(onlyReachable)
+                }
+            }
+            thread.start()
         }
     }
 
@@ -921,7 +958,10 @@ class TransferGuideSession(val player: Player) {
         var problemCount = 0
         var itemCount = 0
         val yellow = ChatColor.YELLOW
-        val stations = KStations.allStations(data).filterByWorld(player.world.name).value
+        val stations = KStations.allStations(data)
+            .filterByWorld(player.world.name)
+            .filterByType("station")
+            .value
         val total = stations.size * stations.size
         stations.forEach { start ->
             stations.forEach inner@{ end ->
@@ -929,32 +969,30 @@ class TransferGuideSession(val player: Player) {
                     itemCount++
                     return@inner
                 }
-                val startToEnd = calcRoute(start.id, end.id)
-                if (startToEnd == null) {
-                    player.sendMessage("${yellow}${start.id}から${end.id}へ到達できません。")
+                try {
+                    val startToEnd = calcRoute(start.id, end.id)
+                    if (startToEnd == null) {
+                        player.sendMessage("${yellow}${start.id}->${end.id}:到達不可。")
+                        problemCount++
+                    }
+                    if (!onlyReachable) {
+                        val endToStart = calcRoute(end.id, start.id)
+                        if (endToStart == null) {
+                            player.sendMessage("${yellow}${end.id}から${start.id}へ到達できません。")
+                            problemCount++
+                        }
+                        val startToEndTime = startToEnd?.getTime()
+                        val endToStartTime = endToStart?.getTime()
+                        val difference = abs((startToEndTime ?: 0) - (endToStartTime ?: 0))
+                        if (difference >= 30) {
+                            player.sendMessage("${yellow}${start.id}<->${end.id}:行きと帰りで${TransferGuideUtil.secondsToString(difference)}の差があります")
+                            problemCount++
+                        }
+                    }
+                } catch (e: Exception) {
+                    player.sendMessage("${yellow}${start.id}<->${end.id}:例外発生:コンソール参照")
+                    e.printStackTrace()
                     problemCount++
-                }
-                if (!onlyReachable) {
-                    val endToStart = calcRoute(end.id, start.id)
-                    if (endToStart == null) {
-                        player.sendMessage("${yellow}${end.id}から${start.id}へ到達できません。")
-                        problemCount++
-                    }
-                    val startToEndTime = startToEnd?.getTime()
-                    val endToStartTime = endToStart?.getTime()
-                    if (startToEndTime != endToStartTime) {
-                        val difference = TransferGuideUtil.secondsToString(abs((startToEndTime ?: 0) - (endToStartTime ?: 0)))
-                        player.sendMessage("行きと帰りで${difference}の差があります")
-                        player.sendMessage("行き:")
-                        startToEnd?.toStringForGuide()?.split("\n")?.forEach {
-                            player.sendMessage(" $it")
-                        }
-                        player.sendMessage("帰り:")
-                        endToStart?.toStringForGuide()?.split("\n")?.forEach {
-                            player.sendMessage(" $it")
-                        }
-                        problemCount++
-                    }
                 }
                 itemCount++
                 if (itemCount % 100 == 0) {
@@ -995,10 +1033,9 @@ class TransferGuideSession(val player: Player) {
         return map
     }
 
-    /**
-     * 共通する路線を抽出します。
-     */
-    private fun getSameLines(startId: String, endId: String): Array<String> {
-        return data.lines.filter { it.value.stations.containsAll(setOf(startId, endId)) }.keys.toTypedArray()
-    }
 }
+
+private class OpenedValue(
+    var elapsedTime: Int,
+    var priority: Int,
+)

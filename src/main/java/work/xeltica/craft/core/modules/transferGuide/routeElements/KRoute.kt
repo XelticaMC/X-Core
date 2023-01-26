@@ -37,7 +37,7 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
         }
         if (data.consoleDebug) {
             Bukkit.getLogger().info(pathsCandidates.joinToString { candidate ->
-                "[" +
+                "pathCandidates=[" +
                         candidate.joinToString {
                             if (it is KRoutePathReal) {
                                 "${it.line}:${it.direction}"
