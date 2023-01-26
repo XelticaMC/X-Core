@@ -465,6 +465,7 @@ object SetMarkerModule : ModuleBase() {
     fun offset(loc: Location, blockFace: String?): Location {
         var reLoc = loc
         if (blockFace == null) return reLoc
+
         when (blockFace) {
             "NORTH" -> reLoc = Location(loc.world, loc.x, loc.y, loc.z - 1).toBlockLocation()
             "EAST" -> reLoc = Location(loc.world, loc.x + 1, loc.y, loc.z).toBlockLocation()
@@ -476,39 +477,55 @@ object SetMarkerModule : ModuleBase() {
         return reLoc
     }
 
+    /**
+     * 相対座標もどきを使えるようにする関数
+     */
     fun tildaToLocation(player: Player, x_: String, y_: String, z_: String): Location? {
-        var x = 0.0
-        var y = 0.0
-        var z = 0.0
-        if (x_.equals("~")) {
-            x = player.location.x
-        } else {
-            try {
-                x = x_.toDouble()
-            } catch (e: NumberFormatException) {
-                return null
-            }
+        val x = StringTolocation(player, x_, "x") ?: return null
+        val y = StringTolocation(player, y_, "y") ?: return null
+        val z = StringTolocation(player, z_, "z") ?: return null
 
-        }
-        if (y_.equals("~")) {
-            y = player.location.y
-        } else {
-            try {
-                x = x_.toDouble()
-            } catch (e: NumberFormatException) {
-                return null
-            }
-        }
-        if (z_.equals("~")) {
-            z = player.location.z
-        } else {
-            try {
-                x = x_.toDouble()
-            } catch (e: NumberFormatException) {
-                return null
-            }
-        }
         return Location(player.world, x, y, z)
+    }
+
+    /**
+     * 文字列[input]を絶対座標に変換
+     * @param player 実行プレイヤー
+     * @param xyz 座標軸を指定。x y z以外を指定した場合はnullが戻ってくる。
+     */
+    private fun StringTolocation(player: Player, input: String, xyz: String = "x"): Double? {
+        val tildaFilter = Regex("~[0-9]{0,100000000}$")
+        val onlyTildaFilter = Regex("^~{0,1}$") //なんかうまく動かんから直接指定した
+        val tildaMinusFilter = Regex("~-[0-9]{0,100000000}$")
+        val minusFilter = Regex("-[0-9]{0,100000000}$")
+        val numsFilter = Regex("^[0-9]{0,100000000}$")
+
+        var loc = 0.0
+        if (xyz == "x") loc = player.location.x
+        else if (xyz == "y") loc = player.location.y
+        else if (xyz == "z") loc = player.location.z
+        else return null
+        if (input == "~") { //~{0,1}
+            Bukkit.getLogger().info("onlyTildaFilter : " + loc)
+            return loc
+
+        } else if (input.matches(tildaFilter)) { //~[0-9]{1,}
+            Bukkit.getLogger().info("tildaFilter : " + input.substring(1).toDouble())
+            return loc + input.substring(1).toDouble()
+
+        } else if (input.matches(tildaMinusFilter)) {//~-[0-9]{1,}
+            Bukkit.getLogger().info("tildaMinusFilter : " + input.substring(2).toDouble())
+            return loc - (input.substring(2).toDouble())
+
+        } else if (input.matches(minusFilter)) {//-[0-9]{1,}
+            Bukkit.getLogger().info("minusFilter : " + input.substring(1).toDouble())
+            return 0 - (input.substring(1).toDouble())
+
+        } else if (input.matches(numsFilter)) {//[0-9]{1,}
+            Bukkit.getLogger().info("numsFilter : " + input.toDouble())
+            return input.toDouble()
+
+        } else return null
     }
 
     /**

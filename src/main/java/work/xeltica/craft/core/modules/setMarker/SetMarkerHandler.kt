@@ -1,9 +1,11 @@
 package work.xeltica.craft.core.modules.setMarker
 
+import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 
@@ -81,4 +83,14 @@ class SetMarkerHandler : Listener {
             }
         }
     }
+
+    @EventHandler
+    fun onPlayerGameModeChange(e: PlayerGameModeChangeEvent) {
+        if (e.newGameMode == GameMode.SPECTATOR) {
+            e.player.performCommand("dynmap hide");
+        } else if (e.player.hasPermission("dynmap.show")) {
+            e.player.performCommand("dynmap show");
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.setMarker
 
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -37,8 +38,14 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                         val y = args[2]
                         val z = args[3]
 
-                        val location = SetMarkerModule.tildaToLocation(player, x, y, z) ?: return false
+                        val location = SetMarkerModule.tildaToLocation(player, x, y, z)
+                        if (location == null) {
+
+                            Bukkit.getLogger().info("異常終了 入力値：$x,$y,$z")
+                            return false
+                        }
                         SetMarkerModule.setMarker(player, location.toBlockLocation())
+                        return true
                     }
 
                     else -> player.sendMessage("§c引数が多すぎます！")
@@ -74,6 +81,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
 
                         val location = SetMarkerModule.tildaToLocation(player, x, y, z) ?: return false
                         SetMarkerModule.dellMarker(player, location.toBlockLocation())
+                        return true
                     }
 
                     else -> player.sendMessage("§c引数が多すぎます！")
@@ -113,6 +121,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
 
                         val loc1 = SetMarkerModule.tildaToLocation(player, x, y, z) ?: return false
                         SetMarkerModule.moveMarker(player, loc1.toBlockLocation(), loc2)
+                        return true
                     }
 
                     5 -> {
@@ -129,6 +138,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
 
                         val loc = SetMarkerModule.tildaToLocation(player, x, y, z) ?: return false
                         SetMarkerModule.moveMarker(player, index, loc.toBlockLocation(), null)
+                        return true
                     }
 
                     6 -> {
@@ -146,6 +156,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                         val location = SetMarkerModule.tildaToLocation(player, x, y, z) ?: return false
                         val endlocation = SetMarkerModule.tildaToLocation(player, x2, y2, z2) ?: return false
                         SetMarkerModule.moveMarker(player, location.toBlockLocation(), endlocation.toBlockLocation())
+                        return true
                     }
 
                     else -> player.sendMessage("§c引数が多すぎます！")
