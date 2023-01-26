@@ -527,7 +527,7 @@ class TransferGuideSession(val player: Player) {
             closed.forEach { station ->
                 if (station.paths.any {
                         it.to == routeArrayList.last().id
-                                && ((it.line == "walk" || it.line == "boat") || data.lines[it.line]?.rapid == false || it.rapidNotInParallel == true)
+                                && (it.line == "walk" || it.line == "boat" || data.lines[it.line]?.rapid == false || it.rapidNotInParallel == true)
                     }) {
                     candidates[station] = TransferGuideUtil.calcDistance(end.location, station.location)
                 }
@@ -536,6 +536,7 @@ class TransferGuideSession(val player: Player) {
             if (candidates.isEmpty()) {
                 var k = 0
                 while (k < data.loopMax) {
+                    routeArrayList.removeLast()
                     if (data.consoleDebug) {
                         logger.info("[TransferGuideData(debug)] step=Ba${k}\n${loopBDebugString()}")
                     }
@@ -545,7 +546,6 @@ class TransferGuideSession(val player: Player) {
                             continue@knitB
                         }
                     }
-                    routeArrayList.removeLast()
                     k++
                 }
                 j++
