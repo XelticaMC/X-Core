@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2023-01-22T22:22"
+update: "2023-01-26T17:57"
 update_info: |-
   路線追加:
    共天睦月電鉄(新草線、新鮫南北線、湖北線、足立線)
@@ -1196,7 +1196,7 @@ stations:
     location: [ -154.5, 865.5 ]
     type: station
     paths: [
-      { to: scr_09, line: scr_nansho, direction: to_ebikawa_watashi, time: 24, rapid_not_in_parallel: false },
+      { to: scr_10, line: scr_nansho, direction: to_ebikawa_watashi, time: 24, rapid_not_in_parallel: false },
       { to: scr_12, line: scr_nansho, direction: to_yamuwakka, time: 56, rapid_not_in_parallel: false },
     ]
   scr_12:
@@ -1316,7 +1316,7 @@ stations:
       { to: nyv_main_2, line: nyv_main, direction: to_shirehasaki, time: 18, rapid_not_in_parallel: false },
       { to: nyv_main_4, line: nyv_main, direction: to_fukamiwan, time: 18, rapid_not_in_parallel: false },
       { to: nyv_takayama_1, line: nyv_takayama, direction: to_hatsumaya, time: 33, rapid_not_in_parallel: false },
-      { to: nyv_takayama_3, line: nyv_takayama, direction: to_yamabukitakayama, time: 24, rapid_not_in_parallel: false },
+      { to: nyv_takayama_2a, line: nyv_takayama, direction: to_yamabukitakayama, time: 24, rapid_not_in_parallel: false },
     ]
   nyv_main_4:
     name: 川中島
@@ -1713,7 +1713,7 @@ stations:
     location: [ 1991.5, 6.5 ]
     type: station
     paths: [
-      { to: nyv_main_3, line: nyv_takayama, direction: to_hatsumaya, time: 24, rapid_not_in_parallel: false },
+      { to: nyv_takayama_2a, line: nyv_takayama, direction: to_hatsumaya, time: 45, rapid_not_in_parallel: false },
       { to: nyv_main_9, line: nyv_takayama, direction: to_yamabukitakayama, time: 60, rapid_not_in_parallel: false },
     ]
   nyv_takayama_5:
@@ -2677,3 +2677,6 @@ availableWorlds:
 
 #デバッグ用、コンソールが滅茶滅茶になるので、本番環境ではfalseにすることを強めに推奨
 consoleDebug: false
+
+#サーバーのパフォーマンスに影響を与えるデバッグ操作の可否、本番環境では絶対にfalse
+allowsElephant: false
