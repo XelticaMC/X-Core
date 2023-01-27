@@ -2,22 +2,9 @@ package work.xeltica.craft.core.modules.ebipower
 
 import com.destroystokyo.paper.MaterialTags
 import net.kyori.adventure.text.Component
-import org.bukkit.GameMode
-import org.bukkit.Material
-import org.bukkit.Sound
-import org.bukkit.SoundCategory
-import org.bukkit.Tag
+import org.bukkit.*
 import org.bukkit.enchantments.Enchantment
-import org.bukkit.entity.Ageable
-import org.bukkit.entity.Cat
-import org.bukkit.entity.Hoglin
-import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Monster
-import org.bukkit.entity.Ocelot
-import org.bukkit.entity.Player
-import org.bukkit.entity.SkeletonHorse
-import org.bukkit.entity.Slime
-import org.bukkit.entity.Tameable
+import org.bukkit.entity.*
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -35,7 +22,7 @@ import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.transferPlayerData.TransferPlayerDataEvent
 import work.xeltica.craft.core.modules.world.WorldModule
-import java.util.Random
+import java.util.*
 
 /**
  * エビパワー関連のイベントハンドラをまとめています。
@@ -170,8 +157,9 @@ class EbiPowerHandler : Listener {
         val p = e.player
         if (playerIsInBlacklisted(p)) return
         val blockData = e.block.blockData
-        HintModule.achieve(p, Hint.HARVEST_AND_EARN_MONEY)
+        //HintModule.achieve(p, Hint.HARVEST_AND_EARN_MONEY)
         if (blockData is org.bukkit.block.data.Ageable && blockData.age == blockData.maximumAge) {
+            HintModule.achieve(p, Hint.HARVEST_AND_EARN_MONEY)
             val tool = p.inventory.itemInMainHand
             val bonus = getBlockDropBonus(tool)
             val power = (1 + bonus) * HARVEST_POWER_MULTIPLIER

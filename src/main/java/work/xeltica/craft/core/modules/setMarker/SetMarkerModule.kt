@@ -73,13 +73,6 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * アクティブマーカーをプレイヤーの足元に移動
-     */
-    fun moveMarker(p: Player) {
-        moveMarker(p, p.location, null)
-    }
-
-    /**
      * アクティブマーカ―を指定した場所に移動
      */
     fun moveMarker(p: Player, loc: Location, face: String?) {
@@ -481,9 +474,9 @@ object SetMarkerModule : ModuleBase() {
      * 相対座標もどきを使えるようにする関数
      */
     fun tildaToLocation(player: Player, x_: String, y_: String, z_: String): Location? {
-        val x = StringTolocation(player, x_, "x") ?: return null
-        val y = StringTolocation(player, y_, "y") ?: return null
-        val z = StringTolocation(player, z_, "z") ?: return null
+        val x = stringToLocation(player, x_, "x") ?: return null
+        val y = stringToLocation(player, y_, "y") ?: return null
+        val z = stringToLocation(player, z_, "z") ?: return null
 
         return Location(player.world, x, y, z)
     }
@@ -493,18 +486,19 @@ object SetMarkerModule : ModuleBase() {
      * @param player 実行プレイヤー
      * @param xyz 座標軸を指定。x y z以外を指定した場合はnullが戻ってくる。
      */
-    private fun StringTolocation(player: Player, input: String, xyz: String = "x"): Double? {
-        val tildaFilter = Regex("^~[0-9]{1,100}$")
-        val onlyTildaFilter = Regex("^~{1,1}$") //なんかうまく動かんから直接指定した
-        val tildaMinusFilter = Regex("^~-[0-9]{1,100}$")
-        val minusFilter = Regex("^-[0-9]{1,100}$")
-        val numsFilter = Regex("^[0-9]{1,100}$")
+    private fun stringToLocation(player: Player, input: String, xyz: String = "x"): Double? {
+        val tildaFilter = Regex("^~[0-9]{1,10}$")
+        val tildaMinusFilter = Regex("^~-[0-9]{1,10}$")
+        val minusFilter = Regex("^-[0-9]{1,10}$")
+        val numsFilter = Regex("^[0-9]{1,10}$")
 
-        var loc = 0.0
-        if (xyz == "x") loc = player.location.x
-        else if (xyz == "y") loc = player.location.y
-        else if (xyz == "z") loc = player.location.z
-        else return null
+        val loc = when (xyz) {
+            "x" -> player.location.x
+            "y" -> player.location.y
+            "z" -> player.location.z
+            else -> return null
+        }
+
         if (input == "~") { //~
             return loc
 
@@ -520,7 +514,10 @@ object SetMarkerModule : ModuleBase() {
         } else if (input.matches(numsFilter)) {//[0-9]{1,100}
             return input.toDouble()
 
-        } else return null
+        } else {
+            player.sendMessage("")
+            return null
+        }
     }
 
     /**
