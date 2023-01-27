@@ -76,6 +76,9 @@ object ItemModule : ModuleBase() {
         val meta1 = stack1.itemMeta
         val meta2 = stack2.itemMeta
 
+        if (meta1.displayName() == null) return false
+        if (meta2.displayName() == null) return false
+
         val name1 = PlainTextComponentSerializer.plainText().serialize(meta1.displayName()!!)
         val name2 = PlainTextComponentSerializer.plainText().serialize(meta2.displayName()!!)
         if (name1 != name2) return false
