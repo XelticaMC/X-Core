@@ -167,6 +167,7 @@ class EbiPowerHandler : Listener {
      */
     @EventHandler
     fun onHarvestCrops(e: BlockBreakEvent) {
+        if (!crops.contains(e.block.type)) return
         val p = e.player
         if (playerIsInBlacklisted(p)) return
         val blockData = e.block.blockData
