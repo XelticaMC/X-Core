@@ -92,5 +92,4 @@ class SetMarkerHandler : Listener {
             e.player.performCommand("dynmap show")
         }
     }
-
 }

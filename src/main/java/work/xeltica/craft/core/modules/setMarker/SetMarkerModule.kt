@@ -494,31 +494,30 @@ object SetMarkerModule : ModuleBase() {
      * @param xyz 座標軸を指定。x y z以外を指定した場合はnullが戻ってくる。
      */
     private fun StringTolocation(player: Player, input: String, xyz: String = "x"): Double? {
-        val tildaFilter = Regex("~[0-9]{0,100000000}$")
-        val onlyTildaFilter = Regex("^~{0,1}$") //なんかうまく動かんから直接指定した
-        val tildaMinusFilter = Regex("~-[0-9]{0,100000000}$")
-        val minusFilter = Regex("-[0-9]{0,100000000}$")
-        val numsFilter = Regex("^[0-9]{0,100000000}$")
+        val tildaFilter = Regex("^~[0-9]{1,100}$")
+        val onlyTildaFilter = Regex("^~{1,1}$") //なんかうまく動かんから直接指定した
+        val tildaMinusFilter = Regex("^~-[0-9]{1,100}$")
+        val minusFilter = Regex("^-[0-9]{1,100}$")
+        val numsFilter = Regex("^[0-9]{1,100}$")
 
         var loc = 0.0
         if (xyz == "x") loc = player.location.x
         else if (xyz == "y") loc = player.location.y
         else if (xyz == "z") loc = player.location.z
         else return null
-        if (input == "~") { //~{0,1}
-            Bukkit.getLogger().info("onlyTildaFilter : " + loc)
+        if (input == "~") { //~
             return loc
 
-        } else if (input.matches(tildaFilter)) { //~[0-9]{1,}
+        } else if (input.matches(tildaFilter)) { //~[0-9]{1,100}
             return loc + input.substring(1).toDouble()
 
-        } else if (input.matches(tildaMinusFilter)) {//~-[0-9]{1,}
+        } else if (input.matches(tildaMinusFilter)) {//~-[0-9]{1,100}
             return loc - (input.substring(2).toDouble())
 
-        } else if (input.matches(minusFilter)) {//-[0-9]{1,}
+        } else if (input.matches(minusFilter)) {//-[0-9]{1,100}
             return 0 - (input.substring(1).toDouble())
 
-        } else if (input.matches(numsFilter)) {//[0-9]{1,}
+        } else if (input.matches(numsFilter)) {//[0-9]{1,100}
             return input.toDouble()
 
         } else return null
