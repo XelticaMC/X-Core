@@ -60,7 +60,7 @@ object ItemModule : ModuleBase() {
 
         st.editMeta {
             it.displayName(
-                Component.text(name).style(Style.style(TextColor.color(37, 113, 255), TextDecoration.BOLD))
+                    Component.text(name).style(Style.style(TextColor.color(37, 113, 255), TextDecoration.BOLD))
             )
             it.lore(lore.map { s -> Component.text(s) })
         }
@@ -76,11 +76,8 @@ object ItemModule : ModuleBase() {
         val meta1 = stack1.itemMeta
         val meta2 = stack2.itemMeta
 
-        if (meta1.displayName() == null) return false
-        if (meta2.displayName() == null) return false
-
-        val name1 = PlainTextComponentSerializer.plainText().serialize(meta1.displayName()!!)
-        val name2 = PlainTextComponentSerializer.plainText().serialize(meta2.displayName()!!)
+        val name1 = PlainTextComponentSerializer.plainText().serialize(meta1.displayName() ?: return false)
+        val name2 = PlainTextComponentSerializer.plainText().serialize(meta2.displayName() ?: return false)
         if (name1 != name2) return false
 
         val lore1 = meta1.lore()?.map { PlainTextComponentSerializer.plainText().serialize(it) }
@@ -124,6 +121,6 @@ object ItemModule : ModuleBase() {
     private fun registerItems() {
         customItems[ITEM_NAME_XPHONE] = createCustomItem("X Phone SE", "XelticaMCの独自機能にアクセスできるスマホ。")
         customItems[ITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT] =
-            createCustomItem("海底神殿行き資源ワールド旅行券", "メイン ✈ 海底神殿")
+                createCustomItem("海底神殿行き資源ワールド旅行券", "メイン ✈ 海底神殿")
     }
 }
