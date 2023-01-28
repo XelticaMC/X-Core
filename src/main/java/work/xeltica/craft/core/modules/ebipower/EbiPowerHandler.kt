@@ -51,7 +51,13 @@ class EbiPowerHandler : Listener {
     private val breakBonusList = HashSet<Material>()
 
     init {
-        crops.addAll(Tag.CROPS.values)
+        crops.add(Material.WHEAT)
+        crops.add(Material.CARROT)
+        crops.add(Material.POTATO)
+        crops.add(Material.BEETROOT)
+
+        breakBonusList.add(Material.PUMPKIN)
+        breakBonusList.add(Material.MELON)
 
         breakBonusList.addAll(Tag.BASE_STONE_OVERWORLD.values)
         breakBonusList.addAll(Tag.BASE_STONE_NETHER.values)
