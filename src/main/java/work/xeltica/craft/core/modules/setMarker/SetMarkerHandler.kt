@@ -1,11 +1,9 @@
 package work.xeltica.craft.core.modules.setMarker
 
-import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
-import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 
@@ -21,23 +19,23 @@ class SetMarkerHandler : Listener {
         val loc = clickBlock.location
         val face = e.blockFace.toString()
         val thisMarker = SetMarkerModule.isMarker(player, loc) //右クリックした対象がマーカーかどうか
-        if (thisMarker == 1) {//他人のマーカー
+        if (thisMarker == 1) { //他人のマーカー
             player.sendMessage("あなたのマーカーではないようです…")
             return
         }
-        if (thisMarker == 2) {//自分のマーカー
-            if (SetMarkerModule.isMarkerTool(item)) {//専用ツールであるかどうか
+        if (thisMarker == 2) { //自分のマーカー
+            if (SetMarkerModule.isMarkerTool(item)) { //専用ツールであるかどうか
                 SetMarkerModule.changeActiveMarker(player, loc)
                 return
             }
         }
         //マーカー以外のブロック
         if (thisMarker == 0) {
-            if (SetMarkerModule.isMarkerToolAD(item)) {//追加ツール動作
+            if (SetMarkerModule.isMarkerToolAD(item)) { //追加ツール動作
                 SetMarkerModule.setMarker(player, loc, face)
                 return
             }
-            if (SetMarkerModule.isMarkerToolM(item)) {//移動ツール動作
+            if (SetMarkerModule.isMarkerToolM(item)) { //移動ツール動作
                 SetMarkerModule.moveMarker(player, loc, face)
                 return
             }
@@ -66,7 +64,7 @@ class SetMarkerHandler : Listener {
             player.sendMessage("破壊に失敗しました。あなたのマーカーではないようです…")
             e.isCancelled = true
             return
-        }//自分のマーカーである
+        } //自分のマーカーである
         if (thisMarker == 2) {
             //もしツールが追加・削除モードでない時
             if (!SetMarkerModule.isMarkerToolAD(item)) {
@@ -81,15 +79,6 @@ class SetMarkerHandler : Listener {
                 player.sendMessage("破壊もしくは削除に失敗しました。")
                 e.isCancelled = true
             }
-        }
-    }
-
-    @EventHandler
-    fun onPlayerGameModeChange(e: PlayerGameModeChangeEvent) {
-        if (e.newGameMode == GameMode.SPECTATOR) {
-            e.player.performCommand("dynmap hide")
-        } else if (e.player.hasPermission("dynmap.show")) {
-            e.player.performCommand("dynmap show")
         }
     }
 }
