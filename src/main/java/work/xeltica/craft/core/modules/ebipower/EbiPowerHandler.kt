@@ -38,7 +38,13 @@ class EbiPowerHandler : Listener {
     private val breakBonusList = HashSet<Material>()
 
     init {
-        crops.addAll(Tag.CROPS.values)
+        crops.add(Material.WHEAT)
+        crops.add(Material.CARROT)
+        crops.add(Material.POTATO)
+        crops.add(Material.BEETROOT)
+
+        breakBonusList.add(Material.PUMPKIN)
+        breakBonusList.add(Material.MELON)
 
         breakBonusList.addAll(Tag.BASE_STONE_OVERWORLD.values)
         breakBonusList.addAll(Tag.BASE_STONE_NETHER.values)
@@ -154,10 +160,11 @@ class EbiPowerHandler : Listener {
      */
     @EventHandler
     fun onHarvestCrops(e: BlockBreakEvent) {
+        if (!crops.contains(e.block.type)) return
         val p = e.player
         if (playerIsInBlacklisted(p)) return
         val blockData = e.block.blockData
-        //HintModule.achieve(p, Hint.HARVEST_AND_EARN_MONEY)
+
         if (blockData is org.bukkit.block.data.Ageable && blockData.age == blockData.maximumAge) {
             HintModule.achieve(p, Hint.HARVEST_AND_EARN_MONEY)
             val tool = p.inventory.itemInMainHand
