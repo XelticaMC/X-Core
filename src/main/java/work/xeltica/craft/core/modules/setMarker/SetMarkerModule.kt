@@ -214,7 +214,7 @@ object SetMarkerModule : ModuleBase() {
             return
         }
 
-        p.sendMessage("${ChatColor.WHITE}location list${ChatColor.BLUE}---------------------------")
+        p.sendMessage("${ChatColor.WHITE}location list${ChatColor.BLUE}------------------------------")
         p.sendMessage("world : ${locationList[0].world}")
         for (i in locationList.indices) {
             p.sendMessage("$i : ${locationList[i].x}, ${locationList[i].y}, ${locationList[i].z}")
@@ -342,7 +342,7 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * player に紐づいているインデックスを削除
+     * player に紐づいているインデックスをコンフィグから削除
      */
     fun deleteLocationIndex(p: Player) {
         val conf: YamlConfiguration = marker.conf
