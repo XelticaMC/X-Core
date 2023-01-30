@@ -1,5 +1,5 @@
 #更新時はここも忘れず変更！！！！！！！！！！
-update: "2023-01-27T00:50"
+update: "2023-01-30T12:00"
 update_info: |-
   路線追加:
    共天睦月電鉄(新草線、新鮫南北線、湖北線、足立線)
@@ -1317,6 +1317,7 @@ stations:
       { to: nyv_main_4, line: nyv_main, direction: to_fukamiwan, time: 18, rapid_not_in_parallel: false },
       { to: nyv_takayama_1, line: nyv_takayama, direction: to_hatsumaya, time: 33, rapid_not_in_parallel: false },
       { to: nyv_takayama_2a, line: nyv_takayama, direction: to_yamabukitakayama, time: 24, rapid_not_in_parallel: false },
+      { to: mutsuki_shinso_15, line: walk, direction: eastwalk, time: 32, rapid_not_in_parallel: false },
     ]
   nyv_main_4:
     name: 川中島
