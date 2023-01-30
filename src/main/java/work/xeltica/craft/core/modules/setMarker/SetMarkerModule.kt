@@ -2,6 +2,7 @@ package work.xeltica.craft.core.modules.setMarker
 
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.configuration.file.YamlConfiguration
@@ -515,7 +516,7 @@ object SetMarkerModule : ModuleBase() {
             return input.toDouble()
 
         } else {
-            player.sendMessage("")
+            player.sendMessage("${ChatColor.RED}正しい座標を入力してください！")
             return null
         }
     }
