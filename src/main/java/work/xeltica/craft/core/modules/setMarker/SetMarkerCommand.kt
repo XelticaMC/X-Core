@@ -81,7 +81,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                     else -> player.sendMessage("§c引数が多すぎます！")
                 }
             }
-
+            // /marker move <index | location> [location]
             "move" -> {
                 when (args.size) {
                     1 -> {
@@ -156,17 +156,17 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                     else -> player.sendMessage("§c引数が多すぎます！")
                 }
             }
-
+            // /marker reload
             "reload" -> {
                 SetMarkerModule.reload(player)
             }
-
+            // /marker info
             "info" -> {
                 SetMarkerModule.infoMarker(player)
             }
 
             else -> player.sendMessage("< delete | move | reload | set >のどれかを指定して下さい")
-            // /marker move <index | location> [location]
+
         }
 
         return true
@@ -191,7 +191,6 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                         val argument = listOf("~", "~ ~", "~ ~ ~")
                         val completions = ArrayList<String>()
                         StringUtil.copyPartialMatches(subargument, argument, completions)
-                        //completions.addAll(argument)
                         completions.sort()
                         return completions
                     }
