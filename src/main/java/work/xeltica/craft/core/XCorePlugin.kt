@@ -38,6 +38,7 @@ import work.xeltica.craft.core.modules.kusa.KusaModule
 import work.xeltica.craft.core.modules.livemode.LiveModeModule
 import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
+import work.xeltica.craft.core.modules.moderation.ModerationModule
 import work.xeltica.craft.core.modules.motd.MotdModule
 import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.modules.nightmare.NightmareModule
@@ -202,6 +203,7 @@ class XCorePlugin : JavaPlugin() {
         LiveModeModule,
         MetaModule,
         MobBallModule,
+        ModerationModule,
         MotdModule,
         NbsModule,
         NightmareModule,
