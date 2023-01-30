@@ -15,7 +15,7 @@ import work.xeltica.craft.core.modules.item.ItemModule
 import java.io.IOException
 
 object SetMarkerModule : ModuleBase() {
-    lateinit var marker: Config
+    private lateinit var marker: Config
 
     /*
     ToDO マルチでの検証ができていないのでやる。
@@ -122,16 +122,9 @@ object SetMarkerModule : ModuleBase() {
      * 新しく指定したマーカーをアクティブマーカーに変更
      */
     fun changeActiveMarker(p: Player, loc: Location) {
-        val newIndex = isMarkerIndex(p, loc)
-        val oldIndex = getLocationIndex(p)
-        changeActiveMarker(p, oldIndex, newIndex)
-    }
-
-    /**
-     * アクティブマーカー[index1]を[index2]へ移動
-     */
-    fun changeActiveMarker(p: Player, index1: Int, index2: Int) {
         val locationList = getLocationList(p) ?: return
+        val index1 = isMarkerIndex(p, loc)
+        val index2 = getLocationIndex(p)
         locationList[index1].block.type = Material.REDSTONE_TORCH
         locationList[index2].block.type = Material.SOUL_TORCH
         saveLocationIndex(p, index2)
@@ -221,15 +214,13 @@ object SetMarkerModule : ModuleBase() {
             return
         }
 
-
-        Bukkit.getLogger().info("----------------------------------------")
+        p.sendMessage("${ChatColor.WHITE}location list${ChatColor.BLUE}---------------------------")
+        p.sendMessage("world : ${locationList[0].world}")
         for (i in locationList.indices) {
-            Bukkit.getLogger().info("" + i + "：" + locationList[i])
+            p.sendMessage("$i : ${locationList[i].x}, ${locationList[i].y}, ${locationList[i].z}")
         }
-        Bukkit.getLogger().info("合計：" + locationList.size)
-        Bukkit.getLogger().info("----------------------------------------")
-
         p.sendMessage("合計：" + locationList.size)
+        p.sendMessage("${ChatColor.BLUE}----------------------------------------")
     }
 
     /**
@@ -251,7 +242,7 @@ object SetMarkerModule : ModuleBase() {
     //コンフィグ関係
 
     /**
-     * [player] の [locationList] を保存します。
+     * player の [locationList] を保存します。
      */
     fun saveLocationList(p: Player, locationList: MutableList<Location>) {
         val conf: YamlConfiguration = marker.conf
@@ -269,7 +260,7 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * [player] のマーカー番号 [index] を保存します。
+     * player のマーカー番号 [index] を保存します。
      */
     fun saveLocationIndex(p: Player, index: Int) {
         val conf: YamlConfiguration = marker.conf
@@ -306,7 +297,7 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * [player]と紐づいている、プレイヤーが今いるワールドの座標リストを返します。
+     * playerと紐づいている、プレイヤーが今いるワールドの座標リストを返します。
      */
     fun getLocationList(p: Player): MutableList<Location>? {
         val conf: YamlConfiguration = marker.conf
@@ -325,7 +316,7 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * [player]に紐づいているインデックスを返します。
+     * playerに紐づいているインデックスを返します。
      * setMarkerでは最後に追加された点として利用
      */
     fun getLocationIndex(p: Player): Int {
@@ -336,7 +327,7 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * [player]のいるワールドのLocationListを削除
+     * playerのいるワールドのLocationListを削除
      */
     fun deleteLocationList(p: Player) {
         val conf: YamlConfiguration = marker.conf
@@ -351,7 +342,7 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * [player]に紐づいているインデックスを削除
+     * player に紐づいているインデックスを削除
      */
     fun deleteLocationIndex(p: Player) {
         val conf: YamlConfiguration = marker.conf
@@ -366,7 +357,7 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * すべての座標のなかに座標があるか検索します。
+     * 指定したワールドで、全プレイヤーの座標リストのなかに座標があるか検索します。
      * @return その座標があったpidを返します。なかった場合はnullが返ります
      */
     fun searchLocationPid(location: Location, worldName: String): String? {
@@ -381,13 +372,10 @@ object SetMarkerModule : ModuleBase() {
         return null
     }
 
-    fun getAllPrefix(): Set<String> {
-        return marker.conf.getKeys(true)
-    }
-
     //ツール関係
     /**
      * マーカーツールADかどうか判定
+     * @param item 比較したいアイテム
      */
     fun isMarkerToolAD(item: ItemStack): Boolean {
         return ItemModule.compareCustomItem(item, createMarkerToolAD())
@@ -395,6 +383,7 @@ object SetMarkerModule : ModuleBase() {
 
     /**
      * マーカーツールMかどうか判定
+     * @param item 比較したいアイテム
      */
     fun isMarkerToolM(item: ItemStack): Boolean {
         return ItemModule.compareCustomItem(item, createMarkerToolM())
@@ -402,6 +391,7 @@ object SetMarkerModule : ModuleBase() {
 
     /**
      * マーカーツールかどうか判定
+     * @param item 比較したいアイテム
      */
     fun isMarkerTool(item: ItemStack): Boolean {
         if (ItemModule.compareCustomItem(item, createMarkerToolM())) return true
@@ -423,6 +413,7 @@ object SetMarkerModule : ModuleBase() {
 
     /**
      * マーカーツール　設置・破壊専用アイテムの作成。
+     * @param amount 作成する個数（デフォルト : 1）
      */
     fun createMarkerToolAD(amount: Int = 1): ItemStack {
         val item = ItemStack(Material.CARROT_ON_A_STICK, amount)
@@ -438,6 +429,7 @@ object SetMarkerModule : ModuleBase() {
 
     /**
      * マーカーツール　移動専用アイテムの作成。
+     * @param amount 作成する個数（デフォルト : 1）
      */
     fun createMarkerToolM(amount: Int = 1): ItemStack {
         val item = ItemStack(Material.WARPED_FUNGUS_ON_A_STICK, amount)
@@ -455,6 +447,9 @@ object SetMarkerModule : ModuleBase() {
 
     /**
      * クリックしたブロックの面に応じて、返す座標を1マスずらします。
+     * @param loc 基準座標
+     * @param blockFace ブロックの面 指定しない場合はずらしません。
+     * @return その方向に1マスずらした座標
      */
     fun offset(loc: Location, blockFace: String?): Location {
         var reLoc = loc
@@ -472,13 +467,32 @@ object SetMarkerModule : ModuleBase() {
     }
 
     /**
-     * 相対座標もどきを使えるようにする関数
+     * 相対座標もどきを使えるようにする関数（~-と数字以外は不可）
+     * @param player 実行プレイヤー
+     * @param x_ x軸に使用したい文字列
+     * @param y_ y軸に使用したい文字列
+     * @param z_ z軸に使用したい文字列
+     * @return Location型の座標
      */
     fun tildaToLocation(player: Player, x_: String, y_: String, z_: String): Location? {
-        val x = stringToLocation(player, x_, "x") ?: return null
-        val y = stringToLocation(player, y_, "y") ?: return null
-        val z = stringToLocation(player, z_, "z") ?: return null
-
+        val x = stringToLocation(player, x_, "x")
+        if (x == null) {
+            player.sendMessage("${ChatColor.RED}正しいX座標を入力してください！")
+            player.sendMessage("入力値：$x_,$y_,$z_")
+            return null
+        }
+        val y = stringToLocation(player, y_, "y")
+        if (y == null) {
+            player.sendMessage("${ChatColor.RED}正しいY座標を入力してください！")
+            player.sendMessage("入力値：$x_,$y_,$z_")
+            return null
+        }
+        val z = stringToLocation(player, z_, "z")
+        if (z == null) {
+            player.sendMessage("${ChatColor.RED}正しいZ座標を入力してください！")
+            player.sendMessage("入力値：$x_,$y_,$z_")
+            return null
+        }
         return Location(player.world, x, y, z)
     }
 
@@ -486,6 +500,7 @@ object SetMarkerModule : ModuleBase() {
      * 文字列[input]を絶対座標に変換
      * @param player 実行プレイヤー
      * @param xyz 座標軸を指定。x y z以外を指定した場合はnullが戻ってくる。
+     * @return 座標に使用できる数値
      */
     private fun stringToLocation(player: Player, input: String, xyz: String = "x"): Double? {
         val tildaFilter = Regex("^~[0-9]{1,10}$")

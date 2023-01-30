@@ -1,6 +1,5 @@
 package work.xeltica.craft.core.modules.setMarker
 
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -38,12 +37,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                         val y = args[2]
                         val z = args[3]
 
-                        val location = SetMarkerModule.tildaToLocation(player, x, y, z)
-                        if (location == null) {
-
-                            Bukkit.getLogger().info("異常終了 入力値：$x,$y,$z")
-                            return false
-                        }
+                        val location = SetMarkerModule.tildaToLocation(player, x, y, z) ?: return false
                         SetMarkerModule.setMarker(player, location.toBlockLocation())
                         return true
                     }
@@ -167,6 +161,10 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                 SetMarkerModule.reload(player)
             }
 
+            "info" -> {
+                SetMarkerModule.infoMarker(player)
+            }
+
             else -> player.sendMessage("< delete | move | reload | set >のどれかを指定して下さい")
             // /marker move <index | location> [location]
         }
@@ -179,7 +177,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
         val subcommand = args[0].lowercase(Locale.getDefault())
         when (args.size) {
             1 -> {
-                val commands = listOf("delete", "set", "move", "reload")
+                val commands = listOf("delete", "set", "move", "reload", "info")
                 val completions = ArrayList<String>()
                 StringUtil.copyPartialMatches(subcommand, commands, completions)
                 completions.sort()
