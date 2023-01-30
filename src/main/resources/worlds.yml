@@ -1,0 +1,171 @@
+main:
+  displayName: メインワールド
+  isCitizenOnly: false
+  isStaffOnly: false
+  isCreativeWorld: false
+  canSleep: true
+  canEarnEbiPower: true
+  allowVehicleSpawn: true
+
+wildarea2:
+  displayName: 共有ワールド
+  isCitizenOnly: false
+  isStaffOnly: false
+  isCreativeWorld: false
+  canSleep: true
+  canEarnEbiPower: true
+  allowVehicleSpawn: true
+  description: |-
+    ここは、§c共有ワールド§r。
+    誰かが寄付してくれた資源を共有拠点にしまってあるので、有効にご活用ください。（独り占めはダメです）
+
+wildarea2_nether:
+  displayName: 共有ネザー
+  isCitizenOnly: false
+  isStaffOnly: false
+  isCreativeWorld: false
+  canSleep: true
+  canEarnEbiPower: true
+  allowVehicleSpawn: true
+  respawnWorld: wildarea2
+
+wildarea2_the_end:
+  displayName: 共有エンド
+  isCitizenOnly: false
+  isStaffOnly: false
+  isCreativeWorld: false
+  canSleep: true
+  canEarnEbiPower: true
+  allowVehicleSpawn: true
+  respawnWorld: wildarea2
+
+wildareab:
+  displayName: 資源ワールド
+  isCitizenOnly: false
+  isStaffOnly: false
+  isCreativeWorld: false
+  canSleep: false
+  canEarnEbiPower: true
+  canRespawn: false
+  allowVehicleSpawn: true
+  description: |-
+    ここは、§c資源ワールド§r。
+    メインワールドで生活するための資源を探そう。
+
+shigen_nether:
+  displayName: 資源ネザー
+  isCitizenOnly: false
+  isStaffOnly: false
+  isCreativeWorld: false
+  canSleep: true
+  canEarnEbiPower: true
+  canRespawn: false
+  allowVehicleSpawn: true
+  description: |-
+    ここは、§c資源ワールド§r。
+    メインワールドで生活するための資源を探そう。
+
+shigen_end:
+  displayName: 資源エンド
+  isCitizenOnly: false
+  isStaffOnly: false
+  isCreativeWorld: false
+  canSleep: true
+  canEarnEbiPower: true
+  canRespawn: false
+  allowVehicleSpawn: true
+  description: |-
+    ここは、§c資源ワールド§r。
+    メインワールドで生活するための資源を探そう。
+
+hub2:
+  displayName: ロビー
+  isCitizenOnly: false
+  isStaffOnly: false
+  isCreativeWorld: false
+  canSleep: false
+  canEarnEbiPower: false
+  canRespawn: false
+  allowVehicleSpawn: false
+  allowAdvancements: false
+
+sandbox2:
+  displayName: サンドボックス
+  isCitizenOnly: true
+  isStaffOnly: false
+  isCreativeWorld: true
+  canSleep: false
+  canEarnEbiPower: false
+  allowVehicleSpawn: false
+  allowAdvancements: false
+  description: |-
+    ここは、§bクリエイティブモード§rで好きなだけ遊べる§cサンドボックスワールド§r。
+    元の世界の道具や経験値はお預かりしているので、好きなだけあそんでね！§7(あ、でも他の人の建築物を壊したりしないでね)
+
+art:
+  displayName: アートワールド
+  isCitizenOnly: true
+  isStaffOnly: false
+  isCreativeWorld: true
+  canSleep: false
+  canEarnEbiPower: false
+  allowVehicleSpawn: false
+  allowAdvancements: false
+  description: |-
+    ここは、§b地上絵§rに特化した§cアートワールド§r。
+    元の世界の道具や経験値はお預かりしているので、安心して地上絵を作成・観覧できます！
+    §7(他の人の作った地上絵を壊さないようお願いします。)
+
+nightmare2:
+  displayName: ナイトメアワールド
+  isCitizenOnly: true
+  isStaffOnly: false
+  isCreativeWorld: true
+  canSleep: false
+  canEarnEbiPower: true
+  allowVehicleSpawn: false
+  allowAdvancements: true
+  description: |-
+    ここは怖い敵がうじゃうじゃいる§cナイトメアワールド§r。
+    手に入れたアイテムは持ち帰れます。
+
+pvp:
+  displayName: PvPアリーナ
+  isCitizenOnly: true
+  isStaffOnly: false
+  isCreativeWorld: false
+  canSleep: false
+  canEarnEbiPower: false
+  canRespawn: false
+  allowVehicleSpawn: false
+  allowAdvancements: false
+
+test:
+  displayName: 実験用ワールド
+  isCitizenOnly: true
+  isStaffOnly: true
+  isCreativeWorld: false
+  canSleep: true
+  canEarnEbiPower: false
+  allowVehicleSpawn: true
+  allowAdvancements: false
+
+event:
+  displayName: イベントワールド
+  isCitizenOnly: true
+  isStaffOnly: false
+  isCreativeWorld: false
+  canSleep: false
+  canEarnEbiPower: false
+  allowVehicleSpawn: false
+  allowAdvancements: false
+
+event2:
+  displayName: イベントワールド
+  isCitizenOnly: true
+  isStaffOnly: false
+  isCreativeWorld: false
+  canSleep: false
+  canEarnEbiPower: false
+  allowVehicleSpawn: false
+  allowAdvancements: false

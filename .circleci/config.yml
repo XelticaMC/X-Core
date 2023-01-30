@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build-master:  
+  build-master:
     docker:
       - image: cimg/openjdk:17.0
     steps:
@@ -23,12 +23,12 @@ jobs:
           key: v1-gradle-cache-{{ checksum "build.gradle.kts" }}
       - store_artifacts:
           path: ~/project/build/libs/XCore.jar
-      - run: 
+      - run:
           name: フィンガープリント登録
           command: echo 'play.craft.xeltica.work,172.105.242.153 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHi9ZWNTLt55UEnlid3bWIryFIGhLtI249vL0R8WsYvQ8RY5dSeyr11BvqS0WvYnpTWzmNFBmuoKrgn65YoGZwk=' >> ~/.ssh/known_hosts;
-      - run: 
+      - run:
           name: 秘密鍵登録
-          command: 
+          command:
             echo 'Host play.craft.xeltica.work' > ~/.ssh/config;
             echo '  IdentityFile /home/circleci/.ssh/id_rsa_d21b72bd6cb7d6ef41501c73ddf084bb' >> ~/.ssh/config;
             echo '  User xeltica' >> ~/.ssh/config;
@@ -39,15 +39,15 @@ jobs:
       - run:
           name: サーバーへのプラグインのアップロード
           command: mkdir p && mv ./build/libs/XCore.jar p && cd p && lftp -e "mirror -R --only-newer . /srv/papermc/plugins && exit" sftp://play.craft.xeltica.work
-      - run: 
+      - run:
           name: サーバーへのプラグインのインストール
           command: ssh xeltica@play.craft.xeltica.work 'sh /srv/deploy-core.sh'
 
 workflows:
-  build: 
+  build:
     jobs:
       - build-master:
           filters:
             branches:
-              only: 
+              only:
                 - master
