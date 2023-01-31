@@ -4,8 +4,6 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.Snowball
 
 abstract class BoundingGrenadeBase(protected var grenade: Snowball) : IGrenadeBase {
-    abstract override val name: String
-
     open fun bound() {
         val velocity = grenade.velocity
         velocity.multiply(0.1)
