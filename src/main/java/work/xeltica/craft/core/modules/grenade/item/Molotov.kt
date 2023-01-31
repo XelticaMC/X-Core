@@ -6,6 +6,7 @@ import org.bukkit.Material
 import org.bukkit.entity.ThrownPotion
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.PotionMeta
+import work.xeltica.craft.core.modules.grenade.GrenadeModule
 import kotlin.math.absoluteValue
 
 class Molotov(val grenade: ThrownPotion) : IGrenadeBase {
@@ -30,9 +31,11 @@ class Molotov(val grenade: ThrownPotion) : IGrenadeBase {
                 block.type = Material.FIRE
             }
         }
+        kill()
     }
 
     override fun kill() {
+        GrenadeModule.destroyGrenadeEntity(grenade.uniqueId)
     }
 
     companion object {
