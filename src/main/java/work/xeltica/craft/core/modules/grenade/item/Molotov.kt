@@ -1,11 +1,18 @@
 package work.xeltica.craft.core.modules.grenade.item
 
+import net.kyori.adventure.text.Component
+import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.entity.ThrownPotion
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.PotionMeta
 import kotlin.math.absoluteValue
 
 class Molotov(val grenade: ThrownPotion) : IGrenadeBase {
-    override val name: String = "火炎瓶"
+    override fun getName(): String {
+        return name
+    }
+
     override fun throwGrenade() {
     }
 
@@ -28,5 +35,20 @@ class Molotov(val grenade: ThrownPotion) : IGrenadeBase {
     }
 
     override fun kill() {
+    }
+
+    companion object {
+        const val name = "火炎瓶"
+        fun createItem(): ItemStack {
+            val item = ItemStack(Material.SPLASH_POTION)
+            item.editMeta {
+                if (it is PotionMeta) {
+                    it.displayName(Component.text(name))
+                    it.color = Color.RED
+                    it.lore(listOf(Component.text("グレネード")))
+                }
+            }
+            return item
+        }
     }
 }
