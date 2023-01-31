@@ -23,16 +23,11 @@ class Molotov(val grenade: ThrownPotion) : IGrenadeBase {
         val center = grenade.location
         for (i in -2..2) {
             for (j in -2..2) {
-                if (i.absoluteValue == 2 && i.absoluteValue == 2) continue
-                var firePos = center.add(i.toDouble(), 0.0, j.toDouble())
-                if (firePos.add(0.0, -1.0, 0.0).block.isEmpty) {
-                    firePos = firePos.add(0.0, -1.0, 0.0)
-                }
-                if (firePos.block.isEmpty) {
-                    if (!firePos.add(0.0, -1.0, 0.0).block.isEmpty) {
-                        firePos.block.type = Material.FIRE
-                    }
-                }
+                if (i.absoluteValue == 2 && j.absoluteValue == 2) continue
+                val block = center.clone().add(i.toDouble(), 0.0, j.toDouble()).block
+                if (!block.isEmpty) continue
+                if (center.clone().subtract(0.0, 1.0, 0.0).block.isEmpty) continue
+                block.type = Material.FIRE
             }
         }
     }
