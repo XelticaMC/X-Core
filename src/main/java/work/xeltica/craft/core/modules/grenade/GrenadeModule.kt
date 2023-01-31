@@ -9,6 +9,7 @@ import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.modules.grenade.item.FragGrenade
 import work.xeltica.craft.core.modules.grenade.item.IGrenadeBase
 import work.xeltica.craft.core.modules.grenade.item.Molotov
+import work.xeltica.craft.core.modules.grenade.item.StunGrenade
 import java.util.UUID
 
 object GrenadeModule : ModuleBase() {
@@ -30,6 +31,11 @@ object GrenadeModule : ModuleBase() {
             FragGrenade.name -> {
                 if (entity is Snowball) {
                     grenadeEntity[entity.uniqueId] = FragGrenade(entity)
+                }
+            }
+            StunGrenade.name -> {
+                if (entity is Snowball) {
+                    grenadeEntity[entity.uniqueId] = StunGrenade(entity)
                 }
             }
             Molotov.name -> {
@@ -65,12 +71,14 @@ object GrenadeModule : ModuleBase() {
     fun createGrenadeItem(type: GrenadeType): ItemStack {
         return when (type) {
             GrenadeType.FRAG_GRENADE -> FragGrenade.createItem()
+            GrenadeType.STUN_GRENADE -> StunGrenade.createItem()
             GrenadeType.MOLOTOV -> Molotov.createItem()
         }
     }
 
     enum class GrenadeType {
         FRAG_GRENADE,
+        STUN_GRENADE,
         MOLOTOV,
     }
 
