@@ -45,7 +45,7 @@ class Molotov(val grenade: ThrownPotion) : IGrenadeBase {
                 if (it is PotionMeta) {
                     it.displayName(Component.text(name))
                     it.color = Color.RED
-                    it.lore(listOf(Component.text("グレネード")))
+                    it.lore(listOf(Component.text("グレネード"), Component.text(name)))
                 }
             }
             return item

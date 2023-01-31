@@ -31,7 +31,7 @@ class FragGrenade(grenade: Snowball) : BoundingGrenadeBase(grenade) {
             val item = ItemStack(Material.SNOWBALL)
             item.editMeta {
                 it.displayName(Component.text(name))
-                it.lore(listOf(Component.text("グレネード")))
+                it.lore(listOf(Component.text("グレネード"), Component.text(name)))
             }
             return item
         }
