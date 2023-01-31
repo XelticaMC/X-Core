@@ -5,4 +5,5 @@ interface IGrenadeBase {
     fun throwGrenade()
     fun explode()
     fun kill()
+    fun hit()
 }

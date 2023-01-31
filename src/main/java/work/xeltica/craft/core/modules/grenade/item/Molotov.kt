@@ -13,6 +13,9 @@ class Molotov(val grenade: ThrownPotion) : IGrenadeBase {
         return name
     }
 
+    override fun hit() {
+    }
+
     override fun throwGrenade() {
     }
 

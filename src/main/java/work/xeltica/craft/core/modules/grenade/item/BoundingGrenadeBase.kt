@@ -18,6 +18,10 @@ abstract class BoundingGrenadeBase(protected var grenade: Snowball) : IGrenadeBa
         grenade.remove()
     }
 
+    override fun hit() {
+        bound()
+    }
+
     fun getEntity(): Snowball {
         return grenade
     }
