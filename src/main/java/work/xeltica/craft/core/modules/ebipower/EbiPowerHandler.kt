@@ -52,9 +52,9 @@ class EbiPowerHandler : Listener {
 
     init {
         crops.add(Material.WHEAT)
-        crops.add(Material.CARROT)
-        crops.add(Material.POTATO)
-        crops.add(Material.BEETROOT)
+        crops.add(Material.CARROTS)
+        crops.add(Material.POTATOES)
+        crops.add(Material.BEETROOTS)
         crops.add(Material.COCOA)
         crops.add(Material.NETHER_WART)
 
