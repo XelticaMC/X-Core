@@ -31,31 +31,11 @@ class KStation(conf: ConfigurationSection, val id: String) {
             val directionT = item["direction"]
             val timeT = item["time"]
             val rapidNotInParallelT = item["rapid_not_in_parallel"]
-            val to = if (toT is String) {
-                toT
-            } else {
-                null
-            }
-            val line = if (lineT is String) {
-                lineT
-            } else {
-                null
-            }
-            val direction = if (directionT is String) {
-                directionT
-            } else {
-                null
-            }
-            val time = if (timeT is Int) {
-                timeT
-            } else {
-                null
-            }
-            val rapidNotInParallel = if (rapidNotInParallelT is Boolean) {
-                rapidNotInParallelT
-            } else {
-                null
-            }
+            val to = if (toT is String) toT else null
+            val line = if (lineT is String) lineT else null
+            val direction = if (directionT is String) directionT else null
+            val time = if (timeT is Int) timeT else null
+            val rapidNotInParallel = if (rapidNotInParallelT is Boolean) rapidNotInParallelT else null
             set.add(
                 KPath(to, line, direction, time, rapidNotInParallel)
             )
