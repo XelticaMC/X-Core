@@ -2,6 +2,7 @@ package work.xeltica.craft.core.modules.promotion
 
 import com.destroystokyo.paper.event.block.TNTPrimeEvent
 import com.destroystokyo.paper.event.block.TNTPrimeEvent.PrimeReason
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.Tag
@@ -64,8 +65,8 @@ class PromotionHandler : Listener {
         if (PromotionModule.isCitizen(e.player)) {
             HintModule.achieve(e.player, Hint.BE_CITIZEN)
         } else if (!record.has(PromotionModule.PS_KEY_NEWCOMER_TIME)) {
-            e.player.sendMessage("総プレイ時間が30分を超えたため、§b市民§rへの昇格ができます！")
-            e.player.sendMessage("詳しくは §b/promo§rコマンドを実行してください。")
+            e.player.sendMessage("総プレイ時間が30分を超えたため、${ChatColor.AQUA}市民${ChatColor.RESET}への昇格ができます！")
+            e.player.sendMessage("詳しくは ${ChatColor.AQUA}/promo${ChatColor.RESET}コマンドを実行してください。")
         }
     }
 
@@ -122,7 +123,11 @@ class PromotionHandler : Listener {
         val player = e.player
         if (destInfo.isCitizenOnly && !player.hasPermission("otanoshimi.citizen")) {
             player.playSound(player.location, Sound.BLOCK_ANVIL_PLACE, 1f, 0.5f)
-            player.sendMessage("§aわかば§rプレイヤーは§6${destInfo.displayName}§rに行くことができません！\n§b/promo§rコマンドを実行して、昇格方法を確認してください！")
+            player.sendMessage(
+                "${ChatColor.GREEN}わかば${ChatColor.RESET}プレイヤーは" +
+                        "${ChatColor.GOLD}${destInfo.displayName}${ChatColor.RESET}に行くことができません！\n" +
+                        "${ChatColor.AQUA}/promo${ChatColor.RESET}コマンドを実行して、昇格方法を確認してください！"
+            )
             e.isCancelled = true
             return
         }
@@ -142,8 +147,8 @@ class PromotionHandler : Listener {
     private fun prevent(e: Cancellable, p: Player, message: String) {
         e.isCancelled = true
         p.playSound(p.location, Sound.BLOCK_ANVIL_PLACE, 1f, 0.5f)
-        p.sendMessage("§aわかば§rプレイヤーは§c$message")
-        p.sendMessage("§b市民への昇格§rが必要です。詳しくは§b/promo§rコマンドを実行してください！")
+        p.sendMessage("${ChatColor.GREEN}わかば${ChatColor.RESET}プレイヤーは${ChatColor.RED}$message")
+        p.sendMessage("${ChatColor.AQUA}市民への昇格${ChatColor.RESET}が必要です。詳しくは${ChatColor.AQUA}/promo${ChatColor.RESET}コマンドを実行してください！")
     }
 
     private fun isDeniedMaterial(mat: Material): Boolean {

@@ -3,6 +3,7 @@ package work.xeltica.craft.core.modules.motd
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.kyori.adventure.title.Title
+import org.bukkit.ChatColor
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
@@ -20,17 +21,17 @@ class MotdHandler : Listener {
     fun onPlayerJoin(e: PlayerJoinEvent) {
         val name = PlainTextComponentSerializer.plainText().serialize(e.player.displayName())
 
-        e.joinMessage(Component.text("§a$name§bさんがやってきました"))
+        e.joinMessage(Component.text("${ChatColor.GREEN}${name}${ChatColor.AQUA}さんがやってきました"))
         if (!e.player.hasPlayedBefore()) {
-            e.joinMessage(Component.text("§a$name§bさんが§6§l初参加§rです"))
+            e.joinMessage(Component.text("${ChatColor.GREEN}${name}${ChatColor.AQUA}さんが${ChatColor.GOLD}${ChatColor.BOLD}初参加${ChatColor.RESET}です"))
             PlayerStore.open(e.player)[PromotionModule.PS_KEY_NEWCOMER_TIME] = defaultNewComerTime
             HubModule.teleport(e.player, HubType.NewComer, true)
         }
 
         e.player.showTitle(
             Title.title(
-                Component.text("§aXelticaMC"),
-                Component.text("§f§b§nhttps://craft.xeltica.work")
+                Component.text("${ChatColor.GREEN}XelticaMC"),
+                Component.text("${ChatColor.WHITE}${ChatColor.AQUA}${ChatColor.UNDERLINE}https://craft.xeltica.work")
             )
         )
 
@@ -40,7 +41,7 @@ class MotdHandler : Listener {
     @EventHandler
     fun onPlayerQuit(e: PlayerQuitEvent) {
         val name = PlainTextComponentSerializer.plainText().serialize(e.player.displayName())
-        e.quitMessage(Component.text("§a$name§bさんがかえりました"))
+        e.quitMessage(Component.text("${ChatColor.GREEN}${name}${ChatColor.AQUA}さんがかえりました"))
     }
 
     // 30分

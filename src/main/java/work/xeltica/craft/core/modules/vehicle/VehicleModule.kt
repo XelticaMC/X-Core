@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.vehicle
 
+import org.bukkit.ChatColor
 import org.bukkit.FluidCollisionMode
 import org.bukkit.Location
 import org.bukkit.Material
@@ -119,7 +120,7 @@ object VehicleModule : ModuleBase() {
      */
     fun trySummonCart(player: Player): Boolean {
         if (!WorldModule.getWorldInfo(player.world).allowVehicleSpawn) {
-            return Gui.getInstance().error(player, "§cここには召喚できないようだ…。")
+            return Gui.getInstance().error(player, "${ChatColor.RED}ここには召喚できないようだ…。")
         }
         val lookBlock = player.getTargetBlockExact(5) ?: return true
         if (lookBlock.type.data == Rail::class.java || lookBlock.type.data == RedstoneRail::class.java) {
@@ -140,7 +141,7 @@ object VehicleModule : ModuleBase() {
      */
     fun trySummonBoat(player: Player): Boolean {
         if (!WorldModule.getWorldInfo(player.world).allowVehicleSpawn) {
-            return Gui.getInstance().error(player, "§cここには召喚できないようだ…。")
+            return Gui.getInstance().error(player, "${ChatColor.RED}ここには召喚できないようだ…。")
         }
         var spawnLoc = player.location
         val lookBlock = player.getTargetBlockExact(5, FluidCollisionMode.ALWAYS)

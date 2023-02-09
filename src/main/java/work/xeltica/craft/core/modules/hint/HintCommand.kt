@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.hint
 
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -30,17 +31,17 @@ class HintCommand : CommandPlayerOnlyBase() {
             if (hint.power > 0) {
                 content += """
 
-§a§l報酬: §r§d${hint.power} エビパワー"""
+${ChatColor.GREEN}${ChatColor.BOLD}報酬: ${ChatColor.RESET}${ChatColor.LIGHT_PURPLE}${hint.power} エビパワー"""
                 if (module.hasAchieved(player, hint)) {
                     content += """
                         
-                        §6§o✧達成済み✧
+                        ${ChatColor.GOLD}${ChatColor.ITALIC}✧達成済み✧
                         """.trimIndent()
                 }
             }
             Gui.getInstance().openDialog(
                 player,
-                "§l" + hint.hintName + "§r",
+                "${ChatColor.BOLD}${hint.hintName}${ChatColor.RESET}",
                 content
             ) { player.performCommand("hint") }
         } else {

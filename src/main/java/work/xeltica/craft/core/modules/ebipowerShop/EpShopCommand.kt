@@ -2,6 +2,7 @@ package work.xeltica.craft.core.modules.ebipowerShop
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
@@ -68,7 +69,7 @@ class EpShopCommand : CommandPlayerOnlyBase() {
                 }
 
                 EbiPowerShopModule.Result.SUCCESS -> {
-                    player.sendMessage(Component.text("§a" + getItemName(item.item) + "§rを購入しました！"))
+                    player.sendMessage(Component.text("${ChatColor.GREEN}${getItemName(item.item)}${ChatColor.RESET}を購入しました！"))
                     player.playSound(player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1f, 1f)
                     HintModule.achieve(player, Hint.EPSHOP)
                     if (MobBallModule.isMobBall(item.item)) {

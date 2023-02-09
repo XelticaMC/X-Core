@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.cat
 
+import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -17,10 +18,11 @@ class CommandCat : CommandPlayerOnlyBase() {
         // 引数がない場合は現在のモードを表示
         if (args.isEmpty()) {
             val mes =
-                if (CatModule.isCat(player))
-                    "§aあなたはCATモードです。§r"
-                else
-                    "§aあなたはCATモードではありません。§r"
+                if (CatModule.isCat(player)) {
+                    "${ChatColor.GREEN}あなたはCATモードです。${ChatColor.RESET}"
+                } else {
+                    "${ChatColor.GREEN}あなたはCATモードではありません。${ChatColor.RESET}"
+                }
             Gui.getInstance().playSound(player, Sound.ENTITY_CAT_AMBIENT, 2f, SoundPitch.F_1)
             player.sendMessage(mes)
             return true

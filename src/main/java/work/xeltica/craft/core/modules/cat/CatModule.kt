@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.cat
 
+import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -51,11 +52,11 @@ object CatModule : ModuleBase() {
         PlayerStore.open(player)[PS_KEY_CAT] = value
         if (value) {
             Gui.getInstance().playSound(player, Sound.ENTITY_CAT_AMBIENT, 2f, SoundPitch.F_2)
-            player.sendMessage("CATモードを§aオン§rにしました。")
+            player.sendMessage("CATモードを${ChatColor.GREEN}オン${ChatColor.RESET}にしました。")
             HintModule.achieve(player, Hint.CAT_MODE)
         } else {
             Gui.getInstance().playSound(player, Sound.ENTITY_CAT_AMBIENT, 2f, SoundPitch.F_0)
-            player.sendMessage("CATモードを§cオフ§rにしました。")
+            player.sendMessage("CATモードを${ChatColor.RED}オフ${ChatColor.RESET}にしました。")
         }
     }
 }

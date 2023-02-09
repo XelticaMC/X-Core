@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.counter
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -146,7 +147,7 @@ class CounterCommand : CommandPlayerOnlyBase() {
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            return ui.error(player, "§cIO エラーが発生したために処理を続行できませんでした。")
+            return ui.error(player, "${ChatColor.RED}IO エラーが発生したために処理を続行できませんでした。")
         }
         return true
     }
