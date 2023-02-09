@@ -177,7 +177,8 @@ object SetMarkerModule : ModuleBase() {
         if (isMarker(p, loc) != 2) return false
         loc.block.type = Material.AIR
         locationList.removeAt(index)
-        if (index == confIndex) { //アクティブマーカーをずらす処理
+        //アクティブマーカーをずらす処理
+        if (index == confIndex) {
             index = (confIndex - 1)
             if (index < 0) {
                 index = 0
@@ -186,6 +187,13 @@ object SetMarkerModule : ModuleBase() {
                 locationList[index].block.type = Material.SOUL_TORCH
             }
             saveLocationAll(p, locationList, index)
+            return true
+        }
+        // リストから削除後、アクティブマーカーのインデックスがリストとずれないようにする処理
+        if (confIndex > locationList.size - 1) {
+            saveLocationIndex(p, locationList.size - 1)
+        } else if (confIndex > index) {
+            saveLocationIndex(p, confIndex - 1)
         }
         saveLocationList(p, locationList)
         return true
