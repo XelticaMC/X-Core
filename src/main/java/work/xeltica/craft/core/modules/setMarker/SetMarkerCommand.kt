@@ -10,7 +10,7 @@ import java.util.*
 
 class SetMarkerCommand : CommandPlayerOnlyBase() {
 
-    ///marker <set | move | delete> <location | index>
+    // /marker <set | move | delete> <location | index>
 
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) return false
@@ -49,7 +49,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
             "delete" -> {
                 when (args.size) {
                     1 -> {
-                        SetMarkerModule.dellAll(player)
+                        SetMarkerModule.deleteAll(player)
                         return true
                     }
 
@@ -61,7 +61,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                             player.sendMessage("§cマーカー番号には整数を入力してください！")
                             return false
                         }
-                        SetMarkerModule.dellMarker(player, index)
+                        SetMarkerModule.deleteMarker(player, index)
                     }
 
                     3 -> {
@@ -74,7 +74,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                         val z = args[3]
 
                         val location = SetMarkerModule.tildaToLocation(player, x, y, z) ?: return false
-                        SetMarkerModule.dellMarker(player, location.toBlockLocation())
+                        SetMarkerModule.deleteMarker(player, location.toBlockLocation())
                         return true
                     }
 
@@ -165,7 +165,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                 SetMarkerModule.infoMarker(player)
             }
 
-            else -> player.sendMessage("< delete | move | reload | set >のどれかを指定して下さい")
+            else -> player.sendMessage("< delete | info | move | reload | set >のどれかを指定して下さい")
 
         }
 
@@ -174,7 +174,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
 
     override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String>? {
         if (args.isEmpty()) return COMPLETE_LIST_EMPTY
-        val subcommand = args[0].lowercase(Locale.getDefault())
+        val subcommand = args[0].lowercase()
         when (args.size) {
             1 -> {
                 val commands = listOf("delete", "set", "move", "reload", "info")
@@ -187,7 +187,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
             2 -> {
                 when (args[0]) {
                     "set" -> {
-                        val subargument = args[1].lowercase(Locale.getDefault())
+                        val subargument = args[1].lowercase()
                         val argument = listOf("~", "~ ~", "~ ~ ~")
                         val completions = ArrayList<String>()
                         StringUtil.copyPartialMatches(subargument, argument, completions)
@@ -196,7 +196,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
                     }
 
                     "delete", "move" -> {
-                        val subargument = args[1].lowercase(Locale.getDefault())
+                        val subargument = args[1].lowercase()
                         val argument = listOf("マーカー番号", "~", "~ ~", "~ ~ ~")
                         val completions = ArrayList<String>()
                         StringUtil.copyPartialMatches(subargument, argument, completions)
@@ -209,7 +209,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
             3, 5 -> {
                 when (args[0]) {
                     "move" -> {
-                        val subargument = args[2].lowercase(Locale.getDefault())
+                        val subargument = args[2].lowercase()
                         val argument = listOf("~", "~ ~", "~ ~ ~")
                         val completions = ArrayList<String>()
                         StringUtil.copyPartialMatches(subargument, argument, completions)

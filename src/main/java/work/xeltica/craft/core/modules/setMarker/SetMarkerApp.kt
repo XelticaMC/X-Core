@@ -16,7 +16,7 @@ class SetMarkerApp : AppBase() {
 
         gui.openMenu(player, "マーカーメニュー", listOf(
                 MenuItem("全消去", {
-                    SetMarkerModule.dellAll(player)
+                    SetMarkerModule.deleteAll(player)
                 }, Material.STRUCTURE_VOID),
                 MenuItem("確認", {
                     SetMarkerModule.infoMarker(player)

@@ -27,7 +27,7 @@ object SetMarkerModule : ModuleBase() {
         registerHandler(SetMarkerHandler())
     }
 
-    //マーカー本体操作
+    // マーカー本体操作
     /**
      * プレイヤーが立っている座標にマーカーを設置する
      */
@@ -56,7 +56,7 @@ object SetMarkerModule : ModuleBase() {
         }
         var locationList: MutableList<Location>? = getLocationList(p)
         if (index < 0 || locationList == null) {
-            locationList = mutableListOf(dest)//nullの時は.addだと動かない
+            locationList = mutableListOf(dest)// nullの時は.addだと動かない
             index = 0
         } else if (index >= (locationList.size - 1)) {
             locationList.add(dest)
@@ -157,17 +157,17 @@ object SetMarkerModule : ModuleBase() {
      * LocationListから指定した座標とマーカーを削除（マーカーでない場合は削除されたものとする）
      * @return 削除できたかどうか（成功：true 失敗:false）
      */
-    fun dellMarker(p: Player, loc: Location): Boolean {
+    fun deleteMarker(p: Player, loc: Location): Boolean {
         val locationList = getLocationList(p) ?: return false
         val index = locationList.indexOf(loc.toBlockLocation())
-        return dellMarker(p, index)
+        return deleteMarker(p, index)
     }
 
     /**
      * LocationListから指定したインデックスの座標とマーカーを削除（自分のマーカーでない場合は失敗する）
      * @return 削除できたかどうか（成功：true 失敗:false）
      */
-    fun dellMarker(p: Player, index_: Int): Boolean {
+    fun deleteMarker(p: Player, index_: Int): Boolean {
         var index = index_
         val confIndex = getLocationIndex(p)
         val locationList = getLocationList(p) ?: return false
@@ -194,7 +194,7 @@ object SetMarkerModule : ModuleBase() {
     /**
      * プレイヤーが今いるワールドでの、全マーカーとLocationListを削除
      */
-    fun dellAll(p: Player) {
+    fun deleteAll(p: Player) {
         val locationList = getLocationList(p) ?: return
         for (i in locationList.indices) {
             val dest = Location(p.world, locationList[i].x, locationList[i].y, locationList[i].z)
@@ -240,7 +240,7 @@ object SetMarkerModule : ModuleBase() {
         }
     }
 
-    //コンフィグ関係
+    // コンフィグ関係
 
     /**
      * player の [locationList] を保存します。
@@ -373,7 +373,7 @@ object SetMarkerModule : ModuleBase() {
         return null
     }
 
-    //ツール関係
+    // ツール関係
     /**
      * マーカーツールADかどうか判定
      * @param item 比較したいアイテム
@@ -444,7 +444,7 @@ object SetMarkerModule : ModuleBase() {
         return item
     }
 
-    //その他
+    // その他
 
     /**
      * クリックしたブロックの面に応じて、返す座標を1マスずらします。
