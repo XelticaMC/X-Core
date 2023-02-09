@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.world
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
@@ -21,7 +22,7 @@ class CommandXtpReset : CommandBase() {
         }
         val p = Bukkit.getPlayer(args[1])
         if (p == null) {
-            sender.sendMessage("§cプレイヤーが存在しません")
+            sender.sendMessage("${ChatColor.RED}プレイヤーが存在しません")
             return true
         }
         WorldModule.deleteSavedLocation(worldName, p)

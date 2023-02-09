@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.quickchat
 
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
@@ -27,7 +28,7 @@ class QuickChatApp : AppBase() {
         for (chat in QuickChatModule.getAllPrefix()) {
             val msg = QuickChatModule.chatFormat(QuickChatModule.getMessage(chat), player)
             list.add(
-                MenuItem(String.format("%s §7(.%s)", msg, chat), {
+                MenuItem(String.format("%s ${ChatColor.GRAY}(.%s)", msg, chat), {
                     player.chat(msg)
                     HintModule.achieve(player, Hint.QUICKCHAT_APP)
                 }, Material.PAPER)

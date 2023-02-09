@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.world
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.GameRule
 import org.bukkit.Location
 import org.bukkit.World
@@ -95,7 +96,7 @@ object WorldModule : ModuleBase() {
     fun teleport(player: Player, worldName: String) {
         val world = Bukkit.getWorld(worldName)
         if (world == null) {
-            player.sendMessage("§bテレポートに失敗しました。ワールドが存在しないようです。")
+            player.sendMessage("${ChatColor.AQUA}テレポートに失敗しました。ワールドが存在しないようです。")
             return
         }
         player.teleportAsync(world.spawnLocation)

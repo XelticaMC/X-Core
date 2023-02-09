@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.xphone
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
@@ -41,7 +42,7 @@ object XphoneModule : ModuleBase() {
     const val ITEM_NAME_XPHONE = "xphone"
     const val PS_KEY_GIVEN_PHONE = "given_phone"
 
-    private const val PHONE_TITLE = "§6§l§oゲームメニュー"
+    private val PHONE_TITLE = "${ChatColor.GOLD}${ChatColor.BOLD}${ChatColor.ITALIC}ゲームメニュー"
     private lateinit var apps: MutableList<AppBase>
 
     /**

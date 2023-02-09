@@ -26,7 +26,7 @@ class CommandReport : CommandPlayerOnlyBase() {
     private val warnTemplateWithoutAfterDoing = "%sは規約違反です。今すぐ停止してください。本警告を無視した場合、%s。"
     private val warnTemplate = "%sは規約違反です。今すぐ停止し、%s。本警告を無視した場合、%s。"
     private val punishLogTemplate = "利用規約で禁止されている「%s」を行った"
-    private val broadcastTemplate = "§c§l[報告] §r§b%s§c：「§a%s§c」による規約違反で%sされました。"
+    private val broadcastTemplate = "${ChatColor.RED}${ChatColor.BOLD}[報告] ${ChatColor.RESET}${ChatColor.AQUA}%s${ChatColor.RED}：「${ChatColor.GREEN}%s${ChatColor.RED}」による規約違反で%sされました。"
 
     private val ui get() = Gui.getInstance()
 
@@ -113,10 +113,10 @@ class CommandReport : CommandPlayerOnlyBase() {
                 }
                 for (s in state) {
                     message = if (s.instruction == null) String.format(warnTemplateWithoutAfterDoing, s.shortName, s.punishment) else String.format(warnTemplate, s.shortName, s.instruction, s.punishment)
-                    badPlayer.sendMessage("§c§l警告: §r§c$message")
+                    badPlayer.sendMessage("${ChatColor.RED}${ChatColor.BOLD}警告: ${ChatColor.RESET}${ChatColor.RED}${message}")
                 }
                 // 警告時は画面を暗くしたりして目立たせる
-                badPlayer.showTitle(Title.title(Component.text("§e⚠警告"), Component.text("§cチャット欄を確認してください。")))
+                badPlayer.showTitle(Title.title(Component.text("${ChatColor.YELLOW}⚠警告"), Component.text("${ChatColor.RED}チャット欄を確認してください。")))
                 badPlayer.playSound(badPlayer.location, Sound.BLOCK_ANVIL_PLACE, SoundCategory.PLAYERS, 1f, 0.5f)
                 badPlayer.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 20 * 15, 1))
                 badPlayer.addPotionEffect(PotionEffect(PotionEffectType.SLOW, 20 * 15, 30))
