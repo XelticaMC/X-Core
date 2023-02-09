@@ -31,7 +31,7 @@ class MotdHandler : Listener {
         e.player.showTitle(
             Title.title(
                 Component.text("${ChatColor.GREEN}XelticaMC"),
-                Component.text("${ChatColor.WHITE}${ChatColor.AQUA}${ChatColor.UNDERLINE}https://craft.xeltica.work")
+                Component.text("${ChatColor.AQUA}${ChatColor.UNDERLINE}https://craft.xeltica.work")
             )
         )
 
