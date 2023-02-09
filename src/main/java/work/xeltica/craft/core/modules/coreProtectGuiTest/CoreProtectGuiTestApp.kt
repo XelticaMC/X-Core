@@ -179,7 +179,7 @@ class CoreProtectGuiTestApp : AppBase() {
      * @param flag 1個目の日時選択の場合はtrue
      * @param [command] 伝播させている[CoreProtectCommand]のインスタンス
      */
-    private fun onDuringTimeUnit(player: Player, dateTime: Pair<Int, String>, flag: Boolean, command: CoreProtectCommand) {
+    private fun onDuringTimeUnit(player: Player, dateTime: UnitedTime, flag: Boolean, command: CoreProtectCommand) {
         if (flag) {
             command.firstInputDate = dateTime
             inputDuringTime(false, command, player)
@@ -281,11 +281,11 @@ class CoreProtectGuiTestApp : AppBase() {
 
             showMenu(player, "時間の単位を選択してください",
                     listOf(
-                            MenuItem("週", { onDuringTimeUnit(player, Pair(value, "w"), flag, command) }, Material.CLOCK),
-                            MenuItem("日", { onDuringTimeUnit(player, Pair(value, "d"), flag, command) }, Material.CLOCK),
-                            MenuItem("時", { onDuringTimeUnit(player, Pair(value, "h"), flag, command) }, Material.CLOCK),
-                            MenuItem("分", { onDuringTimeUnit(player, Pair(value, "m"), flag, command) }, Material.CLOCK),
-                            MenuItem("秒", { onDuringTimeUnit(player, Pair(value, "s"), flag, command) }, Material.CLOCK),
+                            MenuItem("週", { onDuringTimeUnit(player, UnitedTime(value, "w"), flag, command) }, Material.CLOCK),
+                            MenuItem("日", { onDuringTimeUnit(player, UnitedTime(value, "d"), flag, command) }, Material.CLOCK),
+                            MenuItem("時", { onDuringTimeUnit(player, UnitedTime(value, "h"), flag, command) }, Material.CLOCK),
+                            MenuItem("分", { onDuringTimeUnit(player, UnitedTime(value, "m"), flag, command) }, Material.CLOCK),
+                            MenuItem("秒", { onDuringTimeUnit(player, UnitedTime(value, "s"), flag, command) }, Material.CLOCK),
                             MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
                     )
             )

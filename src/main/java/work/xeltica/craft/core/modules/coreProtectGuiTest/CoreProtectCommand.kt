@@ -11,6 +11,14 @@ class CoreProtectCommand {
     var radius: String = ""
     var date: String = ""
     var action: String = ""
-    var firstInputDate: Pair<Int, String> = Pair(0, "")
-    var secondInputDate: Pair<Int, String> = Pair(0, "")
+    var firstInputDate: UnitedTime = UnitedTime(0, "")
+    var secondInputDate: UnitedTime = UnitedTime(0, "")
 }
+
+/**
+ * ログを取るときに使う、時間の数値と単位をまとめたもの
+ *
+ * @param timeValue 時間の数値
+ * @param unit 時間の単位
+ */
+data class UnitedTime(var timeValue: Int, var unit: String)

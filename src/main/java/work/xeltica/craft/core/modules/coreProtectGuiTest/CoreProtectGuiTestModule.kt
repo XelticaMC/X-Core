@@ -18,22 +18,22 @@ object CoreProtectGuiTestModule : ModuleBase() {
      * [CoreProtectCommand.date]に格納する文字列を決定するやつ
      */
     private fun checkDuringTime(command: CoreProtectCommand): String {
-        if (command.firstInputDate.first == 0) {
-            return command.secondInputDate.first.toString() + command.secondInputDate.second
+        if (command.firstInputDate.timeValue == 0) {
+            return command.secondInputDate.timeValue.toString() + command.secondInputDate.unit
         }
 
-        val firstDate = command.firstInputDate.first.toLong() * convertUnit(command.firstInputDate.second)
-        val lastDate = command.secondInputDate.first.toLong() * convertUnit(command.secondInputDate.second)
+        val firstDate = command.firstInputDate.timeValue.toLong() * convertUnit(command.firstInputDate.unit)
+        val lastDate = command.secondInputDate.timeValue.toLong() * convertUnit(command.secondInputDate.unit)
 
         return if (firstDate < lastDate) {
-            (command.firstInputDate.first.toString() + command.firstInputDate.second) + "-" + (command.secondInputDate.first.toString() + command.secondInputDate.second)
+            (command.firstInputDate.timeValue.toString() + command.firstInputDate.unit) + "-" + (command.secondInputDate.timeValue.toString() + command.secondInputDate.unit)
         } else if (firstDate > lastDate) {
-            (command.secondInputDate.first.toString() + command.secondInputDate.second) + "-" + (command.firstInputDate.first.toString() + command.firstInputDate.second)
+            (command.secondInputDate.timeValue.toString() + command.secondInputDate.unit) + "-" + (command.firstInputDate.timeValue.toString() + command.firstInputDate.unit)
 
         } else {
             // ここに到達する場合は同値である場合なので、onTimeUnitMenuClick と同じ経路になるような形で
             // コマンドの文字列を確定させる
-            command.firstInputDate.first.toString() + command.firstInputDate.second
+            command.firstInputDate.timeValue.toString() + command.firstInputDate.unit
         }
     }
 
