@@ -25,14 +25,15 @@ class CoreProtectGuiTestApp : AppBase() {
     }
 
     override fun onLaunch(player: Player) {
-        showMenu(player, "選択する方法を選択してください",
-                listOf(
-                        MenuItem("ログを検索する", { lookupModeStart(player) }, Material.WRITABLE_BOOK),
-                        MenuItem("ロールバック", { rollbackModeStart(player) }, Material.ENDER_CHEST),
-                        MenuItem("ページを取得する", { inputLookUpPage(player) }, Material.BOOK),
-                        MenuItem("インスペクトモード切り替え", { player.performCommand("co i") }, Material.ENDER_EYE),
-                        MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
-                )
+        showMenu(
+            player, "選択する方法を選択してください",
+            listOf(
+                MenuItem("ログを検索する", { lookupModeStart(player) }, Material.WRITABLE_BOOK),
+                MenuItem("ロールバック", { rollbackModeStart(player) }, Material.ENDER_CHEST),
+                MenuItem("ページを取得する", { inputLookUpPage(player) }, Material.BOOK),
+                MenuItem("インスペクトモード切り替え", { player.performCommand("co i") }, Material.ENDER_EYE),
+                MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+            )
         )
     }
 
@@ -79,11 +80,11 @@ class CoreProtectGuiTestApp : AppBase() {
      */
     private fun chooseHowToGetPlayerName(player: Player, command: CoreProtectCommand): List<MenuItem> {
         return listOf(
-                MenuItem("コンソール入力で取得する", { getInputTextByConsole(player, command) }, Material.WRITABLE_BOOK),
-                MenuItem("現在いるプレイヤーから取得する", { getChooseByPlayerMenu(player, command) }, Material.BOOK),
-                MenuItem("クリーパー", { onInputPlayerName("#creeper", command, player) }, Material.CREEPER_HEAD),
-                MenuItem("TNT", { onInputPlayerName("#tnt", command, player) }, Material.TNT),
-                MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+            MenuItem("コンソール入力で取得する", { getInputTextByConsole(player, command) }, Material.WRITABLE_BOOK),
+            MenuItem("現在いるプレイヤーから取得する", { getChooseByPlayerMenu(player, command) }, Material.BOOK),
+            MenuItem("クリーパー", { onInputPlayerName("#creeper", command, player) }, Material.CREEPER_HEAD),
+            MenuItem("TNT", { onInputPlayerName("#tnt", command, player) }, Material.TNT),
+            MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
         )
     }
 
@@ -125,15 +126,16 @@ class CoreProtectGuiTestApp : AppBase() {
     private fun onInputPlayerName(userName: String, command: CoreProtectCommand, player: Player) {
         command.user = userName
 
-        showMenu(player, "ワールドの範囲を指定してください",
-                listOf(
-                        MenuItem("すべてのワールド", { onRadiusWorldMenuClick("#global", command, player) }, Material.DIRT),
-                        MenuItem("メインワールド", { onRadiusWorldMenuClick("#main", command, player) }, Material.CRAFTING_TABLE),
-                        MenuItem("共有ワールド", { onRadiusWorldMenuClick("#wildarea2", command, player) }, Material.GRASS_BLOCK),
-                        MenuItem("共有ネザー", { onRadiusWorldMenuClick("#wildarea2_nether", command, player) }, Material.NETHERRACK),
-                        MenuItem("共有エンド", { onRadiusWorldMenuClick("#wildarea2_the_end", command, player) }, Material.END_STONE),
-                        MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
-                )
+        showMenu(
+            player, "ワールドの範囲を指定してください",
+            listOf(
+                MenuItem("すべてのワールド", { onRadiusWorldMenuClick("#global", command, player) }, Material.DIRT),
+                MenuItem("メインワールド", { onRadiusWorldMenuClick("#main", command, player) }, Material.CRAFTING_TABLE),
+                MenuItem("共有ワールド", { onRadiusWorldMenuClick("#wildarea2", command, player) }, Material.GRASS_BLOCK),
+                MenuItem("共有ネザー", { onRadiusWorldMenuClick("#wildarea2_nether", command, player) }, Material.NETHERRACK),
+                MenuItem("共有エンド", { onRadiusWorldMenuClick("#wildarea2_the_end", command, player) }, Material.END_STONE),
+                MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+            )
         )
     }
 
@@ -147,12 +149,13 @@ class CoreProtectGuiTestApp : AppBase() {
     private fun onRadiusWorldMenuClick(radius: String, command: CoreProtectCommand, player: Player) {
         command.radius = radius
 
-        showMenu(player, "時間の指定方法を選択してください",
-                listOf(
-                        MenuItem("とある日時まで遡る", { onSelectDuringMode(false, command, player) }, Material.CLOCK),
-                        MenuItem("期間を指定して取得する", { onSelectDuringMode(true, command, player) }, Material.CLOCK),
-                        MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
-                )
+        showMenu(
+            player, "時間の指定方法を選択してください",
+            listOf(
+                MenuItem("とある日時まで遡る", { onSelectDuringMode(false, command, player) }, Material.CLOCK),
+                MenuItem("期間を指定して取得する", { onSelectDuringMode(true, command, player) }, Material.CLOCK),
+                MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+            )
         )
     }
 
@@ -185,19 +188,20 @@ class CoreProtectGuiTestApp : AppBase() {
             inputDuringTime(false, command, player)
         } else {
             command.secondInputDate = dateTime
-            showMenu(player, "アクションの種類を選択してください",
-                    listOf(
-                            MenuItem("チェスト", { onActionMenuClick("container", command, player) }, Material.CHEST_MINECART),
-                            MenuItem("ブロック", { onActionMenuClick("block", command, player) }, Material.GRASS_BLOCK),
-                            MenuItem("アイテム", { onActionMenuClick("item", command, player) }, Material.WHEAT_SEEDS),
-                            MenuItem("チャット", { onActionMenuClick("chat", command, player) }, Material.JUKEBOX),
-                            MenuItem("クリック", { onActionMenuClick("click", command, player) }, Material.BOOK),
-                            MenuItem("コマンド", { onActionMenuClick("command", command, player) }, Material.PLAYER_HEAD),
-                            MenuItem("キル", { onActionMenuClick("kill", command, player) }, Material.ZOMBIE_HEAD),
-                            MenuItem("ユーザーネーム", { onActionMenuClick("username", command, player) }, Material.WRITABLE_BOOK),
-                            MenuItem("指定しない", { onActionMenuClick(command, player) }, Material.REDSTONE_TORCH),
-                            MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
-                    )
+            showMenu(
+                player, "アクションの種類を選択してください",
+                listOf(
+                    MenuItem("チェスト", { onActionMenuClick("container", command, player) }, Material.CHEST_MINECART),
+                    MenuItem("ブロック", { onActionMenuClick("block", command, player) }, Material.GRASS_BLOCK),
+                    MenuItem("アイテム", { onActionMenuClick("item", command, player) }, Material.WHEAT_SEEDS),
+                    MenuItem("チャット", { onActionMenuClick("chat", command, player) }, Material.JUKEBOX),
+                    MenuItem("クリック", { onActionMenuClick("click", command, player) }, Material.BOOK),
+                    MenuItem("コマンド", { onActionMenuClick("command", command, player) }, Material.PLAYER_HEAD),
+                    MenuItem("キル", { onActionMenuClick("kill", command, player) }, Material.ZOMBIE_HEAD),
+                    MenuItem("ユーザーネーム", { onActionMenuClick("username", command, player) }, Material.WRITABLE_BOOK),
+                    MenuItem("指定しない", { onActionMenuClick(command, player) }, Material.REDSTONE_TORCH),
+                    MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+                )
             )
         }
     }
@@ -279,15 +283,16 @@ class CoreProtectGuiTestApp : AppBase() {
                 return@openTextInput
             }
 
-            showMenu(player, "時間の単位を選択してください",
-                    listOf(
-                            MenuItem("週", { onDuringTimeUnit(player, UnitedTime(value, "w"), flag, command) }, Material.CLOCK),
-                            MenuItem("日", { onDuringTimeUnit(player, UnitedTime(value, "d"), flag, command) }, Material.CLOCK),
-                            MenuItem("時", { onDuringTimeUnit(player, UnitedTime(value, "h"), flag, command) }, Material.CLOCK),
-                            MenuItem("分", { onDuringTimeUnit(player, UnitedTime(value, "m"), flag, command) }, Material.CLOCK),
-                            MenuItem("秒", { onDuringTimeUnit(player, UnitedTime(value, "s"), flag, command) }, Material.CLOCK),
-                            MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
-                    )
+            showMenu(
+                player, "時間の単位を選択してください",
+                listOf(
+                    MenuItem("週", { onDuringTimeUnit(player, UnitedTime(value, "w"), flag, command) }, Material.CLOCK),
+                    MenuItem("日", { onDuringTimeUnit(player, UnitedTime(value, "d"), flag, command) }, Material.CLOCK),
+                    MenuItem("時", { onDuringTimeUnit(player, UnitedTime(value, "h"), flag, command) }, Material.CLOCK),
+                    MenuItem("分", { onDuringTimeUnit(player, UnitedTime(value, "m"), flag, command) }, Material.CLOCK),
+                    MenuItem("秒", { onDuringTimeUnit(player, UnitedTime(value, "s"), flag, command) }, Material.CLOCK),
+                    MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+                )
             )
         }
     }
@@ -306,28 +311,28 @@ class CoreProtectGuiTestApp : AppBase() {
         return when (action) {
             "container" -> {
                 listOf(
-                        MenuItem("アイテムを入れた", { onOptionMenuClick("+$action", command, player) }, Material.REDSTONE),
-                        MenuItem("アイテムをとった", { onOptionMenuClick("-$action", command, player) }, Material.REDSTONE_TORCH),
-                        MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
-                        MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+                    MenuItem("アイテムを入れた", { onOptionMenuClick("+$action", command, player) }, Material.REDSTONE),
+                    MenuItem("アイテムをとった", { onOptionMenuClick("-$action", command, player) }, Material.REDSTONE_TORCH),
+                    MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
+                    MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
                 )
             }
 
             "block" -> {
                 listOf(
-                        MenuItem("ブロックを設置した", { onOptionMenuClick("+$action", command, player) }, Material.REDSTONE),
-                        MenuItem("ブロックを破壊した", { onOptionMenuClick("-$action", command, player) }, Material.REDSTONE_TORCH),
-                        MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
-                        MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+                    MenuItem("ブロックを設置した", { onOptionMenuClick("+$action", command, player) }, Material.REDSTONE),
+                    MenuItem("ブロックを破壊した", { onOptionMenuClick("-$action", command, player) }, Material.REDSTONE_TORCH),
+                    MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
+                    MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
                 )
             }
 
             "item" -> {
                 listOf(
-                        MenuItem("アイテムの拾得", { onOptionMenuClick("+$action", command, player) }, Material.REDSTONE),
-                        MenuItem("アイテムのドロップ", { onOptionMenuClick("-$action", command, player) }, Material.REDSTONE_TORCH),
-                        MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
-                        MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+                    MenuItem("アイテムの拾得", { onOptionMenuClick("+$action", command, player) }, Material.REDSTONE),
+                    MenuItem("アイテムのドロップ", { onOptionMenuClick("-$action", command, player) }, Material.REDSTONE_TORCH),
+                    MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
+                    MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
                 )
             }
 
@@ -335,17 +340,18 @@ class CoreProtectGuiTestApp : AppBase() {
             "click",
             "command",
             "kill",
-            "username" -> {
+            "username",
+            -> {
                 listOf(
-                        MenuItem("実行", { onOptionMenuClick(action, command, player) }, Material.REDSTONE),
-                        MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+                    MenuItem("実行", { onOptionMenuClick(action, command, player) }, Material.REDSTONE),
+                    MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
                 )
             }
             // ここに来る想定はないが、現状ここでescapeで戻ることしかできないため、仮の値を作っておく
             else -> {
                 listOf(
-                        MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
-                        MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
+                    MenuItem("指定しない", { onOptionMenuClick(action, command, player) }, Material.REDSTONE_LAMP),
+                    MenuItem("キャンセル", { onCancel(player) }, Material.BARRIER),
                 )
             }
         }

@@ -14,10 +14,10 @@ class GamemodeChangeApp : AppBase() {
 
     private fun getGameModeList(player: Player): List<MenuItem> {
         return listOf(
-                MenuItem("サバイバル", { app.selectMenuItem(GameMode.SURVIVAL, player) }, Material.ZOMBIE_HEAD),
-                MenuItem("クリエイティブ", { app.selectMenuItem(GameMode.CREATIVE, player) }, Material.SKELETON_SKULL),
-                MenuItem("アドベンチャー", { app.selectMenuItem(GameMode.ADVENTURE, player) }, Material.CREEPER_HEAD),
-                MenuItem("スペクテイター", { app.selectMenuItem(GameMode.SPECTATOR, player) }, Material.PLAYER_HEAD),
+            MenuItem("サバイバル", { app.selectMenuItem(GameMode.SURVIVAL, player) }, Material.ZOMBIE_HEAD),
+            MenuItem("クリエイティブ", { app.selectMenuItem(GameMode.CREATIVE, player) }, Material.SKELETON_SKULL),
+            MenuItem("アドベンチャー", { app.selectMenuItem(GameMode.ADVENTURE, player) }, Material.CREEPER_HEAD),
+            MenuItem("スペクテイター", { app.selectMenuItem(GameMode.SPECTATOR, player) }, Material.PLAYER_HEAD),
         )
     }
 
@@ -37,9 +37,9 @@ class GamemodeChangeApp : AppBase() {
         player.gameMode = gameMode
     }
 
-//    override fun isVisible(player: Player): Boolean {
-//        return player.hasPermission("otanoshimi.command.report")
-//    }
+    //    override fun isVisible(player: Player): Boolean {
+    //        return player.hasPermission("otanoshimi.command.report")
+    //    }
 
 
 }
