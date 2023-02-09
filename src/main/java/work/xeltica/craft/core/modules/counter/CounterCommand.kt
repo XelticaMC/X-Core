@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.counter
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -11,12 +12,11 @@ import work.xeltica.craft.core.gui.Gui.Companion.getInstance
 import work.xeltica.craft.core.modules.ranking.Ranking
 import work.xeltica.craft.core.modules.ranking.RankingModule
 import java.io.IOException
-import java.util.Locale
 
 class CounterCommand : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) return false
-        val subCommand = args[0].lowercase(Locale.getDefault())
+        val subCommand = args[0].lowercase()
         val record = PlayerStore.open(player)
         val ui = getInstance()
 
@@ -54,8 +54,8 @@ class CounterCommand : CommandPlayerOnlyBase() {
                         player,
                         "/counter bind <name> <all/java/bedrock/uwp/phone> <rankingName>"
                     )
-                    val name = args[1].lowercase(Locale.getDefault())
-                    val playerType = args[2].lowercase(Locale.getDefault())
+                    val name = args[1].lowercase()
+                    val playerType = args[2].lowercase()
                     val rankingName = args[3]
                     val data = CounterModule[name] ?: return ui.error(player, name + "という名前のカウンターは存在しません。")
                     when (playerType) {
@@ -75,8 +75,8 @@ class CounterCommand : CommandPlayerOnlyBase() {
 
                 "unbind" -> {
                     if (args.size != 3) return ui.error(player, "/counter unbind <name> <all/java/bedrock/uwp/phone>")
-                    val name = args[1].lowercase(Locale.getDefault())
-                    val playerType = args[2].lowercase(Locale.getDefault())
+                    val name = args[1].lowercase()
+                    val playerType = args[2].lowercase()
                     val data = CounterModule[name] ?: return ui.error(player, name + "という名前のカウンターは存在しません。")
                     when (playerType) {
                         "all" -> {
@@ -146,14 +146,14 @@ class CounterCommand : CommandPlayerOnlyBase() {
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            return ui.error(player, "§cIO エラーが発生したために処理を続行できませんでした。")
+            return ui.error(player, "${ChatColor.RED}IO エラーが発生したために処理を続行できませんでした。")
         }
         return true
     }
 
     override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String>? {
         if (args.isEmpty()) return COMPLETE_LIST_EMPTY
-        val subcommand = args[0].lowercase(Locale.getDefault())
+        val subcommand = args[0].lowercase()
         if (args.size == 1) {
             val commands = listOf("register", "unregister", "cancel", "bind", "unbind", "info", "list", "resetdaily")
             val completions = ArrayList<String>()
@@ -169,7 +169,7 @@ class CounterCommand : CommandPlayerOnlyBase() {
         } else if (args.size == 3) {
             when (subcommand) {
                 "bind", "unbind" -> {
-                    val playerType = args[2].lowercase(Locale.getDefault())
+                    val playerType = args[2].lowercase()
                     val types = listOf("all", "java", "bedrock", "uwp", "phone")
                     val completions = ArrayList<String>()
                     StringUtil.copyPartialMatches(playerType, types, completions)
