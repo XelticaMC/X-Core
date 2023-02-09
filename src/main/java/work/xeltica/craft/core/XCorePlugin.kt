@@ -31,6 +31,7 @@ import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule
 import work.xeltica.craft.core.modules.eventSummer.EventSummerModule
 import work.xeltica.craft.core.modules.eventTwoYears.EventTwoYearsModule
 import work.xeltica.craft.core.modules.fly.FlyModule
+import work.xeltica.craft.core.modules.grenade.GrenadeModule
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.item.ItemModule
@@ -38,6 +39,7 @@ import work.xeltica.craft.core.modules.kusa.KusaModule
 import work.xeltica.craft.core.modules.livemode.LiveModeModule
 import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
+import work.xeltica.craft.core.modules.moderation.ModerationModule
 import work.xeltica.craft.core.modules.motd.MotdModule
 import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.modules.nightmare.NightmareModule
@@ -195,6 +197,7 @@ class XCorePlugin : JavaPlugin() {
         EventSummerModule,
         EventTwoYearsModule,
         FlyModule,
+        GrenadeModule,
         HintModule,
         HubModule,
         ItemModule,
@@ -202,6 +205,7 @@ class XCorePlugin : JavaPlugin() {
         LiveModeModule,
         MetaModule,
         MobBallModule,
+        ModerationModule,
         MotdModule,
         NbsModule,
         NightmareModule,
