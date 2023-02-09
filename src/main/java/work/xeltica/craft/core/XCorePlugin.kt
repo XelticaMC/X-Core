@@ -21,6 +21,7 @@ import work.xeltica.craft.core.modules.bedrock.BedrockModule
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.cat.CatModule
 import work.xeltica.craft.core.modules.clover.CloverModule
+import work.xeltica.craft.core.modules.coreProtectGuiTest.CoreProtectGuiTestModule
 import work.xeltica.craft.core.modules.countdown.CountdownModule
 import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
@@ -31,6 +32,7 @@ import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule
 import work.xeltica.craft.core.modules.eventSummer.EventSummerModule
 import work.xeltica.craft.core.modules.eventTwoYears.EventTwoYearsModule
 import work.xeltica.craft.core.modules.fly.FlyModule
+import work.xeltica.craft.core.modules.gamemodeChange.GamemodeChangeModule
 import work.xeltica.craft.core.modules.grenade.GrenadeModule
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
@@ -45,12 +47,6 @@ import work.xeltica.craft.core.modules.nbs.NbsModule
 import work.xeltica.craft.core.modules.nightmare.NightmareModule
 import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.modules.omikuji.OmikujiModule
-import work.xeltica.craft.core.models.PlayerDataKey
-import work.xeltica.craft.core.modules.coreProtectGuiTest.CoreProtectGuiTestModule
-import work.xeltica.craft.core.modules.farmFestival.FarmFestivalModule
-import work.xeltica.craft.core.modules.fireworkFestival.FireworkFestivalModule
-import work.xeltica.craft.core.modules.gamemodeChange.GamemodeChangeModule
-import work.xeltica.craft.core.modules.halloween.HalloweenModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
 import work.xeltica.craft.core.modules.promotion.PromotionModule
 import work.xeltica.craft.core.modules.punishment.PunishmentModule
@@ -228,7 +224,6 @@ class XCorePlugin : JavaPlugin() {
         VehicleModule,
         WorldModule,
         XphoneModule,
-        HalloweenModule,
         CoreProtectGuiTestModule,
         GamemodeChangeModule,
     )
