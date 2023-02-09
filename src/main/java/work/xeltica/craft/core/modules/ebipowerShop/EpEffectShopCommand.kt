@@ -17,7 +17,6 @@ import work.xeltica.craft.core.gui.Gui
 import work.xeltica.craft.core.gui.MenuItem
 import work.xeltica.craft.core.modules.hint.Hint
 import work.xeltica.craft.core.modules.hint.HintModule
-import java.util.Locale
 import java.util.function.Consumer
 
 class EpEffectShopCommand : CommandPlayerOnlyBase() {
@@ -28,7 +27,7 @@ class EpEffectShopCommand : CommandPlayerOnlyBase() {
             openShop(player)
             return true
         }
-        when (subCommand.lowercase(Locale.getDefault())) {
+        when (subCommand.lowercase()) {
             "add" -> {
                 if (args.size != 5) {
                     player.sendMessage("/epeffectshop add <type> <power> <time> <cost>")

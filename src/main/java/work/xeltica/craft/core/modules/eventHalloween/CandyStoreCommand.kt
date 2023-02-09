@@ -6,19 +6,18 @@ import org.bukkit.SoundCategory
 import org.bukkit.command.Command
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import java.util.Locale
 
 class CandyStoreCommand : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         val subCommand = if (args.isNotEmpty()) args[0] else null
 
         // サブコマンドがなければお店UIを開く
-        if (subCommand == null || !player.hasPermission("otanoshimi.command.candystore." + subCommand.lowercase(Locale.getDefault()))) {
+        if (subCommand == null || !player.hasPermission("otanoshimi.command.candystore." + subCommand.lowercase())) {
             EventHalloweenModule.openCandyStore(player)
             return true
         }
 
-        when (subCommand.lowercase(Locale.getDefault())) {
+        when (subCommand.lowercase()) {
             "add" -> {
                 if (args.size != 2) {
                     player.sendMessage("/candystore add <cost>")
