@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
+import work.xeltica.craft.core.modules.transferGuide.dataElements.TransferGuideData
 import java.time.LocalDateTime
 
 /**
@@ -13,11 +14,14 @@ import java.time.LocalDateTime
  */
 object TransferGuideModule : ModuleBase() {
 
+    lateinit var data: TransferGuideData
+
     /**
      * モジュール読み込み時に呼び出されるやつ
      */
     override fun onEnable() {
         updateData()
+        data = TransferGuideData()
     }
 
     /**

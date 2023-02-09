@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.transferGuide.dataElements
 
 import org.bukkit.ChatColor
+import work.xeltica.craft.core.modules.transferGuide.TransferGuideModule
 import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
 
 /**
@@ -13,7 +14,8 @@ class KPath(val to: String?, val line: String?, val direction: String?, val time
      * 鉄道なら「駅名:路線名(方向名) 約○分○秒」
      * 徒歩などなら「駅名:方向名約○分○秒歩く/ボートに乗る」
      */
-    fun toStringForGuide(data: TransferGuideData): String {
+    fun toStringForGuide(): String {
+        val data = TransferGuideModule.data
         val gray = ChatColor.GRAY
         val white = ChatColor.WHITE
         val stationName = data.stations[to]?.name

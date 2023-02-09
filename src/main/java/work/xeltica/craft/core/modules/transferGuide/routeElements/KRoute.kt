@@ -2,18 +2,19 @@ package work.xeltica.craft.core.modules.transferGuide.routeElements
 
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import work.xeltica.craft.core.modules.transferGuide.TransferGuideModule
 import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
 import work.xeltica.craft.core.modules.transferGuide.dataElements.KStation
-import work.xeltica.craft.core.modules.transferGuide.dataElements.TransferGuideData
 
 /**
  * 経路データを表すクラス
  * @author Knit prg.
  */
-class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
+class KRoute(stations: Array<KStation>) {
     private val routes: Array<KRouteBlock>
 
     init {
+        val data = TransferGuideModule.data
         val pathsCandidates = ArrayList<ArrayList<KRoutePath>>()
         //駅の配列から使用可能な移動経路群を抽出
         for (i in stations.indices) {
@@ -162,7 +163,7 @@ class KRoute(val data: TransferGuideData, stations: Array<KStation>) {
                     30
                 }
                 sb.append("$white | ")
-                sb.append("${it.routePath.toStringForGuide(data)}\n")
+                sb.append("${it.routePath.toStringForGuide()}\n")
             }
         }
         sb.append("${gray}所要時間:${white}約${TransferGuideUtil.secondsToString(appendTime)}\n")

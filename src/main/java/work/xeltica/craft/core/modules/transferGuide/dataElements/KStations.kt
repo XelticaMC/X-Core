@@ -1,17 +1,18 @@
 package work.xeltica.craft.core.modules.transferGuide.dataElements
 
+import work.xeltica.craft.core.modules.transferGuide.TransferGuideModule
 import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
 
 /**
  * 条件に合う駅を絞り込むコードを分かりやすくする為だけのクラスです。
  * @author Knit prg.
  */
-class KStations private constructor(data: TransferGuideData) {
+class KStations private constructor() {
     var value: ArrayList<KStation>
 
     init {
         val v = arrayListOf<KStation>()
-        data.stations.forEach {
+        TransferGuideModule.data.stations.forEach {
             v.add(it.value)
         }
         value = v
@@ -21,8 +22,8 @@ class KStations private constructor(data: TransferGuideData) {
         /**
          * 路線データ内の全ての駅を取得します。
          */
-        fun allStations(data: TransferGuideData): KStations {
-            return KStations(data)
+        fun allStations(): KStations {
+            return KStations()
         }
     }
 

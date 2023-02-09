@@ -16,7 +16,6 @@ import work.xeltica.craft.core.modules.transferGuide.dataElements.KMuni
 import work.xeltica.craft.core.modules.transferGuide.dataElements.KMunis
 import work.xeltica.craft.core.modules.transferGuide.dataElements.KStation
 import work.xeltica.craft.core.modules.transferGuide.dataElements.KStations
-import work.xeltica.craft.core.modules.transferGuide.dataElements.TransferGuideData
 import work.xeltica.craft.core.modules.transferGuide.enums.JapaneseColumns
 import work.xeltica.craft.core.modules.transferGuide.enums.StationChoiceTarget
 import work.xeltica.craft.core.modules.transferGuide.routeElements.KRoute
@@ -35,7 +34,7 @@ import kotlin.math.abs
  */
 class TransferGuideSession(val player: Player) {
     private val knit = "fef8dd2a-762a-463a-916f-f2e1ac62041b"
-    private val data = TransferGuideData()
+    private val data = TransferGuideModule.data
     private val gui = Gui.getInstance()
     private val logger = Bukkit.getLogger()
     private var startId: String? = null
@@ -200,7 +199,7 @@ class TransferGuideSession(val player: Player) {
      * ランダムに駅を選択します。
      */
     private fun chooseStationRandom(stationChoiceTarget: StationChoiceTarget) {
-        val stations = KStations.allStations(data).filterByWorld(player.world.name).filterByType("station").value
+        val stations = KStations.allStations().filterByWorld(player.world.name).filterByType("station").value
         val range = 0 until stations.size
         val station = stations[range.random()]
         setStationAndReturn(station.id, stationChoiceTarget)
@@ -238,7 +237,7 @@ class TransferGuideSession(val player: Player) {
      * GUI: 駅選択/五十音順/○行/□から始まる駅一覧
      */
     private fun openChooseStationAiueo(stationChoiceTarget: StationChoiceTarget, column: JapaneseColumns, char: String) {
-        val stations = KStations.allStations(data)
+        val stations = KStations.allStations()
             .filterByWorld(player.world.name)
             .filterByType("station")
             .filterByYomiInitial(char)
@@ -270,7 +269,7 @@ class TransferGuideSession(val player: Player) {
      */
     private fun openChooseStationLine(stationChoiceTarget: StationChoiceTarget, company: KCompany) {
         val items = ArrayList<MenuItem>()
-        val lines = KLines.allLines(data)
+        val lines = KLines.allLines()
             .filterByWorld(player.world.name)
             .filterByCompany(company)
         lines.value.forEach { line ->
@@ -287,7 +286,7 @@ class TransferGuideSession(val player: Player) {
      */
     private fun openChooseStationLine(stationChoiceTarget: StationChoiceTarget, company: KCompany, line: KLine) {
         val items = ArrayList<MenuItem>()
-        val stations = KStations.allStations(data)
+        val stations = KStations.allStations()
             .filterByWorld(player.world.name)
             .filterByType("station")
             .filterByLine(line)
@@ -305,7 +304,7 @@ class TransferGuideSession(val player: Player) {
      */
     private fun openChooseStationMuni(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
-        val munis = KMunis.allMunis(data)
+        val munis = KMunis.allMunis()
             .filterByWorld(player.world.name)
         munis.value.forEach { muni ->
             items.add(
@@ -321,7 +320,7 @@ class TransferGuideSession(val player: Player) {
      */
     private fun openChooseStationMuni(stationChoiceTarget: StationChoiceTarget, muni: KMuni) {
         val items = ArrayList<MenuItem>()
-        val stations = KStations.allStations(data)
+        val stations = KStations.allStations()
             .filterByWorld(player.world.name)
             .filterByType("station")
             .filterByMuni(muni)
@@ -340,7 +339,7 @@ class TransferGuideSession(val player: Player) {
     private fun openChooseStationNear(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
         val playerLocation = doubleArrayOf(player.location.x, player.location.z)
-        val stations = KStations.allStations(data)
+        val stations = KStations.allStations()
             .filterByWorld(player.world.name)
             .filterByType("station")
             .sortByDistance(playerLocation)
@@ -374,7 +373,7 @@ class TransferGuideSession(val player: Player) {
      */
     private fun openChooseStationWild(stationChoiceTarget: StationChoiceTarget) {
         val items = ArrayList<MenuItem>()
-        val stations = KStations.allStations(data)
+        val stations = KStations.allStations()
             .filterByWorld(player.world.name)
             .filterByType("station")
         stations.value.forEach { station ->
@@ -646,7 +645,7 @@ class TransferGuideSession(val player: Player) {
         if (data.consoleDebug) {
             logger.info("routeArray=${routeArray.joinToString { it.id }}")
         }
-        return KRoute(data, routeArray)
+        return KRoute(routeArray)
     }
 
     /**
@@ -746,7 +745,7 @@ class TransferGuideSession(val player: Player) {
         }
         sb.append("${gray}隣の駅:\n")
         station.paths.forEach {
-            sb.append(" ${it.toStringForGuide(data)}\n")
+            sb.append(" ${it.toStringForGuide()}\n")
         }
         sb.append("=".repeat(20))
         player.sendMessage(sb.toString())
@@ -988,7 +987,7 @@ class TransferGuideSession(val player: Player) {
         var problemCount = 0
         var itemCount = 0
         val yellow = ChatColor.YELLOW
-        val stations = KStations.allStations(data)
+        val stations = KStations.allStations()
             .filterByWorld(player.world.name)
             .filterByType("station")
             .value

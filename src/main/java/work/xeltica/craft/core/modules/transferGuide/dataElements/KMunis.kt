@@ -1,15 +1,17 @@
 package work.xeltica.craft.core.modules.transferGuide.dataElements
 
+import work.xeltica.craft.core.modules.transferGuide.TransferGuideModule
+
 /**
  * 自治体絞り込み用
  * @author Knit prg.
  */
-class KMunis private constructor(data: TransferGuideData) {
+class KMunis private constructor() {
     var value: ArrayList<KMuni>
 
     init {
         val v = arrayListOf<KMuni>()
-        data.municipalities.forEach {
+        TransferGuideModule.data.municipalities.forEach {
             v.add(it.value)
         }
         value = v
@@ -19,8 +21,8 @@ class KMunis private constructor(data: TransferGuideData) {
         /**
          * 路線データ内の全ての自治体を取得します。
          */
-        fun allMunis(data: TransferGuideData): KMunis {
-            return KMunis(data)
+        fun allMunis(): KMunis {
+            return KMunis()
         }
     }
 

@@ -1,15 +1,17 @@
 package work.xeltica.craft.core.modules.transferGuide.dataElements
 
+import work.xeltica.craft.core.modules.transferGuide.TransferGuideModule
+
 /**
  * 路線絞り込み用
  * @author Knit prg.
  */
-class KLines private constructor(data: TransferGuideData) {
+class KLines private constructor() {
     var value: ArrayList<KLine>
 
     init {
         val v = arrayListOf<KLine>()
-        data.lines.forEach {
+        TransferGuideModule.data.lines.forEach {
             v.add(it.value)
         }
         value = v
@@ -19,8 +21,8 @@ class KLines private constructor(data: TransferGuideData) {
         /**
          * 路線データ内の全ての路線を取得します。
          */
-        fun allLines(data: TransferGuideData): KLines {
-            return KLines(data)
+        fun allLines(): KLines {
+            return KLines()
         }
     }
 
