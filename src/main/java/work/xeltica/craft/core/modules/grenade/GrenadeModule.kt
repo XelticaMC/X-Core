@@ -10,13 +10,24 @@ import work.xeltica.craft.core.modules.grenade.item.FragGrenade
 import work.xeltica.craft.core.modules.grenade.item.IGrenadeBase
 import work.xeltica.craft.core.modules.grenade.item.Molotov
 import work.xeltica.craft.core.modules.grenade.item.StunGrenade
+import work.xeltica.craft.core.modules.item.ItemModule
 import java.util.UUID
 
 object GrenadeModule : ModuleBase() {
     private val grenadeEntity = HashMap<UUID, IGrenadeBase>()
 
+    const val ITEM_NAME_FLAG_GRANADE = "flag_grenade"
+    const val ITEM_NAME_STUN_GRANADE = "stun_grenade"
+    const val ITEM_NAME_MOLOTOV = "molotov"
+
     override fun onEnable() {
         registerHandler(GrenadeHandler())
+    }
+
+    override fun onPostEnable() {
+        ItemModule.registerItem(ITEM_NAME_FLAG_GRANADE, createGrenadeItem(GrenadeType.FRAG_GRENADE))
+        ItemModule.registerItem(ITEM_NAME_STUN_GRANADE, createGrenadeItem(GrenadeType.STUN_GRENADE))
+        ItemModule.registerItem(ITEM_NAME_MOLOTOV, createGrenadeItem(GrenadeType.MOLOTOV))
     }
 
     fun getGrenadeEntity(entity: ThrowableProjectile): IGrenadeBase? {
@@ -33,11 +44,13 @@ object GrenadeModule : ModuleBase() {
                     grenadeEntity[entity.uniqueId] = FragGrenade(entity)
                 }
             }
+
             StunGrenade.name -> {
                 if (entity is Snowball) {
                     grenadeEntity[entity.uniqueId] = StunGrenade(entity)
                 }
             }
+
             Molotov.name -> {
                 if (entity is ThrownPotion) {
                     grenadeEntity[entity.uniqueId] = Molotov(entity)
