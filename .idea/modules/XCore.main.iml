@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="XCore:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="work.xeltica.craft.core" external.system.module.type="sourceSet" external.system.module.version="2.39.2" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="XCore:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="work.xeltica.craft.core" external.system.module.type="sourceSet" external.system.module.version="3.1.2" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="minecraft" name="Minecraft">
       <configuration>
@@ -16,12 +16,13 @@
         </compilerSettings>
         <compilerArguments>
           <flagArguments>
+            <flagArg name="noReflect" arg="true" />
             <flagArg name="noStdlib" arg="true" />
           </flagArguments>
           <stringArguments>
             <stringArg name="classpath">
               <args>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.papermc.paper/paper-api/1.19-R0.1-SNAPSHOT/16c0c5a4a38ed1d4c2e543b7b794c5f2eec086b9/paper-api-1.19-R0.1-SNAPSHOT.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.papermc.paper/paper-api/1.19.3-R0.1-SNAPSHOT/40a113d9afecf5df2582a7700668053f225b43de/paper-api-1.19.3-R0.1-SNAPSHOT.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-chat/1.16-R0.4-deprecated+build.6/34a32cc95e1c5f12176cf0a8aeeff087ff8a17e0/bungeecord-chat-1.16-R0.4-deprecated+build.6.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.MilkBowl/VaultAPI/1.7/5c4ad4b33bbfe93c061e8c8a37d0542f7539415/VaultAPI-1.7.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.bukkit/bukkit/1.13.1-R0.1-SNAPSHOT/4aae819591911e88ffa46e5bee3f2870d28a8db7/bukkit-1.13.1-R0.1-SNAPSHOT.jar</arg>
@@ -32,35 +33,35 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.geysermc.cumulus/cumulus/1.0-SNAPSHOT/7f9b9f733acbf348cbb4b24b7ff12fa24cd10ac3/cumulus-1.0-SNAPSHOT.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.discordsrv/discordsrv/1.25.1/d9865429545ad521eb295027450506784aa4d764/discordsrv-1.25.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/dev.vankka/MCDiscordReserializer/4.2.2/fc0fa963a2ac4dfdbd355b103155f4f965cecfa/MCDiscordReserializer-4.2.2.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-logger-slf4j/4.11.0/22414f4f37e334ce4b8ca042108922554794b1d1/adventure-text-logger-slf4j-4.11.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-minimessage/4.11.0/bae2b3df851f0997f8fd3f56aa1a9987d7b54792/adventure-text-minimessage-4.11.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-logger-slf4j/4.12.0/888548f784b40e35103a2548dfafa8201068dd1e/adventure-text-logger-slf4j-4.12.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-minimessage/4.12.0/c587ced911b95ee3d1ee1c6738ea643f858c826b/adventure-text-minimessage-4.12.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-platform-bukkit/4.0.1/b4b99eff49b6a898a32d0dd5433275bdc0a0d8ff/adventure-platform-bukkit-4.0.1.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-serializer-legacy/4.11.0/de25209fbd6a08d47342f97b99c0c52cc4acc247/adventure-text-serializer-legacy-4.11.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-serializer-plain/4.11.0/a15eb311b588ce2b19b410b53df696fe058a5076/adventure-text-serializer-plain-4.11.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-serializer-legacy/4.12.0/e27192a793d85b40ef0cf885d45e766c611f91bd/adventure-text-serializer-legacy-4.12.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-serializer-plain/4.12.0/e0711d65c29676908cda8bee2bd1d12f02b16e46/adventure-text-serializer-plain-4.12.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.GeyserMC/MCProtocolLib/c2985e8/d77a800b2af41de14a730027090cb9551b6901d7/MCProtocolLib-c2985e8.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-serializer-gson-legacy-impl/4.11.0/170ce1c54a0b809ebc604aeb036243beddf76227/adventure-text-serializer-gson-legacy-impl-4.11.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-serializer-gson-legacy-impl/4.12.0/ae3289c3b16dca2158c69f895e75b11eb2c33db1/adventure-text-serializer-gson-legacy-impl-4.12.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-platform-api/4.0.1/269a2f4afec9f173e673647cf7bf8adb7f97d0c7/adventure-platform-api-4.0.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-serializer-bungeecord/4.0.1/28c34b383bf41e615fa744b673c2ecb61798e610/adventure-text-serializer-bungeecord-4.0.1.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-api/4.11.0/925ce8f663bab063d522de8a895ac152a023dab8/adventure-api-4.11.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-nbt/4.11.0/d8f0e1503b52eba40a4a5ce532ac999f094bf883/adventure-nbt-4.11.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-key/4.11.0/6ac82c19a7c677f0918369cc3610e89f1a2f7d66/adventure-key-4.11.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-serializer-gson/4.11.0/aa74697a6d1e1c225a40ead4c5d07bee77d19164/adventure-text-serializer-gson-4.11.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.9/8a432c1d6825781e21a02db2e2c33c5fde2833b9/gson-2.8.9.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-api/4.12.0/f2351c9766a9c68e9535fa5157699f44ef53d8be/adventure-api-4.12.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-nbt/4.12.0/3641ee16dc11134aec287fe4e7ee81cf4d1e2886/adventure-nbt-4.12.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-key/4.12.0/c5c1e8a4f0664b91e3116e5ecdd8d271362d4ae9/adventure-key-4.12.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-serializer-gson/4.12.0/74405a444d9a7f23f2a20811562d0a6cc6251966/adventure-text-serializer-gson-4.12.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.10/dd9b193aef96e973d5a11ab13cd17430c2e4306b/gson-2.10.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.luckperms/api/5.4/7b07573b0c9f06a1e5ddfc6b0042d04759d0ba8a/api-5.4.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.tr7zw/item-nbt-api-plugin/2.8.0/f868e9d45cd0313b884f52ef629d0f804870cb9/item-nbt-api-plugin-2.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.tr7zw/item-nbt-api-plugin/2.11.1/eca7430224deba7d15b4153c075b9056fd1944d2/item-nbt-api-plugin-2.11.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.gmail.filoghost.holographicdisplays/holographicdisplays-api/2.4.0/be81c17e79869bdd7d637779d77c116ce2b58380/holographicdisplays-api-2.4.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.koca2000/NoteBlockAPI/1.6.1/7a7c1a5f16164615dc966798bbb043c416197167/NoteBlockAPI-1.6.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.citizensnpcs/citizensapi/2.0.29-SNAPSHOT/d236bc1c4083b4fcd785131636cbdc4f6f8de3e/citizensapi-2.0.29-SNAPSHOT.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ucchyocean.lc/LunaChat/3.0.16/836d7c96945156c489fd3a510a065d4c2c11c810/LunaChat-3.0.16.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.6.10/b8af3fe6f1ca88526914929add63cf5e7c5049af/kotlin-stdlib-1.6.10.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.wesjd/anvilgui/1.5.3-SNAPSHOT/9ccff6a042174795a33a27417de4575840c11e36/anvilgui-1.5.3-SNAPSHOT.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/31.0.1-jre/119ea2b2bc205b138974d351777b20f02b92704b/guava-31.0.1-jre.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.wesjd/anvilgui/1.6.3-SNAPSHOT/98cf66d9c9595b96ede7aad68e96d020c08fda15/anvilgui-1.6.3-SNAPSHOT.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/31.1-jre/60458f877d055d0c9114d9e1a2efb737b4bc282c/guava-31.1-jre.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.12.4/69206e02e6a696034f06a59d3ddbfbba5a4cd81/jackson-databind-2.12.4.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.12.4/752cf9a2562ac2c012e48057e3a4c17dad66c66e/jackson-annotations-2.12.4.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.12.4/6a1bd259b6c4e3f9219ec8ec0be55ed11eed0c/jackson-core-2.12.4.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.12.4/2a3cecd4c46a51ebf3bf92ccf229a07f7ef09d86/jackson-dataformat-yaml-2.12.4.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/github.scarsz/configuralize/1.3.2/75d3dc522a429b613946a981903e5551e009fd32/configuralize-1.3.2.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.yaml/snakeyaml/1.30/8fde7fe2586328ac3c68db92045e1c8759125000/snakeyaml-1.30.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.yaml/snakeyaml/1.33/2cd0a87ff7df953f810c344bdf2fe3340b954c69/snakeyaml-1.33.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.json-simple/json-simple/1.1.1/c9ad4a0850ab676c5c64461a05ca524cdfff59f1/json-simple-1.1.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/it.unimi.dsi/fastutil/8.5.6/76f95700418a68fbc4ac050525261f05dc681ca1/fastutil-8.5.6.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.17.1/d771af8e336e372fb5399c99edabe0919aeaf5b2/log4j-api-2.17.1.jar</arg>
@@ -105,10 +106,10 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver-dns/4.1.66.Final/7b74815fb1403e5747c872c6eee2a07e7a700d30/netty-resolver-dns-4.1.66.Final.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-haproxy/4.1.66.Final/9c4f222ca726ea358be1cc03377ad04ce34b7fb9/netty-codec-haproxy-4.1.66.Final.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler/4.1.66.Final/1e6ec9b58725a96b2bd0f173709b59c79175225c/netty-handler-4.1.66.Final.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.nukkitx.network/common/1.6.28-SNAPSHOT/ec46b2c27380a54fb2406f00217e1822d9e3fae1/common-1.6.28-SNAPSHOT.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-epoll/4.1.70.Final/89f5a0f9903404900b3dfe2ecfc969eaf40ce26c/netty-transport-native-epoll-4.1.70.Final-linux-x86_64.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-epoll/4.1.70.Final/bd2a44057355c3e873fe60e2141cc48bd97bb934/netty-transport-native-epoll-4.1.70.Final-linux-aarch_64.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-kqueue/4.1.70.Final/effade0fceb3642b5a2435a6dac2211fd08759b3/netty-transport-native-kqueue-4.1.70.Final-osx-x86_64.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.nukkitx.network/common/1.6.28-SNAPSHOT/b1a7471102e8ff17e03cce7c7b0c2cd8de1be875/common-1.6.28-SNAPSHOT.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-epoll/4.1.85.Final/434da27cbcc74ccdb8033e53242a2fa14de0c494/netty-transport-native-epoll-4.1.85.Final-linux-x86_64.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-epoll/4.1.85.Final/5a32511fe961041b4be00c21c6664aa55a410318/netty-transport-native-epoll-4.1.85.Final-linux-aarch_64.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-kqueue/4.1.85.Final/23234e860919220cc78fdae3eaa5283679f0b367/netty-transport-native-kqueue-4.1.85.Final-osx-x86_64.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.neovisionaries/nv-websocket-client/2.14/1b66d37914b232cef45e56ec8c01907620de9e3a/nv-websocket-client-2.14.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.trove4j/trove4j/3.0.3/42ccaf4761f0dfdfa805c9e340d99a755907e2dd/trove4j-3.0.3.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/me.scarsz/jdaappender/1.0.2/5872777668a15f4dbfd3a7f7c2111f950d63c73a/jdaappender-1.0.2.jar</arg>
@@ -131,7 +132,7 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.spotbugs/spotbugs-annotations/4.2.3/5e2b16c54d6644da056e1aa190d0c3f953ae7d46/spotbugs-annotations-4.2.3.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.7.1/458d9042f7aa6fa9a634df902b37f544e15aacac/error_prone_annotations-2.7.1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.11.0/c5a0ace696d3f8b1c1d8cc036d8c03cc0cbe6b69/error_prone_annotations-2.11.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/1.3/ba035118bc8bac37d7eff77700720999acd9986d/j2objc-annotations-1.3.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-lang/commons-lang/2.6/ce1edb914c94ebc388f086c6827e8bdeec71ac2/commons-lang-2.6.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.nukkitx.fastutil/fastutil-int-object-maps/8.5.3/d31259637e0fe0c04a9fba08e9af3dc09bf2c14b/fastutil-int-object-maps-8.5.3.jar</arg>
@@ -145,13 +146,13 @@
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.steveice10/opennbt/1.4/5771da998d498d89c0bbedc8d6e91225d2987efd/opennbt-1.4.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-dns/4.1.66.Final/390ff96a0e1f7c626cb52c119a1a1dfd0784d193/netty-codec-dns-4.1.66.Final.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.66.Final/e7cfff848e6c1294645638d74fce6ad89cc6f3f3/netty-codec-4.1.66.Final.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-classes-epoll/4.1.70.Final/e71ea6f70691af09c6000bf65a8c35a7e1a58f84/netty-transport-classes-epoll-4.1.70.Final.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-classes-kqueue/4.1.70.Final/52b8dee51e297a88b792c752f0a57dec0a77e668/netty-transport-classes-kqueue-4.1.70.Final.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.70.Final/ba6ad1e8c0570242a9bb2b4526ad4a1c56f71e2f/netty-transport-native-unix-common-4.1.70.Final.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.70.Final/38f683ad3a6c63fec73e5702d237ecbc9839deb6/netty-transport-4.1.70.Final.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.70.Final/54620560d725f497b73d54509baac64dfc4e0093/netty-buffer-4.1.70.Final.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.70.Final/9fd1fb006141dae4a4f3dd8e83662edf56ae5d1b/netty-resolver-4.1.70.Final.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.70.Final/c2db94c855f472573b64ca68d00effcde00329bd/netty-common-4.1.70.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-classes-epoll/4.1.85.Final/8fa9329620accf9ebef76a805cdd1e35cfd8b859/netty-transport-classes-epoll-4.1.85.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-classes-kqueue/4.1.85.Final/2a4f2017084ecd686c25ae051f41c4a88b6f707b/netty-transport-classes-kqueue-4.1.85.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.85.Final/a9c22785e2a4301f523cc9711b387f38a19d8bb2/netty-transport-native-unix-common-4.1.85.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.85.Final/2c30699dd565568303847d87c89f76a01e5cc8ee/netty-transport-4.1.85.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.85.Final/ca55790d7c66ac1a4ddd204d98c2a872187a052/netty-buffer-4.1.85.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.85.Final/aeb5a1de291ac21b9f8d03fa5aa201d109c16d02/netty-resolver-4.1.85.Final.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.85.Final/14a0c958ee311baf010a1617d1fbf02c77f7bfd2/netty-common-4.1.85.Final.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.errorprone/javac/9+181-r4173-1/bdf4c0aa7d540ee1f7bf14d47447aea4bbf450c5/javac-9+181-r4173-1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.13.0/f53f6362226e4546c3987b8693f3d6976df8c797/okhttp-3.13.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-collections4/4.1/a4cf4688fe1c7e3a63aa636cc96d013af537768e/commons-collections4-4.1.jar</arg>
@@ -185,18 +186,18 @@
             <stringArg name="jvmTarget" arg="17" />
             <stringArg name="moduleName" arg="XCore" />
             <stringArg name="apiVersion" arg="1.6" />
-            <stringArg name="languageVersion" arg="1.6" />
+            <stringArg name="languageVersion" arg="1.8" />
           </stringArguments>
           <arrayArguments>
             <arrayArg name="friendPaths" />
             <arrayArg name="pluginClasspaths">
               <args>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.6.10/dbe683647dcb04cda92fe4423acb741a2f144a69/kotlin-scripting-jvm-1.6.10.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.6.10/b3b71fd93878f2b4f19d099ac6430c67549a1c77/kotlin-scripting-common-1.6.10.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.6.10/b8af3fe6f1ca88526914929add63cf5e7c5049af/kotlin-stdlib-1.6.10.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.8.0/1f7345b3fc46786c1f36a4ba0728a95990d05929/kotlin-scripting-jvm-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.8.0/ffeb4c0c2b3978876b993d6b55646e6b567077a8/kotlin-scripting-common-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.8.0/1796921c7a3e2e2665a83e6c8d33399336cd39bc/kotlin-stdlib-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.8.0/f7197e7cc76453ac59f8b0f8d5137cc600becd36/kotlin-stdlib-common-1.8.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.6.10/c118700e3a33c8a0d9adc920e9dec0831171925/kotlin-stdlib-common-1.6.10.jar</arg>
-                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.6.10/d0a7ff2e2500ef497ed0214ae40ad3c8387a6164/kotlin-script-runtime-1.6.10.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.8.0/b2f7e760d283cb339974851c222a4c1d48f2d3d/kotlin-script-runtime-1.8.0.jar</arg>
               </args>
             </arrayArg>
             <arrayArg name="pluginOptions" />
@@ -217,29 +218,29 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.github.MilkBowl:VaultAPI:1.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.geysermc:connector:1.4.3-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.geysermc.floodgate:api:2.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.discordsrv:discordsrv:1.25.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.code.gson:gson:2.8.9" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.code.gson:gson:2.10" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.luckperms:api:5.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: de.tr7zw:item-nbt-api-plugin:2.8.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: de.tr7zw:item-nbt-api-plugin:2.11.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.github.koca2000:NoteBlockAPI:1.6.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.github.ucchyocean.lc:LunaChat:3.0.16" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.6.10" level="project" />
-    <orderEntry type="library" name="Gradle: net.wesjd:anvilgui:1.5.3-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: net.wesjd:anvilgui:1.6.3-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.md-5:bungeecord-chat:1.16-R0.4-deprecated+build.6" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-logger-slf4j:4.11.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-minimessage:4.11.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-legacy:4.11.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-plain:4.11.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-api:4.11.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-gson:4.11.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:guava:31.0.1-jre" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.yaml:snakeyaml:1.30" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-logger-slf4j:4.12.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-minimessage:4.12.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-legacy:4.12.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-plain:4.12.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-api:4.12.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-gson:4.12.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:guava:31.1-jre" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.yaml:snakeyaml:1.33" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: it.unimi.dsi:fastutil:8.5.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.logging.log4j:log4j-api:2.17.1" level="project" />
@@ -268,9 +269,9 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-resolver-dns:4.1.66.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-codec-haproxy:4.1.66.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-handler:4.1.66.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-native-epoll:linux-aarch_64:4.1.70.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-native-epoll:linux-x86_64:4.1.70.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-native-kqueue:osx-x86_64:4.1.70.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-native-epoll:linux-aarch_64:4.1.85.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-native-epoll:linux-x86_64:4.1.85.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-native-kqueue:osx-x86_64:4.1.85.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.geysermc.cumulus:cumulus:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: dev.vankka:MCDiscordReserializer:4.2.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-platform-bukkit:4.0.1" level="project" />
@@ -294,17 +295,17 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: ch.ethz.globis.phtree:phtree:2.3.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains:annotations:23.0.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-key:4.11.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-key:4.12.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:examination-string:1.3.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:examination-api:1.3.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:failureaccess:1.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.errorprone:error_prone_annotations:2.7.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.errorprone:error_prone_annotations:2.11.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.j2objc:j2objc-annotations:1.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: junit:junit:4.13.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: commons-lang:commons-lang:2.6" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-gson-legacy-impl:4.11.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-gson-legacy-impl:4.12.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.github.steveice10:opennbt:1.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.github.CloudburstMC.Protocol:bedrock-v465:0bc10c8e" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.nukkitx.fastutil:fastutil-int-sets:8.5.3" level="project" />
@@ -315,20 +316,20 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.nukkitx.network:common:1.6.28-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.jodah:expiringmap:0.5.9" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.github.spotbugs:spotbugs-annotations:4.2.3" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-native-unix-common:4.1.70.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-common:4.1.70.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-native-unix-common:4.1.85.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-common:4.1.85.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-codec-dns:4.1.66.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-codec:4.1.66.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport:4.1.70.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-buffer:4.1.70.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-resolver:4.1.70.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-classes-epoll:4.1.70.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-classes-kqueue:4.1.70.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport:4.1.85.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-buffer:4.1.85.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-resolver:4.1.85.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-classes-epoll:4.1.85.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.netty:netty-transport-classes-kqueue:4.1.85.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.google.errorprone:javac:9+181-r4173-1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: dev.vankka:SimpleAST:2.2.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-platform-api:4.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-text-serializer-bungeecord:4.0.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-nbt:4.11.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.kyori:adventure-nbt:4.12.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.github.alexheretic:dynamics:4.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.squareup.okhttp3:okhttp:3.13.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.commons:commons-collections4:4.1" level="project" />
