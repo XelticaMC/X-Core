@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.bedrock
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.ModuleBase
@@ -17,7 +18,7 @@ object BedrockModule : ModuleBase() {
     /**
      * 免責事項タイトル
      */
-    private const val DISCLAIMER_TITLE = "§l統合版プレイヤーのあなたへ"
+    private val DISCLAIMER_TITLE = "${ChatColor.BOLD}統合版プレイヤーのあなたへ"
 
     /**
      * 免責事項のメッセージ本文

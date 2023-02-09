@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.ranking
 
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -62,7 +63,7 @@ class RankingCommand : CommandBase() {
                     val ranking = api[name]?.queryRanking() ?: return true
                     for (i in ranking.indices) {
                         val (id1, score) = ranking[i]
-                        sender.sendMessage("§6%d位:§a%s §b%s".format(i + 1, id1, score))
+                        sender.sendMessage("${ChatColor.GOLD}%d位:${ChatColor.GREEN}%s ${ChatColor.AQUA}%s".format(i + 1, id1, score))
                     }
                 }
 
@@ -72,7 +73,7 @@ class RankingCommand : CommandBase() {
                         sender.sendMessage("一つもありません。")
                         return true
                     }
-                    list.map { "%s §7(%s)".format(it.name, it.getDisplayName()) }
+                    list.map { "%s ${ChatColor.GRAY}(%s)".format(it.name, it.getDisplayName()) }
                         .forEach(sender::sendMessage)
                 }
 

@@ -7,6 +7,7 @@ import net.luckperms.api.model.user.User
 import net.luckperms.api.node.types.InheritanceNode
 import net.luckperms.api.query.QueryOptions
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 import work.xeltica.craft.core.XCorePlugin
@@ -54,11 +55,11 @@ object PromotionModule : ModuleBase() {
         val record = PlayerStore.open(player)
         val isManualCitizen = lpUser.getInheritedGroups(QueryOptions.defaultContextualOptions()).any { it.name == "citizen" }
         if (!isCitizen(player)) {
-            builder.appendLine("本サーバーでは、プレイヤーさんを§aわかば§r、§b市民§rという大きく2つのロールに分類しています。")
-            builder.appendLine("§b市民§rにならなくても基本的なプレイはできますが、")
-            builder.appendLine("・§c一部ブロックが使えない§r")
-            builder.appendLine("・§c一部のオリジナル機能が使えない§r")
-            builder.appendLine("という欠点があります。§b市民§rに昇格することで全ての機能が開放されます。")
+            builder.appendLine("本サーバーでは、プレイヤーさんを${ChatColor.GREEN}わかば${ChatColor.RESET}、${ChatColor.AQUA}市民${ChatColor.RESET}という大きく2つのロールに分類しています。")
+            builder.appendLine("${ChatColor.AQUA}市民${ChatColor.RESET}にならなくても基本的なプレイはできますが、")
+            builder.appendLine("・${ChatColor.RED}一部ブロックが使えない${ChatColor.RESET}")
+            builder.appendLine("・${ChatColor.RED}一部のオリジナル機能が使えない${ChatColor.RESET}")
+            builder.appendLine("という欠点があります。${ChatColor.AQUA}市民${ChatColor.RESET}に昇格することで全ての機能が開放されます。")
         }
         if (isManualCitizen) {
             builder.appendLine("既に手動認証されているため、あなたは市民です！")
@@ -67,14 +68,14 @@ object PromotionModule : ModuleBase() {
             val linked = ctx.contains("discordsrv:linked", "true")
             val crafterRole = ctx.contains("discordsrv:role", "クラフター")
             val tick = record.getInt(PS_KEY_NEWCOMER_TIME)
-            builder.appendLine("§b§lクイック認証に必要な条件: ")
+            builder.appendLine("${ChatColor.AQUA}${ChatColor.BOLD}クイック認証に必要な条件: ")
             builder.appendLine(getSuccessListItem("Discord 連携済み", linked))
             builder.appendLine(getSuccessListItem("クラフターロール付与済み", crafterRole))
             builder.appendLine(getSuccessListItem("初参加から30分経過(残り${tickToString(tick)})", tick == 0))
             if (linked && crafterRole) {
-                builder.appendLine("§b全ての条件を満たしているため、あなたは市民です！")
+                builder.appendLine("${ChatColor.AQUA}全ての条件を満たしているため、あなたは市民です！")
             } else {
-                builder.appendLine("§cあなたはまだいくつかの条件を満たしていないため、市民ではありません。")
+                builder.appendLine("${ChatColor.RED}あなたはまだいくつかの条件を満たしていないため、市民ではありません。")
             }
         }
         builder.appendLine("詳しくは https://wiki.craft.xeltica.work/citizen を確認してください！")
@@ -112,7 +113,7 @@ object PromotionModule : ModuleBase() {
     }
 
     private fun getSuccessListItem(label: String, isSuccess: Boolean): String {
-        return (if (isSuccess) "§a✔ " else "§c✘ ") + label + "§r"
+        return (if (isSuccess) "${ChatColor.GREEN}✔ " else "${ChatColor.RED}✘ ") + label + "${ChatColor.RESET}"
     }
 
     private fun tickToString(tick: Int): String {

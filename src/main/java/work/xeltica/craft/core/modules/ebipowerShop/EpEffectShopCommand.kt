@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.ebipowerShop
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
@@ -65,7 +66,7 @@ class EpEffectShopCommand : CommandPlayerOnlyBase() {
                 EbiPowerShopModule.Result.SUCCESS -> {
                     player.sendMessage(
                         String.format(
-                            "§b%s%s§rを§6%d秒間§r付与しました。",
+                            "${ChatColor.AQUA}%s%s${ChatColor.RESET}を${ChatColor.GOLD}%d秒間${ChatColor.RESET}付与しました。",
                             toJapanese(item.effectType),
                             if (item.level > 1) item.level.toString() else "",
                             item.time

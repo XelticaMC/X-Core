@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.world
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -17,7 +18,7 @@ class CommandXtp : CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.size != 1 && args.size != 2) return false
         if (args.size == 2 && !sender.hasPermission("otanoshimi.command.xtp.other")) {
-            sender.sendMessage("§c権限がありません。")
+            sender.sendMessage("${ChatColor.RED}権限がありません。")
             return true
         }
         if (args.size == 1 && sender !is Player) {
@@ -27,7 +28,7 @@ class CommandXtp : CommandBase() {
         val worldName = args[0]
         val p = if (args.size == 2) Bukkit.getPlayer(args[1]) else sender as Player
         if (p == null) {
-            sender.sendMessage("§cプレイヤーが存在しません")
+            sender.sendMessage("${ChatColor.RED}プレイヤーが存在しません")
             return true
         }
         teleportToSavedLocation(p, worldName)

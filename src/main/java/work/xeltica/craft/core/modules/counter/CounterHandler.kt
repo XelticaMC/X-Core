@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.Tag
@@ -13,7 +14,6 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
-import org.geysermc.connector.common.ChatColor
 import org.geysermc.floodgate.util.DeviceOs
 import work.xeltica.craft.core.api.events.RealTimeNewDayEvent
 import work.xeltica.craft.core.api.playerStore.PlayerStore
@@ -85,7 +85,7 @@ class CounterHandler : Listener {
             }
         } catch (ex: IOException) {
             ex.printStackTrace()
-            ui.error(player, "§cIO エラーが発生したために処理を続行できませんでした。")
+            ui.error(player, "${ChatColor.RED}IO エラーが発生したために処理を続行できませんでした。")
         }
     }
 
@@ -120,7 +120,7 @@ class CounterHandler : Listener {
             val ts = System.currentTimeMillis().toString()
             record[CounterModule.PS_KEY_ID] = first.name
             record[CounterModule.PS_KEY_TIME] = ts
-            player.showTitle(Title.title(Component.text("§6スタート！"), Component.empty()))
+            player.showTitle(Title.title(Component.text("${ChatColor.GOLD}スタート！"), Component.empty()))
             player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
             Bukkit.getPluginManager().callEvent(PlayerCounterStart(player, first))
         }
@@ -142,14 +142,14 @@ class CounterHandler : Listener {
             player.sendMessage("ゴール！タイムは" + timeString + "でした。")
             player.showTitle(
                 Title.title(
-                    Component.text("§6ゴール！"),
+                    Component.text("${ChatColor.GOLD}ゴール！"),
                     Component.text("タイム $timeString")
                 )
             )
             player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 1f, 2f)
             val count = record.getInt(CounterModule.PS_KEY_COUNT, 0)
             if (last.isDaily && count >= 2) {
-                player.sendMessage(ChatColor.RED + "既にチャレンジ済みのため、ランキングは更新されません。")
+                player.sendMessage("${ChatColor.RED}既にチャレンジ済みのため、ランキングは更新されません。")
             } else if (last.bedrockRankingId != null || last.javaRankingId != null || last.uwpRankingId != null || last.phoneRankingId != null) {
                 val playerName = PlainTextComponentSerializer.plainText().serialize(player.displayName())
                 Bukkit.getOnlinePlayers()
@@ -160,7 +160,7 @@ class CounterHandler : Listener {
                 DiscordHook.broadcast("${playerName}さんがタイムアタックで${timeString}を達成しました！")
                 handleRanking(player, last, diff)
                 val message = if (count == 0) "あと1回チャレンジできます！" else "本日はもうチャレンジできません。"
-                player.sendMessage(ChatColor.GREEN + message)
+                player.sendMessage("${ChatColor.GREEN}${message}")
             }
             record[CounterModule.PS_KEY_COUNT] = count + 1
             Bukkit.getPluginManager().callEvent(PlayerCounterFinish(player, last, diff.toLong()))
@@ -203,12 +203,12 @@ class CounterHandler : Listener {
         val prev = ranking[uniqueId]
         if (prev == 0 || prev > diff) {
             ranking.add(uniqueId, diff)
-            player.sendMessage("§a§l新記録達成！§cおめでとう！")
+            player.sendMessage("${ChatColor.GREEN}${ChatColor.BOLD}新記録達成！${ChatColor.RED}おめでとう！")
             player.playSound(player.location, Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 1f, 1f)
         } else {
-            player.sendMessage("§7新記録達成ならず…。")
+            player.sendMessage("${ChatColor.GRAY}新記録達成ならず…。")
             player.playSound(player.location, Sound.ENTITY_CAT_AMBIENT, SoundCategory.PLAYERS, 1f, 1f)
         }
-        player.sendMessage("§dまたチャレンジしてね！")
+        player.sendMessage("${ChatColor.LIGHT_PURPLE}またチャレンジしてね！")
     }
 }
