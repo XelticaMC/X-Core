@@ -31,12 +31,9 @@ class KStations private constructor(data: TransferGuideData) {
      */
     fun fromBegin(n: Int): KStations {
         val newValue = arrayListOf<KStation>()
-        for (i in 0 until n) {
-            try {
-                newValue.add(value[i])
-            } catch (_: IndexOutOfBoundsException) {
-
-            }
+        val returnSize = minOf(n, this.value.size) //全ての駅の数より大きい数を指定されるとエラーになるので、小さい方にする
+        for (i in 0 until returnSize) {
+            newValue.add(value[i])
         }
         value = newValue
         return this
