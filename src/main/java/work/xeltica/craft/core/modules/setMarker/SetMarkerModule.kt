@@ -125,7 +125,6 @@ object SetMarkerModule : ModuleBase() {
         val locationList = getLocationList(p) ?: return
         val index1 = getLocationIndex(p)
         val index2 = isMarkerIndex(p, loc)
-        Bukkit.getLogger().info("実行 $index1,$index2")
         locationList[index1].block.type = Material.REDSTONE_TORCH
         locationList[index2].block.type = Material.SOUL_TORCH
         saveLocationIndex(p, index2)
