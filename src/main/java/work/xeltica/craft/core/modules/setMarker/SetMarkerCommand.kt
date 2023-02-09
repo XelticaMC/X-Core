@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
-import java.util.*
 
 class SetMarkerCommand : CommandPlayerOnlyBase() {
 
@@ -14,7 +13,7 @@ class SetMarkerCommand : CommandPlayerOnlyBase() {
 
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) return false
-        val subCommand = args[0].lowercase(Locale.getDefault())
+        val subCommand = args[0].lowercase()
         when (subCommand) {
             // /marker set [location]
             "set" -> {
