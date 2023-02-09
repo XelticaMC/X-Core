@@ -12,9 +12,9 @@ build.gradle.ktsを開き、 `commands` ブロック内に次のようなコー�
 
 ```kotlin
 register("コマンドの名前") {
-  description = "コマンドの説明"
-  usage = "コマンドの使い方"
-  permission = "コマンドに必要な権限文字列"
+    description = "コマンドの説明"
+    usage = "コマンドの使い方"
+    permission = "コマンドに必要な権限文字列"
 }
 ```
 
@@ -22,8 +22,8 @@ register("コマンドの名前") {
 * `"コマンドの説明"` は `/help` で表示されるので、わかりやすく書くと良いでしょう。
 * `"コマンドの使い方"` は、`/fire <プレイヤー名>` などのようにわかりやすく書きましょう。
 * `"コマンドに必要な権限文字列"` は命名規則があるので、次のとおりに設定してください。
-  * `"otanoshimi.command.コマンドの名前"`
-  * X-Coreが「お楽しみプラグイン」という名前だった頃の名残です。
+    * `"otanoshimi.command.コマンドの名前"`
+    * X-Coreが「お楽しみプラグイン」という名前だった頃の名残です。
 
 ### 権限の宣言
 
@@ -33,15 +33,15 @@ register("コマンドの名前") {
 
 ```kotlin
 register("otanoshimi.command.pvp") {
-  default = Permission.Default.OP
+    default = Permission.Default.OP
 }
 ```
 
 * defaultに代入する値は、コマンドの使用権限によって次のようになります。
-  * **全員許可** → `Permission.Default.TRUE`
-  * **全員禁止** → `Permission.Default.FALSE`
-  * **OPのみ許可** → `Permission.Default.OP`
-  * **OPのみ禁止** → `Permission.Default.NOT_OP`
+    * **全員許可** → `Permission.Default.TRUE`
+    * **全員禁止** → `Permission.Default.FALSE`
+    * **OPのみ許可** → `Permission.Default.OP`
+    * **OPのみ禁止** → `Permission.Default.NOT_OP`
 
 ## コマンドの実装
 

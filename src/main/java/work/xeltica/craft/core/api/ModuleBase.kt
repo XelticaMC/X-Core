@@ -5,8 +5,8 @@ import org.bukkit.event.Listener
 import work.xeltica.craft.core.XCorePlugin
 import work.xeltica.craft.core.api.commands.CommandBase
 import work.xeltica.craft.core.api.commands.CommandRegistry
+import work.xeltica.craft.core.modules.xphone.AppBase
 import work.xeltica.craft.core.modules.xphone.XphoneModule
-import work.xeltica.craft.core.xphone.apps.AppBase
 
 /**
  * モジュールの基底クラス。
@@ -22,7 +22,6 @@ abstract class ModuleBase {
 
     protected fun registerHandler(handler: Listener) {
         Bukkit.getPluginManager().registerEvents(handler, XCorePlugin.instance)
-        Bukkit.getLogger().info("イベントハンドラー '${handler.javaClass.typeName}' を登録しました。")
     }
 
     protected fun registerXPhoneApp(app: AppBase) {

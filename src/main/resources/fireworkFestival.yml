@@ -4,5 +4,5 @@ scripts:
       type: BALL
       flicker: true
       trail: true
-      loc: [0, 0, 0]
+      loc: [ 0, 0, 0 ]
       random: 16
