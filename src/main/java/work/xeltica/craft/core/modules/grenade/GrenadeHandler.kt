@@ -18,19 +18,19 @@ class GrenadeHandler : Listener {
 
     @EventHandler
     fun onSplash(event: PotionSplashEvent) {
+        if (!GrenadeModule.isGrenadeEntity(event.entity)) return
+
         event.isCancelled = true
-        if (GrenadeModule.isGrenadeEntity(event.entity)) {
-            GrenadeModule.getGrenadeEntity(event.entity)?.explode()
-        }
+        GrenadeModule.getGrenadeEntity(event.entity)?.explode()
     }
 
     @EventHandler
     fun onHit(event: ProjectileHitEvent) {
-        event.isCancelled = true
         val entity = event.entity
         if (entity !is ThrowableProjectile) return
-        if (GrenadeModule.isGrenadeEntity(entity)) {
-            GrenadeModule.getGrenadeEntity(entity)?.hit()
-        }
+        if (!GrenadeModule.isGrenadeEntity(entity)) return
+
+        event.isCancelled = true
+        GrenadeModule.getGrenadeEntity(entity)?.hit()
     }
 }

@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.countdown
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -40,7 +41,7 @@ class CommandCountdown : CommandPlayerOnlyBase() {
             CountdownModule.showCountdown(count, members, player)
             return true
         } catch (e: NumberFormatException) {
-            player.sendMessage("§c第一引数には数値を指定してください")
+            player.sendMessage("${ChatColor.RED}第一引数には数値を指定してください")
             return true
         }
     }

@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.item
 
+import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
@@ -25,7 +26,7 @@ class ItemHandler : Listener {
             e.isCancelled = true
             val clicked = e.whoClicked
             if (clicked is Player) {
-                getInstance().error(clicked, "§cカスタムアイテムをクラフティングに使用することはできません。")
+                getInstance().error(clicked, "${ChatColor.RED}カスタムアイテムをクラフティングに使用することはできません。")
             }
         }
     }

@@ -113,7 +113,7 @@ bukkit {
         }
         register("givecustomitem") {
             description = "XelticaMCオリジナルアイテムを授与します。"
-            usage = "/givetravelticket <playerName> <xphone>"
+            usage = "/givecustomitem <playerName> <item_key>"
             permission = "otanoshimi.command.givecustomitem"
         }
         register("givemobball") {

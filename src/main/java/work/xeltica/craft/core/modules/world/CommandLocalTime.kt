@@ -7,7 +7,6 @@ import org.bukkit.entity.Player
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.api.commands.CommandPlayerOnlyBase
 import java.util.Collections
-import java.util.Locale
 
 /**
  * 現在いるワールドのみの時間を操作するコマンド
@@ -17,7 +16,7 @@ class CommandLocalTime : CommandPlayerOnlyBase() {
     override fun execute(player: Player, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) return false
         val world = player.world
-        val subCommand = args[0].lowercase(Locale.getDefault())
+        val subCommand = args[0].lowercase()
         when (subCommand) {
             "set" -> {
                 if (args.size != 2) return false
