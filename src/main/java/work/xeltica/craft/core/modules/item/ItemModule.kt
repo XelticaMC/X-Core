@@ -5,17 +5,23 @@ import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import work.xeltica.craft.core.api.ModuleBase
+import work.xeltica.craft.core.modules.xphone.XphoneModule
 
 /**
  * カスタムアイテムを管理するモジュールです。
  */
 object ItemModule : ModuleBase() {
+    @Deprecated(
+        "XphoneModule に移行しました。", replaceWith = ReplaceWith(
+            "XphoneModule.ITEM_NAME_XPHONE",
+            "work.xeltica.craft.core.modules.xphone.XphoneModule"
+        )
+    )
     const val ITEM_NAME_XPHONE = "xphone"
     const val ITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT = "ticket_wildareab_ocean_monument"
 
@@ -23,7 +29,6 @@ object ItemModule : ModuleBase() {
 
     override fun onEnable() {
         registerItems()
-        Bukkit.getOnlinePlayers().forEach(this::givePhoneIfNeeded)
 
         registerCommand("givecustomitem", GiveCustomItemCommand())
         registerHandler(ItemHandler())
@@ -60,7 +65,7 @@ object ItemModule : ModuleBase() {
 
         st.editMeta {
             it.displayName(
-                    Component.text(name).style(Style.style(TextColor.color(37, 113, 255), TextDecoration.BOLD))
+                Component.text(name).style(Style.style(TextColor.color(37, 113, 255), TextDecoration.BOLD))
             )
             it.lore(lore.map { s -> Component.text(s) })
         }
@@ -90,7 +95,7 @@ object ItemModule : ModuleBase() {
      */
     fun givePhoneIfNeeded(player: Player) {
         val inv = player.inventory
-        val phone = getItem(ITEM_NAME_XPHONE)
+        val phone = getItem(XphoneModule.ITEM_NAME_XPHONE)
         val hasItem = inv.any { compareCustomItem(it, phone) }
         if (!hasItem) inv.addItem(phone)
     }
@@ -109,6 +114,20 @@ object ItemModule : ModuleBase() {
     }
 
     /**
+     * ItemModule にアイテムを登録します。
+     */
+    fun registerItem(key: String, item: ItemStack) {
+        customItems[key] = item.clone()
+    }
+
+    /**
+     * 登録されているアイテム名の一覧を取得します。
+     */
+    fun getCustomItemNames(): Set<String> {
+        return customItems.keys
+    }
+
+    /**
      * Bukkit APIを用いてプレイヤーの頭情報を解決します。
      */
     private fun resolvePlayerHeadWithBukkit(player: Player, meta: SkullMeta) {
@@ -119,8 +138,7 @@ object ItemModule : ModuleBase() {
      * カスタムアイテムを定義します。
      */
     private fun registerItems() {
-        customItems[ITEM_NAME_XPHONE] = createCustomItem("X Phone SE", "XelticaMCの独自機能にアクセスできるスマホ。")
         customItems[ITEM_NAME_TICKET_WILDAREAB_OCEAN_MONUMENT] =
-                createCustomItem("海底神殿行き資源ワールド旅行券", "メイン ✈ 海底神殿")
+            createCustomItem("海底神殿行き資源ワールド旅行券", "メイン ✈ 海底神殿")
     }
 }
