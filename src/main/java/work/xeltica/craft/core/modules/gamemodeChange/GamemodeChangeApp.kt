@@ -10,7 +10,6 @@ import work.xeltica.craft.core.modules.xphone.AppBase
 class GamemodeChangeApp : AppBase() {
 
     private val gui by lazy { Gui.getInstance() }
-    private val app by lazy { GamemodeChangeApp() }
 
     override fun getName(player: Player): String {
         return "ゲームモード変更アプリ"
@@ -25,16 +24,12 @@ class GamemodeChangeApp : AppBase() {
             player,
             "変更するゲームモードを選択してください",
             listOf(
-                MenuItem("サバイバル", { app.selectMenuItem(GameMode.SURVIVAL, player) }, Material.ZOMBIE_HEAD),
-                MenuItem("クリエイティブ", { app.selectMenuItem(GameMode.CREATIVE, player) }, Material.SKELETON_SKULL),
-                MenuItem("アドベンチャー", { app.selectMenuItem(GameMode.ADVENTURE, player) }, Material.CREEPER_HEAD),
-                MenuItem("スペクテイター", { app.selectMenuItem(GameMode.SPECTATOR, player) }, Material.PLAYER_HEAD),
+                MenuItem("サバイバル", { player.gameMode = GameMode.SURVIVAL }, Material.ZOMBIE_HEAD),
+                MenuItem("クリエイティブ", { player.gameMode = GameMode.CREATIVE }, Material.SKELETON_SKULL),
+                MenuItem("アドベンチャー", { player.gameMode = GameMode.ADVENTURE }, Material.CREEPER_HEAD),
+                MenuItem("スペクテイター", { player.gameMode = GameMode.SPECTATOR }, Material.PLAYER_HEAD),
             )
         )
-    }
-
-    private fun selectMenuItem(gameMode: GameMode, player: Player) {
-        player.gameMode = gameMode
     }
 
     //    override fun isVisible(player: Player): Boolean {
