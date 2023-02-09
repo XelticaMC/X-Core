@@ -79,7 +79,6 @@ object CoreProtectGuiTestModule : ModuleBase() {
             sendCommand.append("action:" + command.action + " ")
         }
 
-        Bukkit.getLogger().info(sendCommand.toString())
         player.performCommand(sendCommand.toString())
     }
 }
