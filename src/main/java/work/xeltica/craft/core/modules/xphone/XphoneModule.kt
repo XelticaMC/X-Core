@@ -32,6 +32,7 @@ import work.xeltica.craft.core.modules.promotion.PromoApp
 import work.xeltica.craft.core.modules.punishment.PunishApp
 import work.xeltica.craft.core.modules.quickchat.QuickChatApp
 import work.xeltica.craft.core.modules.stamprally.StampRallyApp
+import work.xeltica.craft.core.modules.transferGuide.TransferGuideApp
 import work.xeltica.craft.core.modules.transferPlayerData.TransferPlayerDataApp
 import work.xeltica.craft.core.modules.vehicle.BoatApp
 import work.xeltica.craft.core.modules.vehicle.CartApp
@@ -77,6 +78,7 @@ object XphoneModule : ModuleBase() {
             PunishApp(),
             StampRallyApp(),
             CandyStoreApp(),
+            TransferGuideApp(),
             CoreProtectGuiTestApp(),
             GamemodeChangeApp(),
         )

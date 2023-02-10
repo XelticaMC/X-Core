@@ -1,0 +1,138 @@
+package work.xeltica.craft.core.modules.transferGuide.dataElements
+
+import work.xeltica.craft.core.modules.transferGuide.TransferGuideModule
+import work.xeltica.craft.core.modules.transferGuide.TransferGuideUtil
+
+/**
+ * 条件に合う駅を絞り込むコードを分かりやすくする為だけのクラスです。
+ * @author Knit prg.
+ */
+class KStations private constructor() {
+    var value: ArrayList<KStation>
+
+    init {
+        val v = arrayListOf<KStation>()
+        TransferGuideModule.data.stations.forEach {
+            v.add(it.value)
+        }
+        value = v
+    }
+
+    companion object {
+        /**
+         * 路線データ内の全ての駅を取得します。
+         */
+        fun allStations(): KStations {
+            return KStations()
+        }
+    }
+
+    /**
+     * 先頭から[n]個の駅を抽出します。
+     */
+    fun fromBegin(n: Int): KStations {
+        val newValue = arrayListOf<KStation>()
+        val returnSize = minOf(n, this.value.size) //全ての駅の数より大きい数を指定されるとエラーになるので、小さい方にする
+        for (i in 0 until returnSize) {
+            newValue.add(value[i])
+        }
+        value = newValue
+        return this
+    }
+
+    /**
+     * 路線で駅を抽出します。
+     */
+    fun filterByLine(line: KLine): KStations {
+        val newValue = arrayListOf<KStation>()
+        line.stations.forEach { station ->
+            value.find { it.id == station }?.run {
+                newValue.add(this)
+            }
+        }
+        value = newValue
+        return this
+    }
+
+    /**
+     * 最寄り自治体で駅を抽出します。
+     */
+    fun filterByMuni(muni: KMuni): KStations {
+        val newValue = arrayListOf<KStation>()
+        muni.stations.forEach { station ->
+            value.find { it.id == station }?.run {
+                newValue.add(this)
+            }
+        }
+        value = newValue
+        return this
+    }
+
+    /**
+     * 特定の種類の駅のみを抽出します。
+     */
+    fun filterByType(type: String): KStations {
+        val newValue = arrayListOf<KStation>()
+        value.forEach {
+            if (it.type == type) {
+                newValue.add(it)
+            }
+        }
+        value = newValue
+        return this
+    }
+
+    /**
+     * 特定のワールドにある駅のみを抽出します。
+     */
+    fun filterByWorld(worldName: String): KStations {
+        val newValue = arrayListOf<KStation>()
+        value.forEach {
+            if (it.world == worldName) {
+                newValue.add(it)
+            }
+        }
+        value = newValue
+        return this
+    }
+
+    /**
+     * 読みが特定の文字から始まる駅のみを抽出します。
+     */
+    fun filterByYomiInitial(yomiInitial: String): KStations {
+        val newValue = arrayListOf<KStation>()
+        value.forEach {
+            if (it.yomi?.first()?.toString() == yomiInitial) {
+                newValue.add(it)
+            }
+        }
+        value = newValue
+        return this
+    }
+
+    /**
+     * 距離で並び替えます。
+     */
+    fun sortByDistance(coordinate: DoubleArray): KStations {
+        val distanceList = ArrayList<Pair<Double, KStation>>()
+        value.forEach {
+            val distance = TransferGuideUtil.calcDistance(coordinate, it.location)
+            distanceList.add(Pair(distance, it))
+        }
+        distanceList.sortBy { it.first }
+        val newValue = arrayListOf<KStation>()
+        distanceList.forEach {
+            newValue.add(it.second)
+        }
+        value = newValue
+        return this
+    }
+
+    /**
+     * 読みで並び替えます。
+     */
+    fun sortByYomi(): KStations {
+        value.sortBy { it.yomi }
+        return this
+    }
+}
