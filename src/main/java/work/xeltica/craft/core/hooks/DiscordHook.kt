@@ -61,15 +61,13 @@ object DiscordHook : HookBase() {
         }
         val guild = DiscordSRV.getPlugin().mainGuild
         val channel = guild.getGuildChannelById(guideChannelId)
-        if (channel is TextChannel) {
-            val message = String.format(
-                "<@&%s> <@&%s> 新規さん「%s」がメインワールドに入りました。監視・案内をお願いします。",
-                securityRoleId,
-                guideRoleId,
-                newcomer.name
-            )
-            channel.sendMessage(message)
+        if (channel !is TextChannel) {
+            logger.warning("type of channel is ${channel?.javaClass?.simpleName ?: "null"}. Skip to alertNewcomer(${newcomer.name})")
+            return
         }
+
+        val message = "<@&$securityRoleId> <@&$guideRoleId> 新規さん「${newcomer.name}」がメインワールドに入りました。"
+        channel.sendMessage(message).queue()
     }
 
     /**
