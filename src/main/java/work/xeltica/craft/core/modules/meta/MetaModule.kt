@@ -15,7 +15,8 @@ import java.io.IOException
  */
 object MetaModule : ModuleBase() {
     val changeLog = listOf(
-        "2周年記念イベントパルクール：リタイアすると、チェックポイントなどがリセットされない不具合を修正しました。"
+        "新機能を追加しました。近日中に別途アナウンスします。",
+        "あらゆるブロックの破壊が「作物の収穫」としてエビパワー入手対象となっていた不具合を修正しました。",
     ).toTypedArray()
 
     lateinit var meta: Config
