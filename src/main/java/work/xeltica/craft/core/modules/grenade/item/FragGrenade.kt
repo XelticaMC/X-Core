@@ -5,6 +5,7 @@ import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Snowball
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
@@ -30,7 +31,7 @@ class FragGrenade(grenade: Snowball) : BoundingGrenadeBase(grenade) {
             grenade.world.spawnParticle(Particle.ASH, grenade.location, 8, 1.0, 1.0, 1.0)
             grenade.world.playSound(grenade.location, Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f)
         }
-        grenade.world.createExplosion(grenade.location, 2f, false, false)
+        grenade.world.createExplosion(grenade.location, 2f, false, false, grenade.shooter as? Entity)
     }
 
     companion object {
