@@ -11,7 +11,7 @@ import org.bukkit.SoundCategory
 import org.bukkit.Tag
 import org.bukkit.World
 import org.bukkit.entity.EntityType
-import org.bukkit.entity.Player
+import org.bukkit.entity.Ghast
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -191,11 +191,12 @@ class WorldHandler : Listener {
     fun onPlayerKillGhast(e: EntityDeathEvent) {
         // 殺されたモブがガストでなければスキップ
         if (e.entityType != EntityType.GHAST) return
+        val ghast = e.entity as? Ghast ?: return
         // プレイヤーに殺されたわけでなければスキップ
-        val killer = e.entity.lastDamageCause?.entity as? Player ?: return
-        val worldInfo = WorldModule.getWorldInfo(e.entity.world)
+        val killer = ghast.killer ?: return
+        val worldInfo = WorldModule.getWorldInfo(ghast.world)
         // オーバーワールドでない、あるいは進捗達成が許可されていないワールドであればスキップ
-        if (worldInfo.world.environment != World.Environment.NORMAL || !worldInfo.allowAdvancements) return
+        if (ghast.world.environment != World.Environment.NORMAL || !worldInfo.allowAdvancements) return
 
         val advancement = Bukkit.getAdvancement(NamespacedKey(NamespacedKey.MINECRAFT, "nether/uneasy_alliance"))
         if (advancement == null) {
