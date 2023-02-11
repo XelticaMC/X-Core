@@ -15,13 +15,18 @@ import work.xeltica.craft.core.api.HookBase
 object DiscordHook : HookBase() {
     override val isEnabled = Bukkit.getPluginManager().getPlugin("DiscordSRV")?.isEnabled ?: false
 
+    private val logger by lazy { Bukkit.getLogger() }
+
     /**
      * プレイヤーに紐づくDiscordユーザーを取得します。
      * @param player プレイヤー
      * @return 指定したプレイヤーに紐づく、Discordユーザー。未連携であれば null。
      */
     fun getMember(player: Player): Member? {
-        if (!isEnabled) return null
+        if (!isEnabled) {
+            logger.warning("Discord Integration is not enabled. Skip to getMember(${player.name})")
+            return null
+        }
         if (!linkedToDiscord(player)) return null
         val discordId = DiscordSRV.getPlugin().accountLinkManager.getDiscordId(player.uniqueId)
         return DiscordSRV.getPlugin().mainGuild.getMemberById(discordId)
@@ -35,7 +40,10 @@ object DiscordHook : HookBase() {
      * @param command 処罰内容
      */
     fun reportDiscord(badPlayerName: String, abuses: String, time: String, command: String) {
-        if (!isEnabled) return
+        if (!isEnabled) {
+            logger.warning("Discord Integration is not enabled. Skip to reportDiscord($badPlayerName, $abuses, $time, $command)")
+            return
+        }
         val guild = DiscordSRV.getPlugin().mainGuild
         val channel: GuildChannel = guild.getGuildChannelById(reportChannelID) ?: return
         if (channel !is TextChannel) return
@@ -47,18 +55,19 @@ object DiscordHook : HookBase() {
      * @param newcomer 新規さん
      */
     fun alertNewcomer(newcomer: Player) {
-        if (!isEnabled) return
+        if (!isEnabled) {
+            logger.warning("Discord Integration is not enabled. Skip to alertNewcomer(${newcomer.name})")
+            return
+        }
         val guild = DiscordSRV.getPlugin().mainGuild
         val channel = guild.getGuildChannelById(guideChannelId)
-        if (channel is TextChannel) {
-            val message = String.format(
-                "<@&%s> <@&%s> 新規さん「%s」がメインワールドに入りました。監視・案内をお願いします。",
-                securityRoleId,
-                guideRoleId,
-                newcomer.name
-            )
-            channel.sendMessage(message)
+        if (channel !is TextChannel) {
+            logger.warning("type of channel is ${channel?.javaClass?.simpleName ?: "null"}. Skip to alertNewcomer(${newcomer.name})")
+            return
         }
+
+        val message = "<@&$securityRoleId> <@&$guideRoleId> 新規さん「${newcomer.name}」がメインワールドに入りました。"
+        channel.sendMessage(message).queue()
     }
 
     /**
@@ -66,7 +75,10 @@ object DiscordHook : HookBase() {
      * @param text 送信する内容
      */
     fun broadcast(text: String) {
-        if (!isEnabled) return
+        if (!isEnabled) {
+            logger.warning("Discord Integration is not enabled. Skip to broadcast($text)")
+            return
+        }
         val discord = DiscordSRV.getPlugin()
         discord.getOptionalTextChannel("global").sendMessage(text).queue()
     }
@@ -77,7 +89,10 @@ object DiscordHook : HookBase() {
      * @param changeLog 変更内容
      */
     fun postChangelog(version: String, changeLog: Array<String>) {
-        if (!isEnabled) return
+        if (!isEnabled) {
+            logger.warning("Discord Integration is not enabled. Skip to postChangelog($version, changeLog[${changeLog.size}])")
+            return
+        }
         val guild = DiscordSRV.getPlugin().mainGuild
         val channel = guild.getGuildChannelById(changelogChannelId)
         if (channel is TextChannel) {

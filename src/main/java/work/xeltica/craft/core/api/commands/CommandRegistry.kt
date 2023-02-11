@@ -4,7 +4,6 @@ import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
-import java.util.Locale
 
 /**
  * X-Core のコマンドを管理し、呼び出すレジストリです。
@@ -41,7 +40,7 @@ object CommandRegistry : CommandExecutor {
      * コマンドが実行されるときに呼び出されます。
      */
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        val name = command.name.lowercase(Locale.getDefault())
+        val name = command.name.lowercase()
         val com = commandsMap[name] ?: return false
         return com.execute(sender, command, label, args)
     }

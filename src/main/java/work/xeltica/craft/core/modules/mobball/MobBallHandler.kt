@@ -3,6 +3,7 @@ package work.xeltica.craft.core.modules.mobball
 import de.tr7zw.nbtapi.NBTEntity
 import de.tr7zw.nbtapi.NBTItem
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -147,7 +148,7 @@ class MobBallHandler : Listener {
                     this.cancel()
                     if (isGotcha) {
                         player.playSound(egg.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 0.5f)
-                        player.sendMessage("§a§lおめでとう！§r${eggNbt.getString("mobCase")}を捕まえた！")
+                        player.sendMessage("${ChatColor.GREEN}${ChatColor.BOLD}おめでとう！${ChatColor.RESET}${eggNbt.getString("mobCase")}を捕まえた！")
                         showSuccessParticle(eggEntity.location)
                         eggEntity.setCanPlayerPickup(true)
                         HintModule.achieve(player, Hint.SUCCEEDED_TO_CATCH_MOB)

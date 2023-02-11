@@ -80,7 +80,7 @@ dependencies {
 }
 
 group = "work.xeltica.craft.core"
-version = "3.1.2"
+version = "3.2.0"
 description = "A Core System Plugin for XelticaMC."
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -113,7 +113,7 @@ bukkit {
         }
         register("givecustomitem") {
             description = "XelticaMCオリジナルアイテムを授与します。"
-            usage = "/givetravelticket <playerName> <xphone>"
+            usage = "/givecustomitem <playerName> <item_key>"
             permission = "otanoshimi.command.givecustomitem"
         }
         register("givemobball") {
