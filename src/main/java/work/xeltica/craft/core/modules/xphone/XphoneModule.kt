@@ -23,6 +23,8 @@ import work.xeltica.craft.core.modules.hint.HintApp
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.livemode.LiveModeApp
+import work.xeltica.craft.core.modules.coreProtectGuiTest.CoreProtectGuiTestApp
+import work.xeltica.craft.core.modules.gamemodeChange.GamemodeChangeApp
 import work.xeltica.craft.core.modules.notification.NotificationApp
 import work.xeltica.craft.core.modules.omikuji.OmikujiApp
 import work.xeltica.craft.core.modules.payments.PaymentsApp
@@ -77,6 +79,8 @@ object XphoneModule : ModuleBase() {
             StampRallyApp(),
             CandyStoreApp(),
             TransferGuideApp(),
+            CoreProtectGuiTestApp(),
+            GamemodeChangeApp(),
         )
 
         registerCommand("xphone", XphoneCommand())

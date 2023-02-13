@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module version="4">
+<module external.linked.project.id="XCore:test" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="work.xeltica.craft.core" external.system.module.type="sourceSet" external.system.module.version="3.1.2" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="minecraft" name="Minecraft">
       <configuration>
@@ -8,5 +8,77 @@
         </autoDetectTypes>
       </configuration>
     </facet>
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="5" platform="JVM 17" allPlatforms="JVM [17]" useProjectSettings="false">
+        <compilerSettings>
+          <option name="additionalArguments" value="-Xallow-no-source-files" />
+        </compilerSettings>
+        <compilerArguments>
+          <flagArguments>
+            <flagArg name="noReflect" arg="true" />
+            <flagArg name="noStdlib" arg="true" />
+          </flagArguments>
+          <stringArguments>
+            <stringArg name="classpath">
+              <args>
+                <arg>$MODULE_DIR$/../../build/classes/java/main</arg>
+                <arg>$MODULE_DIR$/../../build/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../build/resources/main</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test-junit/1.5.30/4a024bd5b6a4366818954ee3fcf151b741208c14/kotlin-test-junit-1.5.30.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test/1.5.30/b17de187fc93184ea46a598174f36919caaf065a/kotlin-test-1.5.30.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.6.10/b8af3fe6f1ca88526914929add63cf5e7c5049af/kotlin-stdlib-1.6.10.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.wesjd/anvilgui/1.6.3-SNAPSHOT/98cf66d9c9595b96ede7aad68e96d020c08fda15/anvilgui-1.6.3-SNAPSHOT.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.6.10/c118700e3a33c8a0d9adc920e9dec0831171925/kotlin-stdlib-common-1.6.10.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.12/2973d150c0dc1fefe998f834810d68f278ea58ec/junit-4.12.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar</arg>
+              </args>
+            </stringArg>
+            <stringArg name="destination" arg="$MODULE_DIR$/../../build/classes/kotlin/test" />
+            <stringArg name="jvmTarget" arg="17" />
+            <stringArg name="moduleName" arg="XCore" />
+            <stringArg name="apiVersion" arg="1.6" />
+            <stringArg name="languageVersion" arg="1.8" />
+          </stringArguments>
+          <arrayArguments>
+            <arrayArg name="friendPaths">
+              <args>
+                <arg>$MODULE_DIR$/../../build/classes/java/main</arg>
+                <arg>$MODULE_DIR$/../../build/classes/kotlin/main</arg>
+                <arg>$MODULE_DIR$/../../build/libs/XCore.jar</arg>
+              </args>
+            </arrayArg>
+            <arrayArg name="pluginClasspaths">
+              <args>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.8.0/1f7345b3fc46786c1f36a4ba0728a95990d05929/kotlin-scripting-jvm-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.8.0/ffeb4c0c2b3978876b993d6b55646e6b567077a8/kotlin-scripting-common-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.8.0/1796921c7a3e2e2665a83e6c8d33399336cd39bc/kotlin-stdlib-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.8.0/f7197e7cc76453ac59f8b0f8d5137cc600becd36/kotlin-stdlib-common-1.8.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.8.0/b2f7e760d283cb339974851c222a4c1d48f2d3d/kotlin-script-runtime-1.8.0.jar</arg>
+              </args>
+            </arrayArg>
+            <arrayArg name="pluginOptions" />
+          </arrayArguments>
+        </compilerArguments>
+      </configuration>
+    </facet>
   </component>
+  <component name="NewModuleRootManager">
+    <output-test url="file://$MODULE_DIR$/../../build/classes/java/test" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../src/test" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="XCore.main" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test:1.5.30" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.6.10" level="project" />
+    <orderEntry type="library" name="Gradle: net.wesjd:anvilgui:1.6.3-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test-junit:1.5.30" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10" level="project" />
+    <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
+    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
+  </component>
+  <component name="TestModuleProperties" production-module="XCore.main" />
 </module>
