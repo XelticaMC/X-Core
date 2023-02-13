@@ -243,6 +243,11 @@ bukkit {
             usage = "/candystore"
             permission = "otanoshimi.command.candystore"
         }
+        register("marker") {
+            description = "マーカーを操作します。"
+            usage = "/marker <set | move | delete> [ location | index ]"
+            permission = "otanoshimi.command.marker"
+        }
         register("__core_gui_event__") {
             description = "?"
             usage = "?"
@@ -390,6 +395,9 @@ bukkit {
         }
         register("xcore.teleport.event") {
             default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.OP
+        }
+        register("otanoshimi.command.marker") {
+            default = net.minecrell.pluginyml.bukkit.BukkitPluginDescription.Permission.Default.TRUE
         }
     }
 }

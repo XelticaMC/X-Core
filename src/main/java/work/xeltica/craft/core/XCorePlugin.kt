@@ -48,6 +48,7 @@ import work.xeltica.craft.core.modules.nightmare.NightmareModule
 import work.xeltica.craft.core.modules.notification.NotificationModule
 import work.xeltica.craft.core.modules.omikuji.OmikujiModule
 import work.xeltica.craft.core.modules.payments.PaymentsModule
+import work.xeltica.craft.core.modules.setMarker.SetMarkerModule
 import work.xeltica.craft.core.modules.promotion.PromotionModule
 import work.xeltica.craft.core.modules.punishment.PunishmentModule
 import work.xeltica.craft.core.modules.quickchat.QuickChatModule
@@ -221,11 +222,12 @@ class XCorePlugin : JavaPlugin() {
         RankingModule,
         SignEditModule,
         StampRallyModule,
-        TransferGuideModule,
         TransferPlayerDataModule,
         VehicleModule,
         WorldModule,
         XphoneModule,
+        TransferGuideModule,
+        SetMarkerModule,
         CoreProtectGuiTestModule,
         GamemodeChangeModule,
     )
