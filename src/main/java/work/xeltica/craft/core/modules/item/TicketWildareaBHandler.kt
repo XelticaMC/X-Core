@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.item
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.event.Event
@@ -38,7 +39,7 @@ class TicketWildareaBHandler : Listener {
         }
         player.sendMessage("旅行券を使用しました。現在手配中です。その場で少しお待ちください！")
         for (pl in Bukkit.getOnlinePlayers()) {
-            pl.sendMessage(String.format("§6%s§rさんが資源ワールド:海底神殿への旅に行きます！§b行ってらっしゃい！", player.displayName))
+            pl.sendMessage(String.format("${ChatColor.GOLD}%s${ChatColor.RESET}さんが資源ワールド:海底神殿への旅に行きます！${ChatColor.AQUA}行ってらっしゃい！", player.displayName))
         }
         val structure = wildareab.locateNearestStructure(wildareab.spawnLocation, StructureType.OCEAN_MONUMENT, 200, true)
         if (structure == null) {

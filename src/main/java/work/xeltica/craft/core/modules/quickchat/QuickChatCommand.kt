@@ -4,13 +4,12 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.util.StringUtil
 import work.xeltica.craft.core.api.commands.CommandBase
-import java.util.Locale
 
 class QuickChatCommand : CommandBase() {
     override fun execute(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) return false
 
-        when (args[0].lowercase(Locale.getDefault())) {
+        when (args[0].lowercase()) {
             "register" -> {
                 if (args.size < 3) return false
                 if (QuickChatModule.register(args[1], args[2])) {
@@ -41,7 +40,7 @@ class QuickChatCommand : CommandBase() {
 
     override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<String>): List<String> {
         if (args.isEmpty()) return COMPLETE_LIST_EMPTY
-        val subCmd = args[0].lowercase(Locale.getDefault())
+        val subCmd = args[0].lowercase()
         if (args.size == 1) {
             val commands = listOf("register", "unregister", "list")
             val completions = ArrayList<String>()

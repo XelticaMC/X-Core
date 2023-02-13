@@ -31,6 +31,7 @@ import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule
 import work.xeltica.craft.core.modules.eventSummer.EventSummerModule
 import work.xeltica.craft.core.modules.eventTwoYears.EventTwoYearsModule
 import work.xeltica.craft.core.modules.fly.FlyModule
+import work.xeltica.craft.core.modules.grenade.GrenadeModule
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.item.ItemModule
@@ -197,6 +198,7 @@ class XCorePlugin : JavaPlugin() {
         EventSummerModule,
         EventTwoYearsModule,
         FlyModule,
+        GrenadeModule,
         HintModule,
         HubModule,
         ItemModule,

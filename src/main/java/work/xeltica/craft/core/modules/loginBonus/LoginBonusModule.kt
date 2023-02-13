@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.loginBonus
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.entity.Player
@@ -31,7 +32,7 @@ object LoginBonusModule : ModuleBase() {
         Bukkit.getScheduler().runTaskLater(XCorePlugin.instance, Runnable {
             if (!player.isOnline) return@Runnable
             EbiPowerModule.tryGive(player, LOGIN_BONUS)
-            player.sendMessage("§a§lログインボーナス達成！§6${LOGIN_BONUS}EP§fを手に入れた！")
+            player.sendMessage("${ChatColor.GREEN}${ChatColor.BOLD}ログインボーナス達成！${ChatColor.GOLD}${LOGIN_BONUS}EP${ChatColor.WHITE}を手に入れた！")
             player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1f, 2f)
             PlayerStore.open(player)[PS_KEY_LOGIN_BONUS] = true
         }, Ticks.from(2.0).toLong())

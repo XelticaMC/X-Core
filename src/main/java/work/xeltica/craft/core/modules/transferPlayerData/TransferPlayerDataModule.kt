@@ -2,6 +2,7 @@ package work.xeltica.craft.core.modules.transferPlayerData
 
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.api.playerStore.PlayerStore
@@ -9,8 +10,8 @@ import java.util.UUID
 
 object TransferPlayerDataModule : ModuleBase() {
 
-    const val WARNING_MESSAGE: String =
-        "§r引っ越しにより、次の情報が新しいプレイヤーに§l上書き§rされます。元のデータは削除されます。\n" +
+    val WARNING_MESSAGE: String =
+        "${ChatColor.RESET}引っ越しにより、次の情報が新しいプレイヤーに${ChatColor.BOLD}上書き${ChatColor.RESET}されます。元のデータは削除されます。\n" +
                 "> エビパワー\n" +
                 "> ヒント解禁状況\n" +
                 "> 各種設定項目"

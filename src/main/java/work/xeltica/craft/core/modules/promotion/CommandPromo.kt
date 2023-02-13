@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.promotion
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -17,12 +18,12 @@ class CommandPromo : CommandPlayerOnlyBase() {
         if (args.isNotEmpty()) {
             val name = args[0]
             if (!sender.hasPermission("otanoshimi.command.promo.other")) {
-                sender.sendMessage("§c権限がありません。")
+                sender.sendMessage("${ChatColor.RED}権限がありません。")
                 return true
             }
             val p = Bukkit.getPlayer(name)
             if (p == null) {
-                sender.sendMessage("§cプレイヤーが見つかりませんでした。")
+                sender.sendMessage("${ChatColor.RED}プレイヤーが見つかりませんでした。")
                 return true
             }
             player = p

@@ -2,6 +2,7 @@ package work.xeltica.craft.core.modules.stamprally
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
+import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.block.BlockFace
 import org.bukkit.block.Sign
@@ -35,8 +36,8 @@ class StampRallyHandler : Listener {
                 return
             }
 
-            event.line(0, Component.text("［§aスタンプ§r］"))
-            event.line(1, Component.text("§b" + line1.content()))
+            event.line(0, Component.text("［${ChatColor.GREEN}スタンプ${ChatColor.RESET}］"))
+            event.line(1, Component.text("${ChatColor.AQUA}" + line1.content()))
 
             StampRallyModule.create(name, event.block.location)
             player.sendMessage("スタンプ: " + name + "を作成しました")
@@ -51,12 +52,12 @@ class StampRallyHandler : Listener {
         if (state !is Sign) return
 
         val line0 = state.line(0) as? TextComponent
-        if (line0?.content()!! != "［§aスタンプ§r］") return
+        if (line0?.content()!! != "［${ChatColor.GREEN}スタンプ${ChatColor.RESET}］") return
 
         val line1 = state.line(1)
         if (line1 is TextComponent) {
             val name = line1.content()
-            val stampName = name.removePrefix("§b")
+            val stampName = name.removePrefix("${ChatColor.AQUA}")
             if (!stampRallyStore.contains(stampName)) return
             if (!player.hasPermission(StampRallyModule.DESTROY_PERMISSION)) {
                 player.sendMessage("スタンプを破壊する権限がありません")
@@ -85,7 +86,7 @@ class StampRallyHandler : Listener {
                 val location = block.location.add(0.0, -1.0, 0.0)
                 val sign = getNearStampSign(location) ?: return
                 val line1 = sign.line(1) as? TextComponent ?: return
-                val stampName = line1.content().removePrefix("§b")
+                val stampName = line1.content().removePrefix("${ChatColor.AQUA}")
                 StampRallyModule.activate(event.player, stampName)
             }
         }
@@ -103,7 +104,7 @@ class StampRallyHandler : Listener {
             val state = newLoc.block.state
             if (state is Sign) {
                 val line0 = state.line(0) as? TextComponent ?: continue
-                if (line0.content() == "［§aスタンプ§r］") {
+                if (line0.content() == "［${ChatColor.GREEN}スタンプ${ChatColor.RESET}］") {
                     return state
                 }
             }

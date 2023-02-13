@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.vehicle
 
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -72,7 +73,10 @@ class VehicleHandler : Listener {
             loc.world.playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1f)
             val isCart = e.material == Material.MINECART
             if (!hasAchieved(e.player, if (isCart) Hint.MINECART else Hint.BOAT)) {
-                e.player.sendMessage("§a" + (if (isCart) "トロッコ" else "ボート") + "§rは§bX Phone§rを用いてどこでも召喚できます。X Phoneをお持ちでなければ§a/phone§rコマンドで入手できます。")
+                e.player.sendMessage(
+                    "${ChatColor.GREEN}" + (if (isCart) "トロッコ" else "ボート") + "${ChatColor.RESET}は${ChatColor.AQUA}X Phone${ChatColor.RESET}を用いてどこでも召喚できます。" +
+                            "X Phoneをお持ちでなければ${ChatColor.GREEN}/phone${ChatColor.RESET}コマンドで入手できます。"
+                )
             }
             e.isCancelled = true
         }

@@ -13,7 +13,6 @@ import work.xeltica.craft.core.api.Config
 import work.xeltica.craft.core.api.ModuleBase
 import work.xeltica.craft.core.hooks.VaultHook
 import work.xeltica.craft.core.utils.Ticks
-import java.util.Locale
 
 /**
  * エビパワーを入手する手段や、受け渡しのAPIを提供するモジュールです。
@@ -68,8 +67,8 @@ object EbiPowerModule : ModuleBase() {
                 return config.conf.getInt("charged_creeper")
             }
         }
-        if (config.conf.contains(entity.type.name.lowercase(Locale.getDefault()))) {
-            return config.conf.getInt(entity.type.name.lowercase(Locale.getDefault()))
+        if (config.conf.contains(entity.type.name.lowercase())) {
+            return config.conf.getInt(entity.type.name.lowercase())
         }
         return if (entity is Monster) {
             config.conf.getInt("other_enemy")

@@ -5,15 +5,20 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
 import org.bukkit.Tag
+import org.bukkit.World
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Ghast
 import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockFormEvent
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -41,9 +46,8 @@ class WorldHandler : Listener {
     fun onAdvancementDone(e: PlayerAdvancementDoneEvent) {
         if (WorldModule.getWorldInfo(e.player.world).allowAdvancements) return
 
-        for (criteria in e.advancement.criteria) {
-            e.player.getAdvancementProgress(e.advancement).revokeCriteria(criteria)
-        }
+        val progress = e.player.getAdvancementProgress(e.advancement)
+        e.advancement.criteria.forEach(progress::awardCriteria)
     }
 
     /*
@@ -171,9 +175,35 @@ class WorldHandler : Listener {
         }
     }
 
+    /**
+     * 許可されていないワールドでの襲撃イベントを抑制する
+     */
     @EventHandler
     fun onRaid(e: RaidTriggerEvent) {
         if (WorldModule.getWorldInfo(e.world).allowRaids) return
         e.isCancelled = true
+    }
+
+    /**
+     * 「不安な同盟」のエミュレーション
+     */
+    @EventHandler
+    fun onPlayerKillGhast(e: EntityDeathEvent) {
+        // 殺されたモブがガストでなければスキップ
+        if (e.entityType != EntityType.GHAST) return
+        val ghast = e.entity as? Ghast ?: return
+        // プレイヤーに殺されたわけでなければスキップ
+        val killer = ghast.killer ?: return
+        val worldInfo = WorldModule.getWorldInfo(ghast.world)
+        // オーバーワールドでない、あるいは進捗達成が許可されていないワールドであればスキップ
+        if (ghast.world.environment != World.Environment.NORMAL || !worldInfo.allowAdvancements) return
+
+        val advancement = Bukkit.getAdvancement(NamespacedKey(NamespacedKey.MINECRAFT, "nether/uneasy_alliance"))
+        if (advancement == null) {
+            Bukkit.getLogger().warning("進捗「不安な同盟」が存在しません。バニラのデータパックが差し替えられています。")
+            return
+        }
+        val progress = killer.getAdvancementProgress(advancement)
+        advancement.criteria.forEach(progress::awardCriteria)
     }
 }

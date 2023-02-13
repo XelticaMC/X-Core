@@ -1,6 +1,7 @@
 package work.xeltica.craft.core.modules.transferPlayerData
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import work.xeltica.craft.core.gui.Gui
@@ -48,7 +49,7 @@ class TransferPlayerDataApp : AppBase() {
 
     private fun openTransferPlayerDataApp(player: Player) {
         val ui = Gui.getInstance()
-        ui.openDialog(player, "§4注意！§r", TransferPlayerDataModule.WARNING_MESSAGE) {
+        ui.openDialog(player, "${ChatColor.DARK_RED}注意！${ChatColor.RESET}", TransferPlayerDataModule.WARNING_MESSAGE) {
             ui.openTextInput(player, "引っ越し先のアカウント名を入力してください。") {
                 if (it.isEmpty()) return@openTextInput
                 val to = Bukkit.getPlayer(it)
@@ -68,7 +69,7 @@ class TransferPlayerDataApp : AppBase() {
         val ui = Gui.getInstance()
         ui.openDialog(
             player, "引っ越し", """
-                §3${fromName}§rをお使いのアカウントに移行します。
+                ${ChatColor.DARK_AQUA}${fromName}${ChatColor.RESET}をお使いのアカウントに移行します。
                 
                 問題がなければ[OK]ボタンを押下して次に進んでください。
             """.trimIndent()
