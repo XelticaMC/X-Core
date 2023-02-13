@@ -21,6 +21,7 @@ import work.xeltica.craft.core.modules.bedrock.BedrockModule
 import work.xeltica.craft.core.modules.bossbar.BossBarModule
 import work.xeltica.craft.core.modules.cat.CatModule
 import work.xeltica.craft.core.modules.clover.CloverModule
+import work.xeltica.craft.core.modules.coreProtectGuiTest.CoreProtectGuiTestModule
 import work.xeltica.craft.core.modules.countdown.CountdownModule
 import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.ebipower.EbiPowerModule
@@ -31,6 +32,7 @@ import work.xeltica.craft.core.modules.eventHalloween.EventHalloweenModule
 import work.xeltica.craft.core.modules.eventSummer.EventSummerModule
 import work.xeltica.craft.core.modules.eventTwoYears.EventTwoYearsModule
 import work.xeltica.craft.core.modules.fly.FlyModule
+import work.xeltica.craft.core.modules.gamemodeChange.GamemodeChangeModule
 import work.xeltica.craft.core.modules.grenade.GrenadeModule
 import work.xeltica.craft.core.modules.hint.HintModule
 import work.xeltica.craft.core.modules.hub.HubModule
@@ -59,7 +61,6 @@ import work.xeltica.craft.core.modules.vehicle.VehicleModule
 import work.xeltica.craft.core.modules.world.WorldModule
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.utils.Ticks
-
 
 /**
  * X-Core のメインクラスであり、構成する要素を初期化・管理しています。
@@ -221,12 +222,14 @@ class XCorePlugin : JavaPlugin() {
         RankingModule,
         SignEditModule,
         StampRallyModule,
-        TransferGuideModule,
         TransferPlayerDataModule,
         VehicleModule,
         WorldModule,
         XphoneModule,
+        TransferGuideModule,
         SetMarkerModule,
+        CoreProtectGuiTestModule,
+        GamemodeChangeModule,
     )
 
     companion object {
