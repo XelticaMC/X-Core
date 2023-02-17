@@ -74,6 +74,7 @@ dependencies {
     compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
     compileOnly("com.github.ucchyocean.lc:LunaChat:3.0.16")
     implementation("net.wesjd:anvilgui:1.6.3-SNAPSHOT")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
     library("com.google.code.gson", "gson", "2.8.7")
     bukkitLibrary("com.google.code.gson", "gson", "2.8.7")
