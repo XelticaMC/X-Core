@@ -12,6 +12,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerJoinEvent
 import work.xeltica.craft.core.api.playerStore.PlayerStore
 import work.xeltica.craft.core.modules.counter.CounterModule
 import work.xeltica.craft.core.modules.counter.PlayerCounterFinish
@@ -88,5 +89,10 @@ class EventTwoYearsHandler : Listener {
         if (deathCount == 0 && checkpoint == null) {
             HintModule.achieve(player, Hint.TWO_YEARS_EVENT_NO_MISS)
         }
+    }
+
+    @EventHandler
+    fun onPlayerJoin(e: PlayerJoinEvent) {
+        EventTwoYearsModule.checkHintFor(e.player)
     }
 }

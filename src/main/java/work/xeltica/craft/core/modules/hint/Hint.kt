@@ -226,9 +226,38 @@ enum class Hint constructor(
     // イベント限定
     TWO_YEARS_EVENT_NO_MISS(
         "コードレス・パルクールの達人",
-        "チェックポイントを置かずにパルクールを制覇する。",
+        "（2周年記念イベント限定ヒント）チェックポイントを置かずにパルクールを制覇する。",
         50000,
-        HintType.CHALLENGE
+        HintType.EVENT
+    ),
+
+    // イベント実績
+    TWO_YEARS_EVENT_PARKOUR_JOINED(
+        "2周年記念イベントパルクール参加",
+        "パルクールに参加する",
+        1000,
+        HintType.EVENT
+    ),
+
+    TWO_YEARS_EVENT_PARKOUR_1ST(
+        "2周年記念イベントパルクール・1位",
+        "パルクールで1位を獲得する！",
+        5000,
+        HintType.EVENT
+    ),
+
+    TWO_YEARS_EVENT_PARKOUR_2ND(
+        "2周年記念イベントパルクール・2位",
+        "パルクールで2位を獲得する！",
+        3000,
+        HintType.EVENT
+    ),
+
+    TWO_YEARS_EVENT_PARKOUR_3RD(
+        "2周年記念イベントパルクール・3位",
+        "パルクールで1位を獲得する！",
+        1000,
+        HintType.EVENT
     ),
 
     // ヘルプ

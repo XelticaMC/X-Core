@@ -87,6 +87,23 @@ class Ranking(val name: String, private val conf: Config) {
         return data
     }
 
+    fun keys(): Set<String> {
+        return records.keys.toSet()
+    }
+
+    fun getRank(key: String): Int? {
+        var ranking = records.entries
+            .sortedBy { it.value }
+        if (getMode() != "time") {
+            // 時間以外は降順なので、入れ替える
+            ranking = ranking.reversed()
+        }
+        val rank = ranking
+            .map { it.key }
+            .indexOf(key)
+        return if (rank == -1) null else rank + 1
+    }
+
     private fun modeFormatRecords(): List<RankingRecord> {
         when (getMode()) {
             "normal" -> {
