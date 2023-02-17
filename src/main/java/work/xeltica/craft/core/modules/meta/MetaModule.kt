@@ -15,7 +15,8 @@ import java.io.IOException
  */
 object MetaModule : ModuleBase() {
     val changeLog = listOf(
-        "Xレコードを追加：XelticaMC オリジナルソングをジュークボックスで再生できます。",
+        "ヒントの文言を修正",
+        "不要なデバッグメッセージを修正",
     ).toTypedArray()
 
     lateinit var meta: Config
