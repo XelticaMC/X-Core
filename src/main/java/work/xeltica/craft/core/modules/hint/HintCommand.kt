@@ -46,7 +46,9 @@ ${ChatColor.GREEN}${ChatColor.BOLD}報酬: ${ChatColor.RESET}${ChatColor.LIGHT_P
             ) { player.performCommand("hint") }
         } else {
             // ヒント一覧をプレイヤーに表示
-            val items = hints.map { hint ->
+            val items = hints.filter {
+                it.type !== HintType.EVENT || module.hasAchieved(player, it)
+            }.map { hint ->
                 val isAchieved = module.hasAchieved(player, hint)
                 val isQuest = hint.power > 0
                 val name = hint.hintName + if (isQuest) " (" + hint.power + "EP)" else ""
@@ -64,6 +66,7 @@ ${ChatColor.GREEN}${ChatColor.BOLD}報酬: ${ChatColor.RESET}${ChatColor.LIGHT_P
             HintType.NORMAL -> if (isAchieved) Material.GOLD_BLOCK else Material.GOLD_NUGGET
             HintType.CHALLENGE -> if (isAchieved) Material.DIAMOND_BLOCK else Material.DIAMOND
             HintType.HELP -> Material.NETHER_STAR
+            HintType.EVENT -> Material.GOLDEN_CARROT
         }
     }
 

@@ -258,6 +258,6 @@ enum class Hint constructor(
     );
 
     enum class HintType {
-        NORMAL, CHALLENGE, HELP
+        NORMAL, CHALLENGE, HELP, EVENT,
     }
 }
