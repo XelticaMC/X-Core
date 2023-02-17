@@ -70,7 +70,24 @@ object NbsModule : ModuleBase() {
         val file = getFile(songId)
         if (!file.exists()) throw IllegalArgumentException()
 
-        val model = NbsModel(location, songId, distance, playbackMode)
+        val model = NbsModel(location, songId, distance, playbackMode, false)
+        playModel(model)
+        addModel(location, model)
+    }
+
+    /**
+     * 指定した位置でXレコードを再生します。
+     * @param location 再生位置
+     * @param songId 音楽ID
+     * @throws IllegalArgumentException 曲IDが存在しない
+     */
+    fun playXRecord(location: Location, songId: String) {
+        // ディレクトリトラバーサル対策
+        if (songId.startsWith(".")) throw IllegalArgumentException()
+        val file = getFile(songId)
+        if (!file.exists()) throw IllegalArgumentException()
+
+        val model = NbsModel(location, songId, 100, PlaybackMode.NORMAL, true)
         playModel(model)
         addModel(location, model)
     }

@@ -4,7 +4,7 @@ import org.bukkit.Location
 import org.bukkit.configuration.serialization.ConfigurationSerializable
 import work.xeltica.craft.core.utils.CastHelper
 
-class NbsModel(var location: Location, var songId: String, var distance: Int, var playbackMode: PlaybackMode) : Cloneable, ConfigurationSerializable {
+class NbsModel(var location: Location, var songId: String, var distance: Int, var playbackMode: PlaybackMode, var isXMusicDisc: Boolean) : Cloneable, ConfigurationSerializable {
     companion object {
         // NOTE: Spigotは動的にこの関数を呼び出すため、JvmStaticでなければならない
         @JvmStatic
@@ -21,8 +21,13 @@ class NbsModel(var location: Location, var songId: String, var distance: Int, va
             } else {
                 PlaybackMode.valueOf(args["playbackMode"] as String)
             }
+            val isXMusicDisc = if (!args.containsKey("isXMusicDisc")) {
+                false
+            } else {
+                args["isXMusicDisc"] as Boolean
+            }
 
-            return NbsModel(location, songId, distance, playbackMode)
+            return NbsModel(location, songId, distance, playbackMode, isXMusicDisc)
         }
     }
 
@@ -32,6 +37,7 @@ class NbsModel(var location: Location, var songId: String, var distance: Int, va
         result["songId"] = songId
         result["distance"] = distance
         result["playbackMode"] = playbackMode.toString()
+        result["isXMusicDisc"] = isXMusicDisc
         return result
     }
 
@@ -41,11 +47,12 @@ class NbsModel(var location: Location, var songId: String, var distance: Int, va
         if (this.location != other.location) return false
         if (this.songId != other.songId) return false
         if (this.playbackMode != other.playbackMode) return false
+        if (this.isXMusicDisc != other.isXMusicDisc) return false
         return true
     }
 
     override fun toString(): String {
-        return "NbsModel(location=$location, songId=$songId, distance=$distance, playbackMode=$playbackMode)"
+        return "NbsModel(location=$location, songId=$songId, distance=$distance, playbackMode=$playbackMode, isXMusicDisc=$isXMusicDisc)"
     }
 
     override fun hashCode(): Int {
@@ -53,6 +60,7 @@ class NbsModel(var location: Location, var songId: String, var distance: Int, va
         result = 31 * result + songId.hashCode()
         result = 31 * result + distance
         result = 31 * result + playbackMode.hashCode()
+        result = 31 * result + isXMusicDisc.hashCode()
         return result
     }
 
