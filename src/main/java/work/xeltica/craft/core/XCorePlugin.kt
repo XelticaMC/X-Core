@@ -55,6 +55,7 @@ import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.modules.transferPlayerData.TransferPlayerDataModule
 import work.xeltica.craft.core.modules.vehicle.VehicleModule
 import work.xeltica.craft.core.modules.world.WorldModule
+import work.xeltica.craft.core.modules.xMusicDisc.XMusicDiscModule
 import work.xeltica.craft.core.modules.xphone.XphoneModule
 import work.xeltica.craft.core.utils.Ticks
 
@@ -222,6 +223,7 @@ class XCorePlugin : JavaPlugin() {
         VehicleModule,
         WorldModule,
         XphoneModule,
+        XMusicDiscModule,
     )
 
     companion object {
