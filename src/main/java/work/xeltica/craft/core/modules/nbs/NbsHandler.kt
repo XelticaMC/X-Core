@@ -41,6 +41,10 @@ class NbsHandler : Listener {
 
     @EventHandler
     fun onSongFinished(e: SongEndEvent) {
-        NbsModule.removeModel((e.songPlayer as PositionSongPlayer).targetLocation)
+        val location = (e.songPlayer as PositionSongPlayer).targetLocation
+        val model = NbsModule.getModel(location) ?: return
+        // 音楽ディスクの場合は消去しない
+        if (model.isXMusicDisc) return
+        NbsModule.removeModel(location)
     }
 }
