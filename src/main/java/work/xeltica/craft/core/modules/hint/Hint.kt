@@ -255,7 +255,7 @@ enum class Hint constructor(
 
     TWO_YEARS_EVENT_PARKOUR_3RD(
         "2周年記念イベントパルクール・3位",
-        "パルクールで1位を獲得する！",
+        "パルクールで3位を獲得する！",
         1000,
         HintType.EVENT
     ),

@@ -22,12 +22,10 @@ class XMusicDiscHandler : Listener {
         if (block.type != Material.JUKEBOX) return
         val item = e.item
         val songId = item?.getXMusicDiscSongId()
-        logger.info("songId is  $songId")
 
         val music = NbsModule.getModel(block.location)
         if (music != null) {
             // 音楽の取り出し
-            logger.info("Eject X-MusicDisc")
             if (!music.isXMusicDisc) {
                 logger.warning("バグ：ジュークボックスなのに、Xレコードでない音が鳴ってます…。${block.location}")
                 return
@@ -37,12 +35,9 @@ class XMusicDiscHandler : Listener {
             e.setUseInteractedBlock(Event.Result.DENY)
         } else if (songId != null) {
             // 音楽の再生
-            logger.info("Insert X-MusicDisc ${songId}")
             NbsModule.playXRecord(block.location, songId)
             e.setUseInteractedBlock(Event.Result.DENY)
             e.player.inventory.remove(item)
-        } else {
-            logger.info("SKIP: dont have songId")
         }
     }
 }
