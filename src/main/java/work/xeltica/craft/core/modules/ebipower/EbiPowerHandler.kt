@@ -146,6 +146,10 @@ class EbiPowerHandler : Listener {
         val victim = e.entity
         val killer = e.entity.killer ?: return
 
+        //共有ワールド、共有ネザー、共有エンド、資源エンドの場合はエビパワーを付与しない
+        val prohibitedWorlds = arrayOf("wildarea2", "wildarea2_nether", "wildarea2_the_end", "shigen_end")
+        if (prohibitedWorlds.contains(killer.world.name)) return
+
         if (playerIsInBlacklisted(killer)) return
         // don't kill cats
         if (victim is Cat || victim is Ocelot) return
