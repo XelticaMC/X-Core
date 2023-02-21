@@ -50,6 +50,8 @@ class EbiPowerHandler : Listener {
     private val crops = HashSet<Material>()
     private val breakBonusList = HashSet<Material>()
 
+    private val noEpByKillingWorlds = arrayOf("wildarea2", "wildarea2_nether", "wildarea2_the_end", "shigen_end")
+
     init {
         crops.add(Material.WHEAT)
         crops.add(Material.CARROTS)
@@ -145,6 +147,9 @@ class EbiPowerHandler : Listener {
     fun onPlayerKillMobs(e: EntityDeathEvent) {
         val victim = e.entity
         val killer = e.entity.killer ?: return
+
+        //共有ワールド、共有ネザー、共有エンド、資源エンドの場合はエビパワーを付与しない
+        if (noEpByKillingWorlds.contains(killer.world.name)) return
 
         if (playerIsInBlacklisted(killer)) return
         // don't kill cats
