@@ -37,6 +37,7 @@ import work.xeltica.craft.core.modules.hub.HubModule
 import work.xeltica.craft.core.modules.item.ItemModule
 import work.xeltica.craft.core.modules.kusa.KusaModule
 import work.xeltica.craft.core.modules.livemode.LiveModeModule
+import work.xeltica.craft.core.modules.loginBonus.LoginBonusModule
 import work.xeltica.craft.core.modules.meta.MetaModule
 import work.xeltica.craft.core.modules.mobball.MobBallModule
 import work.xeltica.craft.core.modules.moderation.ModerationModule
@@ -204,6 +205,7 @@ class XCorePlugin : JavaPlugin() {
         ItemModule,
         KusaModule,
         LiveModeModule,
+        LoginBonusModule,
         MetaModule,
         MobBallModule,
         ModerationModule,
