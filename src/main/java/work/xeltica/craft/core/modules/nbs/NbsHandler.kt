@@ -7,6 +7,8 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.NotePlayEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import work.xeltica.craft.core.modules.item.ItemModule
+import work.xeltica.craft.core.modules.xMusicDisc.XMusicDiscModule
 
 class NbsHandler : Listener {
     /**
@@ -15,8 +17,10 @@ class NbsHandler : Listener {
     @EventHandler
     fun onNoteBreak(e: BlockBreakEvent) {
         val loc = e.block.location
-        if (NbsModule.has(loc)) {
-            NbsModule.stop(loc)
+        val nbs = NbsModule.getModel(loc) ?: return
+        NbsModule.stop(loc)
+        if (nbs.isXMusicDisc) {
+            loc.world.dropItem(loc, ItemModule.getItem("${XMusicDiscModule.ITEM_NAME_X_MUSIC_DISC}.${nbs.songId}"))
         }
     }
 
