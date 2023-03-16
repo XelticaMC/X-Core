@@ -70,7 +70,6 @@ object XphoneModule : ModuleBase() {
             LiveModeApp(),
             QuickChatApp(),
             TransferPlayerDataApp(),
-            VoteApp(),
             PaymentsApp(),
             PunishApp(),
             StampRallyApp(),
