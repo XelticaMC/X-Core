@@ -15,8 +15,9 @@ import java.io.IOException
  */
 object MetaModule : ModuleBase() {
     val changeLog = listOf(
-        "ヒントの文言を修正",
-        "不要なデバッグメッセージを修正",
+        "共有ワールド各種および、資源エンドでは敵を倒してもエビパワーを入手できないよう調整",
+        "Xレコードの入ったジュークボックスを破壊すると、Xレコードが消滅する不具合を修正",
+        "ログインボーナスが付与されない不具合を修正",
     ).toTypedArray()
 
     lateinit var meta: Config
