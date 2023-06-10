@@ -51,7 +51,6 @@ import work.xeltica.craft.core.modules.promotion.PromotionModule
 import work.xeltica.craft.core.modules.punishment.PunishmentModule
 import work.xeltica.craft.core.modules.quickchat.QuickChatModule
 import work.xeltica.craft.core.modules.ranking.RankingModule
-import work.xeltica.craft.core.modules.signEdit.SignEditModule
 import work.xeltica.craft.core.modules.stamprally.StampRallyModule
 import work.xeltica.craft.core.modules.transferPlayerData.TransferPlayerDataModule
 import work.xeltica.craft.core.modules.vehicle.VehicleModule
@@ -219,7 +218,6 @@ class XCorePlugin : JavaPlugin() {
         PunishmentModule,
         QuickChatModule,
         RankingModule,
-        SignEditModule,
         StampRallyModule,
         TransferPlayerDataModule,
         VehicleModule,
