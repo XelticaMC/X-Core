@@ -61,7 +61,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.30")
-    compileOnly("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20-R0.1-SNAPSHOT")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("org.geysermc:connector:1.4.3-SNAPSHOT")
@@ -71,7 +71,6 @@ dependencies {
     compileOnly("com.github.koca2000:NoteBlockAPI:1.6.1")
     compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
     compileOnly("com.github.ucchyocean.lc:LunaChat:3.0.16")
-    implementation("net.wesjd:anvilgui:1.6.3-SNAPSHOT")
 
     library("com.google.code.gson", "gson", "2.8.7")
     bukkitLibrary("com.google.code.gson", "gson", "2.8.7")
@@ -86,7 +85,7 @@ bukkit {
     name = "XCore"
     main = "work.xeltica.craft.core.XCorePlugin"
     version = getVersion().toString()
-    apiVersion = "1.19"
+    apiVersion = "1.20"
     softDepend = listOf("Citizens")
     depend = listOf("Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "NoteBlockAPI")
 
