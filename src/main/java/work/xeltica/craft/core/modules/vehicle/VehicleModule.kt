@@ -6,6 +6,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
+import org.bukkit.Tag
 import org.bukkit.block.BlockFace
 import org.bukkit.block.data.Rail
 import org.bukkit.block.data.type.RedstoneRail
@@ -29,6 +30,8 @@ import work.xeltica.craft.core.modules.world.WorldModule
 object VehicleModule : ModuleBase() {
     private lateinit var config: Config
 
+    val vehicleItems = mutableSetOf<Material>()
+
     private val collisionArea = listOf(
         BlockFace.EAST.direction.multiply(0.7),
         BlockFace.WEST.direction.multiply(0.7),
@@ -50,6 +53,10 @@ object VehicleModule : ModuleBase() {
     override fun onEnable() {
         config = Config("vehicles")
         config.useAutoSave = true
+
+        vehicleItems.clear()
+        vehicleItems.addAll(Tag.ITEMS_BOATS.values)
+        vehicleItems.add(Material.MINECART)
 
         registerHandler(VehicleHandler())
         registerCommand("boat", CommandBoat())
