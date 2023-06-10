@@ -59,7 +59,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly("net.skinsrestorer:skinsrestorer:14.1.4-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.10")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.30")
     compileOnly("io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT")
@@ -69,7 +68,6 @@ dependencies {
     compileOnly("org.geysermc.floodgate:api:2.0-SNAPSHOT")
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.11.1")
     compileOnly("com.discordsrv:discordsrv:1.25.1")
-    compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.0")
     compileOnly("com.github.koca2000:NoteBlockAPI:1.6.1")
     compileOnly("net.citizensnpcs:citizensapi:2.0.29-SNAPSHOT")
     compileOnly("com.github.ucchyocean.lc:LunaChat:3.0.16")
@@ -80,7 +78,7 @@ dependencies {
 }
 
 group = "work.xeltica.craft.core"
-version = "3.3.1"
+version = "4.0.0"
 description = "A Core System Plugin for XelticaMC."
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -89,8 +87,8 @@ bukkit {
     main = "work.xeltica.craft.core.XCorePlugin"
     version = getVersion().toString()
     apiVersion = "1.19"
-    softDepend = listOf("SkinsRestorer", "Citizens")
-    depend = listOf("kotlin-stdlib", "Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "HolographicDisplays", "NoteBlockAPI")
+    softDepend = listOf("Citizens")
+    depend = listOf("Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "NoteBlockAPI")
 
     commands {
         register("omikuji") {
@@ -105,11 +103,6 @@ bukkit {
             description = "現在のワールドのPvP設定を変更します。"
             usage = "/pvp <on/off>"
             permission = "otanoshimi.command.pvp"
-        }
-        register("signedit") {
-            description = "看板の指定行を編集します。"
-            usage = "/signedit <行番号> <テキスト>"
-            permission = "otanoshimi.command.signedit"
         }
         register("givecustomitem") {
             description = "XelticaMCオリジナルアイテムを授与します。"
