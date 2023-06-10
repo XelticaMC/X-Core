@@ -85,7 +85,7 @@ bukkit {
     name = "XCore"
     main = "work.xeltica.craft.core.XCorePlugin"
     version = getVersion().toString()
-    apiVersion = "1.20"
+    apiVersion = "1.19"
     softDepend = listOf("Citizens")
     depend = listOf("Geyser-Spigot", "Vault", "floodgate", "DiscordSRV", "NoteBlockAPI")
 
