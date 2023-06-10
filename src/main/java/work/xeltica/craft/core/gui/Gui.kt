@@ -6,7 +6,6 @@ import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import net.wesjd.anvilgui.AnvilGUI
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -422,13 +421,6 @@ class Gui : Listener {
                 callback?.accept(DialogEventArgs(player))
             })
         FloodgateHook.api.getPlayer(player.uniqueId).sendForm(form)
-    }
-
-    private fun openTextInputJavaImpl(player: Player, title: String, responseHandler: Consumer<String>?) {
-        AnvilGUI.Builder().title(title).onComplete { _, text ->
-            responseHandler?.accept(text)
-            return@onComplete AnvilGUI.Response.close()
-        }.itemLeft(ItemStack(Material.GRAY_STAINED_GLASS_PANE)).plugin(XCorePlugin.instance).open(player)
     }
 
     private fun openTextInputJavaImplChat(player: Player, title: String, responseHandler: Consumer<String>?) {
