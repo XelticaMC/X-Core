@@ -15,9 +15,9 @@ import java.io.IOException
  */
 object MetaModule : ModuleBase() {
     val changeLog = listOf(
-        "共有ワールド各種および、資源エンドでは敵を倒してもエビパワーを入手できないよう調整",
-        "Xレコードの入ったジュークボックスを破壊すると、Xレコードが消滅する不具合を修正",
-        "ログインボーナスが付与されない不具合を修正",
+        "Minecraft 1.20をサポートしました。",
+        "一部の条件で、ワールド設定を無視して乗り物アイテムを設置できてしまう不具合を修正しました。",
+        "新たな素材のボートを、ワールド設定を無視して設置できてしまう不具合を修正しました。",
     ).toTypedArray()
 
     lateinit var meta: Config
