@@ -7,6 +7,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerSwapHandItemsEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.inventory.EquipmentSlot
 import work.xeltica.craft.core.XCorePlugin
@@ -61,5 +62,13 @@ class XphoneHandler : Listener {
             e.player.inventory.addItem(ItemModule.getItem(ItemModule.ITEM_NAME_XPHONE))
             record[XphoneModule.PS_KEY_GIVEN_PHONE] = true
         }, 1L)
+    }
+
+    @EventHandler
+    fun onSneakF(e: PlayerSwapHandItemsEvent) {
+        if (e.player.isSneaking) {
+            e.isCancelled = true
+            XphoneModule.openSpringBoard(e.player)
+        }
     }
 }
