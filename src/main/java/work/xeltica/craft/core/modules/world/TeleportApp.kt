@@ -65,7 +65,7 @@ class TeleportApp : AppBase() {
             if (player.hasPermission("xcore.teleport.event") || player.isOp) {
                 list.add(
                     MenuItem("イベント", {
-                        val eventWorldLocation = Bukkit.getWorld("event")?.spawnLocation
+                        val eventWorldLocation = Bukkit.getWorld("event_final")?.spawnLocation
                         if (eventWorldLocation == null) {
                             player.sendMessage("No such world")
                             return@MenuItem
@@ -164,5 +164,6 @@ class TeleportApp : AppBase() {
     private val worldsBlackList = listOf(
         "hub2",
         "event",
+        "event_final",
     )
 }

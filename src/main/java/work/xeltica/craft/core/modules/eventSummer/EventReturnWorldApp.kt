@@ -18,6 +18,6 @@ class EventReturnWorldApp : AppBase() {
     }
 
     override fun isVisible(player: Player): Boolean {
-        return player.world.name == "event" || player.world.name == "event2"
+        return listOf("event", "event2", "event_final").contains(player.world.name)
     }
 }
