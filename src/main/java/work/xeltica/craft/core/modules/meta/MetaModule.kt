@@ -15,9 +15,8 @@ import java.io.IOException
  */
 object MetaModule : ModuleBase() {
     val changeLog = listOf(
-        "Minecraft 1.20をサポートしました。",
-        "一部の条件で、ワールド設定を無視して乗り物アイテムを設置できてしまう不具合を修正しました。",
-        "新たな素材のボートを、ワールド設定を無視して設置できてしまう不具合を修正しました。",
+        "多種目タイムアタックイベントの準備",
+        "スニークした状態でオフハンド切り替えキー（通常[F]）を押すと、ゲームメニューが開くようになりました。",
     ).toTypedArray()
 
     lateinit var meta: Config
