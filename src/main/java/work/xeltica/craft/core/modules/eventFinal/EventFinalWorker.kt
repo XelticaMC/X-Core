@@ -1,5 +1,6 @@
 package work.xeltica.craft.core.modules.eventFinal
 
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -13,14 +14,16 @@ import org.bukkit.entity.Strider
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.scheduler.BukkitRunnable
+import java.util.UUID
 
 class EventFinalWorker : BukkitRunnable() {
     override fun run() {
         EventFinalModule.sessions.keys.forEach(this::logic)
     }
 
-    private fun logic(runner: Player) {
-        val session = EventFinalModule.sessions[runner] ?: return
+    private fun logic(runnerId: UUID) {
+        val session = EventFinalModule.sessions[runnerId] ?: return
+        val runner = Bukkit.getPlayer(runnerId) ?: return
         // TODO: マラソンフェーズ：海抜（64m）以下になったら音楽を止める
 
         checkLavaPhaseGoal(runner, session)
@@ -43,7 +46,7 @@ class EventFinalWorker : BukkitRunnable() {
     }
 
     private fun checkBeginSwimming(runner: Player, session: Session) {
-        if (session.phase != Phase.LAVA_MAZE) return
+        if (session.phase != Phase.LAVA_MAZE && session.phase != Phase.BEFORE_LAVA) return
         if (!runner.isSwimming) return
 
         EventFinalModule.updatePhase(runner, Phase.SWIMMING)
